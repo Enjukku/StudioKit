@@ -24,7 +24,7 @@ Measurement rounds cost the owner time and usage (`rules/owner-profile.md`): run
 
 ## 3. Steps
 1. **Know the baseline.** The game's baseline device (an entry-level Android unless the profile says otherwise) and its budgets. None recorded → start from `references/budgets.md`, mark them PROPOSAL, and replace them with measured numbers.
-2. **Design budget** (new system): how many instances, draw-call groups, moving parts, effects, messages per second at worst case; where it runs (server, client); what streams. Write the numbers in the design note.
+2. **Design budget** (new system): how many instances, draw-call groups, moving parts, effects, messages per second at worst case; where it runs (server, client); what streams. Write the numbers in the design note. **Large or open worlds** also name: the streaming mode of each model group (F-04); a join size check with `NetworkSettings.PrintJoinSizeBreakdown` (F-06); and SLIM only for static far scenery, with its limits (needs streaming, a published place and Team Create; no runtime changes, animation or Humanoids; no physics or raycasts on the merged copy; `references/fixes.md`).
 3. **Measure before fixing** (problem): reproduce, then one capture that names the bottleneck: frame colour and top scopes (MicroProfiler), memory category (Dev Console), or network senders. Add `debug.profilebegin` labels to our systems.
 4. **Fix the named bottleneck** with `references/fixes.md`; one change at a time.
 5. **Verify** with the same capture, same scene, same device class. Report before → after numbers and where measured (Studio, device, dashboard).

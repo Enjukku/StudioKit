@@ -48,7 +48,7 @@ Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, s
 
 - Plan → build → verify → record. Non-trivial work gets a short numbered plan with a check per step.
 - Build what was asked, at the size it needs (`rules/anti-overengineering.md`): no extras, no one-use abstractions, found problems become follow-ups; data tables over hard-coded branches.
-- Say what you assumed. Push back when a rule looks wrong for the case.
+- Say what you assumed. Push back when a rule looks wrong for the case. When a brief conflicts with a rule: build the version that keeps the rule, name the rule, and return `needs-decision` so the owner chooses; never break the rule silently or refuse silently.
 - Check what changed before reporting a state (other chats work in parallel).
 - Surgical edits: touch what the task needs; file unrelated problems as open questions.
 - Pure logic gets offline tests; a bug fix starts with a failing case.
