@@ -4,7 +4,10 @@ import os
 import sys
 import unittest
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:  # optional dep: the kit gate is standard library only
+    raise unittest.SkipTest("needs numpy")
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vfx"))
 import curve_library as cl  # noqa: E402

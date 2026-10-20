@@ -581,7 +581,9 @@ def write_json(res, path=OUT_JSON):
 
 
 def write_md(res, path=OUT_MD):
-    L = ["> Author: data agent · claude-sonnet-5-5 · medium · 2026-10-20", "",
+    L = ["---", "type: reference", "scope: universal", "status: active", "updated: " + __import__("datetime").date.today().isoformat(),
+         "source: \"tools/vfx/curve_library.py\"", "supersedes: []", "---",
+         "> Author: data agent · claude-sonnet-5-5 · medium · 2026-10-20", "",
          "# Curve library: named S+A pro curve shapes (medoids, not averages)", "",
          "Source: `output/vfx/training-dumps/emitters_study.jsonl`, S+A tier only (particle emitters dup=false, Beam, Trail). "
          "Rebuild: `python tools/vfx/curve_library.py` (also writes `content/vfx/curves.json` with exact keypoints, envelope and 2 alternates per curve). "

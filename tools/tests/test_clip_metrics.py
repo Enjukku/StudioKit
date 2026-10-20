@@ -5,8 +5,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import numpy as np
-from PIL import Image
+try:
+    import numpy as np
+    from PIL import Image
+except ImportError:  # optional deps: the kit gate is standard library only
+    raise unittest.SkipTest("needs numpy and Pillow")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "vfx"))
 import clip_metrics as cm  # noqa: E402

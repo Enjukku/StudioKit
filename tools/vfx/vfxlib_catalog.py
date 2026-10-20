@@ -2,7 +2,7 @@
 
 Source list: the VFX Studio plugin's public library (github.com/Sytranom/VFXStudio, VFXData.json), shape
 {"<assetId>": {"Name": str, "Keywords": [group, ...], "Grid"?: 2|4|8, "Resolution"?: int, "Credits"?: str}}.
-Method: knowledge/design/vfx-workflow-proposal.md section 4b. Images live in output/vfx/library/ (git-ignored);
+Images live in output/vfx/library/ (git-ignored);
 the tagged catalog is content/vfx/library/catalog.json.
 
   python tools/vfx/vfxlib_catalog.py fetch       # list + 150 px thumbnails (resumable)
