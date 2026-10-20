@@ -109,7 +109,7 @@ class OutputTests(Base):
             "---\n"
             "name: level-checker\n"
             'description: "Reviews maps: says \\"why\\" and where; C:\\\\path ok"\n'
-            "model: sonnet\n"
+            f"model: {self.kit['models']['claude']['craft']}\n"
             "effort: medium\n"
             "tools: Read, Grep, Glob\n"
             "skills: level-design, art-fundamentals\n"
@@ -229,6 +229,15 @@ class ErrorTests(Base):
         self.assertIn(f".agents/roles/{fname}", err.getvalue())
         self.assertIn(fragment, err.getvalue())
         self.assertFalse((self.tmp / ".claude/agents").exists())
+
+    def test_research_tier_uses_its_own_model(self) -> None:
+        (self.tmp / ".agents" / "roles" / "reader.md").write_text(
+            "---\nname: reader\ndescription: Reads docs\ntier: research\neffort: medium\n---\nRead.\n", encoding="utf-8"
+        )
+        sh.main(["--root", str(self.tmp)])
+        text = (self.tmp / ".claude" / "agents" / "reader.md").read_text(encoding="utf-8")
+        self.assertIn(f"model: {self.kit['models']['claude']['research']}\n", text)
+        self.assertIn("effort: medium\n", text)
 
     def test_bad_tier(self) -> None:
         self.assert_error("---\nname: bad-role\ndescription: d\ntier: boss\neffort: low\n---\nx\n", "unknown tier 'boss'")

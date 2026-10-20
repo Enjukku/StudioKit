@@ -6,7 +6,7 @@ Read `AGENTS.md` and `rules/company.md` first. The main chat is the lead (orches
 
 | Concern | Rule |
 | --- | --- |
-| Models | Per tier from `kit.json` (lead, craft, mechanical). Project instructions do not hot-switch a running chat's model. Pick the model when starting a chat and request it for every worker. |
+| Models | Per tier from `kit.json` (lead, craft, research, mechanical). Project instructions do not hot-switch a running chat's model. Pick the model when starting a chat and request it for every worker. |
 | Roles | Canonical in `.agents/roles/`. `python tools/sync_harness.py` generates `.codex/agents/*.toml`. Never edit generated files. Run `--check` in the gate. |
 | Skills | Canonical in `.agents/skills/*/SKILL.md`. Load the matching skill for the task. |
 | Delegation | Use the Codex collaboration tools (spawn, send message, follow up, list, wait, interrupt). Give model, effort and a complete bounded brief on every spawn. |

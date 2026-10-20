@@ -83,7 +83,7 @@ Escalation: the asker fixes it if it can; otherwise one level up; only real deci
 | Request chain hops | 3 | stops ping-pong; platform nesting limit is 3 levels |
 | Retries per task | 2 | then `failed` with a reason |
 | Budget | estimated on the job card at G1 (sessions, agents, models) | the lead reports actual vs estimate at every gate |
-| Model per role | Opus: lead and taste-critical design calls · Sonnet: specialist craft and building · Haiku: mechanical work (search, copy, format, data entry) | cost scales with model; every agent file pins its model (no silent inherit) |
+| Model per role | Opus: lead, all craft roles and all code · Sonnet: research, data pulls, Studio checks · Haiku: mechanical work (search, copy, format, data entry); per-role effort in `.agents/roles/README.md` | cost scales with model; every agent file pins its model (no silent inherit) |
 
 ## 7. Checks
 

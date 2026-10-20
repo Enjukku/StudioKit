@@ -57,11 +57,15 @@ Parallel only when parts are **independent** (separate files, separate questions
 
 ## 5. Models and usage
 
+Per-role defaults: `.agents/roles/README.md` (owner-approved 2026-10-20). For helpers without a role file:
+
 | Work | Model · effort |
 | --- | --- |
-| Lead decisions, architecture, taste-critical design, risky code reviews | Opus · medium (high only for core design/wiring the owner asked for) |
-| Specialist craft, building, most research | Sonnet · medium (high when needed) |
-| Search, copying, moving data, formatting, templates from a spec, data entry | Haiku or Sonnet · low |
+| Lead decisions, architecture, risky code review (money, saves, remotes) | Opus · high |
+| Game code, scripts, tools | Opus · medium (high for money, saves, remotes) |
+| Specialist craft (animation, VFX, models, UI, sound, design) | Opus · per role table |
+| Reading docs into fact sheets; data pulls; Studio checks | Sonnet · medium |
+| Search, copying, formatting, data entry | Haiku · low (medium if the job ends with a check) |
 
 - The lead never spends high effort on mechanical work: delegate it.
 - Every brief names the model and effort. Every workflow `agent()` call sets `model` and `effort`.

@@ -1,14 +1,16 @@
 {
-  "kit_version": "0.5.0",
+  "kit_version": "0.5.1",
   "models": {
     "claude": {
       "lead": "opus",
-      "craft": "sonnet",
+      "craft": "opus",
+      "research": "sonnet",
       "mechanical": "haiku"
     },
     "codex": {
       "lead": "gpt-6.1-sol",
       "craft": "gpt-6.1-sol",
+      "research": "gpt-6.1-sol",
       "mechanical": "gpt-6.1-sol"
     }
   },

@@ -8,8 +8,9 @@ Read `AGENTS.md` and `rules/company.md` first. This page holds only Claude Code 
 
 | Tier | Model | Used for |
 | --- | --- | --- |
-| lead | opus | The lead chat; taste-critical design; risky code review (tiers are set in `kit.json`) |
-| craft | sonnet | Specialist craft, building, most research |
+| lead | opus | The lead chat; architecture; risky code review (tiers are set in `kit.json`) |
+| craft | opus | Specialist craft (animation, VFX, models, UI, sound, design) and all code |
+| research | sonnet | Reading docs into fact sheets, data pulls, Studio checks |
 | mechanical | haiku | Search, copy, format, data entry |
 
 - Every role file pins its model. No silent inherit.

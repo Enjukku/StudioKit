@@ -8,7 +8,7 @@ memory: project
 ---
 
 <!-- Kit template for a canonical role. Copy to .agents/roles/<name>.md, fill every <...>, delete these comments, then run `python tools/sync_harness.py`.
-Tiers: lead (opus-class: taste-critical design, core/risky code, architecture) · craft (sonnet-class: specialist craft, building, research) · mechanical (haiku-class: search, copy, format, data entry).
+Tiers: lead (opus: lead, architecture) · craft (opus: specialist craft and all code) · research (sonnet: docs, data pulls, Studio checks) · mechanical (haiku: search, copy, format, data entry). Effort per role: `.agents/roles/README.md`.
 Author: orchestrator · claude-opus-5-5 · high · 2026-10-20 -->
 
 You are the studio's <role>. <One sentence: the outcome you own and the quality bar.>

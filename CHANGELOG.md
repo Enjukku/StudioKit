@@ -2,6 +2,11 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.5.1 (2026-10-20): models and effort per role
+
+- `kit.json`: craft tier → Opus; new research tier → Sonnet. `tools/sync_harness.py` accepts `research`; test added.
+- `.agents/roles/README.md`: owner-approved model and effort for all 25 roles; orchestration, company rules and harness profiles match.
+
 ## 0.5.0 (2026-10-20): J001 closed
 
 - Skills: `architecture`, `code-review` (with `luau-current` and `testing` references).
