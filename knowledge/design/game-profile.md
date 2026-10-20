@@ -1,6 +1,14 @@
-# Game profile
-
+---
+type: profile
+scope: game
+status: active
+updated: 2026-10-20
+source: "kit phase 1"
+supersedes: []
+---
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
+
+# Game profile
 
 Fill in at project start. This file is the only place for game-specific taste. Agents read it before any design or visible work.
 

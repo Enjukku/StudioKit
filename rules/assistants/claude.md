@@ -25,6 +25,11 @@ Read `AGENTS.md` and `rules/company.md` first. This page holds only Claude Code 
 | Dynamic workflow | Saved script that calls agent() | Set model and effort on every agent() call. Run a small slice first. |
 | Agent teams | OFF | Experimental, about 7x tokens, plan approvals are automatic. The owner sets `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=0`. Agents never edit their own settings. |
 
+## Workflows and gate
+
+- Workflows (`.agents/workflows/*.md`) are generated into `.claude/commands/` by the sync tool. Never edit the generated copies.
+- The gate is `python tools/verify.py`.
+
 ## Memory and context
 
 | Item | Rule |

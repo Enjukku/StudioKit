@@ -4,12 +4,20 @@
 Sources:
   .agents/roles/<name>.md      frontmatter + markdown body (README.md ignored)
   .agents/skills/<skill>/**    any files
+  .agents/workflows/<name>.md  frontmatter with a `description:` + markdown body (README.md ignored)
 
 Outputs:
   .claude/agents/<name>.md             Claude Code subagent
   .claude/skills/<skill>/**            byte copy of the skill
   .claude/skills/.generated            manifest of synced skill names
+  .claude/commands/<name>.md           Claude Code slash command: exact copy of the workflow with the
+                                       generated marker line inserted after the frontmatter
   .codex/agents/<name_with_underscores>.toml   Codex agent
+  (Codex gets no workflow output: it reads .agents/workflows/ directly.)
+
+Stale removal: a generated agent, command or Codex file (it carries the marker) whose source is gone
+is removed; a skill folder is removed only if the manifest lists it. Hand-written files are never touched.
+--check writes nothing and reports missing, different and stale files.
 
 Usage:
   python tools/sync_harness.py [--check] [--root DIR]
@@ -140,6 +148,20 @@ def parse_frontmatter(text: str, where: str) -> tuple[dict, str]:
             fields[key] = _unquote(value, f"{where}:{lineno}")
     body = "\n".join(lines[end + 1 :])
     return fields, body
+
+
+def render_workflow(text: str, rel: str) -> str:
+    """Exact copy of the workflow with the marker line inserted after the closing frontmatter line."""
+    fields, _ = parse_frontmatter(text, rel)  # raises on missing or unclosed frontmatter
+    if not fields.get("description"):
+        raise SyncError(f"{rel}: missing required key 'description'")
+    lines = text.splitlines(keepends=True)
+    end = next(i for i in range(1, len(lines)) if lines[i].strip() == "---")
+    eol = "\r\n" if lines[end].endswith("\r\n") or lines[0].endswith("\r\n") else "\n"
+    if not lines[end].endswith(("\n", "\r")):
+        lines[end] += eol
+    marker = f"{CLAUDE_MARKER_PREFIX} from {rel}; edit the source -->{eol}"
+    return "".join(lines[: end + 1]) + marker + "".join(lines[end + 1 :])
 
 
 @dataclass
@@ -340,6 +362,17 @@ def build_plan(root: Path) -> tuple[dict[str, bytes], list[str]]:
             codex_name = role.name.replace("-", "_")
             desired[f".codex/agents/{codex_name}.toml"] = render_codex(role, kit).encode("utf-8")
 
+    workflows_dir = root / ".agents" / "workflows"
+    if workflows_dir.is_dir():
+        for path in sorted(workflows_dir.glob("*.md")):
+            if path.name.lower() == "readme.md":
+                continue
+            rel = path.relative_to(root).as_posix()
+            if not NAME_RE.match(path.stem):
+                raise SyncError(f"{rel}: file name '{path.stem}' is not kebab-case")
+            text = path.read_bytes().decode("utf-8")
+            desired[f".claude/commands/{path.stem}.md"] = render_workflow(text, rel).encode("utf-8")
+
     skills_src = root / ".agents" / "skills"
     skill_names: list[str] = []
     if skills_src.is_dir():
@@ -354,6 +387,7 @@ def build_plan(root: Path) -> tuple[dict[str, bytes], list[str]]:
     stale: list[str] = []
     for out_dir, pattern, prefix, first in (
         (".claude/agents", "*.md", CLAUDE_MARKER_PREFIX, False),
+        (".claude/commands", "*.md", CLAUDE_MARKER_PREFIX, False),
         (".codex/agents", "*.toml", CODEX_MARKER_PREFIX, True),
     ):
         d = root / out_dir

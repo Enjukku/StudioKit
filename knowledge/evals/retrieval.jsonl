@@ -1,0 +1,8 @@
+{"task": "how does the owner approve a large job", "expect": ["rules/company.md#2"], "note": "gates per job size live in the company rules"}
+{"task": "where do lesson drafts go after a job ends", "expect": ["rules/knowledge.md#4", "knowledge/inbox/README.md"], "note": "placement table plus the inbox template"}
+{"task": "write an intent brief for an animator", "expect": [".agents/skills/orchestration/SKILL.md#3"], "note": "brief parts table with the animator example"}
+{"task": "run the weekly improvement pass", "expect": [".agents/workflows/improve.md"], "note": "workflow file"}
+{"task": "tailor the kit skills to this game's style", "expect": [".agents/workflows/integrate.md"], "note": "overlays come from /integrate"}
+{"task": "send a universal lesson back to the studio kit", "expect": [".agents/workflows/kit-sync.md"], "note": "kit-sync up direction"}
+{"task": "an agent is blocked and needs a decision from the owner", "expect": ["rules/company.md#5", ".agents/skills/orchestration/SKILL.md#6"], "note": "status table plus how the lead handles statuses"}
+{"task": "which frontmatter fields does every knowledge note need", "expect": ["rules/knowledge.md#3"], "note": "typed frontmatter spec"}

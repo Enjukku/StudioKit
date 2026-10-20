@@ -16,8 +16,10 @@ An AI game studio setup for Roblox games. Clone it into every new game. It holds
 
 1. Clone the kit folder and rename it.
 2. Fill `knowledge/design/game-profile.md` and `rules/owner-profile.md`.
-3. Run `python tools/sync_harness.py` (generates `.claude/` and `.codex/`).
-4. Open the folder in Claude Code or Codex.
+3. Set `kit_path` in `kit.json` (where the kit lives, for `/kit-sync`).
+4. Run `python tools/sync_harness.py` (generates `.claude/` and `.codex/`).
+5. Run `python tools/verify.py` (the gate).
+6. Open the folder in Claude Code or Codex.
 
 ## How the studio works
 
@@ -28,13 +30,17 @@ An AI game studio setup for Roblox games. Clone it into every new game. It holds
 - **Statuses:** proposed, approved, working, blocked, needs-decision, done, failed, cancelled. Problems go up one level.
 - **Decision digest:** one batch of owner questions per turn, each with a recommendation and a default.
 
-## Planned commands (phase 2)
+## Commands
 
 | Command | Purpose |
 | --- | --- |
-| `/integrate` | Kit to game overlays. Weekly. Owner approves. |
-| `/learn` | Inbox lessons into vault and skills. Weekly, dreaming-style consolidation. Owner approves. |
-| `/kit-sync` | Universal lessons from a game back into the kit. Owner approves. |
+| `/improve` | Weekly. Mistakes review, the learning loop (inbox consolidation, promotion), context health, owner coaching. |
+| `/integrate` | Kit to game overlays. Weekly or after big decisions. Owner approves. |
+| `/kit-sync` | Universal lessons up from a game to the kit, and kit updates down. Owner approves. |
+| `/council` | 2-4 specialist lenses in parallel, one synthesis. |
+| `/agent-review` | Score the agents, review the weak ones, keep a change only if the next score holds. |
+
+Workflows live in `.agents/workflows/*.md`. Claude Code gets them as generated commands; Codex reads them on request.
 
 ## Folder map
 
@@ -52,6 +58,6 @@ An AI game studio setup for Roblox games. Clone it into every new game. It holds
 
 | Phase | Scope | State |
 | --- | --- | --- |
-| 1 | Rules, orchestration, templates | done |
-| 2 | Context system + learning loop | next |
+| 1 | Rules, orchestration, templates, sync | done |
+| 2 | `rules/knowledge.md`, workflows, context tools (`context_packet`, `kb_index`, `eval_context`), process tools (`improve_scan`, `agent_scorecard`), `python tools/verify.py` gate | done |
 | 3 | Roles moved in from the first game, new roles | next |

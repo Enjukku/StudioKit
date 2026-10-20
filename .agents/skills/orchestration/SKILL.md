@@ -96,3 +96,5 @@ Parallel only when parts are **independent** (separate files, separate questions
 | The roster of agents and what each is for | `.agents/roles/README.md` |
 | How the owner wants to be talked to | `rules/owner-profile.md` |
 | Harness specifics (Claude subagents and chats; Codex agents) | `rules/assistants/claude.md`, `rules/assistants/codex.md` |
+
+Project overlay: if `knowledge/overlays/orchestration.md` exists, read it after this file; it wins for this game.

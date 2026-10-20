@@ -13,5 +13,9 @@
     }
   },
   "codex_preamble": "You are a Codex worker in an AI game studio. Read AGENTS.md, rules/company.md and rules/assistants/codex.md first. Run the context packet before independent lookup. Load the skills your role names explicitly. Write only inside your brief's scope. End every hand-back with the status block from rules/company.md §4-5. Never claim verification without observed evidence.",
-  "notes": "codex tier models are PROPOSAL: set cheaper Codex models per tier when available."
+  "notes": "codex tier models are PROPOSAL: set cheaper Codex models per tier when available.",
+  "kit_path": null,
+  "context": {
+    "search_roots": null
+  }
 }

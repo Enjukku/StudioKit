@@ -1,0 +1,64 @@
+---
+description: Weekly self-improvement pass. Finds the week's mistakes, consolidates lesson drafts into the knowledge base (merge, supersede, prune, promote), checks context health, applies safe fixes, proposes the rest to the owner, and coaches the owner with the newest official guidance.
+---
+
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit workflow: universal. Merges the earlier `/improve` (owner request 2026-10-09) with the learning loop (`rules/knowledge.md` §5).
+
+# /improve — the weekly review and learning pass
+
+Run once a week (or `/improve 14` for a 14-day window). Lead model at medium effort; mechanical steps go to cheap agents. Write to the owner per `rules/owner-profile.md`.
+
+## Step 1: Gather (scripts, cheap)
+
+1. Window: since the newest `knowledge/logs/improve/*.md`, else 7 days.
+2. `python tools/improve_scan.py --since <date>`: owner messages (corrections flagged), interrupts, rejected or dismissed questions, tool errors, repeated commands, tokens by model and agent.
+3. `git log --since=<date> --stat --oneline`; new rows in `decisions.md`, `tried-and-failed.md`, `open-questions.md`; job ledgers closed this week.
+4. `knowledge/inbox/` drafts; `python tools/kb_index.py --lint`; `python tools/eval_context.py` (score vs last week).
+5. Last week's improve log: did each change hold, or did the same mistake return?
+
+## Step 2: Find the mistakes
+
+One row per owner correction, redo, interrupt, rejection, gate "no", and each tool-error cluster: what happened, root cause, layer to fix.
+
+| Root cause | Fix layer |
+| --- | --- |
+| Context exists but was missed | retrieval: packet tool scope or ranking, an index link, a retrieval eval case |
+| Context does not exist | a ledger row, a lesson, the game profile or owner profile |
+| A rule or skill line is stale, wrong or too narrow | edit or delete that line (pruning beats adding) |
+| Same mistake a second time | promote: rule line, then a hook if it must always hold |
+| Brief, routing or gate problem | orchestration skill or `rules/company.md` |
+| Overcomplication (rounds of patches, size far over estimate) | a simplification review, not another patch |
+| Owner taste missed | `knowledge/design/game-profile.md` (game) or `rules/owner-profile.md` (all games) |
+
+Check `tried-and-failed.md` first: repeating a recorded failure is the most important finding.
+
+## Step 3: Consolidate the knowledge base (the "dreaming" pass)
+
+Delegate the mechanical part to a Sonnet agent with this list; the lead decides promotions.
+1. **Inbox:** group drafts by topic; merge duplicates; drop drafts with no evidence.
+2. **Promote** a lesson to `knowledge/lessons/<area>/`, a skill line, a rule line or an overlay **only if** it happened twice or the owner said or confirmed it. Link the evidence. Mark its scope: universal (kit candidate) or game.
+3. **Supersede** notes the week contradicted (`status: superseded`, link the replacement). Convert relative dates to absolute.
+4. **Agent memories** (`.claude/agent-memory/*/MEMORY.md`): merge duplicates, remove what moved into the vault, keep each under 200 lines.
+5. **Prune:** notes unused and unlinked for 60+ days, stale facts after a model or engine update, duplicated rules.
+6. Move processed drafts to `knowledge/inbox/processed/YYYY-MM-DD/`.
+
+## Step 4: Context health
+
+- Always-loaded size ≤ 200 lines; skills under 500 lines; lint clean; retrieval score not lower than last week.
+- After a new model or harness release: re-check the orchestration skill and role files; suggest `/doctor prompt-audit` (Claude).
+
+## Step 5: Apply, one change at a time
+
+- Apply now: dead links, stale facts, ledger rows, retrieval scope, lesson notes, typo-level rule fixes. Run the gate.
+- Changes to rules, skills, roles, hooks or code behavior: one recommendation each in the owner's decision digest (`templates/jobs/decision-digest.md`). Apply only what the owner approves. A rejected or reverted change gets a `tried-and-failed` row.
+
+## Step 6: Coach the owner
+
+- **Prompt score:** 10-15 owner requests that started work, 0-2 each on outcome, why, done-when, one job, feedback-with-reference. Week score out of 10, trend, and one real request rewritten to score 10 in the owner's voice.
+- **Tips:** one research agent (cheap model) reads the official changelog and docs since the last run (official sources only, newest first, with dates). At most 3 tips that fit what the owner did this week, and at most 3 automation ideas from repeated work, each with a build / don't-build recommendation.
+
+## Step 7: Report and log
+
+1. `knowledge/logs/improve/YYYY-MM-DD.md` (≤ 60 lines): window, numbers, mistakes table, consolidation summary (merged / promoted / superseded / pruned), retrieval score, prompt score, applied and proposed changes with the owner's answers, tips.
+2. Tell the owner in ≤ 15 lines: the 3 biggest mistakes and what changed, what the knowledge base learned, decisions needed, tips.
+3. Commit only your own paths, with the attribution trailers.

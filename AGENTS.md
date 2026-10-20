@@ -9,7 +9,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 | Priority | Source | Holds |
 | --- | --- | --- |
 | 1 | The owner, in chat | Anything. Always wins. |
-| 2 | `rules/company.md` | How the studio works: jobs, gates, tickets, limits, statuses (binding) |
+| 2 | `rules/company.md`, `rules/knowledge.md` | How the studio works (jobs, gates, tickets, limits, statuses) and how context is kept (notes, scopes, learning loop) (binding) |
 | 3 | `rules/*.md` | Binding conventions (owner profile, architecture, security, Luau, UI, performance, platform policy, ...) |
 | 4 | This file + your harness profile | Process |
 | 5 | `knowledge/design/decisions.md` | The only list of locked design decisions (dated, with the owner's words) |
@@ -62,7 +62,7 @@ Written for AI readers: dense tables, fixed keys, `file:line`.
 | A system is finished | `knowledge/systems/<system>.md` with a contract card + an index row |
 | An approach is rejected | Row in `knowledge/design/tried-and-failed.md` |
 
-Every authored note starts with `> Author: <role> · <model id> · <effort> · <date>` and typed frontmatter once phase 2 of the kit lands. `knowledge/generated/` is tool-owned.
+Every authored note starts with typed frontmatter (`rules/knowledge.md` §3), then `> Author: <role> · <model id> · <effort> · <date>`. `knowledge/generated/` is tool-owned.
 
 ## 6. Attribution
 

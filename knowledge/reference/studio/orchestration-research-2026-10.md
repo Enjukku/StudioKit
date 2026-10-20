@@ -1,6 +1,14 @@
-# Orchestration research, October 2026
-
+---
+type: reference
+scope: universal
+status: active
+updated: 2026-10-20
+source: "kit phase 1"
+supersedes: []
+---
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
+
+# Orchestration research, October 2026
 
 | Finding | Source | Date | What it means for the studio |
 | --- | --- | --- | --- |
