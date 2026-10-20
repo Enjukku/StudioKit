@@ -16,7 +16,7 @@ Fill in at project start. This file is the only place for game-specific taste. A
 | --- | --- |
 | Pitch (one sentence) | |
 | Audience (age, play style) | |
-| Platform mix (phone / PC / console %) | |
+| Platform mix (phone / PC / console %) and baseline device for performance budgets | |
 | Pillars (3-5) | |
 | Art style | |
 | UI style | |
