@@ -53,6 +53,7 @@ A screen, HUD element, popup or button is built or changed. The **look** (style,
 ## 6. Self-check before returning
 - [ ] Screenshots at phone, tablet, PC and TV sizes, next to the approved mockup.
 - [ ] Touch, mouse and gamepad each complete the main task.
+- [ ] No action needs hover or a long press only; every long-press or right-click action has a visible button too.
 - [ ] Largest text size and reduced motion checked.
 - [ ] All states defined; disabled states say why.
 - [ ] Open and close the screen repeatedly: connection and instance counts return to baseline.
