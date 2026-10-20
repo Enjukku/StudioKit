@@ -34,14 +34,15 @@ This project is built by an **AI game studio**: the owner is the creative direct
 
 Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, server authority for anything that touches fairness, saves or currency. One client↔server transport layer; validate every client call (types, NaN/inf, rate, ownership, range, state). Content is data: tuning, tables and layouts live in data files compiled by tools, never as numbers inside logic modules. Package choices per game live in `knowledge/design/game-profile.md`.
 
-**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review. Saved data, receipts or trades: also load `data-saving`.
+**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review. Saved data, receipts or trades: also load `data-saving`. Anything client-callable: also load `networking-security`.
 
 ## 3. Tools: the source of truth, the gate verifies, Studio confirms
 
 1. **Code lives where the game profile's source mode says** (default `files`: on disk, synced by Rojo or Script Sync). In `files` mode never edit scripts through Studio MCP.
 2. **The gate** (`powershell -File tools/verify.ps1` or the game's equivalent): `RESULT: PASS` or not done.
 3. **Studio MCP** (skill `studio-mcp`) for what the gate cannot reach: live data model, Output, play-tests, screenshots. Every call names its `studio_id`; one driver per Studio instance.
-4. **Visual work** gets the agent's own multi-angle review before the owner sees it. Label every check: gate-verified / MCP-verified / owner-confirmed / not verified.
+4. **Secrets** (API keys, tokens) live outside the repo (environment variables or key files) and in the place's Secrets store; never in code, notes, commits or chat.
+5. **Visual work** gets the agent's own multi-angle review before the owner sees it. Label every check: gate-verified / MCP-verified / owner-confirmed / not verified.
 
 ## 4. How to work
 
