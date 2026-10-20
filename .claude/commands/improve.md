@@ -58,6 +58,10 @@ Delegate the mechanical part to a Sonnet agent with this list; the lead decides 
 - **Prompt score:** 10-15 owner requests that started work, 0-2 each on outcome, why, done-when, one job, feedback-with-reference. Week score out of 10, trend, and one real request rewritten to score 10 in the owner's voice.
 - **Tips:** one research agent (cheap model) reads the official changelog and docs since the last run (official sources only, newest first, with dates). At most 3 tips that fit what the owner did this week, and at most 3 automation ideas from repeated work, each with a build / don't-build recommendation.
 
+## Step 6b: Monthly agent review (first run of each month)
+
+`python tools/agent_scorecard.py --days 30 --json knowledge/logs/agent-review/<date>.json`; compare with the last saved run. Roles whose score fell after a change get a revert proposal and a `tried-and-failed` row; roles whose score is low or stale (older than the newest model or harness release) get one improvement proposal each in the owner digest. Keep a role change only if the next month's score holds.
+
 ## Step 7: Report and log
 
 1. `knowledge/logs/improve/YYYY-MM-DD.md` (≤ 60 lines): window, numbers, mistakes table, consolidation summary (merged / promoted / superseded / pruned), retrieval score, prompt score, applied and proposed changes with the owner's answers, tips.

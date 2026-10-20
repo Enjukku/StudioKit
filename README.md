@@ -37,8 +37,6 @@ An AI game studio setup for Roblox games. Clone it into every new game. It holds
 | `/improve` | Weekly. Mistakes review, the learning loop (inbox consolidation, promotion), context health, owner coaching. |
 | `/integrate` | Kit to game overlays. Weekly or after big decisions. Owner approves. |
 | `/kit-sync` | Universal lessons up from a game to the kit, and kit updates down. Owner approves. |
-| `/council` | 2-4 specialist lenses in parallel, one synthesis. |
-| `/agent-review` | Score the agents, review the weak ones, keep a change only if the next score holds. |
 
 Workflows live in `.agents/workflows/*.md`. Claude Code gets them as generated commands; Codex reads them on request.
 
