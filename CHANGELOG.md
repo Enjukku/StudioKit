@@ -2,6 +2,12 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.4.0 (2026-10-20): engineering skills (J001 steps 1-5, 8, 9)
+
+- Skills: `studio-mcp`, `platform-policy`, `data-saving`, `performance`, `networking-security`, `ui-basics`, `analytics`, each with sourced references and eval briefs.
+- Rules: `rules/packages.md` (choosing packages); AGENTS.md: source mode per game, `studio_id`, secrets rule, skill pointers.
+- Reference: digest of the owner's architecture research paper.
+
 ## 0.3.1 (2026-10-20): Roblox docs in the kit (J001 step 0)
 
 - The Roblox Creator Docs mirror now ships with the kit (`knowledge/external/roblox-creator-docs/`, upstream `7400643`), with its sync tool `tools/sync_roblox_docs.py` (ported from DestructionSimulator).

@@ -9,7 +9,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 | Priority | Source | Holds |
 | --- | --- | --- |
 | 1 | The owner, in chat | Anything. Always wins. |
-| 2 | `rules/company.md`, `rules/knowledge.md` | How the studio works (jobs, gates, tickets, limits, statuses) and how context is kept (notes, scopes, learning loop) (binding) |
+| 2 | `rules/company.md`, `rules/knowledge.md`, `rules/packages.md` | How the studio works (jobs, gates, tickets, limits, statuses), how context is kept (notes, scopes, learning loop) and how packages are chosen (binding) |
 | 3 | `rules/*.md` | Binding conventions (owner profile, architecture, security, Luau, UI, performance, platform policy, ...) |
 | 4 | This file + your harness profile | Process |
 | 5 | `knowledge/design/decisions.md` | The only list of locked design decisions (dated, with the owner's words) |
@@ -32,9 +32,9 @@ This project is built by an **AI game studio**: the owner is the creative direct
 
 ## 2. Stack defaults (Roblox)
 
-Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, server authority for anything that touches fairness, saves or currency. One client↔server transport layer; validate every client call (types, NaN/inf, rate, ownership, range, state). Content is data: tuning, tables and layouts live in data files compiled by tools, never as numbers inside logic modules. Package choices per game live in `knowledge/design/game-profile.md`.
+Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, server authority for anything that touches fairness, saves or currency. One client↔server transport layer; validate every client call (types, NaN/inf, rate, ownership, range, state). Content is data: tuning, tables and layouts live in data files compiled by tools, never as numbers inside logic modules. Package choices per game live in `knowledge/design/game-profile.md`; how to choose one: `rules/packages.md`.
 
-**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review. Saved data, receipts or trades: also load `data-saving`. Anything client-callable: also load `networking-security`.
+**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review. Saved data, receipts or trades: also load `data-saving`. Anything client-callable: also load `networking-security`. New player steps, currency flows or quit points: also load `analytics`.
 
 ## 3. Tools: the source of truth, the gate verifies, Studio confirms
 
