@@ -14,7 +14,7 @@ supersedes: []
 | --- | --- |
 | Size | L (many skills; research; owner reviews each) |
 | Job owner | lead (orchestrator) |
-| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Next: step 2 |
+| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Step 2 done 2026-10-20 (skill `platform-policy`, owner approved). Next: step 3 |
 | Kit | `C:\Users\Firew\Downloads\uterd\StudioKit` (0.3.0) · audit source: DestructionSimulator skills/rules (read-only) |
 
 ## Owner's words (2026-10-20, verbatim excerpts)
@@ -56,4 +56,5 @@ Research and extraction: Sonnet medium (cheap, parallel by source). Skill writin
 | Date | Gate | Owner's words |
 | --- | --- | --- |
 | 2026-10-20 | G1 | (approved scope and source rules in chat; see "Owner's words") |
+| 2026-10-20 | G3 step 2 | "Approved. Commit the platform policy skill and start J001 step 3: data saving." |
 | 2026-10-20 | G3 step 1 | "Approved. Commit the Studio MCP skill and start J001 step 2: platform policy." |

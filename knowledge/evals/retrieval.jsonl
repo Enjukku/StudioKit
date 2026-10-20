@@ -7,3 +7,4 @@
 {"task": "an agent is blocked and needs a decision from the owner", "expect": ["rules/company.md#5", ".agents/skills/orchestration/SKILL.md#6"], "note": "status table plus how the lead handles statuses"}
 {"task": "which frontmatter fields does every knowledge note need", "expect": ["rules/knowledge.md#3"], "note": "typed frontmatter spec"}
 {"task": "play-test the game in Studio and check Output for new errors", "expect": [".agents/skills/studio-mcp/SKILL.md"], "note": "studio-mcp skill (J001 step 1)"}
+{"task": "add a paid egg with a luck potion and show odds", "expect": [".agents/skills/platform-policy/SKILL.md"], "note": "platform-policy skill (J001 step 2)"}

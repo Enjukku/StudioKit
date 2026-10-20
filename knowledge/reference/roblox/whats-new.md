@@ -111,7 +111,8 @@ supersedes: []
 
 | Rule or feature | Status | Date | Source | What it means |
 | --- | --- | --- | --- | --- |
-| Paid random items | standing policy, no 2026 change found | - | mirror `production/monetization/paid-random-items`; `PolicyService.yaml` | Numeric odds summing to 100 % before purchase, also for indirect currency; check `ArePaidRandomItemsRestricted` per player and offer a fixed alternative |
+| Paid random items: clarifications (bundles with a random item, luck passes, blind restocks and nested boxes all count; every outcome must give value; hiding is the preferred restricted treatment) | policy clarification | 2026-05-26 | [DF 4654622](https://devforum.roblox.com/t/clarifying-requirements-for-paid-random-items/4654622), dinobotsnarl824 | Detail in skill `platform-policy` |
+| Paid random items (base rules) | standing policy | - | mirror `production/monetization/paid-random-items`; `PolicyService.yaml` | Numeric odds summing to 100 % before purchase, also for indirect currency; check `ArePaidRandomItemsRestricted` per player and offer a fixed alternative |
 | Age check: `Player:PromptAgeCheck()`, `Player.AgeChecked` | **live** | API section 2026-10-12 | [DF 4607091](https://devforum.roblox.com/t/introducing-the-us-18-devex-rate-earn-42-more-on-spend-from-18-us-players/4607091), peraldon | Never gate core gameplay on it; console and VR cannot run the flow |
 | Age check to chat; chat groups by age | **live** | early 2026 | `TextChatService.yaml` (`GetChatGroupsAsync`) | Do not assume all players can chat with each other |
 | Social media links only for age-checked 16+; no in-game social-link sharing | policy | 2026-06-30 | [DF 4685717](https://devforum.roblox.com/t/roblox-kids-and-select-global-launch-upcoming-updates-to-eligibility-ads-manager-and-expedited-review/4685717), RbxRocketMan; mirror `production/promotion/social-media-links` | Do not build social-link UI |
