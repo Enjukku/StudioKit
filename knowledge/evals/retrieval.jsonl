@@ -16,3 +16,4 @@
 {"task": "should we add a new package from GitHub for state management", "expect": ["rules/packages.md"], "note": "choosing-packages rule (J001 step 9)"}
 {"task": "design a new quest system so adding quests is easy", "expect": [".agents/skills/architecture/SKILL.md"], "note": "architecture skill (J001 step 6)"}
 {"task": "review this change before merge, is it safe", "expect": [".agents/skills/code-review/SKILL.md"], "note": "code-review skill (J001 step 6)"}
+{"task": "the agent added too many files and abstractions, keep the change small", "expect": ["rules/anti-overengineering.md"], "note": "anti-over-engineering rule (J001 step 7)"}

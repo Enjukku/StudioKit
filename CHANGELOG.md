@@ -2,6 +2,12 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.5.0 (2026-10-20): J001 closed
+
+- Skills: `architecture`, `code-review` (with `luau-current` and `testing` references).
+- Rule: `rules/anti-overengineering.md` (Claude team guidance), wired into AGENTS.md, code review and briefs.
+- Owner research papers digested (architecture, operations) and applied to the approved skills: performance budgets, save recovery and mixed writers, damage-ranked exploit tests, config refresh, multi-client test tools.
+
 ## 0.4.0 (2026-10-20): engineering skills (J001 steps 1-5, 8, 9)
 
 - Skills: `studio-mcp`, `platform-policy`, `data-saving`, `performance`, `networking-security`, `ui-basics`, `analytics`, each with sourced references and eval briefs.

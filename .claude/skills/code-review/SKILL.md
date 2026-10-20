@@ -38,6 +38,7 @@ A change is ready to merge, a builder handed back code, or something broke. The 
 | V-08 | **Lifetimes:** every `Connect`, `task.spawn/delay`, tween and `Instance.new` has a cleanup owner; the reviewer names the owner or reports the leak | `architecture` R-11 |
 | V-09 | **Scope discipline:** changes outside the owned files, unrequested renames, new packages or layers are findings, even if they work | `rules/packages.md`; `architecture` R-09 |
 | V-10 | **Report what was not checked** (no Studio run, no device test, teleport untestable in Studio) with the labels gate-verified / MCP-verified / owner-confirmed / not verified | `AGENTS.md` §3 |
+| V-11 | **Over-building is a finding, nitpicks are not.** Apply the reviewer checks in `rules/anti-overengineering.md` (unplanned files, one-caller abstractions, defensive code around our own code, out-of-scope edits, extra tests, stubs). Do not report style or "could be nicer" items: chasing every gap is itself over-engineering | `rules/anti-overengineering.md`; code.claude.com/docs/en/best-practices |
 
 ## 5. Rules (final check)
 - Changes touching purchases, currency, saves, trades or client-callable methods always get this review before merge.

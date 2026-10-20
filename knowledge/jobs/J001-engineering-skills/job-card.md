@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: active
+status: done
 updated: 2026-10-20
 source: owner chat 2026-10-20
 supersedes: []
@@ -14,7 +14,7 @@ supersedes: []
 | --- | --- |
 | Size | L (many skills; research; owner reviews each) |
 | Job owner | lead (orchestrator) |
-| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Step 2 done 2026-10-20 (skill `platform-policy`, owner approved). Step 3 done 2026-10-20 (skill `data-saving`, owner approved). Step 4 done 2026-10-20 (skill `performance`, owner approved). Step 5 done 2026-10-20 (skill `networking-security`, owner approved). Order change: steps 6-7 wait for the owner's ChatGPT research papers (architecture, testing, updates, performance targets, exploits); step 8 done 2026-10-20 (skill `ui-basics`, owner approved); step 9 done 2026-10-20 (skill `analytics`, `rules/packages.md`, security cleanup; owner approved). Step 6 done 2026-10-20 (skills `architecture`, `code-review` + `luau-current`, owner approved). Left: step 7. Received 2026-10-20: operations paper (testing, releases, performance budgets, exploits), digest `knowledge/reference/architecture/roblox-operations-2026-10.md`; architecture paper, digest `knowledge/reference/architecture/strong-codebases-2026-10.md` |
+| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Step 2 done 2026-10-20 (skill `platform-policy`, owner approved). Step 3 done 2026-10-20 (skill `data-saving`, owner approved). Step 4 done 2026-10-20 (skill `performance`, owner approved). Step 5 done 2026-10-20 (skill `networking-security`, owner approved). Order change: steps 6-7 wait for the owner's ChatGPT research papers (architecture, testing, updates, performance targets, exploits); step 8 done 2026-10-20 (skill `ui-basics`, owner approved); step 9 done 2026-10-20 (skill `analytics`, `rules/packages.md`, security cleanup; owner approved). Step 6 done 2026-10-20 (skills `architecture`, `code-review` + `luau-current`, owner approved). Step 7 done 2026-10-20 (`rules/anti-overengineering.md`, owner approved). **Job closed 2026-10-20.** Follow-ups: run each skill's eval briefs once; move DestructionSimulator to the kit skills (`/kit-sync`, `/integrate`); push the kit to GitHub when the owner says. Received 2026-10-20: operations paper (testing, releases, performance budgets, exploits), digest `knowledge/reference/architecture/roblox-operations-2026-10.md`; architecture paper, digest `knowledge/reference/architecture/strong-codebases-2026-10.md` |
 | Kit | `C:\Users\Firew\Downloads\uterd\StudioKit` (0.3.0) · audit source: DestructionSimulator skills/rules (read-only) |
 
 ## Owner's words (2026-10-20, verbatim excerpts)
@@ -56,6 +56,7 @@ Research and extraction: Sonnet medium (cheap, parallel by source). Skill writin
 | Date | Gate | Owner's words |
 | --- | --- | --- |
 | 2026-10-20 | G1 | (approved scope and source rules in chat; see "Owner's words") |
+| 2026-10-20 | G3 step 7, close | "Approved. Commit step 7 and close J001." |
 | 2026-10-20 | G3 step 6 + ops revisions | "Approved. Commit the revisions and step 6, then start step 7: anti-over-engineering." |
 | 2026-10-20 | G3 paper revision | "Keep them. Commit the paper-based improvements." |
 | 2026-10-20 | G3 step 9 | "Approved. Commit step 9. Then tell me what is left in J001." |
