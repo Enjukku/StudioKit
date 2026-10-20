@@ -8,3 +8,4 @@
 {"task": "which frontmatter fields does every knowledge note need", "expect": ["rules/knowledge.md#3"], "note": "typed frontmatter spec"}
 {"task": "play-test the game in Studio and check Output for new errors", "expect": [".agents/skills/studio-mcp/SKILL.md"], "note": "studio-mcp skill (J001 step 1)"}
 {"task": "add a paid egg with a luck potion and show odds", "expect": [".agents/skills/platform-policy/SKILL.md"], "note": "platform-policy skill (J001 step 2)"}
+{"task": "players lost their data after a teleport, items duplicated", "expect": [".agents/skills/data-saving/SKILL.md"], "note": "data-saving skill (J001 step 3)"}

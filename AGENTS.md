@@ -34,7 +34,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 
 Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, server authority for anything that touches fairness, saves or currency. One client↔server transport layer; validate every client call (types, NaN/inf, rate, ownership, range, state). Content is data: tuning, tables and layouts live in data files compiled by tools, never as numbers inside logic modules. Package choices per game live in `knowledge/design/game-profile.md`.
 
-**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review.
+**Platform rules.** Anything players buy, roll, trade, type, share or watch, plus ads, links, AI features, player data and mature or franchise themes: load the `platform-policy` skill at design time and again at review. Saved data, receipts or trades: also load `data-saving`.
 
 ## 3. Tools: the source of truth, the gate verifies, Studio confirms
 
