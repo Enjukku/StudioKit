@@ -19,7 +19,7 @@ Results depend on context. These rules keep context **correct, small and findabl
 | Skills | `.agents/skills/<skill>/` (+ the game's overlay) | when the craft is needed | SKILL.md ≤ 500 lines; detail in references |
 | Path rules | `.claude/rules/*.md` with `paths:` (Claude) | when matching files are touched | only area-specific rules |
 | Agent memory | `.claude/agent-memory/<agent>/MEMORY.md` (`memory: project`) | when that agent starts | first 200 lines / 25 KB load; detail in topic files |
-| Reference | `knowledge/reference/`, `knowledge/external/` (docs mirrors) | on lookup | agent-ready cards for big docs (dense tables), raw mirror for exact lookup |
+| Reference | `knowledge/reference/`, `knowledge/external/` (docs mirrors) | on lookup | agent-ready cards for big docs (dense tables), raw mirror for exact lookup. Roblox mirror: grep it (the packet skips it); refresh with `python tools/sync_roblox_docs.py`, then update `knowledge/reference/roblox/whats-new.md` |
 
 ## 3. Notes
 

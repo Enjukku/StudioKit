@@ -2,6 +2,12 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.3.1 (2026-10-20): Roblox docs in the kit (J001 step 0)
+
+- The Roblox Creator Docs mirror now ships with the kit (`knowledge/external/roblox-creator-docs/`, upstream `7400643`), with its sync tool `tools/sync_roblox_docs.py` (ported from DestructionSimulator).
+- New note `knowledge/reference/roblox/whats-new.md`: 2026 features, betas and rules from official Roblox posts, by skill area.
+- Fixed the project-authored UI pages: base UIShadow and per-corner UICorner are live; Upgraded UIShadows and Upgraded UIGradients are beta and not publishable.
+
 ## 0.3.0 (2026-10-20): phase 3, orchestrator and agent-building system
 
 - The kit ships only the orchestrator and the system; other roles are built from owner material (owner decision).

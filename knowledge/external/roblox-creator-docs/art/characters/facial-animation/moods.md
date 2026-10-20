@@ -1,0 +1,138 @@
+---
+title: Moods
+description: Moods are a type of facial animation that loop indefinitely, allowing users to express persistent facial emotion.
+tags: [roblox, documentation, external-reference, priority-reference, art, assets, animation]
+---
+
+
+> [!info] Local Roblox Creator Docs mirror
+> Mirrored from [art/characters/facial-animation/moods.md](https://github.com/Roblox/creator-docs/blob/main/content/en-us/art/characters/facial-animation/moods.md). Published page: [https://create.roblox.com/docs/art/characters/facial-animation/moods](https://create.roblox.com/docs/art/characters/facial-animation/moods).
+
+A **mood** is a type of facial animation for [[external/roblox-creator-docs/avatar/dynamic-heads/index|dynamic heads]] that loops indefinitely, allowing users to express themselves and react to others with a persistent facial emotion. Moods play simultaneously with other character [[external/roblox-creator-docs/animation/using#default-character-animations|default animations]], such as walking, climbing, and swimming, and if the default animation has a facial animation, the default animation blends with the character's mood.
+
+<GridContainer numColumns="2">
+  <figure>
+    <video controls src="../../../assets/avatar/dynamic-heads/moods/Overview-Default-Mood.mp4" width="70%"></video>
+    <figcaption>Default mood</figcaption>
+  </figure>
+	<figure>
+    <video controls src="../../../assets/avatar/dynamic-heads/moods/Overview-Open-Mouth-Mood.mp4" width="70%"></video>
+    <figcaption>Open mouth mood</figcaption>
+  </figure>
+</GridContainer>
+
+<Alert severity="info">
+   A mood is a type of facial animation, but not all facial animations are moods. While a mood refers to a specific animation slot that belongs to each character, a facial animation refers to **any** animation that modifies the face channels.
+</Alert>
+
+## Create moods
+
+If you have a character model with an animatable head, you can create any mood animation you can think of using the [[external/roblox-creator-docs/art/characters/facial-animation/animate-heads#use-the-face-animation-editor|Face Animation Editor]]. If you don't want to use the [Blocky](../../../assets/avatar/dynamic-heads/reference-files/BlockyCharacter.fbx) or [Goblin](../../../assets/avatar/dynamic-heads/reference-files/GoblinCharacter.zip) reference character models, you can create or modify an existing model to support animated heads in a third-party modeling software, such as Blender or Maya. For information on how to create an animatable head, see [[external/roblox-creator-docs/art/characters/facial-animation/create-basic-heads|Create basic heads]].
+
+To create a mood:
+
+1. Add a character model with an animatable head to the viewport.
+1. Open the **Face Animation Editor**.
+
+   1. From the toolbar's **Avatar** tab, click **Clip Editor**. The [[external/roblox-creator-docs/animation/editor|Animation Editor]] window displays.
+   1. In the viewport, select your character model with an animatable head.
+   1. In the editor's [[external/roblox-creator-docs/animation/editor#interface|track list]], click the **Face** button. The **Face Animation Editor** displays to the left of the track list.
+
+1. In the **Face Animation Editor**, adjust sliders for the facial parts you want to manipulate. Animation tracks for each facial part you manipulate automatically display in the track list along with keyframes for your current position in the timeline. The character's face also updates in the viewport.
+
+   - To undo a step on a slider, press <kbd>Ctrl</kbd><kbd>Z</kbd> (<kbd>⌘</kbd><kbd>Z</kbd>).
+   - To redo a step on a slider, press <kbd>Ctrl</kbd><kbd>Y</kbd> (<kbd>⌘</kbd><kbd>Y</kbd>).
+   - To reset a slider to its default value, right click on the slider. A contextual menu displays. Select **Reset Selected**.
+
+1. When you are finished creating your animation, navigate to the **Media and Playback Controls** and click the **…** button. A pop-up menu displays.
+
+   <img img src="../../../assets/animation/animation-editor/Controls-File-Menu.png" width="680" />
+
+1. Select **Save** or **Save As** to save the mood animation. The animation displays in the **Explorer** window as a child of the **AnimSaves** object (itself a child of the rig).
+
+   <img width="20%" img src="../../../assets/avatar/dynamic-heads/moods/HappyMood.png" />
+
+1. <Chip label="OPTIONAL" size="small" variant="outlined" /> To assign an asset ID to your mood animation and save it to the [[external/roblox-creator-docs/projects/assets/toolbox|Toolbox]] to use across your games,
+
+   1. In the **Explorer** window, right-click on your new mood animation. A contextual menu displays.
+   1. Select **Save to Roblox**. The **Asset Configuration** window displays.
+   1. Fill in the following fields:
+
+      - **Title**: A name for your plugin.
+      - **Description**: A description that describes what a potential user should expect the plugin to do.
+      - **Creator**: The creator you'd like to attribute as the creator of the plugin.
+
+   1. Click the **Submit** button. After a moment, the Asset Configuration dialog displays your mood's `Class.Animation.AnimationID` that you can use to set the mood to characters within your games.
+
+      <img width="80%" img src="../../../assets/avatar/dynamic-heads/moods/Animation-ID.png" />
+
+## Set moods
+
+Every character with an animatable head has a child **Animate** `Class.LocalScript` with a child **mood** `Class.StringValue` that contains the mood animation that plays on the character's head. The mood animation's default `Class.Animation.AnimationID` plays a smiling animation, but you can change the character's mood to something else by either directly editing the `Class.Animation.AnimationID` within the mood `Class.StringValue`, or using the `Class.HumanoidDescription` system.
+
+<img src="../../../assets/avatar/dynamic-heads/moods/animate-localscript-hierarchy.jpg" width="20%" />
+
+<Alert severity="warning">
+   The code for playing moods doesn't occur in the  **Animate** `Class.LocalScript`, but in a hidden, internal Roblox script. While you can't edit this internal script, the **mood** `Class.StringValue` allows you to interact with it in order to customize moods within your games.
+</Alert>
+
+### Edit AnimationIds
+
+You can set a specific mood for each character within your game by editing their mood's `Class.Animation.AnimationID` whenever a user triggers an event. For example, the following `Class.Script` edits any previously set mood to an animation that [opens the character's mouth](https://www.roblox.com/library/7715145252/moods-11-FaceAnimation) as soon as the user enters the game:
+
+```lua
+local Players = game:GetService("Players")
+
+local function onCharacterAdded(character)
+	local humanoid = character:WaitForChild("Humanoid")
+	local animateScript = character:WaitForChild("Animate")
+	animateScript.mood.Animation1.AnimationId = "rbxassetid://7715145252" -- Mood
+end
+
+local function onPlayerAdded(player)
+	player.CharacterAppearanceLoaded:Connect(onCharacterAdded)
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+```
+
+### Use the HumanoidDescription
+
+You can also use the `Class.HumanoidDescription` system to find user characters and edit their `Class.Animation.AnimationID|AnimationIDs` for any default animation. For example, the following `Class.Script` edits any previously set mood to an animation that gives the character a [half-smile](https://www.roblox.com/catalog/10725833199/Chiseled-Good-Looks-Mood) on the left-side of their face whenever their character is idling:
+
+```lua
+local humanoid = player.Character and player.Character:FindFirstChildWhichIsA("Humanoid")
+if humanoid then
+	local descriptionClone = humanoid:GetAppliedDescription()
+	descriptionClone.IdleAnimation = 10725833199
+	-- Apply modified "descriptionClone" to humanoid
+	humanoid:ApplyDescription(descriptionClone)
+end
+```
+
+## Disable moods
+
+To disable moods from your game, you can delete the mood object underneath the **Animate** `Class.LocalScript`. For example, the following `Class.Script` removes every character's **mood** `Class.StringValue` as soon as they join the game:
+
+```lua
+local Players = game:GetService("Players")
+
+local function onCharacterAdded(character)
+	local humanoid = character:WaitForChild("Humanoid")
+	local animateScript = character:WaitForChild("Animate")
+	animateScript.mood:Destroy()
+end
+
+local function onPlayerAdded(player)
+	player.CharacterAppearanceLoaded:Connect(onCharacterAdded)
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+```
+
+
+## Related Files
+
+- [[external/roblox-creator-docs/art/characters/facial-animation/animate-heads]] - Animate heads.
+- [[external/roblox-creator-docs/art/characters/facial-animation/create-basic-heads]] - Create basic dynamic heads.
+- [[external/roblox-creator-docs/art/characters/facial-animation/create-face-accessories]] - Create face accessories.

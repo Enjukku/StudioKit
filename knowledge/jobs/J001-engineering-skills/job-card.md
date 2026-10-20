@@ -14,7 +14,7 @@ supersedes: []
 | --- | --- |
 | Size | L (many skills; research; owner reviews each) |
 | Job owner | lead (orchestrator) |
-| Status | G1 approved in chat 2026-10-20 (owner chose "rebuild", with source rules below); next: step 0 |
+| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Next: step 1 |
 | Kit | `C:\Users\Firew\Downloads\uterd\StudioKit` (0.3.0) · audit source: DestructionSimulator skills/rules (read-only) |
 
 ## Owner's words (2026-10-20, verbatim excerpts)
@@ -44,7 +44,7 @@ Every fact in a skill cites its source and date.
 4. Performance: MicroProfiler, scene analysis, device/network simulators, streaming features; game-specific physics stays in games.
 5. Networking and security (remotes-security is the best base).
 6. Architecture + code review + Luau: research strong modular game foundations (easy to add content); modern Luau (task, strict types, new solver, Parallel/Actors, buffer, native).
-7. Anti-over-engineering (Claude team first; popular Luau/Roblox GitHub projects — identify the one the owner called "Ponytail").
+7. Anti-over-engineering (Claude team first; popular GitHub projects are input only. Owner 2026-10-20: the "Ponytail" repo is not important; "we could just design the stuff ourselves").
 8. UI basics + new Roblox UI features (deep UI agent later from owner material); keep the UI effects page.
 9. Analytics, security rule cleanup, "choosing packages" rule.
 Each skill: design via `/build-agent` steps 2-5 where it applies (notes → skill → evals); owner sees each before it lands (G3 per skill).

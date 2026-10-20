@@ -1,0 +1,167 @@
+---
+title: Core curriculum
+description: Learn the technical and creative essentials to building Roblox games.
+tags: [roblox, documentation, external-reference, priority-reference, tutorials]
+next: /tutorials/curriculums/core/building/create-a-project
+hideInPageNavigation: true
+---
+
+
+> [!info] Local Roblox Creator Docs mirror
+> Mirrored from [tutorials/curriculums/core/index.md](https://github.com/Roblox/creator-docs/blob/main/content/en-us/tutorials/curriculums/core/index.md). Published page: [https://create.roblox.com/docs/tutorials/curriculums/core](https://create.roblox.com/docs/tutorials/curriculums/core).
+
+<>
+<Grid
+    alignItems="stretch"
+    container
+    direction="row">
+
+<Grid item Large={7} XSmall={12} direction="column">
+
+<div class="container"
+style={{position: "relative", paddingBottom: "56.25%", height: 0}}>
+<iframe width="880" height="495" src="https://www.youtube-nocookie.com/embed/zi0hIuPDyWc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen style={{position: "absolute", top: 0, left: 0, width: "95%", height: "95%"}}></iframe>
+</div>
+
+</Grid>
+
+<Grid item Large={5} XSmall={12} direction="column">
+
+The core curriculum helps you learn many essential Studio features across
+technical and creative disciplines.
+
+You'll learn how to recreate a simple [3D platformer
+game](https://www.roblox.com/games/14238807008) where players collect
+coins to trade for jump power. Players jump to navigate progressively taller
+platforms until they reach a flare on top of the highest platform.
+
+This course is intended for readers who are familiar
+with general coding concepts but are new to Roblox. If you need help learning
+how to code, try the [[external/roblox-creator-docs/tutorials/first-experience/index|absolute basics]] of working in Studio and
+[[external/roblox-creator-docs/tutorials/fundamentals/coding-1/coding-fundamentals|coding fundamentals]].
+</Grid>
+
+</Grid>
+</>
+
+## Course contents
+
+The core curriculum is split into three chapters, each with a
+corresponding place file. You can go through the steps for each chapter or
+inspect the place files if you want to see the end result of each chapter.
+
+   <BaseAccordion>
+   <AccordionSummary>
+      <Typography variant="h4">Chapter 1 - Build a greybox</Typography>
+   </AccordionSummary>
+   <AccordionDetails>
+
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-a-project|Create a project]] - Learn how to create a `.rbxl` file that represents your game on the Roblox platform.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-an-environment-with-terrain|Create an environment with terrain]] - Learn how to create the island where players spawn using Studio's terrain tools.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/greybox-a-playable-area|Greybox a playable area]] - Learn how to use solid modeling tools to plan out the basic shape of your platforms.
+
+        <a href="https://www.roblox.com/games/14239096301/Island-Jump-Building">
+        <Button
+          color="primary"
+          size="medium"
+          variant="contained">
+          Get the place file
+        </Button>
+        </a>
+
+   </AccordionDetails>
+   </BaseAccordion>
+
+   <BaseAccordion>
+   <AccordionSummary>
+      <Typography variant="h4">Chapter 2 - Script the gameplay</Typography>
+   </AccordionSummary>
+   <AccordionDetails>
+
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/script-game-behavior|Create a coin collection mechanic]] - Learn how to track and store players' coin collecting.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/record-and-display-player-data|Record and display player data]] - Learn how to store, retrieve, and display individual player data visually through a leaderboard.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/create-player-hazards|Create player hazards]] - Learn how to create a hazard in the water by modifying player behavior and creating a player life cycle.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/script-an-upgrade-button|Script an upgrade button]] - Learn how to upgrade player jump power by communicating with the Roblox server and handling GUI interactions.
+
+        <a href="https://www.roblox.com/games/14239042199/Island-Jump-Scripting">
+        <Button
+          color="primary"
+          size="medium"
+          variant="contained">
+          Get the place file
+        </Button>
+        </a>
+
+   </AccordionDetails>
+   </BaseAccordion>
+
+   <BaseAccordion>
+   <AccordionSummary>
+      <Typography variant="h4">Chapter 3 - Polish the game</Typography>
+   </AccordionSummary>
+   <AccordionDetails>
+
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-basic-visual-effects|Create basic visual effects]] - Learn how to create two different kinds of visual effect using particle emitters.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/customize-global-lighting|Customize global lighting]] - Learn how to use global lighting settings to refine the look and feel of your game.
+    - [[external/roblox-creator-docs/tutorials/curriculums/core/building/apply-polished-assets|Apply polished assets]] - Learn how to finish your scene by replacing simple parts with complex, imported models.
+
+        <a href="https://www.roblox.com/games/14238807008/Island-Jump-Completed-Sample">
+        <Button
+          color="primary"
+          size="medium"
+          variant="contained">
+          Get the place file
+        </Button>
+        </a>
+
+   </AccordionDetails>
+   </BaseAccordion>
+
+## Why build with Assistant?
+
+Unlike many game development workflows that rely on multiple third-party tools, Roblox provides the engine, networking, asset marketplace, publishing pipeline, and AI-powered Assistant in a single platform. This allows you to build, test, and publish a multiplayer game without integrating additional tools or services.
+
+Assistant runs inside Studio, so it can create instances, configure properties, and generate scripts in your project. This means you can complete common development tasks without switching between Studio and external tools. For creators who are new to Roblox, Assistant can help reduce the amount of Studio functionality you need to learn before you can start building games.
+
+Throughout this curriculum, you'll find **Build with Assistant** and **Build it Yourself** options. You can follow either workflow. Completing the manual steps can help you understand how Studio works, while using Assistant can help you complete routine tasks more quickly and efficiently.
+
+<table>
+  <thead>
+    <tr>
+      <th>Assistant can help with</th>
+      <th>You'll still want to do yourself</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Creating and organizing instances such as folders, models, and parts</td>
+      <td>Sculpting terrain and building environments</td>
+    </tr>
+    <tr>
+      <td>Configuring properties and positioning objects according to specific requirements</td>
+      <td>Choosing colors, lighting, and visual style</td>
+    </tr>
+    <tr>
+      <td>Generating boilerplate code, including event handlers, leaderboards, RemoteFunctions, and GUI logic</td>
+      <td>Designing gameplay and deciding where objects should be placed</td>
+    </tr>
+    <tr>
+      <td>Following detailed tutorial instructions without repetitive copy-pasting</td>
+      <td>Playtesting, balancing, and refining the player experience</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## Related Files
+
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/apply-polished-assets]] - Apply polished assets.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/script-game-behavior]] - Create a coin collection mechanic.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-a-project]] - Create a project.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-an-environment-with-terrain]] - Create an environment with terrain.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/create-basic-visual-effects]] - Create basic visual effects.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/create-player-hazards]] - Create player hazards.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/customize-global-lighting]] - Customize global lighting.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/building/greybox-a-playable-area]] - Greybox a playable area.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/record-and-display-player-data]] - Record and display player data.
+- [[external/roblox-creator-docs/tutorials/curriculums/core/scripting/script-an-upgrade-button]] - Script an upgrade button.
