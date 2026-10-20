@@ -41,6 +41,7 @@ You have a question only a running Studio can answer, or a check to label MCP-ve
 | C-10 | Asset tools (`search_asset`, `insert_asset`, `generate_*`, `upload_image`) only when the brief asks. A Creator Store model can contain scripts: inspect it for `LuaSourceContainer` descendants before it stays in the place. Record every asset ID you keep in the game's data files. | mirror `studio/mcp.md` (only connect trusted clients; tools can modify places) |
 | C-11 | Docs: use the local mirror before MCP `http_get`. Use MCP `skill` only for Roblox's own how-to notes; our skills win on conflict. | `AGENTS.md` §0 |
 | C-12 | Team Create saves edits live for everyone. A test toggle left on is a change to the shared place. | observed 2026-09 |
+| C-13 | **Repeatable tests are not MCP clicks.** MCP suits one-off checks with one player. For repeatable multi-player tests use `StudioTestService:ExecuteMultiplayerTestAsync` from a test plugin (up to 8 simulated clients); for headless server tests in CI use Open Cloud Luau Execution (≤ 5 min per task). **Teleports cannot be tested in Studio**: they need the published game | `knowledge/external/roblox-creator-docs/_api-reference/classes/StudioTestService.yaml`; `knowledge/reference/architecture/roblox-operations-2026-10.md` §1 |
 
 ## 5. Source modes (set per game in `knowledge/design/game-profile.md`)
 | Mode | Code lives | MCP may write | Use when |

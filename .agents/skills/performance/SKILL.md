@@ -17,12 +17,13 @@ Measurement rounds cost the owner time and usage (`rules/owner-profile.md`): run
 | You need | Open |
 | --- | --- |
 | Targets, tool steps, profiler scopes, dashboards | `references/measure.md` |
+| Starting budgets and a test method when the game has none | `references/budgets.md` (owner paper proposals) |
 | The fix for a known bottleneck (scripts, render, physics, memory, network, streaming, UI, sound) | `references/fixes.md` |
 | Driving Studio through MCP for a capture | `studio-mcp` skill (exclusive Studio, no log scans during a capture) |
 | The game's baseline device and budgets | `knowledge/design/game-profile.md` (platform row) or the game's performance note |
 
 ## 3. Steps
-1. **Know the baseline.** The game's baseline device (an entry-level Android unless the profile says otherwise) and its budgets. None recorded → propose them and mark them PROPOSAL.
+1. **Know the baseline.** The game's baseline device (an entry-level Android unless the profile says otherwise) and its budgets. None recorded → start from `references/budgets.md`, mark them PROPOSAL, and replace them with measured numbers.
 2. **Design budget** (new system): how many instances, draw-call groups, moving parts, effects, messages per second at worst case; where it runs (server, client); what streams. Write the numbers in the design note.
 3. **Measure before fixing** (problem): reproduce, then one capture that names the bottleneck: frame colour and top scopes (MicroProfiler), memory category (Dev Console), or network senders. Add `debug.profilebegin` labels to our systems.
 4. **Fix the named bottleneck** with `references/fixes.md`; one change at a time.
