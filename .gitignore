@@ -1,0 +1,20 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+
+# Tool caches and outputs
+.tools/
+output/
+
+# Wally packages
+Packages/
+ServerPackages/
+
+# Studio lock files
+*.rbxl.lock
+*.rbxlx.lock
