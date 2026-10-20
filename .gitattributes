@@ -1,0 +1,6 @@
+# Keep LF everywhere so tools/sync_harness.py --check stays byte-exact after a clone on Windows
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.rbxm binary
+*.rbxl binary
