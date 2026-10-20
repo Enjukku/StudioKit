@@ -12,11 +12,11 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | art-director | craft → Opus | high | planned |
 | cutscene-director | craft → Opus | high | new |
 | animator | craft → Opus | high | planned |
-| vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | planned |
+| vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | in kit |
 | character-rigger | craft → Opus | high | new |
 | modeler | craft → Opus | high; medium for simple models | new |
 | ui-ux-designer | craft → Opus | medium | new |
-| sound-designer | craft → Opus | medium | planned |
+| sound-designer | craft → Opus | medium | in kit |
 | content-builder (levels and world assets) | craft → Opus | medium | planned |
 | live-ops-designer | craft → Opus | medium | later |
 | architect | lead → Opus | high | planned |

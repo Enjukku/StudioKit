@@ -1,0 +1,4810 @@
+{
+ "_about": "Curve library from S+A pro VFX (study set). Keypoints are [t, value, envelope] (colour: [t,[r,g,b]]). Size/squash/beam_width/trail_widthscale also give keypoints_norm (value/max); scale by peak_size_median studs.",
+ "_n": {
+  "size": 595,
+  "transparency": 595,
+  "color": 638,
+  "squash": 52,
+  "beam_transparency": 28,
+  "beam_width": 28,
+  "trail_transparency": 15,
+  "trail_widthscale": 15
+ },
+ "_k": {
+  "size": {
+   "k": 11,
+   "silhouette": 0.805,
+   "n": 595
+  },
+  "transparency": {
+   "k": 12,
+   "silhouette": 0.826,
+   "n": 595
+  },
+  "squash": {
+   "k": 4,
+   "silhouette": 0.991,
+   "n": 52
+  },
+  "beam_transparency": {
+   "k": 4,
+   "silhouette": 0.756,
+   "n": 28
+  },
+  "beam_width": {
+   "k": 3,
+   "silhouette": 0.816,
+   "n": 28
+  },
+  "trail_transparency": {
+   "k": 3,
+   "silhouette": 0.777,
+   "n": 15
+  },
+  "trail_widthscale": {
+   "k": 3,
+   "silhouette": 0.862,
+   "n": 15
+  }
+ },
+ "size": [
+  {
+   "name": "constant size",
+   "share": 0.3244,
+   "n": 193,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 38,
+    "flame body": 32,
+    "glow/halo": 26,
+    "liquid/splash": 17,
+    "ember/spec": 15,
+    "smoke": 13,
+    "impact burst": 9,
+    "streak/speedline": 7,
+    "ground decal": 6,
+    "lightning/electric": 6,
+    "spark": 6,
+    "slash/crescent": 5,
+    "other": 5,
+    "ring/shockwave": 5,
+    "wisp/swirl": 3
+   },
+   "lifetime_median": 0.7,
+   "peak_size_median": 3.856,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     6.6,
+     0.0
+    ],
+    [
+     1.0,
+     6.6,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slash/Attachment/Dark Blue Slash"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       28.875,
+       0.0
+      ],
+      [
+       0.1,
+       28.69,
+       0.0
+      ],
+      [
+       0.2,
+       28.5152,
+       0.0
+      ],
+      [
+       0.3,
+       28.3519,
+       0.0
+      ],
+      [
+       0.4,
+       28.2015,
+       0.0
+      ],
+      [
+       0.5,
+       28.0659,
+       0.0
+      ],
+      [
+       0.6,
+       27.9475,
+       0.0
+      ],
+      [
+       0.7,
+       27.8493,
+       0.0
+      ],
+      [
+       0.8,
+       27.7754,
+       0.0
+      ],
+      [
+       0.9,
+       27.7314,
+       0.0
+      ],
+      [
+       1.0,
+       27.72,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Zonito_Music_OS",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/NoteImpact/Attachment/Spec19"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1,
+       0.9936,
+       0.0
+      ],
+      [
+       0.2,
+       0.9875,
+       0.0
+      ],
+      [
+       0.3,
+       0.9819,
+       0.0
+      ],
+      [
+       0.4,
+       0.9767,
+       0.0
+      ],
+      [
+       0.5,
+       0.972,
+       0.0
+      ],
+      [
+       0.6,
+       0.9679,
+       0.0
+      ],
+      [
+       0.7,
+       0.9645,
+       0.0
+      ],
+      [
+       0.8,
+       0.9619,
+       0.0
+      ],
+      [
+       0.9,
+       0.9604,
+       0.0
+      ],
+      [
+       1.0,
+       0.96,
+       0.0
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       10.0,
+       2.0
+      ],
+      [
+       0.1,
+       10.0398,
+       2.0
+      ],
+      [
+       0.2,
+       10.0777,
+       2.0
+      ],
+      [
+       0.3,
+       10.1159,
+       2.0
+      ],
+      [
+       0.4,
+       10.1554,
+       2.0
+      ],
+      [
+       0.5,
+       10.1974,
+       2.0
+      ],
+      [
+       0.6,
+       10.2427,
+       2.0
+      ],
+      [
+       0.7,
+       10.2928,
+       2.0
+      ],
+      [
+       0.8,
+       10.3494,
+       2.0
+      ],
+      [
+       0.9,
+       10.4161,
+       2.0
+      ],
+      [
+       1.0,
+       10.5,
+       2.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__space_thingiemajig",
+      "path": "/urple! (Space thingie)/Attachment/Cobweb Overlay"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.9524,
+       0.1905
+      ],
+      [
+       0.1,
+       0.9562,
+       0.1905
+      ],
+      [
+       0.2,
+       0.9598,
+       0.1905
+      ],
+      [
+       0.3,
+       0.9634,
+       0.1905
+      ],
+      [
+       0.4,
+       0.9672,
+       0.1905
+      ],
+      [
+       0.5,
+       0.9712,
+       0.1905
+      ],
+      [
+       0.6,
+       0.9755,
+       0.1905
+      ],
+      [
+       0.7,
+       0.9803,
+       0.1905
+      ],
+      [
+       0.8,
+       0.9857,
+       0.1905
+      ],
+      [
+       0.9,
+       0.992,
+       0.1905
+      ],
+      [
+       1.0,
+       1.0,
+       0.1905
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "linear shrink",
+   "share": 0.2874,
+   "n": 171,
+   "n_kind": 595,
+   "jobs": {
+    "spark": 41,
+    "flame body": 24,
+    "core": 22,
+    "streak/speedline": 21,
+    "other": 20,
+    "flare/star": 16,
+    "impact burst": 12,
+    "ember/spec": 6,
+    "wisp/swirl": 4,
+    "debris/chunks": 4,
+    "ground decal": 1
+   },
+   "lifetime_median": 0.7,
+   "peak_size_median": 0.8219,
+   "n_keypoints": 2,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     0.198,
+     0.198
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slash/2/Blob 2"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     1.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.5,
+       0.55
+      ],
+      [
+       0.0785,
+       0.0,
+       0.0
+      ],
+      [
+       0.1482,
+       1.5,
+       0.375
+      ],
+      [
+       0.2105,
+       0.0,
+       0.0
+      ],
+      [
+       0.2603,
+       1.5,
+       0.35
+      ],
+      [
+       0.3773,
+       0.0,
+       0.0
+      ],
+      [
+       0.4271,
+       1.4,
+       0.375
+      ],
+      [
+       0.5081,
+       0.0,
+       0.0
+      ],
+      [
+       0.5641,
+       1.25,
+       0.325
+      ],
+      [
+       0.6526,
+       0.0,
+       0.0
+      ],
+      [
+       0.7235,
+       1.175,
+       0.275
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Impact/Star102"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       1.0,
+       0.3667
+      ],
+      [
+       0.0785,
+       0.0,
+       0.0
+      ],
+      [
+       0.1482,
+       1.0,
+       0.25
+      ],
+      [
+       0.2105,
+       0.0,
+       0.0
+      ],
+      [
+       0.2603,
+       1.0,
+       0.2333
+      ],
+      [
+       0.3773,
+       0.0,
+       0.0
+      ],
+      [
+       0.4271,
+       0.9333,
+       0.25
+      ],
+      [
+       0.5081,
+       0.0,
+       0.0
+      ],
+      [
+       0.5641,
+       0.8333,
+       0.2167
+      ],
+      [
+       0.6526,
+       0.0,
+       0.0
+      ],
+      [
+       0.7235,
+       0.7833,
+       0.1833
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bump (early peak)",
+   "share": 0.0773,
+   "n": 46,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 25,
+    "spark": 6,
+    "other": 6,
+    "ember/spec": 3,
+    "impact burst": 2,
+    "liquid/splash": 2,
+    "core": 1,
+    "flame body": 1
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": 0.5,
+   "n_keypoints": 3,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1,
+     0.2,
+     0.2
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/FireGun/Body/Star102"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1,
+     1.0,
+     1.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0847,
+       4.95,
+       1.05
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__nnoonooooo",
+      "path": "/Part/Impact/Galaxy Impact"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0847,
+       1.0,
+       0.2121
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1108,
+       1.0,
+       0.5625
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Death_FX",
+      "path": "/ /HumanoidRootPart/Attachment/Spec7"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1108,
+       1.0,
+       0.5625
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "partial grow",
+   "share": 0.0706,
+   "n": 42,
+   "n_kind": 595,
+   "jobs": {
+    "smoke": 14,
+    "slash/crescent": 8,
+    "liquid/splash": 6,
+    "ember/spec": 3,
+    "flare/star": 3,
+    "impact burst": 2,
+    "ground decal": 2,
+    "ring/shockwave": 1,
+    "glow/halo": 1,
+    "streak/speedline": 1,
+    "wisp/swirl": 1
+   },
+   "lifetime_median": 0.55,
+   "peak_size_median": 3.375,
+   "n_keypoints": 11,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     10.0,
+     2.0
+    ],
+    [
+     0.1,
+     10.7,
+     2.0
+    ],
+    [
+     0.2,
+     11.4,
+     2.0
+    ],
+    [
+     0.3,
+     12.1,
+     2.0
+    ],
+    [
+     0.4,
+     12.8,
+     2.0
+    ],
+    [
+     0.5,
+     13.5,
+     2.0
+    ],
+    [
+     0.6,
+     14.2,
+     2.0
+    ],
+    [
+     0.7,
+     14.9,
+     2.0
+    ],
+    [
+     0.8,
+     15.6,
+     2.0
+    ],
+    [
+     0.9,
+     16.3,
+     2.0
+    ],
+    [
+     1.0,
+     17.0,
+     2.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Astral_Sword",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Impact/Noisy Fading Crescent"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.5882,
+     0.1176
+    ],
+    [
+     0.1,
+     0.6294,
+     0.1176
+    ],
+    [
+     0.2,
+     0.6706,
+     0.1176
+    ],
+    [
+     0.3,
+     0.7118,
+     0.1176
+    ],
+    [
+     0.4,
+     0.7529,
+     0.1176
+    ],
+    [
+     0.5,
+     0.7941,
+     0.1176
+    ],
+    [
+     0.6,
+     0.8353,
+     0.1176
+    ],
+    [
+     0.7,
+     0.8765,
+     0.1176
+    ],
+    [
+     0.8,
+     0.9176,
+     0.1176
+    ],
+    [
+     0.9,
+     0.9588,
+     0.1176
+    ],
+    [
+     1.0,
+     1.0,
+     0.1176
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       2.31,
+       0.0
+      ],
+      [
+       1.0,
+       4.0425,
+       0.7219
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Zonito_Music_OS",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/NoteImpact/Attachment/Smoke33"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.5714,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.1786
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.625,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__soear",
+      "path": "/Spear/Handle/Smoke"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.6154,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "linear grow",
+   "share": 0.0622,
+   "n": 37,
+   "n_kind": 595,
+   "jobs": {
+    "flame body": 16,
+    "liquid/splash": 7,
+    "ring/shockwave": 4,
+    "impact burst": 4,
+    "slash/crescent": 2,
+    "smoke": 2,
+    "streak/speedline": 2
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": 5.6519,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     9.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/D1/CH1"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.25,
+       0.0
+      ],
+      [
+       1.0,
+       2.0,
+       0.4375
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceBullet/Attachment/Fancy Dissapearing Smoke"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.125,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.2188
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       2.0
+      ],
+      [
+       0.1,
+       0.0412,
+       2.0
+      ],
+      [
+       0.2,
+       0.197,
+       2.0
+      ],
+      [
+       0.3,
+       0.4548,
+       2.0
+      ],
+      [
+       0.4,
+       0.7958,
+       2.0
+      ],
+      [
+       0.5,
+       1.206,
+       2.0
+      ],
+      [
+       0.6,
+       1.6748,
+       2.0
+      ],
+      [
+       0.7,
+       2.1942,
+       2.0
+      ],
+      [
+       0.8,
+       2.758,
+       2.0
+      ],
+      [
+       0.9,
+       3.3613,
+       2.0
+      ],
+      [
+       1.0,
+       4.0,
+       2.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Flame_Beziers",
+      "path": "/ReplicatedStorage/VFX/Barrage/Fire/Impact/Crescent14"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.5
+      ],
+      [
+       0.1,
+       0.0103,
+       0.5
+      ],
+      [
+       0.2,
+       0.0493,
+       0.5
+      ],
+      [
+       0.3,
+       0.1137,
+       0.5
+      ],
+      [
+       0.4,
+       0.1989,
+       0.5
+      ],
+      [
+       0.5,
+       0.3015,
+       0.5
+      ],
+      [
+       0.6,
+       0.4187,
+       0.5
+      ],
+      [
+       0.7,
+       0.5485,
+       0.5
+      ],
+      [
+       0.8,
+       0.6895,
+       0.5
+      ],
+      [
+       0.9,
+       0.8403,
+       0.5
+      ],
+      [
+       1.0,
+       1.0,
+       0.5
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "start 60%, grow to full",
+   "share": 0.0588,
+   "n": 35,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 9,
+    "impact burst": 7,
+    "glow/halo": 4,
+    "ember/spec": 4,
+    "streak/speedline": 3,
+    "liquid/splash": 3,
+    "spark": 2,
+    "ring/shockwave": 1,
+    "wisp/swirl": 1,
+    "core": 1
+   },
+   "lifetime_median": 0.7,
+   "peak_size_median": 7.7,
+   "n_keypoints": 2,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     6.0625,
+     0.0
+    ],
+    [
+     1.0,
+     7.9375,
+     0.75
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceGun/Tip/Fancy"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.7638,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0945
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       15.0,
+       0.0
+      ],
+      [
+       0.1,
+       15.9484,
+       0.0
+      ],
+      [
+       0.2,
+       16.4666,
+       0.0
+      ],
+      [
+       0.3,
+       16.9201,
+       0.0
+      ],
+      [
+       0.4,
+       17.3487,
+       0.0
+      ],
+      [
+       0.5,
+       17.7687,
+       0.0
+      ],
+      [
+       0.6,
+       18.1894,
+       0.0
+      ],
+      [
+       0.7,
+       18.6173,
+       0.0
+      ],
+      [
+       0.8,
+       19.0579,
+       0.0
+      ],
+      [
+       0.9,
+       19.5169,
+       0.0
+      ],
+      [
+       1.0,
+       20.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Colouring_Practice",
+      "path": "/zcolouring practice/Impact/Basic Blurry Spec"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.75,
+       0.0
+      ],
+      [
+       0.1,
+       0.7974,
+       0.0
+      ],
+      [
+       0.2,
+       0.8233,
+       0.0
+      ],
+      [
+       0.3,
+       0.846,
+       0.0
+      ],
+      [
+       0.4,
+       0.8674,
+       0.0
+      ],
+      [
+       0.5,
+       0.8884,
+       0.0
+      ],
+      [
+       0.6,
+       0.9095,
+       0.0
+      ],
+      [
+       0.7,
+       0.9309,
+       0.0
+      ],
+      [
+       0.8,
+       0.9529,
+       0.0
+      ],
+      [
+       0.9,
+       0.9758,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       3.2923,
+       0.0
+      ],
+      [
+       1.0,
+       4.1154,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/Models/Handle/Sword/Attachment/Basic Blurry Spec"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.8,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "S-curve grow",
+   "share": 0.037,
+   "n": 22,
+   "n_kind": 595,
+   "jobs": {
+    "smoke": 8,
+    "ring/shockwave": 2,
+    "slash/crescent": 2,
+    "core": 2,
+    "impact burst": 2,
+    "flame body": 2,
+    "flipbook burst": 2,
+    "glow/halo": 1,
+    "dark underlay/twin": 1
+   },
+   "lifetime_median": 0.5125,
+   "peak_size_median": 3.65,
+   "n_keypoints": 11,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     1.2
+    ],
+    [
+     0.1,
+     0.579,
+     1.2
+    ],
+    [
+     0.2,
+     1.037,
+     1.2
+    ],
+    [
+     0.3,
+     1.4031,
+     1.2
+    ],
+    [
+     0.4,
+     1.6958,
+     1.2
+    ],
+    [
+     0.5,
+     1.9275,
+     1.2
+    ],
+    [
+     0.6,
+     2.107,
+     1.2
+    ],
+    [
+     0.7,
+     2.2404,
+     1.2
+    ],
+    [
+     0.8,
+     2.3321,
+     1.2
+    ],
+    [
+     0.9,
+     2.3846,
+     1.2
+    ],
+    [
+     1.0,
+     2.4,
+     1.2
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Part/Smokes/smoke"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.5
+    ],
+    [
+     0.1,
+     0.2412,
+     0.5
+    ],
+    [
+     0.2,
+     0.4321,
+     0.5
+    ],
+    [
+     0.3,
+     0.5846,
+     0.5
+    ],
+    [
+     0.4,
+     0.7066,
+     0.5
+    ],
+    [
+     0.5,
+     0.8031,
+     0.5
+    ],
+    [
+     0.6,
+     0.8779,
+     0.5
+    ],
+    [
+     0.7,
+     0.9335,
+     0.5
+    ],
+    [
+     0.8,
+     0.9717,
+     0.5
+    ],
+    [
+     0.9,
+     0.9936,
+     0.5
+    ],
+    [
+     1.0,
+     1.0,
+     0.5
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1,
+       1.4988,
+       0.5
+      ],
+      [
+       0.2,
+       2.6894,
+       0.5
+      ],
+      [
+       0.3,
+       3.6126,
+       0.5
+      ],
+      [
+       0.4,
+       4.306,
+       0.5
+      ],
+      [
+       0.5,
+       4.8043,
+       0.5
+      ],
+      [
+       0.6,
+       5.1406,
+       0.5
+      ],
+      [
+       0.7,
+       5.3466,
+       0.5
+      ],
+      [
+       0.8,
+       5.4539,
+       0.5
+      ],
+      [
+       0.9,
+       5.4941,
+       0.5
+      ],
+      [
+       1.0,
+       5.5,
+       0.5
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/VFX/Speed/Attachment/circleFlipbook2"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1,
+       0.2725,
+       0.0909
+      ],
+      [
+       0.2,
+       0.489,
+       0.0909
+      ],
+      [
+       0.3,
+       0.6568,
+       0.0909
+      ],
+      [
+       0.4,
+       0.7829,
+       0.0909
+      ],
+      [
+       0.5,
+       0.8735,
+       0.0909
+      ],
+      [
+       0.6,
+       0.9347,
+       0.0909
+      ],
+      [
+       0.7,
+       0.9721,
+       0.0909
+      ],
+      [
+       0.8,
+       0.9916,
+       0.0909
+      ],
+      [
+       0.9,
+       0.9989,
+       0.0909
+      ],
+      [
+       1.0,
+       1.0,
+       0.0909
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       2.0
+      ],
+      [
+       0.1,
+       1.9429,
+       2.0
+      ],
+      [
+       0.2,
+       3.7753,
+       2.0
+      ],
+      [
+       0.3,
+       5.4844,
+       2.0
+      ],
+      [
+       0.4,
+       7.0543,
+       2.0
+      ],
+      [
+       0.5,
+       8.4652,
+       2.0
+      ],
+      [
+       0.6,
+       9.692,
+       2.0
+      ],
+      [
+       0.7,
+       10.7019,
+       2.0
+      ],
+      [
+       0.8,
+       11.4523,
+       2.0
+      ],
+      [
+       0.9,
+       11.8912,
+       2.0
+      ],
+      [
+       1.0,
+       12.0,
+       2.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__space_thingiemajig",
+      "path": "/urple! (Space thingie)/Attachment/Impact128"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.1667
+      ],
+      [
+       0.1,
+       0.1619,
+       0.1667
+      ],
+      [
+       0.2,
+       0.3146,
+       0.1667
+      ],
+      [
+       0.3,
+       0.457,
+       0.1667
+      ],
+      [
+       0.4,
+       0.5879,
+       0.1667
+      ],
+      [
+       0.5,
+       0.7054,
+       0.1667
+      ],
+      [
+       0.6,
+       0.8077,
+       0.1667
+      ],
+      [
+       0.7,
+       0.8918,
+       0.1667
+      ],
+      [
+       0.8,
+       0.9544,
+       0.1667
+      ],
+      [
+       0.9,
+       0.9909,
+       0.1667
+      ],
+      [
+       1.0,
+       1.0,
+       0.1667
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "grow from 38%",
+   "share": 0.0353,
+   "n": 21,
+   "n_kind": 595,
+   "jobs": {
+    "impact burst": 6,
+    "smoke": 6,
+    "wisp/swirl": 3,
+    "slash/crescent": 2,
+    "other": 2,
+    "streak/speedline": 1,
+    "liquid/splash": 1
+   },
+   "lifetime_median": 0.65,
+   "peak_size_median": 4.0625,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     3.0,
+     0.0
+    ],
+    [
+     1.0,
+     7.9375,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note1Mini/Impact/Wavey"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.378,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.75,
+       0.0
+      ],
+      [
+       1.0,
+       4.875,
+       0.75
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Impact/Fancy Dissapearing Smoke"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.359,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.1538
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.125
+      ],
+      [
+       1.0,
+       3.0,
+       0.75
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceBullet/Impact/Fancy Dissapearing Smoke"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.3333,
+       0.0417
+      ],
+      [
+       1.0,
+       1.0,
+       0.25
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ease-out grow",
+   "share": 0.0252,
+   "n": 15,
+   "n_kind": 595,
+   "jobs": {
+    "liquid/splash": 5,
+    "ground decal": 4,
+    "smoke": 3,
+    "spark": 2,
+    "flare/star": 1
+   },
+   "lifetime_median": 1.0,
+   "peak_size_median": 5.0,
+   "n_keypoints": 11,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ],
+    [
+     0.1,
+     3.9745,
+     1.0
+    ],
+    [
+     0.2,
+     4.577,
+     1.0
+    ],
+    [
+     0.3,
+     4.7977,
+     1.0
+    ],
+    [
+     0.4,
+     4.9012,
+     1.0
+    ],
+    [
+     0.5,
+     4.9535,
+     1.0
+    ],
+    [
+     0.6,
+     4.98,
+     1.0
+    ],
+    [
+     0.7,
+     4.9928,
+     1.0
+    ],
+    [
+     0.8,
+     4.9981,
+     1.0
+    ],
+    [
+     0.9,
+     4.9998,
+     1.0
+    ],
+    [
+     1.0,
+     5.0,
+     1.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note1Mini/Impact/Rainbow9"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.2
+    ],
+    [
+     0.1,
+     0.7949,
+     0.2
+    ],
+    [
+     0.2,
+     0.9154,
+     0.2
+    ],
+    [
+     0.3,
+     0.9595,
+     0.2
+    ],
+    [
+     0.4,
+     0.9802,
+     0.2
+    ],
+    [
+     0.5,
+     0.9907,
+     0.2
+    ],
+    [
+     0.6,
+     0.996,
+     0.2
+    ],
+    [
+     0.7,
+     0.9986,
+     0.2
+    ],
+    [
+     0.8,
+     0.9996,
+     0.2
+    ],
+    [
+     0.9,
+     1.0,
+     0.2
+    ],
+    [
+     1.0,
+     1.0,
+     0.2
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.8
+      ],
+      [
+       0.1,
+       4.0615,
+       0.8
+      ],
+      [
+       0.2,
+       4.4564,
+       0.8
+      ],
+      [
+       0.3,
+       4.6266,
+       0.8
+      ],
+      [
+       0.4,
+       4.7125,
+       0.8
+      ],
+      [
+       0.5,
+       4.7579,
+       0.8
+      ],
+      [
+       0.6,
+       4.7816,
+       0.8
+      ],
+      [
+       0.7,
+       4.7932,
+       0.8
+      ],
+      [
+       0.8,
+       4.7982,
+       0.8
+      ],
+      [
+       0.9,
+       4.7998,
+       0.8
+      ],
+      [
+       1.0,
+       4.8,
+       0.8
+      ]
+     ],
+     "source": {
+      "effect": "aTier__nnoonooooo",
+      "path": "/Part/Impact/Ground18"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.1667
+      ],
+      [
+       0.1,
+       0.8461,
+       0.1667
+      ],
+      [
+       0.2,
+       0.9284,
+       0.1667
+      ],
+      [
+       0.3,
+       0.9639,
+       0.1667
+      ],
+      [
+       0.4,
+       0.9818,
+       0.1667
+      ],
+      [
+       0.5,
+       0.9912,
+       0.1667
+      ],
+      [
+       0.6,
+       0.9962,
+       0.1667
+      ],
+      [
+       0.7,
+       0.9986,
+       0.1667
+      ],
+      [
+       0.8,
+       0.9996,
+       0.1667
+      ],
+      [
+       0.9,
+       1.0,
+       0.1667
+      ],
+      [
+       1.0,
+       1.0,
+       0.1667
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1,
+       18.3385,
+       0.0
+      ],
+      [
+       0.2,
+       21.694,
+       0.0
+      ],
+      [
+       0.3,
+       23.2679,
+       0.0
+      ],
+      [
+       0.4,
+       24.1027,
+       0.0
+      ],
+      [
+       0.5,
+       24.5592,
+       0.0
+      ],
+      [
+       0.6,
+       24.8042,
+       0.0
+      ],
+      [
+       0.7,
+       24.9272,
+       0.0
+      ],
+      [
+       0.8,
+       24.9807,
+       0.0
+      ],
+      [
+       0.9,
+       24.9978,
+       0.0
+      ],
+      [
+       1.0,
+       25.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Impact/Rainbow6"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1,
+       0.7335,
+       0.0
+      ],
+      [
+       0.2,
+       0.8678,
+       0.0
+      ],
+      [
+       0.3,
+       0.9307,
+       0.0
+      ],
+      [
+       0.4,
+       0.9641,
+       0.0
+      ],
+      [
+       0.5,
+       0.9824,
+       0.0
+      ],
+      [
+       0.6,
+       0.9922,
+       0.0
+      ],
+      [
+       0.7,
+       0.9971,
+       0.0
+      ],
+      [
+       0.8,
+       0.9992,
+       0.0
+      ],
+      [
+       0.9,
+       0.9999,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "start big, partial shrink",
+   "share": 0.0134,
+   "n": 8,
+   "n_kind": 595,
+   "jobs": {
+    "streak/speedline": 8
+   },
+   "lifetime_median": 0.575,
+   "peak_size_median": 2.125,
+   "n_keypoints": 2,
+   "envelope": true,
+   "keypoints": [
+    [
+     0.0,
+     2.125,
+     0.8125
+    ],
+    [
+     1.0,
+     1.0,
+     0.25
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Colouring_Practice",
+    "path": "/zcolouring practice/Impact/Stylized plain Blob Rise"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.3824
+    ],
+    [
+     1.0,
+     0.4706,
+     0.1176
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       2.5247,
+       0.0
+      ],
+      [
+       0.0966,
+       3.2772,
+       0.0
+      ],
+      [
+       0.1956,
+       2.1848,
+       0.0
+      ],
+      [
+       0.2977,
+       4.0055,
+       0.0
+      ],
+      [
+       0.4014,
+       1.9421,
+       0.0
+      ],
+      [
+       0.5994,
+       3.8841,
+       0.0
+      ],
+      [
+       0.7094,
+       1.3352,
+       0.0
+      ],
+      [
+       0.9018,
+       3.1559,
+       0.0
+      ],
+      [
+       1.0,
+       2.5247,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__FUGAAAA",
+      "path": "/FUGA/Part/2"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.6303,
+       0.0
+      ],
+      [
+       0.0966,
+       0.8182,
+       0.0
+      ],
+      [
+       0.1956,
+       0.5455,
+       0.0
+      ],
+      [
+       0.2977,
+       1.0,
+       0.0
+      ],
+      [
+       0.4014,
+       0.4849,
+       0.0
+      ],
+      [
+       0.5994,
+       0.9697,
+       0.0
+      ],
+      [
+       0.7094,
+       0.3333,
+       0.0
+      ],
+      [
+       0.9018,
+       0.7879,
+       0.0
+      ],
+      [
+       1.0,
+       0.6303,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bump (mid peak)",
+   "share": 0.0084,
+   "n": 5,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 3,
+    "ember/spec": 1,
+    "spark": 1
+   },
+   "lifetime_median": 0.4,
+   "peak_size_median": 1.2375,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.5474,
+     10.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/D1/flare"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.5474,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.5878,
+       0.0997,
+       0.0997
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__FUGAAAA",
+      "path": "/FUGA/Fire Arrow/projectileArrow/Dots"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.5878,
+       1.0,
+       1.0
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.5,
+       0.4,
+       0.383
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/Sword/Blade/Energy Bezier Spec"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.5,
+       1.0,
+       0.9575
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "transparency": [
+  {
+   "name": "opaque hold",
+   "share": 0.5042,
+   "n": 300,
+   "n_kind": 595,
+   "jobs": {
+    "flame body": 58,
+    "spark": 46,
+    "flare/star": 45,
+    "streak/speedline": 30,
+    "impact burst": 26,
+    "core": 25,
+    "other": 21,
+    "glow/halo": 9,
+    "liquid/splash": 8,
+    "lightning/electric": 6,
+    "ember/spec": 5,
+    "ground decal": 5,
+    "ring/shockwave": 4,
+    "wisp/swirl": 4,
+    "slash/crescent": 4,
+    "debris/chunks": 4
+   },
+   "lifetime_median": 0.65,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slash/2/Blob 2"
+   },
+   "alternates": []
+  },
+  {
+   "name": "fade in, hold, fade out",
+   "share": 0.0891,
+   "n": 53,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 25,
+    "ember/spec": 7,
+    "ring/shockwave": 5,
+    "smoke": 4,
+    "glow/halo": 4,
+    "impact burst": 3,
+    "liquid/splash": 3,
+    "other": 1,
+    "wisp/swirl": 1
+   },
+   "lifetime_median": 0.95,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Colouring_Practice",
+    "path": "/zcolouring practice/Trail/Basic Blurry Spec"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.524,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Mildly_wet_projectiles",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Water/E/Projectile/Attachment/Water23"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.5,
+       0.2,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceGun/Body/Spec19"
+     }
+    }
+   ]
+  },
+  {
+   "name": "linear fade",
+   "share": 0.0891,
+   "n": 53,
+   "n_kind": 595,
+   "jobs": {
+    "liquid/splash": 10,
+    "flame body": 8,
+    "flare/star": 7,
+    "spark": 6,
+    "glow/halo": 5,
+    "impact burst": 5,
+    "slash/crescent": 4,
+    "streak/speedline": 3,
+    "ground decal": 3,
+    "core": 1,
+    "wisp/swirl": 1
+   },
+   "lifetime_median": 0.5,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Pierce/Attachment/Attachment/Basic Blurry Spec"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0895,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceGun/Tip/Flare170New"
+     }
+    }
+   ]
+  },
+  {
+   "name": "faint (barely visible)",
+   "share": 0.0739,
+   "n": 44,
+   "n_kind": 595,
+   "jobs": {
+    "smoke": 18,
+    "glow/halo": 9,
+    "ember/spec": 7,
+    "flare/star": 3,
+    "slash/crescent": 2,
+    "wisp/swirl": 2,
+    "impact burst": 1,
+    "streak/speedline": 1,
+    "spark": 1
+   },
+   "lifetime_median": 0.9,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.161,
+     0.85,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slash/Attachment/Basic Blurry Spec"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1939,
+       0.8554,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Flame_Beziers",
+      "path": "/ReplicatedStorage/VFX/Barrage/Fire/Up/Crescent17"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1753,
+       0.8011,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceBullet/Attachment/Spec19"
+     }
+    }
+   ]
+  },
+  {
+   "name": "partial fade out",
+   "share": 0.0487,
+   "n": 29,
+   "n_kind": 595,
+   "jobs": {
+    "smoke": 9,
+    "impact burst": 4,
+    "liquid/splash": 4,
+    "glow/halo": 3,
+    "spark": 3,
+    "flare/star": 2,
+    "wisp/swirl": 2,
+    "ember/spec": 1,
+    "streak/speedline": 1
+   },
+   "lifetime_median": 1.0,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.6188,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note1Mini/Impact/Wavey"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.6,
+       0.153
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/VFX/Speed/Attachment/Impact21"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.55,
+       0.0718
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceBullet/Impact/Fancy Dissapearing Smoke"
+     }
+    }
+   ]
+  },
+  {
+   "name": "shallow V (translucent dip)",
+   "share": 0.0387,
+   "n": 23,
+   "n_kind": 595,
+   "jobs": {
+    "smoke": 8,
+    "ember/spec": 4,
+    "ground decal": 4,
+    "slash/crescent": 2,
+    "other": 2,
+    "flare/star": 1,
+    "liquid/splash": 1,
+    "streak/speedline": 1
+   },
+   "lifetime_median": 0.9,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.1407,
+     0.6145,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slashes/Basic Blurry Spec"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1612,
+       0.6104,
+       0.0482
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Flame_Beziers",
+      "path": "/ReplicatedStorage/VFX/Barrage/Fire/Middle/Smoke11"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.102,
+       0.5902,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Death_FX",
+      "path": "/ /HumanoidRootPart/Attachment/Flare24New"
+     }
+    }
+   ]
+  },
+  {
+   "name": "fade from translucent",
+   "share": 0.0353,
+   "n": 21,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 5,
+    "slash/crescent": 4,
+    "smoke": 3,
+    "wisp/swirl": 2,
+    "streak/speedline": 2,
+    "impact burst": 1,
+    "ground decal": 1,
+    "ember/spec": 1,
+    "flame body": 1,
+    "liquid/splash": 1
+   },
+   "lifetime_median": 0.675,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.2099,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/FireGun/Tip/Spec19"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.2265,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Zonito_Music_OS",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/NoteImpact/Attachment/Impact21"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.4033,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Mildly_wet_projectiles",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Water/E/Impact/Impact/Flare20New"
+     }
+    }
+   ]
+  },
+  {
+   "name": "late fade",
+   "share": 0.0319,
+   "n": 19,
+   "n_kind": 595,
+   "jobs": {
+    "flare/star": 7,
+    "flame body": 2,
+    "glow/halo": 2,
+    "liquid/splash": 2,
+    "impact burst": 2,
+    "smoke": 2,
+    "streak/speedline": 2
+   },
+   "lifetime_median": 0.9,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.2396,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/FireBullet/Impact/Flare170New"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1988,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Impact/Spec19"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.1856,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Zonito_Music_OS",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note2/Attachment/Spec19"
+     }
+    }
+   ]
+  },
+  {
+   "name": "fade in",
+   "share": 0.0303,
+   "n": 18,
+   "n_kind": 595,
+   "jobs": {
+    "ember/spec": 6,
+    "other": 5,
+    "streak/speedline": 3,
+    "flame body": 2,
+    "spark": 2
+   },
+   "lifetime_median": 0.675,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.1578,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note1Mini/Attachment/Other43"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1828,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/TargetCircle/Spec25"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1893,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__nnoonooooo",
+      "path": "/Part/Middle/Spec1"
+     }
+    }
+   ]
+  },
+  {
+   "name": "late fade #3",
+   "share": 0.0252,
+   "n": 15,
+   "n_kind": 595,
+   "jobs": {
+    "flame body": 4,
+    "ring/shockwave": 4,
+    "slash/crescent": 3,
+    "smoke": 2,
+    "liquid/splash": 2
+   },
+   "lifetime_median": 0.65,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.9546,
+     0.1585,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/D1/H3"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.8705,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/VFX/Slash/Attachment/Dark Blue Slash"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.8687,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Mildly_wet_projectiles",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Water/E/Impact/Impact/Water41"
+     }
+    }
+   ]
+  },
+  {
+   "name": "late fade #2",
+   "share": 0.0185,
+   "n": 11,
+   "n_kind": 595,
+   "jobs": {
+    "liquid/splash": 6,
+    "impact burst": 2,
+    "flipbook burst": 2,
+    "dark underlay/twin": 1
+   },
+   "lifetime_median": 0.375,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.6629,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/NoteImpact/Attachment/Impact13"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.6477,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Mildly_wet_projectiles",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Water/E/Impact/Impact/Water12"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.7372,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Colouring_Practice",
+      "path": "/zcolouring practice/Impact/Water28"
+     }
+    }
+   ]
+  },
+  {
+   "name": "fade in, hold, fade out #2",
+   "share": 0.0151,
+   "n": 9,
+   "n_kind": 595,
+   "jobs": {
+    "other": 4,
+    "liquid/splash": 4,
+    "ember/spec": 1
+   },
+   "lifetime_median": 0.4,
+   "peak_size_median": null,
+   "n_keypoints": 4,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.2,
+     0.0,
+     0.0
+    ],
+    [
+     0.8,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note2/Attachment/Other43"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.1627,
+       0.0,
+       0.0
+      ],
+      [
+       0.4729,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Astral_Sword",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/Sword/Blade/Fireflies 2"
+     }
+    }
+   ]
+  }
+ ],
+ "squash": [
+  {
+   "name": "constant",
+   "share": 0.5192,
+   "n": 27,
+   "n_kind": 52,
+   "jobs": {
+    "streak/speedline": 21,
+    "flare/star": 2,
+    "smoke": 2,
+    "spark": 1,
+    "liquid/splash": 1
+   },
+   "lifetime_median": 0.4689,
+   "peak_size_median": 0.35,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.1,
+     0.0
+    ],
+    [
+     1.0,
+     0.1,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Pierce/Attachment/Sideways Spec 78"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  },
+  {
+   "name": "constant #2",
+   "share": 0.4038,
+   "n": 21,
+   "n_kind": 52,
+   "jobs": {
+    "flare/star": 9,
+    "streak/speedline": 7,
+    "flame body": 5
+   },
+   "lifetime_median": 0.3,
+   "peak_size_median": 0.5,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     1.0,
+     -1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Pierce/Attachment/Attachment/Right Spike"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     1.0,
+     -1.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       -9.0,
+       0.0
+      ],
+      [
+       1.0,
+       -18.4219,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__FUGAAAA",
+      "path": "/FUGA/Fire Arrow/projectileArrow/other/Star"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       -0.4885,
+       0.0
+      ],
+      [
+       1.0,
+       -1.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "pulse",
+   "share": 0.0385,
+   "n": 2,
+   "n_kind": 52,
+   "jobs": {
+    "streak/speedline": 2
+   },
+   "lifetime_median": 0.0875,
+   "peak_size_median": 3.0,
+   "n_keypoints": 4,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1072,
+     3.0,
+     0.0
+    ],
+    [
+     0.1459,
+     1.2113,
+     0.0
+    ],
+    [
+     1.0,
+     3.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Part/15"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1072,
+     1.0,
+     0.0
+    ],
+    [
+     0.1459,
+     0.4038,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  },
+  {
+   "name": "ramp up",
+   "share": 0.0385,
+   "n": 2,
+   "n_kind": 52,
+   "jobs": {
+    "smoke": 2
+   },
+   "lifetime_median": 0.525,
+   "peak_size_median": 0.6,
+   "n_keypoints": 11,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1,
+     0.3446,
+     0.0
+    ],
+    [
+     0.2,
+     0.4397,
+     0.0
+    ],
+    [
+     0.3,
+     0.495,
+     0.0
+    ],
+    [
+     0.4,
+     0.5304,
+     0.0
+    ],
+    [
+     0.5,
+     0.5538,
+     0.0
+    ],
+    [
+     0.6,
+     0.5694,
+     0.0
+    ],
+    [
+     0.7,
+     0.5799,
+     0.0
+    ],
+    [
+     0.8,
+     0.5873,
+     0.0
+    ],
+    [
+     0.9,
+     0.5933,
+     0.0
+    ],
+    [
+     1.0,
+     0.6,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Part/DarkSmoke1"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1,
+     0.5743,
+     0.0
+    ],
+    [
+     0.2,
+     0.7328,
+     0.0
+    ],
+    [
+     0.3,
+     0.825,
+     0.0
+    ],
+    [
+     0.4,
+     0.884,
+     0.0
+    ],
+    [
+     0.5,
+     0.923,
+     0.0
+    ],
+    [
+     0.6,
+     0.949,
+     0.0
+    ],
+    [
+     0.7,
+     0.9665,
+     0.0
+    ],
+    [
+     0.8,
+     0.9788,
+     0.0
+    ],
+    [
+     0.9,
+     0.9888,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  }
+ ],
+ "beam_transparency": [
+  {
+   "name": "fade in, hold, fade out",
+   "share": 0.3929,
+   "n": 11,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 11
+   },
+   "lifetime_median": null,
+   "peak_size_median": null,
+   "n_keypoints": 4,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0416,
+     0.1,
+     0.0
+    ],
+    [
+     0.453,
+     0.1,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceGun/Folder/Beam121"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.0423,
+       1.0,
+       0.0
+      ],
+      [
+       0.0635,
+       0.0,
+       0.0
+      ],
+      [
+       0.5604,
+       0.0361,
+       0.0
+      ],
+      [
+       0.8493,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/VFX/Slashes/Folder/Beam105"
+     }
+    }
+   ]
+  },
+  {
+   "name": "faint (barely visible)",
+   "share": 0.2857,
+   "n": 8,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 8
+   },
+   "lifetime_median": null,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.4812,
+     0.7437,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Fire Arrow/projectileArrow/AADD/1/Beam"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.2553,
+       0.7734,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__soear",
+      "path": "/Spear/Aura/poleBeam"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.4615,
+       0.5691,
+       0.0
+      ],
+      [
+       0.797,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+      "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/FireGun/Tip/Beam127"
+     }
+    }
+   ]
+  },
+  {
+   "name": "linear fade",
+   "share": 0.1786,
+   "n": 5,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 5
+   },
+   "lifetime_median": null,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.5799,
+     0.85,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Fire Arrow/projectileArrow/AA/1/Beam"
+   },
+   "alternates": []
+  },
+  {
+   "name": "V glow (fade in, fade out)",
+   "share": 0.1429,
+   "n": 4,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 4
+   },
+   "lifetime_median": null,
+   "peak_size_median": null,
+   "n_keypoints": 4,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.1248,
+     0.0,
+     0.0
+    ],
+    [
+     0.7465,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Astral_Sword",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/Sword/Beams/Beam121"
+   },
+   "alternates": []
+  }
+ ],
+ "beam_width": [
+  {
+   "name": "widen #2",
+   "share": 0.3571,
+   "n": 10,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 10
+   },
+   "lifetime_median": null,
+   "peak_size_median": 2.0,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     2.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/IceGun/Folder/Beam121"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.5,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  },
+  {
+   "name": "widen",
+   "share": 0.3214,
+   "n": 9,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 9
+   },
+   "lifetime_median": null,
+   "peak_size_median": 20.0,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     20.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Fire Arrow/projectileArrow/AA/1/Beam"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  },
+  {
+   "name": "taper to thin",
+   "share": 0.3214,
+   "n": 9,
+   "n_kind": 28,
+   "jobs": {
+    "beam": 9
+   },
+   "lifetime_median": null,
+   "peak_size_median": 3.2365,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     2.2656,
+     0.0
+    ],
+    [
+     1.0,
+     1.6183,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Astral_Sword",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/SwordRain/E/Sword/Beams/Beam121"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.7143,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       2.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__soear",
+      "path": "/Spear/Aura/poleBeam"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.5,
+       0.0
+      ]
+     ]
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       6.0,
+       0.0
+      ],
+      [
+       1.0,
+       2.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Ayato_Showcase",
+      "path": "/Ayato Showcase/VFX/Slashes/Folder/Beam105"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.3333,
+       0.0
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "trail_transparency": [
+  {
+   "name": "opaque hold",
+   "share": 0.4,
+   "n": 6,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 6
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/T/T/arcana_orb_galaxyTrail_color"
+   },
+   "alternates": []
+  },
+  {
+   "name": "steady translucent",
+   "share": 0.3333,
+   "n": 5,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 5
+   },
+   "lifetime_median": 0.8,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.5,
+     0.0
+    ],
+    [
+     1.0,
+     0.5,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__Elemental_Guns_OPENSOURCE_ZRBLX",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Dual/E/FireBullet/BeamDrag Thick"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.7,
+       0.0
+      ],
+      [
+       1.0,
+       0.7,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__StylizedFireballsTrails",
+      "path": "/StylizedFireballs/ColouredFire/T/T/T1"
+     }
+    },
+    {
+     "keypoints": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ],
+      [
+       0.171,
+       0.1,
+       0.0
+      ],
+      [
+       1.0,
+       0.1,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__Flame_Beziers",
+      "path": "/ReplicatedStorage/VFX/Barrage/Fire/Trails/Beam89"
+     }
+    }
+   ]
+  },
+  {
+   "name": "late fade",
+   "share": 0.2667,
+   "n": 4,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 4
+   },
+   "lifetime_median": 0.4,
+   "peak_size_median": null,
+   "n_keypoints": 4,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.8712,
+     0.0,
+     0.0
+    ],
+    [
+     0.8851,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     1.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Zonito_Music_OS",
+    "path": "/ReplicatedStorage/Shared/Assets/VFX/Music/E/Note1Mini/Beam89"
+   },
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.7496,
+       0.0,
+       0.0
+      ],
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "sTier__FUGAAAA",
+      "path": "/FUGA/Fire Arrow/projectileArrow/1/f2"
+     }
+    }
+   ]
+  }
+ ],
+ "trail_widthscale": [
+  {
+   "name": "linear shrink",
+   "share": 0.6667,
+   "n": 10,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 10
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": 0.4187,
+   "n_keypoints": 2,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.3375,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Flame_Beziers",
+    "path": "/ReplicatedStorage/VFX/Barrage/Fire/Trails/Beam89"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  },
+  {
+   "name": "bump (mid peak)",
+   "share": 0.2,
+   "n": 3,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 3
+   },
+   "lifetime_median": 0.3,
+   "peak_size_median": 0.4798,
+   "n_keypoints": 6,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1166,
+     0.289,
+     0.0
+    ],
+    [
+     0.2317,
+     0.474,
+     0.0
+    ],
+    [
+     0.3386,
+     0.5145,
+     0.0
+    ],
+    [
+     0.6472,
+     0.3931,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "sTier__FUGAAAA",
+    "path": "/FUGA/Fire Arrow/projectileArrow/1/f3"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.1166,
+     0.5617,
+     0.0
+    ],
+    [
+     0.2317,
+     0.9213,
+     0.0
+    ],
+    [
+     0.3386,
+     1.0,
+     0.0
+    ],
+    [
+     0.6472,
+     0.764,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": [
+    {
+     "keypoints": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0648,
+       0.4,
+       0.0
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "source": {
+      "effect": "aTier__nnoonooooo",
+      "path": "/Part/Beam81"
+     },
+     "keypoints_norm": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0648,
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "hold then shrink",
+   "share": 0.1333,
+   "n": 2,
+   "n_kind": 15,
+   "jobs": {
+    "trail": 2
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": 0.8531,
+   "n_keypoints": 3,
+   "envelope": false,
+   "keypoints": [
+    [
+     0.0,
+     0.7062,
+     0.0
+    ],
+    [
+     0.5224,
+     0.5938,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/T/T/arcana_orb_galaxyTrail_color"
+   },
+   "keypoints_norm": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.5224,
+     0.8408,
+     0.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "alternates": []
+  }
+ ],
+ "color": [
+  {
+   "name": "constant colour",
+   "share": 0.721,
+   "n": 460,
+   "n_kind": 638,
+   "jobs": {
+    "flare/star": 88,
+    "spark": 56,
+    "smoke": 44,
+    "impact burst": 42,
+    "liquid/splash": 36,
+    "other": 33,
+    "glow/halo": 28,
+    "ember/spec": 27,
+    "beam": 18,
+    "flame body": 17,
+    "slash/crescent": 16,
+    "ground decal": 13,
+    "streak/speedline": 9,
+    "wisp/swirl": 8,
+    "trail": 6,
+    "lightning/electric": 6,
+    "ring/shockwave": 5,
+    "debris/chunks": 4,
+    "core": 2,
+    "flipbook burst": 1,
+    "dark underlay/twin": 1
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": null,
+   "n_keypoints": 2,
+   "keypoints": [
+    [
+     0.0,
+     [
+      119,
+      126,
+      255
+     ]
+    ],
+    [
+     1.0,
+     [
+      119,
+      126,
+      255
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__nnoonooooo",
+    "path": "/Part/Middle/Spec1"
+   }
+  },
+  {
+   "name": "cycle (returns to start colour)",
+   "share": 0.1207,
+   "n": 77,
+   "n_kind": 638,
+   "jobs": {
+    "flame body": 58,
+    "flare/star": 5,
+    "ring/shockwave": 4,
+    "streak/speedline": 4,
+    "liquid/splash": 2,
+    "core": 2,
+    "smoke": 2
+   },
+   "lifetime_median": 0.4689,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "keypoints": [
+    [
+     0.0,
+     [
+      148,
+      0,
+      161
+     ]
+    ],
+    [
+     0.199,
+     [
+      136,
+      59,
+      9
+     ]
+    ],
+    [
+     1.0,
+     [
+      179,
+      0,
+      179
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/D1/SP1"
+   }
+  },
+  {
+   "name": "hot to body (same hue, darker)",
+   "share": 0.1019,
+   "n": 65,
+   "n_kind": 638,
+   "jobs": {
+    "core": 22,
+    "streak/speedline": 19,
+    "ring/shockwave": 4,
+    "ember/spec": 4,
+    "slash/crescent": 3,
+    "glow/halo": 3,
+    "beam": 3,
+    "trail": 3,
+    "flare/star": 2,
+    "impact burst": 1,
+    "spark": 1
+   },
+   "lifetime_median": 0.375,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "keypoints": [
+    [
+     0.0,
+     [
+      255,
+      176,
+      80
+     ]
+    ],
+    [
+     0.7271,
+     [
+      255,
+      121,
+      32
+     ]
+    ],
+    [
+     1.0,
+     [
+      255,
+      121,
+      32
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slash/Attachment/Dark Blue Slash"
+   }
+  },
+  {
+   "name": "body to dark",
+   "share": 0.0329,
+   "n": 21,
+   "n_kind": 638,
+   "jobs": {
+    "streak/speedline": 9,
+    "wisp/swirl": 4,
+    "liquid/splash": 3,
+    "spark": 1,
+    "ember/spec": 1,
+    "impact burst": 1,
+    "glow/halo": 1,
+    "flipbook burst": 1
+   },
+   "lifetime_median": 0.5,
+   "peak_size_median": null,
+   "n_keypoints": 5,
+   "keypoints": [
+    [
+     0.0,
+     [
+      255,
+      203,
+      71
+     ]
+    ],
+    [
+     0.1071,
+     [
+      255,
+      203,
+      71
+     ]
+    ],
+    [
+     0.2418,
+     [
+      113,
+      255,
+      84
+     ]
+    ],
+    [
+     0.4542,
+     [
+      20,
+      59,
+      22
+     ]
+    ],
+    [
+     1.0,
+     [
+      3,
+      17,
+      7
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Colouring_Practice",
+    "path": "/zcolouring practice/Trail/Stylized plain Blob Rise"
+   }
+  },
+  {
+   "name": "subtle drift",
+   "share": 0.0141,
+   "n": 9,
+   "n_kind": 638,
+   "jobs": {
+    "beam": 7,
+    "streak/speedline": 2
+   },
+   "lifetime_median": 0.255,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "keypoints": [
+    [
+     0.0,
+     [
+      255,
+      167,
+      79
+     ]
+    ],
+    [
+     0.7271,
+     [
+      255,
+      121,
+      32
+     ]
+    ],
+    [
+     1.0,
+     [
+      255,
+      121,
+      32
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__Ayato_Showcase",
+    "path": "/Ayato Showcase/VFX/Slashes/Folder/Beam105"
+   }
+  },
+  {
+   "name": "tint toward white/bright",
+   "share": 0.0094,
+   "n": 6,
+   "n_kind": 638,
+   "jobs": {
+    "trail": 6
+   },
+   "lifetime_median": 0.75,
+   "peak_size_median": null,
+   "n_keypoints": 3,
+   "keypoints": [
+    [
+     0.0,
+     [
+      154,
+      11,
+      255
+     ]
+    ],
+    [
+     0.218,
+     [
+      255,
+      116,
+      24
+     ]
+    ],
+    [
+     1.0,
+     [
+      217,
+      75,
+      255
+     ]
+    ]
+   ],
+   "source": {
+    "effect": "aTier__StylizedFireballsTrails",
+    "path": "/StylizedFireballs/ColouredFire/T/T/T1"
+   }
+  }
+ ]
+}
