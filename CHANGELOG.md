@@ -2,6 +2,13 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.3.0 (2026-10-20): phase 3, orchestrator and agent-building system
+
+- The kit ships only the orchestrator and the system; other roles are built from owner material (owner decision).
+- `/build-agent` workflow; templates `templates/role.md` and `templates/skill/SKILL.md`.
+- The lead loads the `orchestration` skill at the start of every owner request.
+- Removed `/council` (outdated); `/agent-review` folded into `/improve` as a monthly step.
+
 ## 0.2.0 (2026-10-20): phase 2
 
 - Knowledge rules (`rules/knowledge.md`): typed frontmatter, load-by-cost layers, scopes, superseding.

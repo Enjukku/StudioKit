@@ -1,0 +1,36 @@
+---
+description: Build or upgrade one specialist agent from material the owner supplies (transcripts, references, examples, data). Produces a design skill, a craft skill, the role file, eval briefs and a first real test, with owner gates. Never trains an agent without owner material.
+---
+
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit workflow: universal. The recipe that worked for the VFX agent (2026-10-19/20): owner material + measured examples → craft-first skill books → test on a real task → fix the gaps.
+
+# /build-agent — turn owner material into a strong agent
+
+**Precondition:** the owner has supplied material for this role (tutorial transcripts, reference games or clips, example files, notes) or explicitly asked for research. Without it, stop and ask the owner for material; do not research or write skills on your own initiative.
+
+Size: L job (`rules/company.md`). Lead at medium effort; extraction on cheap models; skill writing on the lead tier.
+
+## Step 1 — Brief (Gate 1)
+Job card: the role's job in the studio, who it works with (tickets in and out), what "great" looks like for the owner, the material received, budget. Owner approves.
+
+## Step 2 — Extract (cheap agents, parallel by source)
+- Each source → a dense notes file in `knowledge/reference/<role>/` (paraphrased lessons, never copied text; transcripts stay outside git).
+- Measured data where possible (e.g. property values, timings, counts from example files), with a script and tests.
+- A source table with dates and trust level; contradictions listed.
+
+## Step 3 — Two skill books (lead tier)
+- **Design skill** `<area>-design`: what and why, how to choose the technique, feel rules, safety rules; read by other roles too.
+- **Craft skill** `<area>-craft`: how in Roblox, defaults with evidence, recipes, formats, self-check.
+- Template: `templates/skill/SKILL.md`. Craft first, rules last. Each has a "Read this file when" table, ≤ 500 lines, references for detail, and the project-overlay line.
+
+## Step 4 — Role file
+From `templates/role.md`: tier and model, skills in order, memory on, write scope, hand-back status.
+
+## Step 5 — Evals
+`.agents/skills/<craft-skill>/evals/briefs.md`: 3-5 realistic briefs with must-pass checks. Where possible a hidden test set from the owner's material that the skill was not built from.
+
+## Step 6 — First real task (Gate 2)
+Run the new agent on one real brief. Record where the skills were unclear or contradictory. Fix those gaps. Show the owner the result next to the material's best example.
+
+## Step 7 — Finish (Gate 3)
+Owner approves the agent. Sync (`python tools/sync_harness.py`), gate PASS, roster row in `.agents/roles/README.md`, decision row, lesson drafts. If the role is universal, it lives in the kit (`/kit-sync` up).

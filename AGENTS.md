@@ -23,7 +23,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 
 ## 1. The studio (details: `rules/company.md`)
 
-- **One lead chat (orchestrator)** talks to the owner, sizes each request into a job, routes it, merges results and owns the final word to the owner.
+- **One lead chat (orchestrator)** talks to the owner, sizes each request into a job, routes it, merges results and owns the final word to the owner. **The lead loads the `orchestration` skill at the start of every owner request**; a production chat the lead starts loads it too, as job owner.
 - **Jobs have one owner each.** Medium and large jobs get a job folder `knowledge/jobs/<job-id>/` with a job card, an intent brief, a ledger of tickets and a decision log.
 - **Owner gates:** Gate 1 brief (medium, large) → Gate 2 first samples (large) → Gate 3 final look (all visible work). Agents never approve on the owner's behalf.
 - **Anyone may ask anyone**, but only inside an approved brief and as a logged ticket. New scope, new crew or more budget goes to the owner's decision digest.
