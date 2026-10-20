@@ -14,7 +14,7 @@ supersedes: []
 | --- | --- |
 | Size | L (many skills; research; owner reviews each) |
 | Job owner | lead (orchestrator) |
-| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Step 2 done 2026-10-20 (skill `platform-policy`, owner approved). Step 3 done 2026-10-20 (skill `data-saving`, owner approved). Step 4 done 2026-10-20 (skill `performance`, owner approved). Step 5 done 2026-10-20 (skill `networking-security`, owner approved). Order change: steps 6-7 wait for the owner's ChatGPT research papers (architecture, testing, updates, performance targets, exploits); step 8 next. Received 2026-10-20: architecture paper, digest `knowledge/reference/architecture/strong-codebases-2026-10.md` |
+| Status | G1 approved 2026-10-20. Step 0 done 2026-10-20 (mirror `7400643` in the kit; `knowledge/reference/roblox/whats-new.md`). Step 1 done 2026-10-20 (skill `studio-mcp`, owner approved). Step 2 done 2026-10-20 (skill `platform-policy`, owner approved). Step 3 done 2026-10-20 (skill `data-saving`, owner approved). Step 4 done 2026-10-20 (skill `performance`, owner approved). Step 5 done 2026-10-20 (skill `networking-security`, owner approved). Order change: steps 6-7 wait for the owner's ChatGPT research papers (architecture, testing, updates, performance targets, exploits); step 8 done 2026-10-20 (skill `ui-basics`, owner approved); step 9 next. Received 2026-10-20: architecture paper, digest `knowledge/reference/architecture/strong-codebases-2026-10.md` |
 | Kit | `C:\Users\Firew\Downloads\uterd\StudioKit` (0.3.0) · audit source: DestructionSimulator skills/rules (read-only) |
 
 ## Owner's words (2026-10-20, verbatim excerpts)
@@ -56,6 +56,7 @@ Research and extraction: Sonnet medium (cheap, parallel by source). Skill writin
 | Date | Gate | Owner's words |
 | --- | --- | --- |
 | 2026-10-20 | G1 | (approved scope and source rules in chat; see "Owner's words") |
+| 2026-10-20 | G3 step 8 | "Approved. Commit the UI basics skill and start J001 step 9: analytics, security cleanup and the choosing-packages rule." |
 | 2026-10-20 | G3 step 5 | "And yes, I approve of it for now. You can begin working on the next section" |
 | 2026-10-20 | G3 step 4 | "Approved. Commit the performance skill and start J001 step 5: networking and security." |
 | 2026-10-20 | G3 step 3 | "Approved. Commit the data saving skill and start J001 step 4: performance." |

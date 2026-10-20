@@ -11,3 +11,4 @@
 {"task": "players lost their data after a teleport, items duplicated", "expect": [".agents/skills/data-saving/SKILL.md"], "note": "data-saving skill (J001 step 3)"}
 {"task": "the game lags and memory keeps growing on phones", "expect": [".agents/skills/performance/SKILL.md"], "note": "performance skill (J001 step 4)"}
 {"task": "add a remote so the client can buy an item, make it exploit-proof", "expect": [".agents/skills/networking-security/SKILL.md"], "note": "networking-security skill (J001 step 5)"}
+{"task": "build a shop screen that works on phones and with a controller", "expect": [".agents/skills/ui-basics/SKILL.md"], "note": "ui-basics skill (J001 step 8)"}
