@@ -56,6 +56,7 @@ Research and extraction: Sonnet medium (cheap, parallel by source). Skill writin
 | Date | Gate | Owner's words |
 | --- | --- | --- |
 | 2026-10-20 | G1 | (approved scope and source rules in chat; see "Owner's words") |
+| 2026-10-20 | G3 step 7 revision | "Approved. Commit the revised anti-over-engineering rule." (owner: sources within 3 months, Opus 5.5 first) |
 | 2026-10-20 | G3 step 7, close | "Approved. Commit step 7 and close J001." |
 | 2026-10-20 | G3 step 6 + ops revisions | "Approved. Commit the revisions and step 6, then start step 7: anti-over-engineering." |
 | 2026-10-20 | G3 paper revision | "Keep them. Commit the paper-based improvements." |
