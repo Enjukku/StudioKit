@@ -4,5 +4,5 @@
 
 | note | type | scope | status | updated | summary |
 | --- | --- | --- | --- | --- | --- |
-| [J001 — Rebuild the engineering skills for the kit](../jobs/J001-engineering-skills/job-card.md) | job | universal | done | 2026-10-20 | "using both the Roblox docs as well as maybe web research ... |
+| [J001 — Rebuild the engineering skills for the kit](../jobs/J001-engineering-skills/job-card.md) | job | universal | active | 2026-10-20 | "using both the Roblox docs as well as maybe web research ... |
 | [Jobs](../jobs/README.md) | - | - | - | - | M and L jobs get a folder `knowledge/jobs/<job-id>/`, copied from `templates/jobs/`. |
