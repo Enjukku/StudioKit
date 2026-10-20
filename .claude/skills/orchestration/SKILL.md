@@ -39,6 +39,8 @@ A brief gives the specialist everything it needs to make **its own best craft ch
 | Acceptance checks | measurable pass rules | "Lands on the tower ledge mark; no foot sliding; 30 fps clip from the shot camera" |
 | Status return | to whom, by when in the job | "Report to cutscene director; sample first (G2)" |
 
+**Code briefs** also state, as part of Fixed: the files the agent owns, the public interface it must keep, the invariants that must hold, allowed dependencies and non-goals. The briefer writes the acceptance checks, including failure cases, so tests do not just mirror the code (owner research paper, `knowledge/reference/architecture/strong-codebases-2026-10.md` A-20). This is still what, not how.
+
 **Never** prescribe the craft ("use 3 flaps per second", "use a sine ease") unless it is a locked owner decision. If the brief cannot say *why*, it is not ready.
 
 ## 4. Who does the work

@@ -41,7 +41,7 @@ A screen, HUD element, popup or button is built or changed. The **look** (style,
 | U-09 | **Clipping:** rotated clipping is default; `ClipsDescendantsSupportsRotation` disappears November 2026, so never set it; clip to rounded corners with a CanvasGroup | DF 4737864 |
 | U-10 | **Accessibility:** contrast; meaning never by colour or sound alone (add icons and text); honour `ReducedMotionEnabled` and `PreferredTransparency`; test Largest text size | production/publishing/accessibility.md |
 | U-11 | **UI cost:** pool list rows and update them in place; no tween of `UIStroke.Thickness` on text; few CanvasGroups and keep them static-sized; animate gradient offset and rotation, not colour; sprite sheets for many small icons; fewer layers on always-on HUD | Y/CanvasGroup.yaml; ui/appearance-modifiers.md:258; DF 4846594 |
-| U-12 | **Cleanup:** every connection, tween and cloned instance of a screen has one cleanup owner that runs on close; reopening a screen 20 times leaves no extra connections | `knowledge/reference/architecture/strong-codebases-2026-10.md` A-10 |
+| U-12 | **Cleanup:** every connection, tween and cloned instance of a screen has one cleanup owner that runs on close; reopening a screen 20 times leaves no extra connections. A server answer that arrives after the screen closed or the character respawned is dropped (check a generation token). UI tied to world objects handles the object streaming out; every `WaitForChild` has a timeout | `knowledge/reference/architecture/strong-codebases-2026-10.md` A-10 |
 
 ## 5. Rules (final check)
 - No interactive UI outside the core UI safe area; nothing critical over the default touch controls.

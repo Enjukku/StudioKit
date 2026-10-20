@@ -56,6 +56,7 @@ Research and extraction: Sonnet medium (cheap, parallel by source). Skill writin
 | Date | Gate | Owner's words |
 | --- | --- | --- |
 | 2026-10-20 | G1 | (approved scope and source rules in chat; see "Owner's words") |
+| 2026-10-20 | G3 paper revision | "Keep them. Commit the paper-based improvements." |
 | 2026-10-20 | G3 step 9 | "Approved. Commit step 9. Then tell me what is left in J001." |
 | 2026-10-20 | G3 step 8 | "Approved. Commit the UI basics skill and start J001 step 9: analytics, security cleanup and the choosing-packages rule." |
 | 2026-10-20 | G3 step 5 | "And yes, I approve of it for now. You can begin working on the next section" |

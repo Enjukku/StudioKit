@@ -44,3 +44,12 @@ A strong codebase makes the **consequences of a change understandable before it 
 - Already covered: A-14 (`networking-security` N-02), A-15 (`data-saving` D-04, D-08), A-17 and A-19 (`performance` F-07, F-08, F-10).
 - New for step 6 (architecture + code review): A-01 to A-13, A-16, A-18, A-20 to A-23.
 - Step 7 (anti-over-engineering): A-05 adapters only where they pay, A-08, A-11, A-21.
+
+## Kit verdict (orchestrator, 2026-10-20): where the paper does not fit Roblox as written
+- **Protocol versions on remotes** (§6.4): not needed. Each Roblox server sends its own client code, so a client and its server always match. Versions are needed for saved data and for cross-server messages (MessagingService, MemoryStore, DataStore), where old and new servers meet.
+- **"No service locator"** (§6.1): Luau `require` already makes dependencies visible in the file. The real risk is lookup by name at runtime (a string registry). Singleton services required directly are acceptable when their start order is explicit.
+- Studio evidence (Riot, Valve, Mojang, Blizzard) is from large non-Roblox teams; use it for principles, not for sizes, tools or numbers.
+
+## Applied to approved skills (2026-10-20)
+networking-security (capability review, cheap checks first, re-check after yields, no remote versions, N-14 outcomes and quiet logs); data-saving (newer-schema guard, named session states, shutdown honesty, award ids); performance (fixed benchmark scene, peaks, cache and wake owners); ui-basics (late answers dropped, streamed-out targets, WaitForChild timeouts); orchestration (code briefs: owned files, interface, invariants, non-goals, briefer-written failure checks).
+

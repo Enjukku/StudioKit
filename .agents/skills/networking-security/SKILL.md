@@ -19,7 +19,7 @@ Any new or changed client request, relay, physics interaction, reward path, trad
 | What changed this year | `knowledge/reference/roblox/whats-new.md` § Networking and security |
 
 ## 3. Steps
-1. **Threat-model the feature** (SEC/security-tactics.md:48-54): for each argument the worst value; the request fired 1,000 times a second; its effect on other players; the most server work it can cause; the least state the client needs.
+1. **Threat-model the feature** (SEC/security-tactics.md:48-54): for each argument the worst value; the request fired 1,000 times a second; its effect on other players; the most server work it can cause; the least state the client needs; and what each object involved *can* do, not only what we intend (a reused NPC or tool may keep abilities it should not have).
 2. **Design the request as intent**, not result: `requestFire(weaponId, origin, direction)`, never `dealDamage(target, 50)` or `giveCoins(100)`. The server computes outcomes.
 3. **Write the server handler in the fixed order** (§4 N-02). Fail early and silently.
 4. **Place code and data** (§4 N-05): only what the client needs replicates.
@@ -29,8 +29,8 @@ Any new or changed client request, relay, physics interaction, reward path, trad
 ## 4. Craft core
 | ID | Practice | Evidence |
 | --- | --- | --- |
-| N-01 | **One transport module** (the game's remote layer) registers every client-callable method in one list. No remotes created ad hoc in feature code. The wrapper moves bytes; the handler authorises | `AGENTS.md` §2; RE:13-17 |
-| N-02 | **Validation order, every handler:** (1) player is ready and alive, (2) types and shape: `typeof`, string length and table size caps, `math.isfinite` on every number, integers where expected, Instance args checked with `typeof` and `IsDescendantOf` a known folder, (3) rate limit (server token bucket per player and method), (4) ownership and permission, (5) range and line of sight against server positions with latency slack, (6) game state (equipped, off cooldown, phase), (7) idempotency for anything that grants. Only then act | SEC/client-server-boundary.md:17-303 |
+| N-01 | **One transport module** (the game's remote layer) registers every client-callable method in one list. No remotes created ad hoc in feature code. The wrapper moves bytes; the handler authorises. Remotes need no protocol version (each server sends its own client code); saved data and cross-server messages do | `AGENTS.md` §2; RE:13-17 |
+| N-02 | **Validation order, every handler:** (1) player is ready and alive, (2) types and shape: `typeof`, string length and table size caps, `math.isfinite` on every number, integers where expected, Instance args checked with `typeof` and `IsDescendantOf` a known folder, (3) rate limit (server token bucket per player and method), (4) ownership and permission, (5) range and line of sight against server positions with latency slack, (6) game state (equipped, off cooldown, phase), (7) idempotency for anything that grants. Only then act. Cheap checks run before expensive ones (spatial queries, saves). If the handler yields, re-check afterwards that the player and character are still the same ones (a session or generation token) | SEC/client-server-boundary.md:17-303 |
 | N-03 | **Server computes outcomes.** Hits, damage, drops, rolls, prices and rewards are decided on the server from server state. The client may suggest a target point; the server checks it | SEC/client-server-boundary.md:141-153; SEC/defensive-design.md |
 | N-04 | **Never trust built-in interaction objects alone.** ProximityPrompt and ClickDetector events reach the server from any distance: re-check distance and state in the handler | SEC/client-server-boundary.md:275-291 |
 | N-05 | **Replicated means public.** Anti-cheat thresholds, server rules, admin lists, unreleased content and secrets live in ServerScriptService or ServerStorage. Never put server and client logic in one replicated module | SEC/access-control.md:15-67 |
@@ -42,6 +42,7 @@ Any new or changed client request, relay, physics interaction, reward path, trad
 | N-11 | **Secrets never in the place or the repo.** Places use the Secrets store (`HttpService:GetSecret`, secrets only in URL or headers). Tools read keys from environment variables or key files outside the repo, never print them. API keys: one per app, minimum scopes, restricted to the game | cloud-services/secrets.md; cloud/auth/api-keys.md |
 | N-12 | **Untrusted code stays boxed.** Inserted models: inspect scripts (obfuscation, `require` by id, `loadstring`); keep `LoadStringEnabled` false; Creator Store scripts are sandboxed but malware has slipped through | scripting/capabilities.md; SEC/third-party-vulnerabilities.md |
 | N-13 | **Places are a universe-wide door.** Any client can teleport to any place in the universe: set access to "Secure within universe only"; test and dev places live in a separate private universe | SEC/access-control.md:19-45 |
+| N-14 | **Clear outcomes, quiet logs.** A request ends as done, denied (do not retry) or temporarily unavailable (may retry), and the client shows each differently. Repeated denials are counted with a few samples, never one log line each | strong-codebases A-13, A-14 (owner paper) |
 
 ## 5. Rules (final check)
 - No client-callable method without the N-02 checks; no generic setters (`setData`, `giveItem`).
