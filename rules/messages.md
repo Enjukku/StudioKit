@@ -2,6 +2,8 @@
 
 # Agent messages: how agents brief, ask and hand back
 
+**Quality over cost (owner 2026-10-20):** for messages between agents, the goal is the best result, not fewer tokens. Never cut a fact, a reason or a check to save words. The limits below exist to keep the reader accurate.
+
 Every message between agents (lead → specialist, specialist → specialist, any → lead) has the same two parts. Readers are LLMs: they keep exact values exactly, they lose what is only implied, and they cannot see the sender's conversation (M-02).
 
 | Part | Form | Holds |
@@ -60,7 +62,7 @@ Rules: self-contained (the receiver sees no history); set `effort` before adding
 - **Loose brief** (much in `open`): add one line telling the receiver to look through `refs` and nearby files before it acts. Opus 5.5 starts work fast and misses context the brief did not point to; this line measurably raised correct results (M-14).
 - **`time_budget`** (optional): a time in seconds. Opus 5.5 paces its work to it and usually finishes early, so set it a little above the time you want. It is advice, not a stop: keep a real timeout. Under time pressure it may check a little less, so do not use it on money, saves or security work (M-15).
 - **Workflows:** an `agent()` call that returns a spec or hand-back uses a `schema`, so the keys are checked, not hoped for (M-16). For a Sonnet or Haiku agent, add the line "Think the problem through before you answer.": asked for JSON only, Sonnet 5.5 often skips its thinking and is less accurate (M-18).
-- **Do not shorten rules.** Write `fixed`, `not_in_scope` and the checks in full words. When messages are cut short, rules and boundaries are lost first (M-20). Save tokens with paths and narrow tool lists, not with clipped wording (M-21).
+- **Do not shorten rules.** Write `fixed`, `not_in_scope` and the checks in full words. When messages are cut short, rules and boundaries are lost first (M-20).
 
 ## 3. Hand-back (receiver → whoever asked)
 
@@ -75,7 +77,7 @@ not_verified: [mobile speaker playback]
 questions: [{q: "louder than the explosion?", default: "no, 3 dB under"}]
 ```
 
-- Max about 300 words outside the files. Long logs, tables and specs go in files; the message gives paths (M-07).
+- Length: as long as the reader needs, with no padding, repeats or filler sections. Long logs, tables and specs go in files and the message gives paths, so the next agent reads the original and nothing is lost in a retelling (M-07, M-09).
 - Every `pass` names its evidence (a file, a log line, a capture). No evidence → `not verified` (M-08).
 - A craft hand-back may add its role's own sections (its role file names them), in the files.
 - A text-only report is not proof of done (M-17). If a hand-back has open items and no blocker, the asker sends one line naming them, and the agent continues. After 2 such pushes on one task, treat it as `failed` and review it.

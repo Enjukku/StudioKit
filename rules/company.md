@@ -51,14 +51,14 @@ Any agent may ask any other agent for work **inside an approved brief**. Every r
 - The doing agent reports **to whoever asked**, never sideways.
 - Duplicate asks are merged into one ticket.
 
-## 4. Communication rules (usage and quality)
+## 4. Communication rules (quality first)
 
 The format of every brief, ask and hand-back: `rules/messages.md` (prose for intent, a `yaml` spec for exact values, open choices left to the specialist).
 
 
-1. **Shared files, short messages.** Briefs, beat sheets, results and decisions live in the job folder. A message says "done, see file X", asks one question, or reports a status. Never paste large content into messages (arXiv 2608.16801: shared files cut output tokens ~42% at 8 agents).
+1. **Shared files, complete messages.** Briefs, beat sheets, results and decisions live in the job folder, and messages point to them, so every agent reads the original, not a retelling. A message carries everything the reader needs to act; never cut a fact or a reason to save tokens (owner 2026-10-20: best result over usage between agents).
 2. **Hub and spoke by default.** A job owner runs specialists as subagents (results come back as summaries). Separate chats only for long, independent productions. Agent teams stay off (experimental, ~7× tokens, plans auto-approved).
-3. **Do not wake idle chats for small things.** Every message to an idle chat re-sends its whole context. Batch updates into the next status report.
+3. **Wake a chat when it changes that chat's work.** Pure FYI goes in the next status report.
 4. **Briefs are complete.** A new agent does not see the asker's conversation; the brief and the files it points to must be enough.
 5. **Every hand-back starts with its status** (§5) and follows `rules/messages.md` §3: files, checks with evidence, choices made, not verified, questions with defaults.
 

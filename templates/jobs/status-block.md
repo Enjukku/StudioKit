@@ -1,7 +1,7 @@
 <!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20 -->
 # Hand-back (end of every hand-back)
 
-Format and rules: `rules/messages.md` §3. Max about 300 words outside the files.
+Format and rules: `rules/messages.md` §3. As long as the reader needs, no padding; detail goes in files.
 
 STATUS: <done | blocked | needs-decision | failed>. <one-sentence outcome>
 
