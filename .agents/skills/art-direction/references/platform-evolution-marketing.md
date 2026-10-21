@@ -50,7 +50,7 @@ Pick the baseline phone from the game's analytics when they exist; otherwise wri
 - Marketing may compress and dramatize the fantasy but never invents another product; review it against the current game, not only the bible, and link each approved marketing anchor to the game version it shows (04:MK1-MK3).
 - Name the recognition anchors that must survive any refresh (title word, shape, character, color). Review icon, thumbnail, title treatment, loading screen and in-game UI as one family at real sizes (Supercell's 2025 logo evolution, S 01:SC-BS; no conversion data was published).
 - Click-through is not proof of better art direction; never borrow a competitor's image because it tested well (04:MK6).
-- Marketing icons and thumbnails made with the image tool may ship as final images; the owner reviews every one before it ships (owner J009-D8). Game assets stay built, never shipped as images.
+- Marketing icons and thumbnails made with the image tool may ship as final images, as may a touched-up version or a Blender render with the game's models (owner J012-D7); the owner reviews every one before it ships (owner J009-D8). Game assets stay built, never shipped as images.
 
 ## 4. Don't
 1. Call a generated reference consistent because it looks polished; check its views and construction.
