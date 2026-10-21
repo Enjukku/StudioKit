@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 4 skill books, two research papers to extract and fact-check, an earlier version to merge, first real test) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-20 (J003-D1..D4). Steps 2-5 done 2026-10-20 (notes + 2 fact-checks in `knowledge/reference/game-design/`; skills game-concept, preproduction, game-design, level-design; role game-designer; evals). Step 6 done 2026-10-21: hidden test 15/15 (grades-hidden.md); G2 pitch set 11/11 after one correction pass (grades-g2.md, g2/pitch-set.md). G2 sent to owner 2026-10-21 |
+| Status | G1 approved 2026-10-20 (J003-D1..D4). Steps 2-5 done 2026-10-20 (notes + 2 fact-checks in `knowledge/reference/game-design/`; skills game-concept, preproduction, game-design, level-design; role game-designer; evals). Step 6 done 2026-10-21: hidden test 15/15 (grades-hidden.md); G2 pitch set 11/11 after one correction pass (grades-g2.md, g2/pitch-set.md). G2 sent to owner 2026-10-21. Closed 2026-10-21 (J003-D5): agent done, G2 review and G3 waived by owner |
 
 ## Owner's words (2026-10-20, excerpts)
 - "generates and pitches ambitious, creative game concepts with a strong, marketable fantasy: titles players read and think 'I need to do that' or 'what would happen if I did that?' (for example: destroy the sun, build a dam to save the city, fly or die) ... giving a proven, trending core loop a new theme and a twist."
@@ -80,5 +80,5 @@ Subagents for extraction and fact-checks (independent, verbose output), in two w
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-20 | "I think we can begin creating the agent. This looks good." + "run all the Sonnet models on high" + game designer always Opus on high |
-| G2 first samples (L) | | |
-| G3 final look | | |
+| G2 first samples (L) | 2026-10-21 | waived: "For now, the agent is just done." (J003-D5) |
+| G3 final look | 2026-10-21 | waived (J003-D5); testing happens through real games |

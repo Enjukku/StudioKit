@@ -27,3 +27,7 @@ supersedes: []
 - Lesson: both tests built the look from words (style book tokens) with no whole-screen target image; the anime test generated character art only. A ChatGPT target reference of the screen is now step 4 of the role, required before styling, and self-review compares the build side by side with it (J002-D12).
 - Owner correction: every new UI/UX agent must know it has ChatGPT image generation and the VFX texture library. Now stated at the top of the role file, in the ui-figma description and in each style book §1.
 - Lead miss (2026-10-21): answered "is Codex the best image model" without checking the newest reference-images commit (J009-D16 had already made the browser route the default after a quality comparison). Owner: "everyone uses the browser route now because it's just better." Lesson: before answering about a shared tool, read `git log -3` of its skill.
+
+## Close (G3, 2026-10-21)
+- Owner: "For now, the agent is just done. We're not going to do any testing right now. We will be doing a lot of testing with this kit in the future, making games. So we'll pick up mistakes and this kit should continue to keep updating and getting better."
+- Carry forward: the first real game screen tests the required target reference image (J002-D12) and the browser image route (J002-D14); record its grade against the B-minus baseline.

@@ -15,7 +15,7 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | in kit |
 | character-rigger | craft → Opus | high | building (J005) |
 | modeler | craft → Opus | high for hero models and new kinds of models; medium for simple models (J007-D1) | building (J007; G2 pending) |
-| ui-ux-designer | craft → Opus | medium (high for a new look or a shop, brief-level) | in kit (J002, G3 pending) |
+| ui-ux-designer | craft → Opus | medium (high for a new look or a shop, brief-level) | in kit (J002, owner-approved 2026-10-21) |
 | sound-designer | craft → Opus | medium | in kit |
 | environment-designer (stages, levels, worlds: space, terrain, dressing, light, atmosphere, ambience map; replaces content-builder, J008-D3) | craft → Opus | high for new stages and big environments; medium for small changes and fixes (owner 2026-10-21, J008-D1) | building (J008) |
 | live-ops-designer (updates, events, seasons, limited-time content, fixes after launch; feedback sort and count; ranked update plan; update briefs; post-update review) | craft → Opus | medium; high for a season plan or a big update (owner J014-D1) | building (J014; skills live-ops-design, live-ops-craft; G2 pending) |

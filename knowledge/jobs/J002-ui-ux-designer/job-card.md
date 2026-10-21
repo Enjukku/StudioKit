@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: active
+status: done
 updated: 2026-10-20
 source: owner chat 2026-10-20 (/build-agent)
 supersedes: []
@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 6 skill books, research synthesis, first real test) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-20. Steps 2-5 done. Step 6 G2 test done 2026-10-20: cartoon egg shop in Figma (https://www.figma.com/design/gVgO2Ql80LUerCpQe02CtD), `content/ui/egg-shop/`, 27 skill gaps (`content/ui/egg-shop/skill-gaps.md`) fixed in the books; independent review `review-T08.md` (8 must-fix, 18 should-fix, 13 nits) fixed; VFX texture library linked (J002-D7). Second test T09 done 2026-10-21: anime summon (https://www.figma.com/design/Ob2rRbGBRlmP5JmGyVOlUG), `content/ui/anime-summon/`, 8 library textures, 23 skill gaps fixed in the books + 1 lead-found defect (clipped focus rings) fixed in Figma. Owner G2 review 2026-10-21: "B minus", some buttons "A"; fix = required ChatGPT target reference image before styling (J002-D12), done in the role and books. Next: G3 |
+| Status | G1 approved 2026-10-20. Steps 2-5 done. Step 6 G2 test done 2026-10-20: cartoon egg shop in Figma (https://www.figma.com/design/gVgO2Ql80LUerCpQe02CtD), `content/ui/egg-shop/`, 27 skill gaps (`content/ui/egg-shop/skill-gaps.md`) fixed in the books; independent review `review-T08.md` (8 must-fix, 18 should-fix, 13 nits) fixed; VFX texture library linked (J002-D7). Second test T09 done 2026-10-21: anime summon (https://www.figma.com/design/Ob2rRbGBRlmP5JmGyVOlUG), `content/ui/anime-summon/`, 8 library textures, 23 skill gaps fixed in the books + 1 lead-found defect (clipped focus rings) fixed in Figma. Owner G2 review 2026-10-21: "B minus", some buttons "A"; fix = required ChatGPT target reference image before styling (J002-D12), done in the role and books. G3 2026-10-21: owner closed the job without a rerun (J002-D15); improvements come from real game work |
 
 ## Owner's words (2026-10-20, excerpts)
 - "begin building the UI and UX design agent ... how to build four various UI styles within Figma, which is how we are mainly going to make UI unless I say otherwise."
@@ -73,5 +73,5 @@ Subagents for extraction (independent, parallel, verbose output). Lead writes th
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-20 | "Okay, yeah, you can plan the 6 skill books." + Sonnet on high, use my Figma, add ChatGPT image generation |
-| G2 first samples (L) | pending | shown 2026-10-20 |
-| G3 final look | | |
+| G2 first samples (L) | answered 2026-10-21 | "B minus", some buttons "A" (J002-D12) |
+| G3 final look | approved 2026-10-21 | J002-D15 |
