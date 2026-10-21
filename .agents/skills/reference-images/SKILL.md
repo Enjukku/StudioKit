@@ -39,7 +39,7 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 6. **Approve:** images the owner approves can become anchors (`art_refs.py approve <family> <id>`), so later batches match them.
 7. **Hand over** the image path in the next brief's `refs`, with a note on what to take and what to ignore.
 
-Routes: the tool (default); Figma `generate_image` for UI work inside a design file (`ui-figma`); or a prompt pack the owner runs in the ChatGPT app for large batches. Same locks in every route.
+**Every agent has ChatGPT image access** through this tool (owner J002-D11, 2026-10-21: "ChatGPT has a better image gen model"). Routes: the tool (default, ChatGPT `gpt-image-2` via Codex); a prompt pack the owner runs in the ChatGPT app for large batches; Figma `generate_image` only when the owner asks for it. Same locks in every route. No art bible yet (a kit test, a new game): `--bible templates/skill/art-bible.md` runs on the template's starter locks.
 
 ## 5. Craft core
 | ID | Practice | Evidence |
@@ -51,6 +51,7 @@ Routes: the tool (default); Figma `generate_image` for UI work inside a design f
 | I-05 | **Check before building:** views match, no impossible or hidden geometry, no extra or missing parts, the back is plausible, scale against a player is right, it reads at game distance | owner rejected first builds made without approved refs (first game and the dam game, 2026-10) |
 | I-06 | **Images are inputs.** A reference is a target and a source of shapes, never the shipped asset; UI stays live layers, models are built, effects are built | owner rule (UI built as layers; models from refs) |
 | I-07 | **Franchise themes:** source stills first (kept out of git), then original designs that do not copy a franchise's characters, logos or text | first game franchise stages (2026-10) |
+| I-09 | **Cut-out backgrounds:** for images that need transparency, use a plain magenta `#FF00FF` background; for pure glows, black plus a luminance-to-alpha key. Never green: a glowing subject on `#00FF00` picks up green spill in its glow | UI chat test 2026-10-21 (J002); first game ICON LOCK |
 | I-08 | **Show the owner images next to what they are for** (the sheet next to the model render, the key frames next to the frame script) in one batched review | owner gate practice, first game |
 
 ## 6. Rules (final check)

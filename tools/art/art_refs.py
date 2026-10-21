@@ -12,6 +12,7 @@ grows that library.
   python tools/art/art_refs.py print   <manifest.csv>             # assembled prompts, no generation
   python tools/art/art_refs.py run     <manifest.csv> [--limit N]  # generate missing rows
   python tools/art/art_refs.py approve <family> <id>               # copy a ref into the anchors
+  --bible <path> (before the command) uses another art bible, e.g. the kit template for a quick test
 
 Manifest columns: id, family, identity, inputs (optional; ';'-separated extra image paths attached before
 the anchors), anchors (optional; ';'-separated file names in the family's anchor folder).
@@ -248,6 +249,7 @@ def approve(fam: Family, ident: str) -> None:
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--bible", type=Path, default=BIBLE, help="art bible to read (default: knowledge/design/art-bible.md)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p_print = sub.add_parser("print")
     p_print.add_argument("manifest", type=Path)
@@ -258,7 +260,7 @@ def main() -> int:
     p_app.add_argument("family")
     p_app.add_argument("id")
     args = ap.parse_args()
-    fams, lks = load_bible()
+    fams, lks = load_bible(args.bible)
     if args.cmd == "approve":
         if args.family not in fams:
             sys.exit(f"family must be one of {', '.join(sorted(fams))}")
