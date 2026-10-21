@@ -7,7 +7,7 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | Role | Tier → model | Effort (default; brief may raise it) | Status |
 | --- | --- | --- | --- |
 | orchestrator (lead, via orchestration skill) | lead → Opus | owner sets with `/effort`: medium; high for design or wiring | skill exists |
-| game-designer | craft → Opus | high, always (owner J003-D3) | building (J003) |
+| game-designer | craft → Opus | high, always (owner J003-D3) | in kit (J003, closed 2026-10-21) |
 | progression-designer (feeling timeline → curves, data tables, simulation, live tuning; replaces economy-designer, J011-D3) | craft → Opus | high (owner J011-D1); its tools and scripts Opus medium or higher | building (J011) |
 | art-director | craft → Opus | high (owner J009-D1) | building (J009; skills art-direction, art-review; G2 pending) |
 | film-director (every cinematic moment: beat sheet, shot list + `tools/film/shotlist.py`, ChatGPT storyboards, Blender animatic, craft briefs, Roblox playback checks, capture review; replaces cutscene-director, J015-D2) | craft → Opus | high (owner J015-D1) | building (J015; skills film-direction, film-craft; G2 pending) |
