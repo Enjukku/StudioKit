@@ -7,7 +7,7 @@ Every request between agents is a ticket here (`rules/company.md` section 3).
 | --- | --- |
 | id | `<job-id>-T<nn>` |
 | from, to | asking agent, doing agent |
-| ask | pointer to brief section, or 1-3 line intent brief |
+| ask | pointer to a brief file in the `rules/messages.md` §2 format |
 | inside | yes = same scope, crew, budget; no = needs decision |
 | status | proposed, approved, working, blocked, needs-decision, done, failed, cancelled |
 | hops | agents the request chain has passed (max 3) |

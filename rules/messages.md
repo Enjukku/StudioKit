@@ -77,7 +77,7 @@ return: hand-back to vfx-designer; sample first (G2)
 - Write `fixed`, `rules`, `not_in_scope` and the checks **in full words**. When messages are cut short, rules and boundaries are lost first (M-20).
 - **Loose brief** (much in `open`): add one line telling the receiver to look through `refs` and nearby files before it acts. Opus 5.5 starts work fast and misses context the brief did not point to (M-14).
 - **`time_budget`** (optional): seconds. Opus 5.5 paces to it and usually finishes early; it is advice, not a stop. It may check a little less under time pressure, so not on money, saves or security work (M-15).
-- **Workflows:** an `agent()` call that returns a hand-back uses a `schema` (M-16), with the reasoning or evidence fields **before** the answer fields (answer-first JSON lost accuracy, M-29). For a Sonnet or Haiku agent, add "Think the problem through before you answer." (M-18).
+- **Workflows:** an `agent()` call that returns a hand-back uses a `schema` (`templates/jobs/handback.schema.json`) (M-16), with the reasoning or evidence fields **before** the answer fields (answer-first JSON lost accuracy, M-29). For a Sonnet or Haiku agent, add "Think the problem through before you answer." (M-18).
 - **Deliverable names:** never `report*`, `summary*`, `findings*` or `analysis*` `.md`. Claude Code tells subagents not to write such files, and some Haiku 5.5 subagents then refused (M-30). Name the file by its content (`cue-card.md`, `review-J012.md`).
 
 ## 3. Hand-back (receiver → whoever asked)

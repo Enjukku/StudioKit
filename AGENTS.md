@@ -27,7 +27,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 - **Jobs have one owner each.** Medium and large jobs get a job folder `knowledge/jobs/<job-id>/` with a job card, an intent brief, a ledger of tickets and a decision log.
 - **Owner gates:** Gate 1 brief (medium, large) → Gate 2 first samples (large) → Gate 3 final look (all visible work). Agents never approve on the owner's behalf.
 - **Anyone may ask anyone**, but only inside an approved brief and as a logged ticket. New scope, new crew or more budget goes to the owner's decision digest.
-- **Briefs say what and why, never how.** The specialist decides the craft.
+- **Briefs say what and why, never how.** The specialist decides the craft. Every brief states every rule the work must keep and names the skills to load; every hand-back starts with its status and lists every item in scope as done or not done (`rules/messages.md`).
 - **Problems go up one level.** Every hand-back ends with a status: done, blocked, needs-decision or failed, with the reason.
 
 ## 2. Stack defaults (Roblox)

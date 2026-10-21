@@ -1,0 +1,49 @@
+{
+  "$comment": "Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Hand-back schema for workflow agent() calls (rules/messages.md §2-3). Evidence fields come before the status and outcome fields: answer-first JSON loses accuracy (M-29). For Sonnet or Haiku agents also add 'Think the problem through before you answer.' (M-18).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["coverage", "checks", "files", "decisions_made", "proposals", "questions", "status", "outcome"],
+  "properties": {
+    "coverage": {
+      "type": "array",
+      "description": "Every item in scope, not only the finished ones.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item", "state", "why"],
+        "properties": {
+          "item": {"type": "string"},
+          "state": {"type": "string", "enum": ["done", "not done", "skipped"]},
+          "why": {"type": "string", "description": "Empty for done; the reason otherwise."}
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "result", "evidence"],
+        "properties": {
+          "id": {"type": "string", "description": "C1, C2 ... from the brief"},
+          "result": {"type": "string", "enum": ["pass", "fail", "not verified"]},
+          "evidence": {"type": "string", "description": "File, log line or capture for a pass; the reason otherwise."}
+        }
+      }
+    },
+    "files": {"type": "array", "items": {"type": "string"}},
+    "decisions_made": {"type": "array", "items": {"type": "string"}},
+    "proposals": {"type": "array", "items": {"type": "string"}},
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["q", "default"],
+        "properties": {"q": {"type": "string"}, "default": {"type": "string"}}
+      }
+    },
+    "status": {"type": "string", "enum": ["done", "blocked", "needs-decision", "failed"]},
+    "outcome": {"type": "string", "description": "One sentence."}
+  }
+}

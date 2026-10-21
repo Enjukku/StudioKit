@@ -15,7 +15,7 @@ description: Use at the start of every owner request in the lead chat, and whene
 4. **M / L:** open `knowledge/jobs/<job-id>/` from `templates/jobs/`, write the **job card** and **intent brief** (§3), estimate the budget, and put them to the owner as **Gate 1**. Nothing expensive before the owner's yes.
 5. After G1: pick the job owner (yourself or a production lead), the crew and the mechanism (§4). Brief each specialist with a ticket.
 6. **L:** collect one cheap **first sample** per craft and show them in **one batched Gate 2 review**. Record the owner's picks and words in the decision log.
-7. Full build. Specialists hand back with a status block; checkers run the measurable checks.
+7. Full build. Specialists hand back in the `rules/messages.md` §3 shape (`STATUS`, `coverage`, evidence); checkers run the measurable checks.
 8. **Gate 3:** show the result (renders, clips, screenshots), with what was checked and what was not.
 9. **Close:** ledger statuses final, lesson drafts in `knowledge/inbox/`, decisions in the ledger, one-paragraph report.
 
@@ -77,6 +77,7 @@ Per-role defaults: `.agents/roles/README.md` (owner-approved 2026-10-20). For he
 
 - Gate PASS for code; measurable checks for content (budgets, screen-size math, clip metrics, rubric with a separate grader).
 - Visual work: the agent's own multi-angle review first; then the owner.
+- **Read each hand-back's `coverage` against the files, not the summary.** An item missing from `coverage`, or a `pass` without evidence, goes back to the agent with one line naming it (max 2 pushes, then `failed`).
 - Say exactly what was checked and what was not. Never claim the owner's approval from an agent's message.
 
 ## 8. Self-check before every report to the owner
@@ -87,6 +88,7 @@ Per-role defaults: `.agents/roles/README.md` (owner-approved 2026-10-20). For he
 - [ ] Usage: estimate vs actual given at the gate.
 - [ ] One digest with all open decisions; defaults stated.
 - [ ] Lesson drafts written for the job's wins, failures and owner corrections.
+- [ ] Every brief sent this job: every rule stated, skills named, `fixed` values sourced (`rules/messages.md` §6 checks).
 
 ## Read this file when
 | You need | Open |
