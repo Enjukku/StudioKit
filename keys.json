@@ -1,0 +1,33 @@
+{
+  "_about": "Where each API key file lives on the owner's PC. Paths only, never key values. One key per .txt file. Agents load keys with `python tools/keys.py run -- <command>` and never open a key file. When the owner gives a new key path, add or fill one entry here (rules: AGENTS.md section 3 item 4).",
+  "keys": [
+    {
+      "env": "ROBLOX_ANALYTICS_API_KEY",
+      "service": "Roblox Open Cloud: Analytics Query + Experiments read",
+      "path": "",
+      "used_by": "tools/analytics (analyst)",
+      "note": "Permissions: universe.analytics:read, universe:read. Setup: tools/analytics/README.md section 1."
+    },
+    {
+      "env": "YOUTUBE_API_KEY",
+      "service": "YouTube Data API",
+      "path": "",
+      "used_by": "tools/trends (trend-scout)",
+      "note": ""
+    },
+    {
+      "env": "STEAM_WEB_API_KEY",
+      "service": "Steam Web API",
+      "path": "",
+      "used_by": "tools/trends (trend-scout)",
+      "note": ""
+    },
+    {
+      "env": "OPENAI_API_KEY",
+      "service": "OpenAI image API (large reference-image batches)",
+      "path": "",
+      "used_by": "reference-images skill (optional; owner decides)",
+      "note": ""
+    }
+  ]
+}
