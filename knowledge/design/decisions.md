@@ -10,7 +10,7 @@ supersedes: []
 
 # Decisions ledger
 
-The only list of locked design decisions. Append a row when the owner decides. Never edit old rows; add a new row that supersedes.
+The only list of locked design decisions. Append a row when the owner decides. Never edit old rows; add a new row that supersedes. A decided question stays closed until its revisit trigger happens.
 
-| ID | date | decision | owner's words |
-| --- | --- | --- | --- |
+| ID | date | decision | owner's words | revisit when |
+| --- | --- | --- | --- | --- |

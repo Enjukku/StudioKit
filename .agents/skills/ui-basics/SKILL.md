@@ -1,6 +1,6 @@
 ---
 name: ui-basics
-description: Build and review Roblox UI that works on every device - phone, tablet, PC, console and VR - with correct scaling, safe areas, readable text, gamepad and touch input, accessibility, the 2026 styling system, native shadows, corners and gradients, button states, UI effects and UI performance. Use when building a screen, HUD, shop, menu, popup or button, for "the UI is cut off on phones", "text is too small", "it does not work with a controller", "make the buttons feel good", and to check which new UI features are live or still beta. Engineering baseline only: the look and UX come from the game's UI style and the UI designer.
+description: Build and review Roblox UI that works on every device - scaling, safe areas, readable text, touch and gamepad, accessibility, the 2026 styling system, button states, UI performance. Use when building a screen, HUD, shop, menu, popup or button, for "the UI is cut off on phones", "text is too small", "it does not work with a controller". Engineering only; look and UX come from the UI designer.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 8. Evidence: `references/facts.md` (docs mirror upstream 7400643; Roblox staff posts 2026; Y = `_api-reference/classes/`). A deep UI/UX designer role will come later from owner material and will build on this.

@@ -1,6 +1,6 @@
 ---
 name: networking-security
-description: Design, build or review every client-server path in a Roblox game so exploiters cannot cheat, dupe or crash it. Covers remote design (reliable, unreliable, functions), the server validation order, rate limits, what clients can see and decompile, network ownership, Server Authority (2026) for fast combat or movement, detection and bans, secrets and API keys, and untrusted models. Use for any new remote or client request, "players are cheating", "items got duplicated", "someone flies or teleports", "is this exploitable", and before merging anything client-callable. Wrapper-neutral: any remote library is transport, not authorisation.
+description: Design, build or review every client-server path in a Roblox game so exploiters cannot cheat, dupe or crash it - remotes, server validation, rate limits, network ownership, Server Authority. Use for any new remote or client request, "players are cheating", "items got duplicated", "someone flies or teleports", "is this exploitable", and before merging anything client-callable.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 5. Evidence: `references/facts.md` (docs mirror upstream 7400643; Roblox staff posts 2026). Short source names (SEC, RE, SA, Y) are defined at its top.

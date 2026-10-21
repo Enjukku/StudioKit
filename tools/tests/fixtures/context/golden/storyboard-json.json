@@ -1,0 +1,242 @@
+{
+  "query": "storyboard the boss intro",
+  "terms": [
+    "storyb",
+    "boss",
+    "intro"
+  ],
+  "searched": {
+    "files": 23,
+    "sections": 27
+  },
+  "budget_tokens": 8000,
+  "results": [
+    {
+      "rank": 1,
+      "ref": "knowledge/lessons/storyboard-generic.md#storyboard-panels-for-a-boss-intro",
+      "path": "knowledge/lessons/storyboard-generic.md",
+      "heading": "Storyboard panels for a boss intro",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 6.275,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in heading/title/path/body; type lesson",
+      "excerpt": [
+        "Storyboard every boss intro shot before the animatic; boards drift without a shot list."
+      ]
+    },
+    {
+      "rank": 2,
+      "ref": "knowledge/lessons/storyboard-tagged.md#intro-boards-keep-continuity",
+      "path": "knowledge/lessons/storyboard-tagged.md",
+      "heading": "Intro boards keep continuity",
+      "lines": [
+        9,
+        13
+      ],
+      "score": 5.385,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in heading/title/path/body; type lesson",
+      "excerpt": [
+        "Storyboard the boss intro with one continuity sheet; check the boards against the animatic."
+      ]
+    },
+    {
+      "rank": 3,
+      "ref": "knowledge/jobs/J016-demo/notes.md#boss-intro-working-notes",
+      "path": "knowledge/jobs/J016-demo/notes.md",
+      "heading": "Boss intro working notes",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 5.014,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in heading/title/body; type job",
+      "excerpt": [
+        "The storyboard for the boss intro uses a low angle for the reveal."
+      ]
+    },
+    {
+      "rank": 4,
+      "ref": ".agents/roles/film-director.md#film-director",
+      "path": ".agents/roles/film-director.md",
+      "heading": "film director",
+      "lines": [
+        9,
+        10
+      ],
+      "score": 4.305,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in meta/body",
+      "excerpt": [
+        "Directs cutscenes, boss intros and storyboards.",
+        "You direct every cinematic moment. Storyboard first, then the animatic."
+      ]
+    },
+    {
+      "rank": 5,
+      "ref": "knowledge/jobs/J016-demo/job-card.md#j016-boss-intro-cutscene",
+      "path": "knowledge/jobs/J016-demo/job-card.md",
+      "heading": "J016 — Boss intro cutscene",
+      "lines": [
+        9,
+        17
+      ],
+      "score": 4.168,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in heading/title/body; type job",
+      "excerpt": [
+        "| Status | working: storyboard boards in review; G2 open |"
+      ]
+    },
+    {
+      "rank": 6,
+      "ref": "knowledge/overlays/film-director.md#film-director-for-this-game",
+      "path": "knowledge/overlays/film-director.md",
+      "heading": "Film director for this game",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 4.089,
+      "kind": "match",
+      "why": "matched boss, intro in body; type overlay",
+      "excerpt": [
+        "Boss intros stay under 12 seconds."
+      ]
+    },
+    {
+      "rank": 7,
+      "ref": "knowledge/jobs/J016-demo/decisions.md#j016-decisions",
+      "path": "knowledge/jobs/J016-demo/decisions.md",
+      "heading": "J016 decisions",
+      "lines": [
+        8,
+        15
+      ],
+      "score": 3.928,
+      "kind": "match",
+      "why": "matched storyb, boss, intro in body; type decision",
+      "excerpt": [
+        "| J016-D1 | The boss intro storyboard has six panels |"
+      ]
+    },
+    {
+      "rank": 8,
+      "ref": "knowledge/overlays/film-craft.md#film-craft-for-this-game",
+      "path": "knowledge/overlays/film-craft.md",
+      "heading": "Film craft for this game",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 1.545,
+      "kind": "match",
+      "why": "matched boss, intro in body; type overlay",
+      "excerpt": [
+        "Letterbox 2.39 for every boss intro cutscene."
+      ]
+    },
+    {
+      "rank": 9,
+      "ref": "knowledge/jobs/J016-demo/job-card.md#gates",
+      "path": "knowledge/jobs/J016-demo/job-card.md",
+      "heading": "Gates",
+      "lines": [
+        18,
+        23
+      ],
+      "score": 1.52,
+      "kind": "match",
+      "why": "matched boss, intro in title; type job",
+      "excerpt": [
+        "| Gate | Date | Owner's words |"
+      ]
+    },
+    {
+      "rank": 10,
+      "ref": "knowledge/jobs/J016-demo/g2/beat-sheet.md#beat-sheet",
+      "path": "knowledge/jobs/J016-demo/g2/beat-sheet.md",
+      "heading": "Beat sheet",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 1.435,
+      "kind": "match",
+      "why": "matched boss, intro in body; type job",
+      "excerpt": [
+        "1. The doors open. 2. The boss intro roar. 3. The fight starts."
+      ]
+    },
+    {
+      "rank": 11,
+      "ref": "knowledge/jobs/J016-demo/ledger.md#j016-ledger",
+      "path": "knowledge/jobs/J016-demo/ledger.md",
+      "heading": "J016 ledger",
+      "lines": [
+        8,
+        14
+      ],
+      "score": 1.435,
+      "kind": "match",
+      "why": "matched boss, intro in body; type job",
+      "excerpt": [
+        "| T1 | film-director | animator | boss intro roar timing |"
+      ]
+    },
+    {
+      "rank": 12,
+      "ref": "knowledge/design/decisions.md#decisions",
+      "path": "knowledge/design/decisions.md",
+      "heading": "Decisions",
+      "lines": [
+        8,
+        15
+      ],
+      "score": 1.4,
+      "kind": "match",
+      "why": "matched boss, intro in body; type decision",
+      "excerpt": [
+        "| D-1 | 2026-10-14 | Boss intro cutscene plays once per server | \"only once\" |"
+      ]
+    }
+  ],
+  "superseded": [],
+  "roblox_docs": {
+    "pages": [
+      {
+        "path": "knowledge/external/roblox-creator-docs/workspace/camera/index.md",
+        "title": "Camera",
+        "score": 1.879,
+        "why": "matched boss, intro"
+      }
+    ],
+    "api": []
+  },
+  "decisions": [
+    {
+      "line": 14,
+      "row": "| D-1 | 2026-10-14 | Boss intro cutscene plays once per server | \"only once\" |",
+      "matched": [
+        "boss",
+        "intro"
+      ]
+    }
+  ],
+  "code_hints": [],
+  "agents_sections": [
+    "0. Authority",
+    "1. Studio"
+  ],
+  "read_next": [
+    "open `knowledge/lessons/storyboard-generic.md` L8-12 (Storyboard panels for a boss intro)",
+    "open `knowledge/lessons/storyboard-tagged.md` L9-13 (Intro boards keep continuity)",
+    "open `knowledge/jobs/J016-demo/notes.md` L8-12 (Boss intro working notes)",
+    "open `.agents/roles/film-director.md` L9-10 (film director)",
+    "open Roblox docs `knowledge/external/roblox-creator-docs/workspace/camera/index.md` (Camera) before using that engine system"
+  ]
+}

@@ -1,8 +1,8 @@
 {
-  "$comment": "Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Hand-back schema for workflow agent() calls (rules/messages.md §2-3). Evidence fields come before the status and outcome fields: answer-first JSON loses accuracy (M-29). For Sonnet or Haiku agents also add 'Think the problem through before you answer.' (M-18).",
+  "$comment": "Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised 2026-10-21 (J016: built_on). Hand-back schema for workflow agent() calls (rules/messages.md §2-3). Evidence fields come before the status and outcome fields: answer-first JSON loses accuracy (M-29). For Sonnet or Haiku agents also add 'Think the problem through before you answer.' (M-18).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["coverage", "checks", "files", "decisions_made", "proposals", "questions", "status", "outcome"],
+  "required": ["coverage", "checks", "built_on", "files", "decisions_made", "proposals", "questions", "status", "outcome"],
   "properties": {
     "coverage": {
       "type": "array",
@@ -31,6 +31,7 @@
         }
       }
     },
+    "built_on": {"type": "array", "items": {"type": "string"}, "description": "Every input used, as path@revision."},
     "files": {"type": "array", "items": {"type": "string"}},
     "decisions_made": {"type": "array", "items": {"type": "string"}},
     "proposals": {"type": "array", "items": {"type": "string"}},

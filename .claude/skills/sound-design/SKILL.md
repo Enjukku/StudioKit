@@ -1,6 +1,6 @@
 ---
 name: sound-design
-description: Use when designing, specifying, reviewing or prompting sound for a Roblox game — SFX, music, ambience, UI audio, rewards, pickups, hits, breaks, horror scares, warnings, gacha or egg reveals. Covers choosing sounds for a target emotion, layering (transient/body/tail), variants and repetition, mixing and loudness (LUFS, ducking, priority, voice caps), phone-speaker and headphone checks, ethics for rewards and paid random items, AI sound-generation prompts (ElevenLabs etc.), Roblox audio setup (AudioPlayer, AudioEmitter, AudioFader, Wire, upload limits) and listening-test plans. Game-agnostic.
+description: Design, specify, review or prompt sound for a Roblox game - SFX, music, ambience, UI audio, rewards, hits, scares, egg reveals; layering, repetition, mixing and loudness, AI sound prompts, Roblox audio setup, listening tests. Use for "make the reveal feel exciting", "make the hallway scary", or any sound review. Game-agnostic.
 ---
 
 > Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10

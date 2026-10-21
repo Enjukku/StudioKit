@@ -1,0 +1,54 @@
+# Context packet
+
+- Task: storyboard the boss intro
+- Terms: storyb, boss, intro
+- Searched: 23 files, 27 sections; budget 8000 tokens
+- Locations only: source priority (AGENTS.md §0) and decision status still apply.
+
+## Ranked
+
+1. `knowledge/lessons/storyboard-generic.md#storyboard-panels-for-a-boss-intro` L8-12 · 6.275 · matched storyb, boss, intro in heading/title/path/body; type lesson
+   > Storyboard every boss intro shot before the animatic; boards drift without a shot list.
+2. `knowledge/lessons/storyboard-tagged.md#intro-boards-keep-continuity` L9-13 · 5.385 · matched storyb, boss, intro in heading/title/path/body; type lesson
+   > Storyboard the boss intro with one continuity sheet; check the boards against the animatic.
+3. `knowledge/jobs/J016-demo/notes.md#boss-intro-working-notes` L8-12 · 5.014 · matched storyb, boss, intro in heading/title/body; type job
+   > The storyboard for the boss intro uses a low angle for the reveal.
+4. `.agents/roles/film-director.md#film-director` L9-10 · 4.305 · matched storyb, boss, intro in meta/body
+   > Directs cutscenes, boss intros and storyboards.
+   > You direct every cinematic moment. Storyboard first, then the animatic.
+5. `knowledge/jobs/J016-demo/job-card.md#j016-boss-intro-cutscene` L9-17 · 4.168 · matched storyb, boss, intro in heading/title/body; type job
+   > | Status | working: storyboard boards in review; G2 open |
+6. `knowledge/overlays/film-director.md#film-director-for-this-game` L8-12 · 4.089 · matched boss, intro in body; type overlay
+   > Boss intros stay under 12 seconds.
+7. `knowledge/jobs/J016-demo/decisions.md#j016-decisions` L8-15 · 3.928 · matched storyb, boss, intro in body; type decision
+   > | J016-D1 | The boss intro storyboard has six panels |
+8. `knowledge/overlays/film-craft.md#film-craft-for-this-game` L8-12 · 1.545 · matched boss, intro in body; type overlay
+   > Letterbox 2.39 for every boss intro cutscene.
+9. `knowledge/jobs/J016-demo/job-card.md#gates` L18-23 · 1.52 · matched boss, intro in title; type job
+   > | Gate | Date | Owner's words |
+10. `knowledge/jobs/J016-demo/g2/beat-sheet.md#beat-sheet` L8-12 · 1.435 · matched boss, intro in body; type job
+   > 1. The doors open. 2. The boss intro roar. 3. The fight starts.
+11. `knowledge/jobs/J016-demo/ledger.md#j016-ledger` L8-14 · 1.435 · matched boss, intro in body; type job
+   > | T1 | film-director | animator | boss intro roar timing |
+12. `knowledge/design/decisions.md#decisions` L8-15 · 1.4 · matched boss, intro in body; type decision
+   > | D-1 | 2026-10-14 | Boss intro cutscene plays once per server | "only once" |
+
+## Roblox docs
+
+1. `knowledge/external/roblox-creator-docs/workspace/camera/index.md` · Camera · matched boss, intro
+
+## Matching decisions (knowledge/design/decisions.md)
+
+- L14: | D-1 | 2026-10-14 | Boss intro cutscene plays once per server | "only once" |
+
+## Always on: AGENTS.md sections
+
+0. Authority; 1. Studio
+
+## Read next
+
+- open `knowledge/lessons/storyboard-generic.md` L8-12 (Storyboard panels for a boss intro)
+- open `knowledge/lessons/storyboard-tagged.md` L9-13 (Intro boards keep continuity)
+- open `knowledge/jobs/J016-demo/notes.md` L8-12 (Boss intro working notes)
+- open `.agents/roles/film-director.md` L9-10 (film director)
+- open Roblox docs `knowledge/external/roblox-creator-docs/workspace/camera/index.md` (Camera) before using that engine system

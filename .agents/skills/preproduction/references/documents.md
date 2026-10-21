@@ -21,7 +21,7 @@ States (J003 addition, aligning the paper's mixed words, N2 W14): **proposed** �
 | Uncertainty register | `knowledge/design/open-questions.md` (column "proposal in use"; put the owner and test in the question text) | every open assumption | — |
 | Concepts | `knowledge/design/concepts/<concept-id>.md` | pitch records (`game-concept`) | reference |
 
-Every authored file starts with the frontmatter of `rules/knowledge.md` §3 and an author line. Dense tables, fixed keys.
+Every authored file starts with the frontmatter of `rules/knowledge.md` §5 and an author line. Dense tables, fixed keys.
 
 ## 2. Pillar sheet (T1, 9 fields)
 A pillar is a constraint on decisions, not an adjective; no pillar count is optimal (N2 T1 O).

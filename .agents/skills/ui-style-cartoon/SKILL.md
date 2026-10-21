@@ -1,6 +1,6 @@
 ---
 name: ui-style-cartoon
-description: Make Roblox game UI in the cartoon style in Figma - rounded chunky controls with a thick black outline and white halo, bright two-stop gradients, a darker 3D lip, glossy highlight bars and half-tone dots, rim strokes, bubbly outlined 3D text (Fredoka One), rarity by whole-card colour, soft floating shadows. Use when the game's UI style is cartoon, cartoony, bubbly, cute, simulator, pet or tycoon style, or the owner says "make it cartoony", "chunky buttons", "like a pet sim inventory". Gives tokens, a recipe per component (panel, header, buttons, close, search, item card, rarity, counter, HUD button, popup), states, what to borrow from the other styles, and the Roblox build per part. Read ui-design and ui-figma first.
+description: Roblox game UI in the cartoon style in Figma - chunky rounded controls, thick black outline with white halo, bright gradients, 3D lip, bubbly outlined text. Use when the UI style is cartoon, bubbly, cute, simulator, pet or tycoon, or the owner says "make it cartoony", "chunky buttons". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TC (UI Genesis cartoon pet inventory in Figma, `knowledge/reference/ui/01a`, `01b`); borrowed: TS (stud), TA (anime), TP (pixel). Every value is one tutor's by-eye pick or a PROPOSAL: tune per game, owner confirms.

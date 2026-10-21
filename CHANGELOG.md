@@ -2,6 +2,15 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.6.0 (2026-10-21): J016 orchestration and context redesign (owner approvals J016-D4, J016-D5)
+
+- Flow: one accountable lead, a job lead per job, independent direction proposals and one direction sheet, a shared contract per job, an integrated cheap proof, sideways work between crafts, one integrator and Studio writer, an ordered review chain where reviewers never edit; gates G1 direction, G2 integrated proof, G3 final, bound to revisions. Rewritten: `rules/company.md`, `rules/messages.md`, `orchestration` skill (+ `references/job-types.md`), `rules/knowledge.md`; aligned: `AGENTS.md`, harness profiles.
+- Seven saved job workflows in `.agents/workflows/jobs/` (synced to `.claude/workflows/`): cutscene, character, stage, UI screen, gameplay feature, effect, marketing art; one stage per call; tested with fake agents (`tools/workflows/wf_harness.mjs`, `tools/tests/test_job_workflows.py`).
+- Context: five layers with writers; `context_packet.py --role --job`; `roles:` and `revision:` frontmatter keys; hook scripts in `tools/hooks/` (owner enables); vault starters `precedents.md`, `vocabulary.md`, `taste-log.md`; decisions get a revisit trigger; lesson drafts carry cause and layer; `/improve` routes causes to layers and re-runs capability probes after Claude Code updates.
+- Templates: direction sheet, crew list, evidence ledger, exchange note, contract header, review file; job card, brief, hand-back (`built_on`) and ledger updated.
+- All 48 skill descriptions ≤ 400 characters (new gate check `f`); every role file has "Your place in the job flow".
+- Evidence: `knowledge/jobs/J016-orchestration/` (design, capability check on Claude Code 2.1.296 and 2.1.306, 14 Riot transcripts extracted).
+
 ## 0.5.1 (2026-10-20): models and effort per role
 
 - `kit.json`: craft tier → Opus; new research tier → Sonnet. `tools/sync_harness.py` accepts `research`; test added.

@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""SubagentStop hook: send a kit-role subagent back once when its hand-back lacks STATUS or coverage.
+
+Kit tool (universal). Python 3 standard library only, no network. Spec: J016-T01; format: rules/messages.md §3.
+
+Reads the SubagentStop JSON on stdin (fields used: `agent_type`, `stop_hook_active`,
+`last_assistant_message`). Only kit roles (stems of .agents/roles/*.md) are checked. The stop is
+allowed (no output) when `stop_hook_active` is true (the agent was already sent back once), when the
+message has no text to judge (for example a hand-back sent through a tool), or when the first
+non-empty line starts with `STATUS:` and the message contains `coverage`. Otherwise it prints
+    {"decision": "block", "reason": "<REASON>"}
+which keeps the subagent running and gives it REASON as its next instruction.
+
+Never fails: on any error it exits 0 with no stdout (the stop goes ahead) and one line on stderr.
+
+Usage (settings.json runs it; see tools/hooks/README.md):
+    python tools/hooks/handback_check.py [--root DIR]  < hook-input.json
+Exit codes: always 0.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+REASON = "Hand-back must start with 'STATUS: done | blocked | needs-decision | failed.' and include coverage (rules/messages.md §3)."
+
+
+def decision_for(payload: dict, root: Path) -> dict | None:
+    if payload.get("stop_hook_active") is True:
+        return None
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import context_packet as cp
+
+    role = payload.get("agent_type")
+    if not isinstance(role, str) or role not in cp.role_names(root):
+        return None
+    message = payload.get("last_assistant_message")
+    if not isinstance(message, str) or not message.strip():
+        return None
+    first = next(line.strip() for line in message.splitlines() if line.strip())
+    if first.startswith("STATUS:") and "coverage" in message.lower():
+        return None
+    return {"decision": "block", "reason": REASON}
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    try:
+        root = Path(argv[argv.index("--root") + 1]) if "--root" in argv else ROOT
+        raw = sys.stdin.buffer.read().decode("utf-8-sig")
+        payload = json.loads(raw) if raw.strip() else None
+        decision = decision_for(payload, root.resolve()) if isinstance(payload, dict) else None
+        if decision:
+            sys.stdout.write(json.dumps(decision, ensure_ascii=True) + "\n")
+    except Exception as error:  # a hook must never fail; an error lets the stop go ahead
+        try:
+            sys.stderr.write(f"handback_check: {type(error).__name__}: {error}".replace("\n", " ")[:300] + "\n")
+        except Exception:
+            pass
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

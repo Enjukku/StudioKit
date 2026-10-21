@@ -328,5 +328,84 @@ class WorkflowTests(Base):
         self._error(".agents/workflows/Bad_Name.md", WORKFLOW, "not kebab-case")
 
 
+JOB_JS = b"export const meta = { name: 'cutscene', description: 'Cutscene job' };\r\n\r\nexport default async function run() {}\n"
+
+
+class JobWorkflowTests(Base):
+    """.agents/workflows/jobs/*.js -> .claude/workflows/<name>.js, byte copy, manifest .claude/workflows/.generated."""
+
+    def test_js_workflow_is_byte_copy_with_manifest(self) -> None:
+        self.write(".agents/workflows/jobs/cutscene.js", JOB_JS)
+        self.write(".agents/workflows/jobs/README.md", "# not a workflow\n")
+        self.write(".agents/workflows/jobs/README.js", "// not a workflow either\n")
+        code, _ = self.sync()
+        self.assertEqual(code, 0)
+        self.assertEqual((self.tmp / ".claude/workflows/cutscene.js").read_bytes(), JOB_JS)  # no marker line, CRLF kept
+        self.assertEqual((self.tmp / ".claude/workflows/.generated").read_text(encoding="utf-8"), "cutscene.js\n")
+        self.assertFalse((self.tmp / ".claude/workflows/README.md").exists())
+        self.assertFalse((self.tmp / ".claude/workflows/README.js").exists())
+        self.assertFalse((self.tmp / ".claude/commands").exists())
+        self.assertFalse((self.tmp / ".codex").exists())
+        self.assertEqual(self.sync(check=True)[0], 0)
+
+    def test_check_reports_missing_different_and_stale(self) -> None:
+        self.write(".agents/workflows/jobs/cutscene.js", JOB_JS)
+        self.write(".agents/workflows/jobs/effect.js", b"export const meta = {};\n")
+        code, out = self.sync(check=True)
+        self.assertEqual(code, 1)
+        self.assertIn("missing: .claude/workflows/cutscene.js", out)
+        self.sync()
+        out_file = self.tmp / ".claude/workflows/cutscene.js"
+        out_file.write_bytes(JOB_JS + b"// edit\n")
+        (self.tmp / ".agents/workflows/jobs/effect.js").unlink()
+        code, out = self.sync(check=True)
+        self.assertEqual(code, 1)
+        self.assertIn("different: .claude/workflows/cutscene.js", out)
+        self.assertIn("stale: .claude/workflows/effect.js", out)
+        self.assertTrue((self.tmp / ".claude/workflows/effect.js").exists())  # --check writes nothing
+        self.assertEqual(self.sync()[0], 0)
+        self.assertFalse((self.tmp / ".claude/workflows/effect.js").exists())
+        self.assertEqual(out_file.read_bytes(), JOB_JS)
+        self.assertEqual((self.tmp / ".claude/workflows/.generated").read_text(encoding="utf-8"), "cutscene.js\n")
+
+    def test_hand_written_workflows_never_touched(self) -> None:
+        self.write(".agents/workflows/jobs/cutscene.js", JOB_JS)
+        self.write(".claude/workflows/mine.js", b"export const meta = { name: 'mine' };\n")
+        self.sync()
+        (self.tmp / ".agents/workflows/jobs/cutscene.js").unlink()
+        code, out = self.sync()
+        self.assertEqual(code, 0)
+        self.assertIn("removed: .claude/workflows/cutscene.js", out)
+        self.assertTrue((self.tmp / ".claude/workflows/mine.js").exists())
+        self.assertEqual(self.sync(check=True)[0], 0)
+
+    def test_hand_written_file_with_a_source_name_is_a_bad_source(self) -> None:
+        self.write(".claude/workflows/cutscene.js", b"// mine, not generated\n")
+        self.write(".agents/workflows/jobs/cutscene.js", JOB_JS)
+        err = io.StringIO()
+        old, sys.stderr = sys.stderr, err
+        try:
+            code, _ = self.sync()
+        finally:
+            sys.stderr = old
+        self.assertEqual(code, 2)
+        self.assertIn(".claude/workflows/cutscene.js", err.getvalue())
+        self.assertEqual((self.tmp / ".claude/workflows/cutscene.js").read_bytes(), b"// mine, not generated\n")
+
+    def test_name_equal_to_slash_command_is_bad_source(self) -> None:
+        self.write(".agents/workflows/improve.md", WORKFLOW)
+        self.write(".agents/workflows/jobs/improve.js", JOB_JS)
+        err = io.StringIO()
+        old, sys.stderr = sys.stderr, err
+        try:
+            code, _ = self.sync()
+        finally:
+            sys.stderr = old
+        self.assertEqual(code, 2)
+        self.assertIn(".agents/workflows/jobs/improve.js", err.getvalue())
+        self.assertIn("slash command", err.getvalue())
+        self.assertFalse((self.tmp / ".claude/workflows").exists())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

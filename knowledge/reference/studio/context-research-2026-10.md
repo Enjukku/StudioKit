@@ -22,6 +22,10 @@ Evidence behind `rules/knowledge.md`. Related: [[reference/studio/orchestration-
 | Memory helps mainly when context is insufficient or tasks are hard. No single memory form wins | EvoMemBench, arXiv 2605.18421 | 2026-05-18 | Capture lessons cheaply, promote only repeated or owner-confirmed ones. Mix forms (ledger, lessons, overlays). |
 | The often-quoted 84% (context editing, 2025-09) and 85% (tool search, 2025-11) reductions are older than six months and measure tool results and tool definitions, not knowledge notes. No 2026 source found for an "80%" figure | Anthropic engineering posts | 2025-09 / 2025-11 | Do not quote these as gains for notes. Claim no percentage for our knowledge base without a measurement. |
 | No 2026 controlled study shows wiki-links help agents retrieve | none found | read 2026-10-20 | Keep `[[links]]` for humans and one-hop neighbours. Put needed facts in the note itself. |
+| More shared context raised completion (74.6 → 86.9 %) but lowered robustness to wrong context (97.1 → 72.4 %), +37 % tokens | CoMemBench via owner paper P1:159 | 2026-09-26 | Each agent gets what its step needs; some context is withheld on purpose (`rules/knowledge.md` §3) |
+| The skill list has a budget (1 % of the context window) and drops the least-used descriptions; in the lead's session 24 of 48 kit skills showed names only | code.claude.com/docs/en/skills; observed in J016 | 2026-10-21 | Skill descriptions ≤ 400 characters (gate check); route through roles and the packet |
+| `SubagentStart` hooks can inject context per role, also on resume; a `SessionStart` hook with the `compact` matcher re-adds context after compaction; invoked skills keep 5,000 tokens each (25,000 total) after compaction | code.claude.com/docs/en/hooks, context-window (v2.1.306) | 2026-10-21 | Hook scripts in `tools/hooks/`, owner-enabled; steps and rules at the top of SKILL.md |
+| Evidence for the five-layer design, routing, passing and learning | `knowledge/jobs/J016-orchestration/design-context.md` (E1-E28) | 2026-10-21 | `rules/knowledge.md` revised (J016-D4) |
 
 ## Gaps
 

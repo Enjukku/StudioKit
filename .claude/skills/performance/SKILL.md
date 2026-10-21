@@ -1,6 +1,6 @@
 ---
 name: performance
-description: Keep a Roblox game smooth on phones - set budgets at design time, build with cheap defaults, measure the real bottleneck with the 2026 tools (MicroProfiler, LibMP, Scene Analysis, Script Profiler, device and network simulators, Creator Hub dashboards) and fix it. Use for "it lags", "low FPS", "hitches when X", "memory keeps growing", "slow to load", "will this run on phones", for budget planning of a new system, and before shipping anything with many parts, effects, NPCs or network traffic. Engine-level and universal; game-specific world or physics systems belong in the game's own notes.
+description: Keep a Roblox game smooth on phones - set budgets at design time, build cheap, measure the real bottleneck (MicroProfiler, Script Profiler, Scene Analysis) and fix it. Use for "it lags", "low FPS", "hitches when X", "memory keeps growing", "slow to load", "will this run on phones", budget planning, and before shipping many parts, effects, NPCs or network traffic.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 4. Evidence: `references/measure.md` and `references/fixes.md` (docs mirror upstream 7400643; Roblox staff posts 2026). Short source names (PO, MP) are defined at the top of `references/measure.md`.

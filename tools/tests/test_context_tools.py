@@ -21,6 +21,7 @@ sys.path.insert(0, str(TOOLS))
 import context_packet as cp  # noqa: E402
 import eval_context as ev  # noqa: E402
 import kb_index as kb  # noqa: E402
+import verify  # noqa: E402
 
 
 def quiet(fn, *args):
@@ -251,7 +252,202 @@ class RobloxDocsTests(Repo):
         self.assertEqual(len(json.loads(out.getvalue())["roblox_docs"]["pages"]), 1)
 
 
+FIXTURE = TOOLS / "tests" / "fixtures" / "context"
+GOLDEN_ARGS = {  # same queries as the recorder that wrote fixtures/context/golden/ from the pre-J016 tool
+    "storyboard.txt": ["storyboard the boss intro"],
+    "storyboard-json.json": ["storyboard the boss intro", "--json"],
+    "saves.txt": ["save player data retries", "--budget", "400", "--max", "3"],
+    "camera-json.json": ["camera cutscene Camera timing", "--json", "--docs", "1"],
+}
+
+
+def run_cli(fn, argv: list[str]) -> tuple[int, str, str]:
+    out, err = io.StringIO(), io.StringIO()
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+        code = fn(argv)
+    return code, out.getvalue(), err.getvalue()
+
+
+class FixtureRepo(unittest.TestCase):
+    """A copy of tools/tests/fixtures/context/repo: roles, overlays, docs map, two job folders, tagged notes."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="kit-ctx-fx-"))
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.root = self.tmp / "repo"
+        shutil.copytree(FIXTURE / "repo", self.root)
+
+    def packet(self, *args: str) -> tuple[int, str, str]:
+        return run_cli(cp.main, ["--root", str(self.root), "packet", *args])
+
+
+class NoFlagRegressionTests(FixtureRepo):
+    def test_output_without_role_and_job_is_byte_identical_to_pre_change_golden(self):
+        for name, args in GOLDEN_ARGS.items():
+            with self.subTest(golden=name):
+                code, out, _ = self.packet(*args)
+                self.assertEqual(code, 0)
+                self.assertEqual(out, (FIXTURE / "golden" / name).read_bytes().decode("utf-8"))
+
+
+class RoleFlagTests(FixtureRepo):
+    def test_role_tagged_note_ranks_higher(self):
+        plain = [h.path for h in cp.rank(cp.Corpus(self.root), "storyboard the boss intro")[0]]
+        tagged = [h.path for h in cp.rank(cp.Corpus(self.root), "storyboard the boss intro", role="film-director")[0]]
+        self.assertLess(plain.index("knowledge/lessons/storyboard-generic.md"), plain.index("knowledge/lessons/storyboard-tagged.md"))
+        self.assertEqual(tagged[0], "knowledge/lessons/storyboard-tagged.md")
+
+    def test_role_block_lists_file_skills_overlays_and_docs_row_verbatim(self):
+        code, out, _ = self.packet("storyboard the boss intro", "--role", "film-director")
+        self.assertEqual(code, 0)
+        block = out.split("## For role film-director", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("`.agents/roles/film-director.md`", block)
+        self.assertIn("film-direction, film-craft", block)
+        self.assertIn("`knowledge/overlays/film-director.md`", block)
+        self.assertIn("`knowledge/overlays/film-craft.md`", block)
+        self.assertNotIn("knowledge/overlays/film-direction.md", block)  # no such overlay
+        self.assertIn("\n| film-director | `workspace/camera/`, `animation/` | workspace/camera/index.md | Camera, TweenService |\n", block)
+        self.assertNotIn("feature-builder", block)
+
+    def test_role_in_shared_docs_map_row_and_block_list_skills(self):
+        info = cp.role_info(self.root, "feature-builder")
+        self.assertEqual(info["skills"], ["engineering-craft", "testing"])
+        self.assertEqual(info["overlays"], [])
+        self.assertEqual([r["row"].split("|")[1].strip() for r in info["docs_map"]], ["architect, feature-builder, reviewer"])
+
+    def test_unknown_role_exits_2(self):
+        code, out, err = self.packet("storyboard", "--role", "film-directr")
+        self.assertEqual(code, 2)
+        self.assertEqual(out, "")
+        self.assertIn("unknown role `film-directr`", err)
+        self.assertIn("film-director", err)  # lists the kit roles
+        self.assertEqual(self.packet("storyboard", "--role", "README")[0], 2)
+
+    def test_role_block_outside_note_budget(self):
+        args = ("save player data retries", "--budget", "200")
+        base = json.loads(self.packet(*args, "--json")[1])
+        with_role = json.loads(self.packet(*args, "--json", "--role", "film-director")[1])
+        self.assertEqual(base["results"], with_role["results"])  # no film-director-tagged note matches this task
+        self.assertTrue(with_role["role"]["lines"])
+
+
+class JobFlagTests(FixtureRepo):
+    def test_job_folder_notes_rank_higher(self):
+        plain = [h.path for h in cp.rank(cp.Corpus(self.root), "storyboard the boss intro")[0]]
+        job = [h.path for h in cp.rank(cp.Corpus(self.root), "storyboard the boss intro", job="J016-demo")[0]]
+        self.assertNotEqual(plain[0], "knowledge/jobs/J016-demo/notes.md")
+        self.assertEqual(job[0], "knowledge/jobs/J016-demo/notes.md")
+
+    def test_boost_reason_named_once_per_hit(self):
+        hits = cp.rank(cp.Corpus(self.root), "boss intro gates storyboard", role="film-director", job="J016-demo")[0]
+        card = [h for h in hits if h.path == "knowledge/jobs/J016-demo/job-card.md"]
+        self.assertEqual(len(card), 2)  # two sections of one note: the suffix must not pile up
+        for hit in card:
+            self.assertEqual(hit.why.count("; in job J016-demo"), 1)
+        tagged = next(h for h in hits if h.path == "knowledge/lessons/storyboard-tagged.md")
+        self.assertTrue(tagged.why.endswith("; tagged for role film-director"))
+
+    def test_job_block_lists_canonical_files_in_order_with_revisions(self):
+        code, out, _ = self.packet("storyboard the boss intro", "--job", "J016-demo")
+        self.assertEqual(code, 0)
+        block = out.split("## Job J016-demo", 1)[1].split("\n## ", 1)[0]
+        base = "knowledge/jobs/J016-demo/"
+        expected = [
+            f"`{base}job-card.md` · revision 4",
+            f"`{base}decisions.md` · revision 3",
+            f"`{base}ledger.md`",
+            f"`{base}g2/beat-sheet.md`",
+            f"`{base}contract-camera.md` · revision 2 (camera handover)",
+            f"`{base}g2/boss.shots.json` · revision 5",
+        ]
+        positions = [block.index(item) for item in expected]
+        self.assertEqual(positions, sorted(positions))
+        self.assertNotIn("notes.md", block)
+        self.assertNotIn("ledger.md` · revision", block)
+
+    def test_unique_prefix_selects_job(self):
+        self.assertEqual(cp.resolve_job(self.root, "J016"), "J016-demo")
+        self.assertEqual(cp.resolve_job(self.root, "J016-demo"), "J016-demo")
+
+    def test_unknown_or_ambiguous_job_exits_2(self):
+        for job, fragment in (("J099", "unknown job `J099`"), ("J01", "ambiguous job `J01`")):
+            with self.subTest(job=job):
+                code, out, err = self.packet("storyboard", "--job", job)
+                self.assertEqual(code, 2)
+                self.assertEqual(out, "")
+                self.assertIn(fragment, err)
+
+    def test_job_block_capped_at_25_lines(self):
+        for i in range(40):
+            (self.root / f"knowledge/jobs/J016-demo/contract-{i:02}.md").write_text(f"Revision: {i}\n", encoding="utf-8")
+        info = cp.job_info(self.root, "J016-demo")
+        self.assertLessEqual(len(info["lines"]), cp.BLOCK_MAX_LINES)
+        self.assertIn("more", info["lines"][-1])
+        code, out, _ = self.packet("storyboard", "--job", "J016")
+        block = out.split("## Job J016-demo", 1)[1].split("\n## ", 1)[0]
+        self.assertLessEqual(len(("## Job J016-demo" + block).strip("\n").splitlines()), cp.BLOCK_MAX_LINES)
+
+    def test_cap_keeps_25_lines_and_cuts_26(self):
+        lines = [f"- line {i}" for i in range(26)]
+        self.assertEqual(cp.cap_lines(lines[:25]), lines[:25])
+        capped = cp.cap_lines(lines)
+        self.assertEqual(len(capped), 25)
+        self.assertEqual(capped[:24], lines[:24])
+        self.assertIn("2 more lines", capped[-1])
+
+    def test_json_carries_role_and_job_blocks(self):
+        code, out, _ = self.packet("storyboard the boss intro", "--json", "--role", "film-director", "--job", "J016")
+        self.assertEqual(code, 0)
+        data = json.loads(out)
+        self.assertEqual(data["role"]["role"], "film-director")
+        self.assertEqual(data["job"]["job"], "J016-demo")
+        self.assertEqual(data["job"]["files"][0], {"path": "knowledge/jobs/J016-demo/job-card.md", "revision": "4"})
+        text = self.packet("storyboard the boss intro", "--role", "film-director", "--job", "J016")[1]
+        for line in data["role"]["lines"] + data["job"]["lines"]:
+            self.assertIn(line, text)
+        self.assertNotIn("role", json.loads(self.packet("storyboard the boss intro", "--json")[1]))
+
+
+class DescriptionBudgetTests(Repo):
+    """verify.py check f (J016-D4): every .agents/skills/*/SKILL.md description <= 400 characters."""
+
+    def test_long_descriptions_listed_with_length(self):
+        self.write(".agents/skills/short/SKILL.md", "---\nname: short\ndescription: Use when x.\n---\n# S\n")
+        self.write(".agents/skills/edge/SKILL.md", "---\nname: edge\ndescription: " + "e" * 400 + "\n---\n# E\n")
+        self.write(".agents/skills/long/SKILL.md", "---\nname: long\ndescription: \"" + "l" * 401 + "\"\n---\n# L\n")
+        self.write(".agents/skills/none/SKILL.md", "# No frontmatter\n")
+        self.assertEqual(verify.long_descriptions(self.root), [("long", 401)])
+
+    def test_gate_line_f(self):
+        self.write(".agents/skills/long/SKILL.md", "---\nname: long\ndescription: " + "l" * 450 + "\n---\n# L\n")
+        buf = io.StringIO()
+        self.assertEqual(verify.run(self.root, fast=True, out=buf), 1)
+        self.assertIn("FAIL skill descriptions: 1 over 400 characters: long 450", buf.getvalue())
+        (self.root / ".agents/skills/long/SKILL.md").write_text("---\nname: long\ndescription: ok\n---\n", encoding="utf-8")
+        buf = io.StringIO()
+        verify.run(self.root, fast=True, out=buf)
+        self.assertIn("PASS skill descriptions: all <= 400 characters", buf.getvalue())
+
+
 class LintTests(Repo):
+    def test_roles_key_accepted_and_unknown_role_names_warned(self):
+        self.write(".agents/roles/film-director.md", "---\nname: film-director\n---\nx\n")
+        self.write(".agents/roles/README.md", "# not a role\n")
+        self.write("knowledge/lessons/a.md", fm("lesson", extra="roles: [film-director, animatr]\n") + "# A\n\ntext\n")
+        self.write("knowledge/lessons/b.md", fm("lesson", extra="roles: film-director\n") + "# B\n\ntext\n")
+        errors, warnings = kb.lint(self.root)
+        self.assertEqual(errors, [])
+        self.assertFalse(any("unknown frontmatter key `roles`" in w for w in warnings))
+        self.assertIn("knowledge/lessons/a.md: roles lists `animatr`, not a kit role (.agents/roles/)", warnings)
+        self.assertFalse(any("b.md: roles" in w for w in warnings))
+
+    def test_revision_key_accepted(self):
+        self.write("knowledge/jobs/J1-x/direction-sheet.md", fm("job", extra="revision: 3\n") + "# Direction\n\ntext\n")
+        self.write("knowledge/jobs/J1-x/contract-camera.md", fm("job", extra="revision: r2 camera handover\n") + "# Contract\n\ntext\n")
+        errors, warnings = kb.lint(self.root)
+        self.assertEqual(errors, [])
+        self.assertFalse(any("`revision`" in w for w in warnings), warnings)
+
     def test_frontmatter_errors(self):
         self.write("knowledge/design/none.md", "# No frontmatter\n\ntext\n")
         self.write("knowledge/design/bad.md", "---\ntype: thing\nscope: everywhere\nstatus: active\nupdated: last week\n---\n# Bad\n")

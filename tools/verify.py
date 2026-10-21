@@ -10,6 +10,8 @@ Checks, in order:
   d  always-loaded size: lines of CLAUDE.md + every @import it pulls in (recursive, max depth 4,
      each file counted once) <= 200
   e  every SKILL.md under .agents/skills and .claude/skills <= 500 lines
+  f  every .agents/skills/*/SKILL.md frontmatter `description` <= 400 characters (J016-D4: the
+     skill list budget drops long descriptions); FAIL lists each skill and its length
 
 Usage: python tools/verify.py [--fast] [--root DIR]
 Exit codes: 0 PASS, 1 FAIL.
@@ -23,9 +25,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from context_packet import parse_frontmatter  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 ALWAYS_LOADED_MAX = 200
 SKILL_MAX = 500
+DESCRIPTION_MAX = 400
 IMPORT_DEPTH = 4
 TIMEOUT = 600
 # Claude Code memory imports: @path tokens outside code spans and fences.
@@ -91,6 +98,21 @@ def oversized_skills(root: Path, limit: int = SKILL_MAX) -> list[tuple[str, int]
                 n = _lines(path.read_text(encoding="utf-8", errors="replace"))
                 if n > limit:
                     out.append((path.relative_to(root).as_posix(), n))
+    return out
+
+
+def long_descriptions(root: Path, limit: int = DESCRIPTION_MAX) -> list[tuple[str, int]]:
+    """(skill name, description length) for every .agents/skills/*/SKILL.md description over the limit."""
+    out = []
+    base = root / ".agents" / "skills"
+    if base.is_dir():
+        for path in sorted(base.glob("*/SKILL.md")):
+            meta, _, _ = parse_frontmatter(path.read_text(encoding="utf-8", errors="replace"))
+            description = (meta or {}).get("description")
+            if isinstance(description, list):
+                description = ", ".join(description)
+            if isinstance(description, str) and len(description) > limit:
+                out.append((path.parent.name, len(description)))
     return out
 
 
@@ -161,6 +183,12 @@ def run(root: Path, fast: bool, out=sys.stdout) -> int:
     big = oversized_skills(root)
     report(not big, "SKILL.md size",
            f"all <= {SKILL_MAX} lines" if not big else "; ".join(f"{p} {n} lines" for p, n in big))
+
+    # f
+    long = long_descriptions(root)
+    report(not long, "skill descriptions",
+           f"all <= {DESCRIPTION_MAX} characters" if not long
+           else f"{len(long)} over {DESCRIPTION_MAX} characters: " + "; ".join(f"{name} {n}" for name, n in long))
 
     print(f"RESULT: {'FAIL' if failed else 'PASS'}", file=out)
     return 1 if failed else 0

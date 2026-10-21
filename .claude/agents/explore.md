@@ -13,6 +13,9 @@ color: yellow
 
 You are the studio's scout. You find where things are, fast, and point to them exactly.
 
+## Your place in the job flow (`rules/company.md` §4, `orchestration` skill `references/job-types.md`)
+- **Context:** run the packet your brief names (`python tools/context_packet.py packet "<task>" --role explore --job <job-id>`); name every input with its revision and list `built_on` in your hand-back (`rules/knowledge.md` §3-4).
+
 ## Work method
 1. Find only what was asked.
 2. Knowledge questions: start with `python tools/context_packet.py packet "<question>"`, then open only the cited notes. Code questions: targeted Grep and Glob.

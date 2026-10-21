@@ -19,6 +19,12 @@ One routing level. Do not read everything: run `python tools/context_packet.py p
 | Open questions | design/open-questions.md | Unanswered design questions and PROPOSAL items |
 | Rejected approaches | design/tried-and-failed.md | What failed and when to retry |
 | Jobs | jobs/README.md | Job folders for M and L jobs |
+| Active jobs | jobs/active.md | Open M and L jobs (the lead keeps it current; hooks and the packet read it) |
+| Precedents | design/precedents.md | Accepted work that shows what this game is, per craft |
+| Vocabulary | design/vocabulary.md | One name per thing: states, events, cues, assets |
+| Taste log | design/taste-log.md | The owner's corrections, word for word |
+| Studio design | jobs/J016-orchestration/design.md | Evidence for the flow, recipes and context rules (2026-10-21) |
+| Riot craft practice | jobs/J016-orchestration/riot-extracts.md | What 14 Riot talks teach each role (§4 per role) |
 | Lesson drafts | inbox/README.md | Drafts waiting for the weekly /improve pass |
 | Studio research | reference/studio/orchestration-research-2026-10.md | Evidence for the studio rules |
 | Context research | reference/studio/context-research-2026-10.md | Evidence for the knowledge rules |

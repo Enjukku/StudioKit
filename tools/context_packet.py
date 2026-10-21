@@ -4,7 +4,10 @@
 Kit tool (universal). Standard library only, deterministic output.
 
 Usage:
-    python tools/context_packet.py packet "<task>" [--budget 8000] [--max 12] [--docs 5] [--json] [--root DIR]
+    python tools/context_packet.py packet "<task>" [--role <role>] [--job <job-id>]
+        [--budget 8000] [--max 12] [--docs 5] [--json] [--root DIR]
+
+Exit codes: 0 ok, 2 bad input (empty task, bad budget, unknown role, unknown or ambiguous job).
 
 How it ranks (spec: rules/knowledge.md §2, §3, §6):
     1. Notes under the search roots are split into heading-level sections (#, ##, ###).
@@ -21,6 +24,16 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
     7. "## Roblox docs": up to --docs pages of the local Roblox docs mirror (own ranking, own cap,
        not part of the kit-note budget; see the "Roblox docs mirror" block) plus an API line for
        every exact Roblox class name in the task. Index cached in knowledge/generated/.
+    8. --role <role> (a stem of .agents/roles/*.md): notes whose frontmatter `roles:` lists the role
+       score x ROLE_BOOST, and a "For role" block (role file, its `skills:`, existing overlays
+       knowledge/overlays/<role or skill>.md, its knowledge/reference/roblox/docs-map.md rows verbatim).
+    9. --job <job-id> (a folder of knowledge/jobs/, or a unique prefix such as J016): notes inside that
+       folder score x JOB_BOOST, and a "Job" block listing the canonical job files (JOB_FILES order,
+       searched through the whole folder) with their revision (frontmatter `revision:`, a line starting
+       "> Revision:" or "Revision:", or a top-level "revision" key in a .json file).
+    Both blocks sit outside the note budget, at most BLOCK_MAX_LINES lines each, before "## Ranked";
+    --json carries them as keys `role` and `job`. Without both flags the output is unchanged
+    (regression test: tools/tests/fixtures/context/golden/).
 
 Search roots: kit.json key `context.search_roots` (list of repo-relative paths) when present,
 else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present.
@@ -91,6 +104,16 @@ OVERLAY_FACTOR = 0.95
 SUPERSEDED_STRONG = 0.6  # report a superseded note when it scores >= 60% of the top hit
 CHARS_PER_TOKEN = 4
 EXCERPT_CHARS = 160
+ROLES_DIR = ".agents/roles"
+JOBS_DIR = "knowledge/jobs"
+DOCS_MAP = "knowledge/reference/roblox/docs-map.md"
+ROLE_BOOST = 1.5  # PROPOSAL (J016-T01): notes tagged `roles: [<role>]` for the --role
+JOB_BOOST = 1.5  # PROPOSAL (J016-T01): notes inside the --job folder
+BLOCK_MAX_LINES = 25
+JOB_FILES = ("job-card.md", "direction.md", "decisions.md", "crew.md", "evidence.md", "ledger.md", "beat-sheet.md", "contract*.md", "*.shots.json")
+REVISION_LINE_RE = re.compile(r"^(?:>\s*)?Revision:\s*(.+?)\s*$")
+ACTIVE_JOBS = "knowledge/jobs/active.md"  # lines `- <job-id> · <title>`, kept by the lead; read by tools/hooks/
+ACTIVE_JOB_RE = re.compile(r"^- (\S+) · (.+)$")
 
 
 # ---------------------------------------------------------------- text basics
@@ -179,6 +202,15 @@ def parse_frontmatter(text: str) -> tuple[dict | None, int, list[str]]:
         key = match.group(1)
         meta[key] = _value(match.group(2))
     return meta, end + 1, errors
+
+
+def as_list(value) -> list[str]:
+    """A frontmatter list value: [a, b], a block list, or a comma-separated scalar."""
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()]
+    if isinstance(value, str):
+        return [part.strip() for part in value.split(",") if part.strip()]
+    return []
 
 
 def parse_date(value) -> datetime.date | None:
@@ -544,18 +576,30 @@ def excerpt_for(section: Section, terms: list[str], limit: int = 2) -> list[str]
     return [clip(text) for _, _, text in sorted(best, key=lambda c: c[1])]
 
 
-def rank(corpus: Corpus, query: str) -> tuple[list[Hit], list[dict]]:
-    """Return (ranked hits, superseded strong matches). Deterministic."""
+def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = None) -> tuple[list[Hit], list[dict]]:
+    """Return (ranked hits, superseded strong matches). Deterministic.
+    role: boost notes tagged `roles: [role]`; job: a resolved job folder name, boost notes inside it."""
     terms = query_terms(query)
     if not terms:
         raise ValueError("query needs at least one meaningful word")
     idf = {t: corpus.idf(t) for t in terms}
+    job_prefix = f"{JOBS_DIR}/{job}/" if job else None
     scored: list[tuple[float, Section, list[str], set[str]]] = []
+    boosted: dict[str, str] = {}  # path -> why suffix, only when --role or --job applies
     for section in corpus.sections:
         value, matched, fields_hit = score_section(corpus, section, terms, idf)
         if value > 0:
             note = corpus.notes[section.path]
-            scored.append((value * corpus.note_boost(note), section, matched, fields_hit))
+            value = value * corpus.note_boost(note)
+            role_hit = bool(role) and role in as_list((note.meta or {}).get("roles"))
+            job_hit = bool(job_prefix) and note.path.startswith(job_prefix)
+            if role_hit:
+                value *= ROLE_BOOST
+            if job_hit:
+                value *= JOB_BOOST
+            if role_hit or job_hit:
+                boosted[note.path] = (f"; tagged for role {role}" if role_hit else "") + (f"; in job {job}" if job_hit else "")
+            scored.append((value, section, matched, fields_hit))
     scored.sort(key=lambda item: (-item[0], item[1].path.lower(), item[1].start))
 
     top = scored[0][0] if scored else 0.0
@@ -579,6 +623,7 @@ def rank(corpus: Corpus, query: str) -> tuple[list[Hit], list[dict]]:
         why = f"matched {', '.join(matched)} in {where}"
         if note.type:
             why += f"; type {note.type}"
+        why += boosted.get(note.path, "")
         hits.append(Hit(section.path, section.heading, section.anchor, section.start, section.end, value, "match", why, excerpt_for(section, terms)))
 
     # 1-hop link neighbours of the top notes.
@@ -960,13 +1005,158 @@ def roblox_docs(root: Path, query: str, limit: int = DOCS_PAGES, index: DocsInde
     return {"pages": index.rank(query, limit, cited), "api": index.api(query)}
 
 
+# ---------------------------------------------------------------- role and job blocks
+#
+# Small, fixed blocks for --role and --job. They read only a few files (no corpus), so the
+# SubagentStart hook (tools/hooks/subagent_context.py) can call them on every subagent start.
+
+
+def cap_lines(lines: list[str], limit: int = BLOCK_MAX_LINES) -> list[str]:
+    if len(lines) <= limit:
+        return lines
+    rest = len(lines) - (limit - 1)
+    return lines[: limit - 1] + [f"- … {rest} more lines not shown"]
+
+
+def role_names(root: Path) -> list[str]:
+    """Kit roles: stems of .agents/roles/*.md except README."""
+    base = root / ROLES_DIR
+    if not base.is_dir():
+        return []
+    return sorted(p.stem for p in base.glob("*.md") if p.is_file() and p.name.lower() != "readme.md")
+
+
+def docs_map_rows(root: Path, role: str) -> list[dict]:
+    """Rows of the docs map whose first cell names the role (comma-separated names), verbatim."""
+    path = root / DOCS_MAP
+    if not path.is_file():
+        return []
+    rows = []
+    for number, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
+        stripped = line.strip()
+        if not stripped.startswith("|") or re.fullmatch(r"\|?[\s:|-]+\|?", stripped):
+            continue
+        first = stripped.strip("|").split("|", 1)[0]
+        if role in [name.strip() for name in first.split(",")]:
+            rows.append({"line": number, "row": line.rstrip()})
+    return rows
+
+
+def role_info(root: Path, role: str) -> dict:
+    """The --role block. Raises ValueError for a name that is not a kit role."""
+    names = role_names(root)
+    if role not in names:
+        raise ValueError(f"unknown role `{role}`; kit roles ({ROLES_DIR}/): {', '.join(names) or 'none'}")
+    rel = f"{ROLES_DIR}/{role}.md"
+    meta, _, _ = parse_frontmatter((root / rel).read_text(encoding="utf-8", errors="replace"))
+    skills = as_list((meta or {}).get("skills"))
+    overlays = [f"{OVERLAYS}/{name}.md" for name in [role] + skills if (root / OVERLAYS / f"{name}.md").is_file()]
+    rows = docs_map_rows(root, role)
+    lines = [
+        f"## For role {role}",
+        "",
+        f"- Role file: `{rel}`",
+        f"- Skills (role frontmatter): {', '.join(skills) or 'none'}",
+        f"- Overlays: {', '.join(f'`{o}`' for o in overlays) or 'none'}",
+    ]
+    if rows:
+        lines.append(f"- Docs map rows (`{DOCS_MAP}` L{', L'.join(str(r['line']) for r in rows)}):")
+        lines += [r["row"] for r in rows]
+    else:
+        lines.append(f"- Docs map: no row names this role (`{DOCS_MAP}`)")
+    return {"role": role, "file": rel, "skills": skills, "overlays": overlays, "docs_map": rows, "lines": cap_lines(lines)}
+
+
+def job_folders(root: Path) -> list[str]:
+    base = root / JOBS_DIR
+    if not base.is_dir():
+        return []
+    return sorted(p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith((".", "_")))
+
+
+def resolve_job(root: Path, job: str) -> str:
+    """A job folder name from an exact name or a unique prefix. Raises ValueError otherwise."""
+    names = job_folders(root)
+    if job in names:
+        return job
+    matches = [name for name in names if job.strip() and name.startswith(job)]
+    if len(matches) == 1:
+        return matches[0]
+    if not matches:
+        raise ValueError(f"unknown job `{job}`: no folder {JOBS_DIR}/{job}*")
+    raise ValueError(f"ambiguous job `{job}`: {', '.join(matches)}; give more of the id")
+
+
+def active_jobs(root: Path) -> list[tuple[str, str]]:
+    """(job id, title) for each `- <job-id> · <title>` line of knowledge/jobs/active.md, in file order."""
+    path = root / ACTIVE_JOBS
+    if not path.is_file():
+        return []
+    found: list[tuple[str, str]] = []
+    in_fence = False
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if FENCE_RE.match(line):
+            in_fence = not in_fence
+            continue
+        match = ACTIVE_JOB_RE.match(line)
+        if match and not in_fence:
+            found.append((match.group(1), match.group(2).strip()))
+    return found
+
+
+def file_revision(path: Path) -> str | None:
+    """Revision of a job file: frontmatter `revision:`, a "> Revision:" / "Revision:" line, or JSON "revision"."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    if path.suffix == ".json":
+        try:
+            data = json.loads(text)
+        except ValueError:
+            return None
+        value = data.get("revision") if isinstance(data, dict) else None
+        return str(value) if isinstance(value, (str, int, float)) and not isinstance(value, bool) else None
+    meta, _, _ = parse_frontmatter(text)
+    value = (meta or {}).get("revision")
+    if value not in (None, "", []):
+        return clip(", ".join(value) if isinstance(value, list) else str(value), 80)
+    for line in text.lstrip("﻿").splitlines():
+        match = REVISION_LINE_RE.match(line)
+        if match:
+            return clip(match.group(1), 80)
+    return None
+
+
+def job_info(root: Path, job: str) -> dict:
+    """The --job block. `job` is an id or unique prefix; raises ValueError when unknown or ambiguous."""
+    name = resolve_job(root, job)
+    folder = root / JOBS_DIR / name
+    found: list[str] = []
+    for pattern in JOB_FILES:
+        matches = []
+        for path in folder.rglob(pattern):
+            rel = path.relative_to(root).as_posix()
+            if path.is_file() and not SKIP_DIRS.intersection(rel.split("/")) and rel not in found:
+                matches.append(rel)
+        found += sorted(matches, key=lambda rel: (rel.count("/"), rel.lower()))
+    files = [{"path": rel, "revision": file_revision(root / rel)} for rel in found]
+    lines = [f"## Job {name}", "", f"- Folder: `{JOBS_DIR}/{name}/`"]
+    lines += [f"- `{f['path']}`" + (f" · revision {f['revision']}" if f["revision"] else "") for f in files]
+    if not files:
+        lines.append(f"- No canonical job files yet ({', '.join(JOB_FILES)})")
+    return {"job": name, "folder": f"{JOBS_DIR}/{name}/", "files": files, "lines": cap_lines(lines)}
+
+
 # ---------------------------------------------------------------- packet
 
 
-def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs: int = DOCS_PAGES) -> dict:
+def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs: int = DOCS_PAGES, role: str | None = None, job: str | None = None) -> dict:
+    role_part = role_info(root, role) if role is not None else None
+    job_part = job_info(root, job) if job is not None else None
     corpus = Corpus(root)
     terms = query_terms(query)
-    hits, superseded = rank(corpus, query)
+    hits, superseded = rank(corpus, query, role, job_part["job"] if job_part else None)
     docs_index = DocsIndex.load(root) if docs > 0 else None
     limit_chars = budget * CHARS_PER_TOKEN
     used = 600  # header, side lists and read-next reserve
@@ -1014,7 +1204,7 @@ def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs:
         top_page = docs_part["pages"][0]
         read_next.append(f"open Roblox docs `{top_page['path']}` ({top_page['title']}) before using that engine system")
 
-    return {
+    packet = {
         "query": query,
         "terms": terms,
         "searched": {"files": len(corpus.notes), "sections": len(corpus.sections)},
@@ -1040,6 +1230,11 @@ def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs:
         "agents_sections": agents_headings(root),
         "read_next": read_next,
     }
+    if role_part is not None:
+        packet["role"] = role_part
+    if job_part is not None:
+        packet["job"] = job_part
+    return packet
 
 
 def render(packet: dict) -> str:
@@ -1051,9 +1246,11 @@ def render(packet: dict) -> str:
         f"- Searched: {packet['searched']['files']} files, {packet['searched']['sections']} sections; budget {packet['budget_tokens']} tokens",
         "- Locations only: source priority (AGENTS.md §0) and decision status still apply.",
         "",
-        "## Ranked",
-        "",
     ]
+    for key in ("role", "job"):
+        if packet.get(key):
+            out += packet[key]["lines"] + [""]
+    out += ["## Ranked", ""]
     if not packet["results"]:
         out.append("No matching section.")
     for item in packet["results"]:
@@ -1093,6 +1290,8 @@ def parser() -> argparse.ArgumentParser:
     packet.add_argument("--max", type=int, default=12, help="maximum ranked entries")
     packet.add_argument("--docs", type=int, default=DOCS_PAGES, help="Roblox docs mirror pages to list (0 = none)")
     packet.add_argument("--json", action="store_true", help="machine-readable output")
+    packet.add_argument("--role", help="kit role (.agents/roles/<role>.md): boost its tagged notes, add a 'For role' block")
+    packet.add_argument("--job", help="job id or unique prefix (knowledge/jobs/<job-id>/): boost its notes, add a 'Job' block")
     return result
 
 
@@ -1104,7 +1303,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.budget < 200 or args.max < 1:
             raise ValueError("--budget must be >= 200 and --max >= 1")
-        packet = build(args.root.resolve(), args.task, args.budget, args.max, args.docs)
+        packet = build(args.root.resolve(), args.task, args.budget, args.max, args.docs, args.role, args.job)
     except (OSError, ValueError) as error:
         print(f"context_packet: {error}", file=sys.stderr)
         return 2

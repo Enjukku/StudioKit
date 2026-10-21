@@ -1,6 +1,6 @@
 ---
 name: ste-writing
-description: Use for every message to the owner, and whenever you explain something — how a system works, what code does, why a method was chosen, a status report, an explainer page or video script. Write 80% of the way to ASD-STE100 Simplified Technical English, keep domain terms, keep every hedge, and pick the cheapest format that is easy to check.
+description: Use for every message to the owner and every explanation (how a system works, what code does, why a method was chosen, status reports, explainer pages, video scripts). Write 80% toward ASD-STE100 Simplified Technical English, keep domain terms and every hedge, pick the cheapest format that is easy to check.
 ---
 
 # STE Writing (80% of ASD-STE100)

@@ -1,0 +1,36 @@
+# Context packet
+
+- Task: save player data retries
+- Terms: save, player, data, retry
+- Searched: 23 files, 27 sections; budget 400 tokens
+- Locations only: source priority (AGENTS.md §0) and decision status still apply.
+
+## Ranked
+
+1. `knowledge/lessons/save-retries.md#save-retries` L10-14 · 17.15 · matched save, player, data, retry in heading/title/path/body; type lesson
+   > Player data saves retry with backoff; never retry a purchase grant twice.
+2. `knowledge/design/decisions.md#decisions` L8-15 · 4.899 · matched save, player, data in body; type decision
+   > | D-2 | 2026-10-15 | Player saves use one data store | "one store" |
+3. `.agents/roles/feature-builder.md#feature-builder` L11-12 · 4.29 · matched save, player in meta/body
+   > Builds features, saves and remotes.
+   > You build player saves and validated remotes.
+
+## Roblox docs
+
+1. `knowledge/external/roblox-creator-docs/cloud-services/data-stores.md` · Data stores · matched save, player, data (title: data); cited by top kit notes
+2. `knowledge/external/roblox-creator-docs/workspace/camera/index.md` · Camera · cited by top kit notes
+
+## Matching decisions (knowledge/design/decisions.md)
+
+- L15: | D-2 | 2026-10-15 | Player saves use one data store | "one store" |
+
+## Always on: AGENTS.md sections
+
+0. Authority; 1. Studio
+
+## Read next
+
+- open `knowledge/lessons/save-retries.md` L10-14 (Save retries)
+- open `knowledge/design/decisions.md` L8-15 (Decisions)
+- open `.agents/roles/feature-builder.md` L11-12 (feature builder)
+- open Roblox docs `knowledge/external/roblox-creator-docs/cloud-services/data-stores.md` (Data stores) before using that engine system

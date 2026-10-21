@@ -1,3 +1,5 @@
 - [Planted faults, unequal fixtures](feedback_planted_faults_unequal.md) — symmetric fixtures hide largest/smallest bugs; gate drift from parallel chats
 - [Test helpers repair bad input](feedback_test_helpers_repair_bad_input.md) — build invalid rows by hand; assert exact rejected count
 - [Retrieval tuning on held-out cases](feedback_retrieval_tuning_heldout.md) — own cases before tuning, plateau sweep, kit-citation fusion
+- [Default-unchanged goldens](feedback_default_unchanged_goldens.md) — old-tool goldens + HEAD-vs-new diff on live repo; hooks: assert clean stderr
+- [Bash heredoc escapes](feedback_bash_heredoc_escapes.md) — Bash tool rewrites \n and \ in heredocs/echo; write code and JSON with Write

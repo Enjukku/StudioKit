@@ -18,7 +18,9 @@ Lint (rules/knowledge.md §3):
            updated (relative dates such as "today" or "last week" included), dead [[links]],
            superseded note with no replacement link
     WARN   missing source, unknown keys, supersedes path not found, no author line,
-           note over 300 lines, duplicate titles
+           note over 300 lines, duplicate titles, a `roles:` name that is not a kit role
+    Optional keys: `roles:` (list of kit roles, stems of .agents/roles/*.md; context_packet --role
+    ranks these notes higher) and `revision:` (integer or short string; context_packet --job prints it).
     README.md files and anything under a templates/ folder are exempt from frontmatter.
     Dead-link check also covers rules/, .agents/ and AGENTS.md (the packet corpus).
 """
@@ -44,7 +46,7 @@ TYPES = {"decision", "lesson", "failed", "system", "job", "reference", "log", "i
 SCOPES = {"universal", "game"}
 STATUSES = {"draft", "active", "superseded"}
 REQUIRED = ("type", "scope", "status", "updated")
-KNOWN_KEYS = {"type", "scope", "status", "updated", "source", "supersedes", "superseded_by", "description", "name"}
+KNOWN_KEYS = {"type", "scope", "status", "updated", "source", "supersedes", "superseded_by", "description", "name", "roles", "revision"}
 RELATIVE_DATE_RE = re.compile(
     r"\b(today|yesterday|tomorrow|now|recently|last|next|this|ago|week|month|year|days?)\b", re.IGNORECASE
 )
@@ -170,6 +172,7 @@ def write_indexes(root: Path) -> list[str]:
 
 def lint(root: Path) -> tuple[list[str], list[str]]:
     corpus = cp.Corpus(root)
+    kit_roles = set(cp.role_names(root))
     errors: list[str] = []
     warnings: list[str] = []
     titles: dict[str, list[str]] = {}
@@ -205,6 +208,9 @@ def lint(root: Path) -> tuple[list[str], list[str]]:
             warnings.append(f"{rel}: frontmatter missing `source`")
         for key in sorted(set(meta) - KNOWN_KEYS):
             warnings.append(f"{rel}: unknown frontmatter key `{key}`")
+        for name in cp.as_list(meta.get("roles")):
+            if name not in kit_roles:
+                warnings.append(f"{rel}: roles lists `{name}`, not a kit role (.agents/roles/)")
         sup = meta.get("supersedes") or []
         for target in sup if isinstance(sup, list) else [sup]:
             if target and not (root / str(target)).is_file():

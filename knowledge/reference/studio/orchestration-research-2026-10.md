@@ -23,6 +23,15 @@ supersedes: []
 | Start simple; split by context, not by role; 3-10x tokens; failure modes: telephone game, misrouting, early victory | claude.com/blog/building-multi-agent-systems-when-and-how-to-use-them | 2026-01-23 (older background) | One agent per independent piece. No planner-builder-tester chains. Check hand-offs against the brief. |
 | Plan mode prevents expensive re-work when the initial direction is wrong | code.claude.com/docs/en/costs | read 2026-10-20 | Plan and brief before building (G1). |
 
+## Replaced conclusions (J016, 2026-10-21)
+The findings above stay; some consequences changed after the owner's two orchestration papers and a live check on Claude Code 2.1.296 and 2.1.306 (`knowledge/jobs/J016-orchestration/design.md`, `capability-check.md`):
+| Old consequence | Now | Why |
+| --- | --- | --- |
+| Hop limit 3 (from the nesting limit) | round, repair and depth limits (`rules/company.md` §9) | nesting limits spawning, not production stages (C04) |
+| Default 3 concurrent specialists | parallel by the dependency graph, max 5 per stage | the "3 focused beat 5 scattered" advice is about agent teams, which stay off (C12) |
+| Hub and spoke by default; report only to the asker | hybrid: one accountable lead, direct exchange between crafts that share an interface | both papers; subagents can message by id (C01-C03) |
+| G2 = one sample per craft | G2 = one integrated proof | both papers; Riot and Valve practice |
+
 ## Gaps
 
 - No 2026 study found on approval gates for creative or game-art work.

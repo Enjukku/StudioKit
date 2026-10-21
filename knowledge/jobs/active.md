@@ -1,0 +1,15 @@
+---
+type: index
+scope: universal
+status: active
+updated: 2026-10-21
+source: J016 (context design §3b)
+supersedes: []
+---
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+
+# Active jobs
+
+The lead keeps this list current: one line per open M or L job, `- <job-id> · <title>`. Remove the line when the job closes. The `SubagentStart` and compaction hooks and `context_packet.py --job` read it.
+
+- J016-orchestration · Redesign the studio's orchestration

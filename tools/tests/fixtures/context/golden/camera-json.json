@@ -1,0 +1,223 @@
+{
+  "query": "camera cutscene Camera timing",
+  "terms": [
+    "camera",
+    "cutsce",
+    "tim"
+  ],
+  "searched": {
+    "files": 23,
+    "sections": 27
+  },
+  "budget_tokens": 8000,
+  "results": [
+    {
+      "rank": 1,
+      "ref": ".agents/skills/film-craft/SKILL.md#film-craft",
+      "path": ".agents/skills/film-craft/SKILL.md",
+      "heading": "Film craft",
+      "lines": [
+        5,
+        8
+      ],
+      "score": 6.521,
+      "kind": "match",
+      "why": "matched camera, cutsce, tim in meta/body",
+      "excerpt": [
+        "Use for \"storyboard this\", \"time the cutscene\", camera shots and the animatic.",
+        "Beat sheet, shot list, storyboard panels, a timed animatic, camera ownership in Roblox."
+      ]
+    },
+    {
+      "rank": 2,
+      "ref": "knowledge/overlays/film-craft.md#film-craft-for-this-game",
+      "path": "knowledge/overlays/film-craft.md",
+      "heading": "Film craft for this game",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 6.195,
+      "kind": "match",
+      "why": "matched cutsce in body; type overlay",
+      "excerpt": [
+        "Letterbox 2.39 for every boss intro cutscene."
+      ]
+    },
+    {
+      "rank": 3,
+      "ref": "knowledge/jobs/J016-demo/contract-camera.md#camera-contract",
+      "path": "knowledge/jobs/J016-demo/contract-camera.md",
+      "heading": "Camera contract",
+      "lines": [
+        8,
+        14
+      ],
+      "score": 4.672,
+      "kind": "match",
+      "why": "matched camera, cutsce in heading/title/path/body; type job",
+      "excerpt": [
+        "Revision: 2 (camera handover)",
+        "The cutscene owns the camera from shot A to the last frame."
+      ]
+    },
+    {
+      "rank": 4,
+      "ref": "knowledge/jobs/J016-demo/ledger.md#j016-ledger",
+      "path": "knowledge/jobs/J016-demo/ledger.md",
+      "heading": "J016 ledger",
+      "lines": [
+        8,
+        14
+      ],
+      "score": 1.665,
+      "kind": "match",
+      "why": "matched tim in body; type job",
+      "excerpt": [
+        "| T1 | film-director | animator | boss intro roar timing |"
+      ]
+    },
+    {
+      "rank": 5,
+      "ref": "knowledge/reference/roblox/docs-map.md#roblox-docs-map",
+      "path": "knowledge/reference/roblox/docs-map.md",
+      "heading": "Roblox docs map",
+      "lines": [
+        8,
+        16
+      ],
+      "score": 1.513,
+      "kind": "match",
+      "why": "matched camera in body; type reference",
+      "excerpt": [
+        "| film-director | `workspace/camera/`, `animation/` | workspace/camera/index.md | Camera, TweenService |"
+      ]
+    },
+    {
+      "rank": 6,
+      "ref": "knowledge/jobs/J016-demo/job-card.md#j016-boss-intro-cutscene",
+      "path": "knowledge/jobs/J016-demo/job-card.md",
+      "heading": "J016 — Boss intro cutscene",
+      "lines": [
+        9,
+        17
+      ],
+      "score": 1.488,
+      "kind": "match",
+      "why": "matched cutsce in heading/title/body; type job",
+      "excerpt": [
+        "| Field | Value |"
+      ]
+    },
+    {
+      "rank": 7,
+      "ref": "knowledge/jobs/J016-demo/job-card.md#gates",
+      "path": "knowledge/jobs/J016-demo/job-card.md",
+      "heading": "Gates",
+      "lines": [
+        18,
+        23
+      ],
+      "score": 1.102,
+      "kind": "match",
+      "why": "matched cutsce in title; type job",
+      "excerpt": [
+        "| Gate | Date | Owner's words |"
+      ]
+    },
+    {
+      "rank": 8,
+      "ref": ".agents/roles/film-director.md#film-director",
+      "path": ".agents/roles/film-director.md",
+      "heading": "film director",
+      "lines": [
+        9,
+        10
+      ],
+      "score": 1.068,
+      "kind": "match",
+      "why": "matched cutsce in meta",
+      "excerpt": [
+        "Directs cutscenes, boss intros and storyboards."
+      ]
+    },
+    {
+      "rank": 9,
+      "ref": "knowledge/overlays/film-director.md#film-director-for-this-game",
+      "path": "knowledge/overlays/film-director.md",
+      "heading": "Film director for this game",
+      "lines": [
+        8,
+        12
+      ],
+      "score": 1.015,
+      "kind": "overlay",
+      "why": "game overlay for role film-director",
+      "excerpt": [
+        "Boss intros stay under 12 seconds."
+      ]
+    },
+    {
+      "rank": 10,
+      "ref": "knowledge/design/decisions.md#decisions",
+      "path": "knowledge/design/decisions.md",
+      "heading": "Decisions",
+      "lines": [
+        8,
+        15
+      ],
+      "score": 0.743,
+      "kind": "match",
+      "why": "matched cutsce in body; type decision",
+      "excerpt": [
+        "| D-1 | 2026-10-14 | Boss intro cutscene plays once per server | \"only once\" |"
+      ]
+    },
+    {
+      "rank": 11,
+      "ref": "knowledge/jobs/active.md#active-jobs",
+      "path": "knowledge/jobs/active.md",
+      "heading": "Active jobs",
+      "lines": [
+        8,
+        14
+      ],
+      "score": 0.692,
+      "kind": "match",
+      "why": "matched cutsce in body; type index",
+      "excerpt": [
+        "- J016-demo · Boss intro cutscene"
+      ]
+    }
+  ],
+  "superseded": [],
+  "roblox_docs": {
+    "pages": [
+      {
+        "path": "knowledge/external/roblox-creator-docs/workspace/camera/index.md",
+        "title": "Camera",
+        "score": 3.831,
+        "why": "matched camera, cutsce (title: camera); cited by top kit notes"
+      }
+    ],
+    "api": [
+      {
+        "class": "Camera",
+        "path": "knowledge/external/roblox-creator-docs/_api-reference/classes/Camera.yaml"
+      }
+    ]
+  },
+  "decisions": [],
+  "code_hints": [],
+  "agents_sections": [
+    "0. Authority",
+    "1. Studio"
+  ],
+  "read_next": [
+    "load skill `film-craft` (.agents/skills/film-craft/SKILL.md)",
+    "open `knowledge/overlays/film-craft.md` L8-12 (Film craft for this game)",
+    "open `knowledge/jobs/J016-demo/contract-camera.md` L8-14 (Camera contract)",
+    "open `knowledge/jobs/J016-demo/ledger.md` L8-14 (J016 ledger)",
+    "open Roblox docs `knowledge/external/roblox-creator-docs/workspace/camera/index.md` (Camera) before using that engine system"
+  ]
+}

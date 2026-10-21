@@ -1,6 +1,6 @@
 ---
 name: studio-mcp
-description: Drive Roblox Studio through the built-in Studio MCP server to check what files and the gate cannot reach - the live data model, Output, play-tests with simulated input, screenshots, profiler captures and place settings. Use for "check it in Studio", "play-test it", "take screenshots", "why does Output show errors", "is it in the right place", and whenever a report needs an MCP-verified label. Covers picking the Studio instance, the cheapest tool for each question, play-mode limits, safe Luau probes, source modes (when MCP may or may not write) and what to do when MCP is down.
+description: Drive Roblox Studio through the Studio MCP server to check what files and the gate cannot reach - live data model, Output, play-tests, screenshots, profiler captures. Use for "check it in Studio", "play-test it", "take screenshots", "why does Output show errors", "is it in the right place", and whenever a report needs an MCP-verified label.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 1. Sources: local docs mirror `studio/mcp.md`, `scripting/sync.md` (upstream 7400643); Roblox staff DevForum posts named in rows; field lessons from DestructionSimulator 2026-09/10 (marked "observed").

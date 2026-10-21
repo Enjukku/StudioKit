@@ -13,22 +13,30 @@ Run once a week (or `/improve 14` for a 14-day window). Lead model at medium eff
 1. Window: since the newest `knowledge/logs/improve/*.md`, else 7 days.
 2. `python tools/improve_scan.py --since <date>`: owner messages (corrections flagged), interrupts, rejected or dismissed questions, tool errors, repeated commands, tokens by model and agent.
 3. `git log --since=<date> --stat --oneline`; new rows in `decisions.md`, `tried-and-failed.md`, `open-questions.md`; job ledgers closed this week.
-4. `knowledge/inbox/` drafts; `python tools/kb_index.py --lint`; `python tools/eval_context.py` (score vs last week).
-5. Last week's improve log: did each change hold, or did the same mistake return?
+4. `knowledge/inbox/` drafts (with their `cause` and `layer` fields); `python tools/kb_index.py --lint`; `python tools/eval_context.py` (score vs last week).
+5. Closed jobs' `evidence.md`: defects by cause and the metrics at close (first-pass acceptance, repair rounds by cause, defects the owner found after internal review, stale hand-offs, unsupported "done" claims, usage vs estimate). Compare with earlier jobs of the same type.
+6. Last week's improve log: did each change hold, or did the same mistake return?
+7. Claude Code version (`claude --version`): if it changed since the last run, re-run the capability probes (agent-to-agent message during work, a one-stage workflow, resume) and update the capability record (`rules/knowledge.md` §8.5).
 
 ## Step 2: Find the mistakes
 
 One row per owner correction, redo, interrupt, rejection, gate "no", and each tool-error cluster: what happened, root cause, layer to fix.
 
-| Root cause | Fix layer |
-| --- | --- |
-| Context exists but was missed | retrieval: packet tool scope or ranking, an index link, a retrieval eval case |
-| Context does not exist | a ledger row, a lesson, the game profile or owner profile |
-| A rule or skill line is stale, wrong or too narrow | edit or delete that line (pruning beats adding) |
-| Same mistake a second time | promote: rule line, then a hook if it must always hold |
-| Brief, routing or gate problem | orchestration skill or `rules/company.md` |
-| Overcomplication (rounds of patches, size far over estimate) | a simplification review, not another patch |
-| Owner taste missed | `knowledge/design/game-profile.md` (game) or `rules/owner-profile.md` (all games) |
+| Root cause (draft `cause`) | Fix layer | Proof the fix works |
+| --- | --- | --- |
+| Context missed (it existed, nobody read it) | retrieval: packet ranking, a `roles:` tag, an index link; **a new case in `knowledge/evals/retrieval.jsonl`** | retrieval score holds or rises |
+| Context missing | a vault entry: decision, vocabulary, precedent, catalog, game profile or owner profile | the next packet for that task shows it |
+| Brief gap | `rules/messages.md`, the brief template or the recipe stage's brief | the next brief passes `rules/messages.md` §9 |
+| Interface conflict found late | the recipe's interface stage or the contract template | fewer late conflicts in the next job of that type |
+| Craft error | **the step** of that role's book that should have caught it, plus an eval brief | skill evals; monthly scorecard |
+| Found by the owner after internal review | a seeded fault for reviewer evals and a check in the reviewer's book | the reviewer catches the seeded fault |
+| Review broke correct work | protected-list rule; the reviewer's book | fewer collateral regressions |
+| Tool failure | the tool, or the capability record | the probe or test passes |
+| Owner taste change | `knowledge/design/taste-log.md` → overlay or art bible proposal | fewer change requests at the next gate |
+| A rule or skill line is stale, wrong or too narrow | edit or delete that line (pruning beats adding) | — |
+| Same mistake a second time | promote: rule line, then a hook if it must always hold | the mistake does not return |
+| Brief, routing or gate problem | orchestration skill, a recipe, or `rules/company.md` | — |
+| Overcomplication (rounds of patches, size far over estimate) | a simplification review, not another patch | — |
 
 Check `tried-and-failed.md` first: repeating a recorded failure is the most important finding.
 
@@ -36,7 +44,8 @@ Check `tried-and-failed.md` first: repeating a recorded failure is the most impo
 
 Delegate the mechanical part to a Sonnet agent with this list; the lead decides promotions.
 1. **Inbox:** group drafts by topic; merge duplicates; drop drafts with no evidence.
-2. **Promote** a lesson to `knowledge/lessons/<area>/`, a skill line, a rule line or an overlay **only if** it happened twice or the owner said or confirmed it. Link the evidence. Mark its scope: universal (kit candidate) or game.
+2. **Promote** a lesson to `knowledge/lessons/<area>/`, a skill step, a rule line, a recipe stage or an overlay **only if** it happened twice or the owner said or confirmed it. Link the evidence. Mark its scope: universal (kit candidate) or game. Put a craft lesson into **the step it fixes**, not a growing warning list.
+2b. **Wins:** a method that passed first time in two jobs becomes a recipe step or a worked example in that role's book; an accepted artifact the vault lacks goes to `knowledge/design/precedents.md`.
 3. **Supersede** notes the week contradicted (`status: superseded`, link the replacement). Convert relative dates to absolute.
 4. **Agent memories** (`.claude/agent-memory/*/MEMORY.md`): merge duplicates, remove what moved into the vault, keep each under 200 lines.
 5. **Prune:** notes unused and unlinked for 60+ days, stale facts after a model or engine update, duplicated rules.
@@ -44,7 +53,8 @@ Delegate the mechanical part to a Sonnet agent with this list; the lead decides 
 
 ## Step 4: Context health
 
-- Always-loaded size ≤ 200 lines; skills under 500 lines; lint clean; retrieval score not lower than last week.
+- Always-loaded size ≤ 200 lines; skills under 500 lines; skill descriptions ≤ 400 characters; lint clean; retrieval score not lower than last week.
+- `knowledge/jobs/active.md` lists only open jobs; every closed job was filed into the vault (`orchestration` skill §9).
 - After a new model or harness release: re-check the orchestration skill and role files; suggest `/doctor prompt-audit` (Claude).
 
 ## Step 5: Apply, one change at a time

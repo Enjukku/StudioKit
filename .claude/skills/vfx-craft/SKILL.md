@@ -1,6 +1,6 @@
 ---
 name: vfx-craft
-description: Use when building a planned visual effect in Roblox — turning a vfx-design frame script into layers, exact property values, named curves, textures, meshes, beams, trails, lights and an effect spec file. Covers particles, flipbooks, meshes (rings, domes, crescents, pillars, waves), beams and trails, object changes (flash, swap, pop, shine), world events, cutscene effects, pro default values per layer job from 30 measured pro effects, recipes per effect type, the curve library, texture picking, budgets and the spec.json format. Read vfx-design first for what the effect must make the player feel and which technique to use; this skill is how to build it. Game-agnostic; does not write game code.
+description: The how for building a planned Roblox effect - turn a vfx-design frame script into layers, exact property values, curves, textures, meshes, beams, trails, lights and a spec.json file; recipes, budgets. Use when building particles, flipbooks, mesh effects, object changes, world-event or cutscene effects. Read vfx-design first. Does not write game code.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · default · 2026-10-20 (split from vfx-design v2)

@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review Roblox Luau changes - especially code AI agents wrote - for the things that hurt players most, in order - lost or duplicated data, exploitable requests, money and policy mistakes, leaks and yields, performance at scale, structure, outdated Luau and over-building. Also sets which tests a change needs and when a test result counts. Use before merging any change, for "review this", "is this safe", "why did this break", and after a builder agent hands back code. Reports findings with evidence; does not rewrite the change.
+description: Review Roblox Luau changes, especially AI-written code, for what hurts players most - lost data, exploitable requests, money and policy, leaks, performance, over-building - and set which tests a change needs. Use before merging, for "review this", "is this safe", "why did this break", and after a builder hands back code. Reports findings with evidence; does not rewrite.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 6. Evidence: owner research papers (`knowledge/reference/architecture/strong-codebases-2026-10.md` A-20, A-23; `roblox-operations-2026-10.md`), the kit's engineering skills and the Roblox docs mirror.

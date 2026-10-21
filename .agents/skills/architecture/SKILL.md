@@ -1,6 +1,6 @@
 ---
 name: architecture
-description: Design how a Roblox game's code fits together so new content is easy to add and changes stay safe - invariants, one owner per fact, simulation vs presentation, requests vs results vs events, definitions vs runtime vs saved state, module contracts, lifecycles and cleanup, dependency direction, client/server/shared placement, content as data, genre pressures, refactoring without rewrites. Use when planning a new system or feature, when one change needs edits in many files, when bugs come from timing, duplicates or leaks, or before a refactor. Pairs with `code-review` (checking) and the anti-over-engineering rules (keeping it small).
+description: Design how a Roblox game's code fits together - one owner per fact, simulation vs presentation, module contracts, lifecycles, client/server placement, content as data, safe refactors. Use when planning a system or feature, when one change needs edits in many files, when bugs come from timing, duplicates or leaks, or before a refactor. Pairs with code-review.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 6. Evidence: owner research papers (`knowledge/reference/architecture/strong-codebases-2026-10.md` A-01..A-23, `roblox-operations-2026-10.md`), checked against the Roblox docs mirror; Roblox-specific claims cite the mirror.

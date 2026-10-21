@@ -33,6 +33,8 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | doc-keeper | mechanical → Haiku | medium | in kit |
 | explore | mechanical → Haiku | low | in kit |
 
+**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). The animator runs as a stand-in until J006 builds it.
+
 xhigh and max: nobody by default; only after a measured gain. Owner decisions 2026-10-20 ("Opus for animating ... on high. For UI ... Opus on medium. For sound, Opus on medium"; modeler "for simple things, medium is fine ... models that we want to look really good ... high").
 
 **How roles are added (owner 2026-10-20):** the kit ships only the orchestrator (the `orchestration` skill) and the system. Every other role is built with `/build-agent` from material the owner supplies, using `templates/role.md` and `templates/skill/SKILL.md`. No role is trained without owner material.

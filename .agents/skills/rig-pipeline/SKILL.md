@@ -1,6 +1,6 @@
 ---
 name: rig-pipeline
-description: The shared workflow for anything that will be rigged and animated in a Roblox game (characters, creatures, pets, weapons, vehicles, moving props), and the one rig sheet the animator, character-rigger and modeler fill in together. Covers who decides what (animator - what moves, how far, how; rigger - joints, bones, which parts must be separate, where the cuts go and why; modeler - how each cut is made and hidden), the stages S0-S8 with a check between every hand-off, the one-exact-note rule for fixes, change control, the Tripo merged-mesh routes and the timing-list hand-off to VFX, sound and UI. Use at the start of any rig or animation job, when a rig "breaks" (seams, stretching, the body skews when the head moves), when a Tripo model must be rigged, or when two roles disagree about a cut or a joint. Loaded by animator, character-rigger, modeler and the lead.
+description: Shared workflow and rig sheet for anything rigged and animated in Roblox - who decides what among animator, rigger and modeler, stages S0-S8, one exact fix note, Tripo routes. Use at the start of any rig or animation job, when a rig "breaks" (seams, stretching, body skews when the head moves), when a Tripo model must be rigged, or when roles disagree about a cut or joint.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Owner-approved workflow (J005-D1, 2026-10-21). Evidence: `knowledge/reference/rigging/` (rigging paper notes 01-02, fact-checks), `knowledge/reference/animation/` (animation paper notes), first-game owner experience (EXPERIENCE, cited by decision id).
@@ -59,7 +59,7 @@ S0 lead intake ─► S1 animator: motion needs ─► S2 rigger: rig plan ─�
 - A failed check goes back as **one** note listing every failed item (`templates/rig/fix-note.md`, `rules/messages.md` §2 format).
 - Each item: part id, check id, measured value, where (view, frame, vertex group or coordinates, evidence file), why (the §B/§C row it breaks), pass condition. The how stays open for the receiver.
 - No note without evidence. A claim without evidence is a question, not a fail (`rules/messages.md` §5).
-- Rounds: 2 per stage, then `failed` with the reason → lead. Chains: max 3 hops (`rules/company.md` §6).
+- Rounds: 2 per stage, then `failed` with the reason → lead (`rules/company.md` §9).
 - The animator never works around a missing degree of freedom (bending a tool, rotating a wing through the body). It sends a rig note and proposes alternatives: change the pose, revise the rig, separate a rigid part, reduce a close-up need, or ask the owner to change the design.
 
 ## 4a. Check budget: always light (owner J005-D8)

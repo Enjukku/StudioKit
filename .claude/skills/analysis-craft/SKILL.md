@@ -1,6 +1,6 @@
 ---
 name: analysis-craft
-description: The analyst's procedure for a Roblox game - from a question to a saved data pull, a checked calculation and a plain owner answer. Covers the Open Cloud data tool (tools/analytics - pull, status, show, experiments, stats; key only in the owner's environment), the five task types (answer a question, deep investigation, weekly player-data page, A/B test plan, A/B test reading), event planning for a new feature (measurement spec for engineering; the analytics skill owns the code), the templates (weekly report, test plan, test result), hand-off briefs to the game designer, progression designer, marketing, live-ops designer and engineering, and the self-checks. Use for "pull the numbers", "write the weekly page", "why did retention drop", "did the update help", "plan an A/B test", "read this test", "what should this feature log". Read analysis-design first (what and why); this is how.
+description: The analyst's how for a Roblox game's player data - pull with tools/analytics, check the math, answer the owner plainly; weekly page, A/B test plan and reading, what a feature should log. Use for "pull the numbers", "write the weekly page", "plan an A/B test", "read this test", "what should this feature log". Read analysis-design first (what and why).
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Built in J013 (owner's analyst paper + fact-checks `knowledge/reference/analyst/01..03`; tool `tools/analytics/` J013-T04). Owner decisions: J013-D1 (Sonnet medium; Opus high for deep investigations), D3 (analyst plans events, `analytics` owns code), D4 (Open Cloud tool, key in the owner's environment), D5 (weekly page routing), D6 (defaults).
@@ -26,7 +26,7 @@ After `analysis-design` (the reading rules). Inputs: the question or task, the g
 ## 3. Steps per task type
 Every task starts the same: **(a)** `status` (history fresh? >21 days → warn) · **(b)** write the metric contract · **(c)** pull what the contract needs · **(d)** check point status, maturity (`stats maturity`), breaks (2026-10-12, event versions) · **(e)** compute with `stats` and save outputs · then the task's own steps. Files go in the brief's folder (default `knowledge/jobs/<job>/analyst/`), named by content or date, never `report*` / `summary*` / `findings*` / `analysis*`; `show` and `stats` outputs in `calc/` next to the file.
 
-**Every .md file you write** (finding, weekly page, briefs, calc notes) starts with the kit frontmatter (`rules/knowledge.md` §3): `type: job`, `scope: game` (`universal` only for kit tests), `status`, `updated`, `source`, `supersedes`, then the `> Author:` line.
+**Every .md file you write** (finding, weekly page, briefs, calc notes) starts with the kit frontmatter (`rules/knowledge.md` §5): `type: job`, `scope: game` (`universal` only for kit tests), `status`, `updated`, `source`, `supersedes`, then the `> Author:` line.
 
 **Urgent problems** (a crash or stability regression, broken purchases, lost saves, an invalid running test): finish the minimum evidence, then hand back with the first line `STATUS: done. URGENT: <one sentence>`; the lead tells the owner in the same turn. Do not wait for the weekly page.
 

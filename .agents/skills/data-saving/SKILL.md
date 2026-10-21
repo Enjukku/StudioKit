@@ -1,6 +1,6 @@
 ---
 name: data-saving
-description: Design, build or review player persistence in any Roblox game - what to save, the save schema and its migrations, loading and session locks, when and how to write, purchases, shutdown, failure handling, request budgets and testing. Use for "save the player's progress", "add a new stat", "players lost their data", "items got duplicated", "rename this saved field", "is this safe to save", and before any change that touches saved data or receipts. Wrapper-neutral: any persistence package is one adapter that must pass this skill's checks.
+description: Design, build or review player persistence in a Roblox game - save schema and migrations, loading, session locks, write timing, purchases and receipts, shutdown, failures. Use for "save the player's progress", "add a new stat", "players lost their data", "items got duplicated", "rename this saved field", and before any change touching saved data or receipts.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 3. Evidence: `references/engine-facts.md` (docs mirror upstream 7400643, Roblox staff posts 2026); community library design (ProfileStore, MadStudioRoblox, last code commit 2025-07-31) used as rank-4 evidence only. Short source names (BP, PDP, EL, IDX, VLC, Y) are defined at the top of `references/engine-facts.md`.

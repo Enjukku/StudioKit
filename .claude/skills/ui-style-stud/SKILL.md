@@ -1,6 +1,6 @@
 ---
 name: ui-style-stud
-description: Make Roblox game UI in the stud (classic Roblox toy-brick) style in Figma - chunky two-layer 3D blocks with a darker lip, one thick outer outline, a bright inner stroke, a tiled stud texture on the top face, colour by button role, hard-shadow outlined text, sunbursts behind icons, translucent dark panels over the game. Use when the game's UI style is stud, brick, block, toy, "classic Roblox", obby or tycoon style, or the owner says "make it look like Roblox bricks", "stud UI", "like a Grow a Garden style HUD". Gives tokens, a recipe per component (menu panel, header, exit, product cards, buy button, HUD toggles, side buttons, currency counter, toggle button), states, what to borrow from the other styles, and the Roblox build per part. Read ui-design and ui-figma first.
+description: Roblox game UI in the stud (classic Roblox toy-brick) style in Figma - chunky two-layer 3D blocks, thick outline, tiled stud texture, color by button role. Use when the UI style is stud, brick, block, toy, classic Roblox, obby or tycoon, or the owner says "Roblox bricks", "stud UI". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TS (UI Genesis stud shop + HUD in Figma, `knowledge/reference/ui/02a`, `02b`), the most exact of the four tutorials; borrowed: TC, TA, TP. Values are one tutor's by-eye picks or PROPOSALs: tune per game, owner confirms.

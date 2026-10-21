@@ -1,6 +1,6 @@
 ---
 name: reference-images
-description: Make reference images with ChatGPT's image model so every agent sees the same game before it builds - concept and key art, character and creature sheets, model references for Blender and Tripo, animation key-pose sheets, VFX key frames, UI moods and icons. One art bible holds the style locks, approved anchors keep batches consistent, and a tool assembles and runs the prompts. Use whenever visual work starts (a new game, character, model, animation, effect or screen), when "it doesn't look like our game", or when agents need a shared picture of the target. Images are inputs and targets, never the final asset.
+description: Make reference images with ChatGPT's image model so every agent sees the same game before it builds - key art, character and model sheets, key poses, VFX frames, UI moods, icons; one art bible, approved anchors. Use whenever visual work starts, for "it doesn't look like our game", or when agents need a shared picture of the target. Images are targets, never final assets.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. Owner request 2026-10-20: "reference images are really strong for giving context of the stylization and the game as a whole"; every model starts from a ChatGPT reference image. Ported from the DestructionSimulator art pipeline (`tools/art/art_refs.py`, art bible locks, anchors; 2026-09 to 2026-10), game details removed.

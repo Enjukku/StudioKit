@@ -1,0 +1,54 @@
+---
+type: reference
+scope: universal
+status: active
+updated: 2026-10-21
+source: J016 (docs check by claude-code-guide, live probe on Claude Code 2.1.296, claim spot-check by researcher)
+supersedes: []
+---
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+
+# What Claude Code can and cannot do for the studio (checked 2026-10-21)
+
+Installed: Claude Code **2.1.296** at the first check; the owner updated to **2.1.306** the same day (J016-D3), which includes the C10 and C11 fixes. Native Windows 11, desktop app Code tab. Docs: code.claude.com/docs/en/ (D), releases listed to 2.1.306. Behaviour changed between the two versions (C03): re-run the probes after every Claude Code update.
+
+## 1. Capabilities that shape the design
+| # | Claim (from P1 / P2) | Verdict | Evidence | Design consequence |
+| --- | --- | --- | --- | --- |
+| C01 | Subagents can message each other with SendMessage without agent teams | CONFIRMED (docs) + **PROBED** | D sub-agents: "SendMessage doesn't require agent teams to be enabled". Probe: a Haiku subagent sent `PING-7Q` to a sibling **by its id**; the result was `success: true, "Resuming agent ac961ae"`; the receiver got the text after its own report and replied by SendMessage | Peer messages work, by **id only** |
+| C02 | Subagents see a sibling roster | PARTLY | D: roster only lists agents that have a **name**, as a **startup snapshot**. Probe: `ListAgents` does not exist inside a subagent; no roster | Subagents cannot discover each other. The lead (or job lead) must put every peer's id in the brief. Exchange through files does not need ids |
+| C03 | A message reaches a busy subagent mid-task | **YES on 2.1.306** (not on 2.1.296) | Probe 1 (2.1.296): arrived only after the receiver's report. Probe 2 (2.1.306, 2026-10-21): the send returned "queued for delivery ... at its next tool round"; the receiver saw `PING-9K` right after its step 1 of 8 and continued. Still no `ListAgents` inside a subagent | A contract change can reach a working craft at once (the sender needs its id). A message to a finished agent resumes it, so repairs keep the maker's context |
+| C04 | Nesting depth is 3 below the main chat, configurable | CONFIRMED | D sub-agents: "up to three layers below the main conversation"; env `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`; a `tools` allowlist must list `Agent` to nest. Also a 20 concurrent subagent cap (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`) | Depth limits spawning, not production stages. The old "3 hops" rule mixed the two |
+| C05 | Subagents get no parent conversation; context goes in the brief | CONFIRMED | D: it "doesn't see your conversation history, the skills you've already invoked, or the files Claude has already read". It does get CLAUDE.md (so AGENTS.md), git status and its role's preloaded `skills:` | Briefs stay complete. Rules in AGENTS.md reach every agent; rules from skills, the owner and the job must be restated |
+| C06 | Role files can pin model, effort, memory, skills | CONFIRMED | D: `model`, `effort`, `memory`, `isolation`, `background`, `maxTurns`, `hooks`, `permissionMode`, `skills` (first 32 preloaded) | Keep pinning per role |
+| C07 | Saved workflows: JS with agent / parallel / pipeline / schema; no pause for a human mid-run | CONFIRMED | D workflows: "For sign-off between stages, run each stage as its own workflow"; no file or shell access from the script ("No direct filesystem or shell access from the workflow itself"); `Date.now` / `Math.random` throw | One saved workflow per job type that runs **one stage per call**; owner gates sit between calls |
+| C08 | Where saved workflows live and how they are called | CONFIRMED | D: `.claude/workflows/` (project); `meta.name` becomes `/<name>`; input through the `args` global; permission rule `Workflow(<name>)`. Bundled `workflow-authoring` reference: `agent(prompt, {schema, label, phase, model, effort, agentType, isolation})`, `workflow(name, args)` runs a saved workflow inline, one level | `agentType` = our role names, so each stage runs the real role file. Shared sub-recipes run as inline `workflow()` calls. Names must not clash with `.claude/commands/` |
+| C09 | Workflow limits | CONFIRMED | 16 concurrent agents by default (fewer with fewer CPUs; env 1-256), 1,000 agents per run, 4,096 items per call | Not a constraint for our jobs |
+| C10 | Workflow resume reruns completed parallel calls | CONFIRMED, **fixed in 2.1.305** | D changelog | 2.1.296 is older: avoid resuming a stage run; rerun the stage. Owner: run `claude update` before the pilot |
+| C11 | Resumed subagent keeps its latest work | **fixed in 2.1.304** | D changelog ("resumed subagent forgetting its latest work") | On 2.1.296 a resumed maker may lose its last work: the repair brief must point to the files, not rely on memory. Update before the pilot |
+| C12 | Agent teams: experimental, off, interactive only, one team per session, no nesting, not restored by /resume | CONFIRMED | D agent-teams | Stay off. Not needed for messaging (C01). Trap: with `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` a named subagent launches as a teammate |
+| C13 | Cross-session messages: text only; Windows ≥ 2.1.234 | CONFIRMED | D cross-session-messaging: "Claude sends only plain text across sessions"; Desktop app cannot show the hold dialog; `crossSessionInbound: accept` for unattended | Production chats report by text that points to files |
+| C14 | Background sessions run detached, move into worktrees, stop on shutdown | CONFIRMED (research preview) | D agent-view | Long L jobs may run as production chats; Studio and Blender are not isolated by worktrees |
+| C15 | Hooks can block a subagent from finishing | CONFIRMED | D hooks: `SubagentStop` exit 2 "Prevents the subagent from stopping"; `decision: "block"` + `reason` becomes the agent's next instruction; on Windows `shell: powershell` | A hook can refuse a hand-back with no `STATUS` / `coverage`. Settings are the owner's: proposal only |
+| C16 | Skills: SKILL.md under 500 lines; body loads on use | CONFIRMED | D skills; gate check `e` already enforces 500 | Workflow books stay split: SKILL.md + references |
+| C17 | Hooks can add context | CONFIRMED (2.1.306) | D hooks: 33 events; `additionalContext` from SessionStart, SubagentStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SubagentStop and others; "SubagentStart hooks ... can inject context into the subagent", also on resume; matcher = the role's `name`; a SessionStart hook with the `compact` matcher re-adds context after compaction; PreCompact / PostCompact cannot add context | Context routing by role without relying on the briefer; owner applies the settings |
+| C18 | What survives compaction | CONFIRMED | D context-window: project CLAUDE.md, unscoped rules and auto memory "re-injected from disk"; invoked skills "capped at 5,000 tokens per skill and 25,000 tokens total; oldest dropped first"; hook-added context is summarized; `autoCompactWindow` per subagent 100,000-1,000,000 (plain integer) | Critical skill text in the first 5,000 tokens; job state in files |
+| C19 | Agent memory | PARTLY | D sub-agents: project memory in `.claude/agent-memory/<agent>/`, first 200 lines / 25 KB of MEMORY.md; folders keyed by role name (parallel instances share); no conflict handling documented; needs auto memory on | Dated topic files; `/improve` merges |
+| C20 | Skill list and role description budgets | CONFIRMED + **observed** | D skills: listing budget 1 % of the context window (`skillListingBudgetFraction`), "drops descriptions starting with the skills you invoke least", 1,536 characters per entry; D sub-agents: warning above 15,000 tokens of role descriptions. Observed 2026-10-21: 24 of 48 kit skills showed only their names in the lead's list; kit descriptions total 41,019 characters (skills) and 20,158 (roles) | Shorten descriptions; route crafts through roles and the packet |
+| C21 | Subagents get CLAUDE.md and AGENTS.md | CONFIRMED | D sub-agents: "every level of the CLAUDE.md hierarchy", AGENTS.md included (Explore and Plan skip it); `omitClaudeMd: true` drops it | Rules in AGENTS.md reach every role; built-in Explore does not get them |
+
+## 2. Paper claims spot-checked against their sources (researcher, Sonnet)
+| # | Claim | Verdict | Use in the design |
+| --- | --- | --- | --- |
+| K1 | Upstream messages override correct answers: 297 of 2,667 (11.1 %); 77 of 82 harmful flips copy the upstream answer (arXiv 2609.36855) | CONFIRMED (pooled over 25 cells, worst cell 32 %) | Independent first proposals; reviewers see the artifact before the maker's narrative |
+| K2 | A review workflow lost 36 correct answers and repaired 6 of 371 (arXiv 2606.05670) | PARTLY: 36 lost and 6 repaired confirmed; "350 correct, 320 final" is the paper's arithmetic | Reviewers are read-only; protected checks |
+| K3 | Collaboration overhead: hybrid 44.3 turns vs single 7.2; error amplification 17.2 vs 4.4 (Kim et al.) | PARTLY: numbers confirmed; the paper does **not** say "baseline is the most robust predictor"; it shows negative returns above ~45 % single-agent accuracy; the error-amplification effect is not significant after controls | Do not use amplification as the reason for anything. Use: extra agents only where an interface, a judgment or parallel work needs them |
+| K4 | Riot: effects explored before animation locks; one timing change cascades to animation, effects and sound | CONFIRMED | VFX and sound start on the beat list, not on finished animation |
+| K5 | VALORANT maps: greybox → art blockout → art production; playtests continue during art | CONFIRMED | Stage proof is a playable greybox |
+| K6 | Blizzard layout: whole team at the start; approved boards/previs become shots; continuity checked to final frames | CONFIRMED on content; the page shows no date | Cutscene integrator keeps continuity end to end |
+| K7 | Anthropic harness: roles talk through files; a middle iteration was sometimes better than the last | CONFIRMED | Keep the last accepted candidate; bounded repair loops |
+
+## 3. Owner actions before the pilot (proposals; agents never edit settings)
+1. `claude update` (fixes C10, C11 and SendMessage name lookup after restart, 2.1.300).
+2. Keep `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` unset or `0` (C12).
+3. Optional: a `SubagentStop` hook that blocks a hand-back with no `STATUS:` line or no `coverage:` (C15).

@@ -1,0 +1,540 @@
+<title>Studio Flow Redesign</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (max 980px); diagrams and tables scroll inside their own boxes on phones. */
+:root {
+  --bg: #F4F6F8; --surface: #FFFFFF; --band: #E9EDF1; --fg: #17202A; --muted: #556170;
+  --line: #CDD4DC; --teal: #0E6F69; --teal-soft: #DDF0EE; --gate: #A84F0B; --gate-soft: #FBEBDD;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10151B; --surface: #18202A; --band: #1C2530; --fg: #E5EAF0; --muted: #9AA6B4;
+  --line: #2F3A47; --teal: #46C3B6; --teal-soft: #173634; --gate: #F2A35A; --gate-soft: #3A2814; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #10151B; --surface: #18202A; --band: #1C2530; --fg: #E5EAF0; --muted: #9AA6B4;
+  --line: #2F3A47; --teal: #46C3B6; --teal-soft: #173634; --gate: #F2A35A; --gate-soft: #3A2814; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+section { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 17px; max-width: 70ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--mono); font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.chip.done { border-color: var(--teal); color: var(--teal); }
+.chip.wait { border-color: var(--gate); color: var(--gate); }
+.muted { color: var(--muted); }
+code, .k { font-family: var(--mono); font-size: 0.86em; }
+figure { margin: 0; display: grid; gap: 10px; }
+.figbox { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; overflow-x: auto; }
+.figbox svg { display: block; width: 100%; min-width: 620px; height: auto; color: var(--fg); }
+figcaption { font-size: 14px; color: var(--muted); max-width: 75ch; }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: 0.02em; background: var(--band); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; min-width: 150px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.card.new { border-color: var(--teal); }
+.card .tag { font-family: var(--mono); font-size: 11px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.06em; }
+.card dl { margin: 0; display: grid; gap: 6px; }
+.card dt { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.card dd { margin: 0; font-size: 14px; }
+ol, ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 72ch; }
+.goal-grid { display: grid; gap: 10px; }
+.goal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.goal q { font-style: italic; quotes: "\201C" "\201D"; }
+@media (max-width: 640px) { .goal { grid-template-columns: 1fr; gap: 6px; } }
+.pending { border: 2px dashed var(--gate); background: var(--gate-soft); border-radius: 10px; padding: 18px; display: grid; gap: 8px; }
+.callout { border-left: 4px solid var(--teal); background: var(--teal-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; display: grid; gap: 6px; }
+/* SVG classes */
+.box { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+.box-teal { fill: var(--teal-soft); stroke: var(--teal); stroke-width: 1.6; }
+.band { fill: var(--band); }
+.gate { fill: var(--gate-soft); stroke: var(--gate); stroke-width: 1.8; }
+.ownerbox { fill: var(--gate-soft); stroke: var(--gate); stroke-width: 1.8; }
+.ln { stroke: currentColor; stroke-width: 1.4; fill: none; }
+.ln-teal { stroke: var(--teal); stroke-width: 1.8; fill: none; }
+.ln-ret { stroke: var(--gate); stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+.ln-thin { stroke: var(--muted); stroke-width: 1.1; fill: none; }
+.f-fg { fill: currentColor; } .f-teal { fill: var(--teal); } .f-gate { fill: var(--gate); }
+.t { font-family: var(--body); font-size: 13px; fill: currentColor; }
+.tb { font-family: var(--display); font-size: 14px; font-weight: 700; fill: currentColor; }
+.ts { font-family: var(--body); font-size: 11.5px; fill: var(--muted); }
+.tt { font-family: var(--body); font-size: 11.5px; fill: var(--teal); }
+.tg { font-family: var(--body); font-size: 11.5px; fill: var(--gate); }
+a { color: var(--teal); }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+
+<header style="display:grid;gap:14px">
+  <div class="eyebrow">Job J016 · orchestration redesign · proposal for your approval (G1)</div>
+  <h1>Studio Flow Redesign</h1>
+  <p class="lede">This page shows how the agents will work together. You give the lead your decisions. The right leads agree on the idea and the look. The crafts agree one shared plan, build in parallel and check each other. Work goes up through reviews in a fixed order. You decide at three gates.</p>
+  <div class="chips">
+    <span class="chip done">Steps 1-3 design: approved by you</span>
+    <span class="chip done">Step 4 rules, skill, context: rewritten</span>
+    <span class="chip done">Step 5 seven job workflows: built and tested</span>
+    <span class="chip done">Step 6 role files: updated</span>
+    <span class="chip done">Step 7 gate: PASS, committed, not pushed</span>
+    <span class="chip wait">Next: your quality audit and pilot</span>
+    <span class="chip">Usage: about 5.3 M tokens</span>
+  </div>
+</header>
+
+<section aria-labelledby="goals">
+  <h2 id="goals">What you asked for, and how the design gives it</h2>
+  <div class="goal-grid">
+    <div class="goal"><q>I give my decisions and what the game needs to the orchestrator.</q><p>The lead is your only contact. It writes your words into the job card word for word. It sizes the job, picks the job type's recipe and names one job lead.</p></div>
+    <div class="goal"><q>The right leads agree on a job's idea and look before the crafts start.</q><p>Two to four leads write separate proposals. They read each other's once and name only real conflicts. The job lead writes one direction sheet. The others sign it. You pick at gate 1.</p></div>
+    <div class="goal"><q>The crafts cooperate, because no one can do their part alone.</q><p>Each job has one shared plan file: a beat list, a rig sheet, a route graph, a screen state map or a feature contract. Crafts write what they need, check each other, and the owner of each question merges the result. Two rounds at most, then a small test.</p></div>
+    <div class="goal"><q>Work goes back up through reviews before it reaches me, and I decide at a few clear gates.</q><p>Reviews run in a fixed order on one frozen version: scripts, the maker, the next craft, the domain lead, then QA beside the creative leads, then the lead. Reviewers never edit. Makers fix. Three gates: direction, proof, final.</p></div>
+    <div class="goal"><q>Every agent follows its workflow book.</q><p>Every role book gets the same ten parts: what great work looks like, numbered steps, reference images first, style books, Roblox docs rows, self-review and its place in this chain. The Riot lessons are sorted per role.</p></div>
+    <div class="goal"><q>Quality matters more than token cost; cheaper models for mechanical work.</q><p>Messages between agents stay complete. Opus runs leads, crafts and all code. Scripts run the checks that a script can do. Haiku does search, copy and format. A cheap model never approves creative quality.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="map">
+  <h2 id="map">The map</h2>
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 780 1196" role="img" aria-label="Flow of every big job: owner to lead, leads agree the direction, gate 1, crafts agree a shared contract, cheap proof, gate 2, parallel production with sideways checks, one integrator, ordered review chain with findings back to makers, gate 3, close.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-fg"/></marker>
+          <marker id="aht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-teal"/></marker>
+          <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-gate"/></marker>
+        </defs>
+
+        <rect x="300" y="16" width="180" height="46" rx="6" class="ownerbox"/>
+        <text x="390" y="36" text-anchor="middle" class="tb">You (owner)</text>
+        <text x="390" y="53" text-anchor="middle" class="ts">intent, taste, the three gates</text>
+        <line x1="390" y1="62" x2="390" y2="94" class="ln" marker-end="url(#ah)"/>
+        <text x="402" y="83" class="ts">your words go into the job card</text>
+
+        <rect x="290" y="96" width="200" height="46" rx="6" class="box"/>
+        <text x="390" y="116" text-anchor="middle" class="tb">Lead (orchestrator)</text>
+        <text x="390" y="133" text-anchor="middle" class="ts">size · recipe · job lead · crew</text>
+        <line x1="390" y1="142" x2="390" y2="174" class="ln" marker-end="url(#ah)"/>
+        <text x="402" y="163" class="ts">calls only the leads this job needs</text>
+
+        <rect x="30" y="176" width="720" height="128" rx="8" class="band"/>
+        <text x="46" y="198" class="tb">1  Direction</text>
+        <text x="46" y="214" class="ts">leads agree before any craft starts</text>
+        <rect x="70" y="228" width="190" height="44" rx="6" class="box"/>
+        <text x="165" y="247" text-anchor="middle" class="t">Job lead</text>
+        <text x="165" y="263" text-anchor="middle" class="ts">e.g. film-director</text>
+        <rect x="295" y="228" width="190" height="44" rx="6" class="box"/>
+        <text x="390" y="247" text-anchor="middle" class="t">art-director</text>
+        <text x="390" y="263" text-anchor="middle" class="ts">the look</text>
+        <rect x="520" y="228" width="190" height="44" rx="6" class="box"/>
+        <text x="615" y="247" text-anchor="middle" class="t">tech or design lead</text>
+        <text x="615" y="263" text-anchor="middle" class="ts">architect · game-designer</text>
+        <line x1="262" y1="250" x2="293" y2="250" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <line x1="487" y1="250" x2="518" y2="250" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <text x="390" y="292" text-anchor="middle" class="ts">separate proposals → read each other once → job lead writes one direction sheet → others sign</text>
+        <line x1="390" y1="304" x2="390" y2="328" class="ln" marker-end="url(#ah)"/>
+
+        <polygon points="300,364 390,330 480,364 390,398" class="gate"/>
+        <text x="390" y="360" text-anchor="middle" class="tb">G1 Direction</text>
+        <text x="390" y="377" text-anchor="middle" class="tg">you pick 1 of 2-3 pictures</text>
+        <line x1="390" y1="398" x2="390" y2="424" class="ln" marker-end="url(#ah)"/>
+
+        <rect x="30" y="426" width="720" height="140" rx="8" class="band"/>
+        <text x="46" y="448" class="tb">2  Interfaces</text>
+        <text x="46" y="464" class="ts">crafts that need each other agree one plan file</text>
+        <rect x="290" y="478" width="200" height="50" rx="6" class="box-teal"/>
+        <text x="390" y="498" text-anchor="middle" class="tb">Shared contract</text>
+        <text x="390" y="515" text-anchor="middle" class="ts">beat list · rig sheet · route graph</text>
+        <rect x="60" y="474" width="190" height="28" rx="5" class="box"/>
+        <text x="155" y="492" text-anchor="middle" class="t">modeler · rigger · animator</text>
+        <rect x="60" y="508" width="190" height="28" rx="5" class="box"/>
+        <text x="155" y="526" text-anchor="middle" class="t">layout · environment</text>
+        <rect x="530" y="474" width="190" height="28" rx="5" class="box"/>
+        <text x="625" y="492" text-anchor="middle" class="t">animator · VFX · sound</text>
+        <rect x="530" y="508" width="190" height="28" rx="5" class="box"/>
+        <text x="625" y="526" text-anchor="middle" class="t">UI · code</text>
+        <line x1="252" y1="488" x2="288" y2="496" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <line x1="252" y1="522" x2="288" y2="512" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <line x1="528" y1="488" x2="492" y2="496" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <line x1="528" y1="522" x2="492" y2="512" class="ln-teal" marker-start="url(#aht)" marker-end="url(#aht)"/>
+        <text x="390" y="554" text-anchor="middle" class="ts">write needs → check each other → the owner of the question merges a new version · max 2 rounds</text>
+        <line x1="390" y1="566" x2="390" y2="590" class="ln" marker-end="url(#ah)"/>
+
+        <rect x="240" y="592" width="300" height="52" rx="6" class="box"/>
+        <text x="390" y="612" text-anchor="middle" class="tb">3  Cheap integrated proof</text>
+        <text x="390" y="630" text-anchor="middle" class="ts">animatic · greybox · pose test · prototype</text>
+        <text x="552" y="622" class="ts">leads review it first</text>
+        <line x1="390" y1="644" x2="390" y2="668" class="ln" marker-end="url(#ah)"/>
+
+        <polygon points="300,704 390,670 480,704 390,738" class="gate"/>
+        <text x="390" y="700" text-anchor="middle" class="tb">G2 Proof</text>
+        <text x="390" y="717" text-anchor="middle" class="tg">does it show the direction?</text>
+        <line x1="390" y1="738" x2="390" y2="764" class="ln" marker-end="url(#ah)"/>
+
+        <rect x="30" y="766" width="720" height="124" rx="8" class="band"/>
+        <text x="46" y="788" class="tb">4  Production</text>
+        <text x="46" y="804" class="ts">crafts work in parallel · the next craft checks each hand-off</text>
+        <path d="M106,830 Q161,812 216,830" class="ln-teal"/>
+        <path d="M216,830 Q271,812 326,830" class="ln-teal"/>
+        <path d="M326,830 Q381,812 436,830" class="ln-teal"/>
+        <path d="M436,830 Q491,812 546,830" class="ln-teal"/>
+        <path d="M546,830 Q601,812 656,830" class="ln-teal"/>
+        <rect x="56" y="830" width="100" height="32" rx="5" class="box"/><text x="106" y="851" text-anchor="middle" class="t">modeler</text>
+        <rect x="166" y="830" width="100" height="32" rx="5" class="box"/><text x="216" y="851" text-anchor="middle" class="t">rigger</text>
+        <rect x="276" y="830" width="100" height="32" rx="5" class="box"/><text x="326" y="851" text-anchor="middle" class="t">animator</text>
+        <rect x="386" y="830" width="100" height="32" rx="5" class="box"/><text x="436" y="851" text-anchor="middle" class="t">VFX</text>
+        <rect x="496" y="830" width="100" height="32" rx="5" class="box"/><text x="546" y="851" text-anchor="middle" class="t">sound</text>
+        <rect x="606" y="830" width="100" height="32" rx="5" class="box"/><text x="656" y="851" text-anchor="middle" class="t">environment</text>
+        <text x="390" y="880" text-anchor="middle" class="ts">workflow book → self-review → hand-off · decision owners check in during the work</text>
+        <line x1="390" y1="890" x2="390" y2="914" class="ln" marker-end="url(#ah)"/>
+
+        <rect x="220" y="916" width="340" height="50" rx="6" class="box"/>
+        <text x="390" y="936" text-anchor="middle" class="tb">5  Integration</text>
+        <text x="390" y="954" text-anchor="middle" class="ts">one integrator · one Studio writer · one frozen version</text>
+        <line x1="390" y1="966" x2="390" y2="990" class="ln" marker-end="url(#ah)"/>
+
+        <rect x="30" y="992" width="720" height="100" rx="8" class="band"/>
+        <text x="46" y="1014" class="tb">6  Review chain (same version)</text>
+        <rect x="56" y="1030" width="110" height="34" rx="5" class="box"/><text x="111" y="1052" text-anchor="middle" class="t">scripts</text>
+        <rect x="180" y="1030" width="120" height="34" rx="5" class="box"/><text x="240" y="1052" text-anchor="middle" class="t">QA · phone</text>
+        <rect x="314" y="1030" width="130" height="34" rx="5" class="box"/><text x="379" y="1052" text-anchor="middle" class="t">domain lead</text>
+        <rect x="458" y="1030" width="130" height="34" rx="5" class="box"/><text x="523" y="1052" text-anchor="middle" class="t">art-director</text>
+        <rect x="602" y="1030" width="120" height="34" rx="5" class="box"/><text x="662" y="1052" text-anchor="middle" class="t">lead: ready?</text>
+        <line x1="166" y1="1047" x2="178" y2="1047" class="ln" marker-end="url(#ah)"/>
+        <line x1="300" y1="1047" x2="312" y2="1047" class="ln" marker-end="url(#ah)"/>
+        <line x1="444" y1="1047" x2="456" y2="1047" class="ln" marker-end="url(#ah)"/>
+        <line x1="588" y1="1047" x2="600" y2="1047" class="ln" marker-end="url(#ah)"/>
+        <text x="390" y="1082" text-anchor="middle" class="ts">reviewers read, makers fix · QA runs beside the creative reviews</text>
+        <path d="M722,1047 H762 V846 H708" class="ln-ret" marker-end="url(#ahg)"/>
+        <text x="773" y="946" text-anchor="middle" class="tg" transform="rotate(-90 773 946)">finding → its maker · max 2 rounds</text>
+        <line x1="390" y1="1092" x2="390" y2="1116" class="ln" marker-end="url(#ah)"/>
+
+        <polygon points="300,1152 390,1118 480,1152 390,1186" class="gate"/>
+        <text x="390" y="1148" text-anchor="middle" class="tb">G3 Final</text>
+        <text x="390" y="1165" text-anchor="middle" class="tg">you accept the real result</text>
+        <line x1="480" y1="1152" x2="558" y2="1152" class="ln" marker-end="url(#ah)"/>
+        <text x="519" y="1145" text-anchor="middle" class="ts">accept</text>
+        <rect x="560" y="1134" width="170" height="36" rx="6" class="box"/>
+        <text x="645" y="1157" text-anchor="middle" class="t">close: lessons into books</text>
+        <path d="M300,1152 H16 V846 H54" class="ln-ret" marker-end="url(#ahg)"/>
+        <text x="9" y="1000" text-anchor="middle" class="tg" transform="rotate(-90 9 1000)">your change → only the affected crafts</text>
+      </svg>
+    </div>
+    <figcaption>Every medium and big job follows this path. Orange marks your decisions and the paths that send work back. Teal marks the sideways links: crafts that depend on each other agree through one shared file and check each other's work. A finding goes back to the craft that made the part, and only the parts that depend on it get checked again.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 780 300" role="img" aria-label="Today every question goes through the lead. In the new design crafts that share an interface agree through one contract file and talk directly, and the lead sees status.">
+        <defs>
+          <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-fg"/></marker>
+        </defs>
+        <text x="195" y="24" text-anchor="middle" class="tb">Today: hub and spoke</text>
+        <line x1="195" y1="150" x2="195" y2="72" class="ln-thin"/>
+        <line x1="195" y1="150" x2="282" y2="100" class="ln-thin"/>
+        <line x1="195" y1="150" x2="282" y2="200" class="ln-thin"/>
+        <line x1="195" y1="150" x2="195" y2="228" class="ln-thin"/>
+        <line x1="195" y1="150" x2="108" y2="200" class="ln-thin"/>
+        <line x1="195" y1="150" x2="108" y2="100" class="ln-thin"/>
+        <circle cx="195" cy="150" r="34" class="box"/><text x="195" y="155" text-anchor="middle" class="tb">lead</text>
+        <circle cx="195" cy="50" r="22" class="box"/><text x="195" y="54" text-anchor="middle" class="ts">model</text>
+        <circle cx="282" cy="100" r="22" class="box"/><text x="282" y="104" text-anchor="middle" class="ts">rig</text>
+        <circle cx="282" cy="200" r="22" class="box"/><text x="282" y="204" text-anchor="middle" class="ts">anim</text>
+        <circle cx="195" cy="250" r="22" class="box"/><text x="195" y="254" text-anchor="middle" class="ts">VFX</text>
+        <circle cx="108" cy="200" r="22" class="box"/><text x="108" y="204" text-anchor="middle" class="ts">sound</text>
+        <circle cx="108" cy="100" r="22" class="box"/><text x="108" y="104" text-anchor="middle" class="ts">UI</text>
+        <text x="195" y="292" text-anchor="middle" class="ts">every question and answer goes through the lead</text>
+
+        <line x1="390" y1="20" x2="390" y2="280" class="ln-thin" stroke-dasharray="3 5"/>
+
+        <text x="585" y="24" text-anchor="middle" class="tb">New: hybrid</text>
+        <rect x="545" y="36" width="80" height="24" rx="5" class="box"/><text x="585" y="52" text-anchor="middle" class="t">lead</text>
+        <line x1="585" y1="60" x2="585" y2="78" class="ln" marker-end="url(#ah2)"/>
+        <rect x="535" y="80" width="100" height="24" rx="5" class="box"/><text x="585" y="96" text-anchor="middle" class="t">job lead</text>
+        <line x1="585" y1="104" x2="585" y2="134" class="ln" marker-end="url(#ah2)"/>
+        <text x="594" y="123" class="ts">owns</text>
+        <rect x="540" y="136" width="90" height="30" rx="5" class="box-teal"/><text x="585" y="156" text-anchor="middle" class="t">contract</text>
+        <line x1="470" y1="120" x2="540" y2="146" class="ln-teal"/>
+        <line x1="470" y1="196" x2="540" y2="160" class="ln-teal"/>
+        <line x1="700" y1="120" x2="630" y2="146" class="ln-teal"/>
+        <line x1="700" y1="196" x2="630" y2="160" class="ln-teal"/>
+        <line x1="540" y1="246" x2="572" y2="166" class="ln-teal"/>
+        <line x1="630" y1="246" x2="598" y2="166" class="ln-teal"/>
+        <line x1="470" y1="142" x2="470" y2="174" class="ln-teal" stroke-dasharray="4 3"/>
+        <line x1="700" y1="142" x2="700" y2="174" class="ln-teal" stroke-dasharray="4 3"/>
+        <circle cx="470" cy="120" r="22" class="box"/><text x="470" y="124" text-anchor="middle" class="ts">model</text>
+        <circle cx="470" cy="196" r="22" class="box"/><text x="470" y="200" text-anchor="middle" class="ts">rig</text>
+        <circle cx="700" cy="120" r="22" class="box"/><text x="700" y="124" text-anchor="middle" class="ts">VFX</text>
+        <circle cx="700" cy="196" r="22" class="box"/><text x="700" y="200" text-anchor="middle" class="ts">sound</text>
+        <circle cx="540" cy="246" r="22" class="box"/><text x="540" y="250" text-anchor="middle" class="ts">anim</text>
+        <circle cx="630" cy="246" r="22" class="box"/><text x="630" y="250" text-anchor="middle" class="ts">UI</text>
+        <text x="585" y="292" text-anchor="middle" class="ts">crafts agree through one file · dashed = direct message by ID</text>
+      </svg>
+    </div>
+    <figcaption>The difference you choose between. Today the lead relays every question, and the kit forbids sideways answers. In the new design the lead hands the job to a job lead. Crafts that depend on each other work against one contract file and can message each other directly. The lead still sees status and blockers.</figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="cutscene-wf">
+  <h2 id="cutscene-wf">Step 5: the cutscene workflow, ready for your look</h2>
+  <p>This is the first saved job workflow. It runs one stage per call, because a workflow cannot stop and wait for you. The lead calls the next stage only after your gate answer. Each step runs the real role file with its own model and effort, and every brief uses the full message format.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Stage</th><th>Who works, in order</th><th>What you get</th><th>Agents</th></tr></thead>
+    <tbody>
+      <tr><td>direction</td><td>film-director, art-director, architect and game-designer each propose alone → each names only real conflicts → the film-director writes one direction sheet → art-director and architect sign, or one resolution round runs</td><td>G1: 2-3 pictured options and one recommendation</td><td>11-12</td></tr>
+      <tr><td>proof</td><td>film-director writes the beat sheet → animator, environment, VFX, sound and architect state their needs (2 rounds at most) → a greybox set if needed → rough sound and effect marks → storyboards and a timed animatic → art-director, then architect review (2 repair rounds at most)</td><td>G2: the animatic with rough sound, and the boards</td><td>about 14-18</td></tr>
+      <tr><td>build</td><td>six crafts plan together → the beat list is locked → set (rough, art check-in, final light) beside animation (blocking, film check-in, polish) and the UI spec → VFX and sound against the animator's timing list → clips import, scene assembly, player code, capture, one Studio writer at a time → reviews: QA, then phone, beside film → art → sound sync → makers fix (2 rounds at most)</td><td>G3: the real cutscene in Roblox, with every check and its evidence</td><td>about 25</td></tr>
+      <tr><td>repair</td><td>film-director maps your change to the affected crafts → only those crafts change → the review chain runs again</td><td>the changed cutscene</td><td>about 8</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout">
+    <p><strong>Tested without spending tokens.</strong> A small harness replaces every agent with a fake answer. I ran 10 cases: every stage's normal path, a lead who will not sign, one blocking review finding, findings that never clear (it stops after 2 rounds and asks for a decision), and bad input (refused before any agent starts). All 10 behave as designed. The same test is now part of the kit's gate for every job workflow.</p>
+    <p><strong>Cost to expect.</strong> A big cutscene uses about 50 Opus agent calls across the three stages. Your pilot measures the real token cost.</p>
+  </div>
+  <h3>All seven job workflows (built after your approval)</h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>Workflow</th><th>Job lead</th><th>direction</th><th>proof</th><th>build</th><th>repair</th></tr></thead>
+    <tbody>
+      <tr><td>/job-cutscene</td><td>film-director</td><td>11</td><td>about 14-18</td><td>about 25</td><td>about 8</td></tr>
+      <tr><td>/job-character</td><td>art-director</td><td>12</td><td>12</td><td>19 (skin or recolour: 13)</td><td>5</td></tr>
+      <tr><td>/job-stage</td><td>environment-designer</td><td>12 (blueprint draft shown at G1)</td><td>12</td><td>21</td><td>10</td></tr>
+      <tr><td>/job-ui-screen</td><td>ui-ux-designer</td><td>12</td><td>9</td><td>11</td><td>8</td></tr>
+      <tr><td>/job-feature</td><td>game-designer</td><td>6</td><td>9</td><td>13</td><td>7</td></tr>
+      <tr><td>/job-effect</td><td>vfx-designer</td><td>9</td><td>14</td><td>11-13</td><td>8</td></tr>
+      <tr><td>/job-marketing-art</td><td>marketing</td><td>9</td><td>3</td><td>8</td><td>6</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Agent counts come from the no-cost test runs with clean answers. Real runs add calls for conflicts, repair rounds and each kit piece. Every workflow passes the same 4 tests in the kit's gate.</p>
+</section>
+
+<section aria-labelledby="who">
+  <h2 id="who">Who decides what</h2>
+  <p>One role owns each decision. The others give input when the decision touches their work. A disagreement about taste goes back to the brief's goal first. A disagreement about what is possible needs a test or evidence.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Decision</th><th>Owner</th><th>Goes to you when</th></tr></thead>
+    <tbody>
+      <tr><td>Game promise, style, scope, budget, every gate</td><td>You</td><td>always</td></tr>
+      <tr><td>Job size, recipe, crew, order, who integrates</td><td>Lead</td><td>a trade-off goes outside the approved brief</td></tr>
+      <tr><td>Player rules, routes, cover, what a screen lets the player decide</td><td>game-designer (numbers: progression-designer)</td><td>the player promise changes</td></tr>
+      <tr><td>Shape, value, colour, light mood, how all crafts look as one</td><td>art-director</td><td>the approved style changes</td></tr>
+      <tr><td>Shots, staging, camera, pacing of a cutscene</td><td>film-director</td><td>the story meaning changes</td></tr>
+      <tr><td>What is possible in Roblox, code interfaces, budgets</td><td>architect (measured by performance-engineer)</td><td>the goal cannot fit the limits</td></tr>
+      <tr><td>What moves and its timing · joints and cuts · how cuts are built</td><td>animator · rigger · modeler</td><td>a limit forces a look change</td></tr>
+      <tr><td>The picture of an effect · its sound</td><td>vfx-designer · sound-designer</td><td>—</td></tr>
+      <tr><td>Stop a version on evidence</td><td>reviewer, qa-lead, performance-engineer</td><td>a waiver is needed</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section aria-labelledby="types">
+  <h2 id="types">Seven job types</h2>
+  <p>The two papers name five job types. The Riot talks show two more with their own shape: effects, and marketing art. Skins and recolours use the character recipe with the base rig fixed. Pre-production keeps its own step-by-step process. Each type gets one saved workflow.</p>
+  <div class="cards">
+    <article class="card"><h3>Cutscene</h3><dl>
+      <dt>Lead</dt><dd>film-director. It also assembles the scene and keeps continuity.</dd>
+      <dt>Agree first</dt><dd>film-director, art-director, architect.</dd>
+      <dt>You see at G2</dt><dd>Storyboards and a timed animatic with rough sound.</dd>
+      <dt>Crafts that cooperate</dt><dd>Animator, rigger, environment, VFX and sound work on one beat list. VFX and sound plan each cue together: wind-up, peak, tail.</dd>
+      <dt>Review order</dt><dd>scripts → QA and phone → film → art → sound sync</dd></dl></article>
+    <article class="card"><h3>Character or creature</h3><dl>
+      <dt>Lead</dt><dd>art-director. The game-designer owns its role in play.</dd>
+      <dt>Agree first</dt><dd>game-designer, art-director, rigger and animator. Rigger and animator flag costly parts (capes, coattails) early.</dd>
+      <dt>You see at G2</dt><dd>A blockout at player size with one key pose, in Studio, at the game camera.</dd>
+      <dt>Crafts that cooperate</dt><dd>Animator, rigger and modeler on one rig sheet. VFX and sound follow the animator's timing list.</dd>
+      <dt>Review order</dt><dd>scripts → next-craft checks → art → game-designer → phone budget</dd></dl></article>
+    <article class="card"><h3>Stage</h3><dl>
+      <dt>Lead</dt><dd>environment-designer. The game-designer owns routes and cover.</dd>
+      <dt>Agree first</dt><dd>game-designer, art-director, environment-designer, performance-engineer.</dd>
+      <dt>You see at G2</dt><dd>A playable greybox with walk-test captures.</dd>
+      <dt>Crafts that cooperate</dt><dd>The game-designer checks the build as it grows. Sound gets the ambience map. The modeler builds the kit pieces.</dd>
+      <dt>Review order</dt><dd>scripts → game-designer playtest → art → sound and effects → QA</dd></dl></article>
+    <article class="card"><h3>UI screen</h3><dl>
+      <dt>Lead</dt><dd>ui-ux-designer. The game-designer owns the player's decision.</dd>
+      <dt>Agree first</dt><dd>game-designer, ui-ux-designer, art-director, the builder.</dd>
+      <dt>You see at G2</dt><dd>Big screens only: a clickable prototype of every state at phone size.</dd>
+      <dt>Crafts that cooperate</dt><dd>The builder works from the spec. Sound and VFX add UI feedback.</dd>
+      <dt>Review order</dt><dd>code checks → QA states and devices → ui-ux against its target image → art → game-designer</dd></dl></article>
+    <article class="card"><h3>Gameplay feature</h3><dl>
+      <dt>Lead</dt><dd>game-designer. The architect is the technical lead.</dd>
+      <dt>Agree first</dt><dd>game-designer, architect, and the progression-designer when numbers matter.</dd>
+      <dt>You see at G2</dt><dd>A rough playable prototype that tests the risky part.</dd>
+      <dt>Crafts that cooperate</dt><dd>Builders, UI, VFX and sound attach to named game events.</dd>
+      <dt>Review order</dt><dd>gate → code review, QA and performance together → game-designer plays it → art</dd></dl></article>
+    <article class="card new"><div class="tag">new type</div><h3>Effect</h3><dl>
+      <dt>Lead</dt><dd>vfx-designer.</dd>
+      <dt>Agree first</dt><dd>game-designer, vfx-designer, sound-designer.</dd>
+      <dt>You see</dt><dd>One capture with rough sound in a busy scene. Medium jobs show it at G3.</dd>
+      <dt>Crafts that cooperate</dt><dd>VFX and sound plan the wind-up, hit and tail together on one event timeline.</dd>
+      <dt>Review order</dt><dd>scripts → game-designer (does it hide anything players need?) → art → sound sync</dd></dl></article>
+    <article class="card new"><div class="tag">new type</div><h3>Marketing art</h3><dl>
+      <dt>Lead</dt><dd>marketing.</dd>
+      <dt>Agree first</dt><dd>marketing, game-designer (the art must tell the truth about play), art-director.</dd>
+      <dt>You see</dt><dd>G1: 3-5 rough thumbnails at the real size. G2 "green light": after it the big shapes stay.</dd>
+      <dt>Crafts that cooperate</dt><dd>The art-director keeps the identity. Delivery is in layers, so every crop comes from one file.</dd>
+      <dt>Review order</dt><dd>real-size checks → art → game-designer</dd></dl></article>
+  </div>
+</section>
+
+<section aria-labelledby="cc">
+  <h2 id="cc">What Claude Code can do on your version</h2>
+  <p>I checked the papers' claims against the current Claude Code docs. I also tested messaging live, first on 2.1.296 and again on 2.1.306 after your update.</p>
+  <ul>
+    <li>Subagents can message each other, but only by ID. They cannot see a list of other agents. So the lead keeps a crew list with every agent's ID and puts the IDs in the briefs.</li>
+    <li>On 2.1.306 a message reaches a working agent at its next step. On 2.1.296 it arrived only after the agent finished. So a change to the shared plan can now reach a craft while it works, and a fix can go back to the agent that made the part.</li>
+    <li>Saved workflows run steps in a fixed order, in parallel where possible. They cannot stop and wait for you. So each job type has one workflow that runs one stage per call. Your gate sits between calls.</li>
+    <li>Each workflow step can run a real role, such as film-director or modeler, with its own model and effort.</li>
+    <li>Nesting stops at 3 levels. That limits how deep agents start other agents. It does not limit how many stages a job has. The old "3 hops" rule mixed the two.</li>
+    <li>Agent teams stay off. They are experimental, and messaging works without them.</li>
+    <li>Your update to 2.1.306 brought two needed fixes: workflow resume, and a resumed agent keeping its last work. Behaviour changed between versions, so the kit re-runs these tests after every update.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="trade">
+  <h2 id="trade">Trade-offs in plain words</h2>
+  <ol>
+    <li><strong>More agent work per big job.</strong> The direction stage and the exchange rounds add calls. One study saw about 6 times more turns in mixed teams than in one agent. The gain should be less late rework. Nobody has measured this for our studio yet. Your pilot will.</li>
+    <li><strong>Three waits for you on big jobs.</strong> Medium jobs have two gates. Small jobs have none before the result.</li>
+    <li><strong>Files instead of live chat between crafts.</strong> It is slower than talk. It keeps a record, and it stops one agent's wrong answer from spreading. In one study, messages from other agents turned 11 % of correct answers wrong.</li>
+    <li><strong>One Studio writer at a time.</strong> Studio work waits in line. In return, agents cannot overwrite each other's scene.</li>
+    <li><strong>Lead reviews before you see work.</strong> This adds a step. The leads filter, they never approve. You still judge taste, because agents share blind spots.</li>
+    <li><strong>Reviewers do not edit.</strong> A review chain in one study broke 36 correct answers while it fixed 6. So makers fix, and a list of what already passed must stay passed.</li>
+    <li><strong>The animator role does not exist yet.</strong> Cutscenes and characters use a stand-in with the animator brief until job J006 builds it.</li>
+  </ol>
+</section>
+
+<section aria-labelledby="context">
+  <h2 id="context">Context: what each agent knows, and how the studio learns</h2>
+  <p>Results depend on context. The studio keeps knowledge in four places, each with one writer. Every agent loads context in the same order. Every job feeds the game's knowledge store (the vault), and every week the system learns from what worked and what failed.</p>
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 780 360" role="img" aria-label="Four memory layers feed any agent in a fixed load order. Jobs are filed into the game vault at close, and lessons rise into the kit books only with the owner's approval.">
+        <defs>
+          <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-fg"/></marker>
+          <marker id="aht3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-teal"/></marker>
+          <marker id="ahg3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-gate"/></marker>
+        </defs>
+        <rect x="120" y="20" width="360" height="70" rx="8" class="band"/>
+        <text x="136" y="44" class="tb">Kit books</text>
+        <text x="136" y="62" class="ts">rules · skills · roles · job recipes</text>
+        <text x="136" y="78" class="ts">change only with your OK</text>
+        <rect x="120" y="104" width="360" height="70" rx="8" class="band"/>
+        <text x="136" y="128" class="tb">Game vault</text>
+        <text x="136" y="146" class="ts">decisions · taste log · art bible · precedents</text>
+        <text x="136" y="162" class="ts">names · systems · asset catalogs · game notes</text>
+        <rect x="120" y="188" width="360" height="70" rx="8" class="band"/>
+        <text x="136" y="212" class="tb">Job folder</text>
+        <text x="136" y="230" class="ts">your words · direction · shared plan @version</text>
+        <text x="136" y="246" class="ts">crew IDs · exchange notes · reviews · evidence</text>
+        <rect x="120" y="272" width="360" height="70" rx="8" class="band"/>
+        <text x="136" y="296" class="tb">Agent memory</text>
+        <text x="136" y="314" class="ts">craft lessons of one role</text>
+        <text x="136" y="330" class="ts">never game facts</text>
+
+        <rect x="600" y="20" width="160" height="322" rx="8" class="box"/>
+        <text x="680" y="44" text-anchor="middle" class="tb">Any agent</text>
+        <text x="614" y="70" class="ts">load order:</text>
+        <text x="614" y="88" class="t">1 rules (automatic)</text>
+        <text x="614" y="106" class="t">2 role + its skills</text>
+        <text x="614" y="124" class="t">3 the brief</text>
+        <text x="614" y="142" class="t">4 packet: role + job</text>
+        <text x="614" y="160" class="t">5 only cited notes</text>
+        <text x="614" y="178" class="t">6 its own memory</text>
+        <text x="614" y="210" class="tt">a start hook adds</text>
+        <text x="614" y="226" class="tt">the job pointer</text>
+        <text x="614" y="268" class="ts">held back on purpose:</text>
+        <text x="614" y="286" class="t">other leads' first ideas</text>
+        <text x="614" y="304" class="t">the maker's own story</text>
+        <text x="614" y="322" class="ts">(until the reviewer looked)</text>
+
+        <line x1="482" y1="55" x2="598" y2="55" class="ln" marker-end="url(#ah3)"/>
+        <text x="540" y="48" text-anchor="middle" class="ts">1 · 2</text>
+        <line x1="482" y1="139" x2="598" y2="139" class="ln" marker-end="url(#ah3)"/>
+        <text x="540" y="132" text-anchor="middle" class="ts">4 packet</text>
+        <line x1="482" y1="212" x2="598" y2="212" class="ln" marker-end="url(#ah3)"/>
+        <text x="540" y="205" text-anchor="middle" class="ts">3 brief · 4</text>
+        <line x1="598" y1="238" x2="482" y2="238" class="ln-teal" marker-end="url(#aht3)"/>
+        <text x="540" y="253" text-anchor="middle" class="tt">hand-back @version</text>
+        <line x1="482" y1="307" x2="598" y2="307" class="ln" marker-end="url(#ah3)"/>
+        <text x="540" y="300" text-anchor="middle" class="ts">6</text>
+
+        <path d="M118,223 H92 V145 H116" class="ln-teal" marker-end="url(#aht3)"/>
+        <text x="82" y="184" text-anchor="middle" class="tt" transform="rotate(-90 82 184)">file the job at close</text>
+        <path d="M118,129 H56 V61 H116" class="ln-ret" marker-end="url(#ahg3)"/>
+        <text x="46" y="95" text-anchor="middle" class="tg" transform="rotate(-90 46 95)">weekly · your OK</text>
+      </svg>
+    </div>
+    <figcaption>Every agent loads context in the same order, numbered 1 to 6. The teal arrow on the left is how the vault grows: each job is filed into it at close. The orange arrow is how the kit books improve: the weekly pass proposes changes, and only your OK applies them.</figcaption>
+  </figure>
+
+  <div class="cards">
+    <article class="card"><h3>1. How each agent finds its context</h3><p>Every agent loads context in the same order. Rules and its role's skills load by themselves. The brief names the files it needs and your words. A context packet built for its role and its job adds the job files, the game notes for its craft, its Roblox docs rows and past lessons. It opens only what these name. Some context is held back on purpose: leads do not see each other's first ideas, and reviewers see the work before the maker's story.</p></article>
+    <article class="card"><h3>2. How context passes between agents</h3><p>Files carry the content. Messages carry pointers and news. Every brief names its inputs with their version, what must stay as it is, and who reads the output. Every hand-back names the versions it built on, so an old input shows up as stale. Your words travel word for word in the job card. Nobody passes on a summary of a summary.</p></article>
+    <article class="card"><h3>3. How the vault grows with the game</h3><p>At the end of every job the lead files it into the vault. Decisions go in with a reason to revisit them. Accepted work goes into a precedents list: "this model, this sound, this shot is our game". New names, systems, rejected ideas, your corrections and new reusable assets go in too. Then the integrate pass turns them into short "for this game" notes per skill. A new agent joins the project by reading what earlier jobs filed.</p></article>
+    <article class="card"><h3>4. How wins and failures improve the system</h3><p>Every job records its checks, its defects with their causes, its wins and its numbers. The weekly improve pass sends each cause to the layer that failed. A win that repeats becomes a recipe step or an example in a craft's book. A change stays only if its numbers hold. Otherwise it is reverted and recorded as tried and failed.</p></article>
+  </div>
+
+  <div class="pending">
+    <h3>Problem found today</h3>
+    <p>In this session my own skill list showed 24 of the kit's 48 skills by name only. Claude Code dropped their descriptions because the list is over its budget, least-used skills first. So the lead cannot see when to use those skills. The fix is shorter skill descriptions, with routing through roles and the context packet.</p>
+  </div>
+  <div class="callout">
+    <p><strong>Two hooks would make routing automatic.</strong> One adds the job pointer to every agent when it starts, matched to its role. The other gives the lead its job state back after a long chat is compacted. The kit can ship both scripts. You turn them on in settings, because agents never change settings.</p>
+  </div>
+
+  <h3>Where each failure goes</h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>What went wrong</th><th>What gets fixed</th><th>How we know the fix worked</th></tr></thead>
+    <tbody>
+      <tr><td>A needed file existed but was not read</td><td>The context packet, plus a new routing test case</td><td>The routing score holds or rises</td></tr>
+      <tr><td>A needed fact did not exist</td><td>A vault entry: decision, name, precedent or catalog row</td><td>The next packet for that task shows it</td></tr>
+      <tr><td>The brief missed something</td><td>The brief template or the recipe stage</td><td>The next brief passes the message checks</td></tr>
+      <tr><td>Two crafts disagreed late</td><td>The shared plan template</td><td>Fewer late conflicts</td></tr>
+      <tr><td>A craft made a mistake</td><td>The step in that craft's book that should catch it</td><td>Skill tests and the monthly scorecard</td></tr>
+      <tr><td>You found a defect after our reviews</td><td>A planted test fault for the reviewers, and a check in their book</td><td>Reviewers catch the planted fault</td></tr>
+      <tr><td>A review broke good work</td><td>The "must stay" list rule</td><td>Fewer broken parts after fixes</td></tr>
+      <tr><td>Your taste changed</td><td>The taste log, then the game notes per skill</td><td>Fewer changes at your gates</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section aria-labelledby="decide">
+  <h2 id="decide">Decisions for you</h2>
+  <div class="tablebox"><table>
+    <thead><tr><th>Decision</th><th>Recommendation</th><th>If you do not answer</th></tr></thead>
+    <tbody>
+      <tr><td>Approve the cutscene workflow's shape, so I build the other six job workflows the same way</td><td>Approve</td><td>I wait. Nothing else is built.</td></tr>
+      <tr><td>Turn on the hooks (job pointer at agent start, job state after compaction, optional hand-back check). The settings text to paste is in <code>tools/hooks/README.md</code></td><td>Yes, the first two now; the hand-back check after the pilot</td><td>The kit works without them. Briefs carry the job pointer by hand.</td></tr>
+      <tr><td>Already decided at gate 1 (J016-D4)</td><td colspan="2">7 job types · Riot lessons as a pointer per role now, full skill edits later · all skill descriptions shortened (done) · packet role and job options (done) · hook scripts shipped for you to enable</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section aria-labelledby="files">
+  <h2 id="files">Where the full design lives</h2>
+  <div class="callout">
+    <p>Every choice cites its evidence: line numbers in your two papers, the Riot transcripts and the kit files.</p>
+  </div>
+  <ul>
+    <li><code>knowledge/jobs/J016-orchestration/design.md</code>: the general flow, reviews, sideways rules, tools, limits, what changes.</li>
+    <li><code>knowledge/jobs/J016-orchestration/design-jobtypes.md</code>: the seven job types in detail.</li>
+    <li><code>knowledge/jobs/J016-orchestration/design-context.md</code>: the context design, with 28 findings and their sources.</li>
+    <li><code>knowledge/jobs/J016-orchestration/capability-check.md</code>: what Claude Code can and cannot do, and the paper claims I checked.</li>
+    <li><code>knowledge/jobs/J016-orchestration/riot-extracts.md</code>: what the 14 Riot talks teach, sorted per role.</li>
+  </ul>
+</section>
+
+</div>

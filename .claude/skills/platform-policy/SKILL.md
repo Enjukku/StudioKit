@@ -1,6 +1,6 @@
 ---
 name: platform-policy
-description: Keep a Roblox game inside Roblox's platform rules so it is not moderated, delisted or blocked in regions. Use when designing, building or reviewing anything players buy, roll, trade, chat, type, share or watch - paid random items (eggs, crates, wheels, luck boosts), developer products, passes, subscriptions, prices, ads, age checks, chat, text input, social links, media feeds, AI characters, player data, mature themes or franchise themes. Gives the rule, the PolicyService flag to check, the code pattern that makes compliance automatic, and the owner actions in Creator Hub.
+description: Keep a Roblox game inside platform rules so it is not moderated, delisted or region-blocked. Use when designing, building or reviewing anything players buy, roll, trade, chat, type, share or watch - paid random items, passes, ads, age checks, social links, AI characters, player data, mature or franchise themes. Gives the rule, PolicyService flag and owner actions.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 2. Evidence: `references/rules.md` (docs mirror upstream 7400643, live pages checked 2026-10-20, official Roblox DevForum announcements 2026). Updated 2026-10-21 with the J011 fact-check follow-ups (`knowledge/jobs/J011-progression-designer/policy-followups.md`).

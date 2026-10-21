@@ -19,7 +19,7 @@
 | engineer → game-designer | missing design intent | the question, options, default |
 | engineer ↔ ui-ux-designer, vfx-designer, sound-designer, animator, environment-designer | a feature needs their craft, or their output needs wiring | the gameplay contract (fixed), the craft (open) |
 
-Rules for every hand-off: the receiver checks what it gets against the brief before building on it; the reply goes to the asker; a ledger ticket exists (`rules/company.md` §3); `inside: no` → `needs-decision`.
+Rules for every hand-off: the receiver checks what it gets, at the named revision, against the brief before building on it; the reply goes to the asker; new work has a ledger ticket, clarifying questions go to the peer directly and their outcome into the contract (`rules/company.md` §5); `inside: no` → `needs-decision`.
 
 ## 1. architect → feature-builder (build ticket)
 ```text

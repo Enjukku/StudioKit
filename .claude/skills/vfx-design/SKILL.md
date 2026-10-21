@@ -1,6 +1,6 @@
 ---
 name: vfx-design
-description: Use when deciding what a visual effect must do and feel like in a Roblox game, before building it — importance, emotion and weight, what the player must see first, which context (gameplay moment, world event, object change, cutscene, UI) and which technique (particles, mesh, beam/trail, object change, camera/screen), timing for feel, frame scripts, screen shake, hit-stop, flash safety, readability, clutter, repetition, picture-sound sync, honest paid-random reveals and reviews. Also for feel requests that do not say VFX ("make this hit feel heavy", "the screen is too busy", "players can't see the attack coming"). Pair with vfx-craft to build the effect in Roblox; art-director, sound-designer and UI builders read it for shared feel rules. Game-agnostic; does not write game code.
+description: What and why of a Roblox visual effect before it is built - emotion and weight, what is seen first, technique, timing, screen shake, hit-stop, flash safety, readability, honest paid-random reveals. Use for "make this hit feel heavy", "the screen is too busy", "players can't see the attack coming", and effect reviews. Pair with vfx-craft (the build). Does not write game code.
 ---
 
 > Author: orchestrator · claude-opus-5-5 · default · 2026-10-20 (v2 split: feeling and planning; build craft moved to `vfx-craft`)
