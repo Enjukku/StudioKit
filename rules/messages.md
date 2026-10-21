@@ -34,7 +34,7 @@ Match how exact you are to how fragile the part is (M-25). A value goes in `fixe
 - A `fixed` value with no source is a defect in the brief: move it to `open` or name the source.
 - **State every rule.** A brief without its rules still gets finished, but breaks them: in one test, success fell from 76.5 % to 0 % (M-22). Restate any rule from `AGENTS.md`, a skill or the owner that the receiver must keep, and the owner's original limits: limits do not travel down a chain by themselves (M-26).
 - A feeling gets a **target and an observable sign**, not a method: "the hit must feel heavy; sign: players can tell it landed within 0.1 s" (not "add a low boom at 60 Hz"). No step lists for craft: too much procedure was the main cause of worse results in a skills study (M-27).
-- **Creative briefs** add `refs` with a note on each (what to take, what to avoid; 3-5 when possible) and an `avoid` list that names specific patterns. A general "don't make it generic" only swaps one default for another (M-28).
+- **Creative briefs** add `refs` with a note on each, starting with the approved reference image when one exists (`reference-images` skill), (what to take, what to avoid; 3-5 when possible) and an `avoid` list that names specific patterns. A general "don't make it generic" only swaps one default for another (M-28).
 - The receiver lists the open choices it took in `decisions_made`, so the next agent and the lead see them.
 
 ## 2. Brief (lead or job owner → specialist, or ticket ask)
