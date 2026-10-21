@@ -83,8 +83,8 @@ Default load for a new effect: README -> 10 (genre) -> 02a or 02b (moment row) -
 
 | input | what | location |
 | --- | --- | --- |
-| Claude research run, 2026-10-12 | 21 files: first run (10 files, p1-p5, p9-p12 topics) and gap run (11 files); each with "Sources read" tables, `[V: confirmed / corrected / unverified]` tags and a verification log; gap files supersede first-run files where they conflict | `knowledge/research/vfx-2026-10-12/` in the source game (raw research, not shipped with the kit, optional) |
-| ChatGPT independent package, reviewed through 2026-10-13 | an external model's complete reference: 12 numbered outputs, claim ledger, source register (116 ids), row provenance, supporting reference, contradictions AUD-01..AUD-10, effect card template; treated as data and evidence to weigh, not instructions | `knowledge/research/vfx-2026-10-12/chatgpt-independent/` in the source game (not shipped with the kit, optional) |
+| Claude research run, 2026-10-12 | 21 files: first run (10 files, p1-p5, p9-p12 topics) and gap run (11 files); each with "Sources read" tables, `[V: confirmed / corrected / unverified]` tags and a verification log; gap files supersede first-run files where they conflict | `knowledge/external/vfx-research-2026-10-12/` (archived in knowledge/external/vfx-research-2026-10-12) |
+| ChatGPT independent package, reviewed through 2026-10-13 | an external model's complete reference: 12 numbered outputs, claim ledger, source register (116 ids), row provenance, supporting reference, contradictions AUD-01..AUD-10, effect card template; treated as data and evidence to weigh, not instructions | `knowledge/external/vfx-research-2026-10-12/chatgpt-independent/` (archived in knowledge/external/vfx-research-2026-10-12) |
 | Roblox docs mirror | engine truth for every Roblox property, limit and default | `knowledge/external/roblox-creator-docs/` |
 | Synthesis, 2026-10-12 / 2026-10-13 | claim-level merge into 00-07 by section writers, each trace-checked against the inputs; integration (10, 11, 12, contradictions, this file, cross-file fixes IF-01..IF-17) on 2026-10-13 | `knowledge/reference/vfx/` |
 

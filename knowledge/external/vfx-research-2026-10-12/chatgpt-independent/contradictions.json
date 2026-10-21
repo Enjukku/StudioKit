@@ -1,0 +1,89 @@
+[
+  {
+    "id": "AUD-01",
+    "source_ids": [
+      "JS01"
+    ],
+    "finding": "Figure 4 gives curiosity→playtime .88 [.42,1.35] in Model A; §4.2 text says .99. Table 2 labels overall playtime mean 13.86, SD 7.90; §5.3 calls 7.9 the mean and reports 10.8%. Suppress that percentage pending author/code verification.",
+    "evidence_level": "inference (direct internal-consistency audit)"
+  },
+  {
+    "id": "AUD-02",
+    "source_ids": [
+      "JS01",
+      "JS02"
+    ],
+    "finding": "These are different experimental operationalisations, not a single dose-response curve overturned by the newer paper. Neither establishes an optimum for Roblox children, phones, multiplayer or extended sessions.",
+    "evidence_level": "inference (cross-study scope comparison)"
+  },
+  {
+    "id": "AUD-03",
+    "source_ids": [
+      "JS02"
+    ],
+    "finding": "Performance measures include accumulated actions/kills/level while playtime differs. Do not translate them into improved per-minute skill or accuracy. Expert-designed None was a condition name, not proof of literally absent feedback.",
+    "evidence_level": "inference (measurement audit)"
+  },
+  {
+    "id": "AUD-04",
+    "source_ids": [
+      "JS03"
+    ],
+    "finding": "Keep arXiv version labelled preprint, while acknowledging later IEEE GEM publication. Feature presence in selected commercial games is observational; no universal necessity theorem follows. Frame examples are authors’ descriptions, not a validated prescription.",
+    "evidence_level": "inference (publication and method audit)"
+  },
+  {
+    "id": "AUD-05",
+    "source_ids": [
+      "JS04"
+    ],
+    "finding": "The 2025 arXiv posting is an ICMI 2024 author manuscript. Some surrounding results prose conflicts with tables (e.g. mastery direction, duplicated challenge means). Use the internally consistent progress-feedback result, not the contradictory passages.",
+    "evidence_level": "inference (metadata and text audit)"
+  },
+  {
+    "id": "AUD-06",
+    "source_ids": [
+      "SA01",
+      "SA02",
+      "SA03"
+    ],
+    "finding": "Microsoft’s approximate 20%-screen wording and older red formula are not interchangeable with WCAG visual-field geometry and updated red criterion. Record tool, standard and version; never merge them into an invented threshold.",
+    "evidence_level": "inference (standards comparison)"
+  },
+  {
+    "id": "AUD-07",
+    "source_ids": [
+      "ES-S05",
+      "ES-S07"
+    ],
+    "finding": "The 2017 League guide discourages extreme saturation/value; Sparkball’s 2023 maker account reports that faint desaturated effects failed its busy scene and stronger crisp shapes worked. Context changed; do not turn either project’s palette into a universal rule.",
+    "evidence_level": "inference from differing production contexts"
+  },
+  {
+    "id": "AUD-08",
+    "source_ids": [
+      "RB26",
+      "RB27"
+    ],
+    "finding": "Current general texture guidance permits 4096 by 4096 uploads while an older UV subsection still says 1024 by 1024. Upload maximum does not establish runtime particle resolution.",
+    "evidence_level": "spec comparison"
+  },
+  {
+    "id": "AUD-09",
+    "source_ids": [
+      "RB21",
+      "RB33"
+    ],
+    "finding": "The ColorGradingEffect class specifies Lighting-only parenting, overriding the broad post-effects tutorial implication that all such effects may use Camera.",
+    "evidence_level": "spec comparison"
+  },
+  {
+    "id": "AUD-10",
+    "source_ids": [
+      "ES-S03",
+      "ES-S02"
+    ],
+    "finding": "The requested 1–10 importance scale is a reported League exercise with a single exact numerical source; broader official clarity guidance corroborates hierarchy, not the exact scale or any parameter mapping.",
+    "evidence_level": "industry practice with provenance limitation"
+  }
+]

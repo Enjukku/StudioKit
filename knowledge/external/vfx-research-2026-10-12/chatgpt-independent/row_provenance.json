@@ -1,0 +1,1892 @@
+[
+  {
+    "output": 1,
+    "row_id": "O01-R001",
+    "source_ids": [
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R002",
+    "source_ids": [
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R003",
+    "source_ids": [
+      "ES-S01",
+      "ES-S05"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R004",
+    "source_ids": [
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R005",
+    "source_ids": [
+      "ES-S03",
+      "ES-S16"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R006",
+    "source_ids": [
+      "ES-S18"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R007",
+    "source_ids": [
+      "ES-S19"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R008",
+    "source_ids": [
+      "ES-S19"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R009",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R010",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R011",
+    "source_ids": [
+      "ES-S05",
+      "ES-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R012",
+    "source_ids": [
+      "ES-S02",
+      "ES-S05"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R013",
+    "source_ids": [
+      "ES-S02"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R014",
+    "source_ids": [
+      "ES-S07",
+      "ES-S09"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R015",
+    "source_ids": [
+      "ES-S01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R016",
+    "source_ids": [
+      "ES-S09"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R017",
+    "source_ids": [
+      "ES-S04",
+      "ES-S17"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R018",
+    "source_ids": [
+      "ES-S05",
+      "ES-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R019",
+    "source_ids": [
+      "ES-S04",
+      "ES-S06"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R020",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R021",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R022",
+    "source_ids": [
+      "ES-S05",
+      "ES-S06"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R023",
+    "source_ids": [
+      "ES-S07",
+      "ES-S13"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R024",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R025",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R026",
+    "source_ids": [
+      "ES-S20"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R027",
+    "source_ids": [
+      "ES-S09",
+      "ES-S12"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R028",
+    "source_ids": [
+      "ES-S09",
+      "ES-S12"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R029",
+    "source_ids": [
+      "ES-S11"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R030",
+    "source_ids": [
+      "ES-S09",
+      "ES-S11"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R031",
+    "source_ids": [
+      "ES-S01",
+      "ES-S12"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R032",
+    "source_ids": [
+      "ES-S07",
+      "ES-S10"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R033",
+    "source_ids": [
+      "ES-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R034",
+    "source_ids": [
+      "ES-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R035",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R036",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R037",
+    "source_ids": [
+      "ES-S04",
+      "ES-S08"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R038",
+    "source_ids": [
+      "ES-S02",
+      "ES-S04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R039",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R040",
+    "source_ids": [
+      "ES-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R041",
+    "source_ids": [
+      "ES-S13"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R042",
+    "source_ids": [
+      "ES-S14"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R043",
+    "source_ids": [
+      "ES-S21"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R044",
+    "source_ids": [
+      "SA04",
+      "CAM01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R045",
+    "source_ids": [
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R046",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R047",
+    "source_ids": [
+      "ES-S27"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R048",
+    "source_ids": [
+      "ES-S27"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R049",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R050",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R051",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R052",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 1,
+    "row_id": "O01-R053",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R001",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R002",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R003",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R004",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R005",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R006",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R007",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R008",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R009",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R010",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R011",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R012",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R013",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R014",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R015",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R016",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R017",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S09",
+      "FM-S10",
+      "FM-S11",
+      "FM-S12",
+      "FM-S14",
+      "FM-S15"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R018",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R019",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R020",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R021",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R022",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R023",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R024",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R025",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R026",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R027",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R028",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R029",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R030",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R031",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R032",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R033",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R034",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R035",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R036",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R037",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R038",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "ES-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R039",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S18",
+      "FM-S19",
+      "FM-S20",
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R040",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S18",
+      "FM-S19",
+      "FM-S20",
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R041",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S18",
+      "FM-S19",
+      "FM-S20",
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R042",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S18",
+      "FM-S19",
+      "FM-S20",
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R043",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S18",
+      "FM-S19",
+      "FM-S20",
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R044",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R045",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R046",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R047",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R048",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R049",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "FM-S22",
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R050",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R051",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R052",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R053",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 2,
+    "row_id": "O02-R054",
+    "source_ids": [
+      "ES-S01",
+      "ES-S02",
+      "JS01",
+      "JS02",
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R001",
+    "source_ids": [
+      "FM-S01",
+      "FM-S02"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R002",
+    "source_ids": [
+      "FM-S03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R003",
+    "source_ids": [
+      "FM-S04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R004",
+    "source_ids": [
+      "FM-S05"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R005",
+    "source_ids": [
+      "FM-S06"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R006",
+    "source_ids": [
+      "FM-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R007",
+    "source_ids": [
+      "FM-S08"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R008",
+    "source_ids": [
+      "FM-S09",
+      "FM-S10"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R009",
+    "source_ids": [
+      "FM-S11",
+      "FM-S12"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R010",
+    "source_ids": [
+      "FM-S13"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R011",
+    "source_ids": [
+      "FM-S14"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R012",
+    "source_ids": [
+      "FM-S15",
+      "FM-S14"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R013",
+    "source_ids": [
+      "FM-S16",
+      "FM-S17"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R014",
+    "source_ids": [
+      "FM-S18",
+      "FM-S19"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R015",
+    "source_ids": [
+      "FM-S20"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R016",
+    "source_ids": [
+      "FM-S21",
+      "FM-S34"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R017",
+    "source_ids": [
+      "FM-S22"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R018",
+    "source_ids": [
+      "FM-S23"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R019",
+    "source_ids": [
+      "FM-S24"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R020",
+    "source_ids": [
+      "FM-S25"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R021",
+    "source_ids": [
+      "FM-S26"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R022",
+    "source_ids": [
+      "FM-S27"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R023",
+    "source_ids": [
+      "FM-S28"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R024",
+    "source_ids": [
+      "FM-S29"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R025",
+    "source_ids": [
+      "FM-S30",
+      "FM-S18"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R026",
+    "source_ids": [
+      "FM-S31"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R027",
+    "source_ids": [
+      "FM-S32"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 4,
+    "row_id": "O04-R028",
+    "source_ids": [
+      "FM-S33"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R001",
+    "source_ids": [
+      "JS01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R002",
+    "source_ids": [
+      "JS01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R003",
+    "source_ids": [
+      "JS01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R004",
+    "source_ids": [
+      "JS02"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R005",
+    "source_ids": [
+      "JS02"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R006",
+    "source_ids": [
+      "JS03"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R007",
+    "source_ids": [
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R008",
+    "source_ids": [
+      "JS04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R009",
+    "source_ids": [
+      "JS05"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 5,
+    "row_id": "O05-R010",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R001",
+    "source_ids": [
+      "ES-S01"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R002",
+    "source_ids": [
+      "ES-S02"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R003",
+    "source_ids": [
+      "ES-S04"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R004",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R005",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R006",
+    "source_ids": [
+      "ES-S07",
+      "ES-S09"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R007",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R008",
+    "source_ids": [
+      "ES-S07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R009",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R010",
+    "source_ids": [
+      "ES-S09"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R011",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R012",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R013",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R014",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R015",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R016",
+    "source_ids": [
+      "ES-S18"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R017",
+    "source_ids": [
+      "ES-S09",
+      "ES-S10"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R018",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R019",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R020",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R021",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R022",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R023",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R024",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R025",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R026",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R027",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R028",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R029",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R030",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R031",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R032",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R033",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R034",
+    "source_ids": [],
+    "claim_ids": []
+  },
+  {
+    "output": 6,
+    "row_id": "O06-R035",
+    "source_ids": [
+      "ES-S09"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R001",
+    "source_ids": [
+      "RB01",
+      "RB02"
+    ],
+    "claim_ids": [
+      "RBC01",
+      "RBC02",
+      "RBC10",
+      "RBC23"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R002",
+    "source_ids": [
+      "RB01",
+      "RB03",
+      "RB36"
+    ],
+    "claim_ids": [
+      "RBC04",
+      "RBC05"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R003",
+    "source_ids": [
+      "RB01",
+      "RB02",
+      "RB04"
+    ],
+    "claim_ids": [
+      "RBC03",
+      "RBC06",
+      "RBC07",
+      "RBC23"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R004",
+    "source_ids": [
+      "RB01"
+    ],
+    "claim_ids": [
+      "RBC08",
+      "RBC09"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R005",
+    "source_ids": [
+      "RB01",
+      "RB02"
+    ],
+    "claim_ids": [
+      "RBC09",
+      "RBC10"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R006",
+    "source_ids": [
+      "RB07"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R007",
+    "source_ids": [
+      "RB05"
+    ],
+    "claim_ids": [
+      "RBC11"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R008",
+    "source_ids": [
+      "RB05"
+    ],
+    "claim_ids": [
+      "RBC12"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R009",
+    "source_ids": [
+      "RB06",
+      "RB24"
+    ],
+    "claim_ids": [
+      "RBC13",
+      "RBC20"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R010",
+    "source_ids": [
+      "RB08"
+    ],
+    "claim_ids": [
+      "RBC14"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R011",
+    "source_ids": [
+      "RB09",
+      "RB12",
+      "RB13",
+      "RB29"
+    ],
+    "claim_ids": [
+      "RBC15"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R012",
+    "source_ids": [
+      "RB10",
+      "RB12",
+      "RB13"
+    ],
+    "claim_ids": [
+      "RBC15"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R013",
+    "source_ids": [
+      "RB11",
+      "RB13"
+    ],
+    "claim_ids": [
+      "RBC15"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R014",
+    "source_ids": [
+      "RB13",
+      "RB37"
+    ],
+    "claim_ids": [
+      "RBC16"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R015",
+    "source_ids": [
+      "RB14"
+    ],
+    "claim_ids": []
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R016",
+    "source_ids": [
+      "RB16",
+      "RB15"
+    ],
+    "claim_ids": [
+      "RBC17"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R017",
+    "source_ids": [
+      "RB17",
+      "RB15"
+    ],
+    "claim_ids": [
+      "RBC17"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R018",
+    "source_ids": [
+      "RB18",
+      "RB15"
+    ],
+    "claim_ids": [
+      "RBC17"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R019",
+    "source_ids": [
+      "RB19",
+      "RB15"
+    ],
+    "claim_ids": [
+      "RBC17"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R020",
+    "source_ids": [
+      "RB20",
+      "RB15"
+    ],
+    "claim_ids": [
+      "RBC17"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R021",
+    "source_ids": [
+      "RB21",
+      "RB35"
+    ],
+    "claim_ids": [
+      "RBC18"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R022",
+    "source_ids": [
+      "RB22",
+      "RB23"
+    ],
+    "claim_ids": [
+      "RBC19"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R023",
+    "source_ids": [
+      "RB24",
+      "RB25"
+    ],
+    "claim_ids": [
+      "RBC20"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R024",
+    "source_ids": [
+      "RB26",
+      "RB27",
+      "RB32",
+      "RB02"
+    ],
+    "claim_ids": [
+      "RBC21",
+      "RBC22",
+      "RBC24"
+    ]
+  },
+  {
+    "output": 7,
+    "row_id": "O07-R025",
+    "source_ids": [
+      "RB01",
+      "RB33"
+    ],
+    "claim_ids": []
+  }
+]

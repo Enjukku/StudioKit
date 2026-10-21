@@ -1,0 +1,269 @@
+{
+  "number": 11,
+  "title": "Glossary",
+  "terms": [
+    {
+      "term": "Gameplay",
+      "definition": "The information and decisions the effect must support, including identity, action and consequence."
+    },
+    {
+      "term": "Shape",
+      "definition": "The silhouette and arrangement of masses that make an effect recognizable."
+    },
+    {
+      "term": "Value",
+      "definition": "The light-to-dark structure, independent of hue."
+    },
+    {
+      "term": "Colour",
+      "definition": "Hue, saturation and their relationships within the effect and scene."
+    },
+    {
+      "term": "Timing",
+      "definition": "How visual change is distributed through the effect’s life and aligned to events."
+    },
+    {
+      "term": "Composition",
+      "definition": "Arrangement and hierarchy that directs attention within an effect and across the scene."
+    },
+    {
+      "term": "Windup",
+      "definition": "The preparatory phase before the main action; often anticipation."
+    },
+    {
+      "term": "Anticipation",
+      "definition": "Preparation that makes the following action expected and legible."
+    },
+    {
+      "term": "Punch",
+      "definition": "The concentrated high-intensity accent of the action or contact."
+    },
+    {
+      "term": "Crescendo",
+      "definition": "A build in intensity toward a peak; it need not appear in every effect."
+    },
+    {
+      "term": "Follow-through",
+      "definition": "Motion that continues after the principal action as energy transfers and resolves."
+    },
+    {
+      "term": "Dissipation",
+      "definition": "The designed ending in which the effect disperses or loses prominence."
+    },
+    {
+      "term": "Slow in and slow out",
+      "definition": "Acceleration and deceleration that make timing nonuniform."
+    },
+    {
+      "term": "Squash and stretch",
+      "definition": "Changing proportion to communicate deformation, motion or force while preserving intended volume impression."
+    },
+    {
+      "term": "Arc",
+      "definition": "A curved motion path used to organize gesture or flow."
+    },
+    {
+      "term": "Overlap",
+      "definition": "Related components move or settle at different times rather than as one rigid unit."
+    },
+    {
+      "term": "Silhouette",
+      "definition": "The recognizable outer shape, assessable without texture detail."
+    },
+    {
+      "term": "Line of action",
+      "definition": "The dominant directional gesture of an effect or movement."
+    },
+    {
+      "term": "Primary shape",
+      "definition": "The dominant mass or gesture carrying the effect’s essential meaning."
+    },
+    {
+      "term": "Secondary element",
+      "definition": "A supporting component that strengthens the primary action without displacing it."
+    },
+    {
+      "term": "Tertiary detail",
+      "definition": "Fine supporting ornament; usually a candidate for reduction before primary information."
+    },
+    {
+      "term": "Breakup",
+      "definition": "Fragmenting a solid shape or texture into irregular pieces."
+    },
+    {
+      "term": "Erosion",
+      "definition": "Progressive removal of a shape, often through a mask, rather than uniform transparency."
+    },
+    {
+      "term": "Dissolve",
+      "definition": "A spatially varying disappearance driven by a pattern or threshold."
+    },
+    {
+      "term": "Bloom",
+      "definition": "A post effect that spreads bright areas into surrounding pixels; it is not geometry or a damage boundary."
+    },
+    {
+      "term": "Emissive",
+      "definition": "An appearance of self-illumination; in Roblox light emission alone does not mean light cast onto the scene."
+    },
+    {
+      "term": "Additive blending",
+      "definition": "Combining light contributions by addition, tending to brighten overlapping regions."
+    },
+    {
+      "term": "Alpha blending",
+      "definition": "Combining foreground and background using transparency; ordering and overlap matter."
+    },
+    {
+      "term": "Flipbook",
+      "definition": "A sequence of images stored in a sheet or atlas and played as animation."
+    },
+    {
+      "term": "Sprite sheet",
+      "definition": "An image atlas containing individual frames or sprites."
+    },
+    {
+      "term": "One-shot",
+      "definition": "An animation intended to play through once per event."
+    },
+    {
+      "term": "Loop",
+      "definition": "Animation that repeats; its end-to-start transition needs design."
+    },
+    {
+      "term": "On ones",
+      "definition": "A new drawing or pose on each frame of the stated base timebase."
+    },
+    {
+      "term": "On twos",
+      "definition": "A drawing or pose held for two frames of the stated base timebase; not inherently 2 fps."
+    },
+    {
+      "term": "Variable cadence",
+      "definition": "Changing the number of held base frames between image updates."
+    },
+    {
+      "term": "Impact frame",
+      "definition": "A brief graphic accent at impact, which may change silhouette, colour or contrast."
+    },
+    {
+      "term": "Hit-stop",
+      "definition": "A brief pause or hold associated with contact; clarify whether simulation, animation or only presentation stops."
+    },
+    {
+      "term": "Freeze frame",
+      "definition": "A held image or pose; it may be cinematic rather than a gameplay-wide pause."
+    },
+    {
+      "term": "Camera kick",
+      "definition": "A directional camera displacement or rotation linked to an event."
+    },
+    {
+      "term": "Screen shake",
+      "definition": "Time-varying camera or screen movement used to reinforce an event."
+    },
+    {
+      "term": "Trauma",
+      "definition": "In Eiserloh’s camera model, a state variable accumulated by events and decayed over time to drive shake nonlinearly."
+    },
+    {
+      "term": "Telegraph",
+      "definition": "A cue announcing an action or hazard before activation."
+    },
+    {
+      "term": "Hitbox",
+      "definition": "The gameplay geometry used to determine contact or damage; its visual indicator must represent it truthfully."
+    },
+    {
+      "term": "Salience",
+      "definition": "How strongly an item attracts attention relative to its context."
+    },
+    {
+      "term": "Crowding",
+      "definition": "Impaired identification of a target because nearby visual elements interfere, especially in peripheral vision."
+    },
+    {
+      "term": "Clutter",
+      "definition": "Visual competition that makes relevant information harder to locate or identify."
+    },
+    {
+      "term": "Overdraw",
+      "definition": "Repeated shading of overlapping pixels; broad transparent layers can make cost high."
+    },
+    {
+      "term": "LOD",
+      "definition": "Level of detail; a project’s method for reducing presentation cost while preserving essential information."
+    },
+    {
+      "term": "Culling",
+      "definition": "Avoiding rendering or updating content that is not needed under defined visibility or relevance conditions."
+    },
+    {
+      "term": "Pooling",
+      "definition": "Reusing instances rather than repeatedly creating and destroying them; requires reliable reset and cleanup."
+    },
+    {
+      "term": "Billboard",
+      "definition": "A flat element oriented toward the camera or another defined direction."
+    },
+    {
+      "term": "Depth cue",
+      "definition": "Information that helps communicate distance, layering or spatial relationships."
+    },
+    {
+      "term": "Attachment",
+      "definition": "A Roblox local reference frame used to place or connect components."
+    },
+    {
+      "term": "Beam",
+      "definition": "A Roblox connection rendered between attachments, useful for continuous paths and arcs."
+    },
+    {
+      "term": "Trail",
+      "definition": "A Roblox strip generated from attachment movement over time."
+    },
+    {
+      "term": "ZOffset",
+      "definition": "A ParticleEmitter rendering-depth offset; it does not move gameplay geometry."
+    },
+    {
+      "term": "TimeScale",
+      "definition": "A ParticleEmitter control affecting particle simulation speed, separate from global gameplay time."
+    },
+    {
+      "term": "Harding test",
+      "definition": "Common shorthand for automated photosensitive-epilepsy flash/pattern analysis; tool, version and recorded sequence must be specified."
+    },
+    {
+      "term": "Kitbashing",
+      "definition": "Combining and adapting existing parts into a new effect rather than authoring every component from scratch."
+    },
+    {
+      "term": "Block-in",
+      "definition": "Testing the main shapes, motion and timing before texture/detail polish."
+    },
+    {
+      "term": "fill rate",
+      "definition": "Capacity to process screen pixels; a few large sprites can cost more than many tiny ones."
+    },
+    {
+      "term": "alpha/normal blending",
+      "definition": "Compositing that preserves occluding color according to opacity."
+    },
+    {
+      "term": "mip",
+      "definition": "A lower-resolution texture representation used at smaller projected sizes or under resource constraints."
+    },
+    {
+      "term": "OneShot",
+      "definition": "Roblox flipbook mode that fits a complete cell sequence across the particle lifetime."
+    },
+    {
+      "term": "on 2s",
+      "definition": "A drawing held for two frames of a stated presentation frame rate; not a universal update frequency."
+    }
+  ],
+  "intro": [
+    "Definitions use established field terms. Cadence requires an explicit base frame rate; a frame count alone is not a duration. Engine property names remain distinct from perceptual quantities."
+  ]
+}

@@ -23,7 +23,7 @@ routine design work.
 | `12-gaps.md` | 96 open questions, each with a Roblox test | before trusting a [P] value; planning an owner test |
 | `contradictions.md` | X rows (evidence conflicts), PD rows (start values to use), IF rows (integration fixes) | any contested number; two files disagree |
 
-Raw research (two runs plus an independent package, with "Sources read" tables and verification logs) stays in the source game's repository (`knowledge/research/vfx-2026-10-12/`); it is not shipped with the kit and is optional. Go there only when a reference row is unclear or disputed and the folder exists.
+Raw research (two runs plus an independent package, with "Sources read" tables and verification logs) is archived in `knowledge/external/vfx-research-2026-10-12/`. Go there only when a reference row is unclear or disputed and the folder exists.
 Roblox engine truth: `knowledge/external/roblox-creator-docs/`.
 
 Add evidence: add the source to `00-sources.md` with the next free R-id and tier, tag every number with its evidence

@@ -1,0 +1,1190 @@
+[
+  {
+    "id": "ES-C001",
+    "claim": "Riot ranks correcting inaccurate/missing hitbox indicators and wrong communication first, visibility/noise/visual power second, theme third. Skin variants retain the corrected indicator size. Feedback should identify a specific actionable issue.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S01"
+    ],
+    "limitations": "A League production policy, not an experimental comparison or numerical tolerance."
+  },
+  {
+    "id": "ES-C002",
+    "claim": "Importance reflects damage, crowd control, dodgeability and influence on play. Projectile direction should remain readable without motion. Champion recognition and clarity parity survive skins; effects are checked across maps.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S02"
+    ],
+    "limitations": "No universal layer count, luminance ratio, particle count or screen-coverage limit."
+  },
+  {
+    "id": "ES-C003",
+    "claim": "Designers assign importance from 1–10 for caster, enemies and allies. Morgana’s R range circle is omitted for allies who cannot act on it. League conventions include green nonthreatening heals, vertical knockups and floor-ring/cylinder roots.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S03"
+    ],
+    "limitations": "Conservative C classification follows the brief’s forum category despite first-hand maker provenance. S02 corroborates hierarchy; S16 corroborates viewer-dependent variants. The exact 1–10 scale has no second independent source located."
+  },
+  {
+    "id": "ES-C004",
+    "claim": "The damaging missile head is primary; thematic trail is secondary. Contrast, saturation and shape differentiation support focus and rest.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S04"
+    ],
+    "limitations": "Corroborated by original Riot guide S05 and official Riot S02; not an eye-tracking experiment."
+  },
+  {
+    "id": "ES-C005",
+    "claim": "Guide covers truthful gameplay geometry, primary/secondary hierarchy, value, colour, shape and timing. Its charts are schematic, with no numeric interior ranges. It discourages 0%/100% value/saturation and demotes outros.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S05"
+    ],
+    "limitations": "PRE-2020. Original Riot PDF URL currently redirects. Mirror linked from original release thread https://realtimevfx.com/t/official-league-of-legends-vfx-style-guide/3392 by a community poster on 2026-10-06; not an authenticated studio reissue. No exact RGB or luminance target can be read from the schematic bars."
+  },
+  {
+    "id": "ES-C006",
+    "claim": "Summarizes the guide’s focal hierarchy, restrained palettes, mixed hard/soft shapes, directional blur, anticipation and short linger.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S06"
+    ],
+    "limitations": "A secondary teaching summary. Corroboration: S05 original, S01/S02 modern Riot. The statement about effects assisting story is the teacher’s framing, not a universal film rule."
+  },
+  {
+    "id": "ES-C007",
+    "claim": "Faint, desaturated wispy placeholders failed in busy Sparkball play. Hall used broad, crisp, bolder shapes. Main action usually finishes or starts dissipating in the first quarter of lifetime; an expiring stun trap intentionally blinks out.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S07"
+    ],
+    "limitations": "Firsthand Sparkball account; exact first-quarter heuristic is not independently validated and is excluded from universal defaults."
+  },
+  {
+    "id": "ES-C008",
+    "claim": "Lists gameplay, shape, value, color, timing and composition. The composition lesson explicitly connects VFX to posters, comics and thumbnails.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S08"
+    ],
+    "limitations": "Use for terminology and syllabus only; no experimental claims or unpublished lesson specifics. Principles corroborated by S02/S05/S09."
+  },
+  {
+    "id": "ES-C009",
+    "claim": "Applies animation principles to real-time effects, blocks key poses before detail, offsets secondary timing and tests in-game context. One explosion revision adds 2–3 smaller outward-moving sprites after the initial sprite.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S09"
+    ],
+    "limitations": "PRE-2020. Counts describe examples, not budgets. Skipping 7–8 frames was an attempted demonstration that failed to solve the whole effect; it is not a recommendation."
+  },
+  {
+    "id": "ES-C010",
+    "claim": "Simple grayscale textures, shaders and meshes expose timing and composition. Retiming the same block-in changes its apparent friendly/damaging character; polished colour and dissolves are not required to inspect punch.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S10"
+    ],
+    "limitations": "A teaching demonstration, not controlled research. Corroboration: Lyndon S09 and Hall S07."
+  },
+  {
+    "id": "ES-C011",
+    "claim": "Curriculum uses windup, crescendo, follow-through and dissipation, and includes block-ins and kitbashing.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S11"
+    ],
+    "limitations": "Terminology and scope only; no phase milliseconds or recommended emitter counts. S09 corroborates phase-led workflow."
+  },
+  {
+    "id": "ES-C012",
+    "claim": "Distinguishes impulse/crescendo and flowing/disruptive rhythm; recommends timing charts and simple block-ins. It notes instant effects can omit windup under gameplay constraints.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S12"
+    ],
+    "limitations": "The article’s heal-below-60-BPM heuristic has no independent support found and is excluded from agent defaults. Block-in approach corroborated by S09/S10."
+  },
+  {
+    "id": "ES-C013",
+    "claim": "Attention depends jointly on features, goals, history, reward and scene meaning. Target–distractor differences and distractor similarity influence guidance. The paper models selection around 20 Hz; it is not a VFX display-rate prescription.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S13"
+    ],
+    "limitations": "Theory/review, not a Roblox gameplay trial. Do not turn approximate attentional-selection timing into a minimum warning duration."
+  },
+  {
+    "id": "ES-C014",
+    "claim": "Motion onset impaired unique-shape search, but was avoided when observers searched for a prescribed shape. Experiment 1: n=24, 1057 vs 998 ms, d=.41; Experiment 2: n=24, 560 vs 557 ms, p=.436, d=.026.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S14"
+    ],
+    "limitations": "Laboratory rotating shapes; no effect-strength or notification-duration recommendation. Motion is not an unconditional attention magnet."
+  },
+  {
+    "id": "ES-C015",
+    "claim": "50 observers; 13 crowding distances measured twice. Two-parameter eccentricity model explained 82% cross-validated variance; augmented model 94%. Thresholds vary by position, orientation, target type and observer.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S15"
+    ],
+    "limitations": "Letter recognition under fixation; no permissible particle count, phone pixel gap, or universal screen-coverage percentage follows."
+  },
+  {
+    "id": "ES-C016",
+    "claim": "Allies see updated Mythic effects while enemy-facing identity remains recognizable. The team preserves gameplay/performance and texture-memory constraints.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S16"
+    ],
+    "limitations": "Qualitative maker practice; no engine-independent memory or layer budget."
+  },
+  {
+    "id": "ES-C017",
+    "claim": "Similar-value materials limit environment noise; gameplay spaces are illuminated; most ornamental details sit above player height. The team playtests maps weekly during modeling.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S17"
+    ],
+    "limitations": "FPS environment guidance. Above-player-height staging does not directly transfer to a top-down camera; apply the sightline principle instead."
+  },
+  {
+    "id": "ES-C018",
+    "claim": "Separates correct simulation from misleading feedback. Muzzle/tracer presentation begins at least one rendered frame after input; confirmed hits wait for server round-trip. Example 40 ms one-way produces 80 ms plus processing delay.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S18"
+    ],
+    "limitations": "Historical VALORANT implementation example, not a Roblox latency guarantee or recommendation. Proposed fixes in article must not be claimed shipped."
+  },
+  {
+    "id": "ES-C019",
+    "claim": "Abstract scenes with short angular nonhorizontal contours were judged more threatening; smooth long horizontal contours safer. Experiments 2a/2b each n=157. Natural-photo regression explained R²=.04 overall, .08 for far scenes.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S19"
+    ],
+    "limitations": "Feature combinations matter; effects in still scenes do not prove universal circle/triangle/square meanings or game enjoyment."
+  },
+  {
+    "id": "ES-C020",
+    "claim": "4598 participants in 30 nations/22 languages associated 20 emotions with 12 colour terms. Mean pattern similarity r=.88; linguistic/geographic proximity further shaped associations.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S20"
+    ],
+    "limitations": "Colour-word association survey, not proof a rendered hue causes an emotion or that a game trope is universal."
+  },
+  {
+    "id": "ES-C021",
+    "claim": "n=71; looming animals modulated early attention-related ERPs with emotion/distance interactions. Motion effect on P1p at 140 ms: partial η²=.113; N2po at 280 ms: .287. Behavioral reaction-time main effect of motion was nonsignificant(p=.087).",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S21"
+    ],
+    "limitations": "Stereoscopic animals and line task, not explosions. Do not claim looming always worsens performance or makes threats detectable within 140 ms."
+  },
+  {
+    "id": "ES-C022",
+    "claim": "Abrupt distractors reduced probe detection without generally reducing tracking performance; rapid serial onsets did impair tracking. Lower onset frequency increased capture.",
+    "evidence_level": "study",
+    "source_ids": [
+      "ES-S22"
+    ],
+    "limitations": "Abstract-level evidence only; no safe recurrence interval or maximum effect count extracted."
+  },
+  {
+    "id": "ES-C023",
+    "claim": "Set the review goal, make feedback specific and suggest a solution; prioritize changes that serve the project.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S23"
+    ],
+    "limitations": "Corroboration: official Riot S01 actionable-feedback guidance. No tested optimal review cadence."
+  },
+  {
+    "id": "ES-C024",
+    "claim": "Verified session exists and addresses information overload, integration with design and directing attention.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S24"
+    ],
+    "limitations": "Discovery-only for detailed methods: no numeric budgets or specific fixes attributed to unwatched talk."
+  },
+  {
+    "id": "ES-C025",
+    "claim": "Verified speaker/year/title. Abstract mentions rhythm, balance, negative space and a first-pass-effect demonstration.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S25"
+    ],
+    "limitations": "Do not confuse this 2026 design talk with Disney’s 12 animation principles or claim its examples were inspected."
+  },
+  {
+    "id": "ES-C026",
+    "claim": "Keller identifies fewer simultaneous actors/VFX as cognitively easier to track while acknowledging that greater chaos can create appealing peaks.",
+    "evidence_level": "industry practice",
+    "source_ids": [
+      "ES-S26"
+    ],
+    "limitations": "Historical trade-off discussion; 9vs 11 other players is not a perceptual capacity threshold or a current-mode status claim."
+  },
+  {
+    "id": "ES-C027",
+    "claim": "Observational game comparison describes directional shake, camera focus, slow motion and hit-stop. Guilty Gear Xrd -SIGN- examples use 7 frames for light hits and about 10 for heavy hits; Dragon Ball FighterZ has an approximately 1-second ultimate hold.",
+    "evidence_level": "preprint",
+    "source_ids": [
+      "ES-S27"
+    ],
+    "limitations": "Examples, not optimum timings. No verified capture frame rate conversion or causal camera-feature effect size. User-comment rankings and feature inventories cannot establish that a specific feature caused impact feel. Duplicate of studies module JS03."
+  },
+  {
+    "id": "RBC01",
+    "claim": "ParticleEmitter Rate is documented up to 400 particles/second per emitter, or 100/second on mobile.",
+    "source_ids": [
+      "RB02"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "documented per-emitter emission-rate cap",
+    "caveat": "Not scene-wide live-particle count; not a safe operating budget; do not infer an Emit burst cap from this statement."
+  },
+  {
+    "id": "RBC02",
+    "claim": "The particle tutorial documents Lifetime values internally capped at 20 seconds.",
+    "source_ids": [
+      "RB02"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine lifetime cap",
+    "caveat": "Do not use this as a desirable effect duration. TimeScale affects effect time; cleanup must account for freezing/slowing."
+  },
+  {
+    "id": "RBC03",
+    "claim": "FlipbookFramerate is a NumberRange with documented maximum 30 frames/second.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "property cap",
+    "caveat": "OneShot ignores this property; it is not a universal display-frame-rate ceiling."
+  },
+  {
+    "id": "RBC04",
+    "claim": "Standard layouts have 4, 16 or 64 cells (2×2, 4×4, 8×8); Custom uses FlipbookSizeX/Y.",
+    "source_ids": [
+      "RB03"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "enumerated capability",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC05",
+    "claim": "The 2025 custom-layout announcement specifies integer row and column counts from 1 to 64 and removes square/power-of-two texture restrictions.",
+    "source_ids": [
+      "RB36"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "official engine-team announcement",
+    "caveat": "Original announcement title still says Client Beta. Current Creator Docs independently list Custom; verify imported assets on target clients."
+  },
+  {
+    "id": "RBC06",
+    "claim": "OneShot distributes its sheet cells evenly across Lifetime; Loop repeats; PingPong reverses; Random samples random frames.",
+    "source_ids": [
+      "RB04"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC07",
+    "claim": "Frame blending is linear crossfade or immediate frame replacement; in modes honoring framerate, random start plus 0 fps can select static random sheet frames.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC08",
+    "claim": "LightEmission 0 means normal blending and 1 additive; it does not illuminate geometry. LightInfluence 0–1 controls environmental lighting.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC09",
+    "claim": "Particle Brightness scales appearance when LightInfluence is 0; ZOffset moves render depth in studs without changing projected size; positive offsets approach camera.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC10",
+    "claim": "Positive Squash narrows horizontally and stretches vertically; negative does the reverse. TimeScale runs from 0 frozen to 1 normal. Emit(n) spawns a burst; Clear removes current particles.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC11",
+    "claim": "A Beam needs at least n−1 segments for n color/transparency keypoints; Segments defaults to 10.",
+    "source_ids": [
+      "RB05"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "curve sampling requirement and default",
+    "caveat": "If color and transparency have different keypoint counts, satisfy the larger requirement. More segments is not automatically visually better."
+  },
+  {
+    "id": "RBC12",
+    "claim": "Beam.TextureSpeed is texture cycles/second, not studs/second. Beam Brightness allows 0–10000, default 1, affected by LightInfluence.",
+    "source_ids": [
+      "RB05"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "units and property range",
+    "caveat": "Do not transplant Beam Brightness limits onto ParticleEmitter without its own source."
+  },
+  {
+    "id": "RBC13",
+    "claim": "Trail Lifetime is 0.01–20 seconds, default 2. MaxLength=0 is unlimited by distance; WidthScale is a 0–1 multiplier of attachment separation.",
+    "source_ids": [
+      "RB06"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "property ranges/defaults",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC14",
+    "claim": "Highlight has 255 simultaneous client slots; disabled instances still consume slots and excess instances are ignored.",
+    "source_ids": [
+      "RB08"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "documented client instance limit",
+    "caveat": "Older 31-instance advice is stale. A slot limit is not a recommended count."
+  },
+  {
+    "id": "RBC15",
+    "claim": "PointLight, SpotLight and SurfaceLight Range is capped at 120 studs. ExtendLightRangeTo120 is unused.",
+    "source_ids": [
+      "RB13"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "current hard clamp",
+    "caveat": "Older 60-stud advice is stale; the obsolete rollout switch cannot expand the clamp."
+  },
+  {
+    "id": "RBC16",
+    "claim": "Lighting.Technology is deprecated; LightingStyle and PrioritizeLightingQuality are the current controls.",
+    "source_ids": [
+      "RB13",
+      "RB37"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "current API versus historical migration",
+    "caveat": "Do not use the 2025 announcement’s scriptability statement as a current guarantee; current API metadata has changed."
+  },
+  {
+    "id": "RBC17",
+    "claim": "Post effects can differ or disappear at low graphics quality and do not affect GuiObjects.",
+    "source_ids": [
+      "RB15"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "A gameplay-critical signal must remain readable without the post effect; this requirement is our inference."
+  },
+  {
+    "id": "RBC18",
+    "claim": "ColorGradingEffect works only under Lighting; multiple instances do not combine and the latest-parented instance wins.",
+    "source_ids": [
+      "RB21"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC19",
+    "claim": "Camera FieldOfView is clamped to 1–120 degrees with default 70.",
+    "source_ids": [
+      "RB22"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "property range/default",
+    "caveat": "These are not recommended shake or zoom values; source warns extreme FOV can disorient."
+  },
+  {
+    "id": "RBC20",
+    "claim": "Engine QualityLevel has 21 explicit levels plus Automatic; SavedQualitySetting has 10 explicit levels plus Automatic.",
+    "source_ids": [
+      "RB24",
+      "RB25"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "separate enum ranges",
+    "caveat": "No reliable universal level-to-particle-count or level-to-post-effect mapping; behavior is device/platform-specific."
+  },
+  {
+    "id": "RBC21",
+    "claim": "General Roblox texture documentation allows up to 4096×4096, but the same page retains a 1024×1024 UV-map statement.",
+    "source_ids": [
+      "RB26"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "documented conflict",
+    "caveat": "Do not promise effective 4K ParticleEmitter pixels. Import allowance, downloaded mip and rendered quality are different facts."
+  },
+  {
+    "id": "RBC22",
+    "claim": "Texture streaming currently lists ParticleEmitter and Beam among supported types; whole-atlas detail is loaded when one area requires it.",
+    "source_ids": [
+      "RB27"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "Trail is not in the page’s supported-type list; absence does not prove a permanent engine limitation."
+  },
+  {
+    "id": "RBC23",
+    "claim": "Large particle screen area and overlapping transparency increase GPU cost. Low memory can automatically disable flipbooks.",
+    "source_ids": [
+      "RB02"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "engine behavior",
+    "caveat": "No universal allowed screen percentage, overlap count or safe total particle count found."
+  },
+  {
+    "id": "RBC24",
+    "claim": "1024×1024 has four times as many pixels as 512×512; upload disk compression/grayscale is not a promised Roblox graphics-memory saving.",
+    "source_ids": [
+      "RB29"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "documented relative texture-memory relationship",
+    "caveat": "Runtime transcoding, streaming and device resources determine actual resident memory."
+  },
+  {
+    "id": "RBC25",
+    "claim": "Roblox default target is 60 FPS, corresponding to 16.67 ms/frame.",
+    "source_ids": [
+      "RB34"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "platform target",
+    "caveat": "This is the entire frame budget, not a VFX-only allowance."
+  },
+  {
+    "id": "RBC26",
+    "claim": "Roblox recommends 10–15 minutes of active mobile play to expose thermal throttling.",
+    "source_ids": [
+      "RB30"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "official test-duration guidance",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC27",
+    "claim": "The design guide’s 1000 draw calls and 1000000 triangles are an illustrative device-derived example, not a universal Roblox threshold.",
+    "source_ids": [
+      "RB28"
+    ],
+    "evidence_level": "spec",
+    "numeric_context": "hypothetical example, not limit",
+    "caveat": "Not an aesthetic optimum or universal mobile budget."
+  },
+  {
+    "id": "RBC28",
+    "claim": "Jason Keyser recommends supplementary particles and 3D elements around a flipbook, guided by use context and frequency.",
+    "source_ids": [
+      "RB38"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "named practitioner guidance",
+    "caveat": "No optimal layer count or variant count is supplied."
+  },
+  {
+    "id": "RBC29",
+    "claim": "Kirill Anchikov’s Flame Burst uses an 8×4 sheet suited to an elongated 1:2 frame and combines it with other VFX elements.",
+    "source_ids": [
+      "RB39"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "one named work’s parameters",
+    "caveat": "Case example, not Roblox performance validation or an optimal grid."
+  },
+  {
+    "id": "RBC30",
+    "claim": "At fixed playback, cell duration=L/N seconds; effective OneShot rate=N/L. For an atlas W×H, cell dimensions are W/columns by H/rows before padding.",
+    "source_ids": [
+      "RB04",
+      "RB03"
+    ],
+    "evidence_level": "inference",
+    "numeric_context": "dimensional arithmetic",
+    "caveat": "Formula, not an empirically validated feel prescription; actual display sampling may skip frames."
+  },
+  {
+    "id": "RBC31",
+    "claim": "At 24 presentation fps, on 2s means 12 unique-frame updates/second; at 60 presentation fps it means 30.",
+    "source_ids": [
+      "RB01"
+    ],
+    "evidence_level": "inference",
+    "numeric_context": "arithmetic from explicitly stated presentation cadence",
+    "caveat": "The 24-fps example defines an illustrative reference cadence, not a Roblox recommendation. Record the intended reference cadence instead of equating all on-2s work to 12 fps."
+  },
+  {
+    "id": "RBC32",
+    "claim": "An uncompressed RGBA8 base image would require width×height×4 bytes; an ideal full mip pyramid tends to 4/3 of base.",
+    "source_ids": [
+      "RB29"
+    ],
+    "evidence_level": "inference",
+    "numeric_context": "explicit hypothetical memory calculation",
+    "caveat": "Assumes 4 bytes/texel and ideal mip chain; not observed Roblox GPU memory. Use measured client memory for acceptance."
+  },
+  {
+    "id": "FM-M01",
+    "claim": "Truthful indicator before ornament (League); Intended to make attack extent and identity legible.",
+    "source_ids": [
+      "FM-S01",
+      "FM-S02"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M02",
+    "claim": "Environment as a contrast budget (VALORANT); Intended to keep opponents and action separable from scenery.",
+    "source_ids": [
+      "FM-S03"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M03",
+    "claim": "Observer-specific cosmetic treatment (Overwatch 2); Intended to retain opponent recognition while allowing allied spectacle.",
+    "source_ids": [
+      "FM-S04"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M04",
+    "claim": "Combined-system review (Rocksteady); Avoiding overload is a stated production goal; no measured effect size.",
+    "source_ids": [
+      "FM-S05"
+    ],
+    "evidence_level": "Industry practice, abstract only; proposed review is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M05",
+    "claim": "Beat-aligned action with responsive exceptions (Hi-Fi RUSH); Creator intends rhythmic hits to feel musically forceful.",
+    "source_ids": [
+      "FM-S06"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "60 FPS production target reported; no universal impact delay found"
+  },
+  {
+    "id": "FM-M06",
+    "claim": "Tactile shader iteration (Balatro); Creator associates tactile treatment with a coherent aesthetic; no causality test.",
+    "source_ids": [
+      "FM-S07"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M07",
+    "claim": "Boldness over negligible detail (Hades); Artist intended immediate, visceral, satisfying work.",
+    "source_ids": [
+      "FM-S08"
+    ],
+    "evidence_level": "Documented intention only; operational transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M08",
+    "claim": "Destruction changes available routes (Teardown); Player reads destruction as an actionable world change.",
+    "source_ids": [
+      "FM-S09",
+      "FM-S10"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M09",
+    "claim": "Prefractured authored structure plus runtime consequences (THE FINALS); Makes breakage belong to a traversable building, rather than arbitrary spray.",
+    "source_ids": [
+      "FM-S11",
+      "FM-S12"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M10",
+    "claim": "Damage-edge restraint (THE FINALS); Studio intended more accurate judgment of damage.",
+    "source_ids": [
+      "FM-S13"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M11",
+    "claim": "Material event drives VFX and sound (Battlefield 6); Intended material identity and coherent impact response.",
+    "source_ids": [
+      "FM-S14"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M12",
+    "claim": "Staged damage with usable ruins (Battlefield 6); Makes damage progression and remaining cover interpretable.",
+    "source_ids": [
+      "FM-S15",
+      "FM-S14"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M13",
+    "claim": "Gameplay destruction separated from cosmetic debris (Rainbow Six); Supports convincing breakage without making every fragment gameplay-critical.",
+    "source_ids": [
+      "FM-S16",
+      "FM-S17"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "2016 slides report title-specific budgets, not adopted here; no portable debris count found"
+  },
+  {
+    "id": "FM-M14",
+    "claim": "Held graphic poses with anti-strobing treatment (Spider-Verse); Studio intended distinct illustrated images and speed clarity.",
+    "source_ids": [
+      "FM-S18",
+      "FM-S19"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "At 24 fps, ones=24 unique images/s, twos=12. Across uses 1s–6s; holds are artistic, not a game-FPS mandate."
+  },
+  {
+    "id": "FM-M15",
+    "claim": "Reusable elements versus bespoke hero design (Spider-Verse); Reused components provide efficiency; bespoke drawings improve shot fit per makers.",
+    "source_ids": [
+      "FM-S20"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M16",
+    "claim": "Poof breakup preserves silhouette (Turning Red); Intended to retain a designed graphic appearance while dissipating.",
+    "source_ids": [
+      "FM-S21",
+      "FM-S34"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M17",
+    "claim": "Coherent sprite/simulation hybrid (The Bad Guys); Audience is meant to perceive one graphic effect, not separate media.",
+    "source_ids": [
+      "FM-S22"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M18",
+    "claim": "Stepped action plus controlled figure/background separation (Puss); Maker intends snappy poses and readable characters.",
+    "source_ids": [
+      "FM-S23"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M19",
+    "claim": "Character-state graphic overlays (Arcane); Graphic overlays communicate subjective character experience.",
+    "source_ids": [
+      "FM-S24"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M20",
+    "claim": "Coarse-to-fine motion layers (Dune); Makers intend vast scale and believable granular motion.",
+    "source_ids": [
+      "FM-S25"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M21",
+    "claim": "Captured ingredients re-timed and composited (Oppenheimer); Makers seek photographic richness and designed impact.",
+    "source_ids": [
+      "FM-S26"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M22",
+    "claim": "Material-appropriate deformation (Godzilla Minus One); Preserves identity of what is being destroyed.",
+    "source_ids": [
+      "FM-S27"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M23",
+    "claim": "Human-scale framing and destructive sequence staging (Godzilla); Director intends fear and scale.",
+    "source_ids": [
+      "FM-S28"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M24",
+    "claim": "Designed water vocabulary and hybrid shot construction (Demon Slayer); Gives attacks a distinctive illustrated elemental identity.",
+    "source_ids": [
+      "FM-S29"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M25",
+    "claim": "Exaggerate reference selectively (Chainsaw Man artist example); Artist strengthens action silhouette beyond literal cloth behavior.",
+    "source_ids": [
+      "FM-S30",
+      "FM-S18"
+    ],
+    "evidence_level": "Industry practice; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M26",
+    "claim": "Graphic impact insert (Kameda); Artist uses strong black/white imagery for visual force.",
+    "source_ids": [
+      "FM-S31"
+    ],
+    "evidence_level": "Maker testimony; game transfer is inference; no validated intensity/timing prescription",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M27",
+    "claim": "Sparse focal contrast with localized following emitters (Beyond the Dark); Creators intend eyes and tentacle tips to hold attention.",
+    "source_ids": [
+      "FM-S32"
+    ],
+    "evidence_level": "Documented sample practice + platform specification; no efficacy experiment",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-M28",
+    "claim": "Goal movement against a quiet scene (Island Jump); Tutorial intends to draw players toward the objective and give air depth.",
+    "source_ids": [
+      "FM-S33"
+    ],
+    "evidence_level": "Official illustrative tutorial / Spec; game transfer is inference",
+    "numeric_context": "no number found"
+  },
+  {
+    "id": "FM-C01",
+    "claim": "Truthful gameplay signaling is the first production priority; decorative theme follows.",
+    "source_ids": [
+      "FM-S01",
+      "FM-S02"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "No numerical readability thresholds established."
+  },
+  {
+    "id": "FM-C02",
+    "claim": "Map art is deliberately simplified and tested around player visibility.",
+    "source_ids": [
+      "FM-S03"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Environment policy does not guarantee effect legibility on its own."
+  },
+  {
+    "id": "FM-C03",
+    "claim": "Mythic skin presentation can differ by observer relationship.",
+    "source_ids": [
+      "FM-S04"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Do not infer different hitboxes or damage indicators are acceptable."
+  },
+  {
+    "id": "FM-C04",
+    "claim": "Public session framing addresses combined-system readability.",
+    "source_ids": [
+      "FM-S05"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Abstract-only supplemental case, not a fully reconstructed production method."
+  },
+  {
+    "id": "FM-C05",
+    "claim": "Rhythmic action and clean graphic rendering were explicit design goals.",
+    "source_ids": [
+      "FM-S06"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Do not generalize its musical timing to non-rhythm combat."
+  },
+  {
+    "id": "FM-C06",
+    "claim": "Creator describes tactile shader exploration and iterative juice.",
+    "source_ids": [
+      "FM-S07"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Case establishes intention, not exactly how much shake, shader distortion or delay is effective."
+  },
+  {
+    "id": "FM-C07",
+    "claim": "Credited artist documents a deliberate move toward bold immediate expression.",
+    "source_ids": [
+      "FM-S08"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Detailed current maker evidence for Hades VFX construction is insufficient in this pass."
+  },
+  {
+    "id": "FM-C08",
+    "claim": "Destruction is a route-planning and heist-execution mechanic, not merely an explosion layer.",
+    "source_ids": [
+      "FM-S09",
+      "FM-S10"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "No attempt here to recreate its voxel solver or claim sprite VFX provide equivalent destruction."
+  },
+  {
+    "id": "FM-C09",
+    "claim": "Authored prefractured buildings retain interior/collision quality; damage presentation is tuned for accurate judgment.",
+    "source_ids": [
+      "FM-S11",
+      "FM-S12",
+      "FM-S13"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "A prefractured asset is not proof that every break is scripted; physical collapse and authoring are separate stages."
+  },
+  {
+    "id": "FM-C10",
+    "claim": "Systemic breakage is shaped to leave playable ruins, with material-aware VFX/audio emission.",
+    "source_ids": [
+      "FM-S14",
+      "FM-S15"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Event schema proposed below is our synthesis, not copied engine architecture."
+  },
+  {
+    "id": "FM-C11",
+    "claim": "Classic implementation distinguishes procedural wall damage and lightweight decorative fragments.",
+    "source_ids": [
+      "FM-S16",
+      "FM-S17"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "2016 technical details cannot be assumed unchanged in Siege X; 2025 source confirms only ongoing strategic environmental destruction."
+  },
+  {
+    "id": "FM-C12",
+    "claim": "Reusable graphic ingredients and stepped motion are documented; sequel increased bespoke shot work.",
+    "source_ids": [
+      "FM-S18",
+      "FM-S19",
+      "FM-S20"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Per-component film cadence is not a license to desynchronize gameplay/contact; art-directed camera privileges do not automatically transfer."
+  },
+  {
+    "id": "FM-C13",
+    "claim": "Graphic poofs use designed breakup; other hand-painted elements avoid simulation entirely.",
+    "source_ids": [
+      "FM-S21",
+      "FM-S34"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Replaying a breakup texture approximates authored appearance; it does not implement Pixar’s subdivision or fluid tools."
+  },
+  {
+    "id": "FM-C14",
+    "claim": "Library sprites and procedural work share an intentionally illustrated visual vocabulary.",
+    "source_ids": [
+      "FM-S22"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Do not assume merely stacking sprites hides the medium boundary automatically."
+  },
+  {
+    "id": "FM-C15",
+    "claim": "Action timing, lighting and background simplification were coordinated.",
+    "source_ids": [
+      "FM-S23"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "No one cadence applies to the whole film; article describes stepped action but supplies no universal frame count."
+  },
+  {
+    "id": "FM-C16",
+    "claim": "Drawn overlays complement shot-led animation and graphic composition.",
+    "source_ids": [
+      "FM-S24"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Do not call all Arcane effects 2D or claim a uniform stepped rate from this source."
+  },
+  {
+    "id": "FM-C17",
+    "claim": "Layered coarse motion and fine granular/dust detail sell worm-driven sand displacement.",
+    "source_ids": [
+      "FM-S25"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "This recipe is a visual approximation; it cannot reproduce interactive sand volume or structural displacement."
+  },
+  {
+    "id": "FM-C18",
+    "claim": "Practical photographic elements are selected, retimed and composited.",
+    "source_ids": [
+      "FM-S26"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Real-time camera freedom breaks some film compositing cheats; inspect from playable views."
+  },
+  {
+    "id": "FM-C19",
+    "claim": "Damage respects underlying materials and camera framing supplies human scale.",
+    "source_ids": [
+      "FM-S27",
+      "FM-S28"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Do not copy film occlusion or camera takeover into competitive play by default."
+  },
+  {
+    "id": "FM-C20",
+    "claim": "Graphic water was developed through references and CG/hand-drawn cooperation.",
+    "source_ids": [
+      "FM-S29"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "A single article does not document every season or every breathing style."
+  },
+  {
+    "id": "FM-C21",
+    "claim": "Artist describes deliberate departures from filmed reference and redraw of stepped CG props.",
+    "source_ids": [
+      "FM-S30"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Personal shot-level evidence; not a studio-wide formula."
+  },
+  {
+    "id": "FM-C22",
+    "claim": "Artist explains graphic impact imagery and staging across multiple productions.",
+    "source_ids": [
+      "FM-S31"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Retrospective mixes production eras; no empirical flash recipe."
+  },
+  {
+    "id": "FM-C23",
+    "claim": "Official sample uses selected glow areas and anatomy-local smoke.",
+    "source_ids": [
+      "FM-S32"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Worked example, not evidence for Blox Fruits, DOORS or Pet Simulator pipelines."
+  },
+  {
+    "id": "FM-C24",
+    "claim": "Official tutorial separates goal-oriented movement from ambient particles.",
+    "source_ids": [
+      "FM-S33"
+    ],
+    "evidence_level": "industry practice",
+    "limitations": "Only two well-documented Roblox examples found; do not inflate this into three commercial studio case studies."
+  },
+  {
+    "id": "FM-N01",
+    "claim": "Into Spider-Verse studio page defines 24 images/s on ones and 12 on twos.",
+    "source_ids": [
+      "FM-S18"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Documented production description; no assertion the whole movie uses one cadence."
+  },
+  {
+    "id": "FM-N02",
+    "claim": "Across maker interview explicitly includes animation on 1s, 2s, 3s through 6s, with variable/component-specific cadence.",
+    "source_ids": [
+      "FM-S19"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Documented industry practice."
+  },
+  {
+    "id": "FM-N03",
+    "claim": "At a 24 fps film base, a hold of n frames lasts n/24 seconds: 1=41.7 ms, 2=83.3 ms, 3=125 ms, 4=166.7 ms, 5=208.3 ms, 6=250 ms.",
+    "source_ids": [
+      "FM-S18",
+      "FM-S19"
+    ],
+    "evidence_level": "inference (arithmetic)",
+    "numeric_context": "Arithmetic conversion, not recommended game hit-stop values; mentions 5 only as conversion, not evidence of a particular shot."
+  },
+  {
+    "id": "FM-N04",
+    "claim": "Hi-Fi RUSH interview describes a 60 FPS target.",
+    "source_ids": [
+      "FM-S06"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Title-specific production target, not guaranteed performance or a general Roblox budget."
+  },
+  {
+    "id": "FM-N05",
+    "claim": "Roblox tutorial currently prints dust Rate=50000.",
+    "source_ids": [
+      "FM-S33"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "A source-quality warning, not adopted setting; engine caps, actual behavior and mobile costs require current specification/profiling."
+  },
+  {
+    "id": "CAM-C01",
+    "claim": "Eiserloh models trauma t in [0,1], adds event increments and decays it linearly; shake intensity can use t² or t³. Smoothed Perlin noise drives controllable motion instead of independent random offsets.",
+    "source_ids": [
+      "CAM01"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Practitioner camera model, pre-2020; not an empirically optimal or safe prescription. No angle, offset, frequency or decay-rate default supplied."
+  },
+  {
+    "id": "JS-N01",
+    "claim": "Pair of opposing relative-luminance changes ≥0.10, with darker state <0.80. One brighten–darken pair is one flash.",
+    "source_ids": [
+      "SA01"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "sRGB relative luminance, not raw RGB differences or emitter Brightness"
+  },
+  {
+    "id": "JS-N02",
+    "claim": "No more than 3 general flashes and/or 3 red flashes in any 1-second period, OR combined concurrent flash area ≤0.006 sr within any 10° field (25% of that field) at typical viewing distance.",
+    "source_ids": [
+      "SA01"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "25% is not a whole-screen allowance. SC 2.3.2 Level AAA removes the area alternative."
+  },
+  {
+    "id": "JS-N03",
+    "claim": "An opposing transition pair with one state R/(R+G+B)≥0.8 and state difference >0.2 in CIE 1976 UCS chromaticity.",
+    "source_ids": [
+      "SA02"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Use a standards-aware analyzer; channels require defined colour-space handling."
+  },
+  {
+    "id": "JS-N04",
+    "claim": "General flash: luminance change ≥20 cd/m² with darker state <160 cd/m²; when darker state ≥160 cd/m², Michelson contrast ≥1/17.",
+    "source_ids": [
+      "SA02"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Test highest dynamic-range version. These values are not Roblox property settings."
+  },
+  {
+    "id": "JS-N05",
+    "claim": "Approximate failure descriptions: >3 flashes/second and ≥20% screen; luminance change 10%, dark state <.8. Red formula (R−G−B)×320 change >20 with saturated-red ratio ≥.8.",
+    "source_ids": [
+      "SA03"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Older red formula and approximate screen geometry differ from WCAG 2.2; also flags sustained lower-intensity flashing and high-contrast spatial patterns."
+  },
+  {
+    "id": "JS-N06",
+    "claim": "Li et al., Experiment 1, n=27 analyzed: action high-causality JND 143 ms vs low-causality 219 ms; d=1.86. High-causality action PSS −30 ms (their negative means audio leading).",
+    "source_ids": [
+      "AV01"
+    ],
+    "evidence_level": "study",
+    "numeric_context": "Fitted simultaneity judgments on 30 fps, 3 s clips, offsets sampled every 200 ms. Not latency budgets for responsive game hits."
+  },
+  {
+    "id": "JS-N07",
+    "claim": "ITU 1998 average detectability ~45 ms audio lead /125 ms audio lag; acceptability ~90 ms lead /185 ms lag.",
+    "source_ids": [
+      "AV02"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Television material/assessment context. Detection is not acceptability; neither equals a recommended game-impact delay."
+  },
+  {
+    "id": "JS-N08",
+    "claim": "Guilty Gear Xrd -SIGN-: 7 frames light, approximately 10 heavy; Dragon Ball FighterZ: approximately 1 s cinematic ultimate hold.",
+    "source_ids": [
+      "JS03"
+    ],
+    "evidence_level": "preprint",
+    "numeric_context": "Descriptive examples, with no causal effect size or validated cross-game optimum; do not convert to milliseconds without verified game/capture frame rate."
+  },
+  {
+    "id": "JS-N09",
+    "claim": "HD SDR 1080p60; optional UHD SDR, live-feed or captured-gameplay analysis with frame/in-frame results.",
+    "source_ids": [
+      "SA07"
+    ],
+    "evidence_level": "industry practice",
+    "numeric_context": "Select correct guideline set. Listed SDR capability must not be assumed to validate HDR."
+  }
+]

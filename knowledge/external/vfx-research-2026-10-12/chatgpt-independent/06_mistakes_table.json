@@ -1,0 +1,225 @@
+{
+  "number": 6,
+  "title": "Mistakes table",
+  "headers": [
+    "mistake",
+    "why it looks bad",
+    "how to spot it",
+    "fix"
+  ],
+  "rows": [
+    {
+      "mistake": "Hitbox and visible area disagree",
+      "why it looks bad": "The effect teaches an incorrect safe/unsafe boundary.",
+      "how to spot it": "Overlay authoritative geometry through the full active interval.",
+      "fix": "Correct the primary border before changing decoration; check every variant. [industry practice: ES-S01]"
+    },
+    {
+      "mistake": "Every effect looks ultimate-level",
+      "why it looks bad": "Prominence stops predicting consequence.",
+      "how to spot it": "Show ordinary/critical/ultimate events together and ask which matters.",
+      "fix": "Reassign relative hierarchy; trim ordinary peaks rather than endlessly enlarging the ultimate. [inference from ES-S02]"
+    },
+    {
+      "mistake": "Bright trail, weak projectile head",
+      "why it looks bad": "The eye follows decoration instead of collision.",
+      "how to spot it": "Pause and identify the damaging part.",
+      "fix": "Demote trail value/opacity/detail and clarify the head. [industry practice: ES-S04]"
+    },
+    {
+      "mistake": "Too many unrelated shapes",
+      "why it looks bad": "Meaning and motion direction become ambiguous.",
+      "how to spot it": "Remove each layer individually and compare identification.",
+      "fix": "Keep components with a specific role; replace conflicting silhouettes. [inference]"
+    },
+    {
+      "mistake": "Uniform bright blob / bloom wash",
+      "why it looks bad": "Internal structure and nearby targets disappear.",
+      "how to spot it": "Inspect normal and grayscale captures with bloom toggled.",
+      "fix": "Reduce broad glow first; localize the peak and preserve dark/light structure. [inference]"
+    },
+    {
+      "mistake": "Pretty in isolation, invisible in play",
+      "why it looks bad": "Preview background concealed a context problem.",
+      "how to spot it": "Replay in actual maps/cameras with opponents and UI.",
+      "fix": "Adjust contrast/shape or stage support, then retest; more saturation is not always sufficient. [industry practice: ES-S07, ES-S09]"
+    },
+    {
+      "mistake": "Over-detailed flipbook on phone",
+      "why it looks bad": "The primary shape becomes shimmer or noise.",
+      "how to spot it": "View at real projected size during movement.",
+      "fix": "Select a coarser silhouette, shorten small debris tails or remove tertiary detail. [inference]"
+    },
+    {
+      "mistake": "Linear timing everywhere",
+      "why it looks bad": "Equal rates obscure acceleration and release.",
+      "how to spot it": "Plot size/speed/value over time and inspect main transitions.",
+      "fix": "Retune the dominant parameter first; preserve deliberately constant projectiles. [inference from ES-S07]"
+    },
+    {
+      "mistake": "Extra swelling before an instant impact",
+      "why it looks bad": "A response reads as late or soft.",
+      "how to spot it": "Compare gameplay contact timestamp with the visible peak.",
+      "fix": "Start at a suitable energetic flipbook frame or choose another asset; do not move the gameplay hit casually. [inference]"
+    },
+    {
+      "mistake": "Every secondary layer peaks together",
+      "why it looks bad": "Complexity collapses into one unreadable mass.",
+      "how to spot it": "Solo the core and compare the combined first peak.",
+      "fix": "Offset only secondary motion/dissipation while preserving contact alignment. [industry practice: ES-S09]"
+    },
+    {
+      "mistake": "Lingering danger after damage ends",
+      "why it looks bad": "The player may keep avoiding a harmless area.",
+      "how to spot it": "Review the final active tick alongside the remaining visual.",
+      "fix": "End the semantic hazard cue; retain only clearly different residue if useful. [inference]"
+    },
+    {
+      "mistake": "Uniform opacity fade on an asset needing breakup",
+      "why it looks bad": "The silhouette can look like a flat card being switched off.",
+      "how to spot it": "Watch the tail against both light and dark surfaces.",
+      "fix": "Select a breakup flipbook or size/shape tail; retain simple fades when they read better. [inference]"
+    },
+    {
+      "mistake": "Randomization changes the gameplay message",
+      "why it looks bad": "Variants imply different reach, intensity or direction.",
+      "how to spot it": "Compare extremes of randomized settings.",
+      "fix": "Randomize ornamental parameters inside tested bounds; lock semantic geometry and event timing. [inference]"
+    },
+    {
+      "mistake": "Same colour means opposite actions",
+      "why it looks bad": "Vocabulary loses reliability.",
+      "how to spot it": "Ask new players to classify unknown examples.",
+      "fix": "Define colour plus shape/motion roles and correct exceptions. [inference]"
+    },
+    {
+      "mistake": "Camera motion masks next action",
+      "why it looks bad": "Feedback consumes control or visibility.",
+      "how to spot it": "Aim/navigate during the effect rather than watching a reel.",
+      "fix": "Lower/remove the troublesome layer and offer reduced camera effects. [inference]"
+    },
+    {
+      "mistake": "Late body-hit effect appears on the head",
+      "why it looks bad": "Correct simulation looks incorrect.",
+      "how to spot it": "Frame-step a moving/crouching target with latency telemetry.",
+      "fix": "Use body-part-specific confirmation/attachment only after testing occlusion trade-offs. [industry practice: ES-S18]"
+    },
+    {
+      "mistake": "Expensive polish hides weak timing",
+      "why it looks bad": "An impressive shader cannot clarify the event sequence.",
+      "how to spot it": "Replace appearance with simple grayscale parts.",
+      "fix": "Fix event shape/timing before restoring polish. [industry practice: ES-S10, ES-S09]"
+    },
+    {
+      "mistake": "A laboratory number becomes an aesthetic default",
+      "why it looks bad": "The task/display/population changed.",
+      "how to spot it": "Inspect each numeric field’s source and context.",
+      "fix": "Keep study outcomes in evidence fields; obtain game-specific test bounds. [inference]"
+    },
+    {
+      "mistake": "Calling a small p-value a large design gain",
+      "why it looks bad": "Statistical significance does not give magnitude or external validity.",
+      "how to spot it": "Check effect-size unit, confidence interval, game/sample and actual contrast.",
+      "fix": "Report the numeric effect and scope; do not promise a retention percentage."
+    },
+    {
+      "mistake": "Calling random variation curiosity",
+      "why it looks bad": "Unpredictability can be meaningless.",
+      "how to spot it": "Player sees different colours but cannot learn anything useful.",
+      "fix": "Keep variation decorative or connect it to interpretable gameplay state."
+    },
+    {
+      "mistake": "Randomising the contact frame",
+      "why it looks bad": "Separates consequence from action.",
+      "how to spot it": "Compare earliest visible contact with audio and gameplay event.",
+      "fix": "Keep sync anchor fixed; vary tails/secondary details instead."
+    },
+    {
+      "mistake": "Treating 25% as a whole-screen flashing allowance",
+      "why it looks bad": "Wrong geometry for WCAG’s visual-field criterion.",
+      "how to spot it": "Look for denominator and viewing-distance assumptions.",
+      "fix": "Use visual-field analysis and correct standards-aware tooling."
+    },
+    {
+      "mistake": "A safety warning replacing a fix",
+      "why it looks bad": "Exposure can precede a player’s ability to disable the effect.",
+      "how to spot it": "Known failures still ship behind a splash screen.",
+      "fix": "Redesign failure and validate the composite output."
+    },
+    {
+      "mistake": "All effects off removes warnings",
+      "why it looks bad": "Lower decoration also deletes essential information.",
+      "how to spot it": "Play reduced-effects mode without sound.",
+      "fix": "Preserve or replace the semantic cue with a stable readable one."
+    },
+    {
+      "mistake": "Colour-blind filter treated as proof",
+      "why it looks bad": "People and contexts vary.",
+      "how to spot it": "Only simulation has been checked.",
+      "fix": "Use redundant signifiers, customization and actual player testing."
+    },
+    {
+      "mistake": "Authoring timestamps treated as output sync",
+      "why it looks bad": "Display/audio pipelines add different delay.",
+      "how to spot it": "Code says simultaneous but a capture shows separation.",
+      "fix": "Measure emitted audio and displayed frames on target hardware."
+    },
+    {
+      "mistake": "Using emission cap as scene budget",
+      "why it looks bad": "Often fails under overlapping effects and large transparent sprites",
+      "how to spot it": "Count seems legal but on-device GPU frame time spikes",
+      "fix": "Budget visible area/concurrency and measured CPU/GPU cost, preserving essential cue"
+    },
+    {
+      "mistake": "Random-starting a telegraph/explosion",
+      "why it looks bad": "Skips designed buildup or jumps straight into dissipation",
+      "how to spot it": "Event begins on inconsistent visual states",
+      "fix": "Disable random start for semantic one-shots; vary approved secondary elements instead"
+    },
+    {
+      "mistake": "Treating additive as universal blending",
+      "why it looks bad": "Smoke and volume disappear against bright backgrounds; overlap washes out hierarchy",
+      "how to spot it": "Inspect against bright stage and grayscale",
+      "fix": "Normal blending for obscuring mass; additive only for luminous portions"
+    },
+    {
+      "mistake": "Doubling layers without distinct roles",
+      "why it looks bad": "Muddies silhouette and increases overdraw",
+      "how to spot it": "Solo/mute each layer and name what information changes",
+      "fix": "Keep one primary read; remove redundant layers before adding detail"
+    },
+    {
+      "mistake": "Increasing sheet frames without checking cell resolution",
+      "why it looks bad": "More temporal detail can mean blurrier individual drawings",
+      "how to spot it": "Inspect per-cell artwork size and close-up phone capture",
+      "fix": "Choose fewer useful cells or a better-fitting aspect ratio; verify actual resident detail"
+    },
+    {
+      "mistake": "Pooling without complete reset",
+      "why it looks bad": "Teleport streaks, stale particles or persistent glow appear",
+      "how to spot it": "Interrupt/reacquire rapidly and inspect the first new frame",
+      "fix": "Clear history, reset properties and callbacks; respect outstanding lifetime/TimeScale"
+    },
+    {
+      "mistake": "Relying on unsupported post effects",
+      "why it looks bad": "Recipe cannot be implemented as written or substitution changes its meaning",
+      "how to spot it": "Property/class absent from current public API",
+      "fix": "Specify an honest approximation or request another approved asset; no invented API"
+    },
+    {
+      "mistake": "Cheap or disconnected spectacle",
+      "why it looks bad": "A large flourish can contradict a minor outcome or hide that nothing changed; this is a design diagnosis, not a measured universal law.",
+      "how to spot it": "Compare the claimed importance with the actual state change; mute sound and remove tertiary layers.",
+      "fix": "Rebuild the primary contact/state cue, then add only a layer with a distinct job. [inference]"
+    },
+    {
+      "mistake": "Mushy or floaty impact",
+      "why it looks bad": "Uniform speeds and diffuse edges can fail to show where force was transferred.",
+      "how to spot it": "Scrub first contact and follow-through; check whether heavy pieces move like fine dust.",
+      "fix": "Concentrate contact timing and separate mass motion from decorative tails; test the revised feel. [inference; ES-S09]"
+    }
+  ],
+  "intro": [
+    "Diagnosis should identify the moment and symptom, then name a concrete change and a retest. These fixes are hypotheses constrained by the cited principles, not automatic guarantees of a better effect."
+  ]
+}

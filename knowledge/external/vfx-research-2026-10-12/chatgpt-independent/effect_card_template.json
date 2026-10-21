@@ -1,0 +1,126 @@
+{
+  "communication job": {
+    "what it is": "",
+    "what it does": "",
+    "how big its impact is": ""
+  },
+  "importance rating": {
+    "caster_1_to_10": null,
+    "enemy_1_to_10": null,
+    "ally_1_to_10": null,
+    "why_each_viewer_needs_it": "",
+    "scale_provenance": "Reported League exercise; tune project scale explicitly, not a universal standard."
+  },
+  "gameplay contract": {
+    "event_id": "",
+    "authoritative_area_shape_dimensions": "",
+    "cast_time_ms": null,
+    "contact_time_ms": null,
+    "active_start_ms": null,
+    "active_end_ms": null,
+    "prediction_vs_confirmation": "",
+    "protected_target_path_UI_regions": ""
+  },
+  "feeling and energy": {
+    "intended_feeling": "",
+    "energy_over_time_description": "",
+    "what_would_make_it_read_wrong": ""
+  },
+  "parts": [
+    {
+      "asset_id": "",
+      "asset_kind": "flipbook / particle / beam / trail / light / decal / post",
+      "primary_secondary_tertiary_role": "",
+      "semantic_or_ornamental": "",
+      "start_ms": null,
+      "end_ms": null,
+      "orientation": "",
+      "scale_over_life": "",
+      "value_colour_opacity_over_life": "",
+      "fps_or_lifetime_mode": "",
+      "randomization_bounds": "",
+      "source_for_any_numeric_default": ""
+    }
+  ],
+  "phase timing": {
+    "windup_ms": null,
+    "punch_or_crescendo_ms": null,
+    "follow_through_ms": null,
+    "dissipation_ms": null,
+    "frames_and_reference_fps": "",
+    "source_or_test_rationale": "no number found until supplied or measured"
+  },
+  "scene placement": {
+    "world_anchor": "",
+    "viewer_variants": "",
+    "focal_region": "",
+    "depth_layer": "",
+    "background_cases": "",
+    "worst_overlap_case": ""
+  },
+  "camera and sound": {
+    "camera_layers": "",
+    "comfort_reduced_variant": "",
+    "sound_sync_event": "",
+    "sound_sync_offset_ms": null
+  },
+  "budgets and tests": {
+    "target_device": "",
+    "viewport_resolution": "",
+    "render_fps": "",
+    "coverage_measurement": "",
+    "max_alive_particles_measured": null,
+    "transparent_overdraw_measured": "",
+    "GPU_ms_measured": null,
+    "safety_test_reference": "",
+    "recognition_or_response_test": "",
+    "observed_failure_modes": ""
+  },
+  "evidence": {
+    "source_ids": [],
+    "supported_facts": [],
+    "designer_inferences": [],
+    "unverified_numbers": [],
+    "test_provenance": ""
+  },
+  "review result": {
+    "truth_pass": null,
+    "communication_importance_pass": null,
+    "visibility_clutter_pass": null,
+    "theme_polish_pass": null,
+    "safety_performance_pass": null,
+    "next_concrete_change": ""
+  },
+  "asset metadata required": [
+    "asset ID/version, creator/source/license and approved use",
+    "source dimensions, observed runtime quality, alpha/background convention and baked lighting/colors",
+    "layout, columns, rows, meaningful-cell count, empty/repeated cells and padding",
+    "frame content bounds, pivot/visual center, dominant axis and aspect ratio",
+    "semantic tags: material/element, radial/directional, primary/secondary, warning/impact/aftermath",
+    "first meaningful frame, contact/peak frame, end frame, built-in windup and dissipation",
+    "authored frame cadence and hold pattern, allowed runtime mode, seamless-loop evidence",
+    "blend compatibility, tint limits, bright/dark-background preview",
+    "camera orientation requirements, intended view angle, practical screen-size test result",
+    "compatible companions, redundant baked components and incompatible combinations",
+    "low-quality/static fallback, smallest readable version and quality-tier exclusions",
+    "asset memory measurement context, device/client/version/graphics quality, visible-overlap test and known bugs",
+    "permitted randomization axes, variant family and seed behavior"
+  ],
+  "engine-specific review additions": [
+    "Communication job first: what it is, what it does, how big its impact is",
+    "Importance rating by local player/enemy/ally view, with source and rating rationale",
+    "Gameplay truth: authoritative radius/shape, damage or contact instant, warning duration, required visibility window",
+    "Primary read and desired feeling/energy; style reference with source date",
+    "Layer manifest: asset version, role, origin/axis, transform, color/value, engine class and exact properties",
+    "Timeline: windup, punch, crescendo, follow-through, dissipation, sound marker and cleanup; units explicit",
+    "Flipbook cells/mode/cadence/blending/random-start; OneShot duration calculation",
+    "Camera and post effects: ownership, intensity/duration curves, reduced-motion/flash policy and cancellation reset",
+    "View rules: caster/enemy/ally, distance/projected-size tiers and essential signal retained in each",
+    "Repetition policy: allowed variation, seed, measured concurrency cap, retrigger and interruption rules",
+    "Performance envelope: baseline device, client version, graphics quality, scene concurrency, CPU/GPU frame time, memory and thermal results",
+    "Fallback and pool lifecycle: readiness, reserved critical cue, reset fields, release conditions, no residual light/trail/highlight",
+    "Acceptance: truth/readability checks, bright/dark stage, small phone, crowded scene, no-post/low-quality, sound on/off",
+    "Claim provenance: each number tagged spec/default/example/calculation/measured project result; unsupported value remains no number found"
+  ],
+  "release status": "template only; no production values selected"
+}

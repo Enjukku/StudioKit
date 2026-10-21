@@ -12,7 +12,7 @@ supersedes: []
 
 # VFX reference: unified source register
 
-449 unique sources from two independent research runs: the Claude research files in `knowledge/research/vfx-2026-10-12/` (21 files, "Sources read" tables, verifier corrections applied) and the ChatGPT package `chatgpt-independent/source_register.json` (116 ids). 605 input ids map here (`source-aliases.json`). Rows are deduplicated by publication: one row per article, paper, talk, video or docs page, whatever URL it was read at. Ids R-001... are sorted by tier (A, spec, B, C, D, internal), then year (newest first), then title.
+449 unique sources from two independent research runs: the Claude research files in `knowledge/external/vfx-research-2026-10-12/` (21 files, "Sources read" tables, verifier corrections applied) and the ChatGPT package `chatgpt-independent/source_register.json` (116 ids). 605 input ids map here (`source-aliases.json`). Rows are deduplicated by publication: one row per article, paper, talk, video or docs page, whatever URL it was read at. Ids R-001... are sorted by tier (A, spec, B, C, D, internal), then year (newest first), then title.
 
 Counts: A 164, spec 76, B 93, C 73, D 39, internal 4.
 
@@ -505,7 +505,7 @@ Integration update 2026-10-13: R-450..R-467 appended (15 spec docs-mirror pages,
 | R-464 | ViewportFrame | Roblox Creator Docs | live | spec | no | https://create.roblox.com/docs/reference/engine/classes/ViewportFrame (mirror: _api-reference/classes/ViewportFrame.yaml) | full | unreg:mirror-viewportframe (02b) |
 | R-465 | Game pets design doc (PROPOSAL; source game only) | orchestrator, project | 2026-09-30 | internal | no | not shipped with the kit | full | unreg:project-pets (02b) |
 | R-466 | Game UI style doc (PROPOSAL; source game only) | orchestrator, project | 2026-09-30 | internal | no | not shipped with the kit | full | unreg:project-ui-style (02b) |
-| R-467 | ChatGPT independent package, supporting_reference.json `performance_method` (the model's own inference, no publication) | ChatGPT independent run | 2026-10-13 | internal | no | knowledge/research/vfx-2026-10-12/chatgpt-independent/supporting_reference.json (source game raw research, not shipped) | full | unreg:gpt:supporting_reference#performance_method (07) |
+| R-467 | ChatGPT independent package, supporting_reference.json `performance_method` (the model's own inference, no publication) | ChatGPT independent run | 2026-10-13 | internal | no | knowledge/external/vfx-research-2026-10-12/chatgpt-independent/supporting_reference.json (archived in knowledge/external/vfx-research-2026-10-12) | full | unreg:gpt:supporting_reference#performance_method (07) |
 
 ## Composite aliases
 

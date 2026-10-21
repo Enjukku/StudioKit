@@ -1,0 +1,549 @@
+{
+  "number": 1,
+  "title": "Element table",
+  "headers": [
+    "heading (gameplay, shape, value, colour, timing, composition, camera)",
+    "element",
+    "effect on feeling",
+    "effect on energy",
+    "numbers or ranges",
+    "mechanism",
+    "evidence level",
+    "source, tier and year"
+  ],
+  "rows": [
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Communication job",
+      "effect on feeling": "Legibility supports confidence; wrong meaning creates frustration.",
+      "effect on energy": "Match importance, not decoration.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Communicate identity, consequence and magnitude; consistency lets players learn.",
+      "evidence level": "industry practice; feeling inference",
+      "source, tier and year": "ES-S03 (Tier C, 2020); ES-S02 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Importance rating",
+      "effect on feeling": "Reserves awe for consequential events.",
+      "effect on energy": "Relative escalation.",
+      "numbers or ranges": "1–10 per caster/enemy/ally in Beardilocks’s reported League exercise; exact scale singly sourced. No numerical mapping to render parameters found.",
+      "mechanism": "Rank damage, control, dodgeability and decision relevance.",
+      "evidence level": "industry practice; scale singly sourced",
+      "source, tier and year": "ES-S03 (Tier C, 2020); ES-S02 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Truthful indicator",
+      "effect on feeling": "Fairness and trust.",
+      "effect on energy": "Urgency follows actual hazard.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Primary border/time cue must represent the actionable area and state, regardless of ornamental halo.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S01 (Tier A, 2022); ES-S05 (Tier A, 2017) pre-2020"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Shared status vocabulary",
+      "effect on feeling": "Familiarity; quicker interpretation.",
+      "effect on energy": "Depends on status.",
+      "numbers or ranges": "no number found",
+      "mechanism": "League-specific conventions: green/soft heal, vertical knockup, floor ring/cylinder root. A stun is not automatically a knockup.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S03 (Tier C, 2020); ES-S02 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Viewer-specific visibility",
+      "effect on feeling": "Less irrelevant spectacle.",
+      "effect on energy": "Preserves attention for local decisions.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Show information to people who can act on it; preserve enemy-facing identity.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S03 (Tier C, 2020); ES-S16 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "gameplay",
+      "element": "Predicted versus confirmed hit",
+      "effect on feeling": "Responsiveness without false success.",
+      "effect on energy": "Immediate action, later confirmation.",
+      "numbers or ranges": "VALORANT example: ≥1 rendered frame to muzzle/tracer; 40 ms one-way→80 ms round-trip plus processing.",
+      "mechanism": "Client feedback and authoritative outcome can occur at different times. Distinguish their meanings.",
+      "evidence level": "industry practice; Roblox transfer inference",
+      "source, tier and year": "ES-S18 (Tier A, 2020)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Curves and circles",
+      "effect on feeling": "Softness/safety is a plausible starting hypothesis.",
+      "effect on energy": "Usually calmer when motion is also smooth.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Smooth contour scenes received safer judgements; a circle’s exact gameplay meaning remains learned.",
+      "evidence level": "study; effect-design inference",
+      "source, tier and year": "ES-S19 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Triangles, spikes and jagged contours",
+      "effect on feeling": "Potential threat, sharpness.",
+      "effect on energy": "Can support aggressive emphasis.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Contour combinations affect threat judgments; no universal triangle-to-danger mapping proved.",
+      "evidence level": "study; effect-design inference",
+      "source, tier and year": "ES-S19 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Squares and rigid geometry",
+      "effect on feeling": "Stable, constructed or mechanical by convention.",
+      "effect on energy": "Controlled or abrupt, depending on timing.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: select rectilinear assets for the game’s established mechanical vocabulary; test interpretation.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Swirls and spirals",
+      "effect on feeling": "Magic, gathering or vortex by convention.",
+      "effect on energy": "Rising with contraction/acceleration.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: inward flow can forecast a center; outward flow can show release. A decorative spiral is not a validated emotion trigger.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Hard and soft edges",
+      "effect on feeling": "Crisp action with softer aftermath.",
+      "effect on energy": "Sharp transitions can read as forceful.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Distinct silhouette supports identification; soft secondary material should not replace the hit boundary.",
+      "evidence level": "industry practice; arrangement inference",
+      "source, tier and year": "ES-S05 (Tier A, 2017) pre-2020; ES-S07 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Silhouette and primary shape",
+      "effect on feeling": "Immediate recognizability.",
+      "effect on energy": "A clear shape can feel strong without more particles.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Choose a flipbook whose silhouette survives scale reduction and does not resemble another action.",
+      "evidence level": "industry practice; kitbash inference",
+      "source, tier and year": "ES-S02 (Tier A, 2021); ES-S05 (Tier A, 2017) pre-2020"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Line of action and directional blur",
+      "effect on feeling": "Intent and speed.",
+      "effect on energy": "Directional emphasis.",
+      "numbers or ranges": "no number found; inspect a paused frame.",
+      "mechanism": "A projectile tail should indicate travel direction; orient trails and stretched parts along the actual path.",
+      "evidence level": "industry practice; kitbash inference",
+      "source, tier and year": "ES-S02 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Arcs and radial versus directional release",
+      "effect on feeling": "Flow versus centered blast.",
+      "effect on energy": "Spread conveys release; aimed motion conveys intent.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Arcs support secondary movement. Pick radial sheets for outward events, streaks/beams for directed events.",
+      "evidence level": "industry practice; asset-selection inference",
+      "source, tier and year": "ES-S09 (Tier A, 2018) pre-2020; ES-S07 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Texture detail, breakup and erosion",
+      "effect on feeling": "Organic richness; excessive detail can read as noise.",
+      "effect on energy": "Fine random change may add apparent agitation.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Reduce superfluous fine texture before increasing brightness; select coarser variants for small projections.",
+      "evidence level": "industry practice; mobile transfer inference",
+      "source, tier and year": "ES-S01 (Tier A, 2022)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "shape",
+      "element": "Scale, squash and stretch",
+      "effect on feeling": "Weight, flexibility or punch, depending on sequence.",
+      "effect on energy": "Temporal scale contrast.",
+      "numbers or ranges": "no number found for a general character-size ratio.",
+      "mechanism": "Inference: tune visual scale separately from collision size; use squash/stretch for art without falsifying borders.",
+      "evidence level": "inference informed by industry practice",
+      "source, tier and year": "ES-S09 (Tier A, 2018) pre-2020"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "value",
+      "element": "Focal light–dark contrast",
+      "effect on feeling": "Clear emphasis.",
+      "effect on energy": "Strong local contrast can elevate a peak.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Contrast is relational: inspect the effect against the actual background and competitors.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S04 (Tier C, 2020); ES-S17 (Tier A, 2020)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "value",
+      "element": "Mid-range bias and reserved extremes",
+      "effect on feeling": "Room for special peaks and UI.",
+      "effect on energy": "Keeps ordinary actions below peaks.",
+      "numbers or ranges": "0% and 100% discouraged in LoL; no numeric middle-band limits found.",
+      "mechanism": "A title-specific allocation of value, not a physical law. Sparkball uses bolder values where restraint failed.",
+      "evidence level": "industry practice; contextual disagreement",
+      "source, tier and year": "ES-S05 (Tier A, 2017) pre-2020; ES-S07 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "value",
+      "element": "Bright core and dimmer support",
+      "effect on feeling": "Magic or concentrated force.",
+      "effect on energy": "Focused intensity.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Make the important region distinct; broad uniform white removes internal structure.",
+      "evidence level": "industry practice; failure analysis inference",
+      "source, tier and year": "ES-S06 (Tier C, 2022); ES-S04 (Tier C, 2020)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "value",
+      "element": "Glow, emissive appearance and bloom",
+      "effect on feeling": "Radiance, heat or magic.",
+      "effect on energy": "Can increase apparent intensity.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: asset glow affects the image; actual world lights and post bloom are separate layers with separate costs. Check readability without optional polish.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "value",
+      "element": "World illumination",
+      "effect on feeling": "Connection to surrounding space.",
+      "effect on energy": "A coordinated light pulse can reinforce a peak.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: place a brief world-light response at the same spatial event; avoid large uniform wash that erases silhouettes.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "colour",
+      "element": "Dominant hue plus accent",
+      "effect on feeling": "Coherence rather than competing signals.",
+      "effect on energy": "Accent supplies controlled emphasis.",
+      "numbers or ranges": "One dominant hue role; no percentage split found.",
+      "mechanism": "Complementary hues need hierarchy; palette width is a design choice.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S05 (Tier A, 2017) pre-2020; ES-S06 (Tier C, 2022)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "colour",
+      "element": "Saturation relative to stage",
+      "effect on feeling": "Noticeability rather than guaranteed excitement.",
+      "effect on energy": "Relative boost only.",
+      "numbers or ranges": "no number found for a universal saturation range.",
+      "mechanism": "High saturation is useful only relative to context; brightest/most saturated does not guarantee gaze.",
+      "evidence level": "industry practice + study; inference",
+      "source, tier and year": "ES-S07 (Tier A, 2023); ES-S13 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "colour",
+      "element": "Core–edge separation",
+      "effect on feeling": "Concentrated energy with readable perimeter.",
+      "effect on energy": "Peak at core or actionable edge as needed.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: recolour layers by function; do not insist every effect has a white center when the border is the gameplay message.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "colour",
+      "element": "Colour over life",
+      "effect on feeling": "Cooling, exhaustion, decay.",
+      "effect on energy": "Descending energy.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: hot-core→warm flame→dark smoke is a material/story cue, not a universal recipe; choose library states and tint curves accordingly.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "colour",
+      "element": "Hue meaning, team and danger colours",
+      "effect on feeling": "Learned meaning; cultural associations vary.",
+      "effect on energy": "No fixed hue-to-energy law.",
+      "numbers or ranges": "4598 participants; 30 nations; 22 languages; r=.88 association-pattern similarity.",
+      "mechanism": "Study measured colour terms and emotion associations, not emotions induced by VFX. Keep team identity consistent and redundant with shape.",
+      "evidence level": "study; game-language inference",
+      "source, tier and year": "ES-S20 (Tier A, 2020)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Windup / anticipation",
+      "effect on feeling": "Expectation, warning, gathering power.",
+      "effect on energy": "Rising toward action.",
+      "numbers or ranges": "no number found for general windup milliseconds.",
+      "mechanism": "Communicate impending gameplay when a reaction window exists; cosmetic windup must not delay responsive controls.",
+      "evidence level": "industry practice; implementation inference",
+      "source, tier and year": "ES-S09 (Tier A, 2018) pre-2020; ES-S12 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Punch / impact",
+      "effect on feeling": "Impact, surprise, release.",
+      "effect on energy": "Rapid peak.",
+      "numbers or ranges": "no number found for general punch frames.",
+      "mechanism": "A strong state change contrasts with preparation; align the visible consequence with the authored gameplay event.",
+      "evidence level": "industry practice; implementation inference",
+      "source, tier and year": "ES-S09 (Tier A, 2018) pre-2020; ES-S12 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Crescendo",
+      "effect on feeling": "Anticipation, escalation, triumph.",
+      "effect on energy": "Progressively stronger culmination.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Coordinate changes in shape, motion, value and sound rather than raising every parameter equally.",
+      "evidence level": "inference; practitioner terminology",
+      "source, tier and year": "ES-S11 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Follow-through / overlapping action",
+      "effect on feeling": "Residual force, believable settling.",
+      "effect on energy": "Falls from peak; can preserve local activity.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Different parts settle at different times; secondary action supports the main event.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S09 (Tier A, 2018) pre-2020; ES-S11 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Dissipation / falloff",
+      "effect on feeling": "Completion and cleared space.",
+      "effect on energy": "Lowering.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Retire the active signal when gameplay ends; residual art can lose opacity/value/size without suggesting continued danger.",
+      "evidence level": "industry practice; implementation inference",
+      "source, tier and year": "ES-S01 (Tier A, 2022); ES-S12 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Nonlinear speed, holds, slow in/out",
+      "effect on feeling": "Weight and deliberate force.",
+      "effect on energy": "Contrast, not constant speed.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Retiming can change interpretation; use curves and holds to serve the event, not because every parameter must ease.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S07 (Tier A, 2023); ES-S10 (Tier C, 2025)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Sparkball snappy-action heuristic",
+      "effect on feeling": "Brief readable action with an outro.",
+      "effect on energy": "Early concentration.",
+      "numbers or ranges": "Main action finished or dissipating by first 25% of lifetime, reported for Sparkball.",
+      "mechanism": "A named title-specific practice. Do not copy onto charges, sustained hazards or other games as a requirement.",
+      "evidence level": "industry practice: firsthand Sparkball observation; no independent validation; not a universal default",
+      "source, tier and year": "ES-S07 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Shape breakup versus opacity fade",
+      "effect on feeling": "Designed erosion can feel less like a card vanishing.",
+      "effect on energy": "Energy disperses.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: prefer a suitable premade breakup sequence when available; fade is not inherently wrong, and state expiry may need a crisp end.",
+      "evidence level": "inference informed by industry practice",
+      "source, tier and year": "ES-S07 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Linger: smoke, decals and scorch",
+      "effect on feeling": "Aftermath, history, scale; possible obstruction.",
+      "effect on energy": "Lower-intensity persistence.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: separate cosmetic residue from active-damage cues; preserve enemy, pickup and path visibility.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "timing",
+      "element": "Frame exposure and stepped animation",
+      "effect on feeling": "Graphic, hand-animated cadence.",
+      "effect on energy": "Cadence is distinct from event duration.",
+      "numbers or ranges": "Arithmetic: frame duration=1000/fps ms; on 2s at 24 fps=83.33 ms per drawing, not a universal 12 fps game setting.",
+      "mechanism": "Inference: preserve cadence while timing the hit marker independently; display, simulation and flipbook rates are different.",
+      "evidence level": "inference; arithmetic only",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Primary, secondary and tertiary roles",
+      "effect on feeling": "Purposeful richness.",
+      "effect on energy": "One meaningful emphasis within the event.",
+      "numbers or ranges": "no number found for optimal emitter/layer count.",
+      "mechanism": "Roles are not a mandate for three emitters. Name what each component contributes before adding it.",
+      "evidence level": "industry practice; kitbash inference",
+      "source, tier and year": "ES-S04 (Tier C, 2020); ES-S08 (Tier C, undated)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Areas of focus and rest",
+      "effect on feeling": "Ease of reading; a place for the eye to settle.",
+      "effect on energy": "Contrast between active and quiet regions.",
+      "numbers or ranges": "no number found",
+      "mechanism": "The gameplay-bearing feature owns emphasis; decorative motion should not compete equally.",
+      "evidence level": "industry practice",
+      "source, tier and year": "ES-S04 (Tier C, 2020); ES-S02 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Particle density and clumping",
+      "effect on feeling": "Sparse can feel delicate; dense can feel substantial or muddy.",
+      "effect on energy": "Density is not equivalent to impact.",
+      "numbers or ranges": "no number found for a universal particle cap.",
+      "mechanism": "Inference: compare clustered and uniform emission at equal cost; inspect whether empty spaces preserve semantic boundaries.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Crowding and peripheral recognition",
+      "effect on feeling": "Confusion when nearby elements become difficult to distinguish.",
+      "effect on energy": "More activity may reduce usable information.",
+      "numbers or ranges": "n=50; 82%/94% model variance explained, not a screen budget.",
+      "mechanism": "Spacing and eccentricity affect identification; tests used letters, not combat particles.",
+      "evidence level": "study; game transfer inference",
+      "source, tier and year": "ES-S15 (Tier A, 2023)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Saliency and task relevance",
+      "effect on feeling": "Attention can follow meaning instead of brightness.",
+      "effect on energy": "High saliency need not mean high usefulness.",
+      "numbers or ranges": "Model≈20 Hz selection; not an effect timing recommendation.",
+      "mechanism": "Goals, history, reward, scene structure and bottom-up features jointly guide search.",
+      "evidence level": "study (theoretical review)",
+      "source, tier and year": "ES-S13 (Tier A, 2021)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Abrupt motion onset",
+      "effect on feeling": "Alerting or distraction, conditional on task.",
+      "effect on energy": "Sudden rise.",
+      "numbers or ranges": "Study E1+59 ms RT, d=.41; E2+3 ms, p=.436, d=.026.",
+      "mechanism": "An irrelevant rotation onset captured attention in one search mode and was avoided in another.",
+      "evidence level": "study",
+      "source, tier and year": "ES-S14 (Tier A, 2026)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "composition",
+      "element": "Looming / rapid expansion",
+      "effect on feeling": "Approach or imminent-event hypothesis.",
+      "effect on energy": "Can increase urgency.",
+      "numbers or ranges": "ERP effects 140/280 ms; no usable VFX detection threshold found.",
+      "mechanism": "Looming interacted with emotion/distance; reaction-time main effect was nonsignificant.",
+      "evidence level": "study; effect-design inference",
+      "source, tier and year": "ES-S21 (Tier A, 2022)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Screen shake",
+      "effect on feeling": "Intended force or instability; may be annoying.",
+      "effect on energy": "Brief accent versus prolonged disturbance.",
+      "numbers or ranges": "Eiserloh model: trauma t in [0,1]; shake proportional to t² or t³. No universal amplitude, frequency or duration found.",
+      "mechanism": "Industry model: event accumulation and linear decay drive smoothed-noise motion. Use separate amplitude, frequency and recovery controls; comfort guidance favors optional reduction/off.",
+      "evidence level": "industry practice; application inference",
+      "source, tier and year": "CAM01 A 2016 pre-2020; SA04 A 2022 living guidance"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Hit-stop / freeze",
+      "effect on feeling": "Intended emphasis at contact.",
+      "effect on energy": "Pause then release.",
+      "numbers or ranges": "Lin reports Guilty Gear Xrd light hit-stop 7 frames and heavy approximately 10 frames; reference fps unverified, so no ms conversion. These are observations, not defaults.",
+      "mechanism": "Lin reports title-specific examples, without validated frame-rate conversion. Inference: distinguish world, animation, camera and local-VFX pause; local visuals do not pause server damage.",
+      "evidence level": "preprint observation; implementation inference",
+      "source, tier and year": "JS03 A 2022 preprint"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Camera kick",
+      "effect on feeling": "Directional recoil/force.",
+      "effect on energy": "Fast displacement then recovery.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: align kick direction to action, preserve control and test recovery while tracking another target.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Zoom / FOV pulse",
+      "effect on feeling": "Intended focus, speed or scale emphasis.",
+      "effect on energy": "Change of visual extent.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Lin describes cinematic camera focus/zoom examples. Inference: test projected hitbox readability throughout FOV changes; preserve a reduced-motion option.",
+      "evidence level": "preprint (observational); design inference",
+      "source, tier and year": "ES-S27 (Tier A, 2022)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Slow motion",
+      "effect on feeling": "Inspection, drama, stretched consequence.",
+      "effect on energy": "Temporal expansion.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Lin describes finishing-attack slow-motion examples. Inference: separate spectacle timing from player reaction and multiplayer simulation; a local effect rate is not global slow motion.",
+      "evidence level": "preprint (observational); design inference",
+      "source, tier and year": "ES-S27 (Tier A, 2022)"
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Flash / impact frame / inversion",
+      "effect on feeling": "Intended sharp emphasis or shock.",
+      "effect on energy": "Abrupt contrast peak.",
+      "numbers or ranges": "no number found for an aesthetic default; safety criteria are in Output 3.",
+      "mechanism": "Inference: bind the flash to the actual moment; test the aggregate sequence, including overlapping effects, for safety.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Vignette",
+      "effect on feeling": "Intended edge framing, injury or mood.",
+      "effect on energy": "May lower peripheral information.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: never make the obscured periphery carry the only usable hazard cue.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Chromatic aberration",
+      "effect on feeling": "Stylized distortion or disorientation.",
+      "effect on energy": "Potentially agitated image.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: judge benefit against split-edge loss of precision; preserve a reduced-effects alternative.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Radial / motion blur",
+      "effect on feeling": "Intended speed or energetic focus.",
+      "effect on energy": "Can concentrate apparent motion.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: distinguish a directional asset smear from full-screen blur; retain readable target and path detail.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    },
+    {
+      "heading (gameplay, shape, value, colour, timing, composition, camera)": "camera",
+      "element": "Depth of field",
+      "effect on feeling": "Cinematic focal isolation.",
+      "effect on energy": "Quiet background or narrow attention.",
+      "numbers or ranges": "no number found",
+      "mechanism": "Inference: acceptable only while all required gameplay information stays legible; gameplay depth does not follow a film camera automatically.",
+      "evidence level": "inference",
+      "source, tier and year": ""
+    }
+  ],
+  "intro": [
+    "The practitioner headings organize controllable visual choices. Feeling and energy descriptions express design intent unless a study directly measured them. No universal safe count, duration, brightness ratio or emotional mapping is implied."
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "number": 9,
+  "title": "Review checklist",
+  "ranked_fix_order": [
+    "Truth: correct actionable area and timing.",
+    "Communication: identity, consequence, magnitude and importance.",
+    "Visibility: shape, value, clutter and background compatibility.",
+    "Theme and polish after prior gates pass."
+  ],
+  "checks": [
+    {
+      "step": "1 Write the communication job and viewers.",
+      "pass": "Identity, consequence, magnitude, audience and timing authority are explicit.",
+      "if failed": "Resolve missing gameplay facts before polishing.",
+      "evidence": "inference; ES-S03"
+    },
+    {
+      "step": "2 Block in with available simple parts.",
+      "pass": "Primary silhouette and temporal sequence read without rich textures or glow.",
+      "if failed": "Swap to coarse library assets/meshes and retime the core.",
+      "evidence": "industry practice; ES-S09, ES-S10"
+    },
+    {
+      "step": "3 Check truth first.",
+      "pass": "Authoritative area, contact and active interval are accurately represented in every variant.",
+      "if failed": "Fix semantic geometry/timing before hierarchy or theme.",
+      "evidence": "industry practice; ES-S01"
+    },
+    {
+      "step": "4 Check importance and meaning.",
+      "pass": "Viewers identify the effect and choose the intended response relative to competing cues.",
+      "if failed": "Change focal region or viewer-specific priority.",
+      "evidence": "industry practice; test inference; ES-S02, ES-S03"
+    },
+    {
+      "step": "5 Frame-step each phase.",
+      "pass": "No accidental pop, reversal, mismatched hit or misleading final active frame.",
+      "if failed": "Adjust one responsible parameter/layer, then replay at normal speed.",
+      "evidence": "industry practice; test inference; ES-S18, ES-S09"
+    },
+    {
+      "step": "6 Inspect slow playback and timing curves.",
+      "pass": "Windup, punch/crescendo, follow-through and dissipation have deliberate transitions.",
+      "if failed": "Retune the core phase; avoid assuming slow playback itself proves good feel.",
+      "evidence": "industry practice; test inference; ES-S07, ES-S11"
+    },
+    {
+      "step": "7 Inspect grayscale, silhouette and squint/small view.",
+      "pass": "Actionable geometry and primary form survive loss of hue/detail.",
+      "if failed": "Repair value/shape separation; keep colour semantics redundantly encoded.",
+      "evidence": "inference; ES-S10, ES-S02"
+    },
+    {
+      "step": "8 Test actual phone size and graphics quality.",
+      "pass": "Recognition and required cues survive intended device, distance and reduced-polish conditions.",
+      "if failed": "Use a simpler variant and repeat performance/accessibility review.",
+      "evidence": "inference; "
+    },
+    {
+      "step": "9 Test bright, dark and busy stages.",
+      "pass": "No permitted background or camera angle erases the primary message.",
+      "if failed": "Adjust stage support or contrast treatment.",
+      "evidence": "industry practice; ES-S02, ES-S17"
+    },
+    {
+      "step": "10 Test the crowded scene.",
+      "pass": "Targets, path, pickups and essential UI remain understandable during credible overlaps.",
+      "if failed": "Trim irrelevant audiences, ornamental layers, residue or simultaneous onsets.",
+      "evidence": "inference; ES-S15, ES-S22"
+    },
+    {
+      "step": "11 Test with sound on and off.",
+      "pass": "Picture communicates its required meaning alone; audiovisual peak does not contradict contact.",
+      "if failed": "Separate visual/readability failure from sound-sync failure.",
+      "evidence": "inference; "
+    },
+    {
+      "step": "12 Review comfort and safety jointly with other effects.",
+      "pass": "Required accessibility checks and reduced-effect settings pass; camera control remains usable.",
+      "if failed": "Block release for unresolved safety/accessibility failures.",
+      "evidence": "inference; safety criteria supplied by Output 3 safety and synchrony section; "
+    },
+    {
+      "step": "13 Polish theme only after communication passes.",
+      "pass": "Theme enhances the same meaning and does not recreate clutter or ambiguity.",
+      "if failed": "Revert polish that regresses earlier checks.",
+      "evidence": "industry practice; ES-S01"
+    },
+    {
+      "step": "14 Record a reproducible comparison.",
+      "pass": "Before/after share gameplay seed, camera and competing effects, with precise measurements.",
+      "if failed": "Capture comparable evidence and state uncertainty.",
+      "evidence": "inference; ES-S23"
+    },
+    {
+      "step": "15 A warning is readable without flipbook motion/post effects",
+      "pass": "Critical area, timing and identity still communicated in fallback",
+      "if failed": "Correct the specified failure and rerun the affected scene and device cases.",
+      "evidence": "inference; RB02, RB15, RB24"
+    },
+    {
+      "step": "16 The sheet does not skip its meaningful onset",
+      "pass": "First meaningful/contact frame aligns with timeline, including empty cells and random-start policy",
+      "if failed": "Correct the specified failure and rerun the affected scene and device cases.",
+      "evidence": "inference; RB04"
+    },
+    {
+      "step": "17 Every cosmetic layer has a role",
+      "pass": "Removing a layer has a named perceptual cost; no redundant duplicate smoke/glow",
+      "if failed": "Correct the specified failure and rerun the affected scene and device cases.",
+      "evidence": "inference informed by industry practice; RB38"
+    },
+    {
+      "step": "18 Performance survives concurrency and sustained play",
+      "pass": "Project-agreed frame/memory envelope met on baseline device through 10–15-minute active test",
+      "if failed": "Correct the specified failure and rerun the affected scene and device cases.",
+      "evidence": "spec guidance + inference acceptance; RB30"
+    },
+    {
+      "step": "19 The effect ends and can be interrupted",
+      "pass": "No frozen particles, old trails, lights, highlights, callbacks or camera offsets survive cleanup",
+      "if failed": "Correct the specified failure and rerun the affected scene and device cases.",
+      "evidence": "inference; RB01, RB06, RB08, RB23"
+    },
+    {
+      "step": "20 Composite flash and reduced motion review",
+      "pass": "Machine safety preflight passes the selected standard/version and tested footage; critical state remains readable with optional shake, blur and flash reduced.",
+      "if failed": "Redesign failure before participant exposure; settings and warnings alone do not fix hazardous output.",
+      "evidence": "industry practice and test inference; SA01, SA02, SA03, SA04"
+    }
+  ],
+  "intro": [
+    "Block in the primary shapes and timing before polishing. The requested four-part repair order separates communication/importance from visibility for review convenience; it is not presented as Riot’s verbatim list. Safety and performance are release gates throughout."
+  ]
+}

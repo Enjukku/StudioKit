@@ -1,0 +1,415 @@
+{
+  "number": 3,
+  "title": "Scene placement rulebook",
+  "rules": [
+    {
+      "id": "V-01",
+      "original_id": "V-01",
+      "rule": "Make the actionable edge match gameplay geometry.",
+      "numbers": "no number found",
+      "pass_fail": "Overlay collision/area debug view on the primary indicator at cast, impact and expiry; flag mismatches separately from decorative overflow.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S01",
+        "ES-S05"
+      ]
+    },
+    {
+      "id": "V-02",
+      "original_id": "V-02",
+      "rule": "Assign importance separately for each viewer role.",
+      "numbers": "1–10 is reported League practice; exact scale singly sourced.",
+      "pass_fail": "Record caster/enemy/ally priorities and the decision each visible cue supports.",
+      "evidence_level": "industry practice; workflow inference",
+      "source_ids": [
+        "ES-S03",
+        "ES-S16"
+      ]
+    },
+    {
+      "id": "V-03",
+      "original_id": "V-03",
+      "rule": "Let the current actionable threat beat irrelevant spectacle.",
+      "numbers": "no number found",
+      "pass_fail": "Ask testers what they must react to while reward, ambient and ally effects run; record wrong-target reactions.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S02"
+      ]
+    },
+    {
+      "id": "V-04",
+      "original_id": "V-04",
+      "rule": "Keep a recognisable primary shape across variants.",
+      "numbers": "no number found",
+      "pass_fail": "Blind-test ability identity for base/skin/recolour variants; reject a variant that changes the inferred action.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S02",
+        "ES-S16"
+      ]
+    },
+    {
+      "id": "V-05",
+      "original_id": "V-05",
+      "rule": "Make projectile direction readable when paused.",
+      "numbers": "no number found",
+      "pass_fail": "Pause at several positions and ask travel direction; inspect head–tail ambiguity.",
+      "evidence_level": "industry practice",
+      "source_ids": [
+        "ES-S02"
+      ]
+    },
+    {
+      "id": "V-06",
+      "original_id": "V-06",
+      "rule": "Remove irrelevant viewer-specific cues.",
+      "numbers": "no number found",
+      "pass_fail": "For each layer, document whose next action would change if it vanished; omit only genuinely noninformative variants.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S03",
+        "ES-S16"
+      ]
+    },
+    {
+      "id": "V-07",
+      "original_id": "V-07",
+      "rule": "Reserve value and saturation headroom across the whole scene.",
+      "numbers": "no number found for universal brightness ratios or HSV bands.",
+      "pass_fail": "Inspect scene/character/VFX/UI simultaneously; identify unintended competitors at the moment of decision.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S05",
+        "ES-S07",
+        "ES-S17"
+      ]
+    },
+    {
+      "id": "V-08",
+      "original_id": "V-08",
+      "rule": "Use the stage to support the effect.",
+      "numbers": "no number found",
+      "pass_fail": "Replay on brightest, darkest and most patterned permitted surfaces; adjust the background or effect contrast if recognition fails.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S02",
+        "ES-S17"
+      ]
+    },
+    {
+      "id": "V-09",
+      "original_id": "V-09",
+      "rule": "Move ornament away from gameplay sightlines where possible.",
+      "numbers": "VALORANT reports most details above player height; no universal pixel-height rule.",
+      "pass_fail": "Check expected target/path screen regions under the actual camera; reduce decorative contrast in those regions.",
+      "evidence_level": "industry practice; top-down transfer inference",
+      "source_ids": [
+        "ES-S17"
+      ]
+    },
+    {
+      "id": "V-10",
+      "original_id": "V-10",
+      "rule": "Budget overlap by decision performance, not emitter count alone.",
+      "numbers": "no number found for universal count, coverage or overdraw threshold.",
+      "pass_fail": "Run worst credible multiplayer overlaps on target phones; measure detection errors, response time, screen occlusion and GPU cost together.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "ES-S15",
+        "ES-S26"
+      ]
+    },
+    {
+      "id": "V-11",
+      "original_id": "V-11",
+      "rule": "Retire active hazard language when the hazard ends.",
+      "numbers": "no number found",
+      "pass_fail": "Stop on the final damage/status tick and inspect the remaining border/colour/motion; residue must not imply another hit.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "ES-S01",
+        "ES-S12"
+      ]
+    },
+    {
+      "id": "V-12",
+      "original_id": "V-12",
+      "rule": "Lower the prominence of aftermath.",
+      "numbers": "no number found",
+      "pass_fail": "Compare peak and residue under competing threats; flag residual smoke/light that attracts attention away from a new actionable cue.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S05",
+        "ES-S06"
+      ]
+    },
+    {
+      "id": "V-13",
+      "original_id": "V-13",
+      "rule": "Check effects while the player is looking elsewhere.",
+      "numbers": "no number found",
+      "pass_fail": "Use a central tracking task plus peripheral warning; repeat at actual phone display size and camera distance.",
+      "evidence_level": "study-informed inference",
+      "source_ids": [
+        "ES-S13",
+        "ES-S15"
+      ]
+    },
+    {
+      "id": "V-14",
+      "original_id": "V-14",
+      "rule": "Treat surprise onsets as a shared scene resource.",
+      "numbers": "no number found for a safe onset interval.",
+      "pass_fail": "Compare isolated and rapid overlapping bursts while targets move; record missed warnings and tracking loss.",
+      "evidence_level": "study-informed inference",
+      "source_ids": [
+        "ES-S22",
+        "ES-S14"
+      ]
+    },
+    {
+      "id": "V-15",
+      "original_id": "V-15",
+      "rule": "Do not assume the brightest pixel wins.",
+      "numbers": "no number found",
+      "pass_fail": "Use eye tracking when available, otherwise timed recognition/choice tests; compare intended focus with observed choices.",
+      "evidence_level": "study-informed inference",
+      "source_ids": [
+        "ES-S13",
+        "ES-S14"
+      ]
+    },
+    {
+      "id": "V-16",
+      "original_id": "V-16",
+      "rule": "Keep hit confirmation semantically distinct from firing.",
+      "numbers": "VALORANT example 80 ms plus processing from 40 ms one-way; not a Roblox budget.",
+      "pass_fail": "Test misses, predicted hits rejected by server, late confirmations and moving/crouching targets.",
+      "evidence_level": "industry practice; transfer inference",
+      "source_ids": [
+        "ES-S18"
+      ]
+    },
+    {
+      "id": "V-17",
+      "original_id": "V-17",
+      "rule": "Check screen effects with player control active.",
+      "numbers": "no number found for universal shake amplitude, frequency or duration.",
+      "pass_fail": "Test aim, camera turn, jump/path navigation during kick/shake/zoom; retest with reduced effects.",
+      "evidence_level": "inference",
+      "source_ids": []
+    },
+    {
+      "id": "V-18",
+      "original_id": "V-18",
+      "rule": "Match the timing style to the gameplay contract.",
+      "numbers": "no number found",
+      "pass_fail": "Log cast/contact/peak/last-active/last-visible timestamps in milliseconds; do not add cosmetic delay to a required instant response.",
+      "evidence_level": "industry practice; test procedure inference",
+      "source_ids": [
+        "ES-S18",
+        "ES-S12"
+      ]
+    },
+    {
+      "id": "V-19",
+      "original_id": "V-19",
+      "rule": "Build temporal contrast at scene level.",
+      "numbers": "no number found",
+      "pass_fail": "Compare ordinary play, buildup, payoff and aftermath; check that ordinary repeats have not consumed every available prominence cue.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "ES-S26"
+      ]
+    },
+    {
+      "id": "V-20",
+      "original_id": "V-20",
+      "rule": "Keep depth cues useful.",
+      "numbers": "no number found",
+      "pass_fail": "Review foreground particles, camera-near cards, fog and depth of field; confirm all required target/path cues remain available.",
+      "evidence_level": "inference",
+      "source_ids": []
+    },
+    {
+      "id": "V-21",
+      "original_id": "V-21",
+      "rule": "Test the composition with optional polish removed.",
+      "numbers": "no number found",
+      "pass_fail": "Disable bloom/world light/camera layers and inspect whether identity, hit extent and phase remain understandable.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "ES-S10"
+      ]
+    },
+    {
+      "id": "V-22",
+      "original_id": "V-22",
+      "rule": "Do not import film staging as a compulsory gameplay cut.",
+      "numbers": "no number found",
+      "pass_fail": "For a cinematic payoff, verify whether control and threats are intentionally paused; otherwise keep the gameplay view usable.",
+      "evidence_level": "inference",
+      "source_ids": []
+    },
+    {
+      "id": "V-23",
+      "original_id": "V-23",
+      "rule": "Calibrate screen measurements before interpreting them.",
+      "numbers": "duration_ms=1000×frames/fps; arithmetic conversion, not a tuning recommendation.",
+      "pass_fail": "Record viewport resolution, device, camera FOV/distance, capture frame rate and display frame rate beside every coverage or timing measurement.",
+      "evidence_level": "inference",
+      "source_ids": []
+    },
+    {
+      "id": "V-24",
+      "original_id": "V-24",
+      "rule": "Use a single problem statement for each review change.",
+      "numbers": "no number found",
+      "pass_fail": "Record moment, viewer, symptom, probable cause, exact parameter edit, protected gameplay meaning and a comparison test.",
+      "evidence_level": "industry practice; template inference",
+      "source_ids": [
+        "ES-S01",
+        "ES-S23"
+      ]
+    },
+    {
+      "id": "V-25",
+      "original_id": "V-J01",
+      "rule": "Check that observers can distinguish an attempted action, successful hit, blocked hit and completed outcome with the selected effect build.",
+      "numbers": "no universal threshold found",
+      "pass_fail": "Fail when a miss reads as success or a success cue is hidden by the preceding action.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "JS01"
+      ]
+    },
+    {
+      "id": "V-26",
+      "original_id": "V-J02",
+      "rule": "Randomise only decorative dimensions whose variation cannot change the meaning or timing of a gameplay cue.",
+      "numbers": "No supported universal rotation, hue, size, timing-jitter range or variant count found.",
+      "pass_fail": "Hold collision boundary, contact cue, team identity and warning deadline invariant.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "JS01",
+        "JS05"
+      ]
+    },
+    {
+      "id": "V-27",
+      "original_id": "V-J03",
+      "rule": "Stress-test the repeated event at the game’s actual maximum cadence and realistic multiplayer concurrency.",
+      "numbers": "Use the brief’s 1,000-event replay as an automated durability workload, not a clinically safe human exposure prescription.",
+      "pass_fail": "Fail if tails accumulate, UI stops being readable, the next contact is masked, or frame-time budget fails.",
+      "evidence_level": "inference",
+      "source_ids": []
+    },
+    {
+      "id": "V-28",
+      "original_id": "V-J04",
+      "rule": "Keep cheap input confirmation available when decorative repetition is capped or suppressed.",
+      "numbers": "No universal cooldown, cap or ducking percentage found.",
+      "pass_fail": "Fail if an accepted action becomes indistinguishable from dropped input.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "JS01"
+      ]
+    },
+    {
+      "id": "V-29",
+      "original_id": "V-J05",
+      "rule": "Tie combo escalation to a readable change in achieved outcome, then test bounded progression against constant feedback.",
+      "numbers": "No sourced step count, escalation increment, reset time or maximum intensity found.",
+      "pass_fail": "Fail if spectacle makes separate hits or the streak-reset state ambiguous; do not assume more streak juice raises retention.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "JS01"
+      ]
+    },
+    {
+      "id": "V-30",
+      "original_id": "V-AV01",
+      "rule": "Author one contact event that schedules the visual punch and sound transient together; measure actual output synchrony.",
+      "numbers": "No universal allowable game-impact delay found. Schedule from the same event, then measure displayed and audible output; no numerical offset default is prescribed.",
+      "pass_fail": "Check audio waveform onset against first visible contact/flash in captured output, including device latency and dropped frames.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "AV01",
+        "JS05"
+      ]
+    },
+    {
+      "id": "V-31",
+      "original_id": "V-AV02",
+      "rule": "Separate an intentional distant-explosion delay or anticipation sound from an accidental sync error.",
+      "numbers": "No universal sound-leading or picture-leading offset for hits found.",
+      "pass_fail": "The event card explicitly identifies the causal sync point and whether a nonzero offset is artistic/physical.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "AV01",
+        "AV02"
+      ]
+    },
+    {
+      "id": "V-32",
+      "original_id": "V-S01",
+      "rule": "Assess the composite scene, including overlapping emitters, muzzle flashes, lighting, post effects, UI and camera movement.",
+      "numbers": "Evaluate every rolling 1-second interval; see SA01 criteria below.",
+      "pass_fail": "Per-asset passes are insufficient when the final combined output can exceed a criterion.",
+      "evidence_level": "inference",
+      "source_ids": [
+        "SA01",
+        "SA03"
+      ]
+    },
+    {
+      "id": "V-33",
+      "original_id": "V-S02",
+      "rule": "Do not use an accessibility toggle or seizure warning as the only response to known hazardous flashing.",
+      "numbers": "no number found",
+      "pass_fail": "Remove or redesign known failures before release; a player may encounter them before reaching settings.",
+      "evidence_level": "industry practice",
+      "source_ids": [
+        "SA02",
+        "SA03"
+      ]
+    },
+    {
+      "id": "V-34",
+      "original_id": "V-S03",
+      "rule": "Provide an off setting for nonessential camera shake, bob, motion blur and automatic camera movement.",
+      "numbers": "Halo Infinite example: separate 0–100% blur, shake, full-screen effect and speed-line controls. This scale specifies controls, not physical safe amplitude.",
+      "pass_fail": "Minimum setting fully removes the targeted nonessential motion; feedback remains interpretable.",
+      "evidence_level": "industry practice",
+      "source_ids": [
+        "SA04"
+      ]
+    },
+    {
+      "id": "V-35",
+      "original_id": "V-S04",
+      "rule": "Encode essential team, danger, rarity and state information with a non-colour signifier.",
+      "numbers": "At least one additional signifier: shape, pattern, icon or label.",
+      "pass_fail": "Correct interpretation remains possible without distinguishing the assigned hues; test with players, not simulation alone.",
+      "evidence_level": "industry practice",
+      "source_ids": [
+        "SA05"
+      ]
+    },
+    {
+      "id": "V-36",
+      "original_id": "V-S05",
+      "rule": "Use contrast ratios for important readable UI/markers, not as instructions to intensify every effect.",
+      "numbers": "XAG 102: standard important text/visual elements 4.5:1; large elements 3:1; high-contrast UI mode 7:1.",
+      "pass_fail": "Measure against the lowest-contrast local background; a glowing particle core does not certify the whole telegraph.",
+      "evidence_level": "industry practice",
+      "source_ids": [
+        "SA06"
+      ]
+    }
+  ],
+  "intro": [
+    "Use these rules as observable checks. A number describes its stated source context only. When no transferable threshold exists, the pass/fail task replaces an invented screen percentage or particle cap."
+  ]
+}

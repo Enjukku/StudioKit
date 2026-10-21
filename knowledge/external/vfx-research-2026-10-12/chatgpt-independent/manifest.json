@@ -1,0 +1,159 @@
+{
+  "title": "Independent VFX Research Reference",
+  "version": "1.0",
+  "as_of": "2026-10-13",
+  "status": "Independent evidence input; not final cross-model synthesis; no agent implementation",
+  "file_count_excluding_manifest": 30,
+  "files": [
+    {
+      "name": "01_element_table.csv",
+      "bytes": 16944,
+      "sha256": "ada011d5533f5015ac8b38c0867aab5f68ee533519779079e5fb89bb35bd7398"
+    },
+    {
+      "name": "01_element_table.json",
+      "bytes": 32263,
+      "sha256": "7787699d81767d743ee2ef702c1ffe59c1e532e091502fff5fbb0fd46e3a3faa"
+    },
+    {
+      "name": "02_moment_recipe_table.csv",
+      "bytes": 57721,
+      "sha256": "0a5fa6f2f0150fdc792c26ad110aa7d48304620dadad335c90a9eb8d1cbd2325"
+    },
+    {
+      "name": "02_moment_recipe_table.json",
+      "bytes": 79783,
+      "sha256": "3033b32563a95a6abe70c126fccd27149569cdd35ca26d534adcdec628e52bff"
+    },
+    {
+      "name": "03_scene_placement_rulebook.json",
+      "bytes": 16774,
+      "sha256": "c6b05261213f39a6dfc359ae3908825adc6621bea3467248aaefcc5c6d2cacaa"
+    },
+    {
+      "name": "04_field_methods_table.csv",
+      "bytes": 9995,
+      "sha256": "2e99225ebac244a252625cc0764e71619d6004bd1a622e588f072f691aad142a"
+    },
+    {
+      "name": "04_field_methods_table.json",
+      "bytes": 28980,
+      "sha256": "17097d74840b8d8d6df96037235dde350826e6bcc2003f7555af19bc5624b529"
+    },
+    {
+      "name": "05_juice_and_satisfaction_table.csv",
+      "bytes": 3865,
+      "sha256": "942774d579689f5ccce096b974185406f38f6cca67921c42ec875d7925e5d709"
+    },
+    {
+      "name": "05_juice_and_satisfaction_table.json",
+      "bytes": 6058,
+      "sha256": "b6a04c2f9e41beeb729f8ba83c4b1aff267c5361dfb0166a74a6ed82e42a56a2"
+    },
+    {
+      "name": "06_mistakes_table.csv",
+      "bytes": 8313,
+      "sha256": "5d697dca92d24faa3780347aee773f628ed8260cfb2a1eb9243e616edb8a2fb6"
+    },
+    {
+      "name": "06_mistakes_table.json",
+      "bytes": 12222,
+      "sha256": "44cbe0e7a1580cf62381f88ff569c49d90351f5743d034654070336b5baa8461"
+    },
+    {
+      "name": "07_roblox_table.csv",
+      "bytes": 8012,
+      "sha256": "d17c7e94ed2f64548f24ca4e56df28600f257a5e8eaa3c4d950544fa47666350"
+    },
+    {
+      "name": "07_roblox_table.json",
+      "bytes": 12829,
+      "sha256": "ed9d3e40925c18c715a67a0000f6d3578134f322f57f5b96cc997d1f7ee6a27b"
+    },
+    {
+      "name": "08_effect_card_template.json",
+      "bytes": 5204,
+      "sha256": "1e9f79e624bc1606b31a34ee992c7556f382a9fee0cdeacc1e4ff2f8d19ddea1"
+    },
+    {
+      "name": "09_review_checklist.json",
+      "bytes": 7022,
+      "sha256": "b9d32d0bc805c02c69f798ac46383e6c6d048c7580b93e71ece3a2a1fe77ebd0"
+    },
+    {
+      "name": "10_genre_presets.json",
+      "bytes": 5082,
+      "sha256": "073264b5976fef3e737aec1748ccf4f619939487315fe26e7001130fc18098ef"
+    },
+    {
+      "name": "11_glossary.json",
+      "bytes": 9605,
+      "sha256": "7db73d32d042d92a78042609a79d34b01ce18d09f6c178810d9d514d6523a8a6"
+    },
+    {
+      "name": "12_gaps.json",
+      "bytes": 11541,
+      "sha256": "342ef97981f18759e01ac97784f3b9ae2cfd63be934033ce0b094aa89c6ee18b"
+    },
+    {
+      "name": "Independent_VFX_Research_Reference.json",
+      "bytes": 404303,
+      "sha256": "1af0c9a6b7ea7bb66f171a135a182151298db6d0725c471cce26e000477f380d"
+    },
+    {
+      "name": "Independent_VFX_Research_Reference.txt",
+      "bytes": 241678,
+      "sha256": "4adb95c4088232fa647b2385e6b07191dcd6c5d772170ecd0c0bd1b5bc0a8af8"
+    },
+    {
+      "name": "README.txt",
+      "bytes": 4129,
+      "sha256": "545f4f513030caba0c749679f059ed3de236b6916693bc8096162d14f569601f"
+    },
+    {
+      "name": "claim_ledger.csv",
+      "bytes": 32849,
+      "sha256": "fc4b8b3bac5501ee18b00a46c999e0f59767ced46d36398c4892157b58fab368"
+    },
+    {
+      "name": "claim_ledger.json",
+      "bytes": 48281,
+      "sha256": "ec9a45432f036b9cf6ae03e40b2d63005b23ccf4b78ca9b2fd3da52d1afecdaf"
+    },
+    {
+      "name": "contradictions.json",
+      "bytes": 3813,
+      "sha256": "894299ae17de6fc863475223ddf72f73a45b30960310c50410af0ba945e13557"
+    },
+    {
+      "name": "effect_card_template.json",
+      "bytes": 5483,
+      "sha256": "b031e2de33b4e0c1bc923ca119766d6a9f1fe1d601ccd7bc97d22a41a1d24830"
+    },
+    {
+      "name": "row_provenance.json",
+      "bytes": 27347,
+      "sha256": "56f3ae0bfbedbc9696a1d613eb172a863dd7f07d9c222b90bd267d0dc66f1db7"
+    },
+    {
+      "name": "source_register.csv",
+      "bytes": 32730,
+      "sha256": "5533d12ca1b690d35e88ee789b12399846806c84c59d29e77e21bd57fb3d1de5"
+    },
+    {
+      "name": "source_register.json",
+      "bytes": 74006,
+      "sha256": "3b7d77b558142950164a5e7c4089ff011089faa8bf39c40e297dbdfd81df8c91"
+    },
+    {
+      "name": "supporting_reference.json",
+      "bytes": 28039,
+      "sha256": "3a231cce0478323e25755d3b7c2c3ebbf92628902ed51e7e094bbc1adc04105f"
+    },
+    {
+      "name": "validation.json",
+      "bytes": 982,
+      "sha256": "0c33977cbab02b4ade2e647bf62a870793356c582d4b765d7e3339b9d67379bb"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "all_12_outputs_present": true,
+  "table_validation": {
+    "01_element_table.csv": {
+      "rows": 53,
+      "exact_header_order": true
+    },
+    "02_moment_recipe_table.csv": {
+      "rows": 54,
+      "exact_header_order": true
+    },
+    "04_field_methods_table.csv": {
+      "rows": 28,
+      "exact_header_order": true
+    },
+    "05_juice_and_satisfaction_table.csv": {
+      "rows": 10,
+      "exact_header_order": true
+    },
+    "06_mistakes_table.csv": {
+      "rows": 35,
+      "exact_header_order": true
+    },
+    "07_roblox_table.csv": {
+      "rows": 25,
+      "exact_header_order": true
+    }
+  },
+  "source_ids": 116,
+  "unique_source_urls": 109,
+  "claims": 126,
+  "source_references_resolve": true,
+  "document_pages": 104,
+  "all_pages_visually_reviewed": true,
+  "final_revision_pixel_identical_pages": 98,
+  "final_revision_changed_pages_reinspected": [
+    25,
+    26,
+    27,
+    63,
+    64,
+    65
+  ],
+  "no_third_party_source_files_included": true
+}

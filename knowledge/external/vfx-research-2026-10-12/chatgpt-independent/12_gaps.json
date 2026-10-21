@@ -1,0 +1,159 @@
+{
+  "number": 12,
+  "title": "Gaps",
+  "gaps": [
+    {
+      "gap": "Universal phase timings",
+      "what remains unknown": "No validated light/heavy/reward phase-duration table transfers across genres, cameras and input cadences.",
+      "how to test": "Compare timing variants while holding asset art and sound fixed. Measure contact identification, response performance, perceived weight, preference and fatigue. Store display fps, capture fps, game timebase and actual ms.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Importance to parameter mapping",
+      "what remains unknown": "Riot’s importance scale does not publish a universal mapping to size, luminance, duration or layer count.",
+      "how to test": "Establish ranked simultaneous-cue tasks; vary one prominence channel at a time; test whether participants identify the most consequential event correctly.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Screen shake and hit-stop",
+      "what remains unknown": "Named examples and models are not safe default amplitudes, frequencies or durations for Roblox.",
+      "how to test": "Test device/camera-specific variants with optional controls; measure aim/navigation errors, comfort and hit identification alongside perceived impact. Keep gameplay freeze distinct from animation-only hold.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Flash timing and area",
+      "what remains unknown": "A legal or technical threshold is not an artistic target or guarantee of medical safety.",
+      "how to test": "Analyze full-screen recordings of overlapping effects at worst viewing conditions; record test method/version and results. Test reduced-flash variants and seek specialist review when risk remains.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Simultaneous effect limit",
+      "what remains unknown": "No universal maximum count or screen percentage establishes readability across effects.",
+      "how to test": "Stress the intended busiest scene; vary transparent footprint, overlap and importance distribution; measure target identification, hazard avoidance and frame-time percentiles.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Mobile budgets",
+      "what remains unknown": "No device-independent particle, light, layer, texture-residency or frame-time budget is established.",
+      "how to test": "Profile representative low-end devices and actual graphics settings. Capture worst overlaps and long sessions; derive project budgets from measured bottlenecks.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Genre and reward transfer",
+      "what remains unknown": "The cited juice studies are not direct validation for simulator monetization loops or a common-to-legendary reveal ladder.",
+      "how to test": "Compare clear restrained feedback with alternatives using comprehension, enjoyment and repeated-session measures. Do not infer player welfare or long-term retention from a short experiment.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Repetition and adaptation",
+      "what remains unknown": "No validated variant count, randomization range, cooldown, combo step size or reset duration transfers universally.",
+      "how to test": "Use repeated exposure with semantic invariants held fixed. Track recognition, fatigue, perceived consistency and task interference; test aggregation and attenuation as separate interventions.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Audiovisual synchrony",
+      "what remains unknown": "Psychophysical detection windows are task- and stimulus-dependent, not a plug-in latency budget.",
+      "how to test": "Measure actual display/audio onset together on target devices; assess detection and impact under realistic input/network timing. Compare offsets without altering sound identity or visual intensity.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Shape and hue meaning",
+      "what remains unknown": "Simple emotion labels for circles, triangles or hues are not universal causal laws.",
+      "how to test": "Test the project vocabulary with unfamiliar players and accessibility modes; distinguish learned convention from direct recognition and cultural association.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Flipbook resolution in runtime",
+      "what remains unknown": "Upload size does not guarantee runtime resident size or effective visible resolution for every asset path.",
+      "how to test": "Inspect actual particle appearance and available memory measurements on target devices; compare cell sizes and projected size, including compression, edges and mip behavior.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Variable artistic cadence",
+      "what remains unknown": "Film on-twos/on-sixes practice does not establish a Roblox implementation or gameplay benefit.",
+      "how to test": "Compare duplicated atlas frames, external sequence control and smooth playback for the same asset; measure tracking and silhouette readability. Preserve authoritative gameplay timing.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Source breadth",
+      "what remains unknown": "Some requested candidate titles lack publicly read, maker-attributed breakdowns. Abstracts, portfolios and fan footage cannot substitute for detailed production evidence.",
+      "how to test": "Prioritize direct creator interviews/talk recordings for anime, Roblox exemplars and underrepresented juicy games. Add only claims actually documented in accessible material.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Long-term experience",
+      "what remains unknown": "Available short-term or correlational results cannot establish thousands-of-plays comfort, accessibility, retention or spending effects.",
+      "how to test": "Run longitudinal, consented tests with stable gameplay and participant-controlled effects; predefine outcomes and report attrition rather than selecting favorable metrics.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Scene palette and salience",
+      "what remains unknown": "Laboratory attention and crowding findings do not directly prescribe a game’s luminance or saturation ratios.",
+      "how to test": "Use realistic scenes with competing tasks, alternative palettes and multiple camera distances; measure detection and false positives, then document the project-specific range.",
+      "evidence level": "inference: proposed validation plan"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Roblox: two official worked examples found, but no sufficient first-hand detailed production breakdowns for Blox Fruits, DOORS or Pet Simulator 99. Fan guesses and asset recreations were not promoted to studio evidence.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Stylized games: Hi-Fi RUSH and Balatro have useful maker testimony; Hades evidence here establishes intention more than emitter construction. Sparkball and Riot cases are covered by Outputs 1 and 3. Other famous games were excluded without usable documentation.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Anime: three named-maker cases exist, but two are individual animator interviews rather than studio technical publications. No controlled evidence for a universally optimal impact-frame count or brightness was found.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Rocksteady 2024 and Beyond-FX 2026 are abstract-only; their contents must not be represented as fully watched/read lectures.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Rainbow Six 2016 is explicitly historical. Siege X 2025 description provides modern design context but no verification that old replication/collision details persist.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "LEGO Fortnite official Chaos talk exists, but only its description was inspected; it is a lead, not detailed evidence. Do not assert its fracture solver or toy-brick VFX recipe.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Teardown reverse-engineering blogs were excluded from first-hand implementation claims; developer design sources are stronger for player consequence than for exact modern renderer internals.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "No inspected field source validates universal light/medium/heavy VFX timings, dust lifetimes, debris counts, luminosity ratios, camera-shake amplitudes or flash frequencies.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Film techniques were executed with controlled cameras and offline resources. A Roblox kitbash reproduces selected visual cues only, unless separate gameplay/simulation systems provide the physical consequence.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    },
+    {
+      "gap": "Field coverage",
+      "what remains unknown": "Correct talk metadata: Controlled Chaos: 12 Principles of Design for VFX is Rachel Quitevis / Beyond-FX, GDC 2026. Hanno Hinkelbein / Rocksteady, GDC 2024 is Attention Overload: Creating Readable VFX.",
+      "how to test": "Seek a maker-attributed breakdown, inspect the full source and verify the claimed method before use.",
+      "evidence level": "research gap"
+    }
+  ],
+  "intro": [
+    "Missing numerical evidence is a result, not permission to fabricate a default. These targeted tests would convert uncertainty into project-specific design data."
+  ]
+}

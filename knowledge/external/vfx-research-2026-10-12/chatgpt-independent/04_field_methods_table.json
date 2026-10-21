@@ -1,0 +1,483 @@
+{
+  "number": 4,
+  "title": "Field methods table",
+  "headers": [
+    "field",
+    "method",
+    "what it does to the viewer",
+    "how to use it in a game",
+    "evidence level",
+    "source, tier and year"
+  ],
+  "rows": [
+    {
+      "field": "Real-time game readability",
+      "method": "Truthful indicator before ornament (League)",
+      "what it does to the viewer": "Intended to make attack extent and identity legible.",
+      "how to use it in a game": "Treat hitbox, direction and damage phase as constraints before recolor, glow, sparks or theme.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S01 (A, 2022-04-25); FM-S02 (A, 2021-03-12)"
+    },
+    {
+      "field": "Real-time game readability",
+      "method": "Environment as a contrast budget (VALORANT)",
+      "what it does to the viewer": "Intended to keep opponents and action separable from scenery.",
+      "how to use it in a game": "Test an effect against each map region; remove or quiet competing ground-level decoration before boosting every effect.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S03 (A, 2020-11-16)"
+    },
+    {
+      "field": "Real-time game readability",
+      "method": "Observer-specific cosmetic treatment (Overwatch 2)",
+      "what it does to the viewer": "Intended to retain opponent recognition while allowing allied spectacle.",
+      "how to use it in a game": "Consider local cosmetic variants only after preserving hostile telegraph geometry, timing and shape.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S04 (A, 2023-01-13)"
+    },
+    {
+      "field": "Real-time game readability",
+      "method": "Combined-system review (Rocksteady)",
+      "what it does to the viewer": "Avoiding overload is a stated production goal; no measured effect size.",
+      "how to use it in a game": "Review simultaneous combat, camera, HUD and environment rather than a clean single-effect preview.",
+      "evidence level": "Industry practice, abstract only; proposed review is inference",
+      "source, tier and year": "FM-S05 (A, 2024 (GDC))"
+    },
+    {
+      "field": "Stylized / juicy games",
+      "method": "Beat-aligned action with responsive exceptions (Hi-Fi RUSH)",
+      "what it does to the viewer": "Creator intends rhythmic hits to feel musically forceful.",
+      "how to use it in a game": "If the game authorizes musical timing, align accents to event/music markers; do not secretly delay movement or damage to decorate it.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S06 (B, 2023-03-16)"
+    },
+    {
+      "field": "Stylized / juicy games",
+      "method": "Tactile shader iteration (Balatro)",
+      "what it does to the viewer": "Creator associates tactile treatment with a coherent aesthetic; no causality test.",
+      "how to use it in a game": "Make UI reaction and reward state readable before screen distortion; expose comfort controls and test repeated rewards.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S07 (A, 2024-03-13)"
+    },
+    {
+      "field": "Stylized / juicy games",
+      "method": "Boldness over negligible detail (Hades)",
+      "what it does to the viewer": "Artist intended immediate, visceral, satisfying work.",
+      "how to use it in a game": "Select a clear principal silhouette before adding tiny secondary texture; regard this as an art-direction hypothesis.",
+      "evidence level": "Documented intention only; operational transfer is inference",
+      "source, tier and year": "FM-S08 (A, 2020-09-19 (page also shows 2021-02-17 update))"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Destruction changes available routes (Teardown)",
+      "what it does to the viewer": "Player reads destruction as an actionable world change.",
+      "how to use it in a game": "Separate collision/path-state change from decorative dust; aftermath must reveal the route the player actually earned.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S09 (A, 2020-11-05); FM-S10 (B, 2021-07-21)"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Prefractured authored structure plus runtime consequences (THE FINALS)",
+      "what it does to the viewer": "Makes breakage belong to a traversable building, rather than arbitrary spray.",
+      "how to use it in a game": "Use fracture origin, surface normal and actual changed bounds to place VFX; a flipbook alone cannot make cover or holes.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S11 (A, 2026-02-11); FM-S12 (A, 2024 (GDC))"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Damage-edge restraint (THE FINALS)",
+      "what it does to the viewer": "Studio intended more accurate judgment of damage.",
+      "how to use it in a game": "Do not exaggerate scorch/crack boundaries beyond real damage; inspect breaches with VFX both on and off.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S13 (A, 2025-07-03)"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Material event drives VFX and sound (Battlefield 6)",
+      "what it does to the viewer": "Intended material identity and coherent impact response.",
+      "how to use it in a game": "Feed material, activation and shockwave events to an effect recipe instead of attaching one universal burst to all destruction.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S14 (A, 2025-11-10)"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Staged damage with usable ruins (Battlefield 6)",
+      "what it does to the viewer": "Makes damage progression and remaining cover interpretable.",
+      "how to use it in a game": "Use distinct intact/damaged/broken/collapsed states; keep decorative aftermath subordinate to actual collision and cover.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S15 (A, 2025-04-22); FM-S14 (A, 2025-11-10)"
+    },
+    {
+      "field": "Destruction games",
+      "method": "Gameplay destruction separated from cosmetic debris (Rainbow Six)",
+      "what it does to the viewer": "Supports convincing breakage without making every fragment gameplay-critical.",
+      "how to use it in a game": "Reserve persistent collision for meaningful ruins; disposable fragments can be visual-only if designers authorize this.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S16 (A, 2016 (GDC; pre-2020 classic)); FM-S17 (A, 2025-03-13)"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Held graphic poses with anti-strobing treatment (Spider-Verse)",
+      "what it does to the viewer": "Studio intended distinct illustrated images and speed clarity.",
+      "how to use it in a game": "Use authored flipbook cadence plus directional streaks where needed; keep camera/input/render responsive.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S18 (A, Undated page; 2018 production (pre-2020 classic)); FM-S19 (B, 2023-06-28)"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Reusable elements versus bespoke hero design (Spider-Verse)",
+      "what it does to the viewer": "Reused components provide efficiency; bespoke drawings improve shot fit per makers.",
+      "how to use it in a game": "Tag library assets for camera, shape and timing compatibility. Escalate an unmatched hero moment instead of stacking stock cards indefinitely.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S20 (B, 2023-12-09)"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Poof breakup preserves silhouette (Turning Red)",
+      "what it does to the viewer": "Intended to retain a designed graphic appearance while dissipating.",
+      "how to use it in a game": "Prefer an available breakup/subdivision flipbook over globally fading a solid disk when it fits the brief; vary secondary start offsets modestly and test.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S21 (B, 2022-09-27); FM-S34 (A, Undated (Turning Red discussed; publication year unverified))"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Coherent sprite/simulation hybrid (The Bad Guys)",
+      "what it does to the viewer": "Audience is meant to perceive one graphic effect, not separate media.",
+      "how to use it in a game": "Match contour density, palette, cadence and hot/cool regions across kitbashed assets; reject incompatible realism rather than hiding it with bloom.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S22 (B, 2022-04-26)"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Stepped action plus controlled figure/background separation (Puss)",
+      "what it does to the viewer": "Maker intends snappy poses and readable characters.",
+      "how to use it in a game": "Coordinate VFX peaks with action silhouettes; use local accent contrast and quiet the background. Avoid routine lens distortion as an impact default.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S23 (A, 2024-02-19 (discusses SIGGRAPH 2023 production session))"
+    },
+    {
+      "field": "Stylized film / animation",
+      "method": "Character-state graphic overlays (Arcane)",
+      "what it does to the viewer": "Graphic overlays communicate subjective character experience.",
+      "how to use it in a game": "Reserve a specific scratch/ink vocabulary for a defined state; keep objective gameplay cues stable beneath cosmetic subjectivity.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S24 (B, 2021-12-08)"
+    },
+    {
+      "field": "Live-action VFX",
+      "method": "Coarse-to-fine motion layers (Dune)",
+      "what it does to the viewer": "Makers intend vast scale and believable granular motion.",
+      "how to use it in a game": "Approximate the causal order with large moving masses, material fragments and finer residual dust; label baked layers as approximation.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S25 (B, 2022-02-23)"
+    },
+    {
+      "field": "Live-action VFX",
+      "method": "Captured ingredients re-timed and composited (Oppenheimer)",
+      "what it does to the viewer": "Makers seek photographic richness and designed impact.",
+      "how to use it in a game": "A pre-made library can be composed and retimed coherently; match lighting, perspective and onset rather than relying on asset count.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S26 (B, 2023-08-24)"
+    },
+    {
+      "field": "Live-action VFX",
+      "method": "Material-appropriate deformation (Godzilla Minus One)",
+      "what it does to the viewer": "Preserves identity of what is being destroyed.",
+      "how to use it in a game": "Choose bending plate versus brittle-chip language from material/context; do not give metal, masonry and toy bricks identical breakup.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S27 (B, 2024-02-07)"
+    },
+    {
+      "field": "Live-action VFX",
+      "method": "Human-scale framing and destructive sequence staging (Godzilla)",
+      "what it does to the viewer": "Director intends fear and scale.",
+      "how to use it in a game": "Show a scale anchor and readable windup/after-state, without stealing player camera control unless allowed by the game.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S28 (B, 2024-02-13)"
+    },
+    {
+      "field": "Anime / 2D",
+      "method": "Designed water vocabulary and hybrid shot construction (Demon Slayer)",
+      "what it does to the viewer": "Gives attacks a distinctive illustrated elemental identity.",
+      "how to use it in a game": "Select wave/trail/splash forms aligned to attack paths; do not assume water identity comes only from blue color.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S29 (B, 2020-09-30)"
+    },
+    {
+      "field": "Anime / 2D",
+      "method": "Exaggerate reference selectively (Chainsaw Man artist example)",
+      "what it does to the viewer": "Artist strengthens action silhouette beyond literal cloth behavior.",
+      "how to use it in a game": "Use controlled stretch, wider arcs or trailing cloth/smoke only when the attack vector and contact remain clear.",
+      "evidence level": "Industry practice; game transfer is inference",
+      "source, tier and year": "FM-S30 (B, 2023-05-13); FM-S18 (A, Undated page; 2018 production (pre-2020 classic))"
+    },
+    {
+      "field": "Anime / 2D",
+      "method": "Graphic impact insert (Kameda)",
+      "what it does to the viewer": "Artist uses strong black/white imagery for visual force.",
+      "how to use it in a game": "Treat an impact insert as a rare authored accent with safe alternatives, not a required white flash on every hit.",
+      "evidence level": "Maker testimony; game transfer is inference; no validated intensity/timing prescription",
+      "source, tier and year": "FM-S31 (B, 2023-07-15)"
+    },
+    {
+      "field": "Roblox worked examples",
+      "method": "Sparse focal contrast with localized following emitters (Beyond the Dark)",
+      "what it does to the viewer": "Creators intend eyes and tentacle tips to hold attention.",
+      "how to use it in a game": "Attach each visual to the appropriate anatomical/event anchor and distinguish self-lit material from world lighting.",
+      "evidence level": "Documented sample practice + platform specification; no efficacy experiment",
+      "source, tier and year": "FM-S32 (A + Spec, Undated live documentation (accessed 2026-10-13))"
+    },
+    {
+      "field": "Roblox worked examples",
+      "method": "Goal movement against a quiet scene (Island Jump)",
+      "what it does to the viewer": "Tutorial intends to draw players toward the objective and give air depth.",
+      "how to use it in a game": "Use a goal flare that remains distinct from ambient motion; do not copy tutorial rates into a mobile budget.",
+      "evidence level": "Official illustrative tutorial / Spec; game transfer is inference",
+      "source, tier and year": "FM-S33 (Spec, Undated live documentation (accessed 2026-10-13))"
+    }
+  ],
+  "case_studies": [
+    {
+      "title": "League of Legends",
+      "id": "FM-C01",
+      "field": "Real-time game readability",
+      "source ids": "FM-S01; FM-S02",
+      "documented studio method": "Truthful gameplay signaling is the first production priority; decorative theme follows.",
+      "transfer inference": "Attach effect geometry to the actual attack footprint, then reserve stronger accents for more important events.",
+      "limits": "No numerical readability thresholds established.",
+      "mechanism": "Real-time gameplay VFX"
+    },
+    {
+      "title": "VALORANT",
+      "id": "FM-C02",
+      "field": "Real-time game readability",
+      "source ids": "FM-S03",
+      "documented studio method": "Map art is deliberately simplified and tested around player visibility.",
+      "transfer inference": "VFX review should include noisy and quiet backgrounds, not just a neutral showcase.",
+      "limits": "Environment policy does not guarantee effect legibility on its own.",
+      "mechanism": "Real-time scene design"
+    },
+    {
+      "title": "Overwatch 2",
+      "id": "FM-C03",
+      "field": "Real-time game readability",
+      "source ids": "FM-S04",
+      "documented studio method": "Mythic skin presentation can differ by observer relationship.",
+      "transfer inference": "Separate cosmetic ownership from enemy-critical recognition.",
+      "limits": "Do not infer different hitboxes or damage indicators are acceptable.",
+      "mechanism": "Real-time observer-specific cosmetic VFX"
+    },
+    {
+      "title": "Rocksteady / Attention Overload",
+      "id": "FM-C04",
+      "field": "Real-time game readability",
+      "source ids": "FM-S05",
+      "documented studio method": "Public session framing addresses combined-system readability.",
+      "transfer inference": "Use crowded encounter review as an acceptance condition.",
+      "limits": "Abstract-only supplemental case, not a fully reconstructed production method.",
+      "mechanism": "Real-time design process"
+    },
+    {
+      "title": "Hi-Fi RUSH",
+      "id": "FM-C05",
+      "field": "Stylized / juicy games",
+      "source ids": "FM-S06",
+      "documented studio method": "Rhythmic action and clean graphic rendering were explicit design goals.",
+      "transfer inference": "Bind accents to authorized gameplay/music clocks; compensate visual lead-in rather than adding arbitrary input latency.",
+      "limits": "Do not generalize its musical timing to non-rhythm combat.",
+      "mechanism": "Real-time stylized action"
+    },
+    {
+      "title": "Balatro",
+      "id": "FM-C06",
+      "field": "Stylized / juicy games",
+      "source ids": "FM-S07",
+      "documented studio method": "Creator describes tactile shader exploration and iterative juice.",
+      "transfer inference": "A reward chain should have a clear accumulation/result hierarchy even when animated elaborately.",
+      "limits": "Case establishes intention, not exactly how much shake, shader distortion or delay is effective.",
+      "mechanism": "Real-time UI/reward presentation"
+    },
+    {
+      "title": "Hades",
+      "id": "FM-C07",
+      "field": "Stylized / juicy games",
+      "source ids": "FM-S08",
+      "documented studio method": "Credited artist documents a deliberate move toward bold immediate expression.",
+      "transfer inference": "Use the aesthetic goal as a comparison prompt for a candidate effect, not a numeric recipe.",
+      "limits": "Detailed current maker evidence for Hades VFX construction is insufficient in this pass.",
+      "mechanism": "Real-time game art; partial case"
+    },
+    {
+      "title": "Teardown",
+      "id": "FM-C08",
+      "field": "Destruction games",
+      "source ids": "FM-S09; FM-S10",
+      "documented studio method": "Destruction is a route-planning and heist-execution mechanic, not merely an explosion layer.",
+      "transfer inference": "Validate new sightlines, paths and traversability before polishing dust.",
+      "limits": "No attempt here to recreate its voxel solver or claim sprite VFX provide equivalent destruction.",
+      "mechanism": "Actual mutable geometry / physics gameplay"
+    },
+    {
+      "title": "THE FINALS",
+      "id": "FM-C09",
+      "field": "Destruction games",
+      "source ids": "FM-S11; FM-S12; FM-S13",
+      "documented studio method": "Authored prefractured buildings retain interior/collision quality; damage presentation is tuned for accurate judgment.",
+      "transfer inference": "Drive dust/debris from real fracture events; reveal the final breach and retained cover.",
+      "limits": "A prefractured asset is not proof that every break is scripted; physical collapse and authoring are separate stages.",
+      "mechanism": "Prefractured assets + runtime structural/physics consequences"
+    },
+    {
+      "title": "Battlefield 6",
+      "id": "FM-C10",
+      "field": "Destruction games",
+      "source ids": "FM-S14; FM-S15",
+      "documented studio method": "Systemic breakage is shaped to leave playable ruins, with material-aware VFX/audio emission.",
+      "transfer inference": "Maintain one material/event vocabulary across particles, chunks, decals and sound; reconcile all with gameplay state.",
+      "limits": "Event schema proposed below is our synthesis, not copied engine architecture.",
+      "mechanism": "Systemic/part-based destruction + cosmetic emission"
+    },
+    {
+      "title": "Rainbow Six Siege",
+      "id": "FM-C11",
+      "field": "Destruction games",
+      "source ids": "FM-S16; FM-S17",
+      "documented studio method": "Classic implementation distinguishes procedural wall damage and lightweight decorative fragments.",
+      "transfer inference": "Budget meaningful cover separately from cheap, short-lived debris dressing.",
+      "limits": "2016 technical details cannot be assumed unchanged in Siege X; 2025 source confirms only ongoing strategic environmental destruction.",
+      "mechanism": "Procedural cutting + authored cosmetic debris; historical implementation"
+    },
+    {
+      "title": "Spider-Verse, original and sequel",
+      "id": "FM-C12",
+      "field": "Stylized film / animation",
+      "source ids": "FM-S18; FM-S19; FM-S20",
+      "documented studio method": "Reusable graphic ingredients and stepped motion are documented; sequel increased bespoke shot work.",
+      "transfer inference": "A library-based agent should expose a ceiling: adapt compatible ingredients, or flag that a new asset is needed for a hero contour.",
+      "limits": "Per-component film cadence is not a license to desynchronize gameplay/contact; art-directed camera privileges do not automatically transfer.",
+      "mechanism": "Offline 2D/3D compositing, simulations and variable sampling"
+    },
+    {
+      "title": "Turning Red",
+      "id": "FM-C13",
+      "field": "Stylized film / animation",
+      "source ids": "FM-S21; FM-S34",
+      "documented studio method": "Graphic poofs use designed breakup; other hand-painted elements avoid simulation entirely.",
+      "transfer inference": "Choose opacity, breakup and flow as separate controls when the available asset permits them.",
+      "limits": "Replaying a breakup texture approximates authored appearance; it does not implement Pixar’s subdivision or fluid tools.",
+      "mechanism": "Offline hybrid: hand-painted elements and stylized simulation"
+    },
+    {
+      "title": "The Bad Guys",
+      "id": "FM-C14",
+      "field": "Stylized film / animation",
+      "source ids": "FM-S22",
+      "documented studio method": "Library sprites and procedural work share an intentionally illustrated visual vocabulary.",
+      "transfer inference": "Reject a photoreal smoke card inside a flat graphic effect unless a deliberate style bridge exists.",
+      "limits": "Do not assume merely stacking sprites hides the medium boundary automatically.",
+      "mechanism": "Offline sprite / simulation / drawn overlay hybrid"
+    },
+    {
+      "title": "Puss in Boots: The Last Wish",
+      "id": "FM-C15",
+      "field": "Stylized film / animation",
+      "source ids": "FM-S23",
+      "documented studio method": "Action timing, lighting and background simplification were coordinated.",
+      "transfer inference": "Protect the action silhouette at the visual peak; keep post effects optional and context-specific.",
+      "limits": "No one cadence applies to the whole film; article describes stepped action but supplies no universal frame count.",
+      "mechanism": "Offline stylized rendering and action animation"
+    },
+    {
+      "title": "Arcane",
+      "id": "FM-C16",
+      "field": "Stylized film / animation",
+      "source ids": "FM-S24",
+      "documented studio method": "Drawn overlays complement shot-led animation and graphic composition.",
+      "transfer inference": "Use authored overlays as state-specific accents, while maintaining independent player-readable cues.",
+      "limits": "Do not call all Arcane effects 2D or claim a uniform stepped rate from this source.",
+      "mechanism": "Offline drawn overlays over CG plates"
+    },
+    {
+      "title": "Dune",
+      "id": "FM-C17",
+      "field": "Live-action VFX",
+      "source ids": "FM-S25",
+      "documented studio method": "Layered coarse motion and fine granular/dust detail sell worm-driven sand displacement.",
+      "transfer inference": "For a cheap ground rupture, preserve origin, travel direction, material mass and residual dust as separate roles.",
+      "limits": "This recipe is a visual approximation; it cannot reproduce interactive sand volume or structural displacement.",
+      "mechanism": "Offline simulation driven by animation"
+    },
+    {
+      "title": "Oppenheimer",
+      "id": "FM-C18",
+      "field": "Live-action VFX",
+      "source ids": "FM-S26",
+      "documented studio method": "Practical photographic elements are selected, retimed and composited.",
+      "transfer inference": "Kitbashing quality depends on shared timing/perspective/lighting, not whether source pieces were simulated or filmed.",
+      "limits": "Real-time camera freedom breaks some film compositing cheats; inspect from playable views.",
+      "mechanism": "Photographed practical elements + offline compositing"
+    },
+    {
+      "title": "Godzilla Minus One",
+      "id": "FM-C19",
+      "field": "Live-action VFX",
+      "source ids": "FM-S27; FM-S28",
+      "documented studio method": "Damage respects underlying materials and camera framing supplies human scale.",
+      "transfer inference": "For a giant strike, ensure observers can read a scale anchor, material response and surviving environment.",
+      "limits": "Do not copy film occlusion or camera takeover into competitive play by default.",
+      "mechanism": "Shot-specific simulated deformation/destruction + cinematography"
+    },
+    {
+      "title": "Demon Slayer / ufotable",
+      "id": "FM-C20",
+      "field": "Anime / 2D",
+      "source ids": "FM-S29",
+      "documented studio method": "Graphic water was developed through references and CG/hand-drawn cooperation.",
+      "transfer inference": "Use a coherent family of stylized shapes across charge, travel and contact.",
+      "limits": "A single article does not document every season or every breathing style.",
+      "mechanism": "Hand-drawn / CG hybrid construction"
+    },
+    {
+      "title": "Chainsaw Man / Benjamin Faure shot examples",
+      "id": "FM-C21",
+      "field": "Anime / 2D",
+      "source ids": "FM-S30",
+      "documented studio method": "Artist describes deliberate departures from filmed reference and redraw of stepped CG props.",
+      "transfer inference": "Reference should inform causality but does not prohibit exaggerating the readable silhouette.",
+      "limits": "Personal shot-level evidence; not a studio-wide formula.",
+      "mechanism": "Hand animation assisted by CG/reference"
+    },
+    {
+      "title": "Yoshimichi Kameda craft interview",
+      "id": "FM-C22",
+      "field": "Anime / 2D",
+      "source ids": "FM-S31",
+      "documented studio method": "Artist explains graphic impact imagery and staging across multiple productions.",
+      "transfer inference": "Borrow rare-event contrast and strong composition, subject to accessibility and contextual testing.",
+      "limits": "Retrospective mixes production eras; no empirical flash recipe.",
+      "mechanism": "2D graphic impact/staging craft"
+    },
+    {
+      "title": "Beyond the Dark Creature",
+      "id": "FM-C23",
+      "field": "Roblox worked examples",
+      "source ids": "FM-S32",
+      "documented studio method": "Official sample uses selected glow areas and anatomy-local smoke.",
+      "transfer inference": "A prefab needs correct anchors and focal priorities in addition to attractive textures.",
+      "limits": "Worked example, not evidence for Blox Fruits, DOORS or Pet Simulator pipelines.",
+      "mechanism": "Real-time Roblox mesh / light / particle composition"
+    },
+    {
+      "title": "Island Jump goal flare and atmosphere",
+      "id": "FM-C24",
+      "field": "Roblox worked examples",
+      "source ids": "FM-S33",
+      "documented studio method": "Official tutorial separates goal-oriented movement from ambient particles.",
+      "transfer inference": "Give goal and ambience different priority and visibility rules.",
+      "limits": "Only two well-documented Roblox examples found; do not inflate this into three commercial studio case studies.",
+      "mechanism": "Real-time Roblox tutorial particles"
+    }
+  ],
+  "intro": [
+    "Use documented production methods as references for staging and asset selection. A film frame can be tightly controlled; an interactive multiplayer scene cannot assume the same camera, timing or occlusion tolerance. Coverage gaps are retained rather than filled with famous titles or fan analysis."
+  ]
+}

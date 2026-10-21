@@ -1,0 +1,453 @@
+{
+  "number_register": [
+    {
+      "topic": "WCAG general-flash definition",
+      "value": "Pair of opposing relative-luminance changes ≥0.10, with darker state <0.80. One brighten–darken pair is one flash.",
+      "source_id": "SA01",
+      "scope": "sRGB relative luminance, not raw RGB differences or emitter Brightness"
+    },
+    {
+      "topic": "WCAG SC 2.3.1 rate/area routes",
+      "value": "No more than 3 general flashes and/or 3 red flashes in any 1-second period, OR combined concurrent flash area ≤0.006 sr within any 10° field (25% of that field) at typical viewing distance.",
+      "source_id": "SA01",
+      "scope": "25% is not a whole-screen allowance. SC 2.3.2 Level AAA removes the area alternative."
+    },
+    {
+      "topic": "WCAG saturated-red working definition",
+      "value": "An opposing transition pair with one state R/(R+G+B)≥0.8 and state difference >0.2 in CIE 1976 UCS chromaticity.",
+      "source_id": "SA02",
+      "scope": "Use a standards-aware analyzer; channels require defined colour-space handling."
+    },
+    {
+      "topic": "HDR/other-colour-space flash assessment",
+      "value": "General flash: luminance change ≥20 cd/m² with darker state <160 cd/m²; when darker state ≥160 cd/m², Michelson contrast ≥1/17.",
+      "source_id": "SA02",
+      "scope": "Test highest dynamic-range version. These values are not Roblox property settings."
+    },
+    {
+      "topic": "Microsoft XAG 118 criteria",
+      "value": "Approximate failure descriptions: >3 flashes/second and ≥20% screen; luminance change 10%, dark state <.8. Red formula (R−G−B)×320 change >20 with saturated-red ratio ≥.8.",
+      "source_id": "SA03",
+      "scope": "Older red formula and approximate screen geometry differ from WCAG 2.2; also flags sustained lower-intensity flashing and high-contrast spatial patterns."
+    },
+    {
+      "topic": "Audiovisual laboratory result",
+      "value": "Li et al., Experiment 1, n=27 analyzed: action high-causality JND 143 ms vs low-causality 219 ms; d=1.86. High-causality action PSS −30 ms (their negative means audio leading).",
+      "source_id": "AV01",
+      "scope": "Fitted simultaneity judgments on 30 fps, 3 s clips, offsets sampled every 200 ms. Not latency budgets for responsive game hits."
+    },
+    {
+      "topic": "Broadcast synchrony reference, pre-2020",
+      "value": "ITU 1998 average detectability ~45 ms audio lead /125 ms audio lag; acceptability ~90 ms lead /185 ms lag.",
+      "source_id": "AV02",
+      "scope": "Television material/assessment context. Detection is not acceptability; neither equals a recommended game-impact delay."
+    },
+    {
+      "topic": "Published hit-stop observation",
+      "value": "Guilty Gear Xrd -SIGN-: 7 frames light, approximately 10 heavy; Dragon Ball FighterZ: approximately 1 s cinematic ultimate hold.",
+      "source_id": "JS03",
+      "scope": "Descriptive examples, with no causal effect size or validated cross-game optimum; do not convert to milliseconds without verified game/capture frame rate."
+    },
+    {
+      "topic": "HardingFPA G2 capability",
+      "value": "HD SDR 1080p60; optional UHD SDR, live-feed or captured-gameplay analysis with frame/in-frame results.",
+      "source_id": "SA07",
+      "scope": "Select correct guideline set. Listed SDR capability must not be assumed to validate HDR."
+    }
+  ],
+  "repetition_and_sound": [
+    "Keep semantic cues stable while varying decorative rotation, scale, secondary detail or selection. No universal variant count, random range, cooldown, combo step size or reset time is established. Test the actual cadence and multiplayer overlap. [inference; JS01, JS05]",
+    "Repetition can cause fatigue even when an isolated effect feels good. Aggregate low-priority decoration only if accepted inputs and outcomes remain clear. Combo escalation should communicate achieved state rather than add permanent intensity. [inference; JS01, JS05]",
+    "Use a shared event and an explicit visual landmark for sound alignment, then measure actual display and audio output on target devices. Broadcast and laboratory synchrony values below are not responsive-game latency budgets. [inference; AV01, AV02, JS05]"
+  ],
+  "kitbashing_workflow": [
+    {
+      "step": "Choose for communication before decoration",
+      "evidence_level": "industry practice + inference",
+      "source_ids": [
+        "RB38"
+      ],
+      "instruction": "Identify what the event is, what it does and how strong it is. Find a primary sheet whose silhouette, direction and built-in phases already fit. An attractive explosion sheet is a bad warning indicator if its visible boundary or timing conflicts with gameplay. Numeric selection weights: no number found."
+    },
+    {
+      "step": "Inspect the sheet as data and animation",
+      "evidence_level": "inference",
+      "source_ids": [
+        "RB01",
+        "RB03",
+        "RB04"
+      ],
+      "instruction": "Preview all cells, contact sheet, first/peak/last frame, loop transition and animation against bright/dark backgrounds. Record whether the first frame is transparent, where peak energy occurs, whether it already contains sparks or smoke, and which cells are empty. Do not layer duplicate information merely because multiple assets exist."
+    },
+    {
+      "step": "Split roles across parts",
+      "evidence_level": "industry practice + inference",
+      "source_ids": [
+        "RB38",
+        "RB39"
+      ],
+      "instruction": "Use primary sprite shape for the main event; supplemental sparks for direction/material, mesh pieces for real depth/parallax, Beam for continuous path, Trail for motion history, light for surrounding-world response, and ground mark for remaining evidence. A number of layers that is universally rich-but-clear: no number found. Each layer needs a distinct job and a removable quality tier."
+    },
+    {
+      "step": "Choose temporal mode deliberately",
+      "evidence_level": "spec + inference",
+      "source_ids": [
+        "RB01",
+        "RB04"
+      ],
+      "instruction": "OneShot for an authored beginning-to-end event. Loop only if the endpoints are compatible. PingPong suits reversible motion, not expanding explosions that would visibly run backward. Random is for interchangeable organic frames. Disable random start when onset carries gameplay meaning."
+    },
+    {
+      "step": "Preserve drawn timing",
+      "evidence_level": "spec + inference",
+      "source_ids": [
+        "RB01",
+        "RB04"
+      ],
+      "instruction": "FlipbookBlendFrames=false retains abrupt drawing changes; true linearly crossfades and can soften/double silhouettes. For variable holds, use repeated cells in a preprocessed sheet or distinct timed phase assets. Roblox exposes no per-cell hold list in the inspected API. This agent should choose available cadence variants; repacking is a separate asset-processing step if authorized."
+    },
+    {
+      "step": "Match texture, tint and blending",
+      "evidence_level": "spec + inference",
+      "source_ids": [
+        "RB01",
+        "RB02"
+      ],
+      "instruction": "Neutral texture artwork is generally easier to tint predictably; multiplying tint cannot reconstruct detail missing from the source. Normal/alpha-like blending preserves dark smoke and silhouettes; additive blending suits luminous accents and brightens overlap. Check both against the actual scene. LightEmission is not world illumination. Use pre-authored soft alpha edges and placement to reduce intersections; a true exposed depth-fade control was not found."
+    },
+    {
+      "step": "Integrate spatially",
+      "evidence_level": "inference",
+      "source_ids": [
+        "RB07",
+        "RB05",
+        "RB06"
+      ],
+      "instruction": "Share a meaningful origin/axis across layers; align bursts with contact normal or action path. Compare camera-facing sprites from playable angles against real mesh depth. Place a small source cue at the emitter/contact point so the billboard appears caused by an action. ZOffset is only a rendering adjustment and must not falsify a warning footprint."
+    },
+    {
+      "step": "Hide repetition without changing meaning",
+      "evidence_level": "spec + inference",
+      "source_ids": [
+        "RB01",
+        "RB38"
+      ],
+      "instruction": "Vary allowed rotation, size, speed/lifetime, starting frame for loops and selected assets, using a saved seed for reproducible review. Do not randomize critical contact time, danger boundary, team meaning or power rank. Random UV mirroring is not a ParticleEmitter property in the inspected API; use available mirrored asset variants if they exist. Universal variant count, randomization percentage, cooldown, combo step or reset time: no number found."
+    },
+    {
+      "step": "Make repetition cheaper",
+      "evidence_level": "inference",
+      "source_ids": [
+        "RB29",
+        "RB30"
+      ],
+      "instruction": "For repeated footsteps/gunfire/coins, retain the event cue and reduce secondary trails, persistent smoke and camera response before the cue itself. Test maximum design concurrency and the user-requested 1000-repeat scenario. Throttle cosmetic events by a measured client budget; maintain a distinct allowance for critical signals. Choose limits from telemetry, not a purported platform-wide magic number."
+    },
+    {
+      "step": "Integrate sound and completion",
+      "evidence_level": "inference",
+      "source_ids": [
+        "RB38"
+      ],
+      "instruction": "Place an explicit synchronization marker on the action/contact frame and on the sound transient; verify recorded playback together. Identify the final cell and cleanup state. Do not infer that a sheet beginning at frame zero has its impact on that first frame. No perceptual audiovisual timing tolerance was researched in this API-focused contribution."
+    }
+  ],
+  "performance_method": {
+    "principle": "A visual budget is a measured scene envelope on a target device, not a single particle count. No universal low-end-mobile total, VFX-only milliseconds, transparent coverage percentage, unique-sheet limit or safe dynamic-light count was found.",
+    "evidence_level": "spec + inference",
+    "source_ids": [
+      "RB02",
+      "RB24",
+      "RB28",
+      "RB29",
+      "RB30",
+      "RB31",
+      "RB34"
+    ],
+    "cost_model": [
+      "GPU: projected transparent area, repeated overlap, shading/post effects and shadowing.",
+      "CPU: spawning, scripting, property churn, instance management and any real physics debris.",
+      "Memory/loading: unique textures/meshes, resident mips, pool retention, preload scope and asset duplication.",
+      "Networking: transmit authoritative event information; create presentation locally where appropriate. Client visuals never replace server gameplay authority."
+    ],
+    "optimization_order": [
+      "Preserve danger footprint, source/target identity and important onset.",
+      "Remove offscreen or irrelevant cosmetic layers, considering whether their lights still affect visible geometry.",
+      "Reduce broad overlapping smoke/glow and long low-information tails before shrinking the meaningful silhouette.",
+      "Reuse approved asset IDs; replace unnecessary unique sheets; test smaller textures/cell counts.",
+      "Simplify distant effects by projected readability and importance; avoid exact cut distances until measured.",
+      "Reduce real debris physics and shadows; choose cheaper non-colliding visual pieces when game rules permit.",
+      "Avoid unnecessary per-frame emitter property changes; bake stable properties into templates.",
+      "Pool only if profiling shows a benefit; bound pools, reset state and account for retained memory.",
+      "Reprofile the complete scene after each change; a removed CPU cost may expose a GPU bottleneck."
+    ],
+    "pooling_warning": "Pooling VFX is an inference/application of general reuse principles, not a measured guarantee from these docs. Reserve separate active instances for overlapping events. Reset Enabled, TimeScale, transforms, color, sequences, light state, connections and deadlines; clear old particle/trail history before reuse. Never clear an instance still playing another event. Highlight slots remain occupied by disabled pooled instances.",
+    "mobile_test_plan": [
+      "Select a real low-end baseline from the intended audience; record model, OS, client build, resolution, quality and power/thermal state. Add actual iOS/Android targets as audience requires. Studio emulator checks layout, not real memory or thermal behavior.",
+      "Record representative scene without optional VFX, then the same deterministic event/camera route with the effect; distinguish CPU-bound from GPU-bound frames.",
+      "Test one event, normal gameplay, worst plausible gameplay concurrency and repeated retriggers using the game’s real spawn/cooldown rules. Include close-up billboard coverage, camera inside smoke and dense overlapping effects.",
+      "Test lowest/highest explicit quality and Automatic. Verify the same essential meaning if flipbooks/post effects reduce or disappear. Do not assume quality enum values map directly.",
+      "Exercise cold loading, reuse, cancelled effects, pooled reacquisition, respawn, teleport and streamed-in areas; inspect for missing onsets, ghosts, leak-like memory growth and lingering connections.",
+      "Perform 10–15 minutes of active mobile gameplay and compare late-session frame times/memory with initial runs, per Roblox hardware-test guidance.",
+      "Capture on-device MicroProfiler, Developer Console memory, frame-time distributions and crashes. Define project pass/fail thresholds before comparing variants; 60 FPS/16.67 ms is the documented total-frame target, not all for VFX.",
+      "After publication, compare device-class performance and crashes; keep visual-review evidence alongside telemetry. Fix regressions on the limiting device before raising cosmetic tiers."
+    ]
+  },
+  "calculated_examples": [
+    {
+      "case": "Cell resolution",
+      "calculation": "1024×1024 atlas / 8×8 grid = 128×128 pixels/cell; usable artwork is smaller when padding is included.",
+      "level": "inference (arithmetic)",
+      "source_ids": [
+        "RB02",
+        "RB03"
+      ],
+      "warning": "Not a promise of runtime mip/resolution."
+    },
+    {
+      "case": "Uniform OneShot timing",
+      "calculation": "N meaningful or repeated cells across lifetime L: each cell occupies L/N seconds; nominal unique updates depend on repeated cells.",
+      "level": "inference (arithmetic)",
+      "source_ids": [
+        "RB04"
+      ],
+      "warning": "Empty cells are still part of the timeline. No recommended explosion duration follows."
+    },
+    {
+      "case": "Hypothetical uncompressed RGBA8 memory",
+      "calculation": "256²: 0.25 MiB; 512²: 1 MiB; 1024²: 4 MiB; 2048²: 16 MiB; 4096²: 64 MiB, before mips. Ideal full mip chain approximately multiplies by 4/3.",
+      "level": "inference (arithmetic under declared assumptions)",
+      "source_ids": [
+        "RB29"
+      ],
+      "warning": "Not measured Roblox GPU memory. Formats, compression, streaming and residency can differ."
+    },
+    {
+      "case": "Expected continuous population",
+      "calculation": "For stable rate r and independent lifetime T, expected active particles ≈r×E[T] after reaching steady state, absent culling or other clamps. Add live particles from bursts.",
+      "level": "inference (model)",
+      "source_ids": [
+        "RB01"
+      ],
+      "warning": "Not an engine budget, and not exact under throttling, TimeScale changes or clipping."
+    },
+    {
+      "case": "Frame count conversion",
+      "calculation": "Duration in ms = frame count × 1000 / reference fps. Derived examples at a 24 fps base: one frame 41.67 ms; a two-frame hold 83.33 ms; a six-frame hold 250 ms.",
+      "level": "inference (arithmetic)",
+      "source_ids": [],
+      "warning": "Conversions explain timebases only. These are not recommended impact durations, and film exposure cadence is not engine simulation rate."
+    }
+  ],
+  "accessible_settings": [
+    {
+      "setting": "Reduced camera motion",
+      "implementation": "Separate shake strength/off, head bob, automatic recentering/camera shifts and blur controls.",
+      "source_ids": [
+        "SA04"
+      ],
+      "evidence_level": "industry practice"
+    },
+    {
+      "setting": "Reduced screen effects",
+      "implementation": "Separate controls for full-screen effects and speed lines; reduced-flash variant replaces hard inversion/large luminance changes with a persistent shape or local cue.",
+      "source_ids": [
+        "SA04"
+      ],
+      "evidence_level": "industry practice for controls; inference for replacement design"
+    },
+    {
+      "setting": "Reduced decorative effects",
+      "implementation": "Allow ally/ambient decorations, debris tails and repeated reward flourish to be reduced while preserving hazard boundaries, damage confirmation and essential UI.",
+      "source_ids": [],
+      "evidence_level": "inference"
+    },
+    {
+      "setting": "Colour and contrast",
+      "implementation": "User-selectable colours by information category; redundant icons/shapes; local backing/outline for important text; preview on multiple real stage backgrounds.",
+      "source_ids": [
+        "SA05",
+        "SA06"
+      ],
+      "evidence_level": "industry practice"
+    },
+    {
+      "setting": "Reduced UI animation",
+      "implementation": "Pause, stop or hide nonessential moving/blinking/auto-updating UI; provide opaque text backgrounds where gameplay motion remains behind text.",
+      "source_ids": [
+        "SA04"
+      ],
+      "evidence_level": "industry practice"
+    },
+    {
+      "setting": "Multimodal alternatives",
+      "implementation": "Critical audio has a visual alternative and critical visual information another sensory method; do not rely on haptics as the only fallback.",
+      "source_ids": [
+        "SA05"
+      ],
+      "evidence_level": "industry practice"
+    },
+    {
+      "setting": "Preset persistence and first-run access",
+      "implementation": "Make accessibility choices available before effect-heavy play, persist them and apply them to all quality settings.",
+      "source_ids": [],
+      "evidence_level": "inference"
+    }
+  ],
+  "test_plans": [
+    {
+      "id": "T-JUICE",
+      "question": "Which build improves feeling without losing clarity?",
+      "design": "Preregister main outcomes and smallest meaningful change. Compare current, reduced-decoration and amplified builds while holding mechanics, audio level, input latency and achieved frame rate constant. Include a separately manipulated success-linked condition. Counterbalance task order where appropriate.",
+      "measure": "Hit/miss/block identification, perceived force/weight, annoyance, task accuracy, voluntary replay and later return measured separately; report confidence intervals and nulls.",
+      "stop": "Choose a build only after safety/performance/clarity gates pass; reject a feeling gain that materially worsens required gameplay readability.",
+      "evidence_level": "inference"
+    },
+    {
+      "id": "T-REPEAT",
+      "question": "Does variation help after repeated use?",
+      "design": "Compare fixed, bounded random decoration and state-dependent variation over realistic sessions and repeat visits. Use an automated 1,000-event replay to expose accumulation before user tests.",
+      "measure": "Per-event recognition, annoyance trend, desire to disable effects, remembered event meanings, CPU/GPU cost and overlapping-tail coverage.",
+      "stop": "Stop hazardous or uncomfortable human exposure immediately; adopt variant ranges only if benefit persists and semantics remain stable.",
+      "evidence_level": "inference"
+    },
+    {
+      "id": "T-AV",
+      "question": "What output offset works for this effect and device?",
+      "design": "Calibrate audio/visual capture; sweep both audio-leading and audio-lagging offsets around physical synchrony using measured device latency. Test impact and UI events separately, with headphones/speakers and relevant phones.",
+      "measure": "Separate simultaneity judgment, temporal-order judgment, perceived force, annoyance and task performance; estimate asymmetric psychometric curves, not a universal window.",
+      "stop": "Retain the least delayed robust build meeting game requirements; no unsupported fixed millisecond pass threshold.",
+      "evidence_level": "inference"
+    },
+    {
+      "id": "T-SAFETY",
+      "question": "Can legal combinations create unsafe flashing or patterns?",
+      "design": "Automated rendered capture first: fastest firing, chain explosions, many players, closest legal camera, all major backgrounds and loops; test quality levels and colour/accessibility modes. Use a competent analyzer with recorded guideline/version and output colour space.",
+      "measure": "General/red flash counts, composite area, spatial patterns, failing frame ranges, display conditions and tool result.",
+      "stop": "Resolve known failures before participant exposure; analyzer pass covers tested footage and conditions, not every runtime state or viewer.",
+      "evidence_level": "inference"
+    },
+    {
+      "id": "T-ACCESS",
+      "question": "Does reduced-effects mode preserve the game?",
+      "design": "Recruit players with relevant accessibility needs after machine safety preflight; verify with colour/motion controls enabled and sound muted, plus actual mobile backgrounds.",
+      "measure": "Danger detection, enemy/ally identification, outcome recognition and comfort; record reasons for settings choices.",
+      "stop": "No mandatory shake, flash or colour-only distinction may be required to perform essential actions.",
+      "evidence_level": "inference"
+    }
+  ],
+  "asset_metadata_fields": [
+    "asset ID/version, creator/source/license and approved use",
+    "source dimensions, observed runtime quality, alpha/background convention and baked lighting/colors",
+    "layout, columns, rows, meaningful-cell count, empty/repeated cells and padding",
+    "frame content bounds, pivot/visual center, dominant axis and aspect ratio",
+    "semantic tags: material/element, radial/directional, primary/secondary, warning/impact/aftermath",
+    "first meaningful frame, contact/peak frame, end frame, built-in windup and dissipation",
+    "authored frame cadence and hold pattern, allowed runtime mode, seamless-loop evidence",
+    "blend compatibility, tint limits, bright/dark-background preview",
+    "camera orientation requirements, intended view angle, practical screen-size test result",
+    "compatible companions, redundant baked components and incompatible combinations",
+    "low-quality/static fallback, smallest readable version and quality-tier exclusions",
+    "asset memory measurement context, device/client/version/graphics quality, visible-overlap test and known bugs",
+    "permitted randomization axes, variant family and seed behavior"
+  ],
+  "destruction_transfer": {
+    "central_distinction": "Authoritative destruction changes geometry, collision, cover, routes or structural state. Cosmetic VFX communicates those changes. A flipbook can depict dust/fire/impact but cannot by itself create a traversable breach, physical fragments or structural collapse.",
+    "inferred_event_contract": [
+      "event id and timestamp",
+      "world position and surface normal",
+      "material and damage phase",
+      "actual affected bounds",
+      "attack direction or impulse",
+      "gameplay importance",
+      "observer relationship",
+      "camera/distance context",
+      "chain/combo state",
+      "remaining cover and traversability state"
+    ],
+    "contract_status": "Inference from multiple case studies, not any studio’s disclosed API. Gameplay code owns authoritative fields; VFX must not fabricate them.",
+    "inferred_material_responses": [
+      {
+        "material": "wood",
+        "visual hypothesis": "Directional splinter forms and woody chips; powder only if justified by reference.",
+        "caution": "Splinter direction must agree with strike and grain/context; not every wood break explodes."
+      },
+      {
+        "material": "masonry / concrete / stone",
+        "visual hypothesis": "Readable main chunks plus smaller chips and powder; separate falling mass from hanging dust.",
+        "caution": "Do not let gray smoke erase the new hole or surviving cover."
+      },
+      {
+        "material": "glass",
+        "visual hypothesis": "Sharp shard language, brief glints and transparent-space reveal.",
+        "caution": "Avoid treating all glass as slow opaque gravel; destruction type depends on actual asset/material."
+      },
+      {
+        "material": "metal",
+        "visual hypothesis": "Bent or displaced plates and selected sharp accents; sparks when collision/heat context supports them.",
+        "caution": "Do not turn every metal impact into a firework; Godzilla example supports material-specific deformation, not a spark rule."
+      },
+      {
+        "material": "plastic / toy brick",
+        "visual hypothesis": "Recognizable intact block shapes and clean silhouette breakup may preserve material identity.",
+        "caution": "Inference only; no detailed LEGO production source was established in this pass. Do not claim LEGO uses this exact recipe."
+      }
+    ],
+    "inferred_phase_roles": [
+      "anticipation or stress warning if gameplay provides one",
+      "contact/rupture at actual impact",
+      "directional primary mass displacement",
+      "secondary fragments and dust tied to material",
+      "clear reveal of changed space",
+      "residual visual aftermath with separate lifetime from collision"
+    ],
+    "phase_caveat": "This is an explanatory role list, not a mandatory six-layer stack or fixed timing formula. Use only roles the event needs.",
+    "proposed_tests": [
+      "Can players locate the actual break and attack direction at normal play speed?",
+      "Can they correctly identify remaining cover and the newly available route?",
+      "Does the large mass move coherently before secondary noise dominates?",
+      "Does dust clear enough to support the next decision?",
+      "Do distant/low-quality versions preserve gameplay information?",
+      "Do simultaneous breaches remain distinguishable without exceeding measured target-device costs?"
+    ],
+    "test_status": "Proposed evaluation protocol, inference; no numeric pass threshold claimed."
+  },
+  "field_numeric_claims": [
+    {
+      "claim": "Into Spider-Verse studio page defines 24 images/s on ones and 12 on twos.",
+      "source_ids": [
+        "FM-S18"
+      ],
+      "status": "Documented production description; no assertion the whole movie uses one cadence."
+    },
+    {
+      "claim": "Across maker interview explicitly includes animation on 1s, 2s, 3s through 6s, with variable/component-specific cadence.",
+      "source_ids": [
+        "FM-S19"
+      ],
+      "status": "Documented industry practice."
+    },
+    {
+      "claim": "At a 24 fps film base, a hold of n frames lasts n/24 seconds: 1=41.7 ms, 2=83.3 ms, 3=125 ms, 4=166.7 ms, 5=208.3 ms, 6=250 ms.",
+      "source_ids": [
+        "FM-S18",
+        "FM-S19"
+      ],
+      "status": "Arithmetic conversion, not recommended game hit-stop values; mentions 5 only as conversion, not evidence of a particular shot."
+    },
+    {
+      "claim": "Hi-Fi RUSH interview describes a 60 FPS target.",
+      "source_ids": [
+        "FM-S06"
+      ],
+      "status": "Title-specific production target, not guaranteed performance or a general Roblox budget."
+    },
+    {
+      "claim": "Roblox tutorial currently prints dust Rate=50000.",
+      "source_ids": [
+        "FM-S33"
+      ],
+      "status": "A source-quality warning, not adopted setting; engine caps, actual behavior and mobile costs require current specification/profiling."
+    }
+  ]
+}

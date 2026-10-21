@@ -1,0 +1,97 @@
+{
+  "number": 5,
+  "title": "Juice and satisfaction table",
+  "headers": [
+    "quality or finding",
+    "why it works (or fails)",
+    "how to make it",
+    "game uses",
+    "effect size if known",
+    "evidence level"
+  ],
+  "rows": [
+    {
+      "quality or finding": "Success-linked feedback, rather than mere amplification",
+      "why it works (or fails)": "In the preregistered RPG experiment, outcomes mattered; occlusion is a proposed mechanism, not an isolated manipulation.",
+      "how to make it": "Differentiate swing, hit and kill.",
+      "game uses": "Combat, breaking, completion feedback",
+      "effect size if known": "n=1,699. Success-dependence → competence +.45 [95% CI .30,.60]; effectance +.26 [.15,.36]; curiosity +.29 [.17,.41]. Unstandardised scale-point coefficients.",
+      "evidence level": "study; JS01, A, 2024, Fig.4"
+    },
+    {
+      "quality or finding": "Amplification can undermine experience",
+      "why it works (or fails)": "Tested non-success-dependent glow hid repeated impacts.",
+      "how to make it": "Audit action–outcome legibility before increasing volume.",
+      "game uses": "Rapid attacks",
+      "effect size if known": "Amplification → effectance −.19 [−.36,−.03]; competence −.43 [−.68,−.19]. No significant direct enjoyment/playtime effect.",
+      "evidence level": "study; JS01, A, 2024"
+    },
+    {
+      "quality or finding": "Random variety is not established retention",
+      "why it works (or fails)": "Variability did not significantly predict curiosity or playtime.",
+      "how to make it": "Use variation for appearance; test behavioural benefit.",
+      "game uses": "Repeated pickups/hits",
+      "effect size if known": "Enjoyment +.11 [.01,.22] scale points; curiosity −.01 [−.14,.11].",
+      "evidence level": "study; JS01, A, 2024"
+    },
+    {
+      "quality or finding": "An intermediate amount can beat extremes",
+      "why it works (or fails)": "One RPG bundled audiovisual changes, rather than isolating a particle setting.",
+      "how to make it": "Compare complete builds; no transferable medium/high particle budget.",
+      "game uses": "ARPG combat and menus",
+      "effect size if known": "n=3,018. Partial η²: competence .005; autonomy .004; immersion .003; enjoyment .006; playtime .006; character level .006.",
+      "evidence level": "study; JS02, A, 2020"
+    },
+    {
+      "quality or finding": "Important qualification to the 2020 headline",
+      "why it works (or fails)": "None and Extreme both lost on playtime; enjoyment pairwise significance was Extreme < Medium/High, not None < Medium/High.",
+      "how to make it": "Do not equate statistical significance with a large retention improvement.",
+      "game uses": "Evaluation",
+      "effect size if known": "Playtime F(3,3014)=5.83, p<.001; enjoyment F(3,3014)=5.87, p<.001. No numeric pairwise retention uplift found.",
+      "evidence level": "study; JS02, A, 2020, §6"
+    },
+    {
+      "quality or finding": "Impact-feel features are candidates, not proven causes",
+      "why it works (or fails)": "Review-derived game ranking plus descriptive feature inventory cannot isolate causes.",
+      "how to make it": "Test hit-stop, sound coherence and camera control separately.",
+      "game uses": "Fighting/beat-em-up",
+      "effect size if known": "281,720 Chinese reviews; 96 games, filtered to 44, then top/bottom 8 each. No causal effect size or feature correlation coefficient found.",
+      "evidence level": "preprint; JS03, A, 2022; later IEEE GEM publication verified"
+    },
+    {
+      "quality or finding": "Semantic text can clarify feedback",
+      "why it works (or fails)": "In a minimal targeting task, words communicated graded performance more clearly.",
+      "how to make it": "Use readable success/outcome labels when needed; preserve meaning without particles.",
+      "game uses": "UI, timing feedback, combat training",
+      "effect size if known": "n=45; progress-feedback omnibus Kendall’s W=.44; means Text 5.62, Particles 4.43, None 2.81 (7-point scale).",
+      "evidence level": "study; JS04, A, 2024, Table 2"
+    },
+    {
+      "quality or finding": "Text plus particles is context-dependent",
+      "why it works (or fails)": "No overall superiority of text over juicy particles; observation/performance stages showed no significant performance differences.",
+      "how to make it": "Treat onomatopoeia as an optional style layer, not universal upgrade.",
+      "game uses": "Comic effects, pickups",
+      "effect size if known": "Study effects lasted 0.5 s; this is stimulus duration, not optimal lifetime.",
+      "evidence level": "study; JS04, A, 2024, §§3.1,7–8"
+    },
+    {
+      "quality or finding": "Fatigue, contrast and audiovisual coherence",
+      "why it works (or fails)": "Interviewed audio designers reserve standout moments, vary repetition and align sounds with visible events.",
+      "how to make it": "Keep frequent feedback restrained; let sound carry some impact.",
+      "game uses": "Gunfire, footsteps, coin streams",
+      "effect size if known": "12 expert interviews; no causal effect size, optimal variant count or repetition threshold found.",
+      "evidence level": "study (qualitative); JS05, A, 2024"
+    },
+    {
+      "quality or finding": "Completion, fitting and clean endings as design targets",
+      "why it works (or fails)": "Plausible perceptual/semantic goals; this search did not establish an effect-size recipe for them.",
+      "how to make it": "Specify an unambiguous terminal state and test whether it reads as complete.",
+      "game uses": "Coin counters, unlocks, assembly, UI success",
+      "effect size if known": "no number found",
+      "evidence level": "inference; requires validation"
+    }
+  ],
+  "intro": [
+    "The best-supported conclusion is conditional: feedback must preserve action and outcome information. More decoration is not a universal route to enjoyment or motivation. Experimental effect sizes refer to the tested builds and samples."
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "number": 8,
+  "title": "Effect card template",
+  "fields": [
+    {
+      "field": "Communication job",
+      "instruction": "What is it? What does it do? How large or consequential is its actual impact? Name the gameplay state the player must understand."
+    },
+    {
+      "field": "Importance rating",
+      "instruction": "Record separate caster, ally and enemy ratings on the project’s chosen scale. Riot documents 1–10; no universal mapping to size, value, duration or count is established. Record why this cue outranks its neighbors."
+    },
+    {
+      "field": "Moment and intended feeling",
+      "instruction": "Name the event and intended feeling. Distinguish information that must be perceived from optional embellishment."
+    },
+    {
+      "field": "Authoritative trigger and truth",
+      "instruction": "Event source, position, direction, area/hitbox, activation and expiry, targetability, cancellation and prediction/reconciliation behavior. Decorative shape cannot silently change any of these."
+    },
+    {
+      "field": "Audience and visibility",
+      "instruction": "Caster, ally, enemy, spectator, distance, camera angle, occlusion rules and privacy of information. State which secondary layers each audience can omit."
+    },
+    {
+      "field": "Asset inventory",
+      "instruction": "Asset IDs and rights; flipbook grid, frame count, resolution per cell, intended rate, loop/one-shot mode, premultiplication/edge assumptions, and whether random start preserves meaning."
+    },
+    {
+      "field": "Primary shape and silhouette",
+      "instruction": "Identify the single dominant shape, focal point, direction, source and target. Record small-screen and grayscale checks."
+    },
+    {
+      "field": "Value and colour",
+      "instruction": "Dominant palette, accent, core/edge relationship, stage backgrounds, team/rarity/status redundancy. Use project measurements; no universal ratios established."
+    },
+    {
+      "field": "Layer roles",
+      "instruction": "List primary, secondary and tertiary layers with each layer’s communication purpose, emitter/beam/trail/part/light type, orientation, attachment, and stop condition. Remove roles duplicated without benefit."
+    },
+    {
+      "field": "Timing per phase",
+      "instruction": "Windup, punch, crescendo, follow-through and dissipation. Store durations in seconds or ms with their source and context; if frames, store the relevant fps/timebase. Unsupported values remain unset, not zero."
+    },
+    {
+      "field": "Motion and scale",
+      "instruction": "Start/end size, life curves, speed, acceleration, arcs, overlap, squash/stretch, rotation, inherited motion and world/camera alignment. State how they affect the intended feeling."
+    },
+    {
+      "field": "Sound link",
+      "instruction": "Named sound event, visual sync landmark, trigger timestamp, intended relative offset, source-supported tolerance if available, and measured latency on target device. Keep network arrival separate from asset timing."
+    },
+    {
+      "field": "Camera and screen response",
+      "instruction": "Shake/kick/zoom/flash/blur/slow motion: scope, affected player, optionality, accessibility controls and restoration behavior. Omit if it impairs the required task."
+    },
+    {
+      "field": "Repetition and escalation",
+      "instruction": "Allowed variants, semantic invariants, aggregation/cooldown/cap policy, combo escalation rule and reset condition. No count, delay or step size is a universal default."
+    },
+    {
+      "field": "Scene competition",
+      "instruction": "Worst-case simultaneous events, competing critical cues, stage palette, overlap footprint and resolution when cues conflict."
+    },
+    {
+      "field": "Safety and accessibility",
+      "instruction": "Full recorded-sequence flash testing method/result; reduced motion/flash effects; colour alternatives; preserved gameplay information. No numeric pass is treated as a medical guarantee."
+    },
+    {
+      "field": "Performance",
+      "instruction": "Target devices/graphics levels; observed frame time and frame-time spikes; transparent coverage; active/emitted particles; texture residency; lights; instancing/pool cleanup. Hardware and measurement method are required."
+    },
+    {
+      "field": "LOD and reduced-effects variants",
+      "instruction": "Describe what remains at each project quality tier. Preserve truth, timing and threat boundaries before retaining sparks, smoke, bloom or light."
+    },
+    {
+      "field": "Review observations and fixes",
+      "instruction": "Moment; symptom; evidence/capture; concrete parameter or phase change; expected result; priority; retest outcome. Change a stated cause, not merely “more polish.”"
+    },
+    {
+      "field": "Evidence and release status",
+      "instruction": "Source IDs and claim IDs; evidence level per claim; inferred values and test results; unresolved gaps; owner/version/date; pass/fail against the required checks."
+    }
+  ],
+  "intro": [
+    "Start here before selecting assets or reviewing a finished effect. The card records facts, choices and evidence separately so a later designer can explain each change."
+  ]
+}

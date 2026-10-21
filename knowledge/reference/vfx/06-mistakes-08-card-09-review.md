@@ -14,7 +14,7 @@ supersedes: []
 
 ## Scope and use
 
-Merged from the Claude research files (`knowledge/research/vfx-2026-10-12/`, verifier corrections applied, gap files over first-run files) and the ChatGPT package (06, 08, `effect_card_template`, 09, claim ledger, supporting reference). Claims were reconciled per publication: two models citing one page count as one source.
+Merged from the Claude research files (`knowledge/external/vfx-research-2026-10-12/`, verifier corrections applied, gap files over first-run files) and the ChatGPT package (06, 08, `effect_card_template`, 09, claim ledger, supporting reference). Claims were reconciled per publication: two models citing one page count as one source.
 The VFX designer agent fills the Output 8 card before it picks assets. It runs the Output 9 review on every effect and diagnoses with the Output 6 ids (M-xx). Sources are R-ids in `00-sources.md`. PROPOSAL values are starting points to test. They are never evidence, and they stay proposals until the owner confirms them.
 
 ## Keys

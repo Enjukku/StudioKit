@@ -1,0 +1,73 @@
+{
+  "number": 10,
+  "title": "Genre presets",
+  "profiles": [
+    {
+      "genre": "Simulator",
+      "profile": "Routine collection and conversion should read cheaply and clearly; reserve contrast for meaningful capacity, unlock and milestone transitions.",
+      "priorities": "Pickup/counter convergence and explicit state confirmation.",
+      "main risk": "Many repeated pickups and nearby players; combine low-importance feedback and keep a stable current balance.",
+      "application": "Avoid max-tier reward spectacle on every click; test repetition and motivation instead of assuming escalation helps.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Destruction",
+      "profile": "Structural change is the primary event; sell mass with large pieces, cause-following secondary breaks and material response.",
+      "priorities": "Fracture location, moving mass, new openings and residual hazards.",
+      "main risk": "Dust and overlapping debris can hide traversal; preserve escape routes and surviving targets.",
+      "application": "Spend on readable silhouette and staged fragments before fine particles. Profile crowded collapses and cleanup.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Battlegrounds and combat",
+      "profile": "Threat, hit confirmation and opponent state outrank theme.",
+      "priorities": "Truthful telegraph, trackable projectile, contact result, owner/team distinction.",
+      "main risk": "Many players and skins; reduce unrelated cosmetic layers while preserving opponent threat information.",
+      "application": "Keep attack cadence and input readability intact. Critical/final feedback must not hide the next live threat.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Horror",
+      "profile": "Use absence, contrast and restrained motion to support uncertainty without obscuring required information.",
+      "priorities": "Source-local atmosphere, readable danger state, sparse anomalies.",
+      "main risk": "Dark environments can make every emissive fleck dominant; fog may hide navigation.",
+      "application": "Use atmosphere outside decision-critical areas. Avoid repetitive flashes and forced disorienting camera effects.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Obby",
+      "profile": "Navigation and platform boundaries lead; movement VFX support timing and destination.",
+      "priorities": "Takeoff, landing, dash destination, checkpoints and failure states.",
+      "main risk": "Speed lines, bloom and trails can cover platform edges.",
+      "application": "Maintain stable camera and clear path in reduced motion. Do not let decorative trails imply traversable geometry.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Tycoon",
+      "profile": "Build-state change and resource flow should be immediately attributable to a cause.",
+      "priorities": "Placement confirmation, completed machine, resource transfer and unlock.",
+      "main risk": "Dense machines plus counters create competing motion and constant loops.",
+      "application": "Keep ambient machine effects subordinate and local; milestone VFX ends in a stable completed state.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Disaster survival",
+      "profile": "The current lethal hazard and safe route have priority over spectacle.",
+      "priorities": "Truthful hazard boundary/state, directional threat, structural change and navigation.",
+      "main risk": "Large weather, collapse and multiplayer effects coincide.",
+      "application": "Degrade cosmetic smoke/debris before threat geometry. Test the worst overlap at low quality and on phones.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    },
+    {
+      "genre": "Anime style",
+      "profile": "Use graphic silhouettes, directional accents and cadence contrast inside a coherent combat vocabulary.",
+      "priorities": "Readable attack preparation, distinct impact, held graphic shape and designed breakup.",
+      "main risk": "Impact frames, speed lines and saturated effects can stack into an unreadable flash field.",
+      "application": "Treat stepped cadence and high contrast as contextual style choices. Do not assume cinematic inversion flashes are safe or gameplay-readable.",
+      "evidence level": "inference: proposed project profile, not validated genre-wide numeric defaults"
+    }
+  ],
+  "intro": [
+    "These eight profiles are proposed emphases for project testing. They do not prescribe universal particle counts, colours, timings or shake values."
+  ]
+}

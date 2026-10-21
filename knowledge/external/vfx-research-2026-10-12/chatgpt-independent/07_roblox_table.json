@@ -1,0 +1,217 @@
+{
+  "number": 7,
+  "title": "Roblox table",
+  "headers": [
+    "feature",
+    "what it is good for",
+    "key properties and values",
+    "limits and mobile cost",
+    "best practice",
+    "source"
+  ],
+  "rows": [
+    {
+      "feature": "ParticleEmitter: emission",
+      "what it is good for": "Bursts, ambient motes, sparks, smoke",
+      "key properties and values": "Rate; Enabled; Lifetime; Emit(n); Clear()",
+      "limits and mobile cost": "400/s per emitter; mobile 100/s. Lifetime cap 20 s. Screen area and overlap matter.",
+      "best practice": "Inference: explicit bursts for discrete impacts; choose count by measured cost and readability.",
+      "source": "RB01; RB02"
+    },
+    {
+      "feature": "ParticleEmitter: flipbook layout",
+      "what it is good for": "Authored animated sprite sheets",
+      "key properties and values": "None; 2×2/4×4/8×8; Custom via FlipbookSizeX/Y. Custom axes 1–64.",
+      "limits and mobile cost": "Texture dimensions must divide by grid; padding reduces bleed; unique sheets cost memory.",
+      "best practice": "Inference: record cell geometry and empty cells; reject incompatible assets.",
+      "source": "RB01; RB03; RB36"
+    },
+    {
+      "feature": "ParticleEmitter: playback",
+      "what it is good for": "One-shot punch or looping motion",
+      "key properties and values": "Loop, OneShot, PingPong, Random; fps ≤30; BlendFrames; StartRandom.",
+      "limits and mobile cost": "OneShot ignores fps; low-memory clients can disable flipbooks.",
+      "best practice": "Inference: retain authored first frame for important one-shots; blending off for held drawings.",
+      "source": "RB01; RB02; RB04"
+    },
+    {
+      "feature": "ParticleEmitter: appearance",
+      "what it is good for": "Tint, opacity, glow, shaping",
+      "key properties and values": "Color/Size/Transparency sequences; LightEmission 0 normal, 1 additive; LightInfluence 0–1; Brightness.",
+      "limits and mobile cost": "Emission does not light the scene. Brightness applies with LightInfluence=0.",
+      "best practice": "Inference: use separate local light only when world illumination adds needed information.",
+      "source": "RB01"
+    },
+    {
+      "feature": "ParticleEmitter: placement/time",
+      "what it is good for": "Flow, elongation, layering, local slow motion",
+      "key properties and values": "Orientation; Rotation/RotSpeed; Squash; ZOffset; TimeScale 0–1.",
+      "limits and mobile cost": "ZOffset changes render depth, not geometry. No native per-frame-duration list found.",
+      "best practice": "Inference: use attachment transforms; record phase timing and cleanup explicitly.",
+      "source": "RB01; RB02"
+    },
+    {
+      "feature": "Attachment",
+      "what it is good for": "Shared origin and direction for effect layers",
+      "key properties and values": "CFrame, WorldCFrame; local position/orientation; links Beam/Trail endpoints.",
+      "limits and mobile cost": "Point emission differs from BasePart-volume emission. No safe instance count found.",
+      "best practice": "Inference: anchor to contact normal/muzzle/foot socket rather than eyeballing world offsets.",
+      "source": "RB07"
+    },
+    {
+      "feature": "Beam",
+      "what it is good for": "Tethers, directional energy, arcs, continuous laser silhouettes",
+      "key properties and values": "Attachment0/1; Width0/1; CurveSize0/1; Segments; FaceCamera; texture controls.",
+      "limits and mobile cost": "Default Segments=10; at least n−1 for n keypoints. Overdraw still applies.",
+      "best practice": "Inference: minimal segment count that retains silhouette and sequences; endpoints match gameplay.",
+      "source": "RB05"
+    },
+    {
+      "feature": "Beam: texture/light",
+      "what it is good for": "Scrolling streak detail and emissive appearance",
+      "key properties and values": "TextureSpeed in cycles/s; Wrap/Static/Stretch; Brightness 0–10000, default 1.",
+      "limits and mobile cost": "LightEmission does not illuminate geometry; high brightness is not a design recommendation.",
+      "best practice": "Inference: use explicit units; recheck pattern speed after changing TextureLength/Mode.",
+      "source": "RB05"
+    },
+    {
+      "feature": "Trail",
+      "what it is good for": "Sword swings, moving projectiles and motion history",
+      "key properties and values": "Attachment0/1; Lifetime 0.01–20 s (default 2); MinLength; MaxLength; WidthScale 0–1; Clear().",
+      "limits and mobile cost": "MaxLength=0 removes distance cap. Quality levels affect trail fidelity.",
+      "best practice": "Inference: clear pooled trail history before reuse/teleport; trim lifetime to avoid stale threat paths.",
+      "source": "RB06; RB24"
+    },
+    {
+      "feature": "Highlight",
+      "what it is good for": "Readable object/target silhouette or outline",
+      "key properties and values": "Adornee; DepthMode AlwaysOnTop/Occluded; fill and outline colors/transparencies.",
+      "limits and mobile cost": "255 client slots; disabled instances occupy slots; excess ignored.",
+      "best practice": "Inference: allocate by importance; destroy permanently retired highlights; avoid unintended through-wall information.",
+      "source": "RB08"
+    },
+    {
+      "feature": "PointLight",
+      "what it is good for": "Omnidirectional impact/torch illumination",
+      "key properties and values": "Brightness, Color, Range, Shadows; direct BasePart/Attachment child.",
+      "limits and mobile cost": "Range ≤120 studs. Shadow cost grows with affected geometry/light density.",
+      "best practice": "Inference: choose shortest useful range; test shadowless version before adding shadows.",
+      "source": "RB09; RB12; RB13; RB29"
+    },
+    {
+      "feature": "SpotLight",
+      "what it is good for": "Directed muzzle/cone/flashlight illumination",
+      "key properties and values": "Angle, Face, Range plus shared Light properties.",
+      "limits and mobile cost": "Range ≤120 studs; geometry and shadows determine cost; no universal light-count budget found.",
+      "best practice": "Inference: align with the actual action direction and keep gameplay visibility independent.",
+      "source": "RB10; RB12; RB13"
+    },
+    {
+      "feature": "SurfaceLight",
+      "what it is good for": "Illuminated panels and broad surface glow",
+      "key properties and values": "Face, Angle, Range; behaves like SpotLight under Attachment.",
+      "limits and mobile cost": "Range ≤120 studs. A luminous texture is not a substitute for world lighting.",
+      "best practice": "Inference: prefer one purposeful source to overlapping redundant lights.",
+      "source": "RB11; RB13"
+    },
+    {
+      "feature": "Lighting",
+      "what it is good for": "Scene value/palette baseline and rendering intent",
+      "key properties and values": "LightingStyle Soft/Realistic; PrioritizeLightingQuality; Ambient, ExposureCompensation.",
+      "limits and mobile cost": "Technology is deprecated; quality priority trades shading against viewing distance.",
+      "best practice": "Inference: approve the environment first; tune VFX on all shipped lighting profiles.",
+      "source": "RB13; RB37"
+    },
+    {
+      "feature": "Atmosphere",
+      "what it is good for": "Depth, haze and scene mood",
+      "key properties and values": "Density, Offset, Color, Decay, Glare, Haze.",
+      "limits and mobile cost": "Can obscure objects; poor Offset balance exposes ghosting or distant LOD popping. No universal safe density found.",
+      "best practice": "Inference: test distant threats against haze; do not use fog to conceal critical telegraphs.",
+      "source": "RB14"
+    },
+    {
+      "feature": "BloomEffect",
+      "what it is good for": "Glow around bright features",
+      "key properties and values": "Intensity; Size in pixels; Threshold 0 all colors, 1 pure white.",
+      "limits and mobile cost": "May vary with quality; full-scene cost/readability interaction. No useful universal intensity number found.",
+      "best practice": "Inference: preserve the primary silhouette with bloom disabled.",
+      "source": "RB16; RB15"
+    },
+    {
+      "feature": "BlurEffect",
+      "what it is good for": "Defocusing the world behind a menu",
+      "key properties and values": "Size is Gaussian blur radius in pixels.",
+      "limits and mobile cost": "Global 3D blur; not radial/motion blur. Quality-dependent.",
+      "best practice": "Inference: avoid obscuring active danger during gameplay.",
+      "source": "RB17; RB15"
+    },
+    {
+      "feature": "ColorCorrectionEffect",
+      "what it is good for": "Mood tint and localized player feedback",
+      "key properties and values": "Brightness −1 black/+1 white; Contrast; Saturation −1 grayscale; multiplicative TintColor.",
+      "limits and mobile cost": "Post effects do not alter GuiObjects; additive brightness may erase value structure.",
+      "best practice": "Inference: preserve HUD contrast separately and verify no-flash/reduced-effects variants.",
+      "source": "RB18; RB15"
+    },
+    {
+      "feature": "DepthOfFieldEffect",
+      "what it is good for": "Controlled reveal/shop focus",
+      "key properties and values": "FocusDistance and InFocusRadius in studs; NearIntensity, FarIntensity.",
+      "limits and mobile cost": "Quality-dependent; can hide foreground/background threats. No safe intensity range found.",
+      "best practice": "Inference: reserve strong focus changes for moments without targeting demands.",
+      "source": "RB19; RB15"
+    },
+    {
+      "feature": "SunRaysEffect",
+      "what it is good for": "Sun-linked atmosphere",
+      "key properties and values": "Intensity; Spread 0–1.",
+      "limits and mobile cost": "Not a general local volumetric-light beam. Quality-dependent.",
+      "best practice": "Inference: use Beam for designed local streaks, acknowledging that it is a different effect.",
+      "source": "RB20; RB15"
+    },
+    {
+      "feature": "ColorGradingEffect",
+      "what it is good for": "Global tone-mapper style",
+      "key properties and values": "TonemapperPreset Default/Retro.",
+      "limits and mobile cost": "Lighting-only; most recently parented instance wins.",
+      "best practice": "Inference: do not treat it like stackable, camera-local color correction.",
+      "source": "RB21; RB35"
+    },
+    {
+      "feature": "Camera",
+      "what it is good for": "Scripted kick, shake and zoom",
+      "key properties and values": "CurrentCamera.CFrame; FieldOfView 1–120°, default 70; CameraType; render-step scheduling.",
+      "limits and mobile cost": "No named universal shake amplitude/duration found here. Defaults can fight manually assigned CFrame.",
+      "best practice": "Inference: layer offset into camera controller, offer reduction/off, reset and unbind on cancellation.",
+      "source": "RB22; RB23"
+    },
+    {
+      "feature": "Graphics quality",
+      "what it is good for": "Adaptive visual fallback",
+      "key properties and values": "Engine QualityLevel 1–21; saved player setting 1–10; Automatic.",
+      "limits and mobile cost": "Platform-specific particle/trail/post-effect scaling. The two enums are not interchangeable.",
+      "best practice": "Inference: test low, high and automatic on actual devices; essential information survives each.",
+      "source": "RB24; RB25"
+    },
+    {
+      "feature": "Texture import and streaming",
+      "what it is good for": "Correct, reusable sprite assets",
+      "key properties and values": "PNG with alpha suits particles; general texture upload allowance up to 4096×4096; streaming varies detail.",
+      "limits and mobile cost": "Current texture page has conflicting UV 1024 wording; particle effective 4K not established.",
+      "best practice": "Inference: record source dimensions and tested runtime quality separately; reuse asset IDs.",
+      "source": "RB26; RB27; RB32; RB02"
+    },
+    {
+      "feature": "Unsupported native controls in inspected API",
+      "what it is good for": "Avoid unrealizable agent recipes",
+      "key properties and values": "No dedicated chromatic-aberration, radial-blur, refraction/distortion post effect; no ParticleEmitter depth-fade or per-cell duration property found.",
+      "limits and mobile cost": "This is an inspected-public-API finding, not proof that every approximation is impossible.",
+      "best practice": "Inference: use authored overlays, separate stages, mesh silhouettes or approved existing assets; never relabel Gaussian blur as radial blur.",
+      "source": "RB01; RB33"
+    }
+  ],
+  "intro": [
+    "Current engine facts are Spec evidence, not proof of artistic quality. Living documentation was accessed on 13 October 2026. Defaults and limits can change, so verify the affected API before implementation."
+  ]
+}
