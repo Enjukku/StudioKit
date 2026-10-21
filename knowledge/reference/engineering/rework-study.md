@@ -1,6 +1,6 @@
 ---
 type: reference
-scope: game
+scope: universal
 status: draft
 updated: 2026-10-21
 source: J010 rework study (DestructionSimulator 2026-09-30..2026-10-20); parts rework/git-a.md, git-b.md, git-c.md, logs.md, records.md, old-agents.md

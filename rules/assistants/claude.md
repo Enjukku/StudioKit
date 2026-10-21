@@ -1,6 +1,6 @@
 # Harness profile: Claude Code
 
-> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; mechanisms and context revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016, checked on Claude Code 2.1.306)
+> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; mechanisms and context revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016, checked on Claude Code 2.1.306); revised by orchestrator-fixer W1 · claude-opus-5-5 · high · 2026-10-21 (J016 G3)
 
 Read `AGENTS.md` and `rules/company.md` first. This page holds only Claude Code specifics; CLAUDE.md imports it.
 
@@ -22,9 +22,9 @@ Read `AGENTS.md` and `rules/company.md` first. This page holds only Claude Code 
 | Mechanism | How in Claude Code | Rules |
 | --- | --- | --- |
 | Subagent | Agent tool, role as the agent type | Nest at most 2 below the lead (platform max 3). Pin model and effort in the brief. |
-| Peer message | SendMessage to an agent id | Subagents cannot list each other: ids come from the job's `crew.md` and the brief's `peers`. On 2.1.306 a message reaches a working agent at its next tool step; a message to a finished agent resumes it with its context. |
-| Job workflow | Saved script per job type, `.claude/workflows/job-<type>.js` (source `.agents/workflows/jobs/`, synced) | One stage per call, `args: {job, stage}`; owner gates sit between calls (a workflow cannot pause). Every `agent()` sets `agentType`, `model`, `effort`. |
-| Production chat | In the desktop app the lead starts sessions for long, independent jobs | Messages are plain text that points to files. A message to an idle chat resends its full context, so batch updates. |
+| Peer message | SendMessage to an agent id | Who can send and where ids come from: `rules/company.md` §5 item 3 (capability check C22: a `tools:` list without `SendMessage` cannot send). On 2.1.306 a message reaches a working agent at its next tool step; a message to a finished agent resumes it with its context and resends that whole context (J016 `pilot-plan.md` R6: 105 k tokens for a small probe). |
+| Job workflow | Saved script per job type, `.claude/workflows/job-<type>.js` (source `.agents/workflows/jobs/`, synced) | One stage per call; the args (`job`, `stage`, `size`, `gate`, `studioId`, `change` and the type's flags) are in `.agents/workflows/jobs/README.md`. Owner gates sit between calls (a workflow cannot pause). Every `agent()` sets `agentType`, `model`, `effort`. Workflow agents have no ids: sideways work goes through files (`rules/company.md` §5). |
+| Production chat | In the desktop app the lead starts sessions for long, independent jobs | Messages are plain text that points to files (C13). Batch updates into one message; pure news waits for the next status report (`rules/company.md` §5 item 6). |
 | Hooks | `tools/hooks/` scripts: job pointer at subagent start, job state after compaction, hand-back shape check | The owner enables them in settings (`tools/hooks/README.md`). |
 | Agent teams | OFF | Experimental, interactive only, one team per session; messaging does not need them. Keep `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` unset or `0`. Agents never edit their own settings. |
 
@@ -40,7 +40,7 @@ Read `AGENTS.md` and `rules/company.md` first. This page holds only Claude Code 
 | Role memory | Roles use `memory: project`. MEMORY.md is an index (first 200 lines or 25 KB load); parallel instances of a role share the folder, so write dated topic files. Craft lessons only. |
 | Instruction size | Keep CLAUDE.md plus all imports under 200 lines. Skill descriptions ≤ 400 characters: the skill list has a budget and drops the least-used descriptions. |
 | Compaction | Each invoked skill keeps its first 5,000 tokens (25,000 in total). Steps and rules sit at the top of SKILL.md; job state lives in files; re-load `orchestration` after compaction. |
-| Audit | Run `/doctor prompt-audit` weekly. It finds conflicting instructions. Fix conflicts in the canonical file. |
+| Audit | The owner runs `/doctor` weekly (a built-in command: agents cannot run it); `/improve` reminds the owner in its tips. Fix conflicts it shows in the canonical file. |
 | Context | `python tools/context_packet.py packet "<task>" --role <role> --job <job-id>` first, then only the cited notes. |
 | Settings | The owner applies permission and environment settings. Agents propose, never edit them. |
 

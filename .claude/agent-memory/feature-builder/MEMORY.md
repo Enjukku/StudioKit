@@ -3,3 +3,4 @@
 - [Retrieval tuning on held-out cases](feedback_retrieval_tuning_heldout.md) — own cases before tuning, plateau sweep, kit-citation fusion
 - [Default-unchanged goldens](feedback_default_unchanged_goldens.md) — old-tool goldens + HEAD-vs-new diff on live repo; hooks: assert clean stderr
 - [Bash heredoc escapes](feedback_bash_heredoc_escapes.md) — Bash tool rewrites \n and \ in heredocs/echo; write code and JSON with Write
+- [Same-moment eval](feedback_same_moment_eval.md) — old vs new tool in the same minute under parallel edits; withholding tests on paths

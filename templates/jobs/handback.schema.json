@@ -1,8 +1,19 @@
 {
-  "$comment": "Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised 2026-10-21 (J016: built_on). Hand-back schema for workflow agent() calls (rules/messages.md §2-3). Evidence fields come before the status and outcome fields: answer-first JSON loses accuracy (M-29). For Sonnet or Haiku agents also add 'Think the problem through before you answer.' (M-18).",
+  "$comment": "Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised 2026-10-21 (J016: built_on); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (docs_read; optional lesson draft, lead decision LD11). Hand-back schema for workflow agent() calls (rules/messages.md §2-3). Evidence fields come before the status and outcome fields: answer-first JSON loses accuracy (M-29). A workflow step adds its own fields between questions and lesson (options, findings, revisions); the shared fields stay as here, in this order. For Sonnet or Haiku agents also add 'Think the problem through before you answer.' (M-18).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["coverage", "checks", "built_on", "files", "decisions_made", "proposals", "questions", "status", "outcome"],
+  "required": [
+    "coverage",
+    "checks",
+    "built_on",
+    "docs_read",
+    "files",
+    "decisions_made",
+    "proposals",
+    "questions",
+    "status",
+    "outcome"
+  ],
   "properties": {
     "coverage": {
       "type": "array",
@@ -10,11 +21,27 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["item", "state", "why"],
+        "required": [
+          "item",
+          "state",
+          "why"
+        ],
         "properties": {
-          "item": {"type": "string"},
-          "state": {"type": "string", "enum": ["done", "not done", "skipped"]},
-          "why": {"type": "string", "description": "Empty for done; the reason otherwise."}
+          "item": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "done",
+              "not done",
+              "skipped"
+            ]
+          },
+          "why": {
+            "type": "string",
+            "description": "Empty for done; the reason otherwise."
+          }
         }
       }
     },
@@ -23,28 +50,143 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "result", "evidence"],
+        "required": [
+          "id",
+          "result",
+          "evidence"
+        ],
         "properties": {
-          "id": {"type": "string", "description": "C1, C2 ... from the brief"},
-          "result": {"type": "string", "enum": ["pass", "fail", "not verified"]},
-          "evidence": {"type": "string", "description": "File, log line or capture for a pass; the reason otherwise."}
+          "id": {
+            "type": "string",
+            "description": "C1, C2 ... from the brief"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "not verified"
+            ]
+          },
+          "evidence": {
+            "type": "string",
+            "description": "File, log line or capture for a pass; the reason otherwise."
+          }
         }
       }
     },
-    "built_on": {"type": "array", "items": {"type": "string"}, "description": "Every input used, as path@revision."},
-    "files": {"type": "array", "items": {"type": "string"}},
-    "decisions_made": {"type": "array", "items": {"type": "string"}},
-    "proposals": {"type": "array", "items": {"type": "string"}},
+    "built_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Every input used, as path@revision."
+    },
+    "docs_read": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Every Roblox docs page and docs-map row read for this task (AGENTS.md §0: 'Docs read')."
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decisions_made": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proposals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "questions": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["q", "default"],
-        "properties": {"q": {"type": "string"}, "default": {"type": "string"}}
+        "required": [
+          "q",
+          "default"
+        ],
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "default": {
+            "type": "string"
+          }
+        }
       }
     },
-    "status": {"type": "string", "enum": ["done", "blocked", "needs-decision", "failed"]},
-    "outcome": {"type": "string", "description": "One sentence."}
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "cause",
+        "layer",
+        "what_happened",
+        "proposed_change"
+      ],
+      "description": "Optional lesson draft (knowledge/inbox/README.md fields); the lead files it in knowledge/inbox/ at the next gate.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "win",
+            "failure",
+            "owner-correction"
+          ]
+        },
+        "cause": {
+          "type": "string",
+          "enum": [
+            "context missed",
+            "context missing",
+            "brief gap",
+            "interface conflict",
+            "craft error",
+            "tool failure",
+            "review broke correct work",
+            "found by the owner after internal review",
+            "owner taste change",
+            "win"
+          ]
+        },
+        "layer": {
+          "type": "string",
+          "description": "The file or skill step that should change."
+        },
+        "what_happened": {
+          "type": "string",
+          "description": "1-3 sentences; owner corrections word for word."
+        },
+        "proposed_change": {
+          "type": "string",
+          "description": "One sentence."
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "done",
+        "blocked",
+        "needs-decision",
+        "failed"
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "description": "One sentence."
+    }
   }
 }

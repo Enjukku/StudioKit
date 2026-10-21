@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """SessionStart hook (matcher `compact`): give the lead its job state back after compaction.
 
-Kit tool (universal). Python 3 standard library only, no network. Spec: J016-T01, design-context §3b.
+Kit tool (universal). Python 3 standard library only, no network. Spec: J016-T01, design-context §3b;
+revised by feature-builder · claude-opus-5-5 · high · 2026-10-21, J016 G3 (audit D R3: open tickets).
 
 Reads the SessionStart JSON on stdin (field used: `source`; any value other than "compact" gives no
 output, so a missing matcher does no harm). For each job in knowledge/jobs/active.md it prints the
-`Status` row of the job card and the rows of its Gates table that have no date, then the line
+`Status` row of the job card, the rows of its Gates table that have no date and the number of open
+tickets in its ledger.md (status proposed, approved, working, blocked or needs-decision; the line is
+left out when the ledger has no status column), then the line
 `Re-load the orchestration skill before the next step.` Output is one JSON object:
     {"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": "<text>"}}
 At most CONTEXT_CAP characters; the re-load line is always last.
@@ -30,6 +33,7 @@ EVENT = "SessionStart"
 RELOAD = "Re-load the orchestration skill before the next step."
 ROW_CHARS = 400
 NO_DATE = {"", "-", "—", "–"}
+OPEN_TICKET = {"proposed", "approved", "working", "blocked", "needs-decision"}  # templates/jobs/ledger.md statuses
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*#*\s*$")
 SEPARATOR_RE = re.compile(r"^\|?[\s:|-]+\|?$")
 
@@ -64,6 +68,27 @@ def card_state(text: str) -> tuple[str | None, list[str]]:
     return status, open_gates
 
 
+def open_tickets(text: str) -> int | None:
+    """Ledger rows whose `status` cell is an open status; None when no table has a status column."""
+    count: int | None = None
+    header: list[str] | None = None
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            header = None  # a table ended
+            continue
+        if SEPARATOR_RE.fullmatch(stripped):
+            continue
+        row = cells(stripped)
+        if header is None:
+            header = [c.lower() for c in row]
+            continue
+        if "status" in header:
+            at = header.index("status")
+            count = (count or 0) + (1 if at < len(row) and row[at].lower() in OPEN_TICKET else 0)
+    return count
+
+
 def clip(text: str) -> str:
     return text if len(text) <= ROW_CHARS else text[: ROW_CHARS - 1] + "…"
 
@@ -81,13 +106,17 @@ def context_for(payload: dict, root: Path) -> str | None:
     for job_id, title in jobs:
         body += ["", f"Job {job_id} · {title}"]
         try:
-            card = root / cp.JOBS_DIR / cp.resolve_job(root, job_id) / "job-card.md"
-            status, gates = card_state(card.read_text(encoding="utf-8", errors="replace"))
+            folder = root / cp.JOBS_DIR / cp.resolve_job(root, job_id)
+            status, gates = card_state((folder / "job-card.md").read_text(encoding="utf-8", errors="replace"))
         except (OSError, ValueError):
             body.append(f"No job card found for {job_id} under {cp.JOBS_DIR}/.")
             continue
         body.append(clip(status) if status else "No Status row in the job card.")
         body += [f"Open gate: {clip(row)}" for row in gates] or ["Open gates: none (every gate row has a date)."]
+        ledger = folder / "ledger.md"
+        tickets = open_tickets(ledger.read_text(encoding="utf-8", errors="replace")) if ledger.is_file() else None
+        if tickets is not None:
+            body.append(f"Open tickets: {tickets} (`{ledger.relative_to(root).as_posix()}`)")
     room = CONTEXT_CAP - len(RELOAD) - 1
     kept: list[str] = []
     for line in body:

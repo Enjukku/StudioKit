@@ -1,4 +1,14 @@
-<!-- > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: tickets for new work only; stage instead of hops; stale status) -->
+---
+type: job
+scope: game
+status: active
+updated: <date>
+source: <job-id>
+supersedes: []
+---
+> Author: orchestrator · <model id> · <effort> · <date>
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: tickets for new work only; stage instead of hops; stale status); frontmatter added by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 -->
+
 # Ledger: <job-id>
 
 Every request for **new work** between agents is a ticket here (`rules/company.md` §5). Clarifying questions and interface negotiation need no ticket: they go in `exchange/` or a direct message, and their outcome goes in the contract or `decisions.md`.

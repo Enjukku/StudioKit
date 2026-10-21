@@ -98,6 +98,46 @@ class SubagentContextTests(HookCase):
         self.assertIn("--job J016-demo", text)
         self.assertNotIn("--job J099-gone", text)
 
+    def test_withheld_context_line(self):
+        # Audit D B7: the withheld-context rule for the step (design-context §3b).
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("Withheld on purpose (rules/knowledge.md §3)", text)
+        for item in ("other leads' direction proposals", "hidden", "the maker's hand-back", "other games' notes"):
+            self.assertIn(item, text)
+
+    def test_held_out_job_files_not_listed(self):
+        (self.root / "knowledge/jobs/J016-demo/hidden-rerun").mkdir()
+        (self.root / "knowledge/jobs/J016-demo/hidden-rerun/decisions.md").write_text("Revision: 9\n", encoding="utf-8")
+        (self.root / "knowledge/jobs/J016-demo/contract-hidden.md").write_text("Revision: 2\n", encoding="utf-8")
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("`knowledge/jobs/J016-demo/decisions.md`", text)
+        self.assertNotIn("hidden-rerun", text)
+        self.assertNotIn("contract-hidden", text)
+
+    def test_role_precedents_and_vocabulary_named(self):
+        # Audit D B6: the hook reuses the role block, so it names the role's precedent rows and the vocabulary.
+        (self.root / "knowledge/design/precedents.md").write_text(
+            "# Precedents\n\n| ID | Craft (kit roles) | What it is |\n| --- | --- | --- |\n| P-1 | film-director | Boss slam shot |\n| P-2 | vfx-designer | Spark |\n",
+            encoding="utf-8")
+        (self.root / "knowledge/design/vocabulary.md").write_text("# Vocabulary\n\n| Name | Kind |\n| --- | --- |\n", encoding="utf-8")
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("Precedents for this role: `knowledge/design/precedents.md` L5", text)
+        self.assertNotIn("L6", text)
+        self.assertIn("knowledge/design/vocabulary.md", text)
+
+    def test_two_active_jobs_get_a_lead_line(self):
+        # Audit D R2: with parallel jobs the agent is told which one is its own.
+        active = self.root / "knowledge/jobs/active.md"
+        active.write_text(active.read_text(encoding="utf-8") + "- J017-other · Shop\n", encoding="utf-8")
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("--job J016-demo", text)
+        self.assertIn("--job J017-other", text)
+        self.assertIn("Use the job your brief names; ignore the others.", text)
+
+    def test_one_active_job_has_no_lead_line(self):
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertNotIn("Use the job your brief names", text)
+
     def test_bad_input_never_fails(self):
         for payload in (b"{not json", b"", b"[1, 2]", b"\xff\xfe"):
             with self.subTest(payload=payload):
@@ -117,6 +157,17 @@ class CompactContextTests(HookCase):
         self.assertIn("| G2 first samples | | |", text)
         self.assertIn("| G3 final look | — | |", text)
         self.assertNotIn("G1 brief", text)
+        self.assertTrue(text.rstrip().endswith("Re-load the orchestration skill before the next step."))
+
+    def test_open_tickets_counted_from_the_ledger(self):
+        # Audit D R3: open tickets per job (design-context §3b: "open tickets").
+        (self.root / "knowledge/jobs/J016-demo/ledger.md").write_text(
+            "# Ledger\n\n| id | from | to | ask | inside | stage | status | result | updated |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n"
+            "| T1 | a | b | x | yes | build | working | | 2026-10-20 |\n| T2 | a | b | x | yes | build | done | y | 2026-10-20 |\n"
+            "| T3 | a | b | x | no | build | needs-decision | | 2026-10-21 |\n| T4 | a | b | x | yes | build | stale | | 2026-10-21 |\n",
+            encoding="utf-8")
+        text = self.context("compact_context.py", compact(), "SessionStart")
+        self.assertIn("Open tickets: 2 (`knowledge/jobs/J016-demo/ledger.md`)", text)
         self.assertTrue(text.rstrip().endswith("Re-load the orchestration skill before the next step."))
 
     def test_other_session_sources_give_nothing(self):
@@ -157,7 +208,20 @@ class HandbackCheckTests(HookCase):
 
     def test_missing_status_first_line_blocked(self):
         self.blocked(stop("feature-builder", "Here is my work.\nSTATUS: done.\ncoverage:\n- x: done\n"))
-        self.blocked(stop("feature-builder", "**STATUS:** done.\ncoverage: x\n"))
+        self.blocked(stop("feature-builder", "Status is done.\ncoverage: x\n"))
+
+    def test_markdown_marks_before_status_allowed(self):
+        # Audit D R4: a bold or heading STATUS line is still a STATUS first line.
+        for first in ("**STATUS: done.** Built it.", "**STATUS:** done. Built it.", "## STATUS: done. Built it."):
+            with self.subTest(first=first):
+                self.assert_silent_success("handback_check.py", stop("feature-builder", first + "\n\ncoverage: all\n"))
+
+    def test_coverage_only_in_prose_blocked(self):
+        # Audit D R4: the word in a sentence is not the coverage list.
+        self.blocked(stop("feature-builder", "STATUS: done. Test coverage is low, I skipped the list.\n"))
+        for field in ("coverage:\n  - a: done", "- coverage: [a: done]", '{"coverage": ["a: done"]}', "**coverage:** a done"):
+            with self.subTest(field=field):
+                self.assert_silent_success("handback_check.py", stop("feature-builder", "STATUS: done. x\n<spec>\n" + field + "\n</spec>\n"))
 
     def test_missing_coverage_blocked(self):
         self.blocked(stop("feature-builder", "STATUS: done. Built it.\nfiles: [a.py]\n"))

@@ -1,8 +1,8 @@
 # Role roster
 
-> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
+> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (roster wording, tools lines)
 
-Roles move in from the first game in phase 3; canonical format: see tools/sync_harness.py header. Models per tier come from `kit.json` (lead and craft → Opus, research → Sonnet, mechanical → Haiku); each role file sets its own effort.
+Canonical format: see tools/sync_harness.py header. Models per tier come from `kit.json` (lead and craft → Opus, research → Sonnet, mechanical → Haiku); each role file sets its own effort.
 
 | Role | Tier → model | Effort (default; brief may raise it) | Status |
 | --- | --- | --- | --- |
@@ -33,8 +33,8 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | doc-keeper | mechanical → Haiku | medium | in kit |
 | explore | mechanical → Haiku | low | in kit |
 
-**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). The animator runs as a stand-in until J006 builds it.
+**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). The animator runs as a stand-in until J006 builds it. A role's `tools:` line is its permission list and the owner's decision: a role whose list has no SendMessage does its sideways work through exchange notes, and a role without the built-in browser writes image prompts and returns `images: pending`.
 
 xhigh and max: nobody by default; only after a measured gain. Owner decisions 2026-10-20 ("Opus for animating ... on high. For UI ... Opus on medium. For sound, Opus on medium"; modeler "for simple things, medium is fine ... models that we want to look really good ... high").
 
-**How roles are added (owner 2026-10-20):** the kit ships only the orchestrator (the `orchestration` skill) and the system. Every other role is built with `/build-agent` from material the owner supplies, using `templates/role.md` and `templates/skill/SKILL.md`. No role is trained without owner material.
+**How roles are added (owner 2026-10-20):** new roles are built with `/build-agent` from material the owner supplies, using `templates/role.md` and `templates/skill/SKILL.md`. No role is trained without owner material.

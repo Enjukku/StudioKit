@@ -2,11 +2,11 @@
 type: index
 scope: universal
 status: active
-updated: 2026-10-20
+updated: 2026-10-21
 source: "kit phase 1"
 supersedes: []
 ---
-> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
+> Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by feature-builder · claude-opus-5-5 · high · 2026-10-21, J016 G3 (audit D R5, R10, R11)
 
 # Knowledge index
 
@@ -19,7 +19,8 @@ One routing level. Do not read everything: run `python tools/context_packet.py p
 | Open questions | design/open-questions.md | Unanswered design questions and PROPOSAL items |
 | Rejected approaches | design/tried-and-failed.md | What failed and when to retry |
 | Jobs | jobs/README.md | Job folders for M and L jobs |
-| Active jobs | jobs/active.md | Open M and L jobs (the lead keeps it current; hooks and the packet read it) |
+| Active jobs | jobs/active.md | Open M and L jobs (the lead keeps it current; the hooks read it) |
+| Area indexes | generated/index-<area>.md | Every note of one area (design, jobs, reference, ...) with a one-line summary; made by `python tools/kb_index.py`, never hand-edited |
 | Precedents | design/precedents.md | Accepted work that shows what this game is, per craft |
 | Vocabulary | design/vocabulary.md | One name per thing: states, events, cues, assets |
 | Taste log | design/taste-log.md | The owner's corrections, word for word |

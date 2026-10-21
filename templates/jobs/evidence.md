@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: <role> · <model id> · <effort> · <date>
-<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016). The job's evidence ledger: written by the integrator and reviewers, checked by the lead at readiness, read by /improve. -->
+<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016); cause list aligned with rules/knowledge.md §8 by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3. The job's evidence ledger: written by the integrator and reviewers, checked by the lead at readiness, read by /improve. -->
 
 # Evidence: <job-id>
 
@@ -22,7 +22,7 @@ A failed check stays visible until a passing run on a repaired revision supersed
 | --- | --- | --- |
 
 ## 3. Defects
-Cause: context missed · context missing · brief gap · interface conflict · craft error · tool failure · review broke correct work · found by the owner after internal review · owner taste change.
+Cause (the list in `rules/knowledge.md` §8, word for word): context missed · context missing · brief gap · interface conflict · craft error · tool failure · review broke correct work · defect found by the owner after internal review · owner taste change.
 
 | ID | Found @rev | By | Class (blocking / recommendation / new request) | Cause | Owner of the fix | Fixed @rev | Rechecked |
 | --- | --- | --- | --- | --- | --- | --- | --- |

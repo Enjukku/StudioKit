@@ -408,6 +408,200 @@ class JobFlagTests(FixtureRepo):
         self.assertNotIn("role", json.loads(self.packet("storyboard the boss intro", "--json")[1]))
 
 
+REPO = TOOLS.parent
+
+
+def role_file(name: str, skills: str, body: str) -> str:
+    return f"---\nname: {name}\ndescription: {name} role.\nskills: {skills}\n---\n\n{body}\n"
+
+
+class WithheldTests(Repo):
+    """J016 G3 audit D B1-B3, R12, R13, E TT-01, TT-17, TT-18; lead decision LD8 (rules/knowledge.md §3 withheld table)."""
+
+    def held_out_notes(self) -> None:
+        text = fm("job") + "# Boss anchor answers\n\nThe boss anchor answers: art bible anchors review.\n"
+        for rel in (
+            "knowledge/jobs/J1-x/hidden-answers.md",
+            "knowledge/jobs/J1-x/grades-hidden.md",
+            "knowledge/jobs/J1-x/evals-hidden.md",
+            "knowledge/jobs/J1-x/analyst/hidden-rerun/q1.md",
+            "knowledge/jobs/J1-x/Hidden-Cases.md",
+        ):
+            self.write(rel, text)
+        self.write("knowledge/jobs/J1-x/hidden-rerun/decisions.md", fm("job") + "# Decisions\n\nRevision: 9\n")
+        self.write("knowledge/jobs/J1-x/contract-hidden.md", fm("job", extra="revision: 2\n") + "# Contract\n\ntext\n")
+        self.write("knowledge/jobs/J1-x/job-card.md", fm("job", extra="revision: 1\n") + "# Job card\n\nReview the art bible anchors.\n")
+        self.write("knowledge/design/anchors.md", fm() + "# Anchor register\n\nArt bible anchors for the boss review. See [[jobs/J1-x/hidden-answers]].\n")
+
+    def test_hidden_files_are_never_ranked_linked_or_named(self):
+        self.held_out_notes()
+        self.write("kit.json", json.dumps({"context": {"exclude": ["knowledge/generated"]}}))  # a config exclude list cannot re-admit them
+        corpus = cp.Corpus(self.root)
+        self.assertFalse([p for p in corpus.notes if "hidden" in p.lower()])
+        for role, job in ((None, None), (None, "J1-x")):
+            hits = cp.rank(corpus, "boss anchor answers art bible review", job=job)[0]
+            self.assertIn("knowledge/design/anchors.md", [h.path for h in hits])
+            self.assertFalse([h.path for h in hits if "hidden" in h.path.lower()])
+        packet = cp.build(self.root, "boss anchor answers art bible review", job="J1-x")
+        self.assertNotIn("hidden", json.dumps(packet).lower())
+        self.assertNotIn("hidden", cp.render(packet).lower())
+        self.assertEqual([f["path"] for f in packet["job"]["files"]], ["knowledge/jobs/J1-x/job-card.md"])
+        self.assertIsNone(corpus.resolve_link("hidden-answers"))  # a bare stem never resolves to a held-out file
+
+    def test_hidden_files_never_reach_generated_indexes_or_lint_output(self):
+        self.held_out_notes()
+        self.write("knowledge/jobs/J1-x/hidden-broken.md", "# no frontmatter\n")
+        outputs = kb.build_indexes(self.root)
+        self.assertIn("anchors.md", outputs["knowledge/generated/index-design.md"])
+        self.assertNotIn("hidden", "".join(outputs.values()).lower())
+        self.assertFalse([p for p in kb.knowledge_notes(self.root) if "hidden" in p.lower()])
+        errors, warnings = kb.lint(self.root)
+        self.assertNotIn("hidden", "\n".join(errors + warnings).lower())
+
+    def test_direction_proposals_never_reach_the_packet(self):
+        proposal = fm("job") + "# Direction proposal: art-director\n\nBoss intro cutscene direction proposal: storyboard, palette, cold light.\n"
+        self.write("knowledge/jobs/J2-demo/direction/proposal-art-director.md", proposal)
+        self.write("knowledge/jobs/J2-demo/direction/proposal-film-director.md", proposal.replace("art-director", "film-director"))
+        self.write("knowledge/jobs/J2-demo/direction.md", fm("job", extra="revision: 1\n") + "# Direction sheet\n\nBoss intro cutscene direction after synthesis.\n")
+        self.write("knowledge/jobs/J2-demo/job-card.md", fm("job") + "# Job card\n\nBoss intro cutscene.\n")
+        packet = cp.build(self.root, "write the boss intro cutscene direction proposal and storyboard", job="J2-demo")
+        self.assertNotIn("/proposal-", json.dumps(packet))
+        self.assertIn("knowledge/jobs/J2-demo/direction.md", [r["path"] for r in packet["results"]])
+        self.assertNotIn("proposal-", "".join(kb.build_indexes(self.root).values()))
+
+    def test_underscore_material_from_another_game_is_withheld(self):
+        self.write("knowledge/overlays/_moved-from-other-game.md", fm("overlay").replace("scope: universal", "scope: game") + "# Moved from OtherGame\n\nFireball effect lines for the VFX lab place.\n")
+        self.write("knowledge/overlays/vfx-design.md", fm("overlay") + "# VFX design for this game\n\nFireball effect rules.\n")
+        paths = [h.path for h in self.ranked("build a fireball effect for the VFX lab place")]
+        self.assertIn("knowledge/overlays/vfx-design.md", paths)
+        self.assertNotIn("knowledge/overlays/_moved-from-other-game.md", paths)
+        self.assertNotIn("_moved", "".join(kb.build_indexes(self.root).values()))
+
+    def test_skill_evals_not_ranked_and_read_next_names_skill_md(self):
+        self.write(".agents/skills/data-saving/SKILL.md", "---\nname: data-saving\ndescription: Use when saving player data.\n---\n\n# Data saving\n\nSessions and locks.\n")
+        self.write(".agents/skills/data-saving/references/receipts.md", "# Receipts\n\nShop purchase receipt saving: grant once per receipt.\n")
+        self.write(".agents/skills/data-saving/evals/briefs.md", "# Eval briefs\n\n## E-01 shop purchase receipt saving\n\nPass when the shop purchase receipt saving grants once.\n")
+        packet = cp.build(self.root, "shop purchase receipt saving")
+        self.assertNotIn("/evals/", json.dumps(packet))
+        self.assertEqual(packet["results"][0]["path"], ".agents/skills/data-saving/references/receipts.md")
+        self.assertTrue(packet["read_next"][0].startswith("load skill `data-saving` (.agents/skills/data-saving/SKILL.md)"), packet["read_next"][0])
+        self.assertIn(".agents/skills/data-saving/references/receipts.md", packet["read_next"][0])
+
+    def test_sibling_copies_of_one_section_take_one_slot(self):
+        for name in ("anime", "cartoon", "claytoy", "pixel"):
+            self.write(f"knowledge/jobs/J3-x/art/bible-{name}.md", fm("job") + f"# Bible {name}\n\n## Families\n\nShape families for the character model review.\n")
+        self.write("knowledge/design/review.md", fm() + "# Review\n\n## Character model review\n\nReview the character model.\n")
+        for name, extra in (("doc-keeper", ""), ("explore", " Lesson drafts go to the inbox."), ("modeler", " More words here for length.")):
+            self.write(f".agents/roles/{name}.md", f"---\nname: {name}\n---\n\n## Hand-back\n\nLesson drafts after the job ends.{extra}\n")
+        hits = self.ranked("character model review families")
+        families = [h for h in hits if h.heading == "Families"]
+        self.assertEqual(len(families), 1)
+        handbacks = [h for h in self.ranked("where do lesson drafts go after a job ends") if h.heading == "Hand-back"]
+        self.assertEqual(len(handbacks), 1)  # different scores, same section in sibling files (audit D: role hand-backs filled 4 slots)
+
+    def test_real_repo_corpus_and_indexes_name_no_held_out_path(self):
+        # Real content and scale (testing T-03). Paths only: never print a held-out file's content.
+        corpus = cp.Corpus(REPO)
+        self.assertGreater(len(corpus.notes), 300)
+        leaked = sorted(p for p in corpus.notes if "hidden" in p.lower())
+        self.assertEqual(leaked, [], "held-out paths in the packet corpus")
+        rows = [line for text in kb.build_indexes(REPO).values() for line in text.splitlines() if line.startswith("| [")]
+        self.assertGreater(len(rows), 300)
+        linked = [line.split("](", 1)[1].split(")", 1)[0] for line in rows]
+        self.assertEqual([p for p in linked if "hidden" in p.lower()], [], "held-out paths in the generated indexes")
+        self.assertEqual(sum(1 for line in rows if cp.names_held_out(line)), 0, "index rows that name a held-out file")
+
+
+class RoleRankingTests(Repo):
+    """J016 G3 audit D R1, B6, E TT-15, TT-16: --role ranks the role's own book and lists its precedents."""
+
+    def roles(self) -> None:
+        self.write(".agents/roles/sound-designer.md", role_file("sound-designer", "sound-design", "You design sound."))
+        self.write(".agents/roles/film-director.md", role_file("film-director", "film-direction", "You direct the boss entrance: stinger, reveal and cue timing for the boss entrance."))
+        self.write(".agents/skills/sound-design/SKILL.md", "---\nname: sound-design\ndescription: Use when designing SFX, music and cues.\n---\n\n# Sound design\n\n## Reveal cues\n\nA stinger cue for a reveal: layer the hit.\n")
+        self.write(".agents/skills/film-direction/SKILL.md", "---\nname: film-direction\ndescription: Use for cutscenes.\n---\n\n# Film direction\n\nShots.\n")
+
+    def test_role_ranks_its_own_skill_above_another_roles_file(self):
+        self.roles()
+        task = "design the boss entrance stinger and reveal cue sounds"
+        corpus = cp.Corpus(self.root)
+        plain = [h.path for h in cp.rank(corpus, task)[0]]
+        self.assertLess(plain.index(".agents/roles/film-director.md"), plain.index(".agents/skills/sound-design/SKILL.md"))  # the audit's case
+        hits = cp.rank(corpus, task, role="sound-designer")[0]
+        ranked = [h.path for h in hits]
+        self.assertLess(ranked.index(".agents/skills/sound-design/SKILL.md"), ranked.index(".agents/roles/film-director.md"))
+        own = next(h for h in hits if h.path == ".agents/skills/sound-design/SKILL.md")
+        self.assertIn("; own book of role sound-designer", own.why)
+
+    def test_role_block_lists_precedents_of_the_role_and_names_vocabulary(self):
+        self.roles()
+        self.write(
+            "knowledge/design/precedents.md",
+            fm() + "# Precedents\n\n| ID | Craft (kit roles) | What it is | Why | Path @ revision | Decision | Date |\n| --- | --- | --- | --- | --- | --- | --- |\n"
+            "| P-1 | sound-designer | Boss stinger | \"that hit\" | content/sound/stinger.md@3 | D-4 | 2026-10-20 |\n"
+            "| P-2 | vfx-designer, film-director | Slam shot | \"yes\" | content/vfx/slam.md@2 | D-5 | 2026-10-20 |\n",
+        )
+        self.write("knowledge/design/vocabulary.md", fm() + "# Vocabulary\n\n| Name | Kind |\n| --- | --- |\n")
+        info = cp.role_info(self.root, "sound-designer")
+        self.assertEqual([r["row"].split("|")[1].strip() for r in info["precedents"]], ["P-1"])
+        text = "\n".join(info["lines"])
+        self.assertIn("| P-1 | sound-designer | Boss stinger |", text)
+        self.assertNotIn("P-2", text)
+        self.assertIn("`knowledge/design/vocabulary.md`", text)
+        self.assertEqual([r["row"].split("|")[1].strip() for r in cp.role_info(self.root, "film-director")["precedents"]], ["P-2"])
+
+    def test_orchestrator_role_loads_the_orchestration_skill(self):
+        self.write(".agents/skills/orchestration/SKILL.md", "---\nname: orchestration\ndescription: The lead's playbook.\n---\n\n# Orchestration\n\nSize the job.\n")
+        info = cp.role_info(self.root, "orchestrator")
+        self.assertEqual(info["skills"], ["orchestration"])
+        self.assertIn("orchestration", "\n".join(info["lines"]))
+        code, _, err = run_cli(cp.main, ["--root", str(self.root), "packet", "size the job", "--role", "orchestrator"])
+        self.assertEqual(code, 0, err)
+
+    def test_unknown_job_message_says_what_to_do(self):
+        (self.root / "knowledge/jobs").mkdir(parents=True)
+        code, out, err = run_cli(cp.main, ["--root", str(self.root), "packet", "storyboard", "--job", "J099-tabletop"])
+        self.assertEqual(code, 2)
+        self.assertEqual(out, "")
+        self.assertIn("unknown job `J099-tabletop`", err)
+        self.assertIn("omit --job", err)
+
+
+class EvalCaseTests(Repo):
+    """J016 G3 audit D B4, E TT-01: cases carry role and job; a case can forbid paths."""
+
+    def test_case_role_and_job_reach_the_ranking(self):
+        self.write(".agents/roles/sound-designer.md", role_file("sound-designer", "sound-design", "Sound."))
+        self.write(".agents/roles/film-director.md", role_file("film-director", "film-direction", "Boss entrance stinger and reveal cue timing."))
+        self.write(".agents/skills/sound-design/SKILL.md", "---\nname: sound-design\ndescription: Use for SFX.\n---\n\n# Sound design\n\nA stinger cue for a reveal at the boss entrance.\n")
+        self.write("knowledge/jobs/J5-demo/job-card.md", fm("job") + "# Job card\n\nBoss entrance stinger reveal cue.\n")
+        self.write("knowledge/jobs/J6-other/job-card.md", fm("job") + "# Job card\n\nBoss entrance stinger reveal cue.\n")
+        task = "boss entrance stinger reveal cue"
+        expect = [".agents/skills/sound-design/SKILL.md", "knowledge/jobs/J5-demo/job-card.md"]
+        plain = ev.evaluate(self.root, [{"task": task, "expect": expect}])["cases"][0]
+        tagged = ev.evaluate(self.root, [{"task": task, "expect": expect, "role": "sound-designer", "job": "J5"}])["cases"][0]
+        self.assertEqual(plain["ranks"][1], 2)  # without --job the two equal job cards tie; J5 wins on path order only
+        self.assertGreater(plain["ranks"][0], 1)  # without --role another role's file outranks the skill
+        self.assertEqual(sorted(tagged["ranks"]), [1, 2])  # with both: the role's skill and the job's card lead
+
+    def test_forbidden_path_fails_a_case(self):
+        self.write("knowledge/systems/eggs.md", fm("system") + "# Eggs\n\nEgg hatch odds.\n")
+        self.write("knowledge/systems/egg-draft.md", fm("system") + "# Egg draft\n\nEgg hatch odds draft.\n")
+        cases = [
+            {"task": "egg hatch odds", "expect": ["knowledge/systems/eggs.md"], "forbid": ["*-draft.md"]},
+            {"task": "egg hatch odds", "expect": ["knowledge/systems/eggs.md"], "forbid": ["*hidden*"]},
+        ]
+        rows = ev.evaluate(self.root, cases)["cases"]
+        self.assertFalse(rows[0]["pass"])
+        self.assertEqual(rows[0]["forbidden"], ["knowledge/systems/egg-draft.md"])
+        self.assertTrue(rows[1]["pass"])
+        self.assertIn("forbidden", ev.report(ev.evaluate(self.root, cases), 5))
+
+    def test_bad_role_or_forbid_field_is_a_bad_line(self):
+        self.write("knowledge/evals/retrieval.jsonl", '{"task": "egg odds", "expect": ["a.md"], "forbid": "*hidden*"}\n')
+        self.assertEqual(quiet(ev.main, ["--root", str(self.root)]), 2)
+
+
 class DescriptionBudgetTests(Repo):
     """verify.py check f (J016-D4): every .agents/skills/*/SKILL.md description <= 400 characters."""
 

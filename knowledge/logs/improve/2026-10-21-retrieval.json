@@ -1,0 +1,827 @@
+{
+  "overall": {
+    "cases": 31,
+    "passed": 21,
+    "recall@5": 0.6129,
+    "recall@10": 0.6935,
+    "mrr": 0.5115
+  },
+  "cases": [
+    {
+      "task": "how does the owner approve a large job",
+      "expect": [
+        "rules/company.md#2"
+      ],
+      "ranks": [
+        11
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0909,
+      "pass": false,
+      "top": [
+        "AGENTS.md#1-the-studio-details-rules-company-md",
+        "knowledge/jobs/J009-art-director/art/style-test-2/bible-lowpoly.md#temporary-bible-low-poly-flat-shaded-style-test-2-proposal-no-owner-approval",
+        "knowledge/jobs/J009-art-director/art/style-test-2/bible-lowpoly-r1.md#temporary-bible-low-poly-flat-shaded-retry-1-style-test-2-proposal-no-owner-approval",
+        ".agents/skills/reference-images/SKILL.md#4-steps",
+        ".agents/roles/ui-ux-designer.md#working-with-other-agents",
+        "knowledge/jobs/J004-trend-scout/digest.md#decision-digest-2026-10-20-j004-g1",
+        "knowledge/jobs/J002-ui-ux-designer/decisions.md#j002-decisions",
+        "knowledge/jobs/J016-orchestration/decisions.md#j016-decisions-owner-s-words",
+        "knowledge/reference/modeling/04-first-game-experience.md#2-owner-gates-and-what-the-owner-approved",
+        "knowledge/jobs/J001-engineering-skills/job-card.md#j001-rebuild-the-engineering-skills-for-the-kit"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "where do lesson drafts go after a job ends",
+      "expect": [
+        "rules/knowledge.md#6",
+        "knowledge/inbox/README.md"
+      ],
+      "ranks": [
+        6,
+        1
+      ],
+      "recall@5": 0.5,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        "knowledge/inbox/README.md#inbox-lesson-drafts",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#checks",
+        "rules/knowledge.md#8-the-learning-loop",
+        "knowledge/inbox/2026-10-21-J004-lead-build-trend-scout.md#outcome-and-owner-corrections-word-for-word",
+        ".agents/roles/doc-keeper.md#hand-back",
+        "rules/knowledge.md#6-where-things-go",
+        "knowledge/lessons/README.md#lessons-accepted",
+        "knowledge/jobs/J004-trend-scout/trend-scout/eval-answers-r2.md#self-check",
+        "rules/company.md#4-the-flow-every-m-and-l-job-follows",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "write an intent brief for an animator",
+      "expect": [
+        ".agents/skills/orchestration/SKILL.md#10"
+      ],
+      "ranks": [
+        55
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0182,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J005-character-rigger/brief.md#j005-intent-brief-rig-workflow-character-rigger",
+        "knowledge/jobs/J015-film-director/brief.md#j015-intent-brief-film-director-agent",
+        "knowledge/jobs/J007-modeler/brief.md#j007-intent-brief-modeler-agent",
+        "knowledge/jobs/J009-art-director/brief.md#j009-intent-brief-art-director-agent",
+        "knowledge/jobs/J015-film-director/decisions.md#j015-decisions",
+        "knowledge/jobs/J015-film-director/digest.md#decision-digest-2026-10-21-j015-g1",
+        "knowledge/jobs/J009-art-director/brief.md#proposed-skill-books",
+        ".agents/skills/film-craft/references/handoff-briefs.md#hand-offs-what-each-craft-gets-from-the-film-director",
+        ".agents/skills/film-craft/references/handoff-briefs.md#1-who-gets-what",
+        "knowledge/jobs/J004-trend-scout/brief.md#first-real-test-g2-proposed"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "run the weekly improvement pass",
+      "expect": [
+        ".agents/workflows/improve.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/workflows/improve.md#improve-the-weekly-review-and-learning-pass",
+        ".agents/workflows/improve.md#step-1-gather-scripts-cheap",
+        "knowledge/evals/README.md#compare-before-and-after-a-retrieval-change",
+        "rules/company.md#12-learning",
+        "knowledge/inbox/README.md#inbox-lesson-drafts",
+        "knowledge/jobs/J016-orchestration/design-context.md#6-question-4-how-wins-and-failures-make-every-part-of-context-better",
+        "knowledge/index.md#knowledge-index",
+        "rules/knowledge.md#8-the-learning-loop",
+        "knowledge/jobs/J004-trend-scout/grade-J004-evals-r2.md#e2-is-it-a-breakout-pass",
+        "knowledge/jobs/J013-analyst/decisions.md#j013-decisions"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "tailor the kit skills to this game's style",
+      "expect": [
+        ".agents/workflows/integrate.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/workflows/integrate.md#integrate-kit-this-game",
+        "knowledge/design/game-profile.md#game-profile",
+        ".agents/workflows/integrate.md#steps",
+        "knowledge/jobs/J002-ui-ux-designer/decisions.md#j002-decisions",
+        ".agents/skills/ui-style-anime/SKILL.md#anime-ui",
+        ".agents/skills/ui-style-cartoon/SKILL.md#cartoon-ui",
+        ".agents/skills/ui-style-stud/SKILL.md#stud-ui",
+        "knowledge/jobs/J009-art-director/decisions.md#j009-decisions",
+        "knowledge/reference/art-direction/05-first-game-art.md#first-game-art-experience-the-first-art-director-art-fundamentals-the-art-bible-and-the-owner-s-rulings-kit-neutral-lessons",
+        "knowledge/jobs/J009-art-director/art/style-probe/bible-anime.md#style-probe-bible-anime"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "send a universal lesson back to the studio kit",
+      "expect": [
+        ".agents/workflows/kit-sync.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/workflows/kit-sync.md#kit-sync-this-game-the-studio-kit",
+        "rules/knowledge.md#8-the-learning-loop",
+        "knowledge/jobs/J015-film-director/decisions.md#j015-decisions",
+        "rules/messages.md#agent-messages-how-agents-brief-exchange-review-and-hand-back",
+        "knowledge/inbox/2026-10-21-J013-lead-build-analyst.md#lessons-building-the-analyst-j013-steps-1-6",
+        ".agents/roles/studio-operator.md#studio-operator",
+        "knowledge/jobs/J010-engineering-team/brief-paper.md#brief-research-paper-extraction-j010-t06-t08",
+        "knowledge/reference/film/04-earlier-game-opening-film-lessons.md#read-no-universal-lesson",
+        "rules/knowledge.md#1-one-source-of-truth-five-layers",
+        ".agents/roles/doc-keeper.md#doc-keeper"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "an agent is blocked and needs a decision from the owner",
+      "expect": [
+        "rules/company.md#8",
+        ".agents/skills/orchestration/SKILL.md#12"
+      ],
+      "ranks": [
+        3,
+        2
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.5,
+      "pass": true,
+      "top": [
+        "knowledge/reference/art-direction/03-light-cohesion-anchors-feedback.md#4-2-feedback-template-for-another-agent-ap-713-739-all-12-fields",
+        ".agents/skills/orchestration/SKILL.md#12-statuses",
+        "rules/company.md#8-statuses-and-escalation",
+        ".agents/skills/art-review/references/feedback-briefs.md#3-review-file-layout",
+        "knowledge/jobs/J016-orchestration/reviews/core-rules-322c8ad-auditor-a.md#review-core-rules-and-orchestration-playbook-322c8ad-by-auditor-a",
+        ".agents/workflows/jobs/README.md#contract-every-job-workflow-keeps",
+        "knowledge/jobs/J016-orchestration/reviews/workflows-322c8ad-auditor-b.md#review-the-seven-saved-job-workflows-at-322c8ad-by-auditor-b",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6",
+        "AGENTS.md#1-the-studio-details-rules-company-md",
+        "knowledge/reference/film/04-earlier-game-opening-film-lessons.md#7-what-blocked-progress"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "which frontmatter fields does every knowledge note need",
+      "expect": [
+        "rules/knowledge.md#5"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        "rules/knowledge.md#5-notes",
+        "knowledge/jobs/J014-live-ops-designer/grades-g2.md#6-template-conformance",
+        ".agents/roles/doc-keeper.md#work-method",
+        "knowledge/jobs/J016-orchestration/design-context.md#3-question-1-how-each-agent-reaches-its-correct-context",
+        "knowledge/jobs/J016-orchestration/design-context.md#7-what-would-change-in-the-kit-after-your-approval",
+        ".agents/skills/analysis-craft/SKILL.md#3-steps-per-task-type",
+        ".agents/skills/game-concept/references/pitch-template.md#1-two-layers",
+        "rules/knowledge.md#3-routing-how-every-agent-reaches-its-context",
+        "knowledge/jobs/J016-orchestration/reviews/roles-templates-322c8ad-auditor-c.md#review-role-files-and-job-templates-322c8ad-by-auditor-c",
+        "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#4-3-event-contract-fields-ap-375-379-399-401"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "play-test the game in Studio and check Output for new errors",
+      "expect": [
+        ".agents/skills/studio-mcp/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/studio-mcp/SKILL.md#7-self-check-before-returning",
+        ".agents/skills/studio-mcp/SKILL.md#studio-mcp-checking-the-game-in-studio",
+        "knowledge/reference/engineering/paper/factcheck-engine.md#lead-addendum-studio-probe-2026-10-21",
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/handoffs-draft.md#s-1-and-s-2-studio-checks-i-need-the-lead-routes-them-to-the-studio-operator-i-do-not-drive-studio",
+        ".agents/roles/studio-operator.md#work-method",
+        ".agents/skills/engineering-craft/SKILL.md#4-craft-core",
+        "knowledge/jobs/J013-analyst/T04-tool-brief.md#brief-j013-t04-analytics-data-tool-stats-helper",
+        ".agents/skills/environment-design/SKILL.md#3-steps-each-step-s-output-is-a-file-owner-gates-in-bold",
+        "knowledge/reference/architecture/roblox-operations-2026-10.md#1-testing-toolchain-1-5",
+        "knowledge/jobs/J008-environment-designer/decisions.md#j008-decisions"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "add a paid egg with a luck potion and show odds",
+      "expect": [
+        ".agents/skills/platform-policy/SKILL.md"
+      ],
+      "ranks": [
+        17
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0588,
+      "pass": false,
+      "top": [
+        "knowledge/reference/vfx/02b-moments-reward-mood.md#open-test-ourselves",
+        ".agents/skills/platform-policy/references/rules.md#a-paid-random-items-eggs-crates-wheels-gacha-keys-spins-re-rolls-luck-boosts",
+        ".agents/skills/vfx-design/references/moment-recipes.md#d-paid-random-items-eggs-chests-wheels",
+        "knowledge/reference/progression/fact-check-roblox.md#table-b-paid-random-items-and-policyservice-priority-1-2-3",
+        "knowledge/reference/vfx/11-glossary.md#juice-feel-and-reward",
+        "knowledge/reference/vfx/02b-moments-reward-mood.md#family-v-reveals-by-rarity-8-rows",
+        ".agents/skills/ui-design/references/shops-rewards-onboarding.md#3-paid-random-items-v-r14-placement-o",
+        ".agents/skills/sound-design/references/roblox-audio.md#d-paid-random-items-roblox-policy",
+        "knowledge/jobs/J003-game-designer/g2/concepts/C-20261021-guard-the-dragon-egg.md#pitch-record-guard-the-dragon-egg",
+        "knowledge/reference/live-ops/fact-check-roblox.md#8-paid-random-items-and-policyservice"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "players lost their data after a teleport, items duplicated",
+      "expect": [
+        ".agents/skills/data-saving/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/data-saving/SKILL.md#1-when-this-skill-starts",
+        ".agents/skills/data-saving/SKILL.md#data-saving-never-lose-or-duplicate-a-player-s-progress",
+        ".agents/skills/code-review/SKILL.md#4-craft-core",
+        "knowledge/reference/architecture/roblox-operations-2026-10.md#2-releases-and-recovery-2-5-3",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        ".agents/skills/networking-security/SKILL.md#networking-and-security-the-client-can-lie-about-everything",
+        "knowledge/reference/analyst/01-roblox-platform-facts.md#2-8-discovery-break-roadmap-creator-report",
+        "knowledge/reference/architecture/roblox-operations-2026-10.md#1-testing-toolchain-1-5",
+        "knowledge/jobs/J014-live-ops-designer/g2/feedback-data/sorts/codebook.md#codebook-v1-mothlight-meadow-synthetic-test-game",
+        "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#2-4-economy"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "the game lags and memory keeps growing on phones",
+      "expect": [
+        ".agents/skills/performance/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/performance/SKILL.md#performance-smooth-on-the-players-phones",
+        ".agents/roles/performance-engineer.md#performance-engineer",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        "knowledge/reference/vfx/07-roblox-performance-accessibility.md#performance-and-mobile-part-10",
+        ".agents/skills/market-trends/references/loops.md#4-proven-loop-new-theme-twist",
+        ".agents/skills/performance/SKILL.md#1-when-this-skill-starts",
+        "knowledge/reference/engineering/rework/git-b.md#1-multi-round-tasks-3-or-more-rounds",
+        ".agents/workflows/improve.md#step-3-consolidate-the-knowledge-base-the-dreaming-pass",
+        "knowledge/reference/animation/02-blender-roblox-process.md#5-2-pass-or-fail-review-checklist-ap-1004-1021-complete-15-rows-ids-are-mine",
+        ".agents/skills/engineering-craft/references/handoffs.md#0-who-hands-what-to-whom"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "add a remote so the client can buy an item, make it exploit-proof",
+      "expect": [
+        ".agents/skills/networking-security/SKILL.md"
+      ],
+      "ranks": [
+        2
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.5,
+      "pass": true,
+      "top": [
+        "knowledge/reference/engineering/rework/old-agents.md#remotes-security-agents-skills-remotes-security-skill-md",
+        ".agents/skills/networking-security/SKILL.md#networking-and-security-the-client-can-lie-about-everything",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        ".agents/skills/engineering-craft/references/handoffs.md#1-architect-feature-builder-build-ticket",
+        ".agents/skills/networking-security/references/facts.md#official-validation-guidance",
+        "knowledge/jobs/J016-orchestration/reviews/workflows-322c8ad-auditor-b.md#review-the-seven-saved-job-workflows-at-322c8ad-by-auditor-b",
+        "knowledge/evals/skill-runs/2026-10-20.md#rows-one-per-brief",
+        "knowledge/reference/live-ops/01-mandate-cases-rhythm-events-ranking.md#5-types-of-live-content-lp-129-159",
+        ".agents/skills/networking-security/SKILL.md#4-craft-core",
+        "knowledge/reference/architecture/roblox-operations-2026-10.md#4-exploit-resistance-4"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "build a shop screen that works on phones and with a controller",
+      "expect": [
+        ".agents/skills/ui-basics/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/ui-basics/SKILL.md#ui-basics-every-screen-works-on-every-device",
+        ".agents/roles/ui-ux-designer.md#ui-ux-designer",
+        "knowledge/jobs/J009-art-director/art/test-b/briefs-ui.md#j009-t09-b1-egg-shop-cartoon-fixes",
+        "knowledge/inbox/2026-10-20-J002-ui-ux-designer.md#j002-t07-lessons-first-cartoon-egg-shop-in-figma",
+        ".agents/skills/ui-design/SKILL.md#6-self-check-before-returning",
+        "knowledge/jobs/J016-orchestration/design-jobtypes.md#4-ui-screen-hud-menu-shop-inventory-popup-reward-reveal-onboarding",
+        "knowledge/jobs/J009-art-director/art/test-b/art-review-egg-shop.md#1-verdict",
+        ".agents/skills/ui-design/SKILL.md#ui-design-the-screen-works-before-it-is-pretty",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        ".agents/skills/orchestration/references/job-types.md#4-ui-screen"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "where do new players quit, add funnel events",
+      "expect": [
+        ".agents/skills/analytics/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/analytics/SKILL.md#analytics-know-why-players-stay-or-leave",
+        "knowledge/jobs/J014-live-ops-designer/test-pack/analyst-weekly-2026-10-20.md#part-1-for-the-owner",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        "knowledge/evals/skill-runs/2026-10-20.md#rows-one-per-brief",
+        "knowledge/jobs/J014-live-ops-designer/feedback-plan.md#6-honest-counts-who-could-answer",
+        "knowledge/reference/progression/04-first-game.md#5-telemetry-practice-what-was-planned-to-see-the-problems",
+        "knowledge/jobs/J013-analyst/digest.md#decision-digest-2026-10-21-j013-g1",
+        "knowledge/jobs/J011-progression-designer/policy-followups.md#j011-follow-ups-platform-policy-analytics-whats-new",
+        "knowledge/jobs/J013-analyst/analyst/g2-investigation/retention-drop.md#2-8-competing-explanations-checklist-row-10",
+        "knowledge/reference/progression/fact-check-roblox.md#table-e-analyticsservice-events-and-limits-priority-10-11"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "should we add a new package from GitHub for state management",
+      "expect": [
+        "rules/packages.md"
+      ],
+      "ranks": [
+        19
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0526,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J001-engineering-skills/job-card.md#owner-s-words-2026-10-20-verbatim-excerpts",
+        "knowledge/jobs/J001-engineering-skills/job-card.md#steps-and-order",
+        "knowledge/reference/marketing/fact-check-roblox-ads-policy.md#owner-actions",
+        "knowledge/reference/live-ops/feedback-routes-fact-sheet.md#not-read-and-what-was-not-found",
+        "knowledge/reference/engineering/paper/part-2.md#1c-7-tests-and-tools-that-establish-what-actually-ran-pl-561-602",
+        "knowledge/reference/engineering/paper/sources.md#engineering-paper-dated-source-register-j010-t08",
+        ".agents/skills/marketing-craft/references/testing-measurement.md#1-what-each-test-really-is",
+        "knowledge/reference/engineering/paper/factcheck-practice.md#1d-test-tools-what-each-can-and-cannot-do",
+        "knowledge/reference/marketing/fact-check-roblox-discovery.md#title-icon-testing-answer",
+        "knowledge/reference/roblox/whats-new.md#data-step-3"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "design a new quest system so adding quests is easy",
+      "expect": [
+        ".agents/skills/architecture/SKILL.md"
+      ],
+      "ranks": [
+        182
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0055,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/plan-2026-10-21.md#c-ranked-candidates",
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/handoffs-draft.md#t-g1-game-designer-masquerade-play-spec-a1-gate-message-phone-playtest-read",
+        ".agents/skills/live-ops-design/references/cadence-content.md#2-choosing-a-rhythm-o",
+        ".agents/skills/live-ops-design/references/cadence-content.md#4-content-types-name-the-player-problem-first-o",
+        "knowledge/jobs/J001-engineering-skills/job-card.md#owner-s-words-2026-10-20-verbatim-excerpts",
+        "knowledge/reference/game-design/03-loops-systems.md#3-3-real-disagreements-and-their-scope",
+        ".agents/skills/live-ops-design/references/events-offers-rules.md#1-what-an-event-is-o",
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/event-halloween-masquerade.md#a-proposition",
+        "knowledge/jobs/J014-live-ops-designer/test-pack/game.md#3-systems",
+        "knowledge/reference/game-design/03-loops-systems.md#4-4-when-an-economy-damages-core-play"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "review this change before merge, is it safe",
+      "expect": [
+        ".agents/skills/code-review/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/code-review/SKILL.md#code-review-find-what-would-hurt-players-prove-it-rank-it",
+        ".agents/roles/reviewer.md#reviewer",
+        ".agents/workflows/improve.md#improve-the-weekly-review-and-learning-pass",
+        "knowledge/reference/marketing/03-launch-measurement-policy-process-templates.md#6-2-thumbnail-and-icon-pass-or-fail-checklist-mp-416-432",
+        "knowledge/reference/engineering/paper/part-2.md#1d-8-reviewing-code-by-consequence-and-evidence-pl-604-656",
+        ".agents/skills/film-direction/SKILL.md#3-steps",
+        "knowledge/reference/engineering/paper/part-2.md#4-practice-claims-list",
+        "knowledge/reference/art-direction/04-platform-evolution-marketing-process.md#1-3-screen-space-is-an-observed-output-ap-769-775",
+        "knowledge/reference/engineering/paper/factcheck-practice.md#1c-code-review-practice-anthropic",
+        "knowledge/reference/modeling/03-environment-export-review.md#5-12-reviewing-a-model-mp-814-822-848-861"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "the agent added too many files and abstractions, keep the change small",
+      "expect": [
+        "rules/anti-overengineering.md"
+      ],
+      "ranks": [
+        2
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.5,
+      "pass": true,
+      "top": [
+        ".agents/skills/architecture/SKILL.md#1-when-this-skill-starts",
+        "rules/anti-overengineering.md#size",
+        ".agents/roles/quick-builder.md#quick-builder",
+        ".agents/skills/analysis-design/references/reporting.md#2-plain-words-owner-messages-also-follow-ste-writing",
+        "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#6-disagreements-and-dropped-claims",
+        "AGENTS.md#4-how-to-work",
+        "knowledge/reference/engineering/paper/factcheck-practice.md#1a-anthropic-claude-code-opus-5-5",
+        ".agents/skills/code-review/SKILL.md#4-craft-core",
+        "knowledge/reference/vfx/12-gaps.md#3-camera",
+        "knowledge/reference/engineering/paper/part-1.md#1d-section-2-first-try-success-with-current-claude-models"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "storyboard the boss entrance cutscene and time the animatic",
+      "expect": [
+        ".agents/skills/film-craft/SKILL.md"
+      ],
+      "ranks": [
+        3
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.3333,
+      "pass": true,
+      "top": [
+        ".agents/roles/film-director.md#film-director",
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
+        ".agents/skills/film-craft/SKILL.md#film-craft-from-plan-to-a-proven-cutscene",
+        ".agents/skills/film-direction/SKILL.md#film-direction-what-each-shot-must-do-and-why",
+        "knowledge/jobs/J015-film-director/decisions.md#j015-decisions",
+        ".agents/skills/film-craft/SKILL.md#3-steps",
+        "knowledge/jobs/J015-film-director/job-card.md#owner-s-words-2026-10-21-excerpts",
+        "knowledge/jobs/J015-film-director/brief.md#j015-intent-brief-film-director-agent",
+        "knowledge/jobs/J016-orchestration/design-jobtypes.md#1-cutscene-story-cutscene-boss-intro-reveal-ending-short-camera-moment",
+        "knowledge/jobs/J015-film-director/job-card.md#material-received"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "design the boss entrance stinger and reveal cue sounds",
+      "expect": [
+        ".agents/skills/sound-design/SKILL.md"
+      ],
+      "ranks": [
+        12
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0833,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
+        ".agents/skills/sound-design/references/reward-and-juice.md#b-celebration-and-build-rules",
+        ".agents/skills/sound-design/evidence/sound-emotion-reference.md#do-not-use",
+        ".agents/skills/sound-design/references/reward-and-juice.md#d-honest-outcome-rules-expand-d-01-to-d-08",
+        ".agents/skills/sound-design/evidence/sound-emotion-reference.md#5-4-reward-and-juice",
+        "knowledge/reference/film/01-craft-scenes-game-cinematics.md#4-7-study-7-god-of-war-the-first-boss-fp-163-183",
+        ".agents/skills/film-direction/SKILL.md#film-direction-what-each-shot-must-do-and-why",
+        "knowledge/reference/film/01-craft-scenes-game-cinematics.md#13-3-skip-replay-pause-comfort-handoff",
+        ".agents/roles/sound-designer.md#sound-designer",
+        "knowledge/reference/film/03-vocabulary-method-templates-review.md#shot-b-reveal-the-wrong-assumption-fp-945"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "build a fireball effect and test it in the VFX lab place",
+      "expect": [
+        ".agents/skills/vfx-craft/SKILL.md"
+      ],
+      "ranks": [
+        2
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.5,
+      "pass": true,
+      "top": [
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
+        ".agents/skills/vfx-craft/SKILL.md#7-game-specifics",
+        ".agents/skills/vfx-design/SKILL.md#8-game-specifics",
+        "knowledge/reference/vfx/training/benchmark.md#sets",
+        ".agents/skills/vfx-craft/SKILL.md#3-build-steps",
+        ".agents/skills/reference-images/references/prompt-patterns.md#5-identity-patterns-per-family-p",
+        ".agents/roles/vfx-designer.md#read-first",
+        "knowledge/design/game-profile.md#game-profile",
+        ".agents/skills/vfx-design/references/scene-and-clutter.md#a-scene-review-procedure",
+        ".agents/roles/vfx-designer.md#work-method"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "review the character model against the art bible anchors",
+      "expect": [
+        ".agents/skills/art-review/SKILL.md"
+      ],
+      "ranks": [
+        5
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 0.2,
+      "pass": true,
+      "top": [
+        ".agents/roles/art-director.md#work-method",
+        ".agents/skills/reference-images/SKILL.md#5-craft-core",
+        ".agents/skills/art-direction/references/platform-evolution-marketing.md#3-marketing-art-that-matches-the-game",
+        ".agents/skills/reference-images/SKILL.md#reference-images-one-picture-of-the-target-for-every-agent",
+        ".agents/skills/art-review/SKILL.md#4-craft-core",
+        ".agents/skills/art-review/SKILL.md#2-read-this-file-when",
+        ".agents/skills/art-review/references/feedback-briefs.md#4-briefs-to-each-role",
+        ".agents/skills/art-review/references/look-check.md#4-review-checklist-15-rows-status-pass-fail-needs-decision-not-reviewed-each-with-evidence",
+        ".agents/roles/art-director.md#art-director",
+        ".agents/skills/art-review/references/art-bible.md#5-revisions-and-drift"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "icon renders of the shipped model: archer-gold",
+      "expect": [
+        ".agents/skills/modeling-craft/SKILL.md"
+      ],
+      "ranks": [
+        8
+      ],
+      "recall@5": 0.0,
+      "recall@10": 1.0,
+      "mrr": 0.125,
+      "pass": true,
+      "top": [
+        ".agents/skills/modeling-craft/references/handoffs.md#2-what-each-receiver-gets",
+        ".agents/roles/modeler.md#working-with-other-agents",
+        ".agents/roles/modeler.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md",
+        "knowledge/reference/modeling/03-environment-export-review.md#4-5-receiver-view-for-the-six-agreed-receivers-extractor-compiled-from-the-rows-above",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#trace-r3-make-a-gold-version-of-the-archer-skin-to-sell-in-the-shop",
+        ".agents/skills/modeling-craft/references/handoffs.md#4-icon-render-set-ui",
+        "knowledge/reference/modeling/03-environment-export-review.md#4-3-vfx-and-ui",
+        ".agents/skills/modeling-craft/SKILL.md#modeling-craft-build-it-check-it-ship-it",
+        ".agents/skills/reference-images/SKILL.md#5-craft-core",
+        ".agents/skills/orchestration/references/job-types.md#2-character-or-creature"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "rebind and retest on the fixed geometry",
+      "expect": [
+        ".agents/skills/rigging-craft/SKILL.md"
+      ],
+      "ranks": [
+        12
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0833,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6",
+        ".agents/skills/rig-pipeline/SKILL.md#6-change-control-and-platform-limits",
+        "knowledge/reference/rigging/02-weights-controls-export-tests.md#5-1-export-profile-rp-378-388",
+        ".agents/skills/rigging-design/SKILL.md#4-craft-core-what-separates-great-rigs-from-weak-ones",
+        ".agents/skills/rigging-craft/references/tests.md#3-s4-proxy-sweep-geometry-acceptance-before-real-rigging",
+        ".agents/skills/rig-pipeline/SKILL.md#3-stages-and-the-check-between-each",
+        ".agents/skills/environment-design/references/review.md#6-fixing-what-the-review-found",
+        "knowledge/reference/vfx/06-mistakes-08-card-09-review.md#output-6-mistakes-table",
+        ".agents/roles/character-rigger.md#work-method",
+        ".agents/skills/rigging-design/references/diagnosis.md#1-debug-order-rp-275-fix-the-earliest-broken-layer-first"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "set up the lighting and fog for the wall stage",
+      "expect": [
+        ".agents/skills/environment-craft/SKILL.md"
+      ],
+      "ranks": [
+        1
+      ],
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr": 1.0,
+      "pass": true,
+      "top": [
+        ".agents/skills/environment-craft/SKILL.md#environment-craft-building-the-place-in-blender-and-studio",
+        ".agents/skills/environment-design/references/light-and-air.md#2-atmosphere-fog-sky-post-effects",
+        "knowledge/reference/environment/04-first-game-stages.md#2-6-lighting",
+        ".agents/skills/environment-craft/references/studio-light-air.md#1-setup-order-for-a-stage-look-one-pass-then-iterate",
+        ".agents/skills/environment-design/SKILL.md#4-craft-core-what-separates-a-great-place-from-a-pile-of-nice-objects",
+        ".agents/skills/environment-craft/references/studio-light-air.md#8-the-look-lab-prove-values-before-they-become-the-stage-s",
+        "knowledge/reference/environment/05-roblox-look-dev.md#1a-lighting-service-global-light",
+        "knowledge/reference/environment/fact-check-lighting.md#table-1-note-01-lighting-atmosphere-post-effects-lights-clouds",
+        ".agents/skills/environment-craft/SKILL.md#4-craft-core",
+        "knowledge/reference/environment/01-place-guidance-scale-light.md#7-section-5-atmosphere-and-scoped-lighting-recipes-ep-229-254"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "cutscene letterbox, subtitles and skip UI",
+      "expect": [
+        ".agents/skills/ui-design/SKILL.md"
+      ],
+      "ranks": [
+        130
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0077,
+      "pass": false,
+      "top": [
+        ".agents/roles/ui-ux-designer.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md",
+        ".agents/skills/film-craft/references/roblox-assembly.md#6-ui-layers-and-input-facts",
+        "knowledge/jobs/J016-orchestration/reviews/roles-templates-322c8ad-auditor-c.md#role-recipe-from-job-types-md-jl-job-lead-dl-direction-lead-pr-proof-reviewer-m-maker-i-integrator-ci-check-in-fr-final-reviewer",
+        ".agents/skills/orchestration/references/job-types.md#1-cutscene",
+        ".agents/skills/film-craft/references/roblox-assembly.md#1-which-runtime",
+        "knowledge/jobs/J016-orchestration/design-jobtypes.md#1-cutscene-story-cutscene-boss-intro-reveal-ending-short-camera-moment",
+        "knowledge/reference/film/fact-check-roblox-runtime.md#event-sequencer",
+        "knowledge/reference/film/02-previs-roblox-runtime.md#6-roblox-runtime-light-streaming-ui-tools-fp-645-679",
+        "knowledge/reference/film/03-vocabulary-method-templates-review.md#11-pass-fail-cutscene-review-fp-1097-1137",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "add a server-validated shop purchase remote with receipt saving",
+      "expect": [
+        ".agents/skills/data-saving/SKILL.md",
+        ".agents/skills/networking-security/SKILL.md"
+      ],
+      "ranks": [
+        10,
+        4
+      ],
+      "recall@5": 0.5,
+      "recall@10": 1.0,
+      "mrr": 0.25,
+      "pass": true,
+      "top": [
+        ".agents/skills/engineering-craft/references/handoffs.md#1-architect-feature-builder-build-ticket",
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
+        ".agents/roles/feature-builder.md#feature-builder",
+        ".agents/skills/networking-security/SKILL.md#2-read-this-file-when",
+        ".agents/skills/platform-policy/references/rules.md#b-purchases",
+        ".agents/skills/engineering-craft/references/engine-first.md#engine-first-which-built-in-does-the-job",
+        ".agents/skills/ui-design/references/shops-rewards-onboarding.md#2-purchase-state-machine-t09-o-v-r22",
+        "knowledge/evals/skill-runs/2026-10-20.md#rows-one-per-brief",
+        "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
+        ".agents/skills/data-saving/SKILL.md#3-steps"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "design a new quest system so adding quests is easy",
+      "expect": [
+        ".agents/skills/architecture/SKILL.md"
+      ],
+      "ranks": [
+        65
+      ],
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr": 0.0154,
+      "pass": false,
+      "top": [
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/plan-2026-10-21.md#c-ranked-candidates",
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/handoffs-draft.md#t-g1-game-designer-masquerade-play-spec-a1-gate-message-phone-playtest-read",
+        ".agents/skills/live-ops-design/references/cadence-content.md#2-choosing-a-rhythm-o",
+        ".agents/skills/live-ops-design/references/cadence-content.md#4-content-types-name-the-player-problem-first-o",
+        ".agents/roles/architect.md#architect",
+        "knowledge/jobs/J001-engineering-skills/job-card.md#owner-s-words-2026-10-20-verbatim-excerpts",
+        "knowledge/reference/game-design/03-loops-systems.md#3-3-real-disagreements-and-their-scope",
+        ".agents/skills/live-ops-design/references/events-offers-rules.md#1-what-an-event-is-o",
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/event-halloween-masquerade.md#a-proposition",
+        "knowledge/jobs/J014-live-ops-designer/test-pack/game.md#3-systems"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "size a new owner request and pick its job recipe",
+      "expect": [
+        ".agents/skills/orchestration/SKILL.md#2",
+        "rules/company.md#2"
+      ],
+      "ranks": [
+        null,
+        3
+      ],
+      "recall@5": 0.5,
+      "recall@10": 0.5,
+      "mrr": 0.3333,
+      "pass": false,
+      "top": [
+        ".agents/skills/orchestration/SKILL.md#orchestration-running-the-studio",
+        ".agents/skills/orchestration/SKILL.md#1-the-lead-s-loop-for-every-owner-message",
+        "rules/company.md#2-job-sizes-and-owner-gates",
+        ".agents/skills/orchestration/references/job-types.md#3-stage",
+        "AGENTS.md#1-the-studio-details-rules-company-md",
+        "rules/company.md#4-the-flow-every-m-and-l-job-follows",
+        ".agents/skills/vfx-craft/SKILL.md#3-build-steps",
+        ".agents/skills/orchestration/references/job-types.md#cross-type-rules-all-types",
+        "knowledge/jobs/J016-orchestration/reviews/core-rules-322c8ad-auditor-a.md#review-core-rules-and-orchestration-playbook-322c8ad-by-auditor-a",
+        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6"
+      ],
+      "forbidden": []
+    },
+    {
+      "task": "file the job into the vault: precedents vocabulary taste log",
+      "expect": [
+        "rules/knowledge.md#7",
+        ".agents/skills/orchestration/SKILL.md#9"
+      ],
+      "ranks": [
+        5,
+        7
+      ],
+      "recall@5": 0.5,
+      "recall@10": 1.0,
+      "mrr": 0.2,
+      "pass": true,
+      "top": [
+        "knowledge/jobs/J016-orchestration/design-context.md#5-question-3-how-the-vault-grows-with-the-project",
+        "knowledge/jobs/J016-orchestration/design-context.md#2-five-layers-each-with-one-owner",
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
+        "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#review-context-system-322c8ad-by-auditor-d",
+        "rules/knowledge.md#7-filing-a-job-into-the-vault-every-job-close",
+        "rules/knowledge.md#1-one-source-of-truth-five-layers",
+        ".agents/skills/orchestration/SKILL.md#9-close-file-the-job-into-the-vault",
+        ".agents/roles/doc-keeper.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md",
+        "AGENTS.md#5-records-the-knowledge-base-is-the-studio-s-memory",
+        ".agents/roles/doc-keeper.md#work-method"
+      ],
+      "forbidden": []
+    }
+  ]
+}

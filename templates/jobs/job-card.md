@@ -1,4 +1,14 @@
-<!-- > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics) -->
+---
+type: job
+scope: game
+status: active
+updated: <date>
+source: <job-id>
+supersedes: []
+---
+> Author: orchestrator · <model id> · <effort> · <date>
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer) -->
+
 # Job card: <job-id> <title>
 
 ## The owner's words (verbatim, first)
@@ -13,6 +23,8 @@
 | Job lead (agent) | |
 | Direction leads | |
 | Integrator | |
+| Studio place (`studio_id`) | <the test place the Studio writer uses; none = Blender or files only> |
+| Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect at the interfaces step |
 | Status | proposed |
 
 ## Goal and feeling

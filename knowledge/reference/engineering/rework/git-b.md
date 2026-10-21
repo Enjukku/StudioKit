@@ -1,6 +1,6 @@
 ---
 type: reference
-scope: game
+scope: universal
 status: draft
 updated: 2026-10-21
 source: J010 rework study; DestructionSimulator git 2026-10-05..2026-10-10 (part B)

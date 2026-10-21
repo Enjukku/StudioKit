@@ -24,9 +24,12 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
     7. "## Roblox docs": up to --docs pages of the local Roblox docs mirror (own ranking, own cap,
        not part of the kit-note budget; see the "Roblox docs mirror" block) plus an API line for
        every exact Roblox class name in the task. Index cached in knowledge/generated/.
-    8. --role <role> (a stem of .agents/roles/*.md): notes whose frontmatter `roles:` lists the role
-       score x ROLE_BOOST, and a "For role" block (role file, its `skills:`, existing overlays
-       knowledge/overlays/<role or skill>.md, its knowledge/reference/roblox/docs-map.md rows verbatim).
+    8. --role <role> (a stem of .agents/roles/*.md, or `orchestrator` for the lead: ROLE_ALIASES): notes
+       whose frontmatter `roles:` lists the role and the role's own book (its role file and the folders
+       of its `skills:`) score x ROLE_BOOST; other roles' files score x OTHER_ROLE_FACTOR. A "For role"
+       block lists the role file, its `skills:`, existing overlays knowledge/overlays/<role or skill>.md,
+       its knowledge/reference/roblox/docs-map.md rows and its precedent rows (knowledge/design/
+       precedents.md, Craft cell names the role) verbatim, and names knowledge/design/vocabulary.md.
     9. --job <job-id> (a folder of knowledge/jobs/, or a unique prefix such as J016): notes inside that
        folder score x JOB_BOOST, and a "Job" block listing the canonical job files (JOB_FILES order,
        searched through the whole folder) with their revision (frontmatter `revision:`, a line starting
@@ -34,9 +37,19 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
     Both blocks sit outside the note budget, at most BLOCK_MAX_LINES lines each, before "## Ranked";
     --json carries them as keys `role` and `job`. Without both flags the output is unchanged
     (regression test: tools/tests/fixtures/context/golden/).
+    10. Withheld context (rules/knowledge.md §3; `withheld()`): held-out keys (any path with "hidden"
+       in a file or folder name), direction proposals (`*/direction/proposal-*`), `_`-named material under
+       knowledge/ (kit history, another game's notes) and skill eval briefs (`.agents/skills/*/evals/`)
+       are never in the corpus, link neighbours, job blocks or read-next list, whatever kit.json says;
+       a line that names a held-out file is never excerpted. kb_index.py uses the same rules.
+    11. Sibling files that repeat one section (same folder, same heading) take one ranked slot.
 
 Search roots: kit.json key `context.search_roots` (list of repo-relative paths) when present,
-else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present.
+else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present (never the withheld
+rules of step 10).
+
+Revised by feature-builder · claude-opus-5-5 · high · 2026-10-21, J016 G3 (audit D B1-B3, B6, R1, R12,
+R13; audit E TT-01, TT-15-TT-18).
 Other tools import this module (kb_index.py, eval_context.py).
 """
 
@@ -107,13 +120,55 @@ EXCERPT_CHARS = 160
 ROLES_DIR = ".agents/roles"
 JOBS_DIR = "knowledge/jobs"
 DOCS_MAP = "knowledge/reference/roblox/docs-map.md"
-ROLE_BOOST = 1.5  # PROPOSAL (J016-T01): notes tagged `roles: [<role>]` for the --role
+ROLE_BOOST = 1.5  # PROPOSAL (J016-T01): notes tagged `roles: [<role>]` and the role's own book, for the --role
 JOB_BOOST = 1.5  # PROPOSAL (J016-T01): notes inside the --job folder
 BLOCK_MAX_LINES = 25
 JOB_FILES = ("job-card.md", "direction.md", "decisions.md", "crew.md", "evidence.md", "ledger.md", "beat-sheet.md", "contract*.md", "*.shots.json")
 REVISION_LINE_RE = re.compile(r"^(?:>\s*)?Revision:\s*(.+?)\s*$")
 ACTIVE_JOBS = "knowledge/jobs/active.md"  # lines `- <job-id> · <title>`, kept by the lead; read by tools/hooks/
 ACTIVE_JOB_RE = re.compile(r"^- (\S+) · (.+)$")
+PRECEDENTS = "knowledge/design/precedents.md"
+VOCABULARY = "knowledge/design/vocabulary.md"
+PRECEDENT_ROWS = 5  # newest rows of the role's craft in the role block
+ROLE_ALIASES = {"orchestrator": ["orchestration"]}  # the lead has no role file; its book is this skill
+OTHER_ROLE_FACTOR = 1 / ROLE_BOOST  # with --role, other roles' identity files
+PROPOSAL_RE = re.compile(r"(?:^|/)direction/proposal-[^/]*$")
+
+
+# ---------------------------------------------------------------- withheld context (rules/knowledge.md §3)
+#
+# Never part of the packet corpus, link neighbours, job blocks or generated indexes, whatever kit.json
+# `context.exclude` says. Lead decision LD8 (J016 G3): a held-out key is any path with "hidden" in a
+# file or folder name (hidden-*, *-hidden.*, hidden-rerun/, ...), any case.
+
+
+HELD_OUT_MENTION_RE = re.compile(
+    r"\[\[[^\]\n]*hidden[^\]\n]*\]\]|[\w./-]*hidden[\w.-]*\.(?:md|json|jsonl|txt|luau?)\b|[\w.-]*hidden[\w.-]*/", re.IGNORECASE
+)  # a link or path to a held-out file; the rule text "`hidden-*`" does not match
+
+
+def held_out(rel: str) -> bool:
+    """A held-out evaluation key: never opened, listed or excerpted by any tool."""
+    return any("hidden" in part.lower() for part in rel.split("/"))
+
+
+def names_held_out(line: str) -> bool:
+    """True when a line of a visible note names a held-out file; such lines are never excerpted."""
+    return bool(HELD_OUT_MENTION_RE.search(line))
+
+
+def withheld(rel: str) -> str | None:
+    """Why a repo-relative path is withheld from packets and generated indexes, or None."""
+    parts = rel.split("/")
+    if held_out(rel):
+        return "held-out evaluation key"
+    if PROPOSAL_RE.search(rel):
+        return "direction proposal: the job lead reads it through the synthesis brief"
+    if parts[0] == "knowledge" and any(part.startswith("_") for part in parts[1:]):
+        return "kit history or another game's material (underscore name)"
+    if rel.startswith(".agents/skills/") and "evals" in parts:
+        return "skill eval brief (pass criteria)"
+    return None
 
 
 # ---------------------------------------------------------------- text basics
@@ -370,7 +425,7 @@ def load_config(root: Path) -> dict:
 
 def _excluded(rel: str, exclude: tuple[str, ...]) -> bool:
     parts = rel.split("/")
-    if SKIP_DIRS.intersection(parts):
+    if SKIP_DIRS.intersection(parts) or withheld(rel):
         return True
     return any(rel == ex or rel.startswith(ex.rstrip("/") + "/") for ex in exclude)
 
@@ -385,7 +440,7 @@ def corpus_files(root: Path, config: dict | None = None) -> list[str]:
             found.add(rel)
     for rel in roots:
         base = root / rel
-        if base.is_file() and base.suffix == ".md":
+        if base.is_file() and base.suffix == ".md" and not withheld(rel):
             found.add(rel)
         elif base.is_dir():
             for path in base.rglob("*.md"):
@@ -476,7 +531,7 @@ class Corpus:
             if knowledge.is_dir():
                 for path in knowledge.rglob("*.md"):
                     rel = path.relative_to(self.root).as_posix()
-                    if not SKIP_DIRS.intersection(rel.split("/")):
+                    if not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel):
                         paths.add(rel)
             for rel in sorted(paths):
                 stems.setdefault(Path(rel).stem.lower(), []).append(rel)
@@ -497,7 +552,7 @@ class Corpus:
                 return other.path
         for _, target in note.links:
             resolved = self.resolve_link(target, note.path)
-            if resolved and resolved != note.path:
+            if resolved and resolved != note.path and not withheld(resolved):
                 return resolved
         return None
 
@@ -565,6 +620,7 @@ def excerpt_for(section: Section, terms: list[str], limit: int = 2) -> list[str]
             or HEADING_RE.match(stripped)
             or stripped.startswith("> Author")
             or re.fullmatch(r"\|?[\s:|-]+\|?", stripped)
+            or names_held_out(stripped)
         ):
             continue
         hits = len(set(tokenize(stripped)) & set(terms))
@@ -576,14 +632,23 @@ def excerpt_for(section: Section, terms: list[str], limit: int = 2) -> list[str]
     return [clip(text) for _, _, text in sorted(best, key=lambda c: c[1])]
 
 
+def role_book(corpus: Corpus, role: str) -> tuple[str, ...]:
+    """Path prefixes of a role's own book: its role file and the folders of its frontmatter `skills:`."""
+    note = corpus.notes.get(f"{ROLES_DIR}/{role}.md")
+    skills = ROLE_ALIASES.get(role) or as_list((note.meta or {}).get("skills") if note else None)
+    return (f"{ROLES_DIR}/{role}.md",) + tuple(f".agents/skills/{name}/" for name in skills)
+
+
 def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = None) -> tuple[list[Hit], list[dict]]:
     """Return (ranked hits, superseded strong matches). Deterministic.
-    role: boost notes tagged `roles: [role]`; job: a resolved job folder name, boost notes inside it."""
+    role: boost notes tagged `roles: [role]` and the role's own book (role file and skill folders),
+    lower other roles' files; job: a resolved job folder name, boost notes inside it."""
     terms = query_terms(query)
     if not terms:
         raise ValueError("query needs at least one meaningful word")
     idf = {t: corpus.idf(t) for t in terms}
     job_prefix = f"{JOBS_DIR}/{job}/" if job else None
+    book = role_book(corpus, role) if role else ()
     scored: list[tuple[float, Section, list[str], set[str]]] = []
     boosted: dict[str, str] = {}  # path -> why suffix, only when --role or --job applies
     for section in corpus.sections:
@@ -592,19 +657,27 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
             note = corpus.notes[section.path]
             value = value * corpus.note_boost(note)
             role_hit = bool(role) and role in as_list((note.meta or {}).get("roles"))
+            own_book = bool(book) and note.path.startswith(book)
             job_hit = bool(job_prefix) and note.path.startswith(job_prefix)
-            if role_hit:
+            if role_hit or own_book:
                 value *= ROLE_BOOST
+            elif book and note.kind == "role":
+                value *= OTHER_ROLE_FACTOR
             if job_hit:
                 value *= JOB_BOOST
-            if role_hit or job_hit:
-                boosted[note.path] = (f"; tagged for role {role}" if role_hit else "") + (f"; in job {job}" if job_hit else "")
+            if role_hit or own_book or job_hit:
+                boosted[note.path] = (
+                    (f"; tagged for role {role}" if role_hit else "")
+                    + (f"; own book of role {role}" if own_book and not role_hit else "")
+                    + (f"; in job {job}" if job_hit else "")
+                )
             scored.append((value, section, matched, fields_hit))
     scored.sort(key=lambda item: (-item[0], item[1].path.lower(), item[1].start))
 
     top = scored[0][0] if scored else 0.0
     hits: list[Hit] = []
     per_note: dict[str, int] = {}
+    seen_copies: set[tuple[str, str]] = set()  # (folder, heading): sibling files repeating one section take one slot (audit D R12)
     superseded: dict[str, dict] = {}
     for value, section, matched, fields_hit in scored:
         note = corpus.notes[section.path]
@@ -618,6 +691,10 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
             continue
         if per_note.get(section.path, 0) >= PER_NOTE_CAP:
             continue
+        copy_key = (section.path.rpartition("/")[0].lower(), section.heading.strip().lower())
+        if copy_key in seen_copies:
+            continue
+        seen_copies.add(copy_key)
         per_note[section.path] = per_note.get(section.path, 0) + 1
         where = "/".join(f for f in ("heading", "title", "path", "meta", "body") if f in fields_hit)
         why = f"matched {', '.join(matched)} in {where}"
@@ -649,7 +726,7 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
             continue
         overlay = f"{OVERLAYS}/{note.name}.md"
         target = corpus.notes.get(overlay)
-        if target is None and (corpus.root / overlay).is_file():
+        if target is None and not withheld(overlay) and (corpus.root / overlay).is_file():
             target = load_note(corpus.root, corpus.root / overlay)
         if target is None or target.status == "superseded" or not target.sections:
             continue
@@ -682,6 +759,8 @@ def decision_rows(root: Path, terms: list[str], limit: int = 8) -> list[dict]:
         if not header_done:
             header_done = True  # first table row is the header
             continue
+        if names_held_out(stripped):
+            continue
         hits = set(tokenize(stripped)) & set(terms)
         if len(hits) >= min(2, len(terms)):
             rows.append({"line": number, "row": clip(stripped, 240), "matched": sorted(hits)})
@@ -713,7 +792,7 @@ def code_hints(root: Path, terms: list[str], limit: int = 6) -> list[dict]:
             continue
         for path in base.rglob("*"):
             rel = path.relative_to(root).as_posix()
-            if not path.is_file() or SKIP_DIRS.intersection(rel.split("/")):
+            if not path.is_file() or SKIP_DIRS.intersection(rel.split("/")) or held_out(rel):
                 continue
             hits = set(tokenize(rel.rsplit(".", 1)[0])) & set(terms)
             if hits:
@@ -1042,20 +1121,46 @@ def docs_map_rows(root: Path, role: str) -> list[dict]:
     return rows
 
 
+def precedent_rows(root: Path, role: str, limit: int = PRECEDENT_ROWS) -> list[dict]:
+    """The newest `limit` rows of the precedents register whose Craft cell names the role, verbatim."""
+    path = root / PRECEDENTS
+    if not path.is_file():
+        return []
+    rows: list[dict] = []
+    craft_at: int | None = None
+    for number, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
+        stripped = line.strip()
+        if not stripped.startswith("|") or re.fullmatch(r"\|?[\s:|-]+\|?", stripped):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if craft_at is None:
+            craft_at = next((i for i, cell in enumerate(cells) if cell.lower().startswith("craft")), -1)
+            continue
+        if 0 <= craft_at < len(cells) and role in [name.strip() for name in cells[craft_at].split(",")]:
+            rows.append({"line": number, "row": line.rstrip()})
+    return rows[-limit:]
+
+
 def role_info(root: Path, role: str) -> dict:
-    """The --role block. Raises ValueError for a name that is not a kit role."""
+    """The --role block. Raises ValueError for a name that is not a kit role (or ROLE_ALIASES)."""
     names = role_names(root)
-    if role not in names:
-        raise ValueError(f"unknown role `{role}`; kit roles ({ROLES_DIR}/): {', '.join(names) or 'none'}")
-    rel = f"{ROLES_DIR}/{role}.md"
-    meta, _, _ = parse_frontmatter((root / rel).read_text(encoding="utf-8", errors="replace"))
-    skills = as_list((meta or {}).get("skills"))
+    if role in ROLE_ALIASES and role not in names:
+        rel = None
+        skills = list(ROLE_ALIASES[role])
+    elif role in names:
+        rel = f"{ROLES_DIR}/{role}.md"
+        meta, _, _ = parse_frontmatter((root / rel).read_text(encoding="utf-8", errors="replace"))
+        skills = as_list((meta or {}).get("skills"))
+    else:
+        known = names + sorted(ROLE_ALIASES)
+        raise ValueError(f"unknown role `{role}`; kit roles ({ROLES_DIR}/): {', '.join(known) or 'none'}")
     overlays = [f"{OVERLAYS}/{name}.md" for name in [role] + skills if (root / OVERLAYS / f"{name}.md").is_file()]
     rows = docs_map_rows(root, role)
+    precedents = precedent_rows(root, role)
     lines = [
         f"## For role {role}",
         "",
-        f"- Role file: `{rel}`",
+        f"- Role file: `{rel}`" if rel else "- Role file: none (the lead); its book is the skill below",
         f"- Skills (role frontmatter): {', '.join(skills) or 'none'}",
         f"- Overlays: {', '.join(f'`{o}`' for o in overlays) or 'none'}",
     ]
@@ -1064,7 +1169,12 @@ def role_info(root: Path, role: str) -> dict:
         lines += [r["row"] for r in rows]
     else:
         lines.append(f"- Docs map: no row names this role (`{DOCS_MAP}`)")
-    return {"role": role, "file": rel, "skills": skills, "overlays": overlays, "docs_map": rows, "lines": cap_lines(lines)}
+    if precedents:
+        lines.append(f"- Precedents of this role (`{PRECEDENTS}` L{', L'.join(str(r['line']) for r in precedents)}):")
+        lines += [r["row"] for r in precedents]
+    if (root / VOCABULARY).is_file():
+        lines.append(f"- Vocabulary: `{VOCABULARY}` (use its names for states, events, cues and assets)")
+    return {"role": role, "file": rel, "skills": skills, "overlays": overlays, "docs_map": rows, "precedents": precedents, "lines": cap_lines(lines)}
 
 
 def job_folders(root: Path) -> list[str]:
@@ -1083,7 +1193,10 @@ def resolve_job(root: Path, job: str) -> str:
     if len(matches) == 1:
         return matches[0]
     if not matches:
-        raise ValueError(f"unknown job `{job}`: no folder {JOBS_DIR}/{job}*")
+        raise ValueError(
+            f"unknown job `{job}`: no folder {JOBS_DIR}/{job}*. Check the id against {JOBS_DIR}/, or create the job folder first "
+            "(orchestration skill §3); before it exists, omit --job"
+        )
     raise ValueError(f"ambiguous job `{job}`: {', '.join(matches)}; give more of the id")
 
 
@@ -1137,7 +1250,7 @@ def job_info(root: Path, job: str) -> dict:
         matches = []
         for path in folder.rglob(pattern):
             rel = path.relative_to(root).as_posix()
-            if path.is_file() and not SKIP_DIRS.intersection(rel.split("/")) and rel not in found:
+            if path.is_file() and not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel) and rel not in found:
                 matches.append(rel)
         found += sorted(matches, key=lambda rel: (rel.count("/"), rel.lower()))
     files = [{"path": rel, "revision": file_revision(root / rel)} for rel in found]
@@ -1178,7 +1291,9 @@ def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs:
         seen.add(hit.path)
         note = corpus.notes.get(hit.path)
         if note and note.kind == "skill":
-            read_next.append(f"load skill `{note.name}` ({hit.path})")
+            entry = f".agents/skills/{note.name}/SKILL.md"
+            where = "" if hit.path == entry else f"; the match is `{hit.path}` L{hit.start}-{hit.end}"
+            read_next.append(f"load skill `{note.name}` ({entry}){where}")
         elif hit.kind == "overlay":
             read_next.append(f"apply overlay `{hit.path}` with its skill")
         else:
@@ -1290,7 +1405,7 @@ def parser() -> argparse.ArgumentParser:
     packet.add_argument("--max", type=int, default=12, help="maximum ranked entries")
     packet.add_argument("--docs", type=int, default=DOCS_PAGES, help="Roblox docs mirror pages to list (0 = none)")
     packet.add_argument("--json", action="store_true", help="machine-readable output")
-    packet.add_argument("--role", help="kit role (.agents/roles/<role>.md): boost its tagged notes, add a 'For role' block")
+    packet.add_argument("--role", help="kit role (.agents/roles/<role>.md) or orchestrator: boost its book and tagged notes, add a 'For role' block")
     packet.add_argument("--job", help="job id or unique prefix (knowledge/jobs/<job-id>/): boost its notes, add a 'Job' block")
     return result
 

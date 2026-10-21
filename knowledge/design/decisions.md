@@ -2,7 +2,7 @@
 type: decision
 scope: game
 status: active
-updated: 2026-10-20
+updated: 2026-10-21
 source: "kit phase 1"
 supersedes: []
 ---

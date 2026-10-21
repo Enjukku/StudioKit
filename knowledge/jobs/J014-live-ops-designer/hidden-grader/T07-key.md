@@ -3,14 +3,14 @@ type: job
 scope: universal
 status: active
 updated: 2026-10-21
-source: "J014 grader material (grader/T07-key.md)"
+source: "J014 grader material (hidden-grader/T07-key.md)"
 supersedes: []
 ---
 SYNTHETIC TEST DATA (J014-T07). Not a real game, not real players.
 
 # J014-T07 answer key (GRADER ONLY)
 
-**Never give this file, the tagged copy or the count outputs in this folder to the agent under test.** Pack under test: `knowledge/jobs/J014-live-ops-designer/test-pack/`. All `file:line` references below are inside that folder unless marked `grader/`. Discord lines are the post header line; the text is the next line.
+**Never give this file, the tagged copy or the count outputs in this folder to the agent under test.** Pack under test: `knowledge/jobs/J014-live-ops-designer/test-pack/`. All `file:line` references below are inside that folder unless marked `hidden-grader/`. Discord lines are the post header line; the text is the next line.
 
 ## 0. What the pack is
 
@@ -20,9 +20,9 @@ SYNTHETIC TEST DATA (J014-T07). Not a real game, not real players.
 | Feedback items | 151 counted: Roblox CSV 60 rows (source `reviews` in the tagged copy), Discord 69 player posts (forum "feedback" 57 + chat "general" 12; source `discord`), in-game form 22 answers (source `in-game`) |
 | The "4 sources" | Roblox CSV, Discord forum, Discord general chat, in-game form. The tool has one `discord` source, so the two Discord places are one source with one author scheme (the display name) |
 | Not counted | 3 staff posts from "Mothlight Team (staff)": `inbox/discord-feedback-2026-10-20.txt:51`, `:69`, `:189`. In-game exposure line `inbox/ingame-2026-10-20.jsonl:2` (1,460 shown, 22 answered) is a denominator, not an item |
-| Tagged copy | `grader/T07-tagged-items.jsonl` (151 lines, `validate` exit 0) |
-| Count command | `python tools/liveops/feedback_count.py count knowledge/jobs/J014-live-ops-designer/grader/T07-tagged-items.jsonl --start 2026-09-29 --end 2026-10-21` |
-| Count outputs | `grader/T07-counts-full.md` and `.json` (whole window); `grader/T07-counts-after-1.1.1.md` (2026-10-13T16:00Z to 2026-10-21, the window after the build that went live with the purchase and save reports) |
+| Tagged copy | `hidden-grader/T07-tagged-items.jsonl` (151 lines, `validate` exit 0) |
+| Count command | `python tools/liveops/feedback_count.py count knowledge/jobs/J014-live-ops-designer/hidden-grader/T07-tagged-items.jsonl --start 2026-09-29 --end 2026-10-21` |
+| Count outputs | `hidden-grader/T07-counts-full.md` and `.json` (whole window); `hidden-grader/T07-counts-after-1.1.1.md` (2026-10-13T16:00Z to 2026-10-21, the window after the build that went live with the purchase and save reports) |
 | Sampled authors | Roblox CSV 60, Discord 32, In-game 22 |
 
 ### Tagging decisions (so the grader can judge a different but fair tagging)
@@ -35,7 +35,7 @@ SYNTHETIC TEST DATA (J014-T07). Not a real game, not real players.
 
 ## 1. Expected counts per theme per source (from the tool run)
 
-Cell = distinct authors / sampled authors of that source (share), messages. Shares are never added across sources. Source: `grader/T07-counts-full.md`.
+Cell = distinct authors / sampled authors of that source (share), messages. Shares are never added across sources. Source: `hidden-grader/T07-counts-full.md`.
 
 | Theme | Role in the pack | Roblox CSV | Discord | In-game |
 | --- | --- | --- | --- | --- |

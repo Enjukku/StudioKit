@@ -1,6 +1,6 @@
 ---
 type: reference
-scope: game
+scope: universal
 status: draft
 updated: 2026-10-21
 source: J010 rework study; DestructionSimulator knowledge/logs/** (part L, 86 files)

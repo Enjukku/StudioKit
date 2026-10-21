@@ -1,6 +1,6 @@
 ---
 type: reference
-scope: game
+scope: universal
 status: draft
 updated: 2026-10-21
 source: J010 rework study; DestructionSimulator records (decisions, tried-and-failed, handoffs, research, engine review, physics findings), part R

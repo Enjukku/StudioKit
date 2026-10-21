@@ -1,6 +1,6 @@
 ---
 type: reference
-scope: game
+scope: universal
 status: draft
 updated: 2026-10-21
 source: J010 rework study; DestructionSimulator old engineering agents, skills and rules (HEAD 12a1e82b4, 2026-10-20), part R half 2

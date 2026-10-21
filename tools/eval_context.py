@@ -6,10 +6,14 @@ Kit tool (universal). Standard library only.
 Usage:
     python tools/eval_context.py [--cases FILE] [--save FILE] [--compare FILE] [--show N]
 
-Case line: {"task": "...", "expect": ["path", "path#heading", ...], "note": "..."}
+Case line: {"task": "...", "expect": ["path", "path#heading", ...], "note": "...",
+            "role": "<kit role>", "job": "<job id or prefix>", "forbid": ["<glob>", ...]}
     "path" matches any section of that file; "path#heading" matches a section whose heading
     slug equals the given slug or starts with it plus "-" (so "rules/company.md#2" matches
-    "## 2. Job sizes and owner gates").
+    "## 2. Job sizes and owner gates"). Optional "role" and "job" are passed to the ranking as
+    the packet's --role and --job (the job's folder must exist). Optional "forbid": fnmatch
+    patterns (case-insensitive) over ranked paths; a case with any forbidden path in its whole
+    ranked list fails, whatever its recall (for example "*hidden*": held-out keys never rank).
 Metrics per case: recall@5, recall@10 (share of expected items found in the top k) and MRR
 (1 / rank of the first expected item, 0 if none in the ranked list). A case passes when
 recall@10 is 1.0. `--compare` exits 1 if overall recall@10 drops below the saved run.
@@ -21,6 +25,7 @@ the docs pages (top DOCS_DEPTH), an `_api-reference/` file by its rank among the
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import sys
 from pathlib import Path
@@ -46,6 +51,10 @@ def load_cases(path: Path) -> list[dict]:
             raise ValueError(f"{path.name}:{number}: bad JSON ({error})") from None
         if not isinstance(case, dict) or not isinstance(case.get("task"), str) or not isinstance(case.get("expect"), list) or not case["expect"]:
             raise ValueError(f"{path.name}:{number}: needs a 'task' string and a non-empty 'expect' list")
+        if any(key in case and not isinstance(case[key], str) for key in ("role", "job")):
+            raise ValueError(f"{path.name}:{number}: 'role' and 'job' must be strings")
+        if "forbid" in case and not (isinstance(case["forbid"], list) and all(isinstance(f, str) for f in case["forbid"])):
+            raise ValueError(f"{path.name}:{number}: 'forbid' must be a list of path patterns")
         cases.append(case)
     return cases
 
@@ -94,8 +103,10 @@ def evaluate(root: Path, cases: list[dict]) -> dict:
     index = cp.DocsIndex.load(root)
     rows = []
     for case in cases:
-        hits, _ = cp.rank(corpus, case["task"])
+        job = cp.resolve_job(root, case["job"]) if case.get("job") else None
+        hits, _ = cp.rank(corpus, case["task"], case.get("role"), job)
         ranked = [(h.path, h.heading) for h in hits]
+        forbidden = sorted({h.path for h in hits if any(fnmatch.fnmatch(h.path.lower(), f.lower()) for f in case.get("forbid", []))})
         found = cp.roblox_docs(root, case["task"], DOCS_DEPTH, index, corpus, hits) if index else {"pages": [], "api": []}
         docs = [p["path"] for p in found["pages"]]
         api = [a["path"] for a in found["api"]]
@@ -111,8 +122,9 @@ def evaluate(root: Path, cases: list[dict]) -> dict:
                 "recall@5": round(recall_at(ranks, 5), 4),
                 "recall@10": round(recall_at(ranks, 10), 4),
                 "mrr": round(reciprocal_rank(ranks), 4),
-                "pass": recall_at(ranks, 10) == 1.0,
+                "pass": recall_at(ranks, 10) == 1.0 and not forbidden,
                 "top": top,
+                "forbidden": forbidden,
             }
         )
     count = max(1, len(rows))
@@ -136,7 +148,9 @@ def report(result: dict, show: int) -> str:
     out.append(f"overall: {o['passed']}/{o['cases']} pass · recall@5 {o['recall@5']:.3f} · recall@10 {o['recall@10']:.3f} · MRR {o['mrr']:.3f}")
     if show:
         for i, row in enumerate(result["cases"], start=1):
-            if not row["pass"]:
+            if row.get("forbidden"):
+                out.append(f"\ncase {i} ranked {len(row['forbidden'])} forbidden path(s) (paths not printed)")
+            if not row["pass"] and any(r is None or r > 10 for r in row["ranks"]):
                 out.append(f"\ncase {i} missed {[e for e, r in zip(row['expect'], row['ranks']) if r is None or r > 10]}; top {show}:")
                 out += [f"  {n}. {ref}" for n, ref in enumerate(row["top"][:show], start=1)]
     return "\n".join(out) + "\n"

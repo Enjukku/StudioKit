@@ -12,8 +12,11 @@ Usage:
 Areas = top-level folders of knowledge/ (design, systems, lessons, jobs, reference, logs,
 overlays, ...), minus generated/ and external/; knowledge/inbox/processed/ is skipped.
 Never touches knowledge/index.md (hand-written; it links to the generated indexes).
+Withheld context (rules/knowledge.md §3, context_packet.withheld): held-out keys (any path with
+"hidden" in a name) are never read, linted or listed; direction proposals and `_`-named material
+are linted but not indexed. A summary line that names a held-out file is skipped.
 
-Lint (rules/knowledge.md §3):
+Lint (rules/knowledge.md §9):
     ERROR  missing frontmatter, unparseable frontmatter, missing/invalid type, scope, status,
            updated (relative dates such as "today" or "last week" included), dead [[links]],
            superseded note with no replacement link
@@ -56,6 +59,7 @@ RELATIVE_DATE_RE = re.compile(
 
 
 def knowledge_notes(root: Path) -> list[str]:
+    """Notes under knowledge/ that the lint checks. Held-out keys (cp.held_out) are never read or listed."""
     base = root / "knowledge"
     if not base.is_dir():
         return []
@@ -63,7 +67,7 @@ def knowledge_notes(root: Path) -> list[str]:
     for path in base.rglob("*.md"):
         rel = path.relative_to(root).as_posix()
         parts = rel.split("/")
-        if not path.is_file() or cp.SKIP_DIRS.intersection(parts):
+        if not path.is_file() or cp.SKIP_DIRS.intersection(parts) or cp.held_out(rel):
             continue
         if len(parts) > 2 and parts[1] in SKIP_AREAS:
             continue
@@ -84,7 +88,7 @@ def summary_of(note: cp.Note) -> str:
         if cp.FENCE_RE.match(text):
             in_fence = not in_fence
             continue
-        if in_fence or not text or text.startswith(("#", ">", "|", "---", "<!--")):
+        if in_fence or not text or text.startswith(("#", ">", "|", "---", "<!--")) or cp.names_held_out(text):
             continue
         text = re.sub(r"^[-*+]\s+|^\d+\.\s+", "", text)
         sentence = re.split(r"(?<=[.!?])\s", text, maxsplit=1)[0]
@@ -107,8 +111,8 @@ def build_indexes(root: Path) -> dict[str, str]:
     by_area: dict[str, list[cp.Note]] = {}
     for rel in knowledge_notes(root):
         parts = rel.split("/")
-        if len(parts) < 3:
-            continue  # knowledge/index.md and other root files belong to no area
+        if len(parts) < 3 or cp.withheld(rel):
+            continue  # root files belong to no area; withheld notes (direction proposals, `_` material) are not indexed
         by_area.setdefault(parts[1], []).append(cp.load_note(root, root / rel))
     outputs: dict[str, str] = {}
     for area in sorted(by_area):

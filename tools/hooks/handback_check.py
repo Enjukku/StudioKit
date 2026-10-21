@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """SubagentStop hook: send a kit-role subagent back once when its hand-back lacks STATUS or coverage.
 
-Kit tool (universal). Python 3 standard library only, no network. Spec: J016-T01; format: rules/messages.md §3.
+Kit tool (universal). Python 3 standard library only, no network. Spec: J016-T01; format: rules/messages.md §3;
+revised by feature-builder · claude-opus-5-5 · high · 2026-10-21, J016 G3 (audit D R4).
 
 Reads the SubagentStop JSON on stdin (fields used: `agent_type`, `stop_hook_active`,
 `last_assistant_message`). Only kit roles (stems of .agents/roles/*.md) are checked. The stop is
 allowed (no output) when `stop_hook_active` is true (the agent was already sent back once), when the
 message has no text to judge (for example a hand-back sent through a tool), or when the first
-non-empty line starts with `STATUS:` and the message contains `coverage`. Otherwise it prints
+non-empty line starts with `STATUS:` (after markdown marks such as `**` or `##`) and a line holds a
+`coverage:` field (YAML, a list item, bold or a JSON key; the word in a sentence does not count).
+Otherwise it prints
     {"decision": "block", "reason": "<REASON>"}
 which keeps the subagent running and gives it REASON as its next instruction.
 
@@ -21,10 +24,13 @@ Exit codes: always 0.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+LEAD_MARKS = "*_#> " + chr(9)  # markdown bold, heading or quote marks before the first line's STATUS
+COVERAGE_RE = re.compile(r'^[\s>*#{-]*["*_]*coverage["*_]*\s*:', re.IGNORECASE | re.MULTILINE)  # a field, not the word in prose
 REASON = "Hand-back must start with 'STATUS: done | blocked | needs-decision | failed.' and include coverage (rules/messages.md §3)."
 
 
@@ -41,7 +47,7 @@ def decision_for(payload: dict, root: Path) -> dict | None:
     if not isinstance(message, str) or not message.strip():
         return None
     first = next(line.strip() for line in message.splitlines() if line.strip())
-    if first.startswith("STATUS:") and "coverage" in message.lower():
+    if first.lstrip(LEAD_MARKS).startswith("STATUS:") and COVERAGE_RE.search(message):
         return None
     return {"decision": "block", "reason": REASON}
 

@@ -1,11 +1,11 @@
 {"task": "how does the owner approve a large job", "expect": ["rules/company.md#2"], "note": "gates per job size live in the company rules"}
-{"task": "where do lesson drafts go after a job ends", "expect": ["rules/knowledge.md#4", "knowledge/inbox/README.md"], "note": "placement table plus the inbox template"}
-{"task": "write an intent brief for an animator", "expect": [".agents/skills/orchestration/SKILL.md#3"], "note": "brief parts table with the animator example"}
+{"task": "where do lesson drafts go after a job ends", "expect": ["rules/knowledge.md#6", "knowledge/inbox/README.md"], "note": "placement table (rules/knowledge.md §6 since J016) plus the inbox template"}
+{"task": "write an intent brief for an animator", "expect": [".agents/skills/orchestration/SKILL.md#10"], "note": "brief rules (orchestration §10 since J016)"}
 {"task": "run the weekly improvement pass", "expect": [".agents/workflows/improve.md"], "note": "workflow file"}
 {"task": "tailor the kit skills to this game's style", "expect": [".agents/workflows/integrate.md"], "note": "overlays come from /integrate"}
 {"task": "send a universal lesson back to the studio kit", "expect": [".agents/workflows/kit-sync.md"], "note": "kit-sync up direction"}
-{"task": "an agent is blocked and needs a decision from the owner", "expect": ["rules/company.md#5", ".agents/skills/orchestration/SKILL.md#6"], "note": "status table plus how the lead handles statuses"}
-{"task": "which frontmatter fields does every knowledge note need", "expect": ["rules/knowledge.md#3"], "note": "typed frontmatter spec"}
+{"task": "an agent is blocked and needs a decision from the owner", "expect": ["rules/company.md#8", ".agents/skills/orchestration/SKILL.md#12"], "note": "status table (company §8 since J016) plus how the lead handles statuses (orchestration §12)"}
+{"task": "which frontmatter fields does every knowledge note need", "expect": ["rules/knowledge.md#5"], "note": "typed frontmatter spec (rules/knowledge.md §5 since J016)"}
 {"task": "play-test the game in Studio and check Output for new errors", "expect": [".agents/skills/studio-mcp/SKILL.md"], "note": "studio-mcp skill (J001 step 1)"}
 {"task": "add a paid egg with a luck potion and show odds", "expect": [".agents/skills/platform-policy/SKILL.md"], "note": "platform-policy skill (J001 step 2)"}
 {"task": "players lost their data after a teleport, items duplicated", "expect": [".agents/skills/data-saving/SKILL.md"], "note": "data-saving skill (J001 step 3)"}
@@ -17,3 +17,16 @@
 {"task": "design a new quest system so adding quests is easy", "expect": [".agents/skills/architecture/SKILL.md"], "note": "architecture skill (J001 step 6)"}
 {"task": "review this change before merge, is it safe", "expect": [".agents/skills/code-review/SKILL.md"], "note": "code-review skill (J001 step 6)"}
 {"task": "the agent added too many files and abstractions, keep the change small", "expect": ["rules/anti-overengineering.md"], "note": "anti-over-engineering rule (J001 step 7)"}
+# Per-role cases (J016 G3, audit D B4 and E TT-01): the task as a role runs it with --role (and --job); expected = the role's own book for that task, fixed before the run. Every case forbids held-out keys.
+{"task": "storyboard the boss entrance cutscene and time the animatic", "role": "film-director", "expect": [".agents/skills/film-craft/SKILL.md"], "forbid": ["*hidden*"], "note": "J016 pilot role film-director; audit D packet run 3"}
+{"task": "design the boss entrance stinger and reveal cue sounds", "role": "sound-designer", "expect": [".agents/skills/sound-design/SKILL.md"], "forbid": ["*hidden*"], "note": "J016 pilot role sound-designer; audit D R1 (other roles' files ranked above the role's own skill)"}
+{"task": "build a fireball effect and test it in the VFX lab place", "role": "vfx-designer", "expect": [".agents/skills/vfx-craft/SKILL.md"], "forbid": ["*hidden*", "knowledge/overlays/_*"], "note": "J016 pilot role vfx-designer; audit D B3 (another game's overlay ranked first)"}
+{"task": "review the character model against the art bible anchors", "role": "art-director", "expect": [".agents/skills/art-review/SKILL.md"], "forbid": ["*hidden*"], "note": "J016 pilot role art-director; audit D B1 (a held-out key ranked first)"}
+{"task": "icon renders of the shipped model: archer-gold", "role": "modeler", "expect": [".agents/skills/modeling-craft/SKILL.md"], "forbid": ["*hidden*"], "note": "audit E TT-01 (workflow task string; a held-out key ranked first)"}
+{"task": "rebind and retest on the fixed geometry", "role": "character-rigger", "expect": [".agents/skills/rigging-craft/SKILL.md"], "forbid": ["*hidden*"], "note": "J016 pilot animator stand-in packet role; audit E TT-01"}
+{"task": "set up the lighting and fog for the wall stage", "role": "environment-designer", "expect": [".agents/skills/environment-craft/SKILL.md"], "forbid": ["*hidden*"], "note": "J016 pilot role environment-designer"}
+{"task": "cutscene letterbox, subtitles and skip UI", "role": "ui-ux-designer", "expect": [".agents/skills/ui-design/SKILL.md"], "forbid": ["*hidden*"], "note": "audit E TT-01 (workflow task string; read_next pointed at a held-out key)"}
+{"task": "add a server-validated shop purchase remote with receipt saving", "role": "feature-builder", "expect": [".agents/skills/data-saving/SKILL.md", ".agents/skills/networking-security/SKILL.md"], "forbid": ["*hidden*", ".agents/skills/*/evals/*"], "note": "audit D packet run 4 and R13 (an eval brief ranked first)"}
+{"task": "design a new quest system so adding quests is easy", "role": "architect", "expect": [".agents/skills/architecture/SKILL.md"], "forbid": ["*hidden*"], "note": "case 17 as the architect runs it"}
+{"task": "size a new owner request and pick its job recipe", "role": "orchestrator", "expect": [".agents/skills/orchestration/SKILL.md#2", "rules/company.md#2"], "forbid": ["*hidden*"], "note": "the lead's packet (audit E TT-15)"}
+{"task": "file the job into the vault: precedents vocabulary taste log", "role": "doc-keeper", "job": "J016-orchestration", "expect": ["rules/knowledge.md#7", ".agents/skills/orchestration/SKILL.md#9"], "forbid": ["*hidden*", "*/direction/proposal-*"], "note": "audit D packet run 5 (with --job)"}
