@@ -11,7 +11,7 @@ export const meta = {
     { title: 'First sample', detail: 'first-pass spec.json and temporary sound' },
     { title: 'Lock', detail: 'final timing list (animated); vfx-designer locks the timeline' },
     { title: 'Final build', detail: 'spec.json and cue cards against the locked timeline' },
-    { title: 'Wiring', detail: 'clip import, then one builder wires the spec and cues (one Studio writer)' },
+    { title: 'Wiring', detail: 'clip import, then one builder wires the spec and cues (one Studio driver)' },
     { title: 'Capture', detail: 'studio-operator records the game camera in a busy scene' },
     { title: 'Review chain', detail: 'scripts, maker self-review, then game-designer, art-director, sound sync beside code review; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts' },
@@ -155,8 +155,8 @@ function imageRule(promptsFile) {
 }
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const who = r.standIn
@@ -614,7 +614,7 @@ async function production() {
   if (!ok(fx[0]) || !ok(fx[1])) return { status: 'failed', outcome: 'spec.json or cue cards did not finish; see steps' }
 
   phase('Wiring')
-  // One Studio writer at a time: the clip imports, then the builder wires, then the studio-operator records.
+  // One Studio driver at a time: the clip imports, then the builder wires, then the studio-operator records.
   if (ANIMATED) {
     const imp = keep('B3 import clip', await importClip('candidate', 'Wiring', 'final'))
     if (!ok(imp)) return { status: 'failed', outcome: 'clip import failed' }
@@ -701,7 +701,7 @@ async function reviewChain(label, pass, withCode) {
     if (round === 2) {
       return { status: 'needs-decision', outcome: `Blocking findings remain after 2 repair rounds (${label}): diagnose the brief, tool, standard or approach (rules/company.md §7).`, blocking }
     }
-    // Repairs go to the makers in dependency order; Studio writers take turns.
+    // Repairs go to the makers in dependency order; Studio drivers take turns.
     const byMaker = {}
     blocking.forEach(f => { (byMaker[f.maker_role] = byMaker[f.maker_role] || []).push(f) })
     const unrouted = Object.keys(byMaker).filter(m => !MAKERS.includes(m) || !roleOf(m))

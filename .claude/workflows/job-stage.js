@@ -44,7 +44,7 @@ if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
 // Lead decision LD9: an arg that switches binding rules or gates has no silent default.
 const lacking = []
 if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2; M runs the proof inside build)')
-if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the greybox and the place live in Studio; one Studio writer at a time (rules/company.md §9)')
+if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the greybox and the place live in Studio; one Studio driver at a time (rules/company.md §9)')
 if ((STAGE === 'build' || STAGE === 'repair') && !IMAGES.length) lacking.push('images: the owner-approved key-place reference image paths (no art without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
@@ -152,8 +152,8 @@ const RIGHTS = 'Decision rights: routes, cover, sight lines and blocking surface
 const PINS = 'An input without @rev means its current revision: name the revision you used in built_on.'
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const lines = []
@@ -308,7 +308,7 @@ async function returnPaths(x, tag, phaseName) {
   return null
 }
 
-// Findings go back to their maker, by maker. File makers first; the environment-designer last: it is the Studio writer
+// Findings go back to their maker, by maker. File makers first; the environment-designer last: it is the Studio driver
 // and brings the other makers' new revisions into the place. Unroutable makers go to the lead.
 async function repairByMaker(blocking, tag, phaseName, round) {
   const byMaker = {}
@@ -869,7 +869,7 @@ async function repair() {
   if (scope.touches_play && !roles.includes(ROLE.design.type)) roles.push(ROLE.design.type)
   const unrouted = roles.filter(m => !roleOf(m))
   if (unrouted.length) return { status: 'needs-decision', outcome: `The change names roles this workflow cannot route (${unrouted.join(', ')}): the lead assigns them.` }
-  // The game-designer decides play first; file makers next; the environment-designer last, as integrator and Studio writer.
+  // The game-designer decides play first; file makers next; the environment-designer last, as integrator and Studio driver.
   const rank = m => (m === ROLE.design.type ? 0 : m === ROLE.env.type ? 2 : 1)
   roles.sort((a, b) => rank(a) - rank(b))
   for (const m of roles) {

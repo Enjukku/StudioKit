@@ -59,7 +59,7 @@ Every recipe follows `rules/company.md` §4. Stages per saved workflow `.agents/
 | Proof (G2) | a playable greybox in Studio: walk-test and playtest captures, first view, landmark read, route times. Reviews: game-designer (judges the play captures) → art-director (composition and value in blockout) → performance-engineer |
 | Production order | art blockout snapped to the approved greybox → kit pieces (modeler) and art production → light and atmosphere → ambience (sound) and ambient VFX. Playtests continue during art; lighting and polish only after the space plays well |
 | Check-ins | the game-designer checks placement, materials, set dressing and VFX placement as the build grows |
-| Integrator | environment-designer (Studio writer for place content) |
+| Integrator | environment-designer (Studio driver for place content) |
 | Review order | scripts (scene audit, budgets, floating parts) → **game-designer** judges the studio-operator's playtest captures (play wins over art readability) → **art-director** (camera set, value ladder, rest areas next to detail) → sound and VFX ambience check → qa-lead (collision, falls, stuck spots) |
 | Return paths | an art change that alters sight lines or collision → game-designer; a new surface material → sound may refuse it for time → environment picks another |
 
@@ -69,7 +69,7 @@ Every recipe follows `rules/company.md` §4. Stages per saved workflow `.agents/
 | Job lead | **ui-ux-designer**; the game-designer owns the player's decision |
 | Direction leads | game-designer (the decision the screen serves; shops and odds: progression-designer + `platform-policy`) · ui-ux-designer (state list, focus map, 2-3 target reference images in the game's style book) · art-director (style cohesion) · feature-builder or architect (data and remotes available) |
 | G1 shows | the decision record, the grey-box wireframe with real content, 2-3 pictured style targets, the recommendation |
-| Contract | state map + spec (`content/ui/<screen-id>/spec.md`): states, events, data fields, sizes for the smallest phone |
+| Contract | state map + spec (`content/ui/<screen-id>/spec.md`): states, events, data fields, sizes for the smallest phone; the code contract `contract-code.md` with the Code file owners, written by the architect after the needs rounds |
 | Proof (G2, L only) | a clickable Figma prototype of every state at phone size. Reviews: game-designer (decision clear) → art-director → feature-builder (buildable) |
 | Production order | Figma build to the target image → handoff → feature-builder implements (`ui-basics`) ∥ UI sounds and UI effects from the VFX library |
 | Integrator | feature-builder |

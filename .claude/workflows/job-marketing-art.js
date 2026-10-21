@@ -1,7 +1,7 @@
 export const meta = {
   name: 'job-marketing-art',
   description: 'Run one stage (direction, proof, build or repair) of a marketing art job (game icon, thumbnails, key art and its crops) led by marketing; owner gates sit between calls.',
-  whenToUse: 'An M or L marketing art job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), piece (icon, thumbnails or key-art), launch (true or false); images (owner-approved image paths: the chosen rough, then the green-lit image) for proof, build and repair; change for repair. Optional: trends, gate, imagesApproved. No Studio writer is needed. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L marketing art job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), piece (icon, thumbnails or key-art), launch (true or false); images (owner-approved image paths: the chosen rough, then the green-lit image) for proof, build and repair; change for repair. Optional: trends, gate, imagesApproved. No Studio driver is needed. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'marketing, game-designer, art-director (and trend-scout) write independent proposals' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },

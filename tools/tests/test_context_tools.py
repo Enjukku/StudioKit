@@ -571,6 +571,22 @@ class RepairRoundTests(Repo):
                 base = {h.path: h.score for h in cp.rank(corpus, task, None, "J7-x")[0]}
                 self.assertAlmostEqual(hits["knowledge/jobs/J7-x/reviews/audit.md"], base["knowledge/jobs/J7-x/reviews/audit.md"])
 
+    def test_closed_job_history_ranks_lower_for_everyone(self):
+        # J016 follow-up: a closed job's reviews and exchange notes are history (its lessons were filed at close),
+        # so they rank lower for every role; an open job's keep full weight for the lead and the filer.
+        self.write("knowledge/jobs/active.md", "# Active jobs\n\n- J8-open · an open job\n")
+        text = fm("job") + "# Review\n\nThe quest reward chest timing review found the chest opens late.\n"
+        self.write("knowledge/jobs/J8-open/reviews/chest.md", text)
+        self.write("knowledge/jobs/J9-done/reviews/chest.md", text)
+        corpus = cp.Corpus(self.root)
+        task = "quest reward chest timing"
+        for role in (None, "orchestrator", "doc-keeper"):
+            with self.subTest(role=role):
+                hits = {h.path: h.score for h in cp.rank(corpus, task, role)[0]}
+                self.assertLess(hits["knowledge/jobs/J9-done/reviews/chest.md"], hits["knowledge/jobs/J8-open/reviews/chest.md"])
+        asked = {h.path: h.score for h in cp.rank(corpus, task, "orchestrator", "J9-done")[0]}
+        self.assertGreater(asked["knowledge/jobs/J9-done/reviews/chest.md"], asked["knowledge/jobs/J8-open/reviews/chest.md"], "a job named with --job is never lowered")
+
     def test_distinct_sibling_sections_both_rank(self):
         self.write("knowledge/inbox/2026-10-21-J11-lead.md", fm("lesson") + "# Lead draft\n\n## Owner corrections\n\nThe owner said the curve felt too slow after level ten; cut the wall.\n")
         self.write("knowledge/inbox/2026-10-21-J11-designer.md", fm("lesson") + "# Designer draft\n\n## Owner corrections\n\nThe owner asked for owner-visible milestones and fewer corrections to pity odds.\n")
@@ -805,6 +821,16 @@ class EvalTests(Repo):
         self.assertTrue(dropped)
         _, dropped = ev.compare(result, result)
         self.assertFalse(dropped)
+
+    def test_compare_keeps_same_task_cases_apart(self):
+        # Two cases may share a task and differ by role or job (J016 follow-up): each is compared with its own saved row.
+        row = {"task": "t", "expect": [], "ranks": [], "recall@5": 1.0, "recall@10": 1.0, "mrr": 1.0, "pass": True, "top": [], "forbidden": []}
+        a = dict(row, role=None, job=None)
+        b = dict(row, role="architect", job=None, mrr=0.5)
+        result = {"overall": {"recall@5": 1.0, "recall@10": 1.0, "mrr": 0.75}, "cases": [a, b]}
+        text, dropped = ev.compare(result, json.loads(json.dumps(result)))
+        self.assertFalse(dropped)
+        self.assertNotIn("->", text.split("overall")[0], "no change line for unchanged cases")
 
     def test_mirror_expectations_scored_against_docs_list(self):
         self.write("knowledge/systems/sword.md", fm("system") + "# Sword\n\nSword swing streak.\n")

@@ -11,7 +11,7 @@ export const meta = {
     { title: 'Proof review', detail: 'art-director, then architect; repairs by the film-director' },
     { title: 'Craft planning', detail: 'animator, environment, UI, architect player contract, VFX then sound envelope; film locks' },
     { title: 'Production', detail: 'set, animation and the VFX and sound prototype in parallel; combined check-in; finals' },
-    { title: 'Integration', detail: 'one Studio writer: clips, scene data, player code, candidate capture' },
+    { title: 'Integration', detail: 'one Studio driver: clips, scene data, player code, candidate capture' },
     { title: 'Review chain', detail: 'scripts first; QA and phone beside code review and film, art, sound sync; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts, in dependency order' },
   ],
@@ -46,7 +46,7 @@ if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
 // Lead decision LD9: an arg that switches binding rules or gates has no silent default.
 const lacking = []
 if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2; M runs the proof inside build)')
-if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the Studio probes, the build and the captures need one Studio writer (rules/company.md §9)')
+if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the Studio probes, the build and the captures need one Studio driver (rules/company.md §9)')
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved reference image paths from the last gate (no visual work without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
@@ -165,8 +165,8 @@ function imageRule(promptsFile) {
 }
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance. In files mode never edit scripts through Studio MCP.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance. In files mode never edit scripts through Studio MCP.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const who = r.standIn
@@ -379,7 +379,7 @@ async function proof() {
   }, S_BOARDS, 'Proof'))
   if (!ok(boards)) return notDone('storyboards', boards)
   if (boards.images && boards.images.state === 'pending') return pendingStop('storyboards')
-  // One Studio writer (the architect's probes), one Blender user (the greybox), and the VFX-then-sound temp cues, side by side.
+  // One Studio driver (the architect's probes), one Blender user (the greybox), and the VFX-then-sound temp cues, side by side.
   const [probe, grey, temps] = await parallel([
     () => call(ROLE.arch, {
       id: 'P3-probes', task: `Studio probes for the cutscene runtime: ${SEQ}`, studioWrite: true,
@@ -471,7 +471,7 @@ async function proof() {
   return { status: 'needs-decision', outcome: 'Blocking proof findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).' }
 }
 
-// ================================================================ shared integration steps (one Studio writer at a time)
+// ================================================================ shared integration steps (one Studio driver at a time)
 function importClips(tag, ph) {
   return call(ROLE.anim, {
     id: `IMP-${tag}`, task: `import cutscene clips into Studio: ${SEQ}`, studioWrite: true,
@@ -682,7 +682,7 @@ async function production() {
   if (!ok(pictureDone)) return notDone('animation, effects and sound', pictureDone)
 
   phase('Integration')
-  // One Studio writer at a time: clips import, then scene data, then the player, then the candidate capture.
+  // One Studio driver at a time: clips import, then scene data, then the player, then the candidate capture.
   const imp = keep('B6 import clips', await importClips('candidate', 'Integration'))
   if (!ok(imp)) return notDone('clip import', imp)
   const scene = keep('B6 scene data', await assemble('candidate', 'Integration'))

@@ -5,7 +5,7 @@ claude-opus-5-5 · high · 2026-10-21, J016 G3 (audit fixes: auditor B F1-F16 an
 Runs tools/workflows/wf_harness.mjs under Node; skipped when Node is not installed.
 Every workflow must: refuse bad or missing args before any agent starts (no silent defaults); run each stage to `done` with clean
 fakes; keep the harness contract on every agent() call (role, model on its tier, effort, the hand-back schema of
-templates/jobs/handback.schema.json, a well-formed brief, at most 5 agents at once, one Studio writer, one Blender user and one browser
+templates/jobs/handback.schema.json, a well-formed brief, at most 5 agents at once, one Studio driver, one Blender user and one browser
 user at a time); stop with `needs-decision` when review findings never clear; never count a dead agent as a pass.
 """
 
@@ -380,6 +380,13 @@ class JobWorkflowTests(unittest.TestCase):
         self.assertIn("Code file owners", wire)
         self.assertNotIn("the job card names", wire)
         self.assertGreaterEqual(index(out["labels"], r"architect: P1-wiring-contract"), 0)
+        ui = run("job-ui-screen.js", full("job-ui-screen.js", stage="build", size="M"), {"dump": r"feature-builder: B2-implement"})
+        self.assertEqual(ui["status"], "done", ui["outcome"])
+        self.assertLess(index(ui["labels"], r"architect: C3-code-owners"), index(ui["labels"], r"feature-builder: B2-implement"))
+        self.assertGreaterEqual(index(ui["labels"], r"architect: C3-code-owners"), 0)
+        impl = ui["dumps"][0]["prompt"]
+        self.assertIn("contract-code.md", impl)
+        self.assertNotIn('listed under "File owners" in', impl)
 
     # ------------------------------------------------------------------ feature (F15, TT-06, TT-11)
     def test_feature_code_briefs_load_networking_security_without_money(self):

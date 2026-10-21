@@ -117,6 +117,8 @@ def evaluate(root: Path, cases: list[dict]) -> dict:
         rows.append(
             {
                 "task": case["task"],
+                "role": case.get("role"),
+                "job": case.get("job"),
                 "expect": case["expect"],
                 "ranks": ranks,
                 "recall@5": round(recall_at(ranks, 5), 4),
@@ -157,10 +159,16 @@ def report(result: dict, show: int) -> str:
 
 
 def compare(result: dict, saved: dict) -> tuple[str, bool]:
-    old_cases = {c["task"]: c for c in saved.get("cases", [])}
+    # Cases are matched by task, role and job, in file order: two cases may share a task text.
+    def key(c: dict) -> tuple:
+        return (c["task"], c.get("role"), c.get("job"))
+    old_cases: dict[tuple, list[dict]] = {}
+    for c in saved.get("cases", []):
+        old_cases.setdefault(key(c), []).append(c)
     out = ["", "vs saved run:"]
     for row in result["cases"]:
-        old = old_cases.get(row["task"])
+        same = old_cases.get(key(row))
+        old = same.pop(0) if same else None
         if old is None:
             out.append(f"  new case: {row['task']}")
         elif old["recall@10"] != row["recall@10"] or old["mrr"] != row["mrr"]:

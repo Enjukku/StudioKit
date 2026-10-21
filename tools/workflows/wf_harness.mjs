@@ -106,7 +106,7 @@ function fake(sch, label) {
 
 // ---------------------------------------------------------------- the fake runtime
 const RESOURCES = [
-  ['Studio', /you are the only Studio writer/],
+  ['Studio', /you are the only Studio driver/],
   ['Blender', /you are the only Blender user/],
   ['browser', /you are then the only browser user|you are the only agent using the built-in browser|you are its only user|you are the only image maker/],
 ]

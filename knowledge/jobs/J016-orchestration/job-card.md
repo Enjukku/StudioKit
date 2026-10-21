@@ -74,10 +74,7 @@ supersedes: []
 | Precedents, vocabulary, taste log, systems, catalogs | none | no game artifact, no taste correction; the new names live in `rules/company.md`, `rules/messages.md` and `.agents/workflows/jobs/README.md` |
 
 ## Open follow-ups (not blocking)
-- The workflows still say "Studio writer" where the rules say "Studio driver" (behaviour is right).
-- The UI-screen workflow takes code file owners from the direction sheet, not the architect's contract header.
-- `eval_context --compare` matches cases by task text.
-- In the kit repo the J016 audit reviews rank high in the lead's packets (game repos do not carry kit job folders).
+- Done after the close (2026-10-21, owner: "Fix the four small J016 follow-ups now, here, then run the gate and commit."): the workflows say "Studio driver" and a step that does not drive Studio never reads or captures it; the UI-screen workflow takes code file owners from the architect's `contract-code.md`; `eval_context --compare` matches cases by task, role and job; a closed job's review and exchange files rank lower for every role.
 - The first real cutscene job: run it on `/job-cutscene` and file its result as the J016 pilot.
 
 **Retrospective:** more iteration would come from one real job; the internal audit found what paper review alone could not (tool lists, packet leaks, workflow seams).

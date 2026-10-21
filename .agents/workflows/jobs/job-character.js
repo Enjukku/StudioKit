@@ -12,7 +12,7 @@ export const meta = {
     { title: 'Model', detail: 'S3 cuts and geometry, art check-in, texture polish, S4 rigger acceptance' },
     { title: 'Rig', detail: 'S5 rig and tests, S6 animator acceptance' },
     { title: 'Animation and effects', detail: 'S7 clips and timing list, VFX and sound on it, icon renders' },
-    { title: 'Integration', detail: 'one Studio writer: import, wiring, frozen candidate captures' },
+    { title: 'Integration', detail: 'one Studio driver: import, wiring, frozen candidate captures' },
     { title: 'Review chain', detail: 'scripts, then art-director and game-designer beside the phone check; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts' },
   ],
@@ -60,7 +60,7 @@ if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2
 if (typeof A.variant !== 'boolean') lacking.push('variant: true or false (variant mode fixes the base rig, clips and anchors)')
 if (typeof A.playable !== 'boolean') lacking.push('playable: true or false (wired into gameplay: remotes and saves, the reviewer joins)')
 if (VARIANT && !BASE) lacking.push('base: the base asset id (variant mode)')
-if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the character is captured or built in Studio, one Studio writer at a time (rules/company.md §9)')
+if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the character is captured or built in Studio, one Studio driver at a time (rules/company.md §9)')
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved reference image paths from the last gate (no visual work without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
@@ -171,8 +171,8 @@ function imageRule(promptsFile) {
 }
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const who = r.standIn
@@ -827,7 +827,7 @@ async function production() {
   if (missing(made).length) return { status: 'failed', outcome: 'icons, effects or sound returned nothing; rerun the stage' }
 
   phase('Integration')
-  // One Studio writer at a time: import, then wiring, then the candidate captures.
+  // One Studio driver at a time: import, then wiring, then the candidate captures.
   const imp = keep('S7 import', await call(ROLE.anim, {
     id: 'S7-import', task: `import the character into Studio: ${ASSET}`, studioWrite: true,
     intent: `Integration (rig-pipeline S7 Roblox import). Import the shipped model, rig and clips${VARIANT ? ' (variant: the variant on the base rig with the base clips)' : ''} into the test place on the intended Animator from §A; play every clip and check it on a phone-size view; record the result.`,
@@ -952,7 +952,7 @@ async function reviewLoop(cfg) {
   return { status: 'needs-decision', outcome: `${cfg.phaseName}: review rounds exhausted; diagnose the brief, tool, standard or approach (rules/company.md §7).` }
 }
 
-// Repairs go to the makers in pipeline order (Studio writers take turns); then the receivers recheck what changed upstream.
+// Repairs go to the makers in pipeline order (Studio drivers take turns); then the receivers recheck what changed upstream.
 async function repairRound(tag, round, blocking, cfg) {
   const byMaker = {}
   blocking.forEach(f => { (byMaker[f.maker_role] = byMaker[f.maker_role] || []).push(f) })

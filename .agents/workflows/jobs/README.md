@@ -17,7 +17,7 @@ One saved Claude Code workflow per job type. `tools/sync_harness.py` copies each
 | Every `agent()` call sets `agentType` (the role), `model`, `effort` and the hand-back schema of `templates/jobs/handback.schema.json` (evidence before answers, `docs_read`, optional `lesson`); findings carry expected and observed | `rules/messages.md` §2-3, §6; lead decision LD11 |
 | Every brief is built in the `rules/messages.md` §2 shape: `<intent>`, `<spec>` with packet line, `owner_words`, refs, inputs with revisions, owns, rules, `findings` for repairs, deliver, checks | quality: complete briefs |
 | Code file ownership comes from a contract's Code file owners table, set by the architect (`templates/jobs/contract-header.md`); a builder whose row is empty returns `blocked` | lead decision LD10 |
-| At most 5 agents at once; one Studio writer (`studioId` from the lead), one Blender user and one built-in browser user at a time | `rules/company.md` §9 |
+| At most 5 agents at once; one Studio driver (`studioId` from the lead), one Blender user and one built-in browser user at a time | `rules/company.md` §9 |
 | Studio MCP captures stills only: sync is judged from the Output log (event, VFX and cue start on one clock); listening is an owner-confirmed G3 line. Capture briefs carry the check budget: numbers for every case, images at key frames and where a number fails, and report captures made and looked at | owner J005-D8; Studio MCP `screen_capture` |
 | M jobs run the proof inside `build` (`proof` refuses size M); a look change is sized L | `rules/company.md` §2 |
 | A planned role (animator) runs as a stand-in on `general-purpose` with its brief | `orchestration` skill §2 |

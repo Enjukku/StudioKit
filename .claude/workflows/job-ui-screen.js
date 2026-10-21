@@ -11,7 +11,7 @@ export const meta = {
     { title: 'Proof review', detail: 'game-designer, then art-director, then feature-builder' },
     { title: 'Figma build', detail: 'Figma build to the target image, then the Roblox handoff' },
     { title: 'Production', detail: 'feature-builder implements beside UI sounds and UI effects' },
-    { title: 'Integration', detail: 'one Studio writer wires sounds and effects and freezes the candidate' },
+    { title: 'Integration', detail: 'one Studio driver wires sounds and effects and freezes the candidate' },
     { title: 'Code review', detail: 'gate PASS and reviewer; code repairs by the feature-builder' },
     { title: 'Review chain', detail: 'QA in Studio beside ui-ux, art, game-designer on captures; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected layers' },
@@ -51,7 +51,7 @@ if (typeof A.shop !== 'boolean') lacking.push('shop: true or false (a screen tha
 if (typeof A.newLook !== 'boolean') lacking.push('newLook: true or false (a look change is sized L)')
 if (SIZE === 'M' && NEW_LOOK) lacking.push('size L: a job that changes the look is sized L, so the owner sees the prototype at G2 (rules/company.md §2)')
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved reference image paths, the chosen target image first (no styling without an approved image, lead decision LD2)')
-if ((STAGE === 'build' || STAGE === 'repair') && !STUDIO) lacking.push('studioId: one Studio writer at a time (rules/company.md §9)')
+if ((STAGE === 'build' || STAGE === 'repair') && !STUDIO) lacking.push('studioId: one Studio driver at a time (rules/company.md §9)')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the contract inside stage build (job-types.md §4)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (lacking.length) {
@@ -65,6 +65,7 @@ const ROLE = {
   prog: { type: 'progression-designer', model: 'opus', effort: 'high' },
   art: { type: 'art-director', model: 'opus', effort: 'high' },
   build: { type: 'feature-builder', model: 'opus', effort: SHOP ? 'high' : 'medium' },            // high for money, saves, remotes
+  arch: { type: 'architect', model: 'opus', effort: 'high' },                                     // writes the code file owners (lead decision LD10)
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
   vfx: { type: 'vfx-designer', model: 'opus', effort: NEW_LOOK ? 'high' : 'medium' },             // UI effects from the library are small effects
   review: { type: 'reviewer', model: 'opus', effort: SHOP ? 'high' : 'medium' },                  // high for money, saves, remotes
@@ -156,8 +157,8 @@ function imageRule(promptsFile) {
 }
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const who = r.standIn
@@ -222,9 +223,11 @@ let SPEC_REV = 0   // set by the contract step when it runs in this call
 function pin(path, rev) { return rev ? `${path}@rev${rev}` : `${path} (latest revision; name it in built_on)` }
 function spec() { return pin(`${UI}/spec.md`, SPEC_REV) }
 const STYLE_BOOK = 'ui-style-<the style book in knowledge/design/game-profile.md: cartoon, stud, anime or pixel; read only that one>'
-const FILE_OWNERS = `the UI source files and tests for ${SCREEN} listed under "File owners" in ${DIR}/direction.md`
+const CODE_CONTRACT = `${DIR}/contract-code.md`
+const FILE_OWNERS = `the UI source files and tests for ${SCREEN} in your row of the Code file owners table in ${CODE_CONTRACT} (set by the architect, lead decision LD10)`
 const BUILDER_SKILLS = ['engineering-craft', 'testing', 'ui-basics', 'networking-security'].concat(SHOP ? ['data-saving', 'platform-policy', 'analytics'] : [])
 const BUILDER_RULES = [
+  `Code file ownership comes from the code contract ${CODE_CONTRACT} (lead decision LD10): if its Code file owners table names no files for your role, return blocked with the files you need.`,
   'Code lives on disk (source mode in the game profile, default files); never edit scripts through Studio MCP. The gate is python tools/verify.py (or the game\'s gate): RESULT: PASS or not done.',
   'Every client call this screen makes is validated on the server (types, NaN/inf, rate, ownership, range, state); the client never decides currency, ownership or grants (AGENTS.md §2).',
   'If the screen adds a new player step, a currency flow or a quit point (onboarding, a first purchase), load the analytics skill and log it.',
@@ -395,7 +398,20 @@ async function contract() {
     if (!ok(plan)) return { status: 'failed', outcome: 'spec merge failed' }
     SPEC_REV = plan.spec_revision
   }
-  return { status: 'done', outcome: 'State map and spec agreed.', spec: spec() }
+  // The architect turns the direction sheet's proposed file list into the code contract (lead decision LD10), against the agreed spec.
+  const owners = keep('C3 code file owners', await call(ROLE.arch, {
+    id: 'C3-code-owners', task: `code file owners for the UI screen: ${SCREEN}`,
+    intent: `Contract, code file owners. From the direction sheet's File owners section (the feature-builder's proposal) and the agreed spec, write the code contract every code brief cites: one row per builder with the files and folders it owns, the remotes and data fields each file touches, and who validates each client call on the server. File owners are your decision (rules/company.md §3).`,
+    skills: ['architecture', 'networking-security'].concat(SHOP ? ['data-saving'] : []),
+    inputs: [`${DIR}/direction.md`, spec()],
+    refs: ['templates/jobs/contract-header.md   # take: the Code file owners section and the Consumers table'],
+    owns: [CODE_CONTRACT],
+    consumers: ['feature-builder', 'reviewer', 'qa-lead'],
+    deliver: `${CODE_CONTRACT} (revision 1, with a change table)`,
+    checks: ['every source file and test the screen adds or changes has exactly one owner row', 'every remote names its server validation (types, NaN/inf, rate, ownership, range, state)'],
+  }, S_HANDBACK, 'Contract'))
+  if (!ok(owners)) return { status: 'failed', outcome: 'code contract not written' }
+  return { status: 'done', outcome: 'State map, spec and code contract agreed.', spec: spec(), code_contract: CODE_CONTRACT }
 }
 
 // ================================================================ the proof (contract → clickable Figma prototype → lead reviews)
@@ -450,7 +466,7 @@ async function proof() {
 
 // ================================================================ repairs: findings go back to their makers (rules/company.md §7)
 // mode 'proof': makers fix in Figma or the spec. mode 'code': the feature-builder fixes and reruns the gate.
-// mode 'chain': makers fix, then the feature-builder integrates their revisions and records new captures (one Studio writer).
+// mode 'chain': makers fix, then the feature-builder integrates their revisions and records new captures (one Studio driver).
 async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   const byMaker = {}
   blocking.forEach(f => { const m = routeOf(f); (byMaker[m] = byMaker[m] || []).push(f) })
@@ -481,7 +497,7 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   const done2 = await parallel(others.map(m => () => call(roleOf(m), Object.assign(fixBrief(m), { owns: own[m] || ['your own output folder for this job'] }), S_HANDBACK, phaseName)))
   done2.forEach((x, i) => keep(`FIX ${tag} ${others[i]}`, x))
   if (missing(done2).length) return { status: 'failed', outcome: `${tag}: a repair step returned nothing; rerun the stage` }
-  // 3. The feature-builder last: the only Studio writer; it fixes its own findings and implements the other makers' revisions.
+  // 3. The feature-builder last: the only Studio driver; it fixes its own findings and implements the other makers' revisions.
   if (mode === 'proof') return null
   keep(`FIX ${tag} ${ROLE.build.type}`, await call(ROLE.build, Object.assign(fixBrief(ROLE.build.type,
     ` Also implement every revision the other makers wrote in this round (spec, handoff, sound cues, effects), failing case first for logic, and rerun the gate.${mode === 'chain' ? ` Then record new captures of every state the fixes touched into ${DIR}/captures/ (the creative reviewers judge captures) and update the candidate revision in ${DIR}/evidence.md.` : ''}`),
@@ -512,7 +528,7 @@ async function production() {
   const HANDOFF = [spec(), `${UI}/export/`, `${UI}/screens/`, `${UI}/figma-ids.json`]
 
   phase('Production')
-  // The feature-builder is the only Studio writer; sound and effects work outside Studio meanwhile.
+  // The feature-builder is the only Studio driver; sound and effects work outside Studio meanwhile.
   const prod = await parallel([
     () => call(ROLE.build, {
       id: 'B2-implement', task: `implement the UI screen in Roblox: ${SCREEN}`, studioWrite: true, visual: true,

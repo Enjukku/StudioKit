@@ -2,22 +2,24 @@
   "overall": {
     "cases": 33,
     "passed": 24,
-    "recall@5": 0.6364,
+    "recall@5": 0.6212,
     "recall@10": 0.7424,
-    "mrr": 0.554
+    "mrr": 0.5684
   },
   "cases": [
     {
       "task": "how does the owner approve a large job",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/company.md#2"
       ],
       "ranks": [
-        12
+        11
       ],
       "recall@5": 0.0,
       "recall@10": 0.0,
-      "mrr": 0.0833,
+      "mrr": 0.0909,
       "pass": false,
       "top": [
         "AGENTS.md#1-the-studio-details-rules-company-md",
@@ -29,18 +31,20 @@
         "knowledge/jobs/J004-trend-scout/digest.md#decision-digest-2026-10-20-j004-g1",
         "knowledge/jobs/J016-orchestration/decisions.md#lead-decisions-at-g3-the-lead-s-own-calls-inside-the-approved-design-not-owner-decisions",
         "knowledge/jobs/J002-ui-ux-designer/decisions.md#j002-decisions",
-        "knowledge/jobs/J016-orchestration/decisions.md#j016-decisions-owner-s-words"
+        "knowledge/jobs/J001-engineering-skills/job-card.md#j001-rebuild-the-engineering-skills-for-the-kit"
       ],
       "forbidden": []
     },
     {
       "task": "where do lesson drafts go after a job ends",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/knowledge.md#6",
         "knowledge/inbox/README.md"
       ],
       "ranks": [
-        7,
+        6,
         1
       ],
       "recall@5": 0.5,
@@ -49,20 +53,22 @@
       "pass": true,
       "top": [
         "knowledge/inbox/README.md#inbox-lesson-drafts",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#checks",
-        "rules/knowledge.md#8-the-learning-loop",
         "knowledge/inbox/2026-10-21-J004-lead-build-trend-scout.md#outcome-and-owner-corrections-word-for-word",
+        "rules/knowledge.md#8-the-learning-loop",
         ".agents/roles/doc-keeper.md#hand-back",
         ".agents/roles/feature-builder.md#hand-back",
         "rules/knowledge.md#6-where-things-go",
         "knowledge/lessons/README.md#lessons-accepted",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6",
-        "rules/company.md#4-the-flow-every-m-and-l-job-follows"
+        "rules/company.md#4-the-flow-every-m-and-l-job-follows",
+        ".agents/workflows/improve.md#step-3-consolidate-the-knowledge-base-the-dreaming-pass",
+        "rules/company.md#12-learning"
       ],
       "forbidden": []
     },
     {
       "task": "write an intent brief for an animator",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/orchestration/SKILL.md#10"
       ],
@@ -89,6 +95,8 @@
     },
     {
       "task": "run the weekly improvement pass",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/workflows/improve.md"
       ],
@@ -104,17 +112,19 @@
         ".agents/workflows/improve.md#step-1-gather-scripts-cheap",
         "knowledge/evals/README.md#compare-before-and-after-a-retrieval-change",
         "rules/company.md#12-learning",
+        "knowledge/jobs/J016-orchestration/job-card.md#filing-at-close-rules-knowledge-md-7-adapted-for-a-kit-job",
         "knowledge/inbox/README.md#inbox-lesson-drafts",
         "knowledge/jobs/J016-orchestration/design-context.md#6-question-4-how-wins-and-failures-make-every-part-of-context-better",
         "knowledge/index.md#knowledge-index",
         "rules/knowledge.md#8-the-learning-loop",
-        "knowledge/jobs/J013-analyst/decisions.md#j013-decisions",
-        "knowledge/reference/art-direction/05-first-game-art.md#7-gaps-the-new-art-director-should-fill"
+        "knowledge/jobs/J013-analyst/decisions.md#j013-decisions"
       ],
       "forbidden": []
     },
     {
       "task": "tailor the kit skills to this game's style",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/workflows/integrate.md"
       ],
@@ -141,6 +151,8 @@
     },
     {
       "task": "send a universal lesson back to the studio kit",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/workflows/kit-sync.md"
       ],
@@ -167,6 +179,8 @@
     },
     {
       "task": "an agent is blocked and needs a decision from the owner",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/company.md#8",
         ".agents/skills/orchestration/SKILL.md#12"
@@ -184,17 +198,19 @@
         "rules/company.md#8-statuses-and-escalation",
         ".agents/skills/art-review/references/feedback-briefs.md#3-review-file-layout",
         ".agents/skills/orchestration/SKILL.md#12-statuses",
-        "knowledge/jobs/J016-orchestration/reviews/core-rules-322c8ad-auditor-a.md#review-core-rules-and-orchestration-playbook-322c8ad-by-auditor-a",
         ".agents/workflows/jobs/README.md#contract-every-job-workflow-keeps",
-        "knowledge/jobs/J016-orchestration/reviews/workflows-322c8ad-auditor-b.md#review-the-seven-saved-job-workflows-at-322c8ad-by-auditor-b",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6",
         "AGENTS.md#1-the-studio-details-rules-company-md",
-        "knowledge/jobs/J016-orchestration/reviews/core-rules-763a11e-auditor-a.md#recheck-core-rules-and-orchestration-playbook-763a11e-by-auditor-a"
+        "knowledge/reference/film/04-earlier-game-opening-film-lessons.md#7-what-blocked-progress",
+        "rules/messages.md#3-hand-back-receiver-whoever-asked",
+        ".agents/roles/art-director.md#hand-back",
+        "knowledge/reference/art-direction/04-platform-evolution-marketing-process.md#7-comparison-with-the-kit-what-the-skill-writer-must-reconcile"
       ],
       "forbidden": []
     },
     {
       "task": "which frontmatter fields does every knowledge note need",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/knowledge.md#5"
       ],
@@ -209,18 +225,20 @@
         "rules/knowledge.md#5-notes",
         "knowledge/jobs/J016-orchestration/decisions.md#lead-decisions-at-g3-the-lead-s-own-calls-inside-the-approved-design-not-owner-decisions",
         "rules/knowledge.md#3-routing-how-every-agent-reaches-its-context",
-        "knowledge/jobs/J016-orchestration/reviews/roles-templates-763a11e-auditor-c.md#recheck-role-files-and-job-templates-763a11e-by-auditor-c",
         ".agents/roles/doc-keeper.md#work-method",
         "knowledge/jobs/J016-orchestration/design-context.md#3-question-1-how-each-agent-reaches-its-correct-context",
         "knowledge/jobs/J016-orchestration/design-context.md#7-what-would-change-in-the-kit-after-your-approval",
         ".agents/skills/analysis-craft/SKILL.md#3-steps-per-task-type",
         ".agents/skills/game-concept/references/pitch-template.md#1-two-layers",
-        "knowledge/jobs/J016-orchestration/reviews/roles-templates-322c8ad-auditor-c.md#review-role-files-and-job-templates-322c8ad-by-auditor-c"
+        "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#4-3-event-contract-fields-ap-375-379-399-401",
+        "knowledge/jobs/J010-engineering-team/brief-paper.md#brief-research-paper-extraction-j010-t06-t08"
       ],
       "forbidden": []
     },
     {
       "task": "play-test the game in Studio and check Output for new errors",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/studio-mcp/SKILL.md"
       ],
@@ -247,6 +265,8 @@
     },
     {
       "task": "add a paid egg with a luck potion and show odds",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/platform-policy/SKILL.md"
       ],
@@ -273,6 +293,8 @@
     },
     {
       "task": "players lost their data after a teleport, items duplicated",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/data-saving/SKILL.md"
       ],
@@ -299,6 +321,8 @@
     },
     {
       "task": "the game lags and memory keeps growing on phones",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/performance/SKILL.md"
       ],
@@ -325,6 +349,8 @@
     },
     {
       "task": "add a remote so the client can buy an item, make it exploit-proof",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/networking-security/SKILL.md"
       ],
@@ -341,16 +367,18 @@
         "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
         ".agents/skills/engineering-craft/references/handoffs.md#1-architect-feature-builder-build-ticket",
         ".agents/skills/networking-security/references/facts.md#official-validation-guidance",
-        "knowledge/jobs/J016-orchestration/reviews/workflows-322c8ad-auditor-b.md#review-the-seven-saved-job-workflows-at-322c8ad-by-auditor-b",
         "knowledge/reference/live-ops/01-mandate-cases-rhythm-events-ranking.md#5-types-of-live-content-lp-129-159",
         "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#2-4-economy",
         ".agents/skills/networking-security/SKILL.md#4-craft-core",
-        "knowledge/reference/architecture/roblox-operations-2026-10.md#4-exploit-resistance-4"
+        "knowledge/reference/architecture/roblox-operations-2026-10.md#4-exploit-resistance-4",
+        "knowledge/reference/engineering/rework/old-agents.md#roblox-architecture-agents-skills-roblox-architecture-skill-md"
       ],
       "forbidden": []
     },
     {
       "task": "build a shop screen that works on phones and with a controller",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/ui-basics/SKILL.md"
       ],
@@ -371,12 +399,14 @@
         "knowledge/jobs/J009-art-director/art/test-b/art-review-egg-shop.md#1-verdict",
         ".agents/skills/ui-design/SKILL.md#ui-design-the-screen-works-before-it-is-pretty",
         "knowledge/jobs/J016-orchestration/skill-descriptions.md#kit-skill-descriptions-shortened-j016-t02",
-        ".agents/skills/orchestration/references/job-types.md#4-ui-screen"
+        "knowledge/jobs/J009-art-director/art/test-b/art-review-egg-shop.md#5-ranked-findings"
       ],
       "forbidden": []
     },
     {
       "task": "where do new players quit, add funnel events",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/analytics/SKILL.md"
       ],
@@ -403,6 +433,8 @@
     },
     {
       "task": "should we add a new package from GitHub for state management",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/packages.md"
       ],
@@ -429,18 +461,19 @@
     },
     {
       "task": "design a new quest system so adding quests is easy",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/architecture/SKILL.md"
       ],
       "ranks": [
-        2
+        1
       ],
       "recall@5": 1.0,
       "recall@10": 1.0,
-      "mrr": 0.5,
+      "mrr": 1.0,
       "pass": true,
       "top": [
-        "knowledge/jobs/J016-orchestration/reviews/context-763a11e-auditor-d.md#recheck-context-system-763a11e-by-auditor-d",
         ".agents/skills/architecture/SKILL.md#architecture-make-every-change-understandable-before-it-ships",
         "knowledge/jobs/J014-live-ops-designer/g2/live-ops/plan-2026-10-21.md#c-ranked-candidates",
         "knowledge/jobs/J014-live-ops-designer/g2/live-ops/handoffs-draft.md#t-g1-game-designer-masquerade-play-spec-a1-gate-message-phone-playtest-read",
@@ -449,12 +482,15 @@
         "knowledge/jobs/J001-engineering-skills/job-card.md#owner-s-words-2026-10-20-verbatim-excerpts",
         "knowledge/reference/game-design/03-loops-systems.md#3-3-real-disagreements-and-their-scope",
         ".agents/skills/live-ops-design/references/events-offers-rules.md#1-what-an-event-is-o",
-        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/event-halloween-masquerade.md#a-proposition"
+        "knowledge/jobs/J014-live-ops-designer/g2/live-ops/event-halloween-masquerade.md#a-proposition",
+        "knowledge/jobs/J014-live-ops-designer/test-pack/game.md#3-systems"
       ],
       "forbidden": []
     },
     {
       "task": "review this change before merge, is it safe",
+      "role": null,
+      "job": null,
       "expect": [
         ".agents/skills/code-review/SKILL.md"
       ],
@@ -475,12 +511,14 @@
         "knowledge/reference/engineering/paper/part-2.md#4-practice-claims-list",
         "knowledge/reference/art-direction/04-platform-evolution-marketing-process.md#1-3-screen-space-is-an-observed-output-ap-769-775",
         "knowledge/reference/engineering/paper/factcheck-practice.md#1c-code-review-practice-anthropic",
-        "knowledge/jobs/J016-orchestration/reviews/roles-templates-763a11e-auditor-c.md#role-recipe-rows-changed-at-763a11e-job-types-md-and-their-role-file-status"
+        "knowledge/reference/modeling/03-environment-export-review.md#5-12-reviewing-a-model-mp-814-822-848-861"
       ],
       "forbidden": []
     },
     {
       "task": "the agent added too many files and abstractions, keep the change small",
+      "role": null,
+      "job": null,
       "expect": [
         "rules/anti-overengineering.md"
       ],
@@ -500,13 +538,15 @@
         "AGENTS.md#4-how-to-work",
         "knowledge/reference/engineering/paper/factcheck-practice.md#1a-anthropic-claude-code-opus-5-5",
         ".agents/skills/architecture/SKILL.md#architecture-make-every-change-understandable-before-it-ships",
-        ".agents/skills/code-review/SKILL.md#4-craft-core",
-        "knowledge/reference/vfx/12-gaps.md#3-camera"
+        "knowledge/reference/vfx/12-gaps.md#3-camera",
+        ".agents/skills/code-review/SKILL.md#4-craft-core"
       ],
       "forbidden": []
     },
     {
       "task": "storyboard the boss entrance cutscene and time the animatic",
+      "role": "film-director",
+      "job": null,
       "expect": [
         ".agents/skills/film-craft/SKILL.md"
       ],
@@ -533,6 +573,8 @@
     },
     {
       "task": "design the boss entrance stinger and reveal cue sounds",
+      "role": "sound-designer",
+      "job": null,
       "expect": [
         ".agents/skills/sound-design/SKILL.md"
       ],
@@ -559,6 +601,8 @@
     },
     {
       "task": "build a fireball effect and test it in the VFX lab place",
+      "role": "vfx-designer",
+      "job": null,
       "expect": [
         ".agents/skills/vfx-craft/SKILL.md"
       ],
@@ -585,6 +629,8 @@
     },
     {
       "task": "review the character model against the art bible anchors",
+      "role": "art-director",
+      "job": null,
       "expect": [
         ".agents/skills/art-review/SKILL.md"
       ],
@@ -611,6 +657,8 @@
     },
     {
       "task": "icon renders of the shipped model: archer-gold",
+      "role": "modeler",
+      "job": null,
       "expect": [
         ".agents/skills/modeling-craft/SKILL.md"
       ],
@@ -637,6 +685,8 @@
     },
     {
       "task": "rebind and retest on the fixed geometry",
+      "role": "character-rigger",
+      "job": null,
       "expect": [
         ".agents/skills/rigging-craft/SKILL.md"
       ],
@@ -663,6 +713,8 @@
     },
     {
       "task": "set up the lighting and fog for the wall stage",
+      "role": "environment-designer",
+      "job": null,
       "expect": [
         ".agents/skills/environment-craft/SKILL.md"
       ],
@@ -689,15 +741,17 @@
     },
     {
       "task": "cutscene letterbox, subtitles and skip UI",
+      "role": "ui-ux-designer",
+      "job": null,
       "expect": [
         ".agents/skills/ui-design/SKILL.md"
       ],
       "ranks": [
-        129
+        130
       ],
       "recall@5": 0.0,
       "recall@10": 0.0,
-      "mrr": 0.0078,
+      "mrr": 0.0077,
       "pass": false,
       "top": [
         ".agents/roles/ui-ux-designer.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md",
@@ -715,6 +769,8 @@
     },
     {
       "task": "add a server-validated shop purchase remote with receipt saving",
+      "role": "feature-builder",
+      "job": null,
       "expect": [
         ".agents/skills/data-saving/SKILL.md",
         ".agents/skills/networking-security/SKILL.md"
@@ -743,6 +799,8 @@
     },
     {
       "task": "design a new quest system so adding quests is easy",
+      "role": "architect",
+      "job": null,
       "expect": [
         ".agents/skills/architecture/SKILL.md"
       ],
@@ -769,6 +827,8 @@
     },
     {
       "task": "size a new owner request and pick its job recipe",
+      "role": "orchestrator",
+      "job": null,
       "expect": [
         ".agents/skills/orchestration/SKILL.md#2",
         "rules/company.md#2"
@@ -790,41 +850,45 @@
         "rules/company.md#4-the-flow-every-m-and-l-job-follows",
         ".agents/skills/vfx-craft/SKILL.md#3-build-steps",
         ".agents/skills/orchestration/references/job-types.md#cross-type-rules-all-types",
-        "knowledge/jobs/J016-orchestration/reviews/core-rules-322c8ad-auditor-a.md#review-core-rules-and-orchestration-playbook-322c8ad-by-auditor-a",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6"
+        "rules/assistants/codex.md#execution-profile-codex",
+        "knowledge/jobs/J016-orchestration/design.md#3-the-general-flow-every-m-and-l-job"
       ],
       "forbidden": []
     },
     {
       "task": "file the job into the vault: precedents vocabulary taste log",
+      "role": "doc-keeper",
+      "job": "J016-orchestration",
       "expect": [
         "rules/knowledge.md#7",
         ".agents/skills/orchestration/SKILL.md#9"
       ],
       "ranks": [
-        5,
-        8
+        6,
+        9
       ],
-      "recall@5": 0.5,
+      "recall@5": 0.0,
       "recall@10": 1.0,
-      "mrr": 0.2,
+      "mrr": 0.1667,
       "pass": true,
       "top": [
         "knowledge/jobs/J016-orchestration/design-context.md#5-question-3-how-the-vault-grows-with-the-project",
         "knowledge/jobs/J016-orchestration/design-context.md#2-five-layers-each-with-one-owner",
         "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#d2-packet-runs-repo-root-pythonioencoding-utf-8",
         "knowledge/jobs/J016-orchestration/reviews/context-322c8ad-auditor-d.md#review-context-system-322c8ad-by-auditor-d",
+        "knowledge/jobs/J016-orchestration/job-card.md#filing-at-close-rules-knowledge-md-7-adapted-for-a-kit-job",
         "rules/knowledge.md#7-filing-a-job-into-the-vault-every-job-close",
         "knowledge/jobs/J016-orchestration/reviews/context-763a11e-auditor-d.md#recheck-context-system-763a11e-by-auditor-d",
         "rules/knowledge.md#1-one-source-of-truth-five-layers",
         ".agents/skills/orchestration/SKILL.md#9-close-file-the-job-into-the-vault",
-        ".agents/roles/doc-keeper.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md",
-        "AGENTS.md#5-records-the-knowledge-base-is-the-studio-s-memory"
+        ".agents/roles/doc-keeper.md#your-place-in-the-job-flow-rules-company-md-4-orchestration-skill-references-job-types-md"
       ],
       "forbidden": []
     },
     {
       "task": "Add a daily reward chest that gives coins each day you log in.",
+      "role": "orchestrator",
+      "job": null,
       "expect": [
         ".agents/skills/orchestration/SKILL.md"
       ],
@@ -840,17 +904,19 @@
         "knowledge/jobs/J014-live-ops-designer/g2/feedback-data/sorts/codebook.md#codebook-v1-mothlight-meadow-synthetic-test-game",
         "knowledge/jobs/J013-analyst/digest-g3.md#decision-digest-2026-10-21-j013-g2-result-g3-request",
         "knowledge/reference/progression/fact-check-roblox.md#answers-to-the-two-open-questions-check-c4",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-322c8ad-auditor-e.md#review-block-rules-messages-md-6",
         "knowledge/reference/vfx/05-juice-repetition-sync.md#5e-putting-satisfying-qualities-into-a-game-s-moments",
         "knowledge/reference/progression/03-economy-tools-data-process.md#11-1-roblox-claims-sources-r01-r17-w06-w07",
-        "knowledge/reference/vfx/02b-moments-reward-mood.md#family-r-collecting-and-rewards-6-rows",
         "knowledge/reference/analyst/03-practice-diagnosis-reporting.md#5-gaps-for-a-non-expert-owner",
-        "knowledge/jobs/J016-orchestration/reviews/tabletop-763a11e-auditor-e.md#tabletop-recheck-at-763a11e-blocking-findings-tt-01-tt-13-keep-list-new-issues"
+        "knowledge/reference/vfx/02b-moments-reward-mood.md#family-r-collecting-and-rewards-6-rows",
+        ".agents/skills/live-ops-design/references/cadence-content.md#4-content-types-name-the-player-problem-first-o",
+        "knowledge/reference/progression/03-economy-tools-data-process.md#9-formula-cards-extractor-assembly-every-variable-defined-unit-and-domain"
       ],
       "forbidden": []
     },
     {
       "task": "fix findings and re-wire changes: daily-reward",
+      "role": "feature-builder",
+      "job": null,
       "expect": [
         ".agents/skills/data-saving/SKILL.md"
       ],

@@ -46,7 +46,7 @@ const lacking = []
 if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2; M runs the proof inside build)')
 if (typeof A.money !== 'boolean') lacking.push('money: true or false (Robux, currency, purchases or saved value: platform-policy, data-saving and the money rules in every brief)')
 if (typeof A.numbers !== 'boolean') lacking.push('numbers: true or false (numbers players feel: the progression-designer joins)')
-if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the prototype and the build run in Studio, one Studio writer at a time (rules/company.md §9)')
+if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the prototype and the build run in Studio, one Studio driver at a time (rules/company.md §9)')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (lacking.length) {
@@ -167,8 +167,8 @@ function imageRule(promptsFile) {
 }
 function studioRule(write) {
   return write
-    ? `Studio: you are the only Studio writer during this step; use studio_id ${STUDIO} on every Studio MCP call and no other instance. In files mode never edit scripts through Studio MCP.`
-    : 'Studio: do not write to Studio in this step; read-only captures only if `checks` ask for them.'
+    ? `Studio: you are the only Studio driver during this step (one agent reads or writes Studio at a time); use studio_id ${STUDIO} on every Studio MCP call and no other instance. In files mode never edit scripts through Studio MCP.`
+    : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
   const lines = []
@@ -476,7 +476,7 @@ async function proof() {
 }
 
 // ================================================================ repairs by makers (shared by the proof, the review chain and stage repair)
-// Non-Studio makers fix in parallel; then the feature-builder (the only Studio writer) fixes its own findings and re-wires what changed.
+// Non-Studio makers fix in parallel; then the feature-builder (the only Studio driver) fixes its own findings and re-wires what changed.
 async function repairRound(findings, tag, phaseName, prototype) {
   const byMaker = {}
   findings.forEach(f => { (byMaker[f.maker_role] = byMaker[f.maker_role] || []).push(f) })

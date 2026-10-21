@@ -46,7 +46,8 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
        the kept one) take one ranked slot; distinct sections under a shared template heading all rank.
     12. With --role for a craft role (not orchestrator or doc-keeper), files under a job's reviews/ or
        exchange/ folder score x JOB_HISTORY_FACTOR (rules/knowledge.md §3: a craft step does not get the
-       whole job history); briefs name the ones a step needs.
+       whole job history); briefs name the ones a step needs. A closed job's (not in knowledge/jobs/active.md)
+       review and exchange files score x JOB_HISTORY_FACTOR for every role, unless --job names that job.
 
 Search roots: kit.json key `context.search_roots` (list of repo-relative paths) when present,
 else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present (never the withheld
@@ -136,7 +137,7 @@ VOCABULARY = "knowledge/design/vocabulary.md"
 PRECEDENT_ROWS = 5  # newest rows of the role's craft in the role block
 ROLE_ALIASES = {"orchestrator": ["orchestration"]}  # the lead has no role file; its book is this skill
 OTHER_ROLE_FACTOR = 1 / ROLE_BOOST  # with --role, other roles' identity files
-JOB_HISTORY_RE = re.compile(r"^knowledge/jobs/[^/]+/(?:.*/)?(?:reviews|exchange)/")
+JOB_HISTORY_RE = re.compile(r"^knowledge/jobs/([^/]+)/(?:.*/)?(?:reviews|exchange)/")
 JOB_HISTORY_FACTOR = 0.5  # PROPOSAL (J016 G3, audit D N1): a craft role's packet, review and exchange files
 JOB_HISTORY_ROLES = frozenset({"orchestrator", "doc-keeper"})  # the lead and the filer read the job history at full weight
 SIBLING_OVERLAP = 0.8  # a same-folder, same-heading section is a copy when this share of its words is in the kept one
@@ -477,6 +478,8 @@ class Corpus:
                 continue
             self.notes[rel] = note
         self.sections: list[Section] = [s for n in self.notes.values() for s in n.sections]
+        # Open job folders from knowledge/jobs/active.md; None when the file is missing (nothing counts as closed).
+        self.active: set[str] | None = {j for j, _ in active_jobs(root)} if (root / ACTIVE_JOBS).is_file() else None
         self._index()
 
     def _index(self) -> None:
@@ -682,17 +685,21 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
                 value *= ROLE_BOOST
             elif book and note.kind == "role":
                 value *= OTHER_ROLE_FACTOR
-            history = bool(role) and role not in JOB_HISTORY_ROLES and bool(JOB_HISTORY_RE.match(note.path))
-            if history:
+            past = JOB_HISTORY_RE.match(note.path)
+            history = bool(past) and bool(role) and role not in JOB_HISTORY_ROLES
+            # A closed job's history is lower for every role (its lessons were filed at close), unless --job names it.
+            closed = bool(past) and corpus.active is not None and past.group(1) not in corpus.active and not job_hit
+            if history or closed:
                 value *= JOB_HISTORY_FACTOR
             if job_hit:
                 value *= JOB_BOOST
-            if role_hit or own_book or job_hit or history:
+            if role_hit or own_book or job_hit or history or closed:
                 boosted[note.path] = (
                     (f"; tagged for role {role}" if role_hit else "")
                     + (f"; own book of role {role}" if own_book and not role_hit else "")
                     + (f"; in job {job}" if job_hit else "")
                     + ("; job review or exchange file, lower for a craft role" if history else "")
+                    + ("; closed job's review or exchange file, lower" if closed and not history else "")
                 )
             scored.append((value, section, matched, fields_hit))
     scored.sort(key=lambda item: (-item[0], item[1].path.lower(), item[1].start))
