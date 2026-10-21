@@ -50,4 +50,4 @@ Cause (the list in `rules/knowledge.md` §8, word for word): context missed · c
 | "Done" claims without evidence | none found in the rechecks |
 | Usage: estimate vs actual (tokens) | estimate steps 1-7 about 3.5-4.5 M; actual steps 1-8 about 5.3 M; G3 audit, fixes and rechecks about 7.7 M; close probes about 0.2 M; total about 13.2 M |
 | Owner decisions asked | 9 (J016-D1..D9) |
-| What more iteration would fix | run the first real cutscene job on the new design and file its result; the open follow-ups in the job card |
+| What more iteration would fix | run the first real jobs of every type through the lead (J016-D10) and file their results; the open follow-ups in the job card |

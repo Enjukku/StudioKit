@@ -75,6 +75,6 @@ supersedes: []
 
 ## Open follow-ups (not blocking)
 - Done after the close (2026-10-21, owner: "Fix the four small J016 follow-ups now, here, then run the gate and commit."): the workflows say "Studio driver" and a step that does not drive Studio never reads or captures it; the UI-screen workflow takes code file owners from the architect's `contract-code.md`; `eval_context --compare` matches cases by task, role and job; a closed job's review and exchange files rank lower for every role.
-- The first real cutscene job: run it on `/job-cutscene` and file its result as the J016 pilot.
+- The first real jobs of every type through the lead (S jobs too, not only a cutscene; owner J016-D10): file each result for `/improve` (first-pass acceptance, defects you found after internal review, usage vs estimate).
 
 **Retrospective:** more iteration would come from one real job; the internal audit found what paper review alone could not (tool lists, packet leaks, workflow seams).
