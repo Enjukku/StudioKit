@@ -18,4 +18,4 @@ supersedes: []
 Rules:
 - This file lists agents the lead (or a production chat's job lead) spawns by hand. Add a row when such an agent starts; give each brief the `peers` ids it needs; a message to a finished agent resumes it with its context (Claude Code 2.1.306); never use an id from another job.
 - Inside a saved workflow there are no agent ids: sideways work goes through `exchange/` files in the order the stage sets, and repairs are fresh calls with the review files.
-- Only roles whose `tools:` line includes SendMessage (or that have no `tools:` line) can send a message. The others answer in `exchange/` notes or their hand-back.
+- Only roles whose `tools:` line includes SendMessage (or that have no `tools:` line) can send a message: since J016-D6 every working role can; the helpers (doc-keeper, explore, researcher) answer in `exchange/` notes or their hand-back.

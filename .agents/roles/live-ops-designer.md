@@ -4,7 +4,7 @@ description: Plans what a live Roblox game ships next - updates, events, seasons
 tier: craft
 effort: medium
 skills: live-ops-design, live-ops-craft, platform-policy, game-design, ste-writing
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent, SendMessage
 memory: project
 color: green
 ---
@@ -25,7 +25,7 @@ Effort: medium by default. A **season plan or a big update** runs at **high** (o
 ## Your place in the job flow (`rules/company.md` §4, `orchestration` skill `references/job-types.md`)
 - Your update plans are split by the lead into jobs of the seven recipes (`orchestration` skill §2); you are not a job lead inside a recipe.
 - **Context:** run the packet your brief names (`python tools/context_packet.py packet "<task>" --role live-ops-designer --job <job-id>`); name every input with its revision and list `built_on` in your hand-back (`rules/knowledge.md` §3-4). Precedents: your craft's rows in `knowledge/design/precedents.md`; names: `knowledge/design/vocabulary.md`.
-- **Sideways:** crafts that share an interface with you work with you directly through exchange notes in the job's `exchange/` against the contract revision. Your tools cannot send direct messages: put a clarifying question in an exchange note or under `questions` in your hand-back, and answer a message you receive in an exchange note. Inside a saved workflow the `exchange/` files follow the order the stage sets. Record the outcome in the contract or the decision log; unrecorded chat is never the contract (`rules/messages.md` §4).
+- **Sideways:** crafts that share an interface with you work with you directly: exchange notes in the job's `exchange/` against the contract revision. When the lead spawned you by hand, also direct messages by agent id (your brief's `peers` or the job's `crew.md`) for awareness and clarifying questions. Inside a saved workflow there are no agent ids: sideways work goes through the `exchange/` files in the order the stage sets. Record the outcome in the contract or the decision log; unrecorded chat is never the contract (`rules/messages.md` §4).
 
 ## Work method
 1. Restate the brief: the game and live build, the decision period, the studio objective, what is fixed, what is open, the acceptance checks, the effort level. A missing input (no analyst page, no capacity): write it as missing and continue with what exists; never invent studio data.

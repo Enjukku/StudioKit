@@ -15,13 +15,13 @@ supersedes: []
 | --- | --- | --- | --- |
 | Quality audit | Do the written files implement the approved design, without contradictions, gaps or broken references? | 5 independent Opus reviewers, read-only (crew.md J016-A1..A5); the lead verifies each finding, the maker fixes | done: 57 blocking found, fixed by 4 makers, rechecked (§4) |
 | Rehearsal | Do the mechanisms the rules rely on work on Claude Code 2.1.306 with the real role files? | lead + real role files on Haiku (mechanics only, not craft quality) | done (§2); one gap needs the owner (R2a) |
-| Pilot | Does the new design make a better cutscene than the old process and one strong agent, at what cost? | owner + three runs of one short cutscene | needs the owner's go (§3) |
+| Pilot | Does the new design make a better cutscene than the old process and one strong agent, at what cost? | owner + runs of one short cutscene | deferred (owner J016-D8): the first real cutscene job, likely in GreatWallSim, serves as the pilot |
 
 ## 2. Rehearsal results (scratch files: the lead's scratchpad `rehearsal/`)
 | # | Mechanism | Result | Evidence | Consequence |
 | --- | --- | --- | --- | --- |
 | R1 | Two direction leads write first proposals in parallel, independently | PASS | vfx-designer and sound-designer ran at the same time; neither opened the other's file; both hand-backs start with STATUS, list coverage and built_on | — |
-| R2a | Sideways direct message by agent id | **FAIL for 14 roles** | sound-designer: "the SendMessage tool is not in my available tools". Its role file allowlist is `Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent`. 14 of 24 roles have an allowlist without SendMessage (analyst, art-director, doc-keeper, explore, game-designer, live-ops-designer, marketing, progression-designer, researcher, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer); the 10 roles with all tools have it | `rules/company.md` §5 and the role files promise direct messages these roles cannot send. Fix needs the owner (tool lists are agent permissions; the lead's edit was refused as self-modification) |
+| R2a | Sideways direct message by agent id | **FAIL for 14 roles** | sound-designer: "the SendMessage tool is not in my available tools". Its role file allowlist is `Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent`. 14 of 24 roles have an allowlist without SendMessage (analyst, art-director, doc-keeper, explore, game-designer, live-ops-designer, marketing, progression-designer, researcher, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer); the 10 roles with all tools have it | `rules/company.md` §5 and the role files promised direct messages these roles could not send. Owner decision J016-D6: the 11 working roles now list `SendMessage`; live check after a Claude Code restart (C22) |
 | R2b | Exchange through files instead | PASS | each designer wrote an exchange note with only the production conflict (rapid pickups: 80 ms sound floor vs 2 flashes per second); the VFX designer answered it | Files work for every role today |
 | R3 | Review rejects the work: reviewer opens the artifact first, writes §6 findings, never edits | PASS | art-director opened the proposal before the exchange notes; 2 blocking + 1 recommendation, each with line evidence, a keep list and verdict fix-first; nothing edited. F2 ("3-4 % of screen" is not a size) over-read the acceptance check | A cheap reviewer is fine for format checks but over-reads; it never certifies quality (`orchestration` §11) |
 | R4 | Repair by resuming the maker with the finding file and the protected list; selective recheck | PASS | the VFX designer wrote rev2 fixing F1-F3; all 3 protected values unchanged (lead diffed rev1/rev2); the reviewer, resumed, rechecked only F1-F3 and the keep list: verdict ready for the next review. The maker did not dispute the weak F2; it added PROPOSAL sizes instead | Repairs keep correct work when the protected list travels with them |
@@ -60,7 +60,9 @@ Gate after the fixes: PASS, 641 tests. A fresh rechecker (J016-A6, `reviews/repa
 
 **Usage (G3 so far, as the app reports subagent tokens):** audits 1.53 M · rehearsal and docs check 0.58 M · fixes 2.82 M · rechecks 1.98 M + 0.29 M · lead about 0.5 M · total about **7.7 M tokens**. Resuming a large reviewer for a recheck resends its whole context (0.3-0.54 M each).
 
-## 5. Owner decisions before the pilot
-1. **Role tool lists (R2a, C22):** add `SendMessage` to the 11 working roles that lack it (analyst, art-director, game-designer, live-ops-designer, marketing, progression-designer, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer). Recommendation: yes. Today they work through exchange notes, which is slower but safe. The docs say the same tool can also message other Claude sessions on this machine.
-2. **Browser for image roles:** add the built-in browser tools to art-director, vfx-designer and marketing, so they can make images themselves. Recommendation: not yet. The lead runs image batches between stages with your yes per batch, which keeps your download rule.
-3. **The pilot:** the game and cutscene, two or three arms, and the explicit go to run `/job-cutscene` (§3).
+## 5. Owner decisions (2026-10-21)
+| # | Question | Answer |
+| --- | --- | --- |
+| 1 | Add `SendMessage` to the 11 working roles that lack it | yes (J016-D6) |
+| 2 | Give the image roles the built-in browser | yes (J016-D7): art-director, vfx-designer, marketing; the owner's yes per download batch still applies |
+| 3 | Run the cutscene pilot now | no (J016-D8): the first real cutscene job in a game is the pilot; the comparison runs (§3) are optional then |
