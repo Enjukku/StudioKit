@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-20
+updated: 2026-10-21
 source: "J001 step 0: mirror refresh 7400643 + official Roblox posts 2026-04..10"
 supersedes: []
 ---
@@ -137,11 +137,11 @@ supersedes: []
 | Custom dashboards; Explore page with calculated metrics | **live** | 2026-05 / 08 | [DF 4844585](https://devforum.roblox.com/t/analytics-custom-dashboards-to-save-organize-and-share-custom-charts/4844585); mirror `production/analytics/custom-dashboards` | Funnel, economy and custom events unchanged; read limits from the mirror |
 | Experiments early harm detection | rolling out | 2026-09-28 week | [DF 4907734](https://devforum.roblox.com/t/experiments-catch-experiment-regressions-faster-with-early-harm-detection/4907734) | Faster A/B regression checks |
 | Discovery measurement on a new pipeline | **live** | 2026-10-12 | [DF 4930122](https://devforum.roblox.com/t/improved-discovery-measurement-in-creator-analytics/4930122) | Do not compare impressions across 2026-10-12 |
-| Roadmap: analytics agent, journey (Sankey) funnels | **planned** | 2026-09-18 | roadmap | Not available |
+| Roadmap: analytics agent, journey (Sankey) funnels | **planned** (journeys: method in the API reference) | 2026-09-18; reference checked 2026-10-21 | roadmap; mirror `_api-reference/classes/AnalyticsService.yaml:598-656` (`LogJourneyEvent`) | Analytics agent not available. `LogJourneyEvent` exists in the API reference with no guide page; whether the Creator Hub chart is live is not confirmed |
 
 ## Not verified or contradictory
 
 - Release-note bodies 738-743 were not readable; Studio or Luau items there may be missing from this note.
 - Playtest Agent: beta in April; no graduation post found. Frustum Streaming: roadmap said "late 2026", the post says released.
 - Rows marked "recap" or "post not read" rely on a staff weekly recap or the API yaml, not the full post.
-- No 2026 change found for paid random items, RemoteEvents or AI content rules. Absence of evidence, not proof.
+- No 2026 change found for RemoteEvents or AI content rules. Absence of evidence, not proof. Paid random items: the 2026-05-26 clarification (row above, DF 4654622) is the only 2026 change found.
