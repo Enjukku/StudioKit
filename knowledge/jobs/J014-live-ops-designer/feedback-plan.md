@@ -1,16 +1,16 @@
 ---
 type: job
 scope: universal
-status: draft
+status: active
 updated: 2026-10-21
 source: J014-D3 (owner: "Show it to me before setting anything up. No bot tokens or passwords in the repo or in chat."); fact sheet knowledge/reference/live-ops/feedback-routes-fact-sheet.md (Q/R ids, read 2026-10-21); DevForum 4665118 read by the lead 2026-10-21
 supersedes: []
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 
-# Feedback plan: one place for player feedback (PROPOSAL, gate G1b)
+# Feedback plan: one place for player feedback (approved J014-D5, 2026-10-21)
 
-**Status: nothing is set up.** This plan waits for the owner's yes. No key, bot, webhook, channel or code exists yet.
+**Status: approved, both stages (J014-D5).** Nothing is set up yet: stage 1 starts when a game launches; stage 2 runs the build tickets in §8 in that game's first update. No key, bot, webhook, channel or code exists yet.
 
 ## 1. What the plan does
 Player feedback from the game, Discord and Roblox's own rating page goes into **one folder on the owner's computer**. The live-ops agent reads only that folder. A script counts players per theme (`tools/liveops/feedback_count.py`, built and tested in J014-T06).

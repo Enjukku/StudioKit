@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 749-line paper with 51 dated sources (R01-R22 Roblox, G01-G29 studios) to extract and fact-check, 4 templates, a feedback-collection plan for owner review, a real test on a synthetic live game) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J014-D4). Steps 2-6 done 2026-10-21: notes, fact-checks FR 58 / FG 36, feedback fact sheet, count tool (19 tests), 2 skills, 4 templates, role, evals, roster; G2 test T08 on a synthetic game graded 24.5 / 26 (T09), 14 + 4 skill gaps fixed. G1b feedback plan and G2 wait for the owner (`digest.md` items 9-14). Gate: RESULT FAIL only from other jobs' files (J005, J013-analyst, J015) |
+| Status | Closed 2026-10-21 (J014-D8): agent done; feedback plan approved (D5); emergency authority (D6); hidden cases deferred to the first real game (D7). G2 not run as a gate; the T08 trial (24.5 / 26) and its 18 fixes are kept |
 | Depends on | `analytics`, `platform-policy`, `game-design`, `progression-design`/`progression-craft`, `market-trends`/`trend-scan`, `marketing-design`/`marketing-craft` skills (exist); analyst role (planned, not built) |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -91,6 +91,6 @@ Subagents, max 3 at a time. Wave 1: 2 extractors + feedback-route researcher. Wa
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "You may go ahead and begin." |
-| G1b feedback plan (before any setup) | | |
-| G2 first real test | | |
-| G3 final approval | | |
+| G1b feedback plan (before any setup) | 2026-10-21 | approved (J014-D5) |
+| G2 first real test | 2026-10-21 | not run: "we're not going to run gate 2" (J014-D8) |
+| G3 final approval | 2026-10-21 | "For now, the agent is just done." (J014-D8) |

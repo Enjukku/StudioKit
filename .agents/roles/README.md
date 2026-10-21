@@ -18,7 +18,7 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | ui-ux-designer | craft → Opus | medium (high for a new look or a shop, brief-level) | in kit (J002, owner-approved 2026-10-21) |
 | sound-designer | craft → Opus | medium | in kit |
 | environment-designer (stages, levels, worlds: space, terrain, dressing, light, atmosphere, ambience map; replaces content-builder, J008-D3) | craft → Opus | high for new stages and big environments; medium for small changes and fixes (owner 2026-10-21, J008-D1) | building (J008) |
-| live-ops-designer (updates, events, seasons, limited-time content, fixes after launch; feedback sort and count; ranked update plan; update briefs; post-update review) | craft → Opus | medium; high for a season plan or a big update (owner J014-D1) | building (J014; skills live-ops-design, live-ops-craft; G2 pending) |
+| live-ops-designer (updates, events, seasons, limited-time content, fixes after launch; feedback sort and count; ranked update plan; update briefs; post-update review) | craft → Opus | medium; high for a season plan or a big update (owner J014-D1) | in kit (J014, closed 2026-10-21; skills live-ops-design, live-ops-craft) |
 | architect | lead → Opus | high (owner J010) | in kit (J010, owner 2026-10-21) |
 | reviewer | craft → Opus | medium; high for money, saves, remotes | in kit (J010, owner 2026-10-21) |
 | feature-builder | craft → Opus | medium; high for money, saves, remotes (owner J010) | in kit (J010, owner 2026-10-21) |
