@@ -28,7 +28,7 @@ Every recipe follows `rules/company.md` §4. Stages per saved workflow `.agents/
 | Production order | set and animation in parallel → VFX and sound prototype on the stable event ids early, then finish against the animation → one combined early pass of picture, VFX and sound reviewed before final polish |
 | Check-ins | film reviews animation blocking before polish; art-director reviews the rough set and look before final light |
 | Integrator | film-director (scene data via `shotlist.py luau`); feature-builder builds or extends the player against the contract |
-| Review order | scripts (`shotlist.py check`, `log-diff`, gate) → qa-lead (skip, every ending, control and camera restored, repeat trigger, multiplayer, streaming) ∥ performance-engineer (phone) ∥ reviewer (the player code) → **film-director** (staging, timing, camera, clarity, with sound) → **art-director** (integrated look) → sound sync check |
+| Review order | scripts (`shotlist.py check`, `log-diff`, gate) → qa-lead (skip, every ending, control and camera restored, repeat trigger, multiplayer, streaming) ∥ performance-engineer (phone) ∥ reviewer (the player code) → **film-director** (staging, timing, camera, clarity, with the sound cue times from the Output log) → **art-director** (integrated look) → sound sync check |
 | Return paths | a look problem in one shot → its maker (modeler, light, VFX); timing unchanged → sound only confirms. A visual peak moves → beat-list revision → animator, VFX and sound acknowledge and recheck. A skeleton change → animation and VFX attachments stale |
 | Gap | the animator role is planned (J006): run a stand-in with the animator brief and `rig-pipeline` |
 

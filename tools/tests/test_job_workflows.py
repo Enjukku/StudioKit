@@ -270,7 +270,8 @@ class JobWorkflowTests(unittest.TestCase):
                  ("job-character.js", dict(stage="build", size="M"), r"P1-reference-set", r"S0-sheet|P2-blockout|S3-"),
                  ("job-character.js", dict(stage="proof"), r"P1-reference-set", r"S0-sheet|P2-blockout"),
                  ("job-cutscene.js", dict(stage="build", size="M"), r"P4-boards", r"P5-animatic|B1-"),
-                 ("job-cutscene.js", dict(stage="proof"), r"P4-boards", r"P3-probes|P5-animatic")]
+                 ("job-cutscene.js", dict(stage="proof"), r"P4-boards", r"P3-probes|P5-animatic"),
+                 ("job-feature.js", dict(stage="build", size="M", images=["a.png"]), r"P3-ui-target", r"B1-acceptance|PR-r")]
         for name, changes, maker, later in cases:
             with self.subTest(script=name, changes=changes):
                 out = run(name, full(name, **changes), {"images": "pending"})

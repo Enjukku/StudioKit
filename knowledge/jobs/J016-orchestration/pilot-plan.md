@@ -54,9 +54,11 @@ Same for all three: the owner's brief (words), the game's art bible and assets, 
 | D context system | 7 | 6 closed; B4 (retrieval drop) open | 2 small | fixed: 16/19 on the original cases, as before J016 (90 tests) |
 | E tabletop (3 requests to G3) | 13 | 12 closed; TT-01 narrowed | 3 blocking | fixed (`held_out: true`, split-job owner, image stops) |
 
-Gate after the fixes: PASS, 641 tests. The repair-round fixes were checked by tests and by the lead; a final targeted recheck runs before the commit is reported.
+Gate after the fixes: PASS, 641 tests. A fresh rechecker (J016-A6, `reviews/repair-round-1-d2d0601-rechecker.md`) closed all 24 repair-round items and found 1 new blocking seam (an M feature build did not stop on pending UI or VFX images; fixed by the lead with a harness test: old script done after 24 agents, new script blocked after 8) and 8 small seams (5 fixed).
 
-**Usage (G3 so far, as the app reports subagent tokens):** audits 1.53 M · rehearsal and docs check 0.58 M · fixes 2.82 M · rechecks 1.98 M · lead about 0.4 M · total about **7.3 M tokens**. Resuming a large reviewer for a recheck resends its whole context (0.3-0.54 M each).
+**Open follow-ups (not blocking the cutscene pilot):** the workflows still say "Studio writer" where the rules say "Studio driver" (behaviour is right: 0 overlaps in 7 timeline runs); the UI workflow takes code file owners from the direction sheet instead of the architect's contract header; `eval_context --compare` matches cases by task text; in the kit repo the J016 audit reviews rank high in the lead's packets (game repos do not carry kit job folders).
+
+**Usage (G3 so far, as the app reports subagent tokens):** audits 1.53 M · rehearsal and docs check 0.58 M · fixes 2.82 M · rechecks 1.98 M + 0.29 M · lead about 0.5 M · total about **7.7 M tokens**. Resuming a large reviewer for a recheck resends its whole context (0.3-0.54 M each).
 
 ## 5. Owner decisions before the pilot
 1. **Role tool lists (R2a, C22):** add `SendMessage` to the 11 working roles that lack it (analyst, art-director, game-designer, live-ops-designer, marketing, progression-designer, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer). Recommendation: yes. Today they work through exchange notes, which is slower but safe. The docs say the same tool can also message other Claude sessions on this machine.

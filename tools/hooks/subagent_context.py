@@ -33,7 +33,7 @@ CONTEXT_CAP = 2000
 EVENT = "SubagentStart"
 WITHHELD = (
     "Withheld on purpose (rules/knowledge.md §3): other leads' direction proposals until synthesis, "
-    "held-out keys (any file with 'hidden' in its name: never open), the maker's hand-back before your first look as a reviewer, "
+    "held-out keys (any file with 'hidden' in its name, or a note marked held_out: true: never open), the maker's hand-back before your first look as a reviewer, "
     "other crafts' working files, other games' notes."
 )
 MANY_JOBS = "Several jobs are open. Use the job your brief names; ignore the others."
