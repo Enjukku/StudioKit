@@ -160,8 +160,10 @@ def report(result: dict, show: int) -> str:
 
 def compare(result: dict, saved: dict) -> tuple[str, bool]:
     # Cases are matched by task, role and job, in file order: two cases may share a task text.
+    old_format = any("role" not in c for c in saved.get("cases", []))  # saved before rows carried role and job
+
     def key(c: dict) -> tuple:
-        return (c["task"], c.get("role"), c.get("job"))
+        return (c["task"],) if old_format else (c["task"], c.get("role"), c.get("job"))
     old_cases: dict[tuple, list[dict]] = {}
     for c in saved.get("cases", []):
         old_cases.setdefault(key(c), []).append(c)

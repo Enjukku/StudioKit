@@ -165,6 +165,17 @@ class JobWorkflowTests(unittest.TestCase):
         self.assertEqual(props[-2:], ["status", "outcome"], "evidence fields come before the answer fields")
         # The harness fails any agent() call whose schema differs from the template; the clean-run test covers every call.
 
+    def test_harness_studio_check_matches_the_workflow_wording(self):
+        # The harness's Studio exclusivity check keys on the driver sentence in each workflow's studioRule();
+        # if either side drifts, the overlap check would go silent (J016 follow-up review F3).
+        found = re.search(r"\['Studio', /(.+?)/\]", HARNESS.read_text(encoding="utf-8"))
+        self.assertIsNotNone(found, "the harness has no Studio resource pattern")
+        driver = re.compile(found.group(1))
+        for name in ("job-cutscene.js", "job-character.js", "job-stage.js", "job-ui-screen.js", "job-feature.js", "job-effect.js"):
+            with self.subTest(script=name):
+                out = run(name, full(name, stage="build", size="L"), {"dump": ".*"})
+                self.assertTrue(any(driver.search(d["prompt"]) for d in out["dumps"]), "no brief matches the harness's Studio driver pattern")
+
     def test_scripts_are_pure(self):
         banned = [r"Date\.now", r"Math\.random", r"new Date\(\s*\)", r"\brequire\(", r"^\s*import\s", r"\bfs\.", r"readFile", r"writeFile",
                   r"SendMessage", r"agentId", r"\bpeers\s*:"]

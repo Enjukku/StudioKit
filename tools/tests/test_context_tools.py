@@ -584,6 +584,9 @@ class RepairRoundTests(Repo):
             with self.subTest(role=role):
                 hits = {h.path: h.score for h in cp.rank(corpus, task, role)[0]}
                 self.assertLess(hits["knowledge/jobs/J9-done/reviews/chest.md"], hits["knowledge/jobs/J8-open/reviews/chest.md"])
+        self.write("knowledge/jobs/active.md", "# Active jobs\n\n- J8 · an open job named by a unique prefix\n")
+        prefix = {h.path: h.score for h in cp.rank(cp.Corpus(self.root), task, "orchestrator")[0]}
+        self.assertGreater(prefix["knowledge/jobs/J8-open/reviews/chest.md"], prefix["knowledge/jobs/J9-done/reviews/chest.md"])
         asked = {h.path: h.score for h in cp.rank(corpus, task, "orchestrator", "J9-done")[0]}
         self.assertGreater(asked["knowledge/jobs/J9-done/reviews/chest.md"], asked["knowledge/jobs/J8-open/reviews/chest.md"], "a job named with --job is never lowered")
 
@@ -831,6 +834,11 @@ class EvalTests(Repo):
         text, dropped = ev.compare(result, json.loads(json.dumps(result)))
         self.assertFalse(dropped)
         self.assertNotIn("->", text.split("overall")[0], "no change line for unchanged cases")
+        old = json.loads(json.dumps(result))
+        for c in old["cases"]:
+            del c["role"], c["job"]
+        text, _ = ev.compare(result, old)  # a run saved before rows carried role and job still pairs by task
+        self.assertNotIn("new case", text)
 
     def test_mirror_expectations_scored_against_docs_list(self):
         self.write("knowledge/systems/sword.md", fm("system") + "# Sword\n\nSword swing streak.\n")

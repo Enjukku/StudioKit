@@ -479,7 +479,7 @@ class Corpus:
             self.notes[rel] = note
         self.sections: list[Section] = [s for n in self.notes.values() for s in n.sections]
         # Open job folders from knowledge/jobs/active.md; None when the file is missing (nothing counts as closed).
-        self.active: set[str] | None = {j for j, _ in active_jobs(root)} if (root / ACTIVE_JOBS).is_file() else None
+        self.active: set[str] | None = {_active_folder(root, j) for j, _ in active_jobs(root)} if (root / ACTIVE_JOBS).is_file() else None
         self._index()
 
     def _index(self) -> None:
@@ -1230,6 +1230,14 @@ def resolve_job(root: Path, job: str) -> str:
             "(orchestration skill §3); before it exists, omit --job"
         )
     raise ValueError(f"ambiguous job `{job}`: {', '.join(matches)}; give more of the id")
+
+
+def _active_folder(root: Path, job: str) -> str:
+    """The job folder an active.md id names (exact or unique prefix, as --job); the id itself when no folder matches."""
+    try:
+        return resolve_job(root, job)
+    except ValueError:
+        return job
 
 
 def active_jobs(root: Path) -> list[tuple[str, str]]:
