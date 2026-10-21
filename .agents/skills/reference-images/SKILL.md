@@ -14,6 +14,7 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 | You need | Open |
 | --- | --- |
 | The style locks and families for this game | `knowledge/design/art-bible.md` |
+| How to write the `identity` for each family, edits, several images, text, refining, usage limits | `references/prompt-patterns.md` |
 | UI images inside Figma, icon prompts, image credits | `ui-figma` skill, `references/image-generation.md` |
 | How a model is built from the reference | the modeler's skills (planned) |
 | Brief format for asking another agent for images | `rules/messages.md` |
@@ -31,7 +32,7 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 
 ## 4. Steps
 1. **Brief:** what the image must show and why (`rules/messages.md`): subject, purpose (target, mood, model input), the family, any input images.
-2. **Manifest:** one row per image in a CSV: `id, family, identity, inputs, anchors`. `identity` describes only the subject; the style comes from the locks. Keep the manifest with the job (`knowledge/jobs/<job>/` or `content/<area>/<asset>/refs/`).
+2. **Manifest:** one row per image in a CSV: `id, family, identity, inputs, anchors`. `identity` describes only the subject (purpose, subject, pose or action, must-keep details, subject-specific "no" items: `references/prompt-patterns.md` §5); the style comes from the locks. Keep the manifest with the job (`knowledge/jobs/<job>/` or `content/<area>/<asset>/refs/`).
 3. **Check the prompt:** `python tools/art/art_refs.py print <manifest>` and read the assembled prompt and the attached anchors. Fix the identity, not the lock.
 4. **Generate:** `python tools/art/art_refs.py run <manifest> --limit N` (Codex on the owner's ChatGPT subscription; files land in `content/art/refs/<family>/<id>.png` with a `.json` record of prompt and inputs). It stops at the first failure (often the image quota): report it, do not retry in a loop.
 5. **Review** every image (§5) before anyone builds from it. Regenerate with a fixed identity, max 2 tries per image, then report.
