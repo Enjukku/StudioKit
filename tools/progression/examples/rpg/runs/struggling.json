@@ -1,6 +1,6 @@
 {
  "tool": "progression_sim",
- "version": "1.1.0",
+ "version": "1.2.0",
  "curves_version": "1.0.0",
  "model": {
   "path": "tools/progression/examples/rpg/model.json",
@@ -51,9 +51,10 @@
  },
  "lean": {
   "on": true,
+  "first_steps_kept": 0,
   "omitted": [
    "trace",
-   "steps other than resets, goals, soft walls and spikes",
+   "steps after the first first_steps_kept other than resets, goals, soft walls and spikes",
    "metric history between segment starts, spikes and the last value"
   ]
  },
@@ -987,6 +988,8 @@
     "id": "bog_troll",
     "kind": "enemy",
     "condition": "beatable",
+    "gate": "prerequisite",
+    "via": [],
     "start_s": "2735",
     "start_calendar_s": null,
     "end_s": "25543/2",
@@ -1004,6 +1007,8 @@
     "id": "sunsteel_edge",
     "kind": "item",
     "condition": "affordable",
+    "gate": "prerequisite",
+    "via": [],
     "start_s": "4205",
     "start_calendar_s": null,
     "end_s": "25543/2",

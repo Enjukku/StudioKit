@@ -1,6 +1,6 @@
 # tools/progression/examples: two worked examples
 
-> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21. Built in J011-T08, refreshed in J011-T12 on sim 1.1.0, curves 1.0.0 and chart 1.1.0. Python 3.11+, standard library only.
+> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21. Built in J011-T08, refreshed in J011-T12; runs and charts regenerated in J011-T13 on sim 1.2.0, curves 1.0.0 and chart 1.2.0 (no quoted value changed). Python 3.11+, standard library only.
 
 **Warning: these are teaching examples, not tuning.** Only the inputs labelled `published:M01` (the incremental flower pot) and `published:M04` (the RPG XP rule) come from a source. Every other number is an `EXAMPLE ASSUMPTION`, invented to show the method. Never copy a number from these files into a game. A "pass" is arithmetic against a window that the designer chose; it never shows that a game is fun.
 
@@ -80,4 +80,4 @@ Every number in every `model*.json` is a value object `{"v": …, "src": …}`. 
 
 ## Size
 
-The whole folder is about 2.9 MB (checked with `du -sh`). The 16 lean runs total about 1.2 MB; the four chart pages about 1.6 MB, of which the incremental options page alone is about 770 KB.
+The whole folder is about 2.7 MB (checked with `du -sb`, J011-T13). The incremental options page is about 672 KB (curves shared by several models are drawn once).

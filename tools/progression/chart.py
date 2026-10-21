@@ -14,6 +14,8 @@ What the page shows:
       and model revision; walls are drawn on the calendar axis too (reports from sim 1.1+);
   (b2) wait per step (one dot per step with a non-zero wait, per report) and each reference metric over
       active time (a step line per report, gaps where the metric was not measured);
+  (a2) on a page with several models, a curve identical in several models is drawn once and its title names
+      every model revision that shares it; a curve that differs is drawn once per variant;
   (c) target windows as bands with the verdict as text (pass / fail / not testable);
   (d) the assumptions panel (every EXAMPLE ASSUMPTION and PROPOSAL input, the behaviour lines), the model
       revision and SHA-256, policy, seed, runs, mode and tool versions; tables for every plotted value.
@@ -40,7 +42,7 @@ import sys
 from fractions import Fraction
 from pathlib import Path
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 LOG_SPAN = 1000  # "more than 3 orders of magnitude" (owner brief J011-T07)
 SERIES = 8  # categorical slots in the CSS below
 TABLE_MAX = 100  # rows per chart table (display only; every value stays in the report JSON)
@@ -539,12 +541,54 @@ LEGEND = ('<div class="legend"><span><i class="sw sw-goal"></i>goal reached</spa
           '<span>✕ goal(s) not reached at run end</span></div>')
 
 
+def shared_curves(reports) -> list:
+    """Model curves drawn once per distinct content: models of the same game that share a curve (same title,
+    axes and points) get one chart whose title names every model revision that has it."""
+    models, seen = [], set()
+    for r in reports:
+        key = (r["model"]["sha256"], r["model"]["revision"])
+        if key not in seen:
+            seen.add(key)
+            models.append((r["model"]["revision"], r["curves"]))
+    groups = {}  # curve id -> [[curve, [revisions]], ...], in first-seen order
+
+    def same(a, b):
+        """Same curve: same title, axes and series, and the points agree on the shorter range (the range a
+        report shows depends on how far its run went)."""
+        if any(a.get(k) != b.get(k) for k in ("title", "x", "y", "series")):
+            return False
+        pa, pb = a.get("points") or [], b.get("points") or []
+        n = min(len(pa), len(pb))
+        return pa[:n] == pb[:n]
+
+    for rev, cs in models:
+        for cu in cs:
+            variants = groups.setdefault(cu["id"], [])
+            for v in variants:
+                if same(v[0], cu):
+                    if len(cu.get("points") or []) > len(v[0].get("points") or []):
+                        v[0] = cu  # keep the longest range
+                    v[1].append(rev)
+                    break
+            else:
+                variants.append([cu, [rev]])
+    out = []
+    for variants in groups.values():
+        for cu, revs in variants:
+            if len(models) > 1:
+                cu = dict(cu, title=f"{cu['title']} · model{'s' if len(revs) > 1 else ''} {', '.join(revs)}")
+            out.append(cu)
+    return out
+
+
 def wait_curves(reports) -> list:
     out = []
     for i, r in enumerate(reports, 1):
         pts = [[s["t_active_s"], s["wait_s"]] for s in r.get("steps", []) if num(s["wait_s"]) > 0]
         if pts:
-            lean = " (lean report: steps thinned)" if r.get("lean", {}).get("on") else ""
+            ln = r.get("lean", {})
+            lean = (f" (lean report: first {ln.get('first_steps_kept', 0)} steps in full, then only resets, goals, "
+                    "walls and spikes)") if ln.get("on") else ""
             th = (r["walls"]["soft"].get("thresholds") or {}).get("min_wait_s")
             out.append({"id": f"wait:{i}", "title": f"{i}. {_policy_name(r)} · {r['model']['revision']}{lean}",
                         "x": "active time at step end (s)", "y": "wait (s)", "points": pts, "marks": "dots",
@@ -583,12 +627,7 @@ def render(reports: list, title: str | None = None) -> str:
         if r.get("tool") != "progression_sim":
             raise ValueError("input is not a progression_sim report")
     title = title or reports[0]["model"]["title"] or reports[0]["model"]["revision"]
-    curves, seen = [], set()
-    for r in reports:
-        key = (r["model"]["sha256"], r["model"]["revision"])
-        if key not in seen:
-            seen.add(key)
-            curves += r["curves"]
+    curves = shared_curves(reports)
     n_assumed = len({(r["model"]["sha256"], r["model"]["revision"], a["input"])
                      for r in reports for a in r["assumptions"]["inputs"]})
     active = timeline_svg(reports, "active")

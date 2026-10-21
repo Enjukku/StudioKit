@@ -1,6 +1,6 @@
 {
  "tool": "progression_sim",
- "version": "1.1.0",
+ "version": "1.2.0",
  "curves_version": "1.0.0",
  "model": {
   "path": "tools/progression/examples/incremental/model.json",
@@ -52,9 +52,10 @@
  },
  "lean": {
   "on": true,
+  "first_steps_kept": 0,
   "omitted": [
    "trace",
-   "steps other than resets, goals, soft walls and spikes",
+   "steps after the first first_steps_kept other than resets, goals, soft walls and spikes",
    "metric history between segment starts, spikes and the last value"
   ]
  },
@@ -1787,6 +1788,8 @@
     "id": "bridge_pass",
     "kind": "item",
     "condition": "affordable",
+    "gate": "prerequisite",
+    "via": [],
     "start_s": "24",
     "start_calendar_s": "24",
     "end_s": "1201",
@@ -1804,6 +1807,10 @@
     "id": "sky_orchard",
     "kind": "producer",
     "condition": "affordable",
+    "gate": "chained",
+    "via": [
+     "bridge_pass"
+    ],
     "start_s": "364",
     "start_calendar_s": "364",
     "end_s": "1202",

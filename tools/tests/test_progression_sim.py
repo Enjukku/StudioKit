@@ -540,5 +540,47 @@ class T11Lean(unittest.TestCase):
         reset = run("idle_prestige", "greedy-roi", lean=True)
         self.assertIn("prestige", [s["kind"] for s in reset["steps"]])
 
+
+# ---------------------------------------------------------------- J011-T13 additions
+
+
+class T13(unittest.TestCase):
+    def test_G16_lean_steps_keeps_the_first_steps_in_full(self):
+        full = run("rpg_duel", "fight-best", skill="struggling")
+        lean = run("rpg_duel", "fight-best", skill="struggling", lean=True, lean_steps=5)
+        self.assertEqual(lean["steps"][:5], full["steps"][:5])
+        self.assertEqual(lean["lean"]["first_steps_kept"], 5)
+        plain = run("rpg_duel", "fight-best", skill="struggling", lean=True)
+        self.assertEqual(plain["lean"]["first_steps_kept"], 0)
+        self.assertLess(len(plain["steps"]), len(lean["steps"]))
+        with self.assertRaisesRegex(ValueError, "--lean-steps needs --lean"):
+            run("rpg_duel", "fight-best", lean_steps=5)
+
+    def test_G17_hard_wall_goal_agrees_with_walls_hard(self):
+        m = raw("idle_prestige")
+        m["goals"].insert(0, {"id": "hw", "when": {"hard_wall": "factory"}})
+        for pol in ("greedy-roi", "cheapest-eligible", "save-for"):
+            rep = run("i", pol, model=m, target="factory" if pol == "save-for" else None)
+            w = next(x for x in rep["walls"]["hard"] if x["id"] == "factory")
+            self.assertEqual(goal(rep, "hw")["active_s"], w["start_s"], pol)
+
+    def test_G18_gate_kind_on_each_hard_wall(self):
+        w = run("idle_prestige", "greedy-roi")["walls"]["hard"][0]
+        self.assertEqual((w["id"], w["gate"], w["via"]), ("factory", "timed", []))  # permit opens at active_s 150
+        m = raw("rpg_duel")
+        m["items"]["crown"] = {"cost": {"currency": "gold", "amount": v(1)}, "requires": {"defeated": "ogre"},
+                               "effects": []}
+        walls = {x["id"]: x for x in run("r", "fight-best", model=m)["walls"]["hard"]}
+        self.assertEqual((walls["ogre"]["gate"], walls["ogre"]["via"]), ("prerequisite", []))
+        self.assertEqual((walls["crown"]["gate"], walls["crown"]["via"]), ("chained", ["ogre"]))
+
+    def test_G19_soft_walls_counted_after_a_declared_point(self):
+        m = raw("rpg_duel")
+        m["goals"] += [{"id": "any_wall", "when": {"soft_walls": v(1)}},
+                       {"id": "wall_after_sword", "when": {"soft_walls": [v(1), {"after": {"item": "sword"}}]}}]
+        rep = run("r", "fight-best", model=m)
+        self.assertEqual(goal(rep, "any_wall")["active_s"], "28")  # level 2 (wait 21 s after a 7 s step)
+        self.assertEqual(goal(rep, "wall_after_sword")["active_s"], "77")  # level 3: its step starts at 35 s
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # Bloom Valley: worked example of an incremental game
 
-> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0). Model `example-incremental-r2`, SHA-256 `fc64e5d6c02f3eb0…` (the full hash is in every run file).
+> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed). Model `example-incremental-r2`, SHA-256 `fc64e5d6c02f3eb0…` (the full hash is in every run file).
 
 **For learning, not tuning.** This is a teaching example. Only the flower pot uses published numbers (source M01, a 2016 article about an idle game, as re-checked in the owner's research paper). Every other number is an `EXAMPLE ASSUMPTION`. No number here is a target or a value for a real game. A "pass" below means that the simulator measured a time inside a window that I chose. It does not show that the game is fun.
 

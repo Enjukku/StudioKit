@@ -1,6 +1,6 @@
 # Lantern Woods: worked example of an RPG
 
-> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0). Model `example-rpg-r2`, SHA-256 `f839924ee5e5b2ad…` (the full hash is in every run file).
+> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed). Model `example-rpg-r2`, SHA-256 `f839924ee5e5b2ad…` (the full hash is in every run file).
 
 **For learning, not tuning.** This is a teaching example. Only the XP table uses a published rule (source M04, a 2010 article that reports 1,000 x level XP per level for its first levels and "continuing"; this model continues it to level 15). Every other number is an `EXAMPLE ASSUMPTION`, and none of it is data from any real game. A "pass" below means that the simulator measured a time inside a window that I chose. It does not show that the game is fun.
 

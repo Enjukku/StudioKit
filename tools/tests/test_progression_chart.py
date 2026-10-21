@@ -145,5 +145,27 @@ class T11Chart(unittest.TestCase):
                 w.pop(k, None)
         self.assertIn("<svg", chart.render([rep]))
 
+
+class T13Chart(unittest.TestCase):
+    def test_G20_identical_curves_drawn_once_across_models(self):
+        a = json.loads((FIX / "rpg_duel.json").read_text(encoding="utf-8"))
+        b = json.loads((FIX / "rpg_duel.json").read_text(encoding="utf-8"))
+        b["meta"]["revision"] = "fixture-rpg-duel-r2"
+        b["levels"]["per_level"]["b"]["v"] = 1200  # XP curves differ; hits-to-kill per level is shared
+        page = chart.render([sim.simulate(a, "fight-best", model_path_label="a"),
+                             sim.simulate(b, "fight-best", model_path_label="b")])
+        self.assertEqual(page.count("Hits to kill per level (base stats, no gear) · models "
+                                    "fixture-rpg-duel-r1, fixture-rpg-duel-r2</figcaption>"), 1)
+        self.assertEqual(page.count("XP to next level · model fixture-rpg-duel-r1</figcaption>"), 1)
+        self.assertEqual(page.count("XP to next level · model fixture-rpg-duel-r2</figcaption>"), 1)
+
+    def test_G20_same_curve_over_a_shorter_range_is_shared(self):
+        c = {"id": "cost:pot", "title": "pot", "x": "owned", "y": "price"}
+        r1 = {"model": {"sha256": "a", "revision": "r1"}, "curves": [dict(c, points=[[1, 4], [2, 5], [3, 6]])]}
+        r2 = {"model": {"sha256": "b", "revision": "r2"}, "curves": [dict(c, points=[[1, 4], [2, 5]])]}
+        r3 = {"model": {"sha256": "c", "revision": "r3"}, "curves": [dict(c, points=[[1, 4], [2, 7]])]}
+        out = chart.shared_curves([r1, r2, r3])
+        self.assertEqual([(x["title"], len(x["points"])) for x in out], [("pot · models r1, r2", 3), ("pot · model r3", 2)])
+
 if __name__ == "__main__":
     unittest.main()

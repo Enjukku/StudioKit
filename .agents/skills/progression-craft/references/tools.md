@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Tools built in J011-T07 and extended in J011-T11 after real use (sim and chart 1.1.0; 91 offline tests, standard library only). The authority for the model-file schema and every definition is the header docstring of `tools/progression/sim.py`; this page is how to use the tools and read their output. Never edit the tools; ask the lead for a change.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Tools built in J011-T07 and extended in J011-T11 after real use (sim and chart 1.2.0 after J011-T13; 97 offline tests, standard library only). The authority for the model-file schema and every definition is the header docstring of `tools/progression/sim.py`; this page is how to use the tools and read their output. Never edit the tools; ask the lead for a change.
 
 # The tools: curves, simulator, charts
 
@@ -20,7 +20,7 @@
 - **Orders with counts:** `policies.order` entries `"id"` or `{"id", "until": N}` (units owned, enemy wins or activity completions).
 - **Boss attempts:** `policies.boss_attempt {min_margin, recovery_s}` makes policies try a boss at a declared preview margin and count attempts, losses and attempts-to-first-win; without it, policies fight only when the preview wins (no lost fights appear).
 - **Spike metrics:** `hits_to_kill`, `ttk_s`, `production_per_s`, and defensive `hits_to_die`, `ttd_s`; `active_when` (a predicate) so content the player cannot reach yet is not measured.
-- **Goals on walls and spikes:** predicates `{"soft_walls": N}` and `{"spikes": [metric id, N]}` give wall and spike timeline rows a verdict like any goal (thresholds required). Also `{"not": predicate}`.
+- **Goals on walls and spikes:** predicates `{"soft_walls": N}` (or `{"soft_walls": [N, {"after": predicate}]}` to count only walls after a point, e.g. after a zone opens), `{"spikes": [metric id, N]}` and `{"hard_wall": id}` (goal time = the wall's start) give wall and spike timeline rows a verdict like any goal (thresholds required). Also `{"not": predicate}`.
 - **Model limits to state:** no equipment slots (every owned item stacks; two swords add up); defeat times include the enemy's `overhead_s` (walk and respawn), so a first-kill goal includes it.
 - Fixtures for engineering (cost at n, X_l, hits per build × enemy, prestige award at L) are computed with `curves.py` in exact mode from the same model revision and shipped in the export (`references/data-handoff.md`); the model file itself has no fixtures section.
 
@@ -36,7 +36,7 @@ python tools/progression/chart.py run/greedy.json run/save.json run/struggle.jso
 - Policies: `buy-next-in-order`, `cheapest-eligible`, `greedy-roi` (heuristic, not optimal), `save-for --target`, `fight-best`, `grind-to-level --target-level`; `--skill` applies a struggling profile; `--sessions` applies a session pattern (calendar time, offline, returning after absence).
 - Minimum set per question (C-05): an efficient policy, a saver or cheapest-first, a struggling or explorer variant, a returning pattern; paid and unpaid routes as separate models or items when both exist. Incremental games have no fights: explorer = `cheapest-eligible`, impatient player = `save-for` a gated target. Hard walls are recorded for every policy (affordable or beatable but locked → unlocked, with `pursued_by_policy`).
 - Horizon for calendar rows: sessions × session length (30 days × 20 min = 36,000 s active); a run stops early when every goal is reached.
-- `--lean` keeps goals, resets, walls and spikes and drops the trace (a month run: 2.67 MB → 143 KB); use it for long runs and anything committed.
+- `--lean` keeps goals, resets, walls and spikes and drops the trace (a month run: 2.67 MB → 143 KB); use it for long runs and anything committed. `--lean-steps N` also keeps the first N steps in full (the early "waits shrink, then grow" picture).
 - `--mode exact` for fixtures and checks; `float` only for speed on long horizons (the report says which, and float books a `float_rounding` ledger adjustment).
 - Randomness (drops, success chances, accuracy < 1) needs `--seed` and `--runs`; decide runs from the precision you need before running; the report gives Wilson 95 % intervals per goal (C-06). A model with no random inputs refuses `--runs > 1`.
 - Every run needs a horizon (model or `--horizon-s`).
@@ -48,7 +48,7 @@ python tools/progression/chart.py run/greedy.json run/save.json run/struggle.jso
 4. **Precision:** any currency over 2^53 or losing its smallest unit → design question, not a footnote.
 5. **Blocked paths:** each with its reason; a required goal blocked for any supported policy fails checklist row 5.
 6. **Goals:** pass / fail / not testable against windows, per policy. "Pass" is arithmetic only.
-7. **Walls and spikes:** match each to a timeline row (planned) or raise it (unplanned). Hard walls show kind, the missing prerequisite, time blocked and whether the policy was pursuing the target. Charts mark resets, plot the wait per step against the soft-wall line and each reference metric over time.
+7. **Walls and spikes:** match each to a timeline row (planned) or raise it (unplanned). Hard walls show kind, gate type (`prerequisite`, `chained` with `via` = the locked gates behind it, `timed`, `activity`), the missing prerequisite, time blocked and whether the policy was pursuing the target. Charts mark resets, plot the wait per step against the soft-wall line and each reference metric over time; on an options page a curve shared by several models is drawn once and names them.
 8. **Fights (RPG):** TTK, TTD, actual duel time per enemy, attempts and losses with `boss_attempt`; check breakpoints against the reference enemies. A boss at a TTK = TTD tie is decided by the simultaneous-hit rule: engineering must copy that rule exactly.
 
 ## 4. Charts for the owner

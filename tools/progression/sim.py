@@ -31,7 +31,10 @@ Definitions used in the report:
                interval from the first instant it is affordable (enemy: the preview duel is a win) while its
                prerequisite is false, until the prerequisite holds; with the missing predicate, the condition,
                and whether the policy was pursuing it. An activity counts only while the policy pursues it (a
-               chain of stages alone is ordinary sequencing). Open at the run end = "open_at_end".
+               chain of stages alone is ordinary sequencing). Open at the run end = "open_at_end". "gate"
+               says which kind: "prerequisite" (a real gate), "chained" (it names a gated id that is itself
+               still locked; "via" lists them), "timed" (the prerequisite tests active_s), "activity" (a
+               pursued activity). "unlocked U" is read through U's own predicate for both tests.
   power spike  a change between consecutive measured states in a declared reference metric on unchanged
                reference content: hits_to_kill / ttk_s (the player against a named enemy, lower is better),
                hits_to_die / ttd_s (the enemy against the player, higher is better), production_per_s of a
@@ -140,7 +143,10 @@ activities):
   run         {horizon_active_s}
   Predicates: {"owned": [producer, N]} {"item": id} {"level": L} {"defeated": id} {"completed": id}
   {"unlocked": id} {"prestiges": P} {"balance"|"lifetime"|"run": [currency, C]} {"active_s": T}
-  {"soft_walls": N} {"spikes": [metric id, N]} {"all": [...]} {"any": [...]} {"not": predicate}.
+  {"soft_walls": N} {"soft_walls": [N, {"after": predicate}]} (walls whose step starts at or after the
+  first time the predicate held) {"spikes": [metric id, N]} {"hard_wall": id} (a hard wall on id has started;
+  read from walls.hard, so the goal time equals the wall start) {"all": [...]} {"any": [...]}
+  {"not": predicate}.
   Any predicate number may instead be {"curve": spec, "index": "prestiges", "index_offset"?}: the threshold
   is evaluated at n = prestige count + offset (e.g. a rebirth requirement that grows with each rebirth).
   State ids: currency:, producer:, item:, unlock:, defeated:, completed:<id>.
@@ -153,7 +159,8 @@ where adding its declared smallest_unit does not change a float at that magnitud
 balances with prices and thresholds with a relative 1e-9 tolerance; exact mode compares exactly.
 
 Report size: --lean drops the event trace, keeps steps only at resets, goals, soft walls and spikes, and
-metric histories only at segment starts, spikes and the last value; the report says so ("lean"). Continuous
+metric histories only at segment starts, spikes and the last value; --lean-steps N also keeps the first N
+steps in full (the early "waits shrink, then grow" pattern); the report says so ("lean"). Continuous
 exact mode with exponential prices builds fractions with many digits; long incremental runs are smaller in
 discrete ticks.
 
@@ -161,7 +168,7 @@ Usage:
   python tools/progression/sim.py MODEL.json --policy buy-next-in-order [--mode exact|float]
       [--target ID] [--target-level L] [--skill PROFILE] [--sessions PATTERN] [--seed N --runs N]
       [--horizon-s S] [--soft-wall-s S] [--soft-wall-ratio K] [--top 10] [--max-events N]
-      [--out report.json] [--trace-out trace.json] [--lean]
+      [--out report.json] [--trace-out trace.json] [--lean [--lean-steps N]]
   Policies: buy-next-in-order, cheapest-eligible, greedy-roi, save-for (--target), fight-best,
             grind-to-level (--target-level). --skill applies a model skill profile (e.g. a struggling
             player); --sessions picks a model session pattern (e.g. returning after an absence).
@@ -185,12 +192,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import curves as cv  # noqa: E402
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 PHASES = ("produce", "rewards", "caps", "purchase", "unlock", "reset")
 ASSUMED_LABELS = ("EXAMPLE ASSUMPTION", "PROPOSAL")
 POLICIES = ("buy-next-in-order", "cheapest-eligible", "greedy-roi", "save-for", "fight-best", "grind-to-level")
 PRED_KEYS = ("owned", "item", "level", "defeated", "completed", "unlocked", "prestiges", "balance", "lifetime",
-             "run", "active_s", "soft_walls", "spikes", "all", "any", "not")
+             "run", "active_s", "soft_walls", "spikes", "hard_wall", "all", "any", "not")
 METRICS = ("hits_to_kill", "ttk_s", "hits_to_die", "ttd_s", "production_per_s")
 LOWER_IS_BETTER = ("hits_to_kill", "ttk_s")
 OUTCOME_KEY = {"win": "won", "loss": "lost", "mutual": "mutual"}
@@ -305,6 +312,26 @@ class Model:
         self.run_cfg = m.get("run") or {}
         self.duel_cfg = meta.get("duel")
         self._validate()
+        self.after_preds = []
+        for p in self.all_preds():
+            self._collect_after(p)
+
+    def all_preds(self):
+        out = [g["when"] for g in self.goals] + [u["when"] for u in self.unlocks.values()]
+        out += [t[i]["requires"] for t in (self.producers, self.items, self.enemies, self.activities) for i in t
+                if "requires" in t[i]]
+        out += [sp["active_when"] for sp in self.analysis.get("spikes", []) if "active_when" in sp]
+        return out + ([self.prestige["take_when"]] if self.prestige else [])
+
+    def _collect_after(self, p):
+        (k, a), = p.items()
+        if k in ("all", "any"):
+            for q in a:
+                self._collect_after(q)
+        elif k == "not":
+            self._collect_after(a)
+        elif k == "soft_walls" and isinstance(a, list) and a[1]["after"] not in self.after_preds:
+            self.after_preds.append(a[1]["after"])
 
     # ids -------------------------------------------------------------
     def kind_of(self, i: str) -> str | None:
@@ -342,8 +369,15 @@ class Model:
                 self.check_pred(q, f"{path}.{k}[{i}]")
         elif k == "not":
             self.check_pred(a, f"{path}.not")
+        elif k == "soft_walls" and isinstance(a, list):
+            _req(len(a) == 2 and isinstance(a[1], dict) and set(a[1]) == {"after"},
+                 f"{path}: soft_walls is N or [N, {{\"after\": predicate}}]")
+            self.check_threshold(a[0], f"{path}.soft_walls[0]")
+            self.check_pred(a[1]["after"], f"{path}.soft_walls[1].after")
         elif k in ("level", "prestiges", "active_s", "soft_walls"):
             self.check_threshold(a, f"{path}.{k}")
+        elif k == "hard_wall":
+            _req(self.kind_of(a) is not None, f"{path}: hard_wall needs a producer, item, enemy or activity id")
         elif k == "spikes":
             _req(isinstance(a, list) and len(a) == 2 and a[0] in {s.get("id") for s in self.analysis.get("spikes", [])},
                  f"{path}: spikes [spike metric id, N]")
@@ -691,6 +725,7 @@ class Sim:
         self.lost_at: dict = {}
         self.warnings: list = []
         self._skip_noted = False
+        self.marks: dict = {}
 
     # ---- helpers ---------------------------------------------------
     def ge(self, have, need) -> bool:
@@ -875,7 +910,13 @@ class Sim:
         if k == "prestiges":
             return self.prestiges >= self.num(a)
         if k == "soft_walls":
+            if isinstance(a, list):  # walls whose step starts at or after the first time "after" held
+                t0 = self.marks.get(_key(a[1]["after"]))
+                n = 0 if t0 is None else sum(1 for w in self.soft_walls if w["start_active_s"] >= t0)
+                return n >= self.num(a[0])
             return len(self.soft_walls) >= self.num(a)
+        if k == "hard_wall":
+            return any(w["id"] == a for w in self.hard_walls)
         if k == "spikes":
             return self.spike_counts[a[0]] >= self.num(a[1])
         if k in ("balance", "lifetime", "run"):
@@ -1266,7 +1307,9 @@ class Sim:
                 continue
             cond = self._gate_condition(i)
             if cond:
-                self.hard_walls.append({"id": i, "kind": self.M.kind_of(i), "condition": cond, "start_s": self.t,
+                gate, via = self._gate_kind(i)
+                self.hard_walls.append({"id": i, "kind": self.M.kind_of(i), "condition": cond, "gate": gate,
+                                        "via": via, "start_s": self.t,
                                         "start_calendar_s": self.cal, "end_s": None, "end_calendar_s": None,
                                         "duration_s": None, "missing": self.requires(i),
                                         "pursued_by_policy": pursued == i})
@@ -1274,6 +1317,51 @@ class Sim:
         for i, w in open_ids.items():  # a pursued activity the policy dropped is closed when it unlocks
             if i not in self.gated_ids() and self.eligible(i) and w["end_s"] is None:
                 w["end_s"], w["end_calendar_s"], w["duration_s"] = self.t, self.cal, self.t - w["start_s"]
+
+    def _gate_kind(self, i):
+        """(gate, via): "activity" for a pursued activity; "timed" when the prerequisite tests active time;
+        "chained" when it names a gated id that is itself still locked (via lists them); else "prerequisite"."""
+        if self.M.kind_of(i) == "activity":
+            return "activity", []
+        req = self.requires(i)
+        if self._tests_time(req):
+            return "timed", []
+        via = [x for x in self._refs(req) if self.requires(x) is not None and not self.eligible(x)]
+        return ("chained", via) if via else ("prerequisite", [])
+
+    def _tests_time(self, p, seen=None):
+        """True when the predicate (reading unlocked U through U's predicate) tests active_s."""
+        seen = set() if seen is None else seen
+        (k, a), = p.items()
+        if k == "active_s":
+            return True
+        if k in ("all", "any"):
+            return any(self._tests_time(q, seen) for q in a)
+        if k == "not":
+            return self._tests_time(a, seen)
+        if k == "unlocked" and a not in seen:
+            seen.add(a)
+            return self._tests_time(self.M.unlocks[a]["when"], seen)
+        return False
+
+    def _refs(self, p, seen=None):
+        """Ids a predicate names (owned, item, defeated, completed; unlocked expands to its unlock's predicate)."""
+        seen = set() if seen is None else seen
+        out = []
+        (k, a), = p.items()
+        if k in ("all", "any"):
+            for q in a:
+                out += self._refs(q, seen)
+        elif k == "not":
+            out += self._refs(a, seen)
+        elif k == "owned":
+            out.append(a[0])
+        elif k in ("item", "defeated", "completed"):
+            out.append(a)
+        elif k == "unlocked" and a not in seen:
+            seen.add(a)
+            out += self._refs(self.M.unlocks[a]["when"], seen)
+        return list(dict.fromkeys(out))
 
     def phase_unlock(self):
         for uid, u in self.M.unlocks.items():
@@ -1331,6 +1419,7 @@ class Sim:
                 self._event("prestige_skipped", award=award, min_award=pr["min_award"])
             return
         self._skip_noted = False
+        self.marks: dict = {}
         for cc in self.M.currencies:
             self.best_run[cc] = max(self.best_run[cc], self.counter("run", cc, self._no_offline()))
         removed = {}
@@ -1386,6 +1475,10 @@ class Sim:
         raise ModelError("more than 1,000 re-runs of one instant (an unlock or reset that never settles?)")
 
     def _check_goals(self):
+        for p in self.M.after_preds:  # the first time each "after" point holds (soft_walls [N, {after}])
+            k = _key(p)
+            if k not in self.marks and self.pred(p):
+                self.marks[k] = self.t
         for g in self.M.goals:
             if g["id"] not in self.goal_hits and self.pred(g["when"]):
                 self.goal_hits[g["id"]] = {"t_active_s": self.t, "t_calendar_s": self.cal}
@@ -1447,6 +1540,7 @@ class Sim:
         if self.activity is not None:
             cands.append(self.activity["end"])
         preds = [u["when"] for uid, u in self.M.unlocks.items() if uid not in self.unlocked]
+        preds += [p for p in self.M.after_preds if _key(p) not in self.marks]
         preds += [g["when"] for g in self.M.goals if g["id"] not in self.goal_hits]
         for i in list(self.M.producers) + list(self.M.items) + list(self.M.enemies) + list(self.M.activities):
             r = self.requires(i)
@@ -1957,10 +2051,13 @@ def _summary_runs(sims, model):
 def simulate(model_source, policy: str, *, mode: str = "exact", target=None, target_level=None, skill=None,
              sessions=None, seed=None, runs=None, horizon_s=None, soft_wall_s=None, soft_wall_ratio=None,
              top: int = 10, max_events: int = 1_000_000, model_path_label=None, trace_out=None,
-             lean: bool = False) -> dict:
+             lean: bool = False, lean_steps: int | None = None) -> dict:
     """Run the simulator and return the report dict (JSON-ready). model_source: path or raw dict.
     lean=True: no event trace, steps kept only at resets, goals, soft walls and spikes, metric histories
-    kept only at segment starts, spikes and the last value (for month-long runs)."""
+    kept only at segment starts, spikes and the last value (for month-long runs). lean_steps=N also keeps the
+    first N steps in full (the early wait pattern)."""
+    if lean_steps is not None and (not lean or lean_steps < 0):
+        raise ValueError("--lean-steps needs --lean and a count >= 0")
     if isinstance(model_source, dict):
         raw = json.loads(json.dumps(model_source, default=str), parse_float=Fraction)
         sha, path_label = None, model_path_label
@@ -2064,8 +2161,9 @@ def simulate(model_source, policy: str, *, mode: str = "exact", target=None, tar
             "hard_walls": "every gated buyable or enemy: from affordable (or beatable) while locked until it unlocks; "
                           "an activity only while the policy pursues it",
         },
-        "lean": {"on": True, "omitted": ["trace", "steps other than resets, goals, soft walls and spikes",
-                                         "metric history between segment starts, spikes and the last value"]}
+        "lean": {"on": True, "first_steps_kept": lean_steps or 0,
+                 "omitted": ["trace", "steps after the first first_steps_kept other than resets, goals, soft walls "
+                             "and spikes", "metric history between segment starts, spikes and the last value"]}
         if lean else {"on": False},
         "warnings": s.warnings,
         "never_claims": ["a population forecast (one policy is one strategy)", "that any target feeling passed",
@@ -2097,7 +2195,7 @@ def simulate(model_source, policy: str, *, mode: str = "exact", target=None, tar
         "final_state": {"balances": s.bal, "owned": s.owned, "items": s.items, "unlocked": s.unlocked,
                         "defeated": s.defeated, "completed": s.completed, "level": s.level, "prestiges": s.prestiges,
                         "lifetime": s.lifetime},
-        "steps": _lean_steps(s, timeline) if lean else s.steps,
+        "steps": _lean_steps(s, timeline, lean_steps or 0) if lean else s.steps,
         "curves": _curves(s),
     }
     if runs > 1:
@@ -2111,6 +2209,10 @@ def simulate(model_source, policy: str, *, mode: str = "exact", target=None, tar
     else:
         report["trace"] = s.trace
     return _plain(report)
+
+
+def _key(p):
+    return json.dumps(_plain(p), sort_keys=True)
 
 
 def _pred_keys(p):
@@ -2134,11 +2236,11 @@ def _pred_args(p, key):
         yield from _pred_args(a, key)
 
 
-def _lean_steps(sim, timeline):
+def _lean_steps(sim, timeline, first=0):
     goal_t = {r["active_s"] for r in timeline if r["reached"]}
     spike_at = {(h["t_active_s"], h["cause"]) for hist in sim.metrics.values() for h in hist if h.get("spike")}
-    return [s for s in sim.steps if s["kind"] == "prestige" or s.get("soft_wall") or s["t_active_s"] in goal_t
-            or (s["t_active_s"], s["label"]) in spike_at]
+    return [s for k, s in enumerate(sim.steps) if k < first or s["kind"] == "prestige" or s.get("soft_wall")
+            or s["t_active_s"] in goal_t or (s["t_active_s"], s["label"]) in spike_at]
 
 
 def dumps(report: dict) -> str:
@@ -2166,12 +2268,14 @@ def main(argv=None) -> int:
     ap.add_argument("--trace-out", help="write the event trace here instead of inline")
     ap.add_argument("--lean", action="store_true",
                     help="small report: no trace; steps only at resets, goals, soft walls and spikes")
+    ap.add_argument("--lean-steps", type=int, help="with --lean: also keep the first N steps in full")
     a = ap.parse_args(argv)
     try:
         rep = simulate(a.model, a.policy, mode=a.mode, target=a.target, target_level=a.target_level, skill=a.skill,
                        sessions=a.sessions, seed=a.seed, runs=a.runs, horizon_s=a.horizon_s,
                        soft_wall_s=a.soft_wall_s, soft_wall_ratio=a.soft_wall_ratio, top=a.top,
-                       max_events=a.max_events, trace_out=a.trace_out, lean=a.lean)
+                       max_events=a.max_events, trace_out=a.trace_out, lean=a.lean,
+                       lean_steps=a.lean_steps)
     except (ModelError, ValueError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
