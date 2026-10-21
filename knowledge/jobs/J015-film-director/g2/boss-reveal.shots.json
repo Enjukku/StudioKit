@@ -1,0 +1,273 @@
+{
+  "format": "film-shotlist/1",
+  "sequence": "boss-reveal",
+  "title": "Boss reveal: the guardian of the flooded observatory (J015 G2, hybrid: play, then four authored shots)",
+  "revision": 5,
+  "stage": "previs",
+  "fps": [
+    30,
+    1
+  ],
+  "start_frame": 1,
+  "aspect": [
+    16,
+    9
+  ],
+  "fov_mode": "Vertical",
+  "board_policy": "layout-may-propose",
+  "shots": [
+    {
+      "id": "B",
+      "rev": 3,
+      "frames": 37,
+      "size": "Close, from above: the explorer's reaching right arm and hand entering from frame left, the beacon on its pedestal, the black flood water around it and, at frame right, the edge of the statue's plinth and knee; the guardian's head and hands stay out of frame",
+      "angle": "High, from the south-west side of the action axis, looking down onto the water (previs: camera about 7.4 studs up, 36 degrees down), so the background is dark water, not the walls or the exit; the hand travels left to right",
+      "lens": {
+        "focal_mm": 30.0,
+        "sensor_mm": 36.0,
+        "sensor_fit": "HORIZONTAL"
+      },
+      "movement": "Static. Considered: a push toward contact (paper EX-B-06); rejected because the hand already carries the approach and a moving frame competes with the light change that is this shot's only news",
+      "action": "Opens on the player's own interact: the right hand reaches; the beacon begins its next pulse, then collapses to an ember before contact; the hand stops short and flinches; a ring of ripples spreads out from the base of the statue's plinth toward the pedestal",
+      "sound": "amb.water.observatory under all; sfx.beacon.pulse is the last pulse and ends on the collapse (silence by removing that layer, not by muting the room); sfx.water.disturbance starts with the first ripple",
+      "emotion": "Intention becomes uncertainty",
+      "transition": "Cut when the first ripple reaches the pedestal foot: the disturbance has travelled toward the player (cut on a completed event, not on a timer)",
+      "purpose": "Reveal the wrong assumption: the beacon is not free for the taking, and something behind it moved",
+      "continuity": "Explorer at screen left, travel and reach left to right; beacon middle; statue knee right background; key light from above right (moon shaft); right hand raised at the cut",
+      "approval": "Owner: does the collapse read as 'it refused me', not as 'it broke'? Sound designer: the stopped pulse reads without a loud sting",
+      "evidence": "OPINION: J015 G2 directing choice, from the paper's shot B (FP:945) with the start moved onto the player's interact; length, lens and cue frames measured in previs v10 (g2/animatic-manifest.md)",
+      "notes": "Length measured in the animatic (previs v10): the cut is placed on the frame where the first ripple's radius reaches the pedestal foot (measured in Blender: frame 38, ripple travel 4.708 studs). Acting times inside the shot (reach, collapse at +20, hand stop at +26, first ripple at +28) are PROPOSAL acting choices for the owner to direct on the animatic. Camera height/distance chosen so the dark water is the background: the exit glow and the walls stay above the frame top, and the ripples are the only bright motion after the collapse.",
+      "fov_deg": 37.299,
+      "camera": {
+        "blender_object": "CAM_B",
+        "location_studs": [
+          -3.2,
+          -6.5,
+          7.4
+        ],
+        "look_at_studs": [
+          1.2,
+          0.0,
+          1.4
+        ],
+        "axes": "Blender world, Z up, 1 unit = 1 stud (kit-test assumption); Roblox conversion not verified",
+        "static": true
+      }
+    },
+    {
+      "id": "C",
+      "rev": 3,
+      "frames": 36,
+      "size": "Medium-full on the explorer (knees up), so the head turn and the step back both read on a phone; the dark beacon in the near foreground at frame right",
+      "angle": "Near profile from the south side at the explorer's chest height; the explorer faces screen right; the exit glows behind the explorer's head at the start and stays in the background at frame centre-left; the target of the look stays off screen up and right",
+      "lens": {
+        "focal_mm": 28.0,
+        "sensor_mm": 36.0,
+        "sensor_fit": "HORIZONTAL"
+      },
+      "movement": "Static, so the change of attention carries the beat (paper EX-C-06 kept). A move here would show the space behind the explorer that does not matter",
+      "action": "The hand is still raised; a stone crack sounds off screen; the head lifts from the dead beacon to above frame right; the hand pulls back and the explorer takes one step back to screen left",
+      "sound": "sfx.guardian.stone (the crack) starts before the explorer looks up: the sound is the stimulus and a warning before the image (J-cut relation into D); sfx.water.disturbance continues off screen",
+      "emotion": "Uncertainty becomes recognition",
+      "transition": "Eyeline cut: once the step back lands, cut to what the explorer looks at",
+      "purpose": "Let the player see their own avatar react before the threat is shown (reveal order: geography, alarm, object, reaction)",
+      "continuity": "Explorer faces screen right; eyeline up and right; the right hand comes down during the shot; the step back goes to screen left (toward the exit side); ends with weight on the back foot, head up toward screen right",
+      "approval": "Owner: reaction before the reveal (recommended) or reveal first? Animator: the change of intention reads from head and body angle for the supported avatar range, not from the face",
+      "evidence": "OPINION: J015 G2 directing choice; paper shot C (FP:973) widened from medium close so the weight shift is in frame; length, lens and cue frames measured in previs v10 (g2/animatic-manifest.md)",
+      "notes": "Length measured in the animatic: the cut is 2 frames after the step back lands (+34). The crack sound at +3 comes 4 frames before the head starts to turn (+7): the sound is the stimulus. Medium-full kept after previs: at medium close the step back left the frame.",
+      "fov_deg": 39.761,
+      "camera": {
+        "blender_object": "CAM_C",
+        "location_studs": [
+          -1.8,
+          -9.5,
+          4.0
+        ],
+        "look_at_studs": [
+          -3.5,
+          0.0,
+          4.0
+        ],
+        "axes": "Blender world, Z up, 1 unit = 1 stud (kit-test assumption); Roblox conversion not verified",
+        "static": true
+      }
+    },
+    {
+      "id": "D",
+      "rev": 3,
+      "frames": 64,
+      "size": "Wide on the guardian: the whole kneeling body, the beacon and its pedestal, and the empty moonlight shaft above the bowed head that the rising head will fill",
+      "angle": "From the south side, camera low near the water, chosen so the beacon, the blocking arm and the risen head all stay inside one fixed frame (a readability reason, not a power rule)",
+      "lens": {
+        "focal_mm": 24.0,
+        "sensor_mm": 36.0,
+        "sensor_fit": "HORIZONTAL"
+      },
+      "movement": "Static: the statue's motion is the only motion, which breaks the stillness held since play began. Alternative tested in previs: a tilt up that follows the head (paper EX-D-06)",
+      "action": "The guardian straightens and lifts its head into the moonlight; its eyes ignite in the beacon's colour; it lowers its gaze to the explorer at screen left and draws back its near arm",
+      "sound": "sfx.guardian.rise with the motion (sync); vo.guardian.vocal after the gaze lands (delayed), so the sound marks 'it has seen you', not the movement",
+      "emotion": "Recognition becomes a concrete threat",
+      "transition": "Cut on the action: the arm starts down, and the strike completes in E",
+      "purpose": "Identify the threat: the statue the player passed is the guardian, it holds the beacon's light, and it has seen them",
+      "continuity": "Guardian at screen right, facing screen left; explorer small at screen left; beacon and the dim exit between them; moon shaft from above; the eyes match the beacon's amber; near arm raised at the cut",
+      "approval": "Owner: static frame (recommended) or the tilt; music here or at E (see cue music.encounter.entry). VFX: no effect hides the head, the eyes or the beacon",
+      "evidence": "OPINION: J015 G2 directing choice; paper shot D (FP:1001) kept in job, changed in camera; length, lens and cue frames measured in previs v10 (g2/animatic-manifest.md)",
+      "notes": "Length measured in the animatic: cut 2 frames after the arm starts its draw back toward the strike (+52 start; cut at +64 sits inside the anticipation, the strike lands in E). Measured: the head enters the moon shaft at +16 (frame 90), 16 frames before the eyes ignite at +32: the face is lit before it 'sees'. Tilt alternative (camera ALT_D_tilt) measured in g2/animatic-manifest.md.",
+      "fov_deg": 45.747,
+      "camera": {
+        "blender_object": "CAM_D",
+        "location_studs": [
+          0.5,
+          -21.0,
+          1.2
+        ],
+        "look_at_studs": [
+          3.6,
+          0.0,
+          6.6
+        ],
+        "axes": "Blender world, Z up, 1 unit = 1 stud (kit-test assumption); Roblox conversion not verified",
+        "static": true
+      }
+    },
+    {
+      "id": "E",
+      "rev": 3,
+      "frames": 38,
+      "size": "Gameplay view over the explorer's right shoulder: the explorer in the middle, the guardian crouched over the beacon at screen right, the exit arch at screen left; no overlap between the avatar and the guardian's silhouette",
+      "angle": "Behind and to the right of the explorer, above head height, yawed about 60 degrees left of the explorer's facing so the exit (left) and the threat (right) frame the avatar; the frame the player inherits",
+      "lens": {
+        "focal_mm": 14.46,
+        "sensor_mm": 36.0,
+        "sensor_fit": "HORIZONTAL"
+      },
+      "movement": "Static; no camera move at the handoff: the player's first input moves a camera that already shows the decision",
+      "action": "The guardian's hand strikes the stone between the explorer and the beacon, then the guardian settles over the pedestal into its encounter start state; the beacon resumes a faint pulse inside the arm's curve",
+      "sound": "sfx.guardian.slam on the strike (sync); music.encounter.entry option on the strike; ui.interact.available only when control returns",
+      "emotion": "Threat becomes player agency",
+      "transition": "End of the authored camera: restore the play state at this exact view",
+      "purpose": "Return the decision to the player: fight for the beacon (right) or take the exit (left)",
+      "continuity": "Explorer middle, facing screen right; guardian right, facing screen left; exit arch left; light: moon shaft and beacon glow right, exit glow left",
+      "approval": "Engineering: the default (or the game's) camera takes over from this pose without a jump; no visual cue grants a reward or decides server state",
+      "evidence": "OPINION: J015 G2 directing choice; paper shot E (FP:1029); length, lens and cue frames measured in previs v10 (g2/animatic-manifest.md)",
+      "notes": "Length measured in the animatic: the strike lands at +6 (hand on the floor measured at frame 144), the settle completes at +30, control returns on the last frame (+37). No hold after the settle: nothing develops there, and the frame stays the same when play resumes. FOV 70 = Roblox Camera.FieldOfView default (knowledge/external/roblox-creator-docs/_api-reference/classes/Camera.yaml:269); the focal length was derived from it, not the other way round. Camera distance to the explorer about 13 studs: an assumed gameplay distance; engineering checks the real play camera.",
+      "fov_deg": 70,
+      "camera": {
+        "blender_object": "CAM_E",
+        "location_studs": [
+          -12.5,
+          -13.0,
+          9.0
+        ],
+        "look_at_studs": [
+          -4.9,
+          0.0,
+          3.2
+        ],
+        "axes": "Blender world, Z up, 1 unit = 1 stud (kit-test assumption); Roblox conversion not verified",
+        "static": true
+      }
+    }
+  ],
+  "cues": [
+    {
+      "id": "amb.water.observatory",
+      "shot": "B",
+      "at": 0,
+      "kind": "ambience",
+      "sync": "flexible",
+      "note": "already playing in play; continues under the whole sequence and into play (offset 0 = present from the cut-in)"
+    },
+    {
+      "id": "sfx.beacon.pulse",
+      "shot": "B",
+      "at": 0,
+      "kind": "sfx",
+      "sync": "locked",
+      "note": "the last pulse, heard from the cut-in; ends exactly on the collapse at +20 (named silence: this layer only)",
+      "end": 20
+    },
+    {
+      "id": "sfx.water.disturbance",
+      "shot": "B",
+      "at": 28,
+      "kind": "sfx",
+      "sync": "locked",
+      "note": "starts with the first ripple (+28 in B); runs off screen to the end of C (end offset 73 from B's first frame)",
+      "end": 73
+    },
+    {
+      "id": "sfx.guardian.stone",
+      "shot": "C",
+      "at": 3,
+      "kind": "sfx",
+      "sync": "locked",
+      "note": "stone cracking off screen; the stimulus for the explorer's look (warning before the image)"
+    },
+    {
+      "id": "sfx.guardian.rise",
+      "shot": "D",
+      "at": 0,
+      "kind": "sfx",
+      "sync": "locked",
+      "note": "stone grinding and displaced water with the rise",
+      "end": 30
+    },
+    {
+      "id": "vfx.guardian.eyes",
+      "shot": "D",
+      "at": 32,
+      "kind": "vfx",
+      "sync": "locked",
+      "note": "eyes ignite in the beacon's amber after the head is in the moonlight"
+    },
+    {
+      "id": "vo.guardian.vocal",
+      "shot": "D",
+      "at": 50,
+      "kind": "vo",
+      "sync": "locked",
+      "note": "non-verbal; after the gaze lands on the explorer (delayed relation)"
+    },
+    {
+      "id": "sfx.guardian.slam",
+      "shot": "E",
+      "at": 6,
+      "kind": "sfx",
+      "sync": "locked",
+      "note": "hand strikes stone and water"
+    },
+    {
+      "id": "vfx.water.splash",
+      "shot": "E",
+      "at": 6,
+      "kind": "vfx",
+      "sync": "locked",
+      "note": "must not hide the beacon, the hand or the exit"
+    },
+    {
+      "id": "music.encounter.entry",
+      "shot": "E",
+      "at": 6,
+      "kind": "music",
+      "sync": "pending",
+      "note": "owner option: on the strike in E (recommended) or on the eyes in D"
+    },
+    {
+      "id": "vfx.beacon.ember",
+      "shot": "E",
+      "at": 20,
+      "kind": "vfx",
+      "sync": "flexible",
+      "note": "faint slow pulse resumes so the objective reads again"
+    },
+    {
+      "id": "ui.interact.available",
+      "shot": "E",
+      "at": 37,
+      "kind": "ui",
+      "sync": "locked",
+      "note": "only when control returns"
+    }
+  ]
+}

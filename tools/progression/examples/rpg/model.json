@@ -1,0 +1,102 @@
+{
+ "meta": {
+  "revision": "example-rpg-r2",
+  "title": "Worked example: Lantern Woods (RPG) - for learning, not tuning",
+  "source_note": "Teaching model. The XP table is M04's reported rule (2010-07-14: 1000 x l XP from level l to l+1, as derived in the owner's research paper). Every combat, reward, price and session number is an EXAMPLE ASSUMPTION; none is Dark Alliance or any other game's data. Never copy these numbers into a game.",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"],
+  "time": {"mode": "continuous"},
+  "duel": {"player_first_hit": "immediate", "enemy_first_hit": "after_interval", "simultaneous": "player_first"}
+ },
+ "currencies": {
+  "xp": {"start": {"v": 0, "src": "published:M04"}, "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+  "gold": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}, "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "levels": {"currency": "xp", "max_level": {"v": 15, "src": "EXAMPLE ASSUMPTION"},
+  "per_level": {"kind": "affine", "a": {"v": 0, "src": "published:M04"}, "b": {"v": 1000, "src": "published:M04", "note": "XP from level l to l+1 = 1000 x l"}}},
+ "player": {"stats": {
+  "hp": {"kind": "affine", "a": {"v": 30, "src": "EXAMPLE ASSUMPTION"}, "b": {"v": 10, "src": "EXAMPLE ASSUMPTION", "note": "hp at level l = 30 + 10 l"}},
+  "attack": {"kind": "affine", "a": {"v": 4, "src": "EXAMPLE ASSUMPTION"}, "b": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "damage per hit at level l = 4 + l"}},
+  "attack_interval_s": {"kind": "affine", "a": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "b": {"v": 0, "src": "EXAMPLE ASSUMPTION"}},
+  "mitigation": {"kind": "affine", "a": {"v": 0, "src": "EXAMPLE ASSUMPTION"}, "b": {"v": 0, "src": "EXAMPLE ASSUMPTION", "note": "armour only"}}
+ }},
+ "enemies": {
+  "slime": {"hp": {"v": 12, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 2, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 6, "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"xp": {"v": 25, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}},
+  "wolf": {"hp": {"v": 36, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 12, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": "3/2", "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 6, "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"xp": {"v": 45, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 4, "src": "EXAMPLE ASSUMPTION"}}},
+  "crypt_guard": {"hp": {"v": 120, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 10, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 8, "src": "EXAMPLE ASSUMPTION"}, "requires": {"level": {"v": 4, "src": "EXAMPLE ASSUMPTION"}}, "boss": true, "once": true,
+   "rewards": {"xp": {"v": 600, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 40, "src": "EXAMPLE ASSUMPTION"}},
+   "drops": [{"item": "crypt_key", "chance": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "guaranteed: essential progress never waits on luck"}}]},
+  "hollow_king": {"hp": {"v": 220, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 20, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 15, "src": "EXAMPLE ASSUMPTION"}, "requires": {"item": "crypt_key"}, "boss": true, "once": true,
+   "rewards": {"xp": {"v": 3000, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 250, "src": "EXAMPLE ASSUMPTION"}}},
+  "bog_troll": {"hp": {"v": 90, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 18, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 7, "src": "EXAMPLE ASSUMPTION"}, "requires": {"unlocked": "ember_marsh"},
+   "rewards": {"xp": {"v": 80, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 10, "src": "EXAMPLE ASSUMPTION"}}},
+  "ember_drake": {"hp": {"v": 800, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 30, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": "5/2", "src": "EXAMPLE ASSUMPTION"},
+   "overhead_s": {"v": 20, "src": "EXAMPLE ASSUMPTION"}, "requires": {"level": {"v": 12, "src": "EXAMPLE ASSUMPTION"}}, "boss": true, "once": true,
+   "rewards": {"xp": {"v": 20000, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 1000, "src": "EXAMPLE ASSUMPTION"}}}
+ },
+ "items": {
+  "iron_sword": {"cost": {"currency": "gold", "amount": {"v": 60, "src": "EXAMPLE ASSUMPTION"}},
+   "effects": [{"target": "stat:attack", "op": "add", "value": {"v": 3, "src": "EXAMPLE ASSUMPTION"}}]},
+  "leather_armor": {"cost": {"currency": "gold", "amount": {"v": 150, "src": "EXAMPLE ASSUMPTION"}},
+   "effects": [{"target": "stat:mitigation", "op": "add", "value": {"v": "2/5", "src": "EXAMPLE ASSUMPTION", "note": "takes 40 % less damage"}}]},
+  "crypt_key": {"effects": []},
+  "sunsteel_edge": {"cost": {"currency": "gold", "amount": {"v": 1200, "src": "EXAMPLE ASSUMPTION"}}, "requires": {"defeated": "hollow_king"},
+   "effects": [{"target": "stat:attack", "op": "add", "value": {"v": 6, "src": "EXAMPLE ASSUMPTION", "note": "the smith reforges the iron sword: stacks with it"}}]},
+  "dragonscale": {"cost": {"currency": "gold", "amount": {"v": 8000, "src": "EXAMPLE ASSUMPTION"}}, "requires": {"defeated": "hollow_king"},
+   "effects": [{"target": "stat:mitigation", "op": "add", "value": {"v": "1/5", "src": "EXAMPLE ASSUMPTION", "note": "with the leather armour: 60 % less damage"}}]}
+ },
+ "unlocks": {"ember_marsh": {"when": {"defeated": "hollow_king"}}},
+ "skill_profiles": {
+  "struggling": {"extra_attack_delay_s": {"v": "1/2", "src": "EXAMPLE ASSUMPTION", "note": "reacts half a second late on every swing"},
+                 "damage_factor": {"v": "3/4", "src": "EXAMPLE ASSUMPTION", "note": "misses weak spots: 75 % damage"}}
+ },
+ "sessions": {"patterns": {
+  "daily": {"active_s": {"v": 1800, "src": "EXAMPLE ASSUMPTION", "note": "one 30-minute session a day"},
+            "gaps_s": {"v": [84600], "src": "EXAMPLE ASSUMPTION"}},
+  "returning": {"active_s": {"v": 1800, "src": "EXAMPLE ASSUMPTION"}, "gaps_s": {"v": [84600], "src": "EXAMPLE ASSUMPTION"},
+                "absences": [{"after_session": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+                              "gap_s": {"v": 689400, "src": "EXAMPLE ASSUMPTION", "note": "plays days 1-2, away until day 10"}}]}
+ }},
+ "policies": {"objective_currency": "xp",
+  "boss_attempt": {"min_margin": {"v": "-1/4", "src": "EXAMPLE ASSUMPTION", "note": "tries a boss when the preview leaves it with 25 % HP or less"}, "recovery_s": {"v": 30, "src": "EXAMPLE ASSUMPTION", "note": "walk back after a lost boss fight"}}},
+ "goals": [
+  {"id": "TL-01", "label": "first kill", "when": {"defeated": "slime"},
+   "window": {"basis": "active", "max_s": {"v": 10, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-02", "label": "level 2", "when": {"level": {"v": 2, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "active", "max_s": {"v": 360, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-03", "label": "first power spike on wolves (one hit fewer)", "when": {"spikes": ["wolf_hits", {"v": 1, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 600, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-04", "label": "crypt guard beaten (key)", "when": {"defeated": "crypt_guard"},
+   "window": {"basis": "active", "max_s": {"v": 1800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-05", "label": "Hollow King beaten", "when": {"defeated": "hollow_king"},
+   "window": {"basis": "active", "min_s": {"v": 2400, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 4500, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-05b", "label": "a soft wall before the king (his level check)", "when": {"all": [{"soft_walls": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}, {"not": {"defeated": "hollow_king"}}]},
+   "window": {"basis": "active", "min_s": {"v": 2400, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 4500, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-06", "label": "Ember Marsh open on the first return", "when": {"unlocked": "ember_marsh"},
+   "window": {"basis": "calendar", "max_s": {"v": 172800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-07a", "label": "a soft wall inside the marsh (the second wall of the run)", "when": {"all": [{"unlocked": "ember_marsh"}, {"soft_walls": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]},
+   "window": {"basis": "active", "min_s": {"v": 3600, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 5400, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-07", "label": "level 12", "when": {"level": {"v": 12, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "calendar", "max_s": {"v": 604800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-08", "label": "Ember Drake beaten (completion)", "when": {"defeated": "ember_drake"},
+   "window": {"basis": "calendar", "min_s": {"v": 432000, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 1814400, "src": "EXAMPLE ASSUMPTION"}}}
+ ],
+ "analysis": {
+  "soft_wall": {"min_wait_s": {"v": 900, "src": "EXAMPLE ASSUMPTION", "note": "TL-07a: 15 minutes or more with no visible step (half a session) is a soft wall"}},
+  "spikes": [
+   {"id": "wolf_hits", "metric": "hits_to_kill", "enemy": "wolf", "min_change": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "one hit fewer on the zone-1 reference enemy"}},
+   {"id": "troll_hits", "metric": "hits_to_kill", "enemy": "bog_troll", "min_change": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "one hit fewer on the marsh reference enemy"},
+    "active_when": {"unlocked": "ember_marsh"}},
+   {"id": "wolf_htd", "metric": "hits_to_die", "enemy": "wolf", "min_ratio": {"v": "4/3", "src": "EXAMPLE ASSUMPTION", "note": "the wolf needs a third more hits to down the player (armour), more than one level-up gives"}},
+   {"id": "king_ttk", "metric": "ttk_s", "enemy": "hollow_king", "min_ratio": {"v": "6/5", "src": "EXAMPLE ASSUMPTION", "note": "the boss falls 20 % faster"},
+    "active_when": {"all": [{"item": "crypt_key"}, {"not": {"defeated": "hollow_king"}}]}}
+  ]
+ },
+ "run": {"horizon_active_s": {"v": 18000, "src": "EXAMPLE ASSUMPTION", "note": "five hours of play; the session runs override it on the command line"}}
+}

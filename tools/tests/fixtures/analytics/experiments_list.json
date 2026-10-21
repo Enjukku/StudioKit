@@ -1,0 +1,1 @@
+{"_fixture": "TEST: shape from the experiments guide 'List and inspect' text (ExperimentSummary rows + total); synthetic ids", "experiments": [{"id": "test-exp-1", "name": "TEST experiment", "state": "EXPERIMENT_STATE_RUNNING"}], "total": 1}

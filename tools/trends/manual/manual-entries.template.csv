@@ -1,0 +1,7 @@
+source,read_date,page,region,window,entity_type,entity_id,entity_name,metric,value,unit,kind,note
+# Copy this file, delete the example lines, add one row per value read by hand. Columns: tools/trends/manual_import.py.
+# steam.charts,2026-10-20,https://store.steampowered.com/charts/mostplayed,global,now,steam_app,730,Counter-Strike 2,rank,1,rank,,free-to-play
+# google.play,2026-10-20,Google Play Top charts: Games,US,,play_app,com.example.game,Example Game,rank,3,rank,,
+# google.trends,2026-10-20,https://trends.google.com/trends/explore,US,past 7 days,search_term,example term,,interest_0_100,72,index 0-100,,same comparison set as last week
+# release.calendars,2026-10-20,https://about.netflix.com/en/news,,,title,Example Show S2,,release_date_announced,,,,announced for 2026-12-01
+# roblox.trackers,2026-10-20,https://example.org/tracker/game/123,global,30 days,roblox_universe,123,Example Game,revenue_robux_per_day,50000,robux,third_party_estimate,"vendor RoVitals; range as shown; method as stated"

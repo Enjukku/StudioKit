@@ -1,0 +1,14 @@
+{
+  "image": "content/art/refs/concept/dragonegg-a-nest.png",
+  "mask": "knowledge/jobs/J009-art-director/art/test-a/diag/dragonegg-a-nest-p90-eggmask.png",
+  "egg_median_Y": 0.4814,
+  "egg_area_frac": 0.0703,
+  "non_egg_px_at_or_above_egg_median_frac_of_frame": 0.02622,
+  "ratio_to_egg_area": 0.373,
+  "by_third_frac_of_frame": {
+    "top": 0.00235,
+    "middle": 0.00599,
+    "bottom": 0.01789
+  },
+  "verdict": "measured (diagnostic)"
+}

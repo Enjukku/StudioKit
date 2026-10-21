@@ -15,7 +15,8 @@ grows that library.
   --bible <path> (before the command) uses another art bible, e.g. the kit template for a quick test
 
 Manifest columns: id, family, identity, inputs (optional; ';'-separated extra image paths attached before
-the anchors), anchors (optional; ';'-separated file names in the family's anchor folder).
+the anchors), anchors (optional; ';'-separated file names in the family's anchor folder, or `none` for no anchors at all).
+Every row runs in its own new Codex session (one image = one chat), so images never edit or copy each other.
 
 Art bible format (machine-read):
   - a markdown table with the header `| family | lock | world lock | anchors |`; `world lock` is yes or no;
@@ -104,9 +105,11 @@ def load_bible(path: Path = BIBLE) -> tuple[dict[str, Family], dict[str, str]]:
 
 
 def anchors_for(fam: Family, ident: str, named: str = "", root: Path = ANCHORS) -> list[Path]:
-    """Up to MAX_ANCHORS style references. The owner's references (files without the gen- prefix) come
+    """Up to MAX_ANCHORS style references; anchors guide the whole look, the lock wins on conflicts (owner J009-D11). The owner's references (files without the gen- prefix) come
     first; a row may name them, else they are picked by the row id so different assets see different ones.
     The last slot is our newest approved generation, which keeps a batch consistent."""
+    if named.strip().lower() == "none":
+        return []  # exploration: no anchors, so styles from other directions cannot blend in
     folder = root / fam.anchors
     if not folder.is_dir():
         return []
@@ -156,9 +159,9 @@ def build(row: dict[str, str], fams: dict[str, Family], lks: dict[str, str], anc
             parts.append(f"the first {n_in} attached image(s) are inputs the prompt refers to")
         if n_anchor:
             parts.append(
-                f"the last {n_anchor} are design references: take ideas from their silhouettes, proportions"
-                " and details only; do not copy their shading, lighting, rendering or subjects,"
-                " and follow the style lock below for how it is drawn"
+                f"the last {n_anchor} are approved style anchors: match their whole look (shapes, proportions,"
+                " colours, lighting, materials and rendering) but not their subjects or exact composition;"
+                " where an anchor and the style lock below disagree, follow the lock"
             )
         note = "; ".join(parts).capitalize() + ". "
     prompt = INSTRUCTION.format(inputs=note) + f"{row['identity']}\n\n{lks[fam.lock]}"

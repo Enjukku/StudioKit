@@ -1,0 +1,26 @@
+---
+type: job
+scope: universal
+status: active
+updated: 2026-10-21
+source: J015 G1
+supersedes: []
+---
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+
+# Ledger: J015-film-director
+
+Fields: `templates/jobs/ledger.md`. Paper = `C:\Users\Firew\Downloads\Film_Director_Research_2026.txt` (FP), outside git. DS = `C:\Users\Firew\Downloads\uterd\DestructionSimulator` (read-only).
+
+| id | from | to | ask | inside | status | hops | result | updated |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| J015-T01 | lead | researcher as extractor (Sonnet high) | FP lines 1-507 (15 rules, §1-§10: scene studies, shots, lenses, movement, staging, editing, structure, light, acting, sound, game cinematics, skip/comfort/handoff, multiplayer contract) + register F, A, G → notes | yes | done (130 content rows; 30 FC: 1 P1, 29 P2; 41 limits; lint warn 501 lines) | 1 | knowledge/reference/film/01-craft-scenes-game-cinematics.md | 2026-10-21 |
+| J015-T02 | lead | researcher as extractor (Sonnet high) | FP lines 509-707 (§11 boards, Blender 5.2 previs, ChatGPT boards; §12 Roblox runtime, terminal paths, evidence gaps) + register B, R → notes | yes | done (246 rows; 51 FC: 43 P1, 6 P2, 2 P3; most-at-risk FC-23, 29, 30, 32, 40) | 1 | knowledge/reference/film/02-previs-roblox-runtime.md | 2026-10-21 |
+| J015-T03 | lead | researcher as extractor (Sonnet high) | FP lines 709-1203 (shot vocabulary, §13 method, hand-off table, AI defect table, approval, shot-list template, filled boss reveal, storyboard brief template, pass/fail review, don'ts, open questions, disagreements) → notes | yes | done (counts: vocab 27, hand-off 9, AI defects 8, shot-list fields 13, board brief 14, pass/fail 18, don'ts 10; 18 FC: 5 P1, 11 P2, 2 P3) | 1 | knowledge/reference/film/03-vocabulary-method-templates-review.md | 2026-10-21 |
+| J015-T04 | lead | researcher as extractor (Sonnet high) | DS opening-film records (read-only) → universal lessons, owner corrections, game-specific content stripped | yes | done (70 rows: 22 owner decision, 10 owner correction, 28 proposal, 10 open; no measured results; lead grep: no game names in lessons) | 1 | knowledge/reference/film/04-earlier-game-opening-film-lessons.md | 2026-10-21 |
+| J015-T05 | lead | researcher as fact-checker (Sonnet high) | Roblox runtime claims: note 02 FC-20..49 + note 03 P1 Roblox rows; Event Sequencer module vs the paper's runtime plan | yes | done (33 rows: 32 confirmed, 1 unverified FC-46 Moon Animator version → drop; 9 must-carry details; Event Sequencer section; lead spot-checked Camera.yaml FOV + CurrentCamera hazard, AudioPlayer atTime, FrustumStreamingMode) | 1 | knowledge/reference/film/fact-check-roblox-runtime.md | 2026-10-21 |
+| J015-T06 | lead | general-purpose as fact-checker (Sonnet high) | Blender claims (note 02 FC-01..19 incl. maths) against installed Blender 5.1.2 headless + bundled manual + live blender.org; ChatGPT Images claims (B15-B17) live; note 03 P1 Blender/image rows | yes | done (23 rows: 19 confirmed, 1 corrected AUTO fit, 2 unverified ChatGPT Images 2.5 page + GUI playback switch, 1 dropped; 10 probes; lead fixed the tool's 29.97 rate per FC-08 and re-ran the round trip: exact) | 1 | knowledge/reference/film/fact-check-blender-images.md | 2026-10-21 |
+| J015-T08 | lead | general-purpose as tool builder (Opus medium) | shot-list data format + tools/film/shotlist.py (check, table, cues, blender, blender-export, diff, luau, log-diff) + tests (`T08-shotlist-tool-brief.md`) | yes | done (8 commands; 46 tests, 1 Blender test opt-in; C1-C8 pass; planted faults F1-F4 caught; Blender 5.1.2 round trip no drift; lead re-ran tests + check/table) | 1 | tools/film/shotlist.py, tools/tests/test_shotlist.py, templates/film/shotlist.example.json | 2026-10-21 |
+| J015-T07 | lead | researcher as fact-checker (Sonnet high) | Film and game craft sources: note 01 FC-01..30, note 02 FC-50..51, note 03 FC rows not about Roblox, Blender or OpenAI (quotes, dates, attributions, scope of F, A, G sources) | yes | working | 1 | knowledge/reference/film/fact-check-craft-sources.md | 2026-10-21 |
+| J015-T09 | lead | film-director (Opus high) | G2 real test part 1: the paper's 5-shot boss reveal (eval E1) through beat sheet, shot list, boards (ChatGPT, max 8 images), timed Blender animatic, one craft brief, self-review; Roblox capture held (TestBench.rbxl belongs to J010-T14; owner to open a separate Studio) | yes | done, planning half (hybrid: play beat + 4 shots, 175 frames at 30/1; check exit 0 at previs; diff no drift; 8/8 images; 18 skill gaps). Lead review: verified check and diff; boards hold continuity; shot E too dark (whole-frame median WCAG luminance 0.0024, look_check value) = gap G19. Roblox capture held | 1 | knowledge/jobs/J015-film-director/g2/, output/J015-g2/ | 2026-10-21 |
+| J015-T10 | lead | general-purpose as tool builder (Opus medium) | shotlist.py gaps G1 (--props-only push), G3 (no 'no drift' on UNKNOWN plans; --write range check), G4 (cue:<id> markers round trip) + tests | yes | done (67 tests, 2 opt-in Blender; planted faults caught; real Blender 5.1.2 run props-only → author → write → full push → no drift; lead re-ran tests and checks) | 1 | tools/film/shotlist.py, tools/tests/test_shotlist.py | 2026-10-21 |

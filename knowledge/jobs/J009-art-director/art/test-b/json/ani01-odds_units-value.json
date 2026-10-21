@@ -1,0 +1,76 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "value",
+ "input": {
+  "path": "content\\ui\\anime-summon\\screens\\01-main-1920.png",
+  "sha256": "a9883480126e33631ad4386841a96e826ec65144c59a5a0a904a3a2dd5b4c88f",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani01-odds_units.png",
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "ring_px": 24,
+  "ring_metric": "chessboard dilation",
+  "luminance": "WCAG 2.x relative luminance (FM1-FM3, switch 0.04045)",
+  "percentiles": [
+   5,
+   25,
+   50,
+   75,
+   95
+  ],
+  "min_ratio": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "whole": {
+   "n_px": 2073600,
+   "mean": 0.14641782458742758,
+   "p5": 0.004627434306556169,
+   "p25": 0.015402774442084152,
+   "p50": 0.035729761307825444,
+   "p75": 0.10075436873913632,
+   "p95": 0.8026814052343417
+  },
+  "subject": {
+   "n_px": 78400,
+   "mean": 0.1277732640609632,
+   "p5": 0.007958585182027234,
+   "p25": 0.020248832434794216,
+   "p50": 0.044324879415578985,
+   "p75": 0.07043551761847616,
+   "p95": 1.0
+  },
+  "ring": {
+   "n_px": 35904,
+   "mean": 0.006262378744566891,
+   "p5": 0.0021966003883883635,
+   "p25": 0.0034909790001158717,
+   "p50": 0.004481070363899043,
+   "p75": 0.00732704839773483,
+   "p95": 0.016190729074086307
+  },
+  "subject_ring_ratio": 1.7313330811151202
+ },
+ "images": {
+  "luminance": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-main-1920.luminance.png"
+ },
+ "verdict": "measured"
+}

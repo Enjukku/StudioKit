@@ -1,0 +1,37 @@
+{
+  "format": "film-shotlist/1",
+  "sequence": "drill",
+  "title": "Tool test sequence (placeholder content, no game)",
+  "revision": 3,
+  "stage": "previs",
+  "fps": [30, 1],
+  "start_frame": 1,
+  "aspect": [16, 9],
+  "fov_mode": "Vertical",
+  "board_policy": "layout-may-propose",
+  "shots": [
+    {
+      "id": "S010", "frames": 30, "size": "wide", "angle": "eye level",
+      "lens": {"focal_mm": 50, "sensor_mm": 36, "sensor_fit": "HORIZONTAL"}, "fov_deg": 23,
+      "movement": "static", "action": "placeholder action one", "sound": "cue sfx.test.one",
+      "emotion": "placeholder", "transition": "cut", "purpose": "test fixture",
+      "notes": "TEST VALUES: every length, lens and FOV in this file is a placeholder for tool tests"
+    },
+    {
+      "id": "S020", "frames": 30, "size": "medium", "angle": "low",
+      "lens": {"focal_mm": 35, "sensor_mm": 24, "sensor_fit": "VERTICAL"},
+      "movement": "push in", "action": "placeholder action two", "sound": "none",
+      "emotion": "placeholder", "transition": "cut"
+    },
+    {
+      "id": "S030", "frames": 45, "size": "close", "angle": "high", "lens": "free text lens",
+      "fov_deg": 70, "movement": "static", "action": "placeholder action three", "sound": "music.test.sting",
+      "emotion": "placeholder", "transition": "end"
+    }
+  ],
+  "cues": [
+    {"id": "sfx.test.one", "shot": "S010", "at": 0, "kind": "sfx", "sync": "locked"},
+    {"id": "music.test.sting", "shot": "S030", "at": 15, "kind": "music", "sync": "flexible", "end": 45, "note": "ends on the last frame boundary"},
+    {"id": "amb.test.bed", "shot": "S010", "at": 5, "kind": "ambience", "sync": "flexible", "end": 70, "note": "runs into S030"}
+  ]
+}

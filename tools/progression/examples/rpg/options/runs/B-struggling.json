@@ -1,0 +1,2099 @@
+{
+ "tool": "progression_sim",
+ "version": "1.1.0",
+ "curves_version": "1.0.0",
+ "model": {
+  "path": "tools/progression/examples/rpg/options/model-B.json",
+  "sha256": "4aec592f1ba6131afc7662e7ce1fc3f8c2d342a1434b999c824295965d3e9c5a",
+  "revision": "example-rpg-r2-optB",
+  "title": "Lantern Woods option B: a late assist (Lantern Ward) - for learning, not tuning"
+ },
+ "mode": "exact",
+ "policy": {
+  "name": "fight-best",
+  "target": null,
+  "target_level": null,
+  "skill_profile": "struggling",
+  "session_pattern": null
+ },
+ "seed": null,
+ "runs": 1,
+ "random_inputs": false,
+ "semantics": {
+  "event_order": [
+   "produce",
+   "rewards",
+   "caps",
+   "purchase",
+   "unlock",
+   "reset"
+  ],
+  "time": {
+   "mode": "continuous"
+  },
+  "duel": {
+   "player_first_hit": "immediate",
+   "enemy_first_hit": "after_interval",
+   "simultaneous": "player_first"
+  },
+  "horizon_active_s": "21600",
+  "horizon_source": "cli",
+  "calendar": "not modelled (no session pattern selected)",
+  "offline": "not modelled (the model gives no offline contract)",
+  "prestige_offline_counts_toward_basis": null,
+  "prestige_min_award": null,
+  "boss_attempt": {
+   "min_margin": "-1/4",
+   "recovery_s": "30"
+  },
+  "level_rewards": null,
+  "hard_walls": "every gated buyable or enemy: from affordable (or beatable) while locked until it unlocks; an activity only while the policy pursues it"
+ },
+ "lean": {
+  "on": true,
+  "omitted": [
+   "trace",
+   "steps other than resets, goals, soft walls and spikes",
+   "metric history between segment starts, spikes and the last value"
+  ]
+ },
+ "warnings": [],
+ "never_claims": [
+  "a population forecast (one policy is one strategy)",
+  "that any target feeling passed",
+  "that the game is fun",
+  "any default threshold, rate, horizon or session length"
+ ],
+ "assumptions": {
+  "inputs": [
+   {
+    "input": "currencies.xp.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "currencies.gold.start",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "currencies.gold.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "levels.max_level",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "15"
+   },
+   {
+    "input": "player.stats.hp.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "30"
+   },
+   {
+    "input": "player.stats.hp.b",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "player.stats.attack.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4"
+   },
+   {
+    "input": "player.stats.attack.b",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "player.stats.attack_interval_s.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "player.stats.attack_interval_s.b",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "player.stats.mitigation.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "player.stats.mitigation.b",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "enemies.slime.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "12"
+   },
+   {
+    "input": "enemies.slime.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.slime.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.slime.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6"
+   },
+   {
+    "input": "enemies.slime.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "25"
+   },
+   {
+    "input": "enemies.slime.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.wolf.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "36"
+   },
+   {
+    "input": "enemies.wolf.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "12"
+   },
+   {
+    "input": "enemies.wolf.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3/2"
+   },
+   {
+    "input": "enemies.wolf.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6"
+   },
+   {
+    "input": "enemies.wolf.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "45"
+   },
+   {
+    "input": "enemies.wolf.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4"
+   },
+   {
+    "input": "enemies.crypt_guard.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "120"
+   },
+   {
+    "input": "enemies.crypt_guard.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "enemies.crypt_guard.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.crypt_guard.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "8"
+   },
+   {
+    "input": "enemies.crypt_guard.requires.level",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4"
+   },
+   {
+    "input": "enemies.crypt_guard.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "600"
+   },
+   {
+    "input": "enemies.crypt_guard.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "40"
+   },
+   {
+    "input": "enemies.crypt_guard.drops[0].chance",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "enemies.hollow_king.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "220"
+   },
+   {
+    "input": "enemies.hollow_king.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "20"
+   },
+   {
+    "input": "enemies.hollow_king.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.hollow_king.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "15"
+   },
+   {
+    "input": "enemies.hollow_king.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3000"
+   },
+   {
+    "input": "enemies.hollow_king.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "250"
+   },
+   {
+    "input": "enemies.bog_troll.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "90"
+   },
+   {
+    "input": "enemies.bog_troll.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "18"
+   },
+   {
+    "input": "enemies.bog_troll.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "enemies.bog_troll.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "7"
+   },
+   {
+    "input": "enemies.bog_troll.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "80"
+   },
+   {
+    "input": "enemies.bog_troll.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "enemies.ember_drake.hp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "800"
+   },
+   {
+    "input": "enemies.ember_drake.damage",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "30"
+   },
+   {
+    "input": "enemies.ember_drake.attack_interval_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "5/2"
+   },
+   {
+    "input": "enemies.ember_drake.overhead_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "20"
+   },
+   {
+    "input": "enemies.ember_drake.requires.level",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "12"
+   },
+   {
+    "input": "enemies.ember_drake.rewards.xp",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "20000"
+   },
+   {
+    "input": "enemies.ember_drake.rewards.gold",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1000"
+   },
+   {
+    "input": "items.iron_sword.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "60"
+   },
+   {
+    "input": "items.iron_sword.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3"
+   },
+   {
+    "input": "items.leather_armor.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "150"
+   },
+   {
+    "input": "items.leather_armor.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2/5"
+   },
+   {
+    "input": "items.lantern_ward.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "300"
+   },
+   {
+    "input": "items.lantern_ward.requires.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3000"
+   },
+   {
+    "input": "items.lantern_ward.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3/20"
+   },
+   {
+    "input": "items.sunsteel_edge.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "items.sunsteel_edge.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6"
+   },
+   {
+    "input": "items.dragonscale.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "8000"
+   },
+   {
+    "input": "items.dragonscale.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/5"
+   },
+   {
+    "input": "skill_profiles.struggling.extra_attack_delay_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/2"
+   },
+   {
+    "input": "skill_profiles.struggling.damage_factor",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3/4"
+   },
+   {
+    "input": "sessions.patterns.daily.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "sessions.patterns.daily.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "84600"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "sessions.patterns.returning.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "84600"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].after_session",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].gap_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "689400"
+   },
+   {
+    "input": "policies.boss_attempt.min_margin",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "-1/4"
+   },
+   {
+    "input": "policies.boss_attempt.recovery_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "30"
+   },
+   {
+    "input": "goals[0].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[1].when.level",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "goals[1].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "360"
+   },
+   {
+    "input": "goals[2].when.spikes[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[2].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "600"
+   },
+   {
+    "input": "goals[3].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "goals[4].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2400"
+   },
+   {
+    "input": "goals[4].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4500"
+   },
+   {
+    "input": "goals[5].when.all[0].soft_walls",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[5].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2400"
+   },
+   {
+    "input": "goals[5].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4500"
+   },
+   {
+    "input": "goals[6].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "172800"
+   },
+   {
+    "input": "goals[7].when.all[1].soft_walls",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "goals[7].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3600"
+   },
+   {
+    "input": "goals[7].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "5400"
+   },
+   {
+    "input": "goals[8].when.level",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "12"
+   },
+   {
+    "input": "goals[8].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "604800"
+   },
+   {
+    "input": "goals[9].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "432000"
+   },
+   {
+    "input": "goals[9].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1814400"
+   },
+   {
+    "input": "analysis.soft_wall.min_wait_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "900"
+   },
+   {
+    "input": "analysis.spikes[0].min_change",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "analysis.spikes[1].min_change",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "analysis.spikes[2].min_ratio",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "4/3"
+   },
+   {
+    "input": "analysis.spikes[3].min_ratio",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6/5"
+   },
+   {
+    "input": "run.horizon_active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "18000"
+   }
+  ],
+  "behaviour": [
+   "policy fight-best: one modelled strategy, not the player population",
+   "skill profile struggling (model skill_profiles.struggling)",
+   "the fight-choosing preview assumes every attack lands; actual fights roll accuracy",
+   "bosses are attempted at a preview margin >= -1/4 (model policies.boss_attempt); 30 s recovery after a lost fight"
+  ],
+  "note": "every result below is conditional on all listed inputs and the behaviour lines; the tool does not trace which result uses which input"
+ },
+ "provenance_counts": {
+  "EXAMPLE ASSUMPTION": 97,
+  "published": 3
+ },
+ "stop": {
+  "reason": "all goals reached",
+  "detail": "",
+  "active_s": "20299",
+  "active_s_approx": 20299.0,
+  "calendar_s": null,
+  "calendar_s_approx": null
+ },
+ "timeline": [
+  {
+   "goal": "TL-01",
+   "label": "first kill",
+   "when": {
+    "defeated": "slime"
+   },
+   "reached": true,
+   "active_s": "21/2",
+   "active_s_approx": 10.5,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "10"
+   },
+   "verdict": "fail",
+   "evidence": "measured active time 21/2 s (= 10.5 s) is outside the declared window [-, 10] s (active time)"
+  },
+  {
+   "goal": "TL-02",
+   "label": "level 2",
+   "when": {
+    "level": "2"
+   },
+   "reached": true,
+   "active_s": "390",
+   "active_s_approx": 390.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "360"
+   },
+   "verdict": "fail",
+   "evidence": "measured active time 390 s is outside the declared window [-, 360] s (active time)"
+  },
+  {
+   "goal": "TL-03",
+   "label": "first power spike on wolves (one hit fewer)",
+   "when": {
+    "spikes": [
+     "wolf_hits",
+     "1"
+    ]
+   },
+   "reached": true,
+   "active_s": "315",
+   "active_s_approx": 315.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "600"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 315 s is inside the declared window [-, 600] s (active time)"
+  },
+  {
+   "goal": "TL-04",
+   "label": "crypt guard beaten (key)",
+   "when": {
+    "defeated": "crypt_guard"
+   },
+   "reached": true,
+   "active_s": "1823",
+   "active_s_approx": 1823.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "1800"
+   },
+   "verdict": "fail",
+   "evidence": "measured active time 1823 s is outside the declared window [-, 1800] s (active time)"
+  },
+  {
+   "goal": "TL-05",
+   "label": "Hollow King beaten",
+   "when": {
+    "defeated": "hollow_king"
+   },
+   "reached": true,
+   "active_s": "17951/2",
+   "active_s_approx": 8975.5,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "min_s": "2400",
+    "max_s": "4500"
+   },
+   "verdict": "fail",
+   "evidence": "measured active time 17951/2 s (= 8975.5 s) is outside the declared window [2400, 4500] s (active time)"
+  },
+  {
+   "goal": "TL-05b",
+   "label": "a soft wall before the king (his level check)",
+   "when": {
+    "all": [
+     {
+      "soft_walls": "1"
+     },
+     {
+      "not": {
+       "defeated": "hollow_king"
+      }
+     }
+    ]
+   },
+   "reached": true,
+   "active_s": "2735",
+   "active_s_approx": 2735.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "min_s": "2400",
+    "max_s": "4500"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 2735 s is inside the declared window [2400, 4500] s (active time)"
+  },
+  {
+   "goal": "TL-06",
+   "label": "Ember Marsh open on the first return",
+   "when": {
+    "unlocked": "ember_marsh"
+   },
+   "reached": true,
+   "active_s": "17951/2",
+   "active_s_approx": 8975.5,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "calendar",
+    "max_s": "172800"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  },
+  {
+   "goal": "TL-07a",
+   "label": "a soft wall inside the marsh (the second wall of the run)",
+   "when": {
+    "all": [
+     {
+      "unlocked": "ember_marsh"
+     },
+     {
+      "soft_walls": "2"
+     }
+    ]
+   },
+   "reached": true,
+   "active_s": "17951/2",
+   "active_s_approx": 8975.5,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "min_s": "3600",
+    "max_s": "5400"
+   },
+   "verdict": "fail",
+   "evidence": "measured active time 17951/2 s (= 8975.5 s) is outside the declared window [3600, 5400] s (active time)"
+  },
+  {
+   "goal": "TL-07",
+   "label": "level 12",
+   "when": {
+    "level": "12"
+   },
+   "reached": true,
+   "active_s": "27331/2",
+   "active_s_approx": 13665.5,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "calendar",
+    "max_s": "604800"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  },
+  {
+   "goal": "TL-08",
+   "label": "Ember Drake beaten (completion)",
+   "when": {
+    "defeated": "ember_drake"
+   },
+   "reached": true,
+   "active_s": "20299",
+   "active_s_approx": 20299.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "calendar",
+    "min_s": "432000",
+    "max_s": "1814400"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  }
+ ],
+ "walls": {
+  "soft": {
+   "evaluated": true,
+   "thresholds": {
+    "min_wait_s": "900"
+   },
+   "walls": [
+    {
+     "step": "level 5",
+     "start_active_s": "1823",
+     "end_active_s": "2735",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "912",
+     "previous_wait_s": "29",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 1823.0,
+     "end_active_s_approx": 2735.0,
+     "wait_s_approx": 912.0
+    },
+    {
+     "step": "level 7",
+     "start_active_s": "7801/2",
+     "end_active_s": "5297",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "2793/2",
+     "previous_wait_s": "1785/2",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 3900.5,
+     "end_active_s_approx": 5297.0,
+     "wait_s_approx": 1396.5
+    },
+    {
+     "step": "level 8",
+     "start_active_s": "5297",
+     "end_active_s": "7004",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "1707",
+     "previous_wait_s": "2793/2",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 5297.0,
+     "end_active_s_approx": 7004.0,
+     "wait_s_approx": 1707.0
+    },
+    {
+     "step": "level 9",
+     "start_active_s": "7004",
+     "end_active_s": "17867/2",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "3859/2",
+     "previous_wait_s": "1707",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 7004.0,
+     "end_active_s_approx": 8933.5,
+     "wait_s_approx": 1929.5
+    },
+    {
+     "step": "level 10",
+     "start_active_s": "8999",
+     "end_active_s": "10072",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "1073",
+     "previous_wait_s": "47/2",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 8999.0,
+     "end_active_s_approx": 10072.0,
+     "wait_s_approx": 1073.0
+    },
+    {
+     "step": "level 11",
+     "start_active_s": "10072",
+     "end_active_s": "23769/2",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "3625/2",
+     "previous_wait_s": "1073",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 10072.0,
+     "end_active_s_approx": 11884.5,
+     "wait_s_approx": 1812.5
+    },
+    {
+     "step": "level 12",
+     "start_active_s": "23769/2",
+     "end_active_s": "27331/2",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "1781",
+     "previous_wait_s": "3625/2",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 11884.5,
+     "end_active_s_approx": 13665.5,
+     "wait_s_approx": 1781.0
+    },
+    {
+     "step": "level 13",
+     "start_active_s": "27331/2",
+     "end_active_s": "31231/2",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "1950",
+     "previous_wait_s": "1781",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 13665.5,
+     "end_active_s_approx": 15615.5,
+     "wait_s_approx": 1950.0
+    },
+    {
+     "step": "buy dragonscale",
+     "start_active_s": "31231/2",
+     "end_active_s": "34949/2",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "1859",
+     "previous_wait_s": "1950",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 15615.5,
+     "end_active_s_approx": 17474.5,
+     "wait_s_approx": 1859.0
+    },
+    {
+     "step": "level 15",
+     "start_active_s": "35679/2",
+     "end_active_s": "20222",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "4765/2",
+     "previous_wait_s": "365",
+     "rule": "wait >= 900 s",
+     "start_active_s_approx": 17839.5,
+     "end_active_s_approx": 20222.0,
+     "wait_s_approx": 2382.5
+    }
+   ],
+   "slowest_steps": [
+    {
+     "step": "level 15",
+     "end_active_s": "20222",
+     "wait_s": "4765/2",
+     "wait_s_approx": 2382.5
+    },
+    {
+     "step": "level 13",
+     "end_active_s": "31231/2",
+     "wait_s": "1950",
+     "wait_s_approx": 1950.0
+    },
+    {
+     "step": "level 9",
+     "end_active_s": "17867/2",
+     "wait_s": "3859/2",
+     "wait_s_approx": 1929.5
+    },
+    {
+     "step": "buy dragonscale",
+     "end_active_s": "34949/2",
+     "wait_s": "1859",
+     "wait_s_approx": 1859.0
+    },
+    {
+     "step": "level 11",
+     "end_active_s": "23769/2",
+     "wait_s": "3625/2",
+     "wait_s_approx": 1812.5
+    },
+    {
+     "step": "level 12",
+     "end_active_s": "27331/2",
+     "wait_s": "1781",
+     "wait_s_approx": 1781.0
+    },
+    {
+     "step": "level 8",
+     "end_active_s": "7004",
+     "wait_s": "1707",
+     "wait_s_approx": 1707.0
+    },
+    {
+     "step": "level 7",
+     "end_active_s": "5297",
+     "wait_s": "2793/2",
+     "wait_s_approx": 1396.5
+    },
+    {
+     "step": "level 10",
+     "end_active_s": "10072",
+     "wait_s": "1073",
+     "wait_s_approx": 1073.0
+    },
+    {
+     "step": "level 5",
+     "end_active_s": "2735",
+     "wait_s": "912",
+     "wait_s_approx": 912.0
+    }
+   ]
+  },
+  "hard": [
+   {
+    "id": "lantern_ward",
+    "kind": "item",
+    "condition": "affordable",
+    "start_s": "1823",
+    "start_calendar_s": null,
+    "end_s": "3000",
+    "end_calendar_s": null,
+    "duration_s": "1177",
+    "missing": {
+     "active_s": "3000"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": false,
+    "start_s_approx": 1823.0,
+    "duration_s_approx": 1177.0
+   },
+   {
+    "id": "bog_troll",
+    "kind": "enemy",
+    "condition": "beatable",
+    "start_s": "2735",
+    "start_calendar_s": null,
+    "end_s": "17951/2",
+    "end_calendar_s": null,
+    "duration_s": "12481/2",
+    "missing": {
+     "unlocked": "ember_marsh"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": false,
+    "start_s_approx": 2735.0,
+    "duration_s_approx": 6240.5
+   },
+   {
+    "id": "sunsteel_edge",
+    "kind": "item",
+    "condition": "affordable",
+    "start_s": "9985/2",
+    "start_calendar_s": null,
+    "end_s": "17951/2",
+    "end_calendar_s": null,
+    "duration_s": "3983",
+    "missing": {
+     "defeated": "hollow_king"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": false,
+    "start_s_approx": 4992.5,
+    "duration_s_approx": 3983.0
+   }
+  ]
+ },
+ "spikes": {
+  "metrics": [
+   {
+    "id": "wolf_hits",
+    "metric": "hits_to_kill",
+    "reference": "wolf",
+    "direction": "lower is better",
+    "active_when": null,
+    "thresholds": {
+     "min_change": "1"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "0",
+      "t_calendar_s": null,
+      "value": 10,
+      "cause": "start",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "315",
+      "t_calendar_s": null,
+      "value": 6,
+      "cause": "buy iron_sword",
+      "spike": "improvement >= 1"
+     },
+     {
+      "t_active_s": "990",
+      "t_calendar_s": null,
+      "value": 5,
+      "cause": "level 3",
+      "spike": "improvement >= 1"
+     },
+     {
+      "t_active_s": "2735",
+      "t_calendar_s": null,
+      "value": 4,
+      "cause": "level 5",
+      "spike": "improvement >= 1"
+     },
+     {
+      "t_active_s": "17867/2",
+      "t_calendar_s": null,
+      "value": 3,
+      "cause": "level 9",
+      "spike": "improvement >= 1"
+     },
+     {
+      "t_active_s": "23769/2",
+      "t_calendar_s": null,
+      "value": 2,
+      "cause": "level 11",
+      "spike": "improvement >= 1"
+     }
+    ]
+   },
+   {
+    "id": "troll_hits",
+    "metric": "hits_to_kill",
+    "reference": "bog_troll",
+    "direction": "lower is better",
+    "active_when": {
+     "unlocked": "ember_marsh"
+    },
+    "thresholds": {
+     "min_change": "1"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "17951/2",
+      "t_calendar_s": null,
+      "value": 6,
+      "cause": "unlock ember_marsh",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "23769/2",
+      "t_calendar_s": null,
+      "value": 5,
+      "cause": "level 11",
+      "spike": "improvement >= 1"
+     }
+    ]
+   },
+   {
+    "id": "wolf_htd",
+    "metric": "hits_to_die",
+    "reference": "wolf",
+    "direction": "higher is better",
+    "active_when": null,
+    "thresholds": {
+     "min_ratio": "4/3"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "0",
+      "t_calendar_s": null,
+      "value": 4,
+      "cause": "start",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "1755/2",
+      "t_calendar_s": null,
+      "value": 7,
+      "cause": "buy leather_armor",
+      "spike": "ratio >= 4/3"
+     },
+     {
+      "t_active_s": "34949/2",
+      "t_calendar_s": null,
+      "value": 54,
+      "cause": "buy dragonscale",
+      "spike": "ratio >= 4/3"
+     },
+     {
+      "t_active_s": "20222",
+      "t_calendar_s": null,
+      "value": 60,
+      "cause": "level 15"
+     }
+    ]
+   },
+   {
+    "id": "king_ttk",
+    "metric": "ttk_s",
+    "reference": "hollow_king",
+    "direction": "lower is better",
+    "active_when": {
+     "all": [
+      {
+       "item": "crypt_key"
+      },
+      {
+       "not": {
+        "defeated": "hollow_king"
+       }
+      }
+     ]
+    },
+    "thresholds": {
+     "min_ratio": "6/5"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "1823",
+      "t_calendar_s": null,
+      "value": "39",
+      "cause": "found crypt_key",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "17867/2",
+      "t_calendar_s": null,
+      "value": "27",
+      "cause": "level 9"
+     }
+    ]
+   }
+  ],
+  "spikes": [
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "315",
+    "t_calendar_s": null,
+    "t_active_s_approx": 315.0,
+    "from": 10,
+    "to": 6,
+    "cause": "buy iron_sword",
+    "improvement": 4,
+    "ratio": "5/3",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "990",
+    "t_calendar_s": null,
+    "t_active_s_approx": 990.0,
+    "from": 6,
+    "to": 5,
+    "cause": "level 3",
+    "improvement": 1,
+    "ratio": "6/5",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "2735",
+    "t_calendar_s": null,
+    "t_active_s_approx": 2735.0,
+    "from": 5,
+    "to": 4,
+    "cause": "level 5",
+    "improvement": 1,
+    "ratio": "5/4",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "17867/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 8933.5,
+    "from": 4,
+    "to": 3,
+    "cause": "level 9",
+    "improvement": 1,
+    "ratio": "4/3",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "23769/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 11884.5,
+    "from": 3,
+    "to": 2,
+    "cause": "level 11",
+    "improvement": 1,
+    "ratio": "3/2",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "troll_hits",
+    "t_active_s": "23769/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 11884.5,
+    "from": 6,
+    "to": 5,
+    "cause": "level 11",
+    "improvement": 1,
+    "ratio": "6/5",
+    "rule": "improvement >= 1"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "1755/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 877.5,
+    "from": 5,
+    "to": 7,
+    "cause": "buy leather_armor",
+    "improvement": 2,
+    "ratio": "7/5",
+    "rule": "ratio >= 4/3"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "34949/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 17474.5,
+    "from": 30,
+    "to": 54,
+    "cause": "buy dragonscale",
+    "improvement": 24,
+    "ratio": "9/5",
+    "rule": "ratio >= 4/3"
+   }
+  ],
+  "changes_ranked": [
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "34949/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 17474.5,
+    "from": 30,
+    "to": 54,
+    "cause": "buy dragonscale",
+    "improvement": 24,
+    "ratio": "9/5"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "315",
+    "t_calendar_s": null,
+    "t_active_s_approx": 315.0,
+    "from": 10,
+    "to": 6,
+    "cause": "buy iron_sword",
+    "improvement": 4,
+    "ratio": "5/3"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "23769/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 11884.5,
+    "from": 3,
+    "to": 2,
+    "cause": "level 11",
+    "improvement": 1,
+    "ratio": "3/2"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "1755/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 877.5,
+    "from": 5,
+    "to": 7,
+    "cause": "buy leather_armor",
+    "improvement": 2,
+    "ratio": "7/5"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "17867/2",
+    "t_calendar_s": null,
+    "t_active_s_approx": 8933.5,
+    "from": 4,
+    "to": 3,
+    "cause": "level 9",
+    "improvement": 1,
+    "ratio": "4/3"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "990",
+    "t_calendar_s": null,
+    "t_active_s_approx": 990.0,
+    "from": 7,
+    "to": 9,
+    "cause": "level 3",
+    "improvement": 2,
+    "ratio": "9/7"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "390",
+    "t_calendar_s": null,
+    "t_active_s_approx": 390.0,
+    "from": 4,
+    "to": 5,
+    "cause": "level 2",
+    "improvement": 1,
+    "ratio": "5/4"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "2735",
+    "t_calendar_s": null,
+    "t_active_s_approx": 2735.0,
+    "from": 5,
+    "to": 4,
+    "cause": "level 5",
+    "improvement": 1,
+    "ratio": "5/4"
+   },
+   {
+    "metric": "wolf_htd",
+    "t_active_s": "3008",
+    "t_calendar_s": null,
+    "t_active_s_approx": 3008.0,
+    "from": 12,
+    "to": 15,
+    "cause": "buy lantern_ward",
+    "improvement": 3,
+    "ratio": "5/4"
+   },
+   {
+    "metric": "wolf_hits",
+    "t_active_s": "990",
+    "t_calendar_s": null,
+    "t_active_s_approx": 990.0,
+    "from": 6,
+    "to": 5,
+    "cause": "level 3",
+    "improvement": 1,
+    "ratio": "6/5"
+   }
+  ],
+  "evaluated": true
+ },
+ "blocked": [],
+ "unlocks": [
+  {
+   "id": "ember_marsh",
+   "t_active_s": "17951/2",
+   "t_calendar_s": null
+  }
+ ],
+ "prestige": [],
+ "fights": {
+  "won": 1669,
+  "lost": 4,
+  "mutual": 0,
+  "per_enemy": {
+   "slime": {
+    "fights": 120,
+    "won": 120,
+    "lost": 0,
+    "mutual": 0,
+    "attempts_to_first_win": 1,
+    "last": {
+     "outcome": "win",
+     "time_s": "3/2",
+     "hits_to_kill": 2,
+     "ttk_isolated_s": "3/2",
+     "hits_to_die": 42,
+     "ttd_isolated_s": "84",
+     "player_hits": 2,
+     "enemy_hits": 0,
+     "at_level": 2
+    }
+   },
+   "wolf": {
+    "fights": 721,
+    "won": 721,
+    "lost": 0,
+    "mutual": 0,
+    "attempts_to_first_win": 1,
+    "last": {
+     "outcome": "win",
+     "time_s": "3",
+     "hits_to_kill": 3,
+     "ttk_isolated_s": "3",
+     "hits_to_die": 23,
+     "ttd_isolated_s": "69/2",
+     "player_hits": 3,
+     "enemy_hits": 1,
+     "at_level": 9
+    }
+   },
+   "crypt_guard": {
+    "fights": 1,
+    "won": 1,
+    "lost": 0,
+    "mutual": 0,
+    "attempts_to_first_win": 1,
+    "last": {
+     "outcome": "win",
+     "time_s": "21",
+     "hits_to_kill": 15,
+     "ttk_isolated_s": "21",
+     "hits_to_die": 12,
+     "ttd_isolated_s": "24",
+     "player_hits": 15,
+     "enemy_hits": 10,
+     "at_level": 4
+    }
+   },
+   "hollow_king": {
+    "fights": 3,
+    "won": 1,
+    "lost": 2,
+    "mutual": 0,
+    "attempts_to_first_win": 3,
+    "last": {
+     "outcome": "win",
+     "time_s": "27",
+     "hits_to_kill": 19,
+     "ttk_isolated_s": "27",
+     "hits_to_die": 14,
+     "ttd_isolated_s": "28",
+     "player_hits": 19,
+     "enemy_hits": 13,
+     "at_level": 9
+    }
+   },
+   "bog_troll": {
+    "fights": 825,
+    "won": 825,
+    "lost": 0,
+    "mutual": 0,
+    "attempts_to_first_win": 1,
+    "last": {
+     "outcome": "win",
+     "time_s": "6",
+     "hits_to_kill": 5,
+     "ttk_isolated_s": "6",
+     "hits_to_die": 38,
+     "ttd_isolated_s": "76",
+     "player_hits": 5,
+     "enemy_hits": 2,
+     "at_level": 14
+    }
+   },
+   "ember_drake": {
+    "fights": 3,
+    "won": 1,
+    "lost": 2,
+    "mutual": 0,
+    "attempts_to_first_win": 3,
+    "last": {
+     "outcome": "win",
+     "time_s": "57",
+     "hits_to_kill": 39,
+     "ttk_isolated_s": "57",
+     "hits_to_die": 24,
+     "ttd_isolated_s": "60",
+     "player_hits": 39,
+     "enemy_hits": 22,
+     "at_level": 15
+    }
+   }
+  },
+  "note": "time_s is the duel's actual deciding death; *_isolated_s are N = ceil(H/d) and t0 + (N-1)*tau for each side alone (TTK, TTD)"
+ },
+ "ledger": {
+  "xp": {
+   "start": "0",
+   "sources": {
+    "reward:slime": "3000",
+    "reward:wolf": "32445",
+    "reward:crypt_guard": "600",
+    "reward:hollow_king": "3000",
+    "reward:bog_troll": "66000",
+    "reward:ember_drake": "20000"
+   },
+   "sinks": {},
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {},
+   "end": "125045",
+   "residual": "0"
+  },
+  "gold": {
+   "start": "0",
+   "sources": {
+    "reward:slime": "240",
+    "reward:wolf": "2884",
+    "reward:crypt_guard": "40",
+    "reward:hollow_king": "250",
+    "reward:bog_troll": "8250",
+    "reward:ember_drake": "1000"
+   },
+   "sinks": {
+    "purchase:iron_sword": "60",
+    "purchase:leather_armor": "150",
+    "purchase:lantern_ward": "300",
+    "purchase:sunsteel_edge": "1200",
+    "purchase:dragonscale": "8000"
+   },
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {},
+   "end": "2954",
+   "residual": "0"
+  }
+ },
+ "ledger_all_runs_residual_zero": true,
+ "precision": {
+  "xp": {
+   "max_reached": "125045",
+   "exceeds_2_53": false,
+   "smallest_unit": "1",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  },
+  "gold": {
+   "max_reached": "12664",
+   "exceeds_2_53": false,
+   "smallest_unit": "1",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  }
+ },
+ "final_state": {
+  "balances": {
+   "xp": "125045",
+   "gold": "2954"
+  },
+  "owned": {},
+  "items": [
+   "crypt_key",
+   "dragonscale",
+   "iron_sword",
+   "lantern_ward",
+   "leather_armor",
+   "sunsteel_edge"
+  ],
+  "unlocked": [
+   "ember_marsh"
+  ],
+  "defeated": [
+   "bog_troll",
+   "crypt_guard",
+   "ember_drake",
+   "hollow_king",
+   "slime",
+   "wolf"
+  ],
+  "completed": [],
+  "level": 15,
+  "prestiges": 0,
+  "lifetime": {
+   "xp": "125045",
+   "gold": "12664"
+  }
+ },
+ "steps": [
+  {
+   "kind": "defeat",
+   "id": "slime",
+   "label": "defeat slime",
+   "t_active_s": "21/2",
+   "t_calendar_s": null,
+   "wait_s": "21/2",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "iron_sword",
+   "label": "buy iron_sword",
+   "t_active_s": "315",
+   "t_calendar_s": null,
+   "wait_s": "609/2",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "level",
+   "id": "level 2",
+   "label": "level 2",
+   "t_active_s": "390",
+   "t_calendar_s": null,
+   "wait_s": "75",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "leather_armor",
+   "label": "buy leather_armor",
+   "t_active_s": "1755/2",
+   "t_calendar_s": null,
+   "wait_s": "975/2",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "level",
+   "id": "level 3",
+   "label": "level 3",
+   "t_active_s": "990",
+   "t_calendar_s": null,
+   "wait_s": "225/2",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "drop",
+   "id": "crypt_key",
+   "label": "found crypt_key",
+   "t_active_s": "1823",
+   "t_calendar_s": null,
+   "wait_s": "29",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "defeat",
+   "id": "crypt_guard",
+   "label": "defeat crypt_guard",
+   "t_active_s": "1823",
+   "t_calendar_s": null,
+   "wait_s": "0",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "level",
+   "id": "level 5",
+   "label": "level 5",
+   "t_active_s": "2735",
+   "t_calendar_s": null,
+   "wait_s": "912",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 7",
+   "label": "level 7",
+   "t_active_s": "5297",
+   "t_calendar_s": null,
+   "wait_s": "2793/2",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 8",
+   "label": "level 8",
+   "t_active_s": "7004",
+   "t_calendar_s": null,
+   "wait_s": "1707",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 9",
+   "label": "level 9",
+   "t_active_s": "17867/2",
+   "t_calendar_s": null,
+   "wait_s": "3859/2",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "defeat",
+   "id": "hollow_king",
+   "label": "defeat hollow_king",
+   "t_active_s": "17951/2",
+   "t_calendar_s": null,
+   "wait_s": "42",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "sunsteel_edge",
+   "label": "buy sunsteel_edge",
+   "t_active_s": "17951/2",
+   "t_calendar_s": null,
+   "wait_s": "0",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "level",
+   "id": "level 10",
+   "label": "level 10",
+   "t_active_s": "10072",
+   "t_calendar_s": null,
+   "wait_s": "1073",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 11",
+   "label": "level 11",
+   "t_active_s": "23769/2",
+   "t_calendar_s": null,
+   "wait_s": "3625/2",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 12",
+   "label": "level 12",
+   "t_active_s": "27331/2",
+   "t_calendar_s": null,
+   "wait_s": "1781",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 13",
+   "label": "level 13",
+   "t_active_s": "31231/2",
+   "t_calendar_s": null,
+   "wait_s": "1950",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "dragonscale",
+   "label": "buy dragonscale",
+   "t_active_s": "34949/2",
+   "t_calendar_s": null,
+   "wait_s": "1859",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "level",
+   "id": "level 15",
+   "label": "level 15",
+   "t_active_s": "20222",
+   "t_calendar_s": null,
+   "wait_s": "4765/2",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "defeat",
+   "id": "ember_drake",
+   "label": "defeat ember_drake",
+   "t_active_s": "20299",
+   "t_calendar_s": null,
+   "wait_s": "77",
+   "start_calendar_s": null
+  }
+ ],
+ "curves": [
+  {
+   "id": "xp:per_level",
+   "title": "XP to next level",
+   "x": "level",
+   "y": "xp from level l to l+1",
+   "points": [
+    [
+     1,
+     "1000"
+    ],
+    [
+     2,
+     "2000"
+    ],
+    [
+     3,
+     "3000"
+    ],
+    [
+     4,
+     "4000"
+    ],
+    [
+     5,
+     "5000"
+    ],
+    [
+     6,
+     "6000"
+    ],
+    [
+     7,
+     "7000"
+    ],
+    [
+     8,
+     "8000"
+    ],
+    [
+     9,
+     "9000"
+    ],
+    [
+     10,
+     "10000"
+    ],
+    [
+     11,
+     "11000"
+    ],
+    [
+     12,
+     "12000"
+    ],
+    [
+     13,
+     "13000"
+    ],
+    [
+     14,
+     "14000"
+    ]
+   ]
+  },
+  {
+   "id": "xp:cumulative",
+   "title": "Cumulative XP at level start",
+   "x": "level",
+   "y": "cumulative xp",
+   "points": [
+    [
+     1,
+     "0"
+    ],
+    [
+     2,
+     "1000"
+    ],
+    [
+     3,
+     "3000"
+    ],
+    [
+     4,
+     "6000"
+    ],
+    [
+     5,
+     "10000"
+    ],
+    [
+     6,
+     "15000"
+    ],
+    [
+     7,
+     "21000"
+    ],
+    [
+     8,
+     "28000"
+    ],
+    [
+     9,
+     "36000"
+    ],
+    [
+     10,
+     "45000"
+    ],
+    [
+     11,
+     "55000"
+    ],
+    [
+     12,
+     "66000"
+    ],
+    [
+     13,
+     "78000"
+    ],
+    [
+     14,
+     "91000"
+    ],
+    [
+     15,
+     "105000"
+    ]
+   ]
+  },
+  {
+   "id": "hits_to_kill:per_level",
+   "title": "Hits to kill per level (base stats, no gear)",
+   "x": "player level",
+   "y": "hits",
+   "series": [
+    {
+     "name": "wolf",
+     "points": [
+      [
+       1,
+       10
+      ],
+      [
+       2,
+       8
+      ],
+      [
+       3,
+       7
+      ],
+      [
+       4,
+       6
+      ],
+      [
+       5,
+       6
+      ],
+      [
+       6,
+       5
+      ],
+      [
+       7,
+       5
+      ],
+      [
+       8,
+       4
+      ],
+      [
+       9,
+       4
+      ],
+      [
+       10,
+       4
+      ],
+      [
+       11,
+       4
+      ],
+      [
+       12,
+       3
+      ],
+      [
+       13,
+       3
+      ],
+      [
+       14,
+       3
+      ],
+      [
+       15,
+       3
+      ]
+     ]
+    },
+    {
+     "name": "bog_troll",
+     "points": [
+      [
+       1,
+       24
+      ],
+      [
+       2,
+       20
+      ],
+      [
+       3,
+       18
+      ],
+      [
+       4,
+       15
+      ],
+      [
+       5,
+       14
+      ],
+      [
+       6,
+       12
+      ],
+      [
+       7,
+       11
+      ],
+      [
+       8,
+       10
+      ],
+      [
+       9,
+       10
+      ],
+      [
+       10,
+       9
+      ],
+      [
+       11,
+       8
+      ],
+      [
+       12,
+       8
+      ],
+      [
+       13,
+       8
+      ],
+      [
+       14,
+       7
+      ],
+      [
+       15,
+       7
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "trace": null
+}

@@ -1,0 +1,16 @@
+{
+ "meta": {
+  "revision": "fixture-m05-chain-r1",
+  "title": "M05 generator chain run as discrete 1 s ticks (the published model is continuous: C(t) = t^2/2)",
+  "source_note": "M05 2016-10-28: one tier-2 generator makes tier-1 generators at 1/s; each tier-1 makes currency at 1/s. Test fixture only.",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"],
+  "time": {"mode": "discrete", "tick_s": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "new_units_produce_in_creation_tick": false}
+ },
+ "currencies": {"coins": {"start": {"v": 0, "src": "published:M05"}}},
+ "producers": {
+  "gen2": {"start_owned": {"v": 1, "src": "published:M05"}, "produces": {"producer:gen1": {"v": 1, "src": "published:M05"}}},
+  "gen1": {"start_owned": {"v": 0, "src": "published:M05"}, "produces": {"currency:coins": {"v": 1, "src": "published:M05"}}}
+ },
+ "goals": [],
+ "run": {"horizon_active_s": {"v": 5, "src": "published:M05"}}
+}

@@ -1,0 +1,35 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "contrast",
+ "input": null,
+ "params": {
+  "pairs": [
+   "e9fbff,2d2271"
+  ],
+  "rule": "wcag-nontext",
+  "min_ratio": null,
+  "tolerance_source": null,
+  "rounding": "none (a failing ratio is never rounded up, A04)"
+ },
+ "scope": "UI text and UI components only; not a rule for world art, props or characters (AP:559).",
+ "measurements": {
+  "pairs": [
+   {
+    "fg": "#E9FBFF",
+    "bg": "#2D2271",
+    "l_fg": 0.9353799857472646,
+    "l_bg": 0.028941977232877978,
+    "ratio": 12.482332217755381,
+    "pass": true
+   }
+  ]
+ },
+ "images": {},
+ "verdict": "pass",
+ "rule": {
+  "name": "wcag-nontext",
+  "min_ratio": 3.0,
+  "source": "WCAG 2.x SC 1.4.11 Non-text Contrast, UI components and graphics (A05)"
+ }
+}

@@ -1,0 +1,23 @@
+{
+  "_about": "Trend tool settings. Every value is a PROPOSAL from the owner research paper (RP:<line>) or a lead choice, not a platform rule and not backtested. Change values here, never in code.",
+  "thresholds": {
+    "breakout_g7_min": {"value": 0.5, "status": "PROPOSAL", "source": "RP:97 (+50% non-overlapping g7)"},
+    "breakout_added_ccu_min": {"value": 100, "status": "PROPOSAL", "source": "RP:97 (at least +100 average CCU)"},
+    "breakout_consecutive_days": {"value": 3, "status": "PROPOSAL", "source": "RP:97 (three consecutive matched days above baseline)"},
+    "coverage_min": {"value": 0.9, "status": "PROPOSAL", "source": "RP:93 (suppress promotion under 90% of intended minutes)"},
+    "max_gap_minutes": {"value": 60, "status": "PROPOSAL", "source": "RP:93 (suppress promotion with a gap over 60 minutes)"},
+    "emerging_lead_days": {"value": 14, "status": "PROPOSAL", "source": "RP:97 (under 14 complete days of our history: emerging lead (n days), no g7)"},
+    "fade_negative_weeks": {"value": 2, "status": "PROPOSAL", "source": "RP:99 (two negative non-overlapping weekly changes plus a lower matched trough)"},
+    "week_boundary": {"value": "complete UTC days", "status": "PROPOSAL", "source": "lead choice J004-T05; paper leaves 'complete days' undefined (I8)"}
+  },
+  "collector": {
+    "min_interval_s": {"value": 2.0, "status": "PROPOSAL", "source": "studio choice: low request rate; no verified public limit (RP:54)"},
+    "batch_size": {"value": 10, "status": "PROPOSAL", "source": "studio choice: keep small (RP:56); code caps it at 50, the documented maximum (sources.json roblox.games)"},
+    "max_retries": {"value": 4, "status": "PROPOSAL", "source": "bounded retries (RP:56)"},
+    "backoff_base_s": {"value": 2.0, "status": "PROPOSAL", "source": "exponential backoff with jitter (RP:56)"},
+    "max_retry_after_s": {"value": 600, "status": "PROPOSAL", "source": "stop instead of waiting longer than this for Retry-After"},
+    "timeout_s": {"value": 20, "status": "PROPOSAL", "source": "studio choice"},
+    "apple_max_retries": {"value": 0, "status": "PROPOSAL", "source": "fact-check-outside.md §3 Apple: a 504 waits for the next day's run, no retry loops"},
+    "youtube_search_daily_budget": {"value": 10, "status": "PROPOSAL", "source": "studio choice under the 100 search.list/day quota (fact-check-outside.md §3); counted over any trailing 24 hours"}
+  }
+}

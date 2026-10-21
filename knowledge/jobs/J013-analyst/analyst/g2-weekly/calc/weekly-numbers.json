@@ -1,0 +1,372 @@
+{
+ "B_before_video_and_v112": {
+  "dau_player_days_total": 21628,
+  "dau_player_days_new": 4344,
+  "dau_player_days_returning": 17283,
+  "visits": 37816,
+  "playtime_min_per_dau_range": [
+   30.57,
+   32.44
+  ],
+  "session_len_min_range": [
+   13.78,
+   14.62
+  ],
+  "revenue_days": [
+   "2026-09-22",
+   "2026-09-28"
+  ],
+  "daily_revenue_sum_final_days": 79442,
+  "paying_users_range_final_days": [
+   93,
+   99
+  ],
+  "d1_cohorts": [
+   "2026-09-22",
+   "2026-09-28"
+  ],
+  "d1_range": [
+   0.211,
+   0.2173
+  ],
+  "d1_new_players_cohort_proxy_sum": 4344,
+  "d1_est_returned": 931,
+  "d1_weighted_rate_est": 0.2143,
+  "d7_cohorts": [
+   "2026-09-22",
+   "2026-09-28"
+  ],
+  "d7_range": [
+   0.0886,
+   0.0913
+  ],
+  "d7_new_players_proxy_sum": 4344,
+  "d7_est_returned": 391,
+  "d7_weighted_rate_est": 0.09
+ },
+ "P_prior_week": {
+  "dau_player_days_total": 27657,
+  "dau_player_days_new": 6766,
+  "dau_player_days_returning": 20891,
+  "visits": 42637,
+  "dau_pd_Friends": 4786,
+  "dau_pd_HomeRecommendations": 14177,
+  "dau_pd_Other": 6088,
+  "dau_pd_Search": 2610,
+  "dau_pd_Phone": 16570,
+  "dau_pd_Computer": 8325,
+  "dau_pd_Console": 735,
+  "dau_pd_Tablet": 2031,
+  "client_crash_count": 472,
+  "oom_exits": 192,
+  "playtime_min_per_dau_range": [
+   26.28,
+   28.79
+  ],
+  "session_len_min_range": [
+   11.48,
+   12.73
+  ],
+  "revenue_days": [
+   "2026-10-06",
+   "2026-10-12"
+  ],
+  "daily_revenue_sum_final_days": 82291,
+  "paying_users_range_final_days": [
+   97,
+   103
+  ],
+  "d1_cohorts": [
+   "2026-10-06",
+   "2026-10-12"
+  ],
+  "d1_range": [
+   0.1521,
+   0.1656
+  ],
+  "d1_new_players_cohort_proxy_sum": 6766,
+  "d1_est_returned": 1063,
+  "d1_weighted_rate_est": 0.1571,
+  "d7_cohorts": [
+   "2026-10-06",
+   "2026-10-12"
+  ],
+  "d7_range": [
+   0.0639,
+   0.0695
+  ],
+  "d7_new_players_proxy_sum": 6766,
+  "d7_est_returned": 447,
+  "d7_weighted_rate_est": 0.0661
+ },
+ "T_target_week": {
+  "dau_player_days_total": 25233,
+  "dau_player_days_new": 5693,
+  "dau_player_days_returning": 19541,
+  "visits": 42631,
+  "dau_pd_Friends": 4515,
+  "dau_pd_HomeRecommendations": 13436,
+  "dau_pd_Other": 4809,
+  "dau_pd_Search": 2475,
+  "dau_pd_Phone": 14871,
+  "dau_pd_Computer": 7837,
+  "dau_pd_Console": 694,
+  "dau_pd_Tablet": 1827,
+  "client_crash_count": 629,
+  "oom_exits": 280,
+  "playtime_min_per_dau_range": [
+   26.06,
+   27.92
+  ],
+  "session_len_min_range": [
+   11.37,
+   12.22
+  ],
+  "revenue_days": [
+   "2026-10-13",
+   "2026-10-18"
+  ],
+  "daily_revenue_sum_final_days": 70304,
+  "paying_users_range_final_days": [
+   97,
+   103
+  ],
+  "d1_cohorts": [
+   "2026-10-13",
+   "2026-10-18"
+  ],
+  "d1_range": [
+   0.1565,
+   0.1669
+  ],
+  "d1_new_players_cohort_proxy_sum": 4941,
+  "d1_est_returned": 801,
+  "d1_weighted_rate_est": 0.1621
+ },
+ "phases": {
+  "pre_both_09-25..10-03": {
+   "Phone": {
+    "d1_range": [
+     0.2011,
+     0.2084
+    ],
+    "fps_p10_range": [
+     30.4,
+     31.5
+    ],
+    "crash_rate_range": [
+     0.0072,
+     0.0087
+    ]
+   },
+   "Computer": {
+    "d1_range": [
+     0.2306,
+     0.2389
+    ],
+    "fps_p10_range": [
+     51.0,
+     52.9
+    ],
+    "crash_rate_range": [
+     0.0036,
+     0.0043
+    ]
+   },
+   "Console": {
+    "d1_range": [
+     0.1766,
+     0.183
+    ],
+    "fps_p10_range": [
+     47.1,
+     48.8
+    ],
+    "crash_rate_range": [
+     0.0054,
+     0.0065
+    ]
+   },
+   "Tablet": {
+    "d1_range": [
+     0.1913,
+     0.1982
+    ],
+    "fps_p10_range": [
+     32.4,
+     33.5
+    ],
+    "crash_rate_range": [
+     0.0081,
+     0.0097
+    ]
+   },
+   "crash_count_per_day_range": [
+    34,
+    41
+   ],
+   "oom_per_day_range": [
+    10,
+    12
+   ],
+   "mem_p90_range": [
+    1423,
+    1474
+   ]
+  },
+  "video_only_v111_10-04..10-08": {
+   "Phone": {
+    "d1_range": [
+     0.201,
+     0.2091
+    ],
+    "fps_p10_range": [
+     30.4,
+     31.6
+    ],
+    "crash_rate_range": [
+     0.0072,
+     0.0088
+    ]
+   },
+   "Computer": {
+    "d1_range": [
+     0.2304,
+     0.2397
+    ],
+    "fps_p10_range": [
+     51.0,
+     53.0
+    ],
+    "crash_rate_range": [
+     0.0036,
+     0.0044
+    ]
+   },
+   "Console": {
+    "d1_range": [
+     0.1765,
+     0.1836
+    ],
+    "fps_p10_range": [
+     47.1,
+     49.0
+    ],
+    "crash_rate_range": [
+     0.0054,
+     0.0066
+    ]
+   },
+   "Tablet": {
+    "d1_range": [
+     0.1912,
+     0.1989
+    ],
+    "fps_p10_range": [
+     32.4,
+     33.7
+    ],
+    "crash_rate_range": [
+     0.0081,
+     0.0099
+    ]
+   },
+   "crash_count_per_day_range": [
+    34,
+    42
+   ],
+   "oom_per_day_range": [
+    10,
+    12
+   ],
+   "mem_p90_range": [
+    1422,
+    1479
+   ]
+  },
+  "video_v112_10-13..10-18": {
+   "Phone": {
+    "d1_range": [
+     0.1617,
+     0.1682
+    ],
+    "fps_p10_range": [
+     21.4,
+     22.6
+    ],
+    "crash_rate_range": [
+     0.0182,
+     0.0198
+    ]
+   },
+   "Computer": {
+    "d1_range": [
+     0.2303,
+     0.2396
+    ],
+    "fps_p10_range": [
+     51.0,
+     53.0
+    ],
+    "crash_rate_range": [
+     0.0036,
+     0.0044
+    ]
+   },
+   "Console": {
+    "d1_range": [
+     0.1764,
+     0.1835
+    ],
+    "fps_p10_range": [
+     47.0,
+     48.9
+    ],
+    "crash_rate_range": [
+     0.0054,
+     0.0066
+    ]
+   },
+   "Tablet": {
+    "d1_range": [
+     0.1764,
+     0.1835
+    ],
+    "fps_p10_range": [
+     28.3,
+     29.6
+    ],
+    "crash_rate_range": [
+     0.0081,
+     0.0099
+    ]
+   },
+   "crash_count_per_day_range": [
+    86,
+    94
+   ],
+   "oom_per_day_range": [
+    39,
+    41
+   ],
+   "mem_p90_range": [
+    1571,
+    1628
+   ]
+  }
+ },
+ "video_day": {
+  "new_players_10-03": 653,
+  "new_players_10-04": 1188,
+  "other_dau_10-03": 459,
+  "other_dau_10-04": 993,
+  "d1_total_10-03": 0.2111,
+  "d1_total_10-04": 0.1572,
+  "d1_other_10-03": 0.1668,
+  "d1_other_10-04": 0.1003,
+  "d1_other_10-12..10-18_range": [
+   0.107,
+   0.1154
+  ]
+ }
+}

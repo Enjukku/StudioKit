@@ -1,0 +1,35 @@
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Paths relative to `knowledge/external/roblox-creator-docs/` (Y = `_api-reference/classes/`, E = `_api-reference/enums/`). Capabilities from the owner paper §5 (P201-P225), fact-checked (`knowledge/reference/engineering/paper/factcheck-engine.md`); "first game" cells point into `knowledge/reference/engineering/rework/`.
+
+# Engine first: which built-in does the job
+
+Read the docs page before you design. Custom work in the right column is normal game work; anything beyond it needs the EC-03 answer (built-in evaluated, requirement it failed with evidence, how the replacement is measured).
+
+| Need | Built-in | Docs | Fair custom work | First game |
+| --- | --- | --- | --- | --- |
+| Save player progress | DataStoreService (shared across the game's places) | cloud-services/data-stores/index.md | schema, migration, session lock, save timing (`data-saving`) | — |
+| Fast shared temporary state across servers | MemoryStoreService (queues, sorted maps, hash maps); not durable, calls can fail | cloud-services/memory-stores/index.md; cloud-services/data-stores-vs-memory-stores.md | leases, reconciliation | — |
+| Notify other servers | MessagingService: best effort, not guaranteed | cloud-services/cross-server-messaging.md | rebuild important state from stored data after a missed message | — |
+| Client ↔ server messages | RemoteEvent (reliable, ordered per connection and direction), RemoteFunction (yields), UnreliableRemoteEvent (lossy, unordered, drops payloads over 1,000 bytes) | scripting/events/remote.md; Y/UnreliableRemoteEvent.yaml:55 | a small domain protocol; sequence or freshness for unreliable data; never durable commits over unreliable | — |
+| Physical motion, falling, colliding | assemblies, constraints, mover constraints (LinearVelocity, AlignPosition, ...) | physics/assemblies.md; physics/mover-constraints.md | custom kinematics only for intentionally non-physical motion or a measured need | A07: custom analytic motion rejected engine bodies on a desk estimate; play-test reversed it within hours |
+| Things at rest | engine sleep; any physics property write (Anchored, CanCollide, velocity, ...) wakes the assembly | physics/sleep-system.md (additional wake situations) | gameplay rules about when a piece is "done" | records SR1: own anchor-to-rest code; 37-69 % of rests undone within 0.1 s (hypothesis that it fights sleep, never A/B-tested) |
+| Physics step rate | `Workspace.PhysicsSteppingMethod`: Default resolves to Adaptive ("optimized for performance"); Fixed runs 240 Hz ("best for optimal stability and simulation accuracy") | E/PhysicsSteppingMethod.yaml; physics/adaptive-timestepping.md; physics/index.md:63 | set it explicitly in the place and record why | A03: light bodies launched in 26 of 144 test pairs under Adaptive, 0 of 144 under Fixed (measured, not a docs claim) |
+| Who simulates a part | network ownership; `SetNetworkOwner(nil)` keeps the server in charge | physics/network-ownership.md | ownership policy per gameplay object | E7: ownership drifted after a Part joined a free assembly |
+| Responsive, cheat-resistant movement or combat | Server Authority (prediction, rollback, resimulation), full release 2026-07-09; Next Generation Replication is a prerequisite: check its status | projects/server-authority/index.md | deterministic game rules inside its model; evaluate in the prototype | — |
+| Animation blends and transitions | Animator; Animation Graphs (full release 2026-07-15; state machines and Luau expressions still beta) | animation/graph-editor.md | gameplay parameters only | — |
+| Navigation | PathfindingService; `Path.Blocked` for re-planning, also when streaming changes the world | characters/pathfinding.md | goals, steering, scheduling | — |
+| UI layout | UIListLayout flex, AutomaticSize, size and aspect constraints | ui/list-flex-layouts.md; ui/size-modifiers.md | state and composition; custom per-frame geometry only for what layouts cannot express | — |
+| Large worlds | instance streaming (+ opt-in predictive streaming) | workspace/streaming/index.md | streaming-safe lifecycles, loading UX | — |
+| Product analytics | AnalyticsService (economy, funnel, progression, custom events) | production/analytics/index.md | a small event vocabulary (`analytics` skill) | — |
+| Join a public server | built-in matchmaking scoring with custom attributes and signals | matchmaking/index.md; matchmaking/attributes-and-signals.md | party, team or round formation the scoring cannot do | — |
+| Move players between places | `TeleportService:TeleportAsync` (server); not testable in a Studio play-test | projects/teleport.md | retry, recovery, transition UX; test in a published experience | — |
+| Look of lighting | Lighting and its children authored in the place: Atmosphere, Sky, BloomEffect, ColorCorrectionEffect, SunRaysEffect, DepthOfFieldEffect | environment/lighting.md; environment/post-processing-effects.md; environment/atmosphere.md | presets as data that set values on existing children | B08: effects created in code with an invented class name `Bloom`; owner "Why are we like inventing our own stuff?" |
+| Shadow cost | the engine lowers shadow quality with graphics quality and draws no shadows below level 4; `CastShadow` "is not designed for performance enhancement" but may help in complex scenes, with possible artifacts; the optimisation page says to turn it off on small parts where shadows are hard to see and on moving parts when possible | Y/BasePart.yaml:653-666; performance-optimization/improve.md:418-434 | a per-part data value (as `performance` F-03 sets for new small, moving or effect parts); on existing content, change it only with a capture showing the shadow cost and a look check; never a shadow system | B09: a shadow system built for 0.2-0.8 ms, then deleted |
+| Spatial queries | `GetPartBoundsInBox`, `GetPartBoundsInRadius`, `Raycast` with OverlapParams / RaycastParams; set the CollisionGroup on the params | workspace/raycasting.md; workspace/collisions.md | filtering by game rules | B17: a Lua box test gave 158 wrong verdicts on round shapes; E3: default-group queries missed parts in another group |
+| Collision filtering | collision groups (per-world on WorldRoot) | workspace/collisions.md | group plan | — |
+| Tweened values | TweenService; a newer tween on the same property cancels the earlier one | Y/Tween.yaml:19-22 | sequencing that gameplay needs; never let a tween decide gameplay (`architecture` R-04) | — |
+| Player input | Input Action System (`InputAction`), UserInputService | input/input-action-system.md | action map per game | — |
+| Text players type | TextService filtering | ui/text-filtering.md | `platform-policy` rules | — |
+| Purchases | MarketplaceService `ProcessReceipt` | see `data-saving` and `platform-policy` | idempotent grant after a committed save | — |
+| Post-launch speed | Creator Hub performance dashboards | see `performance` F-12 | — | — |
+
+Release dates and beta status change: check `knowledge/reference/roblox/whats-new.md` and the page's banner before you rely on a row.

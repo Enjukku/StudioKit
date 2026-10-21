@@ -1,0 +1,1 @@
+{"_fixture": "TEST: a later pull of the same buckets; 2026-10-19 revised from Projected 1200 to Valid 1234", "path": "v1/universes/1234567890/operations/metrics/testop2", "done": true, "metadata": {"createdTime": "2026-10-22T00:00:00Z"}, "response": {"values": [{"breakdowns": [], "dataPoints": [{"time": "2026-10-19T00:00:00Z", "value": 1234, "status": "Valid"}]}]}}

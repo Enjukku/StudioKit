@@ -1,0 +1,2 @@
+- [Feedback reading craft](craft-feedback-reading.md) — split counts at build times; check prompt exposure; "more rewards" may be a hidden goal
+- [Event scheduling craft](craft-event-scheduling.md) — ship dormant earlier; free lane only; avoid incident-touching steps

@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\egg-shop\\screens\\01-inspect-main-1920.png",
+  "sha256": "d71998153972f3c0af6eca11d39fb8d75025ea91abf1cce23d85a2a57a3d158a",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-buy_meadow.png",
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "target_px": [
+   564,
+   318
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   564,
+   318
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 564,
+   "h": 317
+  },
+  "scale": 0.29375,
+  "mask_source": "mask-image",
+  "value": {
+   "whole": {
+    "n_px": 178788,
+    "mean": 0.4541336813355835,
+    "p5": 0.014200310496514695,
+    "p25": 0.13894550994214655,
+    "p50": 0.34624525931295913,
+    "p75": 0.7736260067886522,
+    "p95": 1.0
+   },
+   "subject": {
+    "n_px": 3528,
+    "mean": 0.49013965708809054,
+    "p5": 0.0,
+    "p25": 0.37020592785113626,
+    "p50": 0.5243406038853862,
+    "p75": 0.6241839942394871,
+    "p95": 0.9442322249164371
+   },
+   "ring": {
+    "n_px": 520,
+    "mean": 0.4841264197331142,
+    "p5": 0.0,
+    "p25": 0.15373798331216507,
+    "p50": 0.4999584327368099,
+    "p75": 0.7993001602099055,
+    "p95": 1.0
+   },
+   "subject_ring_ratio": 1.0443345709370089
+  },
+  "silhouette": {
+   "area_px": 3528,
+   "area_frac": 0.019670814933761542,
+   "bbox_px": {
+    "x0": 226,
+    "y0": 249,
+    "x1": 310,
+    "y1": 291,
+    "w": 84,
+    "h": 42
+   },
+   "bbox_frac": {
+    "x0": 0.40070921985815605,
+    "y0": 0.7830188679245284,
+    "w": 0.14893617021276595,
+    "h": 0.1320754716981132
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-inspect-main-1920.thumb564x318.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-inspect-main-1920.thumb564x318-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

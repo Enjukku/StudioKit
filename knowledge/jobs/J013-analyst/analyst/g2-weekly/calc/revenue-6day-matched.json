@@ -1,0 +1,38 @@
+{
+ "B": {
+  "days": [
+   "2026-09-22",
+   "2026-09-27"
+  ],
+  "revenue_sum": 67352,
+  "dau_player_days": 18534,
+  "payer_days": 573,
+  "revenue_per_player_day": 3.634,
+  "payer_days_share_of_player_days": 0.0309,
+  "revenue_per_payer_day": 117.5
+ },
+ "P": {
+  "days": [
+   "2026-10-06",
+   "2026-10-11"
+  ],
+  "revenue_sum": 69793,
+  "dau_player_days": 23616,
+  "payer_days": 597,
+  "revenue_per_player_day": 2.955,
+  "payer_days_share_of_player_days": 0.0253,
+  "revenue_per_payer_day": 116.9
+ },
+ "T": {
+  "days": [
+   "2026-10-13",
+   "2026-10-18"
+  ],
+  "revenue_sum": 70304,
+  "dau_player_days": 22005,
+  "payer_days": 598,
+  "revenue_per_player_day": 3.195,
+  "payer_days_share_of_player_days": 0.0272,
+  "revenue_per_payer_day": 117.6
+ }
+}

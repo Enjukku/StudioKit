@@ -1,0 +1,76 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "value",
+ "input": {
+  "path": "content\\ui\\egg-shop\\screens\\01-inspect-main-1920-v2.png",
+  "sha256": "d28020b0c0d0d5881e399d5d5c686c6db3d652b0090013dd559ca91d00f7fd7f",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-card_meadow_face.png",
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "ring_px": 4,
+  "ring_metric": "chessboard dilation",
+  "luminance": "WCAG 2.x relative luminance (FM1-FM3, switch 0.04045)",
+  "percentiles": [
+   5,
+   25,
+   50,
+   75,
+   95
+  ],
+  "min_ratio": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "whole": {
+   "n_px": 2073600,
+   "mean": 0.4491614132587755,
+   "p5": 0.0,
+   "p25": 0.13319325613877625,
+   "p50": 0.35023174522767714,
+   "p75": 0.828637371855869,
+   "p95": 1.0
+  },
+  "subject": {
+   "n_px": 65505,
+   "mean": 0.5057048659806349,
+   "p5": 0.3273005558665335,
+   "p25": 0.42468348808336037,
+   "p50": 0.5055396558566849,
+   "p75": 0.5696531985897765,
+   "p95": 0.7414948579262791
+  },
+  "ring": {
+   "n_px": 17696,
+   "mean": 0.5454038110605247,
+   "p5": 0.0,
+   "p25": 0.011607594334441123,
+   "p50": 0.8256372219260139,
+   "p75": 0.9056452280248203,
+   "p95": 1.0
+  },
+  "subject_ring_ratio": 1.5761921092306432
+ },
+ "images": {
+  "luminance": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-inspect-main-1920-v2.luminance.png"
+ },
+ "verdict": "measured"
+}

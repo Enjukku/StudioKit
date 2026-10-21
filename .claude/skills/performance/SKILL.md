@@ -17,6 +17,7 @@ Measurement rounds cost the owner time and usage (`rules/owner-profile.md`): run
 | You need | Open |
 | --- | --- |
 | Targets, tool steps, profiler scopes, dashboards | `references/measure.md` |
+| The measure-change-measure loop: recipe, budget first, hygiene, A/B, phones | `references/measure-loop.md` |
 | Starting budgets and a test method when the game has none | `references/budgets.md` (owner paper proposals) |
 | The fix for a known bottleneck (scripts, render, physics, memory, network, streaming, UI, sound) | `references/fixes.md` |
 | Driving Studio through MCP for a capture | `studio-mcp` skill (exclusive Studio, no log scans during a capture) |

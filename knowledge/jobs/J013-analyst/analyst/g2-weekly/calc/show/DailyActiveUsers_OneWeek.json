@@ -1,0 +1,81 @@
+{
+  "metric": "DailyActiveUsers",
+  "granularity": "OneWeek",
+  "points": [
+    {
+      "bucket_time_utc": "2026-09-09T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 16338,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-16T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 16347,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-23T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 16351,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 20088,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 22158,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneWeek",
+      "series": [],
+      "filter": [],
+      "value": 19575,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    }
+  ],
+  "not_final": 0,
+  "revised_buckets": 0,
+  "note": "Daily values are distinct users per day; never sum them into unique players. OneWeek/OneMonth buckets are distinct users over the bucket."
+}

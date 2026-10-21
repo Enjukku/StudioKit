@@ -1,0 +1,81 @@
+{
+ "tool": "look_check",
+ "version": "1.1.0",
+ "check": "value",
+ "input": {
+  "path": "content\\art\\refs\\concept\\dragonegg-a-nest.png",
+  "sha256": "0cd0031feffa6f808aa835c2eb41d6913f979bfccceffc6c39c95942007b0ed9",
+  "size_px": [
+   1536,
+   1024
+  ],
+  "mode": "RGB"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-a/diag/dragonegg-a-nest-p90-eggmask.png",
+  "key_order": "--mask | --box > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "boxes": null,
+  "box_key": false,
+  "box_coords": "pixels [x0, y0, x1, y1), x1/y1 exclusive",
+  "exclude": null,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "ring_px": 8,
+  "ring_metric": "chessboard dilation",
+  "luminance": "WCAG 2.x relative luminance (FM1-FM3, switch 0.04045)",
+  "percentiles": [
+   5,
+   25,
+   50,
+   75,
+   95
+  ],
+  "min_ratio": null,
+  "tolerance_source": null,
+  "compare_subjects": false
+ },
+ "measurements": {
+  "whole": {
+   "n_px": 1572864,
+   "mean": 0.13124310581691342,
+   "p5": 0.006662318040873371,
+   "p25": 0.024587054677675288,
+   "p50": 0.054581169653906074,
+   "p75": 0.163030315211703,
+   "p95": 0.5153539164559042
+  },
+  "subject": {
+   "n_px": 110495,
+   "mean": 0.5042918968589897,
+   "p5": 0.2804575835563864,
+   "p25": 0.36889230036728765,
+   "p50": 0.4813921269900611,
+   "p75": 0.6106035334345433,
+   "p95": 0.8353035805217827
+  },
+  "ring": {
+   "n_px": 22079,
+   "mean": 0.19516789390805755,
+   "p5": 0.031944030707918215,
+   "p25": 0.08501312805137498,
+   "p50": 0.17282237075429052,
+   "p75": 0.3035886764136607,
+   "p95": 0.3808800138160784
+  },
+  "subject_ring_ratio": 2.384823952780015
+ },
+ "images": {
+  "luminance": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-a-nest.luminance.png"
+ },
+ "verdict": "measured"
+}

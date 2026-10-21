@@ -1,0 +1,1 @@
+{"_fixture": "TEST: unexpected server error (docs errors table; message synthetic)", "done": true, "error": {"code": 2000, "message": "TEST unexpected error"}}

@@ -1,0 +1,113 @@
+{
+ "meta": {
+  "revision": "example-incremental-r2-optC",
+  "title": "Bloom Valley option C: a Moon Garden opens at the 10th Replant - for learning, not tuning",
+  "option_note": "Differs from ../model.json (r2) by one new producer (moon_garden, gated by 10 Replants) and its entry in prestige.reset.",
+  "source_note": "Teaching model. The pot uses the published M01 inputs (2016-10-04, as re-indexed in the owner's research paper); every other number is an EXAMPLE ASSUMPTION. Two modelling choices differ from M01's simplified model: 1-second payout ticks and prices rounded up to whole petals. Never copy these numbers into a game.",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"],
+  "time": {"mode": "discrete", "tick_s": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "the game pays petals once per second"},
+           "new_units_produce_in_creation_tick": false}
+ },
+ "currencies": {
+  "petals": {"start": {"v": 0, "src": "published:M01", "note": "empty wallet at the start"},
+             "smallest_unit": {"v": "1/100", "src": "EXAMPLE ASSUMPTION"}},
+  "seeds": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION", "note": "golden seeds: the Replant (rebirth) currency"},
+            "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "producers": {
+  "pot": {
+   "start_owned": {"v": 1, "src": "published:M01", "note": "the first pot is free"},
+   "cost": {"currency": "petals",
+            "curve": {"kind": "exponential", "a": {"v": 4, "src": "published:M01"}, "r": {"v": "107/100", "src": "published:M01"}},
+            "index_offset": {"v": -1, "src": "published:M01", "note": "price with k owned = 4 x 1.07^(k-1): the second pot costs 4"},
+            "rounding": "ceil"},
+   "produces": {"currency:petals": {"v": "167/100", "src": "published:M01"}},
+   "milestones": [{"owned": {"v": 25, "src": "published:M01"}, "mult": {"v": 2, "src": "published:M01"}},
+                  {"owned": {"v": 50, "src": "published:M01"}, "mult": {"v": 2, "src": "published:M01"}}]
+  },
+  "greenhouse": {
+   "start_owned": {"v": 0, "src": "EXAMPLE ASSUMPTION"},
+   "cost": {"currency": "petals",
+            "curve": {"kind": "exponential", "a": {"v": 300, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": "11/10", "src": "EXAMPLE ASSUMPTION"}},
+            "rounding": "ceil"},
+   "produces": {"currency:petals": {"v": 6, "src": "EXAMPLE ASSUMPTION"}},
+   "milestones": [{"owned": {"v": 25, "src": "EXAMPLE ASSUMPTION"}, "mult": {"v": 2, "src": "EXAMPLE ASSUMPTION"}},
+                  {"owned": {"v": 50, "src": "EXAMPLE ASSUMPTION"}, "mult": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]
+  },
+  "sky_orchard": {
+   "start_owned": {"v": 0, "src": "EXAMPLE ASSUMPTION"},
+   "requires": {"item": "bridge_pass"},
+   "cost": {"currency": "petals",
+            "curve": {"kind": "exponential", "a": {"v": 50000, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": "6/5", "src": "EXAMPLE ASSUMPTION"}},
+            "rounding": "ceil"},
+   "produces": {"currency:petals": {"v": 150, "src": "EXAMPLE ASSUMPTION"}}
+  },
+  "moon_garden": {
+   "start_owned": {"v": 0, "src": "EXAMPLE ASSUMPTION"},
+   "requires": {"prestiges": {"v": 10, "src": "EXAMPLE ASSUMPTION", "note": "option C: a second Replant-gated area, opens at the 10th Replant"}},
+   "cost": {"currency": "petals",
+            "curve": {"kind": "exponential", "a": {"v": 1000000, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": "5/4", "src": "EXAMPLE ASSUMPTION"}},
+            "rounding": "ceil"},
+   "produces": {"currency:petals": {"v": 2500, "src": "EXAMPLE ASSUMPTION"}}
+  }
+ },
+ "items": {
+  "watering_can": {"cost": {"currency": "petals", "amount": {"v": 1000, "src": "EXAMPLE ASSUMPTION"}},
+   "effects": [{"target": "producer:pot", "op": "mul", "value": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]},
+  "bee_hive": {"cost": {"currency": "petals", "amount": {"v": 25000, "src": "EXAMPLE ASSUMPTION"}},
+   "requires": {"owned": ["greenhouse", {"v": 10, "src": "EXAMPLE ASSUMPTION"}]},
+   "effects": [{"target": "producer:greenhouse", "op": "mul", "value": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]},
+  "bridge_pass": {"cost": {"currency": "petals", "amount": {"v": 500, "src": "EXAMPLE ASSUMPTION"}},
+   "requires": {"prestiges": {"v": 1, "src": "EXAMPLE ASSUMPTION", "note": "the hard wall: the bridge opens only after the first Replant"}},
+   "effects": [{"target": "currency:petals", "op": "mul", "value": {"v": "11/10", "src": "EXAMPLE ASSUMPTION", "note": "visitors cross the bridge: x1.1 petals"}}]}
+ },
+ "prestige": {
+  "basis_currency": "petals", "basis": "lifetime", "rule": "total_entitlement", "award_currency": "seeds",
+  "formula": {"kind": "power", "a": {"v": 10, "src": "EXAMPLE ASSUMPTION"}, "alpha": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"},
+              "divisor": {"v": 50000, "src": "EXAMPLE ASSUMPTION", "note": "seeds owed = floor(10 x sqrt(lifetime petals / 50,000))"}},
+  "take_when": {"run": ["petals", {"v": 7000000, "src": "EXAMPLE ASSUMPTION", "note": "Replant as soon as this run has earned 7,000,000 petals"}]},
+  "reset": ["currency:petals", "producer:greenhouse", "producer:sky_orchard", "producer:moon_garden", "item:bee_hive"],
+  "keep": ["currency:seeds", "producer:pot", "item:watering_can", "item:bridge_pass"],
+  "bonus": {"target": "currency:petals", "per_unit": {"v": "1/1000", "src": "EXAMPLE ASSUMPTION", "note": "+0.1 % petals per golden seed"}}
+ },
+ "offline": {"efficiency": {"v": "1/20", "src": "EXAMPLE ASSUMPTION"}, "cap_s": {"v": 7200, "src": "EXAMPLE ASSUMPTION"}, "currencies": ["petals"]},
+ "sessions": {"patterns": {
+  "daily": {"active_s": {"v": 1200, "src": "EXAMPLE ASSUMPTION", "note": "one 20-minute session a day"},
+            "gaps_s": {"v": [85200], "src": "EXAMPLE ASSUMPTION"}},
+  "returning": {"active_s": {"v": 1200, "src": "EXAMPLE ASSUMPTION"}, "gaps_s": {"v": [85200], "src": "EXAMPLE ASSUMPTION"},
+                "absences": [{"after_session": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+                              "gap_s": {"v": 603600, "src": "EXAMPLE ASSUMPTION", "note": "plays days 1-2, away until day 9"}}]}
+ }},
+ "policies": {"order": ["pot"], "objective_currency": "petals"},
+ "goals": [
+  {"id": "TL-01a", "label": "second pot (first purchase)", "when": {"owned": ["pot", {"v": 2, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 10, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-01b", "label": "three power spikes (the third is the 25-pot milestone)", "when": {"spikes": ["petal_rate", {"v": 3, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 60, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-02", "label": "first greenhouse", "when": {"owned": ["greenhouse", {"v": 1, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 120, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-03", "label": "first soft wall: the garden fills up", "when": {"soft_walls": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "active", "min_s": {"v": 720, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 1200, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-04", "label": "first Replant (rebirth)", "when": {"prestiges": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "active", "min_s": {"v": 1200, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 1800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-05a", "label": "hard wall starts: the bridge pass is affordable but locked",
+   "when": {"all": [{"balance": ["petals", {"v": 500, "src": "EXAMPLE ASSUMPTION", "note": "the bridge pass price"}]}, {"not": {"prestiges": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}}]},
+   "window": {"basis": "active", "max_s": {"v": 120, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-05", "label": "first Sky Orchard (hard wall passed)", "when": {"owned": ["sky_orchard", {"v": 1, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 1800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-06", "label": "bridge open on the first return", "when": {"item": "bridge_pass"},
+   "window": {"basis": "calendar", "max_s": {"v": 172800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-07", "label": "10th Replant", "when": {"prestiges": {"v": 10, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "calendar", "max_s": {"v": 604800, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-08", "label": "900 golden seeds", "when": {"balance": ["seeds", {"v": 900, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "calendar", "min_s": {"v": 1814400, "src": "EXAMPLE ASSUMPTION"}, "max_s": {"v": 2592000, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "TL-09", "label": "10th Replant within two weeks", "when": {"prestiges": {"v": 10, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "calendar", "max_s": {"v": 1209600, "src": "EXAMPLE ASSUMPTION"}}}
+ ],
+ "analysis": {
+  "soft_wall": {"min_wait_s": {"v": 45, "src": "EXAMPLE ASSUMPTION", "note": "TL-03: a 45-second wait between purchases is where the garden feels full"}},
+  "spikes": [{"id": "petal_rate", "metric": "production_per_s", "currency": "petals",
+              "min_ratio": {"v": "3/2", "src": "EXAMPLE ASSUMPTION", "note": "TL-01: a purchase that raises petals per second by 50 % or more"}}]
+ },
+ "run": {"horizon_active_s": {"v": 3600, "src": "EXAMPLE ASSUMPTION", "note": "one hour of play; the session runs override it on the command line"}}
+}

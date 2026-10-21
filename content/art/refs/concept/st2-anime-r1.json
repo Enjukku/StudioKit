@@ -1,0 +1,9 @@
+{
+  "id": "st2-anime-r1",
+  "family": "concept",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nConcept scene for a prehistoric adventure game. A Tyrannosaurus charges through a shallow jungle river, roaring up at a huge meteor streaking across the dusk sky behind it; water bursts up around its legs and a flock of small pterosaurs scatters from the trees. The Tyrannosaurus is the focal point; the meteor's fiery trail is the brightest light in the image and washes the scene in warm orange. Feeling: awe and danger, the end of an age. No people.\n\nCONCEPT LOCK: Concept art of a game world, wide landscape frame. One clear focal subject; a readable foreground, middle ground and background; the focal subject stands apart from its surroundings by value as well as colour. No text, no letters, no logos, no user interface, no border, no watermark.\n\nWORLD STYLE LOCK: Hand-drawn cel-shaded anime film frame. Creatures are drawn with clean, confident line art of varying weight, flat cel colour with one hard-edged shadow tone and one crisp highlight. Backgrounds are lush hand-painted gouache with soft visible brushwork, layered depth and atmospheric haze; big sculpted cumulus clouds. Fire, spray and light are drawn as bold graphic shapes with sharp edges and glowing cores. Rich, natural palette: deep jungle greens, cobalt and violet sky, molten orange and gold light. Strong perspective, dynamic framing. Not resembling any existing franchise or studio.",
+  "images": [],
+  "codex_session": "01a15dc9-7cfa-7930-b4c4-9173017f32e4",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15dc9-7cfa-7930-b4c4-9173017f32e4\\exec-78379201-949b-4082-899d-95243f206b90.png",
+  "seconds": 58
+}

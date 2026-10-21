@@ -1,0 +1,12 @@
+{
+  "id": "boss-reveal-b-r1",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 2 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nStoryboard panel, shot B of 5: close view looking down from above. Image 1 is the greybox layout of this shot: keep the camera angle, the framing and the positions exactly. Image 2 is the earlier panel of this place: keep the explorer's colours and sleeve, the pedestal, the beacon and the statue's stone exactly. The explorer's right arm and hand reach in from the left toward the beacon at the top middle and have stopped just short of it; the beacon has gone dark, only a dim amber ember is left; on the black flood water at the right, one bright ring of ripples spreads from the base of the statue's plinth toward the pedestal. The statue's head and hands are not in the frame. Moonlight from above right.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "output\\J015-g2\\stills\\board_inputs\\B_layout.png",
+    "content\\art\\refs\\storyboard\\boss-reveal-p1-r1.png"
+  ],
+  "codex_session": "01a15e07-d9dd-7301-b10b-ff6fc72a7772",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e07-d9dd-7301-b10b-ff6fc72a7772\\exec-b0e3e194-d3f3-4705-a8b8-aa83adbce69a.png",
+  "seconds": 47
+}

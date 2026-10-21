@@ -1,0 +1,28 @@
+{
+ "meta": {"revision": "fixture-rebirth-growing-r1",
+  "title": "Rebirth requirement that doubles with each rebirth, capped at three rebirths, with optional sessions and offline income",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {
+  "cash": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}},
+  "gems": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "producers": {"stand": {"start_owned": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "produces": {"currency:cash": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}}},
+ "prestige": {
+  "basis_currency": "cash", "basis": "run",
+  "formula": {"kind": "power", "a": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "alpha": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"}, "divisor": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+  "rule": "per_run", "award_currency": "gems",
+  "take_when": {"all": [
+   {"run": ["cash", {"curve": {"kind": "exponential", "a": {"v": 100, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}, "index": "prestiges"}]},
+   {"not": {"prestiges": {"v": 3, "src": "EXAMPLE ASSUMPTION"}}}
+  ]},
+  "reset": ["currency:cash", "producer:stand"],
+  "keep": ["currency:gems"]
+ },
+ "offline": {"efficiency": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"}, "cap_s": {"v": 100, "src": "EXAMPLE ASSUMPTION"}, "currencies": ["cash"]},
+ "sessions": {"patterns": {"short": {"active_s": {"v": 50, "src": "EXAMPLE ASSUMPTION"}, "gaps_s": {"v": [1000], "src": "EXAMPLE ASSUMPTION"}}}},
+ "goals": [
+  {"id": "third", "label": "third rebirth", "when": {"prestiges": {"v": 3, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "fourth", "label": "fourth rebirth (excluded by the not predicate)", "when": {"prestiges": {"v": 4, "src": "EXAMPLE ASSUMPTION"}}}
+ ],
+ "run": {"horizon_active_s": {"v": 2000, "src": "EXAMPLE ASSUMPTION"}}
+}

@@ -1,0 +1,24 @@
+{"label": "SYNTHETIC TEST DATA (J014-T07). Not a real game, not real players."}
+{"record": "prompt_exposure", "prompt": "Tell us (in-game form)", "added_in_build": "1.1.0", "first_shown_utc": "2026-10-08T15:00:00Z", "window_start_utc": "2026-10-08T15:00:00Z", "window_end_utc": "2026-10-20T23:59:59Z", "shown_rule": "Shown once after a player's 3rd net round (a round is 10 catches) in a session, at most once per player per 7 days. Fixed choice first, optional short text second. Text is filtered on the server before it is stored.", "players_shown": 1460, "players_answered": 22, "players_answered_with_text": 17}
+{"record": "answer", "answer_id": "ig-001", "author": "p_3fa9c1", "at_utc": "2026-10-08T22:40:11Z", "platform": "phone", "build": "1.1.0", "choice": "like"}
+{"record": "answer", "answer_id": "ig-002", "author": "p_81b7d0", "at_utc": "2026-10-09T16:02:45Z", "platform": "computer", "build": "1.1.0", "choice": "idea", "text": "trade moths with friends"}
+{"record": "answer", "answer_id": "ig-003", "author": "p_c20e44", "at_utc": "2026-10-10T14:11:30Z", "platform": "phone", "build": "1.1.0", "choice": "could_not_find", "text": "where is the orchard"}
+{"record": "answer", "answer_id": "ig-004", "author": "p_77d3ab", "at_utc": "2026-10-11T01:25:19Z", "platform": "computer", "build": "1.1.0", "choice": "too_slow", "text": "dust per moth is low"}
+{"record": "answer", "answer_id": "ig-005", "author": "p_0e5f12", "at_utc": "2026-10-11T19:48:02Z", "platform": "tablet", "build": "1.1.0", "choice": "too_hard", "text": "net timing"}
+{"record": "answer", "answer_id": "ig-006", "author": "p_a9c4e7", "at_utc": "2026-10-12T12:33:58Z", "platform": "phone", "build": "1.1.0", "choice": "idea", "text": "more rewards"}
+{"record": "answer", "answer_id": "ig-007", "author": "p_5b2d88", "at_utc": "2026-10-12T21:09:40Z", "platform": "phone", "build": "1.1.0", "choice": "bug", "text": "lag when the fireflies come"}
+{"record": "answer", "answer_id": "ig-008", "author": "p_e1130c", "at_utc": "2026-10-13T10:54:16Z", "platform": "computer", "build": "1.1.0", "choice": "like"}
+{"record": "answer", "answer_id": "ig-009", "author": "p_46af95", "at_utc": "2026-10-13T22:31:07Z", "platform": "phone", "build": "1.1.1", "choice": "could_not_find"}
+{"record": "answer", "answer_id": "ig-010", "author": "p_d8841b", "at_utc": "2026-10-14T13:20:55Z", "platform": "phone", "build": "1.1.1", "choice": "idea", "text": "show crate percentages on phone"}
+{"record": "answer", "answer_id": "ig-011", "author": "p_92c6f0", "at_utc": "2026-10-14T17:42:29Z", "platform": "console", "build": "1.1.1", "choice": "too_slow", "text": "upgrades so slow"}
+{"record": "answer", "answer_id": "ig-012", "author": "p_2a7e63", "at_utc": "2026-10-15T08:15:33Z", "platform": "computer", "build": "1.1.1", "choice": "idea", "text": "more rewards for the dusk board"}
+{"record": "answer", "answer_id": "ig-013", "author": "p_b1d5a9", "at_utc": "2026-10-15T20:37:48Z", "platform": "phone", "build": "1.1.1", "choice": "bug", "text": "bought beads, never got them"}
+{"record": "answer", "answer_id": "ig-014", "author": "p_6c0912", "at_utc": "2026-10-16T11:04:12Z", "platform": "phone", "build": "1.1.1", "choice": "could_not_find", "text": "cant get the lantern on the post"}
+{"record": "answer", "answer_id": "ig-015", "author": "p_f3e478", "at_utc": "2026-10-16T23:18:26Z", "platform": "computer", "build": "1.1.1", "choice": "idea", "text": "frog chorus event"}
+{"record": "answer", "answer_id": "ig-016", "author": "p_1d95b2", "at_utc": "2026-10-17T14:49:51Z", "platform": "phone", "build": "1.1.1", "choice": "bug", "text": "terrarium moths gone after rejoin"}
+{"record": "answer", "answer_id": "ig-017", "author": "p_8e4a3d", "at_utc": "2026-10-18T09:27:04Z", "platform": "tablet", "build": "1.1.1", "choice": "too_slow"}
+{"record": "answer", "answer_id": "ig-018", "author": "p_c7b60e", "at_utc": "2026-10-18T18:55:39Z", "platform": "computer", "build": "1.1.1", "choice": "bug", "text": "moth stuck in net"}
+{"record": "answer", "answer_id": "ig-019", "author": "p_3d28f5", "at_utc": "2026-10-19T12:12:20Z", "platform": "phone", "build": "1.1.1", "choice": "like"}
+{"record": "answer", "answer_id": "ig-020", "author": "p_a40b97", "at_utc": "2026-10-19T22:46:03Z", "platform": "phone", "build": "1.1.1", "choice": "could_not_find", "text": "how do i get to the cave"}
+{"record": "answer", "answer_id": "ig-021", "author": "p_59e1c3", "at_utc": "2026-10-20T09:38:44Z", "platform": "computer", "build": "1.1.1", "choice": "idea", "text": "more rewards"}
+{"record": "answer", "answer_id": "ig-022", "author": "p_0b6d7a", "at_utc": "2026-10-20T16:21:17Z", "platform": "phone", "build": "1.1.1", "choice": "idea", "text": "dust is useless now"}

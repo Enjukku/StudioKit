@@ -1,0 +1,211 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "palette",
+ "input": {
+  "path": "content\\ui\\egg-shop\\screens\\01-inspect-main-1920.png",
+  "sha256": "d71998153972f3c0af6eca11d39fb8d75025ea91abf1cce23d85a2a57a3d158a",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "none",
+  "key_estimate": {
+   "estimated_key": "#4E6D6F",
+   "border_strip_px": 22,
+   "border_share_within_tol": 0.11577377291179727,
+   "flat_share_needed": 0.9,
+   "flat": false
+  },
+  "region": "whole image",
+  "k": 12,
+  "seed": 0,
+  "k_note": "analysis setting, not the right number of colours",
+  "algorithm": "k-means++ init, Lloyd, Euclidean in CIELAB",
+  "colour_space": "CIELAB D65 2deg from sRGB",
+  "difference": "CIEDE2000 (kL=kC=kH=1)",
+  "sample_max_px": 200000,
+  "roles": {
+   "primary_green_top": "#7CF05A",
+   "primary_green_bottom": "#2FB52A",
+   "danger_red_bottom": "#E0303F",
+   "header_blue_bottom": "#2C7BEF",
+   "currency_gold_bottom": "#FFAE1A",
+   "utility_white_bottom": "#D3DAE4"
+  },
+  "max_delta_e": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "n_px": 2073600,
+  "k_requested": 12,
+  "k_effective": 12,
+  "clusters": [
+   {
+    "lab": [
+     97.13406625893583,
+     -0.1679252445981815,
+     -0.459653214293106
+    ],
+    "hex": "#F6F7F8",
+    "share": 0.27563078703703703
+   },
+   {
+    "lab": [
+     48.94811093214978,
+     -0.43738394147882126,
+     -20.634932726496874
+    ],
+    "hex": "#5D7697",
+    "share": 0.15123119212962963
+   },
+   {
+    "lab": [
+     84.50544312021809,
+     -8.632639319490538,
+     -20.098250845066374
+    ],
+    "hex": "#A9D9F8",
+    "share": 0.1319999035493827
+   },
+   {
+    "lab": [
+     58.95130150652456,
+     53.56858726224396,
+     -57.014806481897864
+    ],
+    "hex": "#B56CF3",
+    "share": 0.09494502314814815
+   },
+   {
+    "lab": [
+     1.1502673615010075,
+     0.2806559030716184,
+     -0.8524661019347455
+    ],
+    "hex": "#040406",
+    "share": 0.07592496141975309
+   },
+   {
+    "lab": [
+     27.56897380648598,
+     -20.436066201645687,
+     8.36412989945109
+    ],
+    "hex": "#1F4934",
+    "share": 0.061317997685185185
+   },
+   {
+    "lab": [
+     45.73203485147109,
+     -24.019802918881037,
+     29.642837760907856
+    ],
+    "hex": "#537639",
+    "share": 0.053208429783950614
+   },
+   {
+    "lab": [
+     79.215564629218,
+     -56.45333787201945,
+     56.030055073494
+    ],
+    "hex": "#6EDC54",
+    "share": 0.04125289351851852
+   },
+   {
+    "lab": [
+     88.55252602636823,
+     -1.859023713788006,
+     57.835297276405605
+    ],
+    "hex": "#FCDC6D",
+    "share": 0.03991512345679012
+   },
+   {
+    "lab": [
+     23.894754936742366,
+     8.169425896677152,
+     6.264981628357529
+    ],
+    "hex": "#483430",
+    "share": 0.03152536651234568
+   },
+   {
+    "lab": [
+     34.14997404482399,
+     22.71146046537544,
+     -53.64475836618128
+    ],
+    "hex": "#2C49A7",
+    "share": 0.026360435956790124
+   },
+   {
+    "lab": [
+     48.00178005938134,
+     49.21502160081368,
+     43.581292071586915
+    ],
+    "hex": "#C7472A",
+    "share": 0.016687885802469136
+   }
+  ],
+  "roles": {
+   "primary_green_top": {
+    "hex": "#7CF05A",
+    "nearest_cluster": 7,
+    "cluster_hex": "#6EDC54",
+    "delta_e2000": 4.530123553492057
+   },
+   "primary_green_bottom": {
+    "hex": "#2FB52A",
+    "nearest_cluster": 7,
+    "cluster_hex": "#6EDC54",
+    "delta_e2000": 10.945304974259885
+   },
+   "danger_red_bottom": {
+    "hex": "#E0303F",
+    "nearest_cluster": 11,
+    "cluster_hex": "#C7472A",
+    "delta_e2000": 9.62888527025548
+   },
+   "header_blue_bottom": {
+    "hex": "#2C7BEF",
+    "nearest_cluster": 1,
+    "cluster_hex": "#5D7697",
+    "delta_e2000": 10.529650538212767
+   },
+   "currency_gold_bottom": {
+    "hex": "#FFAE1A",
+    "nearest_cluster": 8,
+    "cluster_hex": "#FCDC6D",
+    "delta_e2000": 15.062016314663499
+   },
+   "utility_white_bottom": {
+    "hex": "#D3DAE4",
+    "nearest_cluster": 0,
+    "cluster_hex": "#F6F7F8",
+    "delta_e2000": 7.862859452410815
+   }
+  }
+ },
+ "images": {
+  "swatches": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-inspect-main-1920.palette.png"
+ },
+ "verdict": "measured"
+}

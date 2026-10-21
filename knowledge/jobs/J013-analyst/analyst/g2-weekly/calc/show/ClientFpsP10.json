@@ -1,0 +1,2089 @@
+{
+  "metric": "ClientFpsP10",
+  "granularity": "OneDay",
+  "points": [
+    {
+      "bucket_time_utc": "2026-09-25T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-26T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 38.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-27T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-28T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 40.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-29T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 38.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 38.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-01T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 40.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-02T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-03T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 38.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-04T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-05T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 40.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-06T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 38.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-08T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 39.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 35.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 34.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 33.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 35.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 34.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 33.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 34.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 35.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 34.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 33.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 34.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 35.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-25T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-26T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-27T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-28T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-29T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-01T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-02T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-03T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-04T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-05T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 53.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-06T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-08T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 53.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 51.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 52.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Computer"
+        }
+      ],
+      "filter": [],
+      "value": 53.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-25T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-26T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-27T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-28T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-29T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-01T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-02T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-03T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-04T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-05T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 49.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-06T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-08T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 47.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Console"
+        }
+      ],
+      "filter": [],
+      "value": 48.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-25T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-26T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-27T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-28T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-29T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-01T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-02T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-03T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-04T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-05T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-06T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 30.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-08T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 31.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 21.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 21.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 21.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 21.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 21.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Phone"
+        }
+      ],
+      "filter": [],
+      "value": 22.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-25T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-26T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-27T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-28T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-29T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-30T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-01T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-02T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-03T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-04T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.9,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-05T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.7,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-06T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.0,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-07T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 32.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-08T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 33.2,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 28.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 28.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.5,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 28.4,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 28.8,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 28.3,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.1,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-10-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [
+        {
+          "dimension": "Platform",
+          "value": "Tablet"
+        }
+      ],
+      "filter": [],
+      "value": 29.6,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:03:00Z"
+    }
+  ],
+  "not_final": 0,
+  "revised_buckets": 0,
+  "note": null
+}

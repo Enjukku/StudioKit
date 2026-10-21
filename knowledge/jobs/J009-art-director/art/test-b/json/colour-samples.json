@@ -1,0 +1,897 @@
+{
+ "E1 review muted labels (Cost/You have/After)": {
+  "file": "content/ui/egg-shop/screens/03-review.png",
+  "box": [
+   235,
+   540,
+   400,
+   670
+  ],
+  "modes": [
+   {
+    "hex": "f2f5f9",
+    "share": 0.782
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.161
+   },
+   {
+    "hex": "6c738e",
+    "share": 0.014
+   },
+   {
+    "hex": "b6bbc9",
+    "share": 0.009
+   },
+   {
+    "hex": "9298ac",
+    "share": 0.008
+   }
+  ]
+ },
+ "E2 odds column head 'Pet'": {
+  "file": "content/ui/egg-shop/screens/02-odds-open.png",
+  "box": [
+   715,
+   340,
+   780,
+   378
+  ],
+  "modes": [
+   {
+    "hex": "ffffff",
+    "share": 0.739
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.188
+   },
+   {
+    "hex": "8a90a5",
+    "share": 0.021
+   },
+   {
+    "hex": "6b738d",
+    "share": 0.02
+   },
+   {
+    "hex": "c2c5d1",
+    "share": 0.013
+   }
+  ]
+ },
+ "E3 odds footnote": {
+  "file": "content/ui/egg-shop/screens/02-odds-open.png",
+  "box": [
+   620,
+   908,
+   1580,
+   947
+  ],
+  "modes": [
+   {
+    "hex": "fefeff",
+    "share": 0.718
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.204
+   },
+   {
+    "hex": "8d93a7",
+    "share": 0.02
+   },
+   {
+    "hex": "6c738e",
+    "share": 0.02
+   },
+   {
+    "hex": "c9ccd6",
+    "share": 0.015
+   }
+  ]
+ },
+ "E4 confirmed 'Added to your pets.'": {
+  "file": "content/ui/egg-shop/screens/06-confirmed.png",
+  "box": [
+   790,
+   788,
+   1132,
+   826
+  ],
+  "modes": [
+   {
+    "hex": "fefefe",
+    "share": 0.652
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.265
+   },
+   {
+    "hex": "6c738e",
+    "share": 0.023
+   },
+   {
+    "hex": "8d92a7",
+    "share": 0.02
+   },
+   {
+    "hex": "c7c9d4",
+    "share": 0.019
+   }
+  ]
+ },
+ "E5 failed body muted": {
+  "file": "content/ui/egg-shop/screens/07-failed.png",
+  "box": [
+   560,
+   620,
+   1362,
+   712
+  ],
+  "modes": [
+   {
+    "hex": "ffffff",
+    "share": 0.741
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.196
+   },
+   {
+    "hex": "8d93a7",
+    "share": 0.016
+   },
+   {
+    "hex": "6c738d",
+    "share": 0.016
+   },
+   {
+    "hex": "cacdd7",
+    "share": 0.014
+   }
+  ]
+ },
+ "E6 card name 'Meadow Egg'": {
+  "file": "content/ui/egg-shop/screens/01-inspect-main-1920.png",
+  "box": [
+   800,
+   400,
+   1025,
+   447
+  ],
+  "modes": [
+   {
+    "hex": "fafefe",
+    "share": 0.339
+   },
+   {
+    "hex": "010202",
+    "share": 0.25
+   },
+   {
+    "hex": "c2ebff",
+    "share": 0.19
+   },
+   {
+    "hex": "bde9fe",
+    "share": 0.107
+   },
+   {
+    "hex": "6a6b6c",
+    "share": 0.019
+   }
+  ]
+ },
+ "E7 Buy label on green face": {
+  "file": "content/ui/egg-shop/screens/01-inspect-main-1920.png",
+  "box": [
+   865,
+   895,
+   960,
+   952
+  ],
+  "modes": [
+   {
+    "hex": "010101",
+    "share": 0.282
+   },
+   {
+    "hex": "fefefe",
+    "share": 0.236
+   },
+   {
+    "hex": "46c638",
+    "share": 0.168
+   },
+   {
+    "hex": "63dd4a",
+    "share": 0.125
+   },
+   {
+    "hex": "5cd746",
+    "share": 0.075
+   }
+  ]
+ },
+ "E8 sunburst ray on panel": {
+  "file": "content/ui/egg-shop/screens/06-confirmed.png",
+  "box": [
+   1100,
+   465,
+   1230,
+   505
+  ],
+  "modes": [
+   {
+    "hex": "ffec8d",
+    "share": 0.725
+   },
+   {
+    "hex": "fffffe",
+    "share": 0.258
+   },
+   {
+    "hex": "fff7cd",
+    "share": 0.009
+   },
+   {
+    "hex": "fff2ae",
+    "share": 0.007
+   }
+  ]
+ },
+ "E9 'Need more' label on grey": {
+  "file": "content/ui/egg-shop/screens/01-inspect-main-1920.png",
+  "box": [
+   1480,
+   895,
+   1720,
+   952
+  ],
+  "modes": [
+   {
+    "hex": "010101",
+    "share": 0.27
+   },
+   {
+    "hex": "ccd2da",
+    "share": 0.243
+   },
+   {
+    "hex": "fefefe",
+    "share": 0.233
+   },
+   {
+    "hex": "bec6d0",
+    "share": 0.092
+   },
+   {
+    "hex": "d4dae0",
+    "share": 0.079
+   }
+  ]
+ },
+ "E10 focus ring on white panel": {
+  "file": "content/ui/egg-shop/screens/03-review.png",
+  "box": [
+   240,
+   690,
+   540,
+   712
+  ],
+  "modes": [
+   {
+    "hex": "f6f6f7",
+    "share": 0.455
+   },
+   {
+    "hex": "1a2457",
+    "share": 0.273
+   },
+   {
+    "hex": "000000",
+    "share": 0.227
+   },
+   {
+    "hex": "dedfe3",
+    "share": 0.045
+   },
+   {
+    "hex": "dfe0e6",
+    "share": 0.0
+   }
+  ]
+ },
+ "E11 need-coins muted labels": {
+  "file": "content/ui/egg-shop/screens/08-not-enough-coins.png",
+  "box": [
+   718,
+   622,
+   880,
+   712
+  ],
+  "modes": [
+   {
+    "hex": "f2f5f9",
+    "share": 0.707
+   },
+   {
+    "hex": "5a6280",
+    "share": 0.216
+   },
+   {
+    "hex": "6b738e",
+    "share": 0.019
+   },
+   {
+    "hex": "9298ad",
+    "share": 0.013
+   },
+   {
+    "hex": "b6bbc9",
+    "share": 0.011
+   }
+  ]
+ },
+ "A1 'Ends in 6d 12h'": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   95,
+   318,
+   382,
+   360
+  ],
+  "modes": [
+   {
+    "hex": "362985",
+    "share": 0.492
+   },
+   {
+    "hex": "c9c3f5",
+    "share": 0.22
+   },
+   {
+    "hex": "43368c",
+    "share": 0.207
+   },
+   {
+    "hex": "b7b0e7",
+    "share": 0.018
+   },
+   {
+    "hex": "938bcc",
+    "share": 0.014
+   }
+  ]
+ },
+ "A2 'Sure Mythic in 53 summons'": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   95,
+   785,
+   648,
+   830
+  ],
+  "modes": [
+   {
+    "hex": "120c38",
+    "share": 0.693
+   },
+   {
+    "hex": "c9c3f5",
+    "share": 0.2
+   },
+   {
+    "hex": "211b46",
+    "share": 0.015
+   },
+   {
+    "hex": "6e6897",
+    "share": 0.012
+   },
+   {
+    "hex": "2b2552",
+    "share": 0.012
+   }
+  ]
+ },
+ "A3a MYTHIC word": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   230,
+   443,
+   390,
+   485
+  ],
+  "modes": [
+   {
+    "hex": "2d2271",
+    "share": 0.315
+   },
+   {
+    "hex": "ff9ac4",
+    "share": 0.276
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.233
+   },
+   {
+    "hex": "1c154b",
+    "share": 0.036
+   },
+   {
+    "hex": "2a1f6b",
+    "share": 0.03
+   }
+  ]
+ },
+ "A3b LEGENDARY word": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   230,
+   498,
+   482,
+   540
+  ],
+  "modes": [
+   {
+    "hex": "ffe58a",
+    "share": 0.306
+   },
+   {
+    "hex": "281e67",
+    "share": 0.288
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.244
+   },
+   {
+    "hex": "1b1449",
+    "share": 0.036
+   },
+   {
+    "hex": "e5cd81",
+    "share": 0.02
+   }
+  ]
+ },
+ "A3c EPIC word": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   230,
+   555,
+   326,
+   596
+  ],
+  "modes": [
+   {
+    "hex": "d49bff",
+    "share": 0.312
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.26
+   },
+   {
+    "hex": "23195b",
+    "share": 0.201
+   },
+   {
+    "hex": "261c61",
+    "share": 0.089
+   },
+   {
+    "hex": "1b1449",
+    "share": 0.042
+   }
+  ]
+ },
+ "A3d RARE word": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   230,
+   610,
+   345,
+   652
+  ],
+  "modes": [
+   {
+    "hex": "7cc4ff",
+    "share": 0.324
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.245
+   },
+   {
+    "hex": "1d154f",
+    "share": 0.178
+   },
+   {
+    "hex": "211857",
+    "share": 0.157
+   },
+   {
+    "hex": "70b0ea",
+    "share": 0.018
+   }
+  ]
+ },
+ "A4 pity count '37 / 90'": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   525,
+   688,
+   666,
+   730
+  ],
+  "modes": [
+   {
+    "hex": "1a1247",
+    "share": 0.434
+   },
+   {
+    "hex": "ff9ac4",
+    "share": 0.252
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.222
+   },
+   {
+    "hex": "a86790",
+    "share": 0.016
+   },
+   {
+    "hex": "e68bb6",
+    "share": 0.013
+   }
+  ]
+ },
+ "A5 review pity line (yellow)": {
+  "file": "content/ui/anime-summon/screens/03-review.png",
+  "box": [
+   460,
+   598,
+   1342,
+   642
+  ],
+  "modes": [
+   {
+    "hex": "271c64",
+    "share": 0.713
+   },
+   {
+    "hex": "ffd34d",
+    "share": 0.201
+   },
+   {
+    "hex": "ad8e56",
+    "share": 0.013
+   },
+   {
+    "hex": "cba752",
+    "share": 0.011
+   },
+   {
+    "hex": "907559",
+    "share": 0.011
+   }
+  ]
+ },
+ "A6 review chance line (muted)": {
+  "file": "content/ui/anime-summon/screens/03-review.png",
+  "box": [
+   460,
+   485,
+   1445,
+   575
+  ],
+  "modes": [
+   {
+    "hex": "2d2271",
+    "share": 0.64
+   },
+   {
+    "hex": "2a1f6b",
+    "share": 0.16
+   },
+   {
+    "hex": "c9c3f5",
+    "share": 0.14
+   },
+   {
+    "hex": "b8b2e6",
+    "share": 0.012
+   },
+   {
+    "hex": "786fb0",
+    "share": 0.01
+   }
+  ]
+ },
+ "A7 reveal fact line (muted)": {
+  "file": "content/ui/anime-summon/screens/06-reveal-1x.png",
+  "box": [
+   1000,
+   475,
+   1715,
+   566
+  ],
+  "modes": [
+   {
+    "hex": "24125b",
+    "share": 0.619
+   },
+   {
+    "hex": "271561",
+    "share": 0.173
+   },
+   {
+    "hex": "c9c3f5",
+    "share": 0.133
+   },
+   {
+    "hex": "37276a",
+    "share": 0.018
+   },
+   {
+    "hex": "766aa9",
+    "share": 0.01
+   }
+  ]
+ },
+ "A8 SUMMON label on crystal": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   1025,
+   905,
+   1335,
+   957
+  ],
+  "modes": [
+   {
+    "hex": "140f3a",
+    "share": 0.291
+   },
+   {
+    "hex": "fdfefe",
+    "share": 0.278
+   },
+   {
+    "hex": "6bcdef",
+    "share": 0.139
+   },
+   {
+    "hex": "88e3f8",
+    "share": 0.097
+   },
+   {
+    "hex": "5fc4ec",
+    "share": 0.044
+   }
+  ]
+ },
+ "A9 10x pity line (yellow)": {
+  "file": "content/ui/anime-summon/screens/07-reveal-10x-summary.png",
+  "box": [
+   60,
+   968,
+   850,
+   1012
+  ],
+  "modes": [
+   {
+    "hex": "0b0625",
+    "share": 0.655
+   },
+   {
+    "hex": "ffd34d",
+    "share": 0.208
+   },
+   {
+    "hex": "231d38",
+    "share": 0.059
+   },
+   {
+    "hex": "886f39",
+    "share": 0.014
+   },
+   {
+    "hex": "695534",
+    "share": 0.012
+   }
+  ]
+ },
+ "A10 disabled CANCEL label on grey": {
+  "file": "content/ui/anime-summon/screens/05-pending.png",
+  "box": [
+   565,
+   758,
+   775,
+   812
+  ],
+  "modes": [
+   {
+    "hex": "140f3a",
+    "share": 0.292
+   },
+   {
+    "hex": "fdfdfe",
+    "share": 0.272
+   },
+   {
+    "hex": "737389",
+    "share": 0.156
+   },
+   {
+    "hex": "9999a8",
+    "share": 0.069
+   },
+   {
+    "hex": "5d5c72",
+    "share": 0.063
+   }
+  ]
+ },
+ "A11 card EPIC word on ink strip": {
+  "file": "content/ui/anime-summon/screens/07-reveal-10x-summary.png",
+  "box": [
+   815,
+   410,
+   912,
+   450
+  ],
+  "modes": [
+   {
+    "hex": "1d1444",
+    "share": 0.531
+   },
+   {
+    "hex": "d49bff",
+    "share": 0.317
+   },
+   {
+    "hex": "17113c",
+    "share": 0.052
+   },
+   {
+    "hex": "62478b",
+    "share": 0.022
+   },
+   {
+    "hex": "8e67b8",
+    "share": 0.015
+   }
+  ]
+ },
+ "A12 '-50' debit": {
+  "file": "content/ui/anime-summon/screens/06-reveal-1x.png",
+  "box": [
+   1105,
+   72,
+   1187,
+   116
+  ],
+  "modes": [
+   {
+    "hex": "3b1d8f",
+    "share": 0.38
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.261
+   },
+   {
+    "hex": "ffd34d",
+    "share": 0.241
+   },
+   {
+    "hex": "1a1146",
+    "share": 0.02
+   },
+   {
+    "hex": "2c186e",
+    "share": 0.018
+   }
+  ]
+ },
+ "A13 odds intro (muted)": {
+  "file": "content/ui/anime-summon/screens/02-odds-open.png",
+  "box": [
+   200,
+   168,
+   1625,
+   258
+  ],
+  "modes": [
+   {
+    "hex": "392c8c",
+    "share": 0.697
+   },
+   {
+    "hex": "c9c3f5",
+    "share": 0.158
+   },
+   {
+    "hex": "453793",
+    "share": 0.083
+   },
+   {
+    "hex": "938ace",
+    "share": 0.01
+   },
+   {
+    "hex": "b6aee7",
+    "share": 0.009
+   }
+  ]
+ },
+ "A14 '0.5 % per summon' on banner": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   1360,
+   598,
+   1792,
+   642
+  ],
+  "modes": [
+   {
+    "hex": "fdfdfe",
+    "share": 0.289
+   },
+   {
+    "hex": "140f3a",
+    "share": 0.274
+   },
+   {
+    "hex": "34237a",
+    "share": 0.2
+   },
+   {
+    "hex": "2e1e71",
+    "share": 0.086
+   },
+   {
+    "hex": "413283",
+    "share": 0.024
+   }
+  ]
+ },
+ "A15 focus ring on popup panel": {
+  "file": "content/ui/anime-summon/screens/03-review.png",
+  "box": [
+   970,
+   758,
+   1392,
+   772
+  ],
+  "modes": [
+   {
+    "hex": "e9fbff",
+    "share": 0.412
+   },
+   {
+    "hex": "395685",
+    "share": 0.38
+   },
+   {
+    "hex": "3d4375",
+    "share": 0.087
+   },
+   {
+    "hex": "393b6e",
+    "share": 0.083
+   },
+   {
+    "hex": "231c55",
+    "share": 0.013
+   }
+  ]
+ }
+}

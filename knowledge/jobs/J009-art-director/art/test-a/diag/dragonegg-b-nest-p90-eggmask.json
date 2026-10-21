@@ -1,0 +1,104 @@
+{
+  "image": "content/art/refs/concept/dragonegg-b-nest.png",
+  "size_px": [
+    1672,
+    941
+  ],
+  "method": "seed = largest 8-connected component of WCAG Y >= p98; grown into connected Y >= p90; holes filled",
+  "threshold_Y_p98": 0.6257,
+  "grow_percentile": 90.0,
+  "threshold_Y_grow": 0.2886,
+  "bright_components": 412,
+  "egg_mask": {
+    "area_px": 89179,
+    "area_frac": 0.0567,
+    "bbox_xyxy": [
+      705,
+      132,
+      1078,
+      539
+    ],
+    "median_Y": 0.5104
+  },
+  "share_of_brightest_1pct_inside_egg": 0.6642,
+  "share_of_brightest_0.2pct_inside_egg": 0.7665,
+  "largest_bright_components": [
+    {
+      "label": 43,
+      "area_px": 21802,
+      "centroid_xy": [
+        897,
+        335
+      ],
+      "bbox_xyxy": [
+        711,
+        133,
+        1032,
+        519
+      ],
+      "median_Y": 0.7433
+    },
+    {
+      "label": 3,
+      "area_px": 1825,
+      "centroid_xy": [
+        305,
+        61
+      ],
+      "bbox_xyxy": [
+        278,
+        21,
+        337,
+        103
+      ],
+      "median_Y": 0.8201
+    },
+    {
+      "label": 346,
+      "area_px": 1092,
+      "centroid_xy": [
+        714,
+        664
+      ],
+      "bbox_xyxy": [
+        694,
+        610,
+        735,
+        692
+      ],
+      "median_Y": 0.826
+    },
+    {
+      "label": 367,
+      "area_px": 919,
+      "centroid_xy": [
+        1099,
+        680
+      ],
+      "bbox_xyxy": [
+        1078,
+        645,
+        1120,
+        701
+      ],
+      "median_Y": 0.816
+    },
+    {
+      "label": 183,
+      "area_px": 488,
+      "centroid_xy": [
+        1387,
+        388
+      ],
+      "bbox_xyxy": [
+        1370,
+        362,
+        1401,
+        404
+      ],
+      "median_Y": 0.8075
+    }
+  ],
+  "image_median_Y": 0.0479,
+  "verdict": "measured (diagnostic; no project tolerance exists)"
+}

@@ -1,0 +1,90 @@
+{
+ "tool": "look_check",
+ "version": "1.1.0",
+ "check": "value",
+ "input": {
+  "path": "content\\art\\refs\\character\\dragonegg-a-keeper.png",
+  "sha256": "19cb48a7f72c4e3d32d68bb26df03c39a157c19b75c1eb2d87973150282fb6af",
+  "size_px": [
+   1145,
+   1374
+  ],
+  "mode": "RGB"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask | --box > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "boxes": null,
+  "box_key": false,
+  "box_coords": "pixels [x0, y0, x1, y1), x1/y1 exclusive",
+  "exclude": null,
+  "mask_source": "key-auto",
+  "key_estimate": {
+   "estimated_key": "#ABA9AA",
+   "border_strip_px": 23,
+   "border_share_within_tol": 0.9980045359447247,
+   "flat_share_needed": 0.9,
+   "flat": true,
+   "hole_fill": true,
+   "filled_holes": 1361,
+   "filled_area_px": 36229
+  },
+  "ring_px": 8,
+  "ring_metric": "chessboard dilation",
+  "luminance": "WCAG 2.x relative luminance (FM1-FM3, switch 0.04045)",
+  "percentiles": [
+   5,
+   25,
+   50,
+   75,
+   95
+  ],
+  "min_ratio": null,
+  "tolerance_source": null,
+  "compare_subjects": false
+ },
+ "measurements": {
+  "whole": {
+   "n_px": 1573230,
+   "mean": 0.28236031360867725,
+   "p5": 0.010411648295406466,
+   "p25": 0.07910962470028458,
+   "p50": 0.37915777310564786,
+   "p75": 0.4046039998138621,
+   "p95": 0.4617984882811317
+  },
+  "subject": {
+   "n_px": 746715,
+   "mean": 0.153407033739683,
+   "p5": 0.004724741455736448,
+   "p25": 0.02757351919302686,
+   "p50": 0.07156206387618186,
+   "p75": 0.22815522187310516,
+   "p95": 0.5304842049452211
+  },
+  "ring": {
+   "n_px": 60645,
+   "mean": 0.409372722324257,
+   "p5": 0.3017365364604155,
+   "p25": 0.39122513298833667,
+   "p50": 0.4099884189984503,
+   "p75": 0.440128817760861,
+   "p95": 0.4910003517944494
+  },
+  "subject_ring_ratio": 3.7839800043784684
+ },
+ "images": {
+  "luminance": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-a-keeper.luminance.png"
+ },
+ "verdict": "measured"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "boss-reveal-b-r2",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 1 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nEdit image 1, a storyboard panel for shot B of 5. Change only the explorer's hand: pull it back so a clear gap of dark air, about one hand's width, separates the fingertips from the beacon; the open fingers still point at the beacon. Keep everything else exactly: the camera, the framing, the dark beacon with its tiny ember, the pedestal, the ring of ripples, the statue's plinth, the light and the colours.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "content\\art\\refs\\storyboard\\boss-reveal-b-r1.png"
+  ],
+  "codex_session": "01a15e0b-8ecb-7793-8f53-76341b598ad4",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e0b-8ecb-7793-8f53-76341b598ad4\\exec-7a9e4d27-b532-4167-acb6-8afcf957cc84.png",
+  "seconds": 63
+}

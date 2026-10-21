@@ -1,0 +1,13 @@
+{"item_id": "ex-001", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-02T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-002", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-03T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-003", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-04T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-004", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-05T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-005", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-06T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-006", "source": "discord", "author_key": "a-001", "occurred_at_utc": "2026-10-07T18:00:00Z", "themes": ["economy.upgrade-cost"], "severity": "low", "excerpt": "Fake example text: upgrades cost too much."}
+{"item_id": "ex-007", "source": "discord", "author_key": "a-002", "occurred_at_utc": "2026-10-02T10:00:00Z", "themes": ["event.entrance-hard-to-find", "ui.shop-confusing"], "severity": "medium"}
+{"item_id": "ex-008", "source": "discord", "author_key": "a-003", "occurred_at_utc": "2026-10-03T11:00:00Z", "themes": []}
+{"item_id": "ex-009", "source": "in-game", "author_key": "a-101", "occurred_at_utc": "2026-10-02T09:30:00Z", "themes": ["event.entrance-hard-to-find"], "cohort": "new", "build": "1.4.0"}
+{"item_id": "ex-010", "source": "in-game", "author_key": "a-102", "occurred_at_utc": "2026-10-04T15:00:00Z", "themes": ["event.entrance-hard-to-find"], "cohort": "mobile", "build": "1.4.0"}
+{"item_id": "ex-011", "source": "in-game", "author_key": "a-103", "occurred_at_utc": "2026-10-05T16:45:00Z", "themes": [], "build": "1.4.0"}
+{"item_id": "ex-012", "source": "support", "author_key": "a-201", "occurred_at_utc": "2026-10-06T08:00:00Z", "themes": ["purchase.not-delivered"], "severity": "critical", "urgent": true, "excerpt": "Fake example text: paid but did not get the item."}
+{"item_id": "ex-013", "source": "reviews", "author_key": "a-301", "occurred_at_utc": "2026-09-20T12:00:00Z", "themes": ["ui.shop-confusing"]}

@@ -1,0 +1,26 @@
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=utf-8
+X-Tt-Logid: 2026101516355305238019309D3B057A76
+X-Tos-Index: 3
+X-Tos-Idc: VA
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Access-Control-Expose-Headers: x-tt-traceflag,x-tt-logid
+x-tt-trace-host: 0197de2e731127850c95ae9f190ca682cd1e98bb65017b90ef83d33f099d34709010d38c9c1441fc50cff79ded1c6b6007f178463b3f970da246215bd7a179c523d18eba7c5afb2f0e5f1fddccc7f7018ceb0f4e1c310f88840ed2473bff665a713792d14249cd7b723da37621eda69d23
+x-tt-trace-id: 00-26101516355305238019309D3B057A76-4DDA1E9D297C86F5-00
+Server: TLB
+X-Akamai-Request-ID: 263be42a.1b1fac1.19ba1274
+Cache-Control: max-age=103030
+Expires: Thu, 22 Oct 2026 08:35:54 GMT
+Date: Wed, 21 Oct 2026 03:58:44 GMT
+Content-Length: 90
+X-Cache: TCP_MISS from a23-49-254-12.deploy.akamaitechnologies.com (AkamaiGHost/22.6.5-e48a1e600c03e7d517694b5b11b937be) (-)
+Connection: keep-alive
+X-Cache-Remote: TCP_REFRESH_MISS from a23-49-254-28.deploy.akamaitechnologies.com (AkamaiGHost/22.6.5-e48a1e600c03e7d517694b5b11b937be) (S)
+x-tt-trace-tag: id=16;cdn-cache=hit;type=static
+Server-Timing: cdn-cache; desc=HIT, edge; dur=10, origin; dur=0
+Server-Timing: inner; dur=548
+X-Parent-Response-Time: 10,23.49.254.12
+
+User-agent: *
+Allow: /
+Sitemap: https://ads.tiktok.com/business/sitemap/sitemap_index.xml

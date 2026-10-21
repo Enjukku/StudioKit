@@ -1,0 +1,168 @@
+{
+  "format": "film-shotlist/1",
+  "sequence": "boss-reveal",
+  "title": "Boss reveal (paper example, flooded observatory)",
+  "revision": 1,
+  "stage": "plan",
+  "fps": [
+    30,
+    1
+  ],
+  "start_frame": 1,
+  "aspect": [
+    16,
+    9
+  ],
+  "fov_mode": "Vertical",
+  "board_policy": "constraint",
+  "shots": [
+    {
+      "id": "A",
+      "rev": 1,
+      "frames": "UNKNOWN",
+      "size": "Wide view that shows the player, the beacon and the exit landmark",
+      "angle": "Near the player's observing height; the exact camera height is UNKNOWN",
+      "lens": "UNKNOWN",
+      "movement": "Static proposal; the player's approach changes the composition",
+      "action": "The player pauses at the edge of the flooded floor and notices the beacon",
+      "sound": "Water ambience; a distinct beacon pulse, cue sfx.beacon.pulse",
+      "emotion": "Curiosity becomes intention",
+      "transition": "Cut when the player's attention fixes on the beacon",
+      "purpose": "Establish the choice",
+      "continuity": "Establish the exit on the same planned screen side as the eventual return to play",
+      "approval": "The owner approves the geography",
+      "evidence": "OPINION: original example (film paper FP:917)",
+      "notes": "Length UNKNOWN until the Blender animatic measures it (fill with `shotlist.py diff --write`). Keep lens UNKNOWN: keep all three narrative landmarks in the chosen viewport."
+    },
+    {
+      "id": "B",
+      "rev": 1,
+      "frames": "UNKNOWN",
+      "size": "Detail of the player's hand approaching the beacon",
+      "angle": "Close observing angle; exact height and distance UNKNOWN",
+      "lens": "UNKNOWN",
+      "movement": "Proposed gentle push toward contact; speed UNKNOWN",
+      "action": "The beacon stops pulsing before contact; reflected motion appears behind it",
+      "sound": "sfx.beacon.pulse ceases; a water disturbance cue starts before the threat is identified",
+      "emotion": "Expectation becomes uncertainty",
+      "transition": "Cut on the player's interrupted reach, not on an invented timer",
+      "purpose": "Reveal the wrong assumption",
+      "continuity": "Preserve the reaching hand and the action phase",
+      "approval": "The sound designer reviews whether the contrast reads without excessive loudness",
+      "evidence": "OPINION: original example (film paper FP:945)",
+      "notes": "Length UNKNOWN until the Blender animatic measures it (fill with `shotlist.py diff --write`). Lens: avoid confusing the reaching hand with the statue's hand."
+    },
+    {
+      "id": "C",
+      "rev": 1,
+      "frames": "UNKNOWN",
+      "size": "Medium close view of the player with a readable eyeline",
+      "angle": "Eye-level proposal; exact camera geometry UNKNOWN",
+      "lens": "UNKNOWN",
+      "movement": "Static proposal, so the shift of attention carries the beat",
+      "action": "The player stops, looks past the beacon, then shifts weight away",
+      "sound": "The water disturbance continues offscreen; no dialogue required",
+      "emotion": "Uncertainty becomes recognition",
+      "transition": "Cut motivated by the new eyeline to its target",
+      "purpose": "Let the player notice",
+      "continuity": "The animator provides a readable change of intention for supported avatars",
+      "approval": "The owner approves whether the reaction comes before the reveal",
+      "evidence": "OPINION: original example (film paper FP:973)",
+      "notes": "Length UNKNOWN until the Blender animatic measures it (fill with `shotlist.py diff --write`). Lens: avatar variation needs a runtime review."
+    },
+    {
+      "id": "D",
+      "rev": 1,
+      "frames": "UNKNOWN",
+      "size": "Wide enough to show the statue awakening and its relation to the beacon",
+      "angle": "Low-angle proposal, depending on readability, not on a universal power rule",
+      "lens": "UNKNOWN",
+      "movement": "Proposed upward reveal that follows the statue's rising action; speed UNKNOWN",
+      "action": "The guardian lifts its head and blocks the direct route to the beacon",
+      "sound": "Stone separating, displaced water and a guardian vocal cue; a music entry is an option for the owner to review",
+      "emotion": "Recognition becomes a concrete threat",
+      "transition": "Cut when the threat's position and the player's problem are clear",
+      "purpose": "Identify the threat",
+      "continuity": "VFX must not hide the route or the boss silhouette",
+      "approval": "The artist and the engineer verify the loading of required elements",
+      "evidence": "OPINION: original example (film paper FP:1001)",
+      "notes": "Length UNKNOWN until the Blender animatic measures it (fill with `shotlist.py diff --write`). Lens: the Roblox FOV is decided after viewport checks."
+    },
+    {
+      "id": "E",
+      "rev": 1,
+      "frames": "UNKNOWN",
+      "size": "A gameplay-compatible view holding the player, the threat and the exit direction",
+      "angle": "Match the approved gameplay viewing relationship",
+      "lens": "UNKNOWN",
+      "movement": "Transition to the gameplay camera by an implementation chosen and tested with engineering",
+      "action": "The guardian settles into its encounter start state; the player has a legible next action",
+      "sound": "Encounter ambience continues; a UI cue only when interaction is available",
+      "emotion": "Threat becomes player agency",
+      "transition": "End cinematic ownership and restore the agreed play state",
+      "purpose": "Return the decision to the player",
+      "continuity": "Test completion, skip and interruption separately",
+      "approval": "No visual cue may grant gameplay rewards or decide server authority",
+      "evidence": "OPINION: original example (film paper FP:1029)",
+      "notes": "Length UNKNOWN until the Blender animatic measures it (fill with `shotlist.py diff --write`). Lens: compare runtime FOV modes and device aspect ratios."
+    }
+  ],
+  "cues": [
+    {
+      "id": "amb.water.observatory",
+      "shot": "A",
+      "at": "UNKNOWN",
+      "kind": "ambience",
+      "sync": "flexible",
+      "note": "water ambience under A and B"
+    },
+    {
+      "id": "sfx.beacon.pulse",
+      "shot": "A",
+      "at": "UNKNOWN",
+      "kind": "sfx",
+      "sync": "pending",
+      "note": "the beacon pulse the player notices"
+    },
+    {
+      "id": "sfx.water.disturbance",
+      "shot": "B",
+      "at": "UNKNOWN",
+      "kind": "sfx",
+      "sync": "pending",
+      "note": "starts before the threat is identified, continues offscreen in C"
+    },
+    {
+      "id": "sfx.guardian.stone",
+      "shot": "D",
+      "at": "UNKNOWN",
+      "kind": "sfx",
+      "sync": "pending",
+      "note": "stone separating and displaced water"
+    },
+    {
+      "id": "vo.guardian.vocal",
+      "shot": "D",
+      "at": "UNKNOWN",
+      "kind": "vo",
+      "sync": "pending",
+      "note": "guardian vocal cue"
+    },
+    {
+      "id": "music.encounter.entry",
+      "shot": "D",
+      "at": "UNKNOWN",
+      "kind": "music",
+      "sync": "pending",
+      "note": "An option for the owner to review (paper EX-D-08)"
+    },
+    {
+      "id": "ui.interact.available",
+      "shot": "E",
+      "at": "UNKNOWN",
+      "kind": "ui",
+      "sync": "pending",
+      "note": "Only when interaction is available"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"_fixture_note":"SYNTHETIC (J004-T06): shape from the documented playlistItems.list resource (contentDetails.videoId). Ids are made up.","kind":"youtube#playlistItemListResponse","items":[{"kind":"youtube#playlistItem","contentDetails":{"videoId":"vidA0000001"}},{"kind":"youtube#playlistItem","contentDetails":{"videoId":"vidB0000002"}}]}

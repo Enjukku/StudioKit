@@ -1,0 +1,107 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "silhouette",
+ "input": {
+  "path": "content\\ui\\egg-shop\\export\\egg_meadow.png",
+  "sha256": "447fda8a17403e02a8f5549f91f8a7828d937fb882d70b02337450bc496b6265",
+  "size_px": [
+   512,
+   512
+  ],
+  "mode": "RGBA",
+  "compare": {
+   "path": "content\\ui\\egg-shop\\export\\egg_lava.png",
+   "sha256": "2f9de1aff9bce3133e7229e97fa7a086a3c1d0b012161757324564441194ac7d",
+   "size_px": [
+    512,
+    512
+   ],
+   "mask_source": "alpha",
+   "key_estimate": {}
+  }
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "compare": "content/ui/egg-shop/export/egg_lava.png",
+  "compare_mask": null,
+  "min_iou": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "area_px": 157068,
+  "area_frac": 0.5991668701171875,
+  "bbox_px": {
+   "x0": 42,
+   "y0": 6,
+   "x1": 470,
+   "y1": 507,
+   "w": 428,
+   "h": 501
+  },
+  "bbox_frac": {
+   "x0": 0.08203125,
+   "y0": 0.01171875,
+   "w": 0.8359375,
+   "h": 0.978515625
+  },
+  "components": [
+   {
+    "label": 1,
+    "area_px": 157068,
+    "area_frac": 0.5991668701171875,
+    "bbox_px": {
+     "x0": 42,
+     "y0": 6,
+     "x1": 470,
+     "y1": 507,
+     "w": 428,
+     "h": 501
+    },
+    "n": 1
+   }
+  ],
+  "component_count": 1,
+  "compare": {
+   "iou": 0.9432469269794795,
+   "alignment": {
+    "method": "crop to bbox, scale to common bbox height keeping aspect (bilinear, threshold 0.5), centre",
+    "canvas_px": [
+     429,
+     502
+    ],
+    "scale_a": 1.001996,
+    "scale_b": 1.0,
+    "bbox_a_px": [
+     42,
+     6,
+     470,
+     507
+    ],
+    "bbox_b_px": [
+     58,
+     5,
+     453,
+     507
+    ]
+   }
+  }
+ },
+ "images": {
+  "silhouette": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_meadow.silhouette.png"
+ },
+ "verdict": "measured"
+}

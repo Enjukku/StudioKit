@@ -1,0 +1,116 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "silhouette",
+ "input": {
+  "path": "content\\ui\\egg-shop\\refs\\raw\\egg_galaxy_raw.png",
+  "sha256": "bf04c3b42a9a8b080f85ec92c413262734d67988b4de7bf04998d6874893cc8d",
+  "size_px": [
+   1024,
+   1024
+  ],
+  "mode": "RGB",
+  "compare": {
+   "path": "content\\ui\\egg-shop\\export\\egg_galaxy.png",
+   "sha256": "0c4053ff0daea1e49e5b7b872eed02f733b664bdc7df8044e42c8d1825f1116a",
+   "size_px": [
+    512,
+    512
+   ],
+   "mask_source": "alpha",
+   "key_estimate": {}
+  }
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "key-auto",
+  "key_estimate": {
+   "estimated_key": "#02FA03",
+   "border_strip_px": 20,
+   "border_share_within_tol": 1.0,
+   "flat_share_needed": 0.9,
+   "flat": true,
+   "hole_fill": true,
+   "filled_holes": 0,
+   "filled_area_px": 0
+  },
+  "compare": "content/ui/egg-shop/export/egg_galaxy.png",
+  "compare_mask": null,
+  "min_iou": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "area_px": 441788,
+  "area_frac": 0.4213218688964844,
+  "bbox_px": {
+   "x0": 167,
+   "y0": 91,
+   "x1": 850,
+   "y1": 938,
+   "w": 683,
+   "h": 847
+  },
+  "bbox_frac": {
+   "x0": 0.1630859375,
+   "y0": 0.0888671875,
+   "w": 0.6669921875,
+   "h": 0.8271484375
+  },
+  "components": [
+   {
+    "label": 1,
+    "area_px": 441788,
+    "area_frac": 0.4213218688964844,
+    "bbox_px": {
+     "x0": 167,
+     "y0": 91,
+     "x1": 850,
+     "y1": 938,
+     "w": 683,
+     "h": 847
+    },
+    "n": 1
+   }
+  ],
+  "component_count": 1,
+  "compare": {
+   "iou": 0.9981733260386948,
+   "alignment": {
+    "method": "crop to bbox, scale to common bbox height keeping aspect (bilinear, threshold 0.5), centre",
+    "canvas_px": [
+     685,
+     847
+    ],
+    "scale_a": 1.0,
+    "scale_b": 1.687251,
+    "bbox_a_px": [
+     167,
+     91,
+     850,
+     938
+    ],
+    "bbox_b_px": [
+     53,
+     5,
+     459,
+     507
+    ]
+   }
+  }
+ },
+ "images": {
+  "silhouette": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_galaxy_raw.silhouette.png"
+ },
+ "verdict": "measured"
+}

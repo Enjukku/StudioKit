@@ -1,0 +1,12 @@
+{
+  "id": "boss-reveal-c-r1",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 2 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nStoryboard panel, shot C of 5: medium-full side view at the explorer's chest height. Image 1 is the greybox layout of this shot: keep the camera, the framing and the positions exactly. Image 2 is the earlier panel of this place: keep the explorer, the pedestal and the beacon exactly. The explorer stands left of centre in near profile, facing right, head tilted up, looking up and to the right past the beacon at something out of frame; the right hand is coming down; the weight is moving onto the back foot. The dim amber beacon on its pedestal at the right. Behind the explorer, the cool glowing arched exit doorway on the back wall. The statue is out of frame.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "output\\J015-g2\\stills\\board_inputs\\C_layout.png",
+    "content\\art\\refs\\storyboard\\boss-reveal-p1-r1.png"
+  ],
+  "codex_session": "01a15e08-9320-7d22-9cb9-859394d6164d",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e08-9320-7d22-9cb9-859394d6164d\\exec-35245306-739d-4ad7-a738-bac7a08ab5df.png",
+  "seconds": 50
+}

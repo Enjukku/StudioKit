@@ -1,0 +1,5 @@
+06-confirmed.png focus ring rightmost x 965  black-outline columns (count>60): [np.int64(950), np.int64(951), np.int64(952), np.int64(953), np.int64(954), np.int64(965), np.int64(966), np.int64(967), np.int64(968), np.int64(969)]
+07-failed.png focus ring rightmost x 965  black-outline columns (count>60): [np.int64(950), np.int64(951), np.int64(952), np.int64(953), np.int64(954), np.int64(965), np.int64(966), np.int64(967), np.int64(968), np.int64(969)]
+08-not-enough-coins.png focus ring rightmost x 965  black-outline columns (count>60): [np.int64(950), np.int64(951), np.int64(952), np.int64(953), np.int64(954), np.int64(965), np.int64(966), np.int64(967), np.int64(968), np.int64(969)]
+03 stitch rows (y with >300 stitch px in x600-1700): [976, 977, 978, 979]
+03 stitch px under Cancel box x230-550 at those rows: [0, 0, 0, 0]  at x 170-225: [33, 32, 30, 29]

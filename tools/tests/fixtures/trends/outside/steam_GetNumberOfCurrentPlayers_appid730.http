@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Server: nginx
+Content-Type: application/json; charset=UTF-8
+Cache-Control: public, max-age=421
+Expires: Wed, 21 Oct 2026 03:59:12 GMT
+Date: Wed, 21 Oct 2026 03:52:11 GMT
+Content-Length: 47
+Connection: keep-alive
+
+{"response":{"player_count":408548,"result":1}}

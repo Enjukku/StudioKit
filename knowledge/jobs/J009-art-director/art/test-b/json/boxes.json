@@ -1,0 +1,563 @@
+{
+ "method": "colour predicate in a search window, largest connected component, holes filled; boxes [x0,y0,x1,y1) in canvas px of the 1920x1080 export",
+ "screens": {
+  "egg01": {
+   "file": "content/ui/egg-shop/screens/01-inspect-main-1920.png",
+   "items": {
+    "buy_meadow": {
+     "box": [
+      782,
+      860,
+      1042,
+      980
+     ],
+     "window": [
+      760,
+      840,
+      1060,
+      1010
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-buy_meadow.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "chances_meadow": {
+     "box": [
+      782,
+      756,
+      1042,
+      836
+     ],
+     "window": [
+      760,
+      740,
+      1060,
+      850
+     ],
+     "predicate": "P_white_btn",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-chances_meadow.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "buy_featured": {
+     "box": [
+      470,
+      856,
+      694,
+      976
+     ],
+     "window": [
+      455,
+      840,
+      710,
+      1000
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-buy_featured.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "chances_featured": {
+     "box": [
+      194,
+      856,
+      450,
+      976
+     ],
+     "window": [
+      180,
+      840,
+      462,
+      1000
+     ],
+     "predicate": "P_white_btn",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-chances_featured.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "plus_coins": {
+     "box": [
+      540,
+      236,
+      632,
+      320
+     ],
+     "window": [
+      525,
+      220,
+      645,
+      340
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-plus_coins.png",
+     "mask_note": "bbox grown by 10 px to include outline/halo/lip"
+    },
+    "close": {
+     "box": [
+      1700,
+      172,
+      1828,
+      292
+     ],
+     "window": [
+      1690,
+      160,
+      1840,
+      310
+     ],
+     "predicate": "P_red",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01-close.png",
+     "mask_note": "bbox grown by 10 px to include outline/halo/lip"
+    }
+   }
+  },
+  "egg01v2": {
+   "file": "content/ui/egg-shop/screens/01-inspect-main-1920-v2.png",
+   "items": {
+    "buy_meadow": {
+     "box": [
+      782,
+      860,
+      1042,
+      980
+     ],
+     "window": [
+      760,
+      840,
+      1060,
+      1010
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-buy_meadow.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "chances_meadow": {
+     "box": [
+      782,
+      756,
+      1042,
+      836
+     ],
+     "window": [
+      760,
+      740,
+      1060,
+      850
+     ],
+     "predicate": "P_white_btn",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-chances_meadow.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "buy_featured": {
+     "box": [
+      470,
+      856,
+      694,
+      976
+     ],
+     "window": [
+      455,
+      840,
+      710,
+      1000
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-buy_featured.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "chances_featured": {
+     "box": [
+      194,
+      856,
+      450,
+      976
+     ],
+     "window": [
+      180,
+      840,
+      462,
+      1000
+     ],
+     "predicate": "P_white_btn",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-chances_featured.png",
+     "mask_note": "bbox grown by 12 px to include outline/halo/lip"
+    },
+    "plus_coins": {
+     "box": [
+      540,
+      236,
+      632,
+      320
+     ],
+     "window": [
+      525,
+      220,
+      645,
+      340
+     ],
+     "predicate": "P_green",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-plus_coins.png",
+     "mask_note": "bbox grown by 10 px to include outline/halo/lip"
+    },
+    "close": {
+     "box": [
+      1700,
+      172,
+      1828,
+      292
+     ],
+     "window": [
+      1690,
+      160,
+      1840,
+      310
+     ],
+     "predicate": "P_red",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/egg01v2-close.png",
+     "mask_note": "bbox grown by 10 px to include outline/halo/lip"
+    }
+   }
+  },
+  "egg02": {
+   "file": "content/ui/egg-shop/screens/02-odds-open.png",
+   "items": {
+    "buy": {
+     "box": [
+      230,
+      690,
+      550,
+      810
+     ],
+     "window": [
+      200,
+      670,
+      580,
+      840
+     ],
+     "predicate": "P_green"
+    }
+   }
+  },
+  "egg03": {
+   "file": "content/ui/egg-shop/screens/03-review.png",
+   "items": {
+    "buy": {
+     "box": [
+      230,
+      712,
+      550,
+      832
+     ],
+     "window": [
+      200,
+      690,
+      580,
+      860
+     ],
+     "predicate": "P_green"
+    },
+    "cancel": {
+     "box": [
+      230,
+      862,
+      550,
+      982
+     ],
+     "window": [
+      200,
+      850,
+      580,
+      1000
+     ],
+     "predicate": "P_white_btn"
+    }
+   }
+  },
+  "egg06": {
+   "file": "content/ui/egg-shop/screens/06-confirmed.png",
+   "items": {
+    "done": {
+     "box": [
+      570,
+      850,
+      950,
+      970
+     ],
+     "window": [
+      555,
+      830,
+      960,
+      990
+     ],
+     "predicate": "P_green"
+    },
+    "buy_again": {
+     "box": [
+      970,
+      850,
+      1350,
+      970
+     ],
+     "window": [
+      960,
+      830,
+      1360,
+      990
+     ],
+     "predicate": "P_white_btn"
+    }
+   }
+  },
+  "ani01": {
+   "file": "content/ui/anime-summon/screens/01-main-1920.png",
+   "items": {
+    "summon_x1": {
+     "box": [
+      963,
+      883,
+      1397,
+      1037
+     ],
+     "window": [
+      950,
+      870,
+      1410,
+      1060
+     ],
+     "predicate": "P_cyan",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani01-summon_x1.png"
+    },
+    "summon_x10": {
+     "box": [
+      1423,
+      883,
+      1857,
+      1037
+     ],
+     "window": [
+      1410,
+      870,
+      1870,
+      1060
+     ],
+     "predicate": "P_cyan",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani01-summon_x10.png"
+    },
+    "odds_units_stroke": {
+     "box": [
+      60,
+      900,
+      620,
+      1040
+     ],
+     "window": [
+      50,
+      890,
+      630,
+      1050
+     ],
+     "predicate": "P_glass_stroke"
+    }
+   }
+  },
+  "ani03": {
+   "file": "content/ui/anime-summon/screens/03-review.png",
+   "items": {
+    "confirm": {
+     "box": [
+      983,
+      780,
+      1377,
+      914
+     ],
+     "window": [
+      960,
+      750,
+      1400,
+      950
+     ],
+     "predicate": "P_cyan"
+    }
+   }
+  },
+  "ani04": {
+   "file": "content/ui/anime-summon/screens/04-commit.png",
+   "items": {
+    "confirm": {
+     "box": [
+      983,
+      790,
+      1377,
+      924
+     ],
+     "window": [
+      960,
+      750,
+      1400,
+      950
+     ],
+     "predicate": "P_cyan"
+    }
+   }
+  },
+  "ani05": {
+   "file": "content/ui/anime-summon/screens/05-pending.png",
+   "items": {
+    "summoning": {
+     "box": [
+      913,
+      718,
+      1447,
+      852
+     ],
+     "window": [
+      900,
+      700,
+      1460,
+      870
+     ],
+     "predicate": "P_cyan"
+    },
+    "cancel_disabled": {
+     "box": [
+      470,
+      715,
+      870,
+      855
+     ],
+     "window": [
+      460,
+      700,
+      880,
+      870
+     ],
+     "predicate": "P_grey_btn",
+     "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani05-cancel_disabled.png"
+    }
+   }
+  },
+  "ani06": {
+   "file": "content/ui/anime-summon/screens/06-reveal-1x.png",
+   "items": {
+    "done": {
+     "box": [
+      1443,
+      883,
+      1837,
+      1017
+     ],
+     "window": [
+      1420,
+      860,
+      1870,
+      1060
+     ],
+     "predicate": "P_cyan"
+    }
+   }
+  },
+  "ani07": {
+   "file": "content/ui/anime-summon/screens/07-reveal-10x-summary.png",
+   "items": {
+    "done": {
+     "box": [
+      1463,
+      927,
+      1857,
+      1061
+     ],
+     "window": [
+      1440,
+      900,
+      1890,
+      1080
+     ],
+     "predicate": "P_cyan"
+    }
+   }
+  }
+ },
+ "hero_template_match": {
+  "ani01": {
+   "x": 830,
+   "y": 140,
+   "size": [
+    478,
+    700
+   ],
+   "rmse_rgb": 5.94,
+   "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani01-hero.png"
+  },
+  "ani06": {
+   "x": 210,
+   "y": 110,
+   "size": [
+    640,
+    937
+   ],
+   "rmse_rgb": 9.81,
+   "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani06-hero.png"
+  }
+ },
+ "overlaps": {
+  "egg02.buy -> egg03.buy (Chances popup Buy, then Review Buy)": {
+   "px": 31360,
+   "box": [
+    230,
+    712,
+    550,
+    810
+   ],
+   "frac_of_second": 0.817
+  },
+  "egg01.buy_featured -> egg03.buy": {
+   "px": 0,
+   "box": null,
+   "gap_x": -80,
+   "gap_y": 24
+  },
+  "egg01.buy_meadow -> egg03.buy": {
+   "px": 0,
+   "box": null,
+   "gap_x": 232,
+   "gap_y": 28
+  },
+  "ani01.summon_x1 -> ani03.confirm (if the x1 review uses this layout)": {
+   "px": 12214,
+   "box": [
+    983,
+    883,
+    1377,
+    914
+   ],
+   "frac_of_second": 0.231
+  },
+  "ani01.summon_x10 -> ani03.confirm": {
+   "px": 0,
+   "box": null,
+   "gap_x": 46,
+   "gap_y": -31
+  },
+  "ani03.confirm -> ani05.summoning (pressed button moves/resizes)": {
+   "before": [
+    983,
+    780,
+    1377,
+    914
+   ],
+   "after": [
+    913,
+    718,
+    1447,
+    852
+   ]
+  },
+  "ani06.done -> ani01.summon_x10 (Done returns to main)": {
+   "px": 52796,
+   "box": [
+    1443,
+    883,
+    1837,
+    1017
+   ],
+   "frac_of_second": 0.79
+  }
+ }
+}

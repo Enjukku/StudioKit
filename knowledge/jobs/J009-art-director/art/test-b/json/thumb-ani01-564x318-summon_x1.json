@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\anime-summon\\screens\\01-main-1920.png",
+  "sha256": "a9883480126e33631ad4386841a96e826ec65144c59a5a0a904a3a2dd5b4c88f",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-b/masks/ani01-summon_x1.png",
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "target_px": [
+   564,
+   318
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   564,
+   318
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 564,
+   "h": 317
+  },
+  "scale": 0.29375,
+  "mask_source": "mask-image",
+  "value": {
+   "whole": {
+    "n_px": 178788,
+    "mean": 0.13823338623549558,
+    "p5": 0.004362195717742615,
+    "p25": 0.016919628553174783,
+    "p50": 0.037208632145229376,
+    "p75": 0.11508284893038198,
+    "p95": 0.7128214167654852
+   },
+   "subject": {
+    "n_px": 5673,
+    "mean": 0.4769116510175744,
+    "p5": 0.010547853877396186,
+    "p25": 0.3258172940520643,
+    "p50": 0.4554422118940321,
+    "p75": 0.6725066139027105,
+    "p95": 0.9102458153875373
+   },
+   "ring": {
+    "n_px": 704,
+    "mean": 0.32560913400020297,
+    "p5": 0.0018702347663438887,
+    "p25": 0.03504045067916381,
+    "p50": 0.2284649999557804,
+    "p75": 0.603888655535353,
+    "p95": 0.7323019673747684
+   },
+   "subject_ring_ratio": 1.8151014022383252
+  },
+  "silhouette": {
+   "area_px": 5673,
+   "area_frac": 0.03163053659842098,
+   "bbox_px": {
+    "x0": 283,
+    "y0": 259,
+    "x1": 410,
+    "y1": 304,
+    "w": 127,
+    "h": 45
+   },
+   "bbox_frac": {
+    "x0": 0.50177304964539,
+    "y0": 0.8144654088050315,
+    "w": 0.225177304964539,
+    "h": 0.14150943396226415
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-main-1920.thumb564x318.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-main-1920.thumb564x318-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

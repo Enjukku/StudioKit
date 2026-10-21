@@ -1,0 +1,177 @@
+﻿PROBE p01 version = 5.1.2
+PROBE p01 fps_default = 24
+PROBE p01 fps_base_default = 1.0
+PROBE p01 fps_prop_range = (1, 32767)
+PROBE p01 fps_base_prop_range = (9.999999747378752e-06, 1000000.0)
+PROBE p01 sensor_fit_items = ['AUTO', 'HORIZONTAL', 'VERTICAL']
+PROBE p01 sensor_fit_default = AUTO
+PROBE p01 sensor_width_default = 36.0
+PROBE p01 sensor_height_default = 24.0
+PROBE p01 lens_default = 50.0
+PROBE p01 camera_type_items = ['PERSP', 'ORTHO', 'PANO', 'CUSTOM']
+PROBE p01 TimelineMarker_has_camera = True
+PROBE p01 TimelineMarker_frame_type = INT
+PROBE p01 render.opengl_exists = True
+PROBE p01 render.opengl_label = Viewport Render
+PROBE p01 render.opengl_props = ['animation', 'render_keyed_only', 'sequencer', 'write_still', 'view_context']
+PROBE p01 FCurve_auto_smoothing_items = ['NONE', 'CONT_ACCEL']
+PROBE p01 Keyframe_handle_types = ['FREE', 'ALIGNED', 'VECTOR', 'AUTO', 'AUTO_CLAMPED']
+PROBE p01 new_key_handle_type_default = AUTO_CLAMPED
+PROBE p01 new_key_interp_default = BEZIER
+PROBE p01 space_view3d.py_contains[Render Viewport Preview] = True
+PROBE p01 space_view3d.py_contains[Render Playblast] = True
+PROBE p01 space_view3d.py_contains[Render Playblast on Keyframes] = True
+PROBE p01 space_view3d.py_contains[Viewport Render Animation] = False
+PROBE p01 space_view3d.py_contains[Viewport Render Image] = False
+PROBE p01 space_view3d_path = C:\Program Files\Blender Foundation\Blender 5.1\5.1\scripts\startup\bl_ui\space_view3d.py
+PROBE p02 rate[24] = fps=24 fps_base=1.0 effective=24.000000000000
+PROBE p02 rate[30] = fps=30 fps_base=1.0 effective=30.000000000000
+PROBE p02 rate[29.97 via 30/1.001] = fps=30 fps_base=1.0010000467300415 effective=29.970028570928
+PROBE p02 rate[29.97 via 30000/1001] = fps=30000 fps_base=1001.0 effective=29.970029970030
+PROBE p02 rate[60] = fps=60 fps_base=1.0 effective=60.000000000000
+PROBE p02 rate[23.976 via 24000/1001] = fps=24000 fps_base=1001.0 effective=23.976023976024
+PROBE p02 exact_30000_over_1001 = 29.970029970030
+PROBE p02 fps_base_set_1.001_readback = 1.0010000467300415
+PROBE p02 error_30_over_1.001_vs_exact = -1.399e-06
+PROBE p02 error_30000_over_1001_vs_exact = 0.000e+00
+PROBE p02 fps_assign_29.97 = TypeError: bpy_struct: item.attr = val: RenderSettings.fps expected an int type, not float
+PROBE p02 marker_new_frame_10.5 = TypeError: TimelineMarkers.new(): error with keyword argument "frame" -  Function.frame expected an i
+PROBE p02 marker_set_frame_12.7 = TypeError: bpy_struct: item.attr = val: TimelineMarker.frame expected an int type, not float
+PROBE p02 marker_frame_negative_ok = -5
+PROBE p02 marker_cameras = [('A', 10, 'CamA'), ('B', 20, 'CamB'), ('C', 30, 'CamC')]
+PROBE p02 frame_set[1].scene.camera = CamA
+PROBE p02 frame_set[9].scene.camera = CamA
+PROBE p02 frame_set[10].scene.camera = CamA
+PROBE p02 frame_set[11].scene.camera = CamA
+PROBE p02 frame_set[19].scene.camera = CamA
+PROBE p02 frame_set[20].scene.camera = CamB
+PROBE p02 frame_set[21].scene.camera = CamB
+PROBE p02 frame_set[29].scene.camera = CamB
+PROBE p02 frame_set[30].scene.camera = CamC
+PROBE p02 frame_set[31].scene.camera = CamC
+PROBE p02 frame_set[100].scene.camera = CamC
+PROBE p02 frame_set[19+0.9].scene.camera = CamA
+PROBE p02 frame_set[20+0.0].scene.camera = CamB
+PROBE p02 render_animation_1_to_31_file_count = 31
+PROBE p02 render_animation_first_last_file = ('f_0001.png', 'f_0031.png')
+PROBE p02 render_pre_camera_log(frame:cam) sample = [(1, 'CamC'), (9, 'CamA'), (10, 'CamA'), (19, 'CamA'), (20, 'CamA'), (29, 'CamB'), (30, 'CamB'), (31, 'CamC')]
+PROBE p02 render_pre_distinct_camera_runs = [('CamC', 1, 31), ('CamA', 2, 20), ('CamB', 21, 30)]
+PROBE p02 scene.camera_after_render = CamA
+PROBE p02 samples_frames_1_to_31 = 31
+PROBE p02 seconds_for_31_samples_at_30fps = 31/30 = 1.033333333333
+PROBE p02 t(31)-t(1) elapsed positions = 1.0
+PROBE p03 frame_set(1) with scene.camera=CamC and first marker at 5 -> = CamA
+PROBE p03 rendered_centre_pixel(frame, colour) = [(1, 'red=A'), (2, 'red=A'), (3, 'red=A'), (4, 'red=A'), (5, 'red=A'), (6, 'red=A'), (7, 'red=A'), (8, 'red=A'), (9, 'red=A'), (10, 'green=B'), (11, 'green=B'), (12, 'green=B'), (13, 'green=B'), (14, 'green=B'), (15, 'blue=C'), (16, 'blue=C')]
+PROBE p03 render_pre_camera = [(1, 'CamC'), (2, 'CamA'), (3, 'CamA'), (4, 'CamA'), (5, 'CamA'), (6, 'CamA'), (7, 'CamA'), (8, 'CamA'), (9, 'CamA'), (10, 'CamA'), (11, 'CamB'), (12, 'CamB'), (13, 'CamB'), (14, 'CamB'), (15, 'CamB'), (16, 'CamC')]
+PROBE p03 render_post_camera = [(1, 'CamA'), (2, 'CamA'), (3, 'CamA'), (4, 'CamA'), (5, 'CamA'), (6, 'CamA'), (7, 'CamA'), (8, 'CamA'), (9, 'CamA'), (10, 'CamB'), (11, 'CamB'), (12, 'CamB'), (13, 'CamB'), (14, 'CamB'), (15, 'CamC'), (16, 'CamC')]
+Error: Cannot use OpenGL render in background mode (no opengl context)
+PROBE p03 render.opengl in background = RuntimeError: Error: Cannot use OpenGL render in background mode (no opengl context)
+PROBE p04 case[HORIZONTAL 1920x1080] = angle_x=39.5978 angle_y=26.9915 cam.angle=39.5978 | formula H=39.5978 V=22.8952 | projmatrix H=39.5978 V=22.8952 | pixel-measured H=39.55 V=22.87 (run 267x267 of 960x540 px)
+PROBE p04 case[VERTICAL 1920x1080] = angle_x=39.5978 angle_y=26.9915 cam.angle=26.9915 | formula H=46.2127 V=26.9915 | projmatrix H=46.2127 V=26.9915 | pixel-measured H=46.21 V=26.88 (run 225x226 of 960x540 px)
+PROBE p04 case[AUTO 1920x1080] = angle_x=39.5978 angle_y=26.9915 cam.angle=39.5978 | formula H=39.5978 V=22.8952 | projmatrix H=39.5978 V=22.8952 | pixel-measured H=39.55 V=22.87 (run 267x267 of 960x540 px)
+PROBE p04 case[HORIZONTAL 1080x1920] = angle_x=39.5978 angle_y=26.9915 cam.angle=39.5978 | formula H=39.5978 V=65.2385 | projmatrix H=39.5978 V=65.2385 | pixel-measured H=39.36 V=64.89 (run 151x151 of 540x960 px)
+PROBE p04 case[VERTICAL 1080x1920] = angle_x=39.5978 angle_y=26.9915 cam.angle=26.9915 | formula H=15.3769 V=26.9915 | projmatrix H=15.3769 V=26.9915 | pixel-measured H=15.34 V=26.93 (run 401x401 of 540x960 px)
+PROBE p04 case[AUTO 1080x1920] = angle_x=39.5978 angle_y=26.9915 cam.angle=39.5978 | formula H=22.8952 V=39.5978 | projmatrix H=22.8952 V=39.5978 | pixel-measured H=22.87 V=39.55 (run 267x267 of 540x960 px)
+PROBE p04 sensor_height_effect[HORIZONTAL] (sensor_height -> projmatrix V deg @1920x1080) = [(24.0, 22.8952), (12.0, 22.8952)]
+PROBE p04 sensor_height_effect[AUTO] (sensor_height -> projmatrix V deg @1920x1080) = [(24.0, 22.8952), (12.0, 22.8952)]
+PROBE p04 sensor_height_effect[VERTICAL] (sensor_height -> projmatrix V deg @1920x1080) = [(24.0, 26.9915), (12.0, 13.6855)]
+PROBE p04 cam.angle[HORIZONTAL] deg (resolution-independent) = 39.5978
+PROBE p04 cam.angle[VERTICAL] deg (resolution-independent) = 26.9915
+PROBE p04 cam.angle[AUTO] deg (resolution-independent) = 39.5978
+PROBE p04 angle_x/angle_y identical at 1920x1080 and 1080x1920 (i.e. resolution-independent)? = True
+PROBE p04 pixel_aspect_2:1 HORIZONTAL projmatrix H,V deg (calc_matrix_camera with scale_x=2) = (39.5978, 11.563)
+PROBE p05 TrackTo defaults via constraints.new (track_axis, up_axis) = ('TRACK_NEGATIVE_Z', 'UP_Y')
+PROBE p05 TrackTo track_axis items = ['TRACK_X', 'TRACK_Y', 'TRACK_Z', 'TRACK_NEGATIVE_X', 'TRACK_NEGATIVE_Y', 'TRACK_NEGATIVE_Z']
+PROBE p05 TrackTo up_axis items = ['UP_X', 'UP_Y', 'UP_Z']
+PROBE p05 TrackTo use_target_z default = False
+PROBE p05 TrackTo track=Y up=Y -> is_valid / active = (False, True)
+PROBE p05 TrackTo track=-Y up=Y -> is_valid = False
+PROBE p05 TrackTo track=-Z up=Y (camera setup) -> is_valid = True
+PROBE p05 DampedTrack track_axis items = ['TRACK_X', 'TRACK_Y', 'TRACK_Z', 'TRACK_NEGATIVE_X', 'TRACK_NEGATIVE_Y', 'TRACK_NEGATIVE_Z']
+PROBE p05 DampedTrack has up_axis = False
+PROBE p05 orbit[TRACK_TO r=0.01 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 10.0000 / 0.0000
+PROBE p05 orbit[TRACK_TO r=0.5 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 10.0001 / 0.4989
+PROBE p05 orbit[TRACK_TO r=3 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 10.0000 / 2.8701
+PROBE p05 orbit[TRACK_TO r=10 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 10.0000 / 7.0666
+PROBE p05 orbit[DAMPED_TRACK r=0.01 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 0.0000 / 0.0000
+PROBE p05 orbit[DAMPED_TRACK r=0.5 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 0.4989 / 0.4989
+PROBE p05 orbit[DAMPED_TRACK r=3 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 2.9007 / 2.8701
+PROBE p05 orbit[DAMPED_TRACK r=10 h=10, 10deg orbit step] max camera-rotation change / max aim-direction change (deg) = 7.6453 / 7.0666
+PROBE p05 exact pole camera above target [TRACK_TO] aim, local Y in world = ('aim=(0.0, 0.0, -1.0)', 'Y=(0.0, 1.0, 0.0)')
+PROBE p05 exact pole camera above target [DAMPED_TRACK] aim, local Y in world = ('aim=(0.0, 0.0, -1.0)', 'Y=(0.0, 1.0, 0.0)')
+PROBE p06 new key defaults (interp, handle_left, handle_right) = ('BEZIER', 'AUTO_CLAMPED', 'AUTO_CLAMPED')
+PROBE p06 fcurve.auto_smoothing default = CONT_ACCEL
+PROBE p06 one F-curve = one channel (data_path, array_index, keys) = ('location', 0, 3)
+PROBE p06 overshoot[peak 0,10,0, AUTO_CLAMPED] min/max of sampled curve (key range 0..10) = 0.0000 / 10.0000
+PROBE p06 overshoot[peak 0,10,0, AUTO] min/max of sampled curve (key range 0..10) = 0.0000 / 10.0000
+PROBE p06 overshoot[step 0,0,10,10, AUTO_CLAMPED] min/max of sampled curve (key range 0..10) = 0.0000 / 10.0000
+PROBE p06 overshoot[step 0,0,10,10, AUTO] min/max of sampled curve (key range 0..10) = -0.8885 / 10.8885
+PROBE p06 LINEAR speed just before / after middle key (units per frame) = 1.0004 / -1.0004
+PROBE p06 AUTO_CLAMPED monotone keys 0,10,20,40: speed before / after key at frame 10 = 1.0014 / 1.0004
+PROBE p06 AUTO_CLAMPED peak key: speed before / after (flat handle => ~0) = 0.00000 / 0.00000
+PROBE p06 auto_smoothing=NONE: |change| at frames 5,15,25,35,45,55 when last key 9->20 (monotone keys) = [0.0, 0.0, 0.0, 0.0, 0.2286, 5.7286]
+PROBE p06 auto_smoothing=CONT_ACCEL: |change| at frames 5,15,25,35,45,55 when last key 9->20 (monotone keys) = [0.0012, 0.0062, 0.0234, 0.0874, 0.3261, 5.7572]
+PROBE p07 frame 1 = raw cam.location=(0.0, 0.0, 2.0) (local, unchanged) | evaluated world pos=(0.0, 0.0, 2.0) | evaluated aim(-Z)=(0.0, 0.995, -0.0995) | raw rotation_euler=(0.0, 0.0, 0.0) | eval lens=35.000 | orig lens=35.000 | orig matrix_world pos=(0.0, 0.0, 2.0)
+PROBE p07 frame 6 = raw cam.location=(0.0, 0.0, 2.0) (local, unchanged) | evaluated world pos=(5.0, 0.0, 2.0) | evaluated aim(-Z)=(-0.2414, 0.9656, -0.0966) | raw rotation_euler=(0.0, 0.0, 0.0) | eval lens=60.000 | orig lens=60.000 | orig matrix_world pos=(5.0, 0.0, 2.0)
+PROBE p07 frame 11 = raw cam.location=(0.0, 0.0, 2.0) (local, unchanged) | evaluated world pos=(10.0, 0.0, 2.0) | evaluated aim(-Z)=(-0.4454, 0.8909, -0.0891) | raw rotation_euler=(0.0, 0.0, 0.0) | eval lens=85.000 | orig lens=85.000 | orig matrix_world pos=(10.0, 0.0, 2.0)
+PROBE p07 after cam.location=(0,0,50), no update: original matrix_world z / evaluated z = (2.0, 50.0)
+PROBE p07 after view_layer.update(): original matrix_world z / evaluated z = (50.0, 50.0)
+PROBE p07 calc_matrix_camera H deg (lens 85 at frame 11, 36mm AUTO) = 23.9132
+PROBE p07 formula 2*atan(36/(2*85)) deg = 23.9132
+PROBE p08 H = 2atan(36/(2*50)) deg = 39.597753
+PROBE p08 V (Sy=24) = 2atan(24/(2*50)) deg = 26.991467
+PROBE p08 V from H=39.5978 with a=16:9: V=2atan(tan(H/2)/a) deg = 22.895193
+PROBE p08 identity tan(H/2) - a*tan(V/2) for a=16:9 = 0.000e+00
+PROBE p08 V from H=39.5978 with a=9:16: V=2atan(tan(H/2)/a) deg = 65.238486
+PROBE p08 identity tan(H/2) - a*tan(V/2) for a=9:16 = 5.551e-17
+PROBE p08 sensor 36mm, f=50 -> tan(H/2) = 0.36000000000000004
+PROBE p08 angle bounds: f->0+ (f=1e-6) H deg / f->inf (f=1e9) H deg = 179.999994 / 2.063e-06
+PROBE p08 x_image = f X/Z (X=1,Z=10,f=50) = 5.0
+PROBE p08 subject depth 10 f=50: subject image size for 1 m | background (1 m at depth 40) = 5.0000 | 1.2500  ratio bg/subject=0.2500
+PROBE p08 subject depth 20 f=100: subject image size for 1 m | background (1 m at depth 50) = 5.0000 | 2.0000  ratio bg/subject=0.4000
+PROBE p08 smoothstep speed analytic vs numeric derivative, max err (u in 0.02..0.98, L=10,T=2) = 1.44e-09
+PROBE p08 average speed L/T = 5.0
+PROBE p08 peak speed analytic 3L/(2T) at u=0.5 / speed(0.5) / max over grid = 7.500000 / 7.500000 / 7.500000
+PROBE p08 endpoint velocity u=0 / u=1 = (0.0, 0.0)
+PROBE p08 endpoint acceleration (L/T^2)(6-12u) at u=0 and u=1 (L=10,T=2) = (15.0, -15.0)
+PROBE p08 peak/average speed ratio = 1.5
+PROBE p08 t(31) with k0=1 at 30 fps (s) = 1
+PROBE p08 intervals between positions 1 and 31 = 30
+PROBE p08 inclusive samples 1..31 = 31
+PROBE p08 duration of 31 samples at 30 fps = 31/30 s = 1.033333333 s
+PROBE p08 one frame at 30 fps (ms) = 100/3 = 33.333333333
+PROBE p08 one frame at 60 fps (ms) = 50/3 = 16.666666667
+PROBE p08 33 ms and 16 ms exact? = (False, False)
+PROBE p08 30000/1001 fps one frame (ms) = 1001/30 = 33.366666667 ; rate = 29.970029970030
+PROBE p08 30000/1001 vs 29.97 relative difference = 1.000e-06
+PROBE p08 108000 frames (1 h at 30 fps) played at 30000/1001 last this many seconds MORE than 3600 = 3.6000 s
+PROBE p08 cut list [1,31) frames / seconds at 30fps = (30, Fraction(1, 1))
+PROBE p08 R_target(Qv) == Q(Rv) for Z-up->Y-up (det+1), max abs diff = 0.00e+00
+PROBE p08 det(R_target) for Z-up->Y-up (det+1) = 1.0
+PROBE p08 R_target(Qv) == Q(Rv) for swap y/z (det-1), max abs diff = 0.00e+00
+PROBE p08 det(R_target) for swap y/z (det-1) = 1.0
+PROBE p09 movie_strip_add prop = frame_start | name='Start Frame' | desc='Start frame of the strip' | default=0
+PROBE p09 movie_strip_add prop = adjust_playback_rate | name='Adjust Playback Rate' | desc='Play at normal speed regardless of scene FPS' | default=True
+PROBE p09 movie_strip_add prop = use_framerate | name='Set Scene Frame Rate' | desc='Set frame rate of the current scene to the frame rate of the movie' | default=True
+PROBE p09 movie_strip_add label = Add Movie Strip
+PROBE p09 image_settings.media_type items = ['IMAGE', 'MULTI_LAYER_IMAGE', 'VIDEO']
+PROBE p09 file_format items (media_type=IMAGE) = ['AVIF', 'JPEG', 'OPEN_EXR', 'PNG', 'WEBP', 'BMP', 'CINEON', 'DPX', 'IRIS', 'JPEG2000', 'HDR', 'TARGA', 'TARGA_RAW', 'TIFF', 'OPEN_EXR_MULTILAYER', 'FFMPEG']
+PROBE p09 set file_format='FFMPEG' directly = TypeError: bpy_struct: item.attr = val: enum "FFMPEG" not found in ('AVIF', 'JPEG
+PROBE p09 file_format items (media_type=VIDEO) = ['AVIF', 'JPEG', 'OPEN_EXR', 'PNG', 'WEBP', 'BMP', 'CINEON', 'DPX', 'IRIS', 'JPEG2000', 'HDR', 'TARGA', 'TARGA_RAW', 'TIFF', 'OPEN_EXR_MULTILAYER', 'FFMPEG']
+PROBE p09 movie_files = ['m_0001-0031.mp4']
+PROBE p09 movieclip fps / frame_duration / size = (29.970029830932617, 31, (64, 36))
+PROBE p09 strip.fps / frame_final_duration = (29.970029830932617, 31)
+PROBE p10 unbound marker@15: frame 12 camera = CamA
+PROBE p10 unbound marker@15: frame 15 camera = CamA
+PROBE p10 unbound marker@15: frame 17 camera = CamA
+PROBE p10 unbound marker@15: frame 20 camera = CamB
+PROBE p10 two bound markers on frame 10, created CamA then CamC -> camera = CamA
+PROBE p10 two bound markers on frame 10, created CamC then CamA -> camera = CamC
+PROBE p10 duplicate names allowed; count = (2, ['S010', 'S010'])
+PROBE p10 timeline_markers iteration order (creation order, unsorted) = [('late', 90), ('early', 5), ('mid', 40)]
+PROBE p10 sorted by frame = [('early', 5), ('mid', 40), ('late', 90)]
+PROBE p10 marker.camera readback = CamA
+PROBE p10 marker.camera after None = None
+PROBE p10 markers after remove = 3
+PROBE p10 marker.camera after the camera object is deleted = None
+PROBE p10 marker before frame_start (5), frame_set(12) camera = CamB

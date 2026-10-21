@@ -1,0 +1,1 @@
+{"_fixture": "TEST: docs dimension-values Completed (200) example", "path": "v1/universes/1234567890/operations/dimension-values/testop4", "done": true, "metadata": {"createdTime": "2026-10-20T00:00:00Z"}, "response": {"values": [{"dimension": "Country", "values": [{"value": "US"}, {"value": "GB"}]}]}}

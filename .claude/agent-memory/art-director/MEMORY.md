@@ -1,0 +1,2 @@
+- [Direction test craft](feedback_direction_tests.md) — art_refs two-pass print/run, prompt fixes for counts/proportion/thieves, measured "reads first" mask, grading calibration
+- [Style set craft](feedback_style_sets.md) — one scene in N styles: shared identity, only world lock varies; default staging, light line overrides palettes

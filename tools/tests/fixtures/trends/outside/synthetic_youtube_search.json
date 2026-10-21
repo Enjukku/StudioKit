@@ -1,0 +1,1 @@
+{"_fixture_note":"SYNTHETIC (J004-T06): shape from the documented search.list resource (id.videoId). Ids are made up.","kind":"youtube#searchListResponse","items":[{"kind":"youtube#searchResult","id":{"kind":"youtube#video","videoId":"vidC0000003"}},{"kind":"youtube#searchResult","id":{"kind":"youtube#video","videoId":"vidA0000001"}}]}

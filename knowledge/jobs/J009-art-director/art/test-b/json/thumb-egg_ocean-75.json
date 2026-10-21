@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\egg-shop\\export\\egg_ocean_256.png",
+  "sha256": "9e5d728ec021c99238f30cb3b757c2323d97c827b1b618cc89480a69bb1d1d0a",
+  "size_px": [
+   256,
+   256
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "target_px": [
+   75,
+   75
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   75,
+   75
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 75,
+   "h": 75
+  },
+  "scale": 0.29296875,
+  "mask_source": "alpha",
+  "value": {
+   "whole": {
+    "n_px": 5625,
+    "mean": 0.2490745730962391,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.10986451887033627,
+    "p75": 0.45248242970454666,
+    "p95": 0.8766641228524565
+   },
+   "subject": {
+    "n_px": 3367,
+    "mean": 0.4100304290017999,
+    "p5": 0.03450976844648512,
+    "p25": 0.16826461650957683,
+    "p50": 0.3863843300830953,
+    "p75": 0.6169165067193153,
+    "p95": 0.9223904514173835
+   },
+   "ring": {
+    "n_px": 511,
+    "mean": 0.03937754789538746,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.003588814064053986,
+    "p75": 0.015491527840749805,
+    "p95": 0.1313532689894295
+   },
+   "subject_ring_ratio": 8.143198122680808
+  },
+  "silhouette": {
+   "area_px": 3367,
+   "area_frac": 0.5985777777777778,
+   "bbox_px": {
+    "x0": 8,
+    "y0": 1,
+    "x1": 67,
+    "y1": 74,
+    "w": 59,
+    "h": 73
+   },
+   "bbox_frac": {
+    "x0": 0.10666666666666667,
+    "y0": 0.013333333333333334,
+    "w": 0.7866666666666666,
+    "h": 0.9733333333333334
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_ocean_256.thumb75x75.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_ocean_256.thumb75x75-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

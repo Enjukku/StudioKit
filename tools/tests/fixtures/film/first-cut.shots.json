@@ -1,0 +1,25 @@
+{
+  "format": "film-shotlist/1",
+  "sequence": "first-cut",
+  "title": "Tool test: first animatic, every length UNKNOWN (placeholder content, no game)",
+  "revision": 1,
+  "stage": "boards",
+  "fps": [24, 1],
+  "start_frame": 1,
+  "aspect": [16, 9],
+  "board_policy": "constraint",
+  "shots": [
+    {"id": "A", "frames": "UNKNOWN", "size": "wide", "angle": "eye level", "lens": "UNKNOWN", "movement": "static",
+     "action": "placeholder action one", "sound": "amb.first.bed", "emotion": "placeholder", "transition": "cut",
+     "notes": "TEST VALUES: every timing in this file and in first-cut.blender.json is a placeholder for tool tests"},
+    {"id": "B", "frames": "UNKNOWN", "size": "close", "angle": "low", "lens": "UNKNOWN", "movement": "push in",
+     "action": "placeholder action two", "sound": "sfx.first.hit", "emotion": "placeholder", "transition": "cut"},
+    {"id": "C", "frames": "UNKNOWN", "size": "medium", "angle": "eye level", "lens": "UNKNOWN", "movement": "static",
+     "action": "placeholder action three", "sound": "ui.first.prompt", "emotion": "placeholder", "transition": "end"}
+  ],
+  "cues": [
+    {"id": "amb.first.bed", "shot": "A", "at": 0, "kind": "ambience", "sync": "flexible", "end": 40, "note": "end is not round-tripped"},
+    {"id": "sfx.first.hit", "shot": "B", "at": "UNKNOWN", "kind": "sfx", "sync": "pending"},
+    {"id": "ui.first.prompt", "shot": "C", "at": "UNKNOWN", "kind": "ui", "sync": "pending"}
+  ]
+}

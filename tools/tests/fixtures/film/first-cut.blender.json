@@ -1,0 +1,18 @@
+{
+  "format": "film-shotlist-blender/1",
+  "blender_version": "fixture",
+  "scene": "Scene",
+  "fps": 24,
+  "fps_base": 1.0,
+  "frame_start": 1,
+  "frame_end": 96,
+  "sequence": "first-cut",
+  "revision": 1,
+  "markers": [
+    {"name": "cue:amb.first.bed", "frame": 1, "camera": null},
+    {"name": "shot:A", "frame": 1, "camera": "CAM_A"},
+    {"name": "shot:B", "frame": 25, "camera": "CAM_B"},
+    {"name": "cue:sfx.first.hit", "frame": 37, "camera": null},
+    {"name": "shot:C", "frame": 61, "camera": "CAM_C"}
+  ]
+}

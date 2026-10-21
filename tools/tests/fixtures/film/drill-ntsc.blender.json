@@ -1,0 +1,28 @@
+{
+  "format": "film-shotlist-blender/1",
+  "blender_version": "5.1.2",
+  "scene": "Scene",
+  "fps": 30,
+  "fps_base": 1.0010000467300415,
+  "frame_start": 1,
+  "frame_end": 1076,
+  "sequence": "drill-ntsc",
+  "revision": 3,
+  "markers": [
+    {
+      "name": "shot:S010",
+      "frame": 1,
+      "camera": null
+    },
+    {
+      "name": "shot:S020",
+      "frame": 1002,
+      "camera": null
+    },
+    {
+      "name": "shot:S030",
+      "frame": 1032,
+      "camera": null
+    }
+  ]
+}

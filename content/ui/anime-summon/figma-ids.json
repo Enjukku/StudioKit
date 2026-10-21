@@ -1,0 +1,157 @@
+{
+  "fileKey": "Ob2rRbGBRlmP5JmGyVOlUG",
+  "fileUrl": "https://www.figma.com/design/Ob2rRbGBRlmP5JmGyVOlUG",
+  "pages": {
+    "Refs": "0:1",
+    "Components": "1:2",
+    "Summon": "1:3"
+  },
+  "refs": {
+    "gen/kaida_raw (Figma)": "2:2",
+    "gen/sora_raw (Figma)": "3:2",
+    "char/kaida_keyed": "4:2",
+    "char/sora_keyed": "4:3",
+    "char/yume_keyed": "4:4",
+    "char/toma_keyed": "4:5",
+    "fx/CI-0225": "4:6",
+    "fx/CI-0173": "4:7",
+    "fx/SW-0160": "4:8",
+    "fx/FL-0227": "4:9",
+    "fx/FL-0269": "4:10",
+    "fx/SP-0129": "4:11",
+    "fx/FL-0532": "4:12",
+    "fx/CI-0065": "4:13",
+    "fx420/CI-0225": "15:2",
+    "fx420/CI-0173": "15:143",
+    "fx420/SW-0160": "15:144",
+    "fx420/FL-0227": "15:145",
+    "fx420/FL-0269": "15:146",
+    "fx420/SP-0129": "15:147",
+    "fx420/FL-0532": "15:148",
+    "fx420/CI-0065": "15:149"
+  },
+  "imageHashes": {
+    "kaida": "9b7f4df5c804d597851f1e7980cec365f2411ce5",
+    "sora": "60fc7f708a769a0e45e0fa71611890fd860004e6",
+    "yume": "ab9f287ae3d13aa731e0412f1a8de069a1929293",
+    "toma": "604029c9b53d08674c5649364718d75fb35c23f8",
+    "CI-0225": "f620c027fbd344e76430485026260dbb504fcfff",
+    "CI-0173": "966763ab79f0d733ad58051f115321543c2d4100",
+    "SW-0160": "60fc4f60afb245c7870cd0120d061689a1c44a49",
+    "FL-0227": "946c19c82bdf98957b46400a81bd2b49475b91b7",
+    "FL-0269": "5922de14ec3bb147332b4bff311e3bd47d0f5dce",
+    "SP-0129": "6aed50bb3607d47c919efaf6a5d34813824b3b8a",
+    "FL-0532": "3af94a693d49f9c32001a361f2c35b4cc5d6a82b",
+    "CI-0065": "252aead0925ce89072e0e29cac2f39443f617e96"
+  },
+  "variables": {
+    "Primitives": "VariableCollectionId:5:2",
+    "Color": "VariableCollectionId:5:3",
+    "role": {
+      "text/ink": "VariableID:5:35",
+      "text/on-dark": "VariableID:5:36",
+      "text/muted": "VariableID:5:37",
+      "text/warn": "VariableID:5:38",
+      "surface/scrim": "VariableID:5:39",
+      "surface/strip": "VariableID:5:40",
+      "stroke/outline": "VariableID:5:41",
+      "stroke/focus": "VariableID:5:42",
+      "rarity/rare": "VariableID:5:43",
+      "rarity/epic": "VariableID:5:44",
+      "rarity/legendary": "VariableID:5:45",
+      "rarity/mythic": "VariableID:5:46"
+    }
+  },
+  "textStyles": {
+    "Anime/Title 76": "S:cf8298b898b8d66544079f28defc57aab89032bb,",
+    "Anime/Heading 56": "S:6c48f7cac49ad55a0f6dad953eb3c96c6c9cb34d,",
+    "Anime/Button 48": "S:c15f2ab2c0d97fd212d9b053c86acc38dc7ac9af,",
+    "Anime/Body 40": "S:4225ec76ddb510d7d9d99e64df24c0cc793e2c3d,",
+    "Anime/Label 38": "S:b477f8456de9938739e50d1c6b8f3c66b78a8023,",
+    "Anime/Small 32": "S:dbdb97b7088cefe60bd2380ab04a2650a811c518,"
+  },
+  "effectStyles": {
+    "Glow/Crystal": "S:bf082f348655142b984a86c84f579d1d759b4dd1,",
+    "Glow/Focus": "S:6aa282946c660257d71bfd826bf5595e86869943,",
+    "Shadow/Card": "S:ffbf38d3bec923d10e1adf6bffe736bfb8b851b0,"
+  },
+  "components": {
+    "board": "6:2",
+    "icons": {
+      "icon/gem": "6:9",
+      "icon/close": "6:13",
+      "icon/spinner-ink": "6:17",
+      "icon/spinner-white": "6:21",
+      "icon/check": "6:25",
+      "icon/warning": "6:30",
+      "icon/plus": "6:34",
+      "icon/odds": "6:40"
+    },
+    "Badge/New": "6:42",
+    "Rarity tag (set)": "6:86",
+    "Rarity tag variants": {
+      "Rare": "6:46",
+      "Epic": "6:53",
+      "Legendary": "6:62",
+      "Mythic": "6:73"
+    },
+    "Button/Summon (set)": "7:91",
+    "Button/Summon variants": {
+      "Idle": "7:2",
+      "Focus": "7:21",
+      "Pressed": "7:41",
+      "Pending": "7:60",
+      "Disabled": "7:77"
+    },
+    "Button/Action (set, Kind x State)": "7:206",
+    "Button/Close (set)": "7:232",
+    "Gem counter (set: Idle, Change)": "8:214",
+    "Pity meter": "8:215",
+    "Header": "8:221",
+    "Unit result card (set: Size x Rarity x State, props Name, New)": "8:186",
+    "Banner card (set)": "10:159",
+    "Banner card variants": {
+      "Active": "10:112",
+      "Loading": "10:146"
+    },
+    "Odds panel (set)": "9:180",
+    "Odds panel variants": {
+      "Loaded": "9:54",
+      "Loading": "9:141",
+      "Error": "9:160"
+    }
+  },
+  "screens": {
+    "01 Main banner (inspect)": "12:2",
+    "02 Odds open": "13:130",
+    "03 Review (summon x10)": "13:372",
+    "04 Commit (Confirm pressed)": "13:503",
+    "05 Pending": "13:641",
+    "06 Reveal 1x (confirmed)": "14:1014",
+    "07 Reveal 10x summary (confirmed)": "14:1097",
+    "08 Failed": "13:789",
+    "09 Not enough gems": "13:924"
+  },
+  "imageHashes420": {
+    "CI-0225": "082fb5c6b3f12fbe24bcd89580c07a1b95e37311",
+    "CI-0173": "f3aab0284e8899248c30e596614bcc9e3f6292ec",
+    "SW-0160": "80631364e374713b12ea10ae5abbbc0ddf1cf5f8",
+    "FL-0227": "4a12aa300721b80855ab2e9ba16579cf2a505ff0",
+    "FL-0269": "af46f38a11f8d4e4a21ad6e70bbd9229819ce776",
+    "SP-0129": "32384c99fb3261c566f02baa77a4b4ad5ea4e01d",
+    "FL-0532": "f69c8f0383a0822a9851bbe4249dd959bc5d8220",
+    "CI-0065": "4c32771f272f8e33cbd89ef5e48b3d5bf12a8b5d"
+  },
+  "note": "Library stand-ins in use are the 420 px Roblox thumbnails (imageHashes420); the 150 px set is kept on Refs for the record.",
+  "mainFrameChildren": {
+    "header": "12:7",
+    "gem-counter": "12:13",
+    "close": "12:32",
+    "info-panel": "12:42",
+    "banner-card": "12:97",
+    "odds-button": "12:143",
+    "summon-x1": "12:150",
+    "summon-x10": "12:173",
+    "no-go guide": "12:192"
+  }
+}

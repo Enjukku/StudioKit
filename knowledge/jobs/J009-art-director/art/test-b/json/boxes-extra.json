@@ -1,0 +1,50 @@
+{
+ "ani01-odds_units": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   60,
+   900,
+   620,
+   1040
+  ],
+  "window": [
+   50,
+   890,
+   630,
+   1050
+  ],
+  "predicate": "P_glass_stroke (outer light stroke), bbox filled"
+ },
+ "ani03-cancel": {
+  "file": "content/ui/anime-summon/screens/03-review.png",
+  "box": [
+   540,
+   777,
+   940,
+   917
+  ],
+  "window": [
+   530,
+   765,
+   950,
+   930
+  ],
+  "predicate": "P_glass_stroke (outer light stroke), bbox filled"
+ },
+ "ani01-plus": {
+  "file": "content/ui/anime-summon/screens/01-main-1920.png",
+  "box": [
+   1582,
+   35,
+   1702,
+   155
+  ],
+  "window": [
+   1575,
+   30,
+   1710,
+   160
+  ],
+  "predicate": "P_glass_stroke (outer light stroke), bbox filled"
+ }
+}

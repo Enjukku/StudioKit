@@ -1,0 +1,15 @@
+{
+ "meta": {"revision": "fixture-sessions-offline-r1", "title": "Session pattern and frozen-rate offline earnings",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {"cash": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}},
+ "producers": {"stand": {"start_owned": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "produces": {"currency:cash": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}}},
+ "offline": {"efficiency": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"}, "cap_s": {"v": 300, "src": "EXAMPLE ASSUMPTION"}, "currencies": ["cash"]},
+ "sessions": {"patterns": {
+  "regular": {"active_s": {"v": 120, "src": "EXAMPLE ASSUMPTION"}, "gaps_s": {"v": [600], "src": "EXAMPLE ASSUMPTION"}},
+  "returning": {"active_s": {"v": 120, "src": "EXAMPLE ASSUMPTION"}, "gaps_s": {"v": [600], "src": "EXAMPLE ASSUMPTION"},
+   "absences": [{"after_session": {"v": 2, "src": "EXAMPLE ASSUMPTION"}, "gap_s": {"v": 604800, "src": "EXAMPLE ASSUMPTION"}}]}
+ }},
+ "goals": [{"id": "save1000", "label": "1000 cash", "when": {"balance": ["cash", {"v": 1000, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "calendar", "max_s": {"v": 3600, "src": "PROPOSAL"}}}],
+ "run": {"horizon_active_s": {"v": 86400, "src": "EXAMPLE ASSUMPTION"}}
+}

@@ -26,7 +26,7 @@ This skill answers **what and why**: what the effect means, how strong it is, wh
 | Gameplay moment | weapon hit, pickup, object break, sell | short, repeats, phone budget, many at once; merge windows and caps |
 | World event | tsunami over the city, meteor shower, stage boss | rare, big, seconds long, everyone sees it; bigger budget, level of detail by distance, shake allowed |
 | Object change | wall completes and transforms, building upgrade, freeze, charge | the object itself changes; a flash hides the swap; the animator helps with the pop |
-| Cutscene | opening film, stage intro | camera is ours, plays once; heavy assets allowed (even mesh flipbooks, loaded and unloaded); frame per shot |
+| Cutscene | opening film, stage intro | camera is ours, plays once; heavy assets allowed (even mesh flipbooks, loaded and unloaded); frame per shot; shots, cue ids and times come from the film director's shot list (`film-craft`) |
 | UI | button, HUD pop, counter, reward screen | screen layer: build with `ui-basics`; feel rules from here |
 
 **The shape the eye must read picks the tool (one effect can use several):**
@@ -66,6 +66,7 @@ Under ~10 studs, prefer particles over meshes for rings, slashes and streaks (pr
 | Reviewing an effect (findings, ranked fixes) | `references/review.md` |
 | Genre presets, older effect-card fields | `references/effect-card-and-presets.md` |
 | Pro frame scripts by type | `knowledge/reference/vfx/training/frame-scripts/` |
+| Ambient motion in a stage: what moves, its cause, anchor and fallback (written by the environment designer; you fill the `vfx:` keys) | `templates/environment/ambience-map.md` |
 | Building it in Roblox | **`vfx-craft` skill** |
 | Testing these skills | `evals/briefs.md`, `knowledge/reference/vfx/training/benchmark.md` |
 Older numbers in these references that conflict with `vfx-craft` (emitter caps, layer caps) are superseded (§7).

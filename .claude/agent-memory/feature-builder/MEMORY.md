@@ -1,0 +1,2 @@
+- [Planted faults, unequal fixtures](feedback_planted_faults_unequal.md) — symmetric fixtures hide largest/smallest bugs; gate drift from parallel chats
+- [Test helpers repair bad input](feedback_test_helpers_repair_bad_input.md) — build invalid rows by hand; assert exact rejected count

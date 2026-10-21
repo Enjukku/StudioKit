@@ -164,5 +164,6 @@ Claims and numbers:
 | ElevenLabs or other AI generation prompts and clean-up | `references/ai-generation-prompts.md` |
 | A term you do not know | `references/glossary.md` |
 | Cue card fields, filled example, JSON blank | `references/cue-card.md` |
+| A stage's ambience: zones, causes, point sources, blends, states (written by the environment designer; you fill the `sound:` keys) | `templates/environment/ambience-map.md`; `environment-design/references/ambience.md` |
 | Checking a source, settling a dispute, updating rules | `evidence/README.md` |
 | Testing this skill | `evals/briefs.md` |

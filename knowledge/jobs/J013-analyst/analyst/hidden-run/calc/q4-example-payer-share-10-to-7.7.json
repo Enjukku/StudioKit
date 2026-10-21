@@ -1,0 +1,24 @@
+{
+  "inputs": {
+    "x_a": 100,
+    "n_a": 1000,
+    "x_b": 77,
+    "n_b": 1000,
+    "confidence": 0.95
+  },
+  "rate_a": 0.1,
+  "rate_b": 0.077,
+  "absolute_difference_pp": -2.3000000000000007,
+  "absolute_interval_pp": [
+    -4.809316050032271,
+    0.19588890459302405
+  ],
+  "absolute_method": "Newcombe hybrid score (method 10)",
+  "relative_difference_pct": -23.00000000000001,
+  "relative_interval_pct": [
+    -42.03337028320491,
+    2.2829864176517
+  ],
+  "relative_method": "risk ratio B/A, Katz log interval",
+  "interval_excludes_zero": false
+}

@@ -1,0 +1,1 @@
+{"_fixture": "TEST: transient failure (docs errors table; message synthetic)", "done": true, "error": {"code": 2002, "message": "TEST transient failure"}}

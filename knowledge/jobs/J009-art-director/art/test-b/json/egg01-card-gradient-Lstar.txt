@@ -1,0 +1,7 @@
+# J009-T09 diagnostic. Lines 2-5: first attempt, column x 768-790 / 176-196 = card rim stroke, NOT the face; do not use. Last 2 lines: face column x~1050, visible span y400-740 (the face below 740 is covered by the buttons).
+01-inspect-main-1920.png meadow top y392 c3ebff L*90.9 bottom y1004 b4e7f7 L*88.7 dL 2.2
+01-inspect-main-1920.png featured top y392 d78dff L*70.0 bottom y1004 c36ffa L*61.5 dL 8.5
+01-inspect-main-1920-v2.png meadow top y392 8cd7ff L*82.6 bottom y1004 51c1f3 L*73.9 dL 8.7
+01-inspect-main-1920-v2.png featured top y392 d78dff L*70.0 bottom y1004 c36ffa L*61.5 dL 8.5
+01-inspect-main-1920.png meadow card face, column x~1050 (right of the egg art, inside the rim): y400 f0fdff L*98.4 | y450 edfdff L*98.2 | y700 a2dbfa L*84.6 | y740 9cd6f7 L*82.8
+01-inspect-main-1920-v2.png meadow card face, column x~1050 (right of the egg art, inside the rim): y400 caf8ff L*94.7 | y450 c3f6ff L*93.8 | y700 5db3f2 L*70.2 | y740 56acee L*67.8

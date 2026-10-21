@@ -1,0 +1,74 @@
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008 (owner J008-D7: "make sure we understand how to do ambience lighting haze ... whether it's changing the skybox or whatever"). Facts: `knowledge/reference/environment/05-roblox-look-dev.md` (**LD** rows: every control with its doc file:line, scriptability, Roblox's own scenes) and `fact-check-lighting.md` (**LF**, **LX**). Design rules: `environment-design/references/light-and-air.md`. Values from Roblox scenes are **examples for one scene**, never presets; the art bible and the look lab decide.
+
+# Light, haze and sky in Studio: how to get the look
+
+## 1. Setup order for a stage look (one pass, then iterate)
+Roblox's own tutorials follow nearly this order (LD 2a); each step ends with a capture from the same 3 cameras (a wide establishing view, a player-eye view on the route, one interior or shade view) at high and low quality.
+1. **Style.** `LightingStyle` Realistic (precise local shadows, specular, automatic indoor/outdoor model) or Soft (flatter, retro); `PrioritizeLightingQuality` true keeps close shadows and shading as quality drops, false keeps view distance (LD01-LD02; the old `Technology` property is superseded, LX04). Choose from the art bible; check both on a phone-size crop.
+2. **Sun position.** `ClockTime` (0-24) and `GeographicLatitude` set sun direction, shadow length and sunlight colour. Morning (about 9) gives long directional shadows; late afternoon (about 17) gives gold light (LD60 examples). Save the start time in `TimeOfDay` ("HH:MM"): ClockTime is not saved with the place (LX02). Aim the sun at what the player should notice (the cabin tutorial lit its only exit this way, LD82).
+3. **Sky first, then air.** Pick or make the skybox before Atmosphere: Atmosphere takes most of its colour from the sky, and environment light and metal reflections follow it too (LD63, LD102; outdoor tutorial lines 128-147). Lower half of the sky ≈ the terrain colour and darker than the upper half (LD101).
+4. **Fill light.** `Ambient` = colour where the sky is hidden (interiors, under cover); `OutdoorAmbient` = colour in the open. OutdoorAmbient is clamped to be at least Ambient in every channel, so an Ambient channel above OutdoorAmbient leaks indoor colour outdoors; with `GlobalShadows` off there is no indoor/outdoor split at all (LD04-LD05, LD12; `Lighting.yaml:459-463`). Tint them to the mood: purple evening, warm firelit room, cool blue-grey ocean (LD61 examples). `EnvironmentDiffuseScale` and `EnvironmentSpecularScale` (default 0) add sky light and reflections; raise them with lower Ambient values (LD09-LD10, LD62). Set both to 1 when metal must reflect (LD48).
+5. **Sun strength and exposure.** `Brightness` raises sun contrast and also lifts shadows; `ExposureCompensation` (-5 to 5, +1 = twice) brightens without muddying darks (LD06, LD11, LD66). `ColorShift_Top` / `_Bottom` tint sun-facing and away-facing surfaces, scaled by Brightness (LD07-LD08).
+6. **Shadows.** `ShadowSoftness` 0 hard to 1 soft (docs disagree on which style it affects: test, LF05). Shadows switch off below quality level 4, so the place must read without them (LD132).
+7. **Atmosphere** (a child of Lighting; legacy Fog properties are hidden once it exists, LD17).
+   | Property | Does | Watch |
+   | --- | --- | --- |
+   | Density | how much air hides distant objects and terrain | balance with Offset (LD20) |
+   | Offset | high: silhouettes stand against the sky; low: far objects melt into the sky | too low = sky shows through objects ("ghosting"); too high = far level-of-detail popping (LD21, LD150) |
+   | Haze | haziness above the horizon and in the distance; values above 1 are valid | required for Glare and Decay (LD22, LD151) |
+   | Color | atmosphere hue, wider with high Haze; pick near the average colour of the scene | set after the sky (LD23) |
+   | Glare | glow around the sun | needs Haze > 0 (LD24) |
+   | Decay | hue away from the sun | needs Haze and Glare > 0 (LD25) |
+   No range or default is documented for any of them (LX07): read them back in Studio. Density also warms or cools interiors through sky-coloured indirect light (the cabin went from cold to warm at 0.5, LD64). Haze is depth and mood, never a way to hide something the player needs (`light-and-air.md` LA-10).
+8. **Clouds and wind.** A `Clouds` object renders only under Terrain: Cover 0-1, Density (light to stormy), Color mixed with Lighting and Atmosphere (LD30-LD32, LD152). `Workspace.GlobalWind` moves grass, clouds and opted-in particles (LD33).
+9. **Local lights** (§4).
+10. **Post effects last, as seasoning.** ColorCorrection (Brightness, Contrast, Saturation, TintColor; they stack) fixes a dull result; Bloom (Intensity, Size, Threshold) makes Neon and bright lights glow; SunRays (Intensity, Spread 0-1) gives sun shafts; DepthOfField for far softness; ColorGrading tonemapper Default or Retro (one only, Lighting only). Under Lighting they apply to everyone; under the Camera to one player; none touch UI (LD34-LD40, LD160). Preview needs Studio's Editor Quality Level set high (LD159). Some may not run on low-end phones (SunRays may not render, LD134).
+
+## 2. Starting points from Roblox's own scenes (examples for one scene each)
+| Look | Roblox scene | Key moves | Row |
+| --- | --- | --- | --- |
+| cool, crisp ocean day with strong direction | Island Jump | Realistic, hard shadows, ClockTime 9 / latitude 78, cool ColorShift_Top and OutdoorAmbient, dark Ambient, Density 0.375 / Offset 0.17 to hide the water edge but keep mountains | LD80 |
+| warm evening around a fire | Outdoors tutorial | ClockTime 17, purple ambient (both equal), env scales 1, Density 0.272, Haze 1, Atmosphere Color near the scene average, one shadowed PointLight (Range 48) for the fire | LD81 |
+| warm interior that leads to the exit | Indoors tutorial | sun aimed through the window at the door, SunRays faint, warm Ambient and warm sky, Density 0.5, one light per light-source cluster, ExposureCompensation 0.5, light ColorCorrection | LD82 |
+| readable arena indoors and out | laser tag (environmental-art course) | equal dark ambients, Realistic indoor/outdoor model, skylights in ceilings, Haze 2 with Glare and Decay, Bloom on neon bars, faint far DoF, floor materials differ indoors vs out | LD85 |
+| dark night with one focal light | Volcano | dark scene, exposure -1, lava PointLights as the only strong light, Bloom, desaturating ColorCorrection | LD86 |
+| storm | Duvall Drive | cloud meshes rather than the Clouds object for depth, lightning as tweened ColorCorrection Brightness + Bloom + beam on clients only, wet MaterialVariants on terrain | LD87-LD88 |
+| contrast for attention | Beyond the Dark, Volcano, cabin | the brightest, most contrasting thing is the focal point; dark body, glowing points | LD68 |
+Mood comes mostly from time, latitude, ambient colours, sky, atmosphere colour and haze, and ColorCorrection tint; readability mostly from brightness and exposure, contrast, atmosphere density and offset, shadow softness and local light range (LD71, inference). Check every mood choice on a phone-size crop.
+
+## 3. Skybox
+- **Make:** six square images (back, down, front, left, right, up), seamless on every edge; import, add a `Sky` to Lighting, assign the six faces. No pixel size or format is documented (LD100). Lower half like the terrain and darker than the upper; clouds can come from the Clouds object instead of the image (LD101).
+- **Sun, moon, stars:** sun and moon texture and angular size (0-60; sun 21, moon 11 by default), `StarCount`, `CelestialBodiesShown`; they move with time of day; moon phase cannot change (LD27-LD28, LD103).
+- **Orientation:** `SkyboxOrientation` rotates the faces (Y, then X, then Z); slow Y spin for a moving sky, keep Y modulo 360; cheap on every device. It does not rotate the sun, moon, clouds or indoor sky reflections (LD29, LD104).
+- **Changing the sky:** there is no blend feature, and face ids are strings that cannot be tweened (LD105). Options: (a) a hard swap hidden by a fade, flash or cutscene, as Duvall Drive did for its room swaps (LD89); (b) keep one sky and move the mood with tweens of Atmosphere, Ambient colours, ColorCorrection and SkyboxOrientation. What two Sky objects in Lighting do is undocumented (look lab LQ06). After any swap re-check atmosphere tint, ambient fill and reflections (LD102, LQ07).
+
+## 4. Local lights, glow and interiors
+| Need | Use | Row |
+| --- | --- | --- |
+| bulb, torch, fire, candle cluster | PointLight (most expensive on low-end; one per cluster) | LD42, LD135 |
+| hooded lamp, street lamp, flashlight, doorway marker | SpotLight (Angle up to 180; Face picks the side) | LD43 |
+| screen, panel, billboard, light strip | SurfaceLight | LD44 |
+| something that glows | Neon (or a SurfaceAppearance emissive mask) **plus** a light object: Neon emits no light | LD49-LD50, LD156 |
+Range is in studs and capped at 120; Brightness never widens the lit area (LD46, LD155). Lights must be direct children of a part or attachment (LD41). Studio's "Show Light Guides" shows each light's reach (LD45). Shadows only where they add; CastShadow off on small or far parts (LD54, LD132).
+**Interiors** (Realistic): surround rooms with parts at least 1 stud thick or outdoor light leaks in (the cabin used 2.5-stud blockers round thin walls, window left open); check blockers do not close windows or shrink approved openings (LD120; L12). Brighten with ExposureCompensation, not Brightness; let sun in through skylights or windows aimed at what matters (LD123-LD124). Flicker: drive Brightness and bulb colour from a NumberSequence over a loop (LD126).
+
+## 5. Changing the look at runtime (time, weather, zones, events)
+| Need | How (docs) | Watch |
+| --- | --- | --- |
+| time of day | tween `ClockTime` (a float) or step `SetMinutesAfterMidnight`; nothing moves time by itself | tween ClockTime, not TimeOfDay (a string) (LD110) |
+| mood shift | TweenService on Brightness, Exposure, Ambient colours, Atmosphere numbers and colours, Clouds, ColorCorrection, SkyboxOrientation | two tweens on one property cancel the first; booleans jump (LD111) |
+| weather and storm | Clouds, GlobalWind gusts, rain particles (caps 400/s per emitter, 100/s on mobile), wet MaterialVariants | big rain areas hit phone particle limits fast (LD112) |
+| flashes, lightning | server picks the moment and tells clients; each client plays it (skip when indoors) | flash safety rules in `vfx-design` (LD113) |
+| indoor / cave / zone look | point-in-box tests against placed volumes (Duvall: touch zones fail for seated players); swap Lighting/Atmosphere values while a fade or a doorway hides the change | AtmosphereSensor is a physics sensor, not a zone tool (LD115-LD116) |
+| one player only | post effects under that player's Camera | ColorGrading ignores the Camera (LD114) |
+| replication | the docs do not say how server-set Lighting replicates or whether client writes stay local | look lab LQ08 (LD117) |
+The code that runs these changes belongs to a code role; the environment designer specifies the looks per zone and state (values and transition) in the stage's look sheet and the ambience map §D.
+
+## 6. Scripts cannot set everything (plan the Studio steps)
+NotScriptable or plugin-only, so set them in the Properties window or hand the step to the owner or studio operator: Terrain `Decoration`, `GrassLength`, `MaterialColors` (LD53, LD167); MaterialService override names (LD51); most SurfaceAppearance properties at runtime (LD50); streaming properties (`performance.md`); `RenderSettings` (quality level, frame-rate manager: plugin security, LD131); `SoundService.DefaultListenerLocation`. Whether Luau can set `LightingStyle` is disputed between pages (LD173): try it and record the result.
+
+## 7. Phones
+Quality level changes draw distance, shading, textures, particles and post effects, device by device, and the frame-rate manager can change it mid-session (LD130-LD131). Shadows go below level 4; SunRays may not render on low-end; glass refraction is unsupported on mobile; stacked transparent layers are a major cost (LD132-LD137). Never carry gameplay information only in a post effect, a shadow or bloom. No per-control millisecond costs are documented except Highlight (first one up to 1 ms GPU on mobile, LD136): measure with MicroProfiler (`computeLightingPerform`, `LightGridCPU`, `ShadowMapSystem`) and Scene Analysis (LD139).
+
+## 8. The look lab (prove values before they become the stage's)
+The docs leave 23 look questions open (`05-roblox-look-dev.md` §9, LQ01-LQ23): Atmosphere ranges, latitude clamp, ShadowSoftness under Soft, defaults, thin-wall leaks, two skies, sky swap side effects, replication, runtime LightingStyle, effects per quality level, shadow cut-off readability, environment diffuse vs Ambient, Density/Offset ghosting, haze at sunrise, bloom on phone crops, emissive light, water under three skies, tweened dusk, LightingChanged cost, fade time for a zone swap, two Atmospheres, clouds after a sky swap, cost per control. For a stage, run the questions its look depends on: same cameras, one change at a time, low and high quality, phone-size crops; write results with the Studio build and date into the stage's look sheet. Tested project values then replace the examples; never claim the docs supplied them.

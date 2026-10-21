@@ -1,0 +1,11 @@
+{
+  "id": "boss-reveal-c-r2",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 1 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nEdit image 1, a storyboard panel for shot C of 5. Change only the beacon on the pedestal at the right: it has gone dark, a dark stone orb with only a faint dim amber ember deep inside, and no amber glow on the pedestal or the water. Keep everything else exactly: the explorer, the pose, the camera, the framing, the doorway, the light and the colours.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "content\\art\\refs\\storyboard\\boss-reveal-c-r1.png"
+  ],
+  "codex_session": "01a15e0c-6448-7f11-9228-c1ab1aa075d7",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e0c-6448-7f11-9228-c1ab1aa075d7\\exec-5be765f5-b90b-4d66-9f37-19b5d4d87d7d.png",
+  "seconds": 38
+}

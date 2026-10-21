@@ -1,0 +1,107 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "silhouette",
+ "input": {
+  "path": "content\\ui\\anime-summon\\refs\\keyed\\kaida.png",
+  "sha256": "7b2d0031855250450910aaa13598f420b2b58d59cb39939c8561b9961fa44b3b",
+  "size_px": [
+   820,
+   1200
+  ],
+  "mode": "RGBA",
+  "compare": {
+   "path": "content\\ui\\anime-summon\\refs\\keyed\\sora.png",
+   "sha256": "c5d71320f13223ee02d416d4e534805b0178c9588f9ba48e9922a73ffc42bd38",
+   "size_px": [
+    640,
+    640
+   ],
+   "mask_source": "alpha",
+   "key_estimate": {}
+  }
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "compare": "content/ui/anime-summon/refs/keyed/sora.png",
+  "compare_mask": null,
+  "min_iou": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "area_px": 527046,
+  "area_frac": 0.5356158536585366,
+  "bbox_px": {
+   "x0": 1,
+   "y0": 1,
+   "x1": 820,
+   "y1": 1200,
+   "w": 819,
+   "h": 1199
+  },
+  "bbox_frac": {
+   "x0": 0.0012195121951219512,
+   "y0": 0.0008333333333333334,
+   "w": 0.998780487804878,
+   "h": 0.9991666666666666
+  },
+  "components": [
+   {
+    "label": 1,
+    "area_px": 526970,
+    "area_frac": 0.5355386178861788,
+    "bbox_px": {
+     "x0": 1,
+     "y0": 1,
+     "x1": 820,
+     "y1": 1200,
+     "w": 819,
+     "h": 1199
+    },
+    "n": 1
+   }
+  ],
+  "component_count": 1,
+  "compare": {
+   "iou": 0.4966584575922457,
+   "alignment": {
+    "method": "crop to bbox, scale to common bbox height keeping aspect (bilinear, threshold 0.5), centre",
+    "canvas_px": [
+     1199,
+     1199
+    ],
+    "scale_a": 1.0,
+    "scale_b": 1.873438,
+    "bbox_a_px": [
+     1,
+     1,
+     820,
+     1200
+    ],
+    "bbox_b_px": [
+     0,
+     0,
+     640,
+     640
+    ]
+   }
+  }
+ },
+ "images": {
+  "silhouette": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\kaida.silhouette.png"
+ },
+ "verdict": "measured"
+}

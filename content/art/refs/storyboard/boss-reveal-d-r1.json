@@ -1,0 +1,12 @@
+{
+  "id": "boss-reveal-d-r1",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 2 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nStoryboard panel, shot D of 5: wide view from low, near the water. Image 1 is the greybox layout of this shot: keep the camera, the framing and the positions exactly. Image 2 is the earlier panel of this place: keep the statue, the explorer, the pedestal and the beacon exactly. The huge stone statue at the right has come alive: it kneels upright with its head lifted into the narrow shaft of moonlight, its two eyes glowing the same amber as the beacon, looking down and left at the small explorer at the far left; the dim beacon on its pedestal and the cool glowing exit doorway stand between them. Exactly one statue and one explorer.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "output\\J015-g2\\stills\\board_inputs\\D_layout.png",
+    "content\\art\\refs\\storyboard\\boss-reveal-p1-r1.png"
+  ],
+  "codex_session": "01a15e09-568c-7853-a8b1-f7da006324c5",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e09-568c-7853-a8b1-f7da006324c5\\exec-7756e3b2-305f-4f72-90df-290c11c659aa.png",
+  "seconds": 50
+}

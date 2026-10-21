@@ -1,0 +1,25 @@
+B - A = -8.00 pp (95% CI -11.54 to -4.44 pp); relative -32.0 %
+{
+  "inputs": {
+    "x_a": 250,
+    "n_a": 1000,
+    "x_b": 170,
+    "n_b": 1000,
+    "confidence": 0.95
+  },
+  "rate_a": 0.25,
+  "rate_b": 0.17,
+  "absolute_difference_pp": -7.999999999999999,
+  "absolute_interval_pp": [
+    -11.542602182859365,
+    -4.436318426539383
+  ],
+  "absolute_method": "Newcombe hybrid score (method 10)",
+  "relative_difference_pct": -31.999999999999996,
+  "relative_interval_pct": [
+    -42.86042408306627,
+    -19.075353189143208
+  ],
+  "relative_method": "risk ratio B/A, Katz log interval",
+  "interval_excludes_zero": true
+}

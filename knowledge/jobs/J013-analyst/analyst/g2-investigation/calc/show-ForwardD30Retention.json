@@ -1,0 +1,153 @@
+{
+  "metric": "ForwardD30Retention",
+  "granularity": null,
+  "points": [
+    {
+      "bucket_time_utc": "2026-09-09T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0391,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-10T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0386,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-11T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.038,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-12T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0386,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-13T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0391,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-14T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0383,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-15T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.038,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-16T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0389,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-17T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.039,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-18T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0381,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-19T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0382,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    },
+    {
+      "bucket_time_utc": "2026-09-20T00:00:00Z",
+      "granularity": "OneDay",
+      "series": [],
+      "filter": [],
+      "value": 0.0391,
+      "string_values": null,
+      "point_status": null,
+      "final": true,
+      "revision_count": 1,
+      "pulled_at_utc": "2026-10-21T06:01:00Z"
+    }
+  ],
+  "not_final": 0,
+  "revised_buckets": 0,
+  "note": "Date semantics undocumented (fact-check 01 §4.1)."
+}

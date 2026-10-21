@@ -1,0 +1,86 @@
+{
+ "tool": "look_check",
+ "version": "1.1.0",
+ "check": "silhouette",
+ "input": {
+  "path": "content\\art\\refs\\character\\dragonegg-b-keeper.png",
+  "sha256": "a0162620371b852e86ad56c11105072d3feb4e6a624701c8924a6667940cac7f",
+  "size_px": [
+   1024,
+   1536
+  ],
+  "mode": "RGB"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask | --box > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "boxes": null,
+  "box_key": false,
+  "box_coords": "pixels [x0, y0, x1, y1), x1/y1 exclusive",
+  "exclude": null,
+  "mask_source": "key-auto",
+  "key_estimate": {
+   "estimated_key": "#A4A2A6",
+   "border_strip_px": 20,
+   "border_share_within_tol": 0.9980257936507937,
+   "flat_share_needed": 0.9,
+   "flat": true,
+   "hole_fill": true,
+   "filled_holes": 171,
+   "filled_area_px": 22815
+  },
+  "compare": null,
+  "compare_mask": null,
+  "min_iou": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "area_px": 590185,
+  "area_frac": 0.3752295176188151,
+  "bbox_px": {
+   "x0": 156,
+   "y0": 0,
+   "x1": 988,
+   "y1": 1475,
+   "w": 832,
+   "h": 1475
+  },
+  "bbox_frac": {
+   "x0": 0.15234375,
+   "y0": 0.0,
+   "w": 0.8125,
+   "h": 0.9602864583333334
+  },
+  "components": [
+   {
+    "label": 1,
+    "area_px": 590174,
+    "area_frac": 0.37522252400716144,
+    "bbox_px": {
+     "x0": 156,
+     "y0": 0,
+     "x1": 988,
+     "y1": 1475,
+     "w": 832,
+     "h": 1475
+    },
+    "n": 1
+   }
+  ],
+  "component_count": 1
+ },
+ "images": {
+  "silhouette": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-b-keeper.silhouette.png"
+ },
+ "verdict": "measured"
+}

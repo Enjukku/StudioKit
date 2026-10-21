@@ -1,0 +1,13 @@
+{
+ "meta": {"revision": "fixture-zero-income-r1", "title": "Zero income toward an unaffordable producer",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {"cash": {"start": {"v": 3, "src": "EXAMPLE ASSUMPTION"}}},
+ "producers": {
+  "stand": {"start_owned": {"v": 0, "src": "EXAMPLE ASSUMPTION"},
+   "cost": {"currency": "cash", "curve": {"kind": "exponential", "a": {"v": 10, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": "3/2", "src": "EXAMPLE ASSUMPTION"}}},
+   "produces": {"currency:cash": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}}
+ },
+ "goals": [{"id": "first_stand", "label": "own 1 stand", "when": {"owned": ["stand", {"v": 1, "src": "EXAMPLE ASSUMPTION"}]},
+   "window": {"basis": "active", "max_s": {"v": 60, "src": "PROPOSAL"}}}],
+ "run": {"horizon_active_s": {"v": 86400, "src": "EXAMPLE ASSUMPTION"}}
+}

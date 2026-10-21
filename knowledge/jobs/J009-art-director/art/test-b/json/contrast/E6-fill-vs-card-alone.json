@@ -1,0 +1,29 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "contrast",
+ "input": null,
+ "params": {
+  "pairs": [
+   "fafefe,c3ecff"
+  ],
+  "rule": null,
+  "min_ratio": null,
+  "tolerance_source": null,
+  "rounding": "none (a failing ratio is never rounded up, A04)"
+ },
+ "scope": "UI text and UI components only; not a rule for world art, props or characters (AP:559).",
+ "measurements": {
+  "pairs": [
+   {
+    "fg": "#FAFEFE",
+    "bg": "#C3ECFF",
+    "l_fg": 0.9836337261682279,
+    "l_bg": 0.7881300736842789,
+    "ratio": 1.2332617079644304
+   }
+  ]
+ },
+ "images": {},
+ "verdict": "measured"
+}

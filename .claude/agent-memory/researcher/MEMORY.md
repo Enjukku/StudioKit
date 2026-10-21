@@ -1,0 +1,3 @@
+- [Roblox source access](reference_roblox_source_access.md) — Help Center JSON trick, mirror gaps, token-heavy pages, where offer rules live
+- [Reading limits for PDF sources](reference_reading-limits.md) — WebFetch fails on compressed PDFs; use ar5iv for arXiv; no Bash, hand-compute checks
+- [Roblox live pages](reference_roblox_live_pages.md) — live page reads for analytics facts (J013)

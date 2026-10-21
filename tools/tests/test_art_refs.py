@@ -90,6 +90,9 @@ class Prompts(unittest.TestCase):
         self.assertEqual(picks[2].name, "gen-new.png")
         _, images = art_refs.build({"id": "hero", "family": "model", "identity": "x"}, self.fams, self.lks, self.root)
         self.assertEqual(len(images), 3)
+        self.assertEqual(art_refs.anchors_for(self.fams["model"], "hero", "none", self.root), [])
+        _, images = art_refs.build({"id": "hero", "family": "model", "identity": "x", "anchors": "None"}, self.fams, self.lks, self.root)
+        self.assertEqual(images, [])
 
     def test_manifest_validation(self):
         bad = self.root / "m.csv"

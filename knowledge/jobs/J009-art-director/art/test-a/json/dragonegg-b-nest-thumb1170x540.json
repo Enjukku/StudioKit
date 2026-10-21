@@ -1,0 +1,109 @@
+{
+ "tool": "look_check",
+ "version": "1.1.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\art\\refs\\concept\\dragonegg-b-nest.png",
+  "sha256": "798bcc5aa62b80fedee3cd10b8e79a0ed18cda26d8618df5f8b2b8c4c008d492",
+  "size_px": [
+   1672,
+   941
+  ],
+  "mode": "RGB"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": "knowledge/jobs/J009-art-director/art/test-a/diag/dragonegg-b-nest-p90-eggmask.png",
+  "key_order": "--mask | --box > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "boxes": null,
+  "box_key": false,
+  "box_coords": "pixels [x0, y0, x1, y1), x1/y1 exclusive",
+  "exclude": null,
+  "mask_source": "mask-image",
+  "key_estimate": {},
+  "target_px": [
+   1170,
+   540
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   1170,
+   540
+  ],
+  "content_box_px": {
+   "x0": 105,
+   "y0": 0,
+   "w": 959,
+   "h": 540
+  },
+  "scale": 0.5735645933014354,
+  "mask_source": "mask-image",
+  "value": {
+   "whole": {
+    "n_px": 517860,
+    "mean": 0.10392727876408638,
+    "p5": 0.005355667383088127,
+    "p25": 0.021561287864147967,
+    "p50": 0.04809978902095626,
+    "p75": 0.10749268229562836,
+    "p95": 0.45539334545853566
+   },
+   "subject": {
+    "n_px": 29351,
+    "mean": 0.5255936790783305,
+    "p5": 0.24824710709217826,
+    "p25": 0.40928089752928676,
+    "p50": 0.5101144231294051,
+    "p75": 0.628848071133482,
+    "p95": 0.866450356212717
+   },
+   "ring": {
+    "n_px": 2430,
+    "mean": 0.13923430529853498,
+    "p5": 0.034239209338877724,
+    "p25": 0.08785688921963161,
+    "p50": 0.13287494914214704,
+    "p75": 0.17693044770690253,
+    "p95": 0.27874525476337325
+   },
+   "subject_ring_ratio": 3.062827499101768
+  },
+  "silhouette": {
+   "area_px": 29351,
+   "area_frac": 0.046456157011712566,
+   "bbox_px": {
+    "x0": 510,
+    "y0": 76,
+    "x1": 723,
+    "y1": 309,
+    "w": 213,
+    "h": 233
+   },
+   "bbox_frac": {
+    "x0": 0.4358974358974359,
+    "y0": 0.14074074074074075,
+    "w": 0.18205128205128204,
+    "h": 0.43148148148148147
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-b-nest.thumb1170x540.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-b-nest.thumb1170x540-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

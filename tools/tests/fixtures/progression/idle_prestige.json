@@ -1,0 +1,42 @@
+{
+ "meta": {"revision": "fixture-idle-prestige-r1",
+  "title": "Idle test model: capped wallet, timed permit (hard wall), multiplier item, prestige with reset and keep lists",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {
+  "cash": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}, "cap": {"v": 100, "src": "EXAMPLE ASSUMPTION"}, "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+  "angels": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "producers": {
+  "stand": {"start_owned": {"v": 1, "src": "EXAMPLE ASSUMPTION"},
+   "cost": {"currency": "cash", "curve": {"kind": "exponential", "a": {"v": 10, "src": "EXAMPLE ASSUMPTION"}, "r": {"v": "3/2", "src": "EXAMPLE ASSUMPTION"}},
+            "index_offset": {"v": -1, "src": "EXAMPLE ASSUMPTION"}, "rounding": "ceil"},
+   "produces": {"currency:cash": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}}
+ },
+ "items": {
+  "factory": {"cost": {"currency": "cash", "amount": {"v": 50, "src": "EXAMPLE ASSUMPTION"}},
+   "requires": {"unlocked": "permit"},
+   "effects": [{"target": "producer:stand", "op": "mul", "value": {"v": 3, "src": "EXAMPLE ASSUMPTION"}}]}
+ },
+ "unlocks": {"permit": {"when": {"active_s": {"v": 150, "src": "EXAMPLE ASSUMPTION"}}}},
+ "prestige": {
+  "basis_currency": "cash", "basis": "lifetime",
+  "formula": {"kind": "power", "a": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "alpha": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"}, "divisor": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+  "rule": "total_entitlement", "award_currency": "angels",
+  "take_when": {"all": [{"item": "factory"}, {"run": ["cash", {"v": 300, "src": "EXAMPLE ASSUMPTION"}]}]},
+  "reset": ["currency:cash", "producer:stand", "item:factory"],
+  "keep": ["currency:angels", "unlock:permit"],
+  "bonus": {"target": "currency:cash", "per_unit": {"v": "1/10", "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "policies": {"objective_currency": "cash"},
+ "goals": [
+  {"id": "factory", "label": "buy the factory", "when": {"item": "factory"}},
+  {"id": "prestige1", "label": "first prestige", "when": {"prestiges": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}},
+  {"id": "rebuilt", "label": "4 stands after the first prestige",
+   "when": {"all": [{"prestiges": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}, {"owned": ["stand", {"v": 4, "src": "EXAMPLE ASSUMPTION"}]}]}}
+ ],
+ "analysis": {
+  "soft_wall": {"min_wait_s": {"v": 60, "src": "EXAMPLE ASSUMPTION"}},
+  "spikes": [{"id": "cash_rate", "metric": "production_per_s", "currency": "cash", "min_ratio": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]
+ },
+ "run": {"horizon_active_s": {"v": 7200, "src": "EXAMPLE ASSUMPTION"}}
+}

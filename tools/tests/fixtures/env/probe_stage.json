@@ -1,0 +1,628 @@
+{
+ "probe": "scene_probe",
+ "version": 1,
+ "root": "Workspace.Stage",
+ "ray_length": 5000,
+ "eps": 0.01,
+ "parts": [
+  {
+   "path": "Workspace.Stage.Ground",
+   "class": "Part",
+   "cf": [
+    0,
+    -1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    100,
+    2,
+    100
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 4,
+   "terrain_y": "NO_HIT",
+   "down_hit": "NO_HIT"
+  },
+  {
+   "path": "Workspace.Stage.Rock",
+   "class": "Part",
+   "cf": [
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    2,
+    2,
+    2
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 1,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 1.0
+  },
+  {
+   "path": "Workspace.Stage.Lantern",
+   "class": "Part",
+   "cf": [
+    10,
+    5,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    1,
+    1
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 5.0
+  },
+  {
+   "path": "Workspace.Stage.Crate",
+   "class": "Part",
+   "cf": [
+    20,
+    0.6,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    1,
+    1
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 0.6
+  },
+  {
+   "path": "Workspace.Stage.StrayRock",
+   "class": "Part",
+   "cf": [
+    300,
+    5,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    2,
+    2,
+    2
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "NO_HIT"
+  },
+  {
+   "path": "Workspace.Stage.SunkLog",
+   "class": "Part",
+   "cf": [
+    5,
+    -3,
+    5,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    4,
+    1,
+    1
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 1,
+   "terrain_y": -1.0,
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 0.5
+  },
+  {
+   "path": "Workspace.Stage.HiddenBox",
+   "class": "Part",
+   "cf": [
+    0,
+    -1,
+    10,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 1,
+   "terrain_y": "NO_HIT",
+   "down_hit": "NO_HIT",
+   "enclosed_by": "Workspace.Stage.Ground"
+  },
+  {
+   "path": "Workspace.Stage.Blocker",
+   "class": "Part",
+   "cf": [
+    15,
+    3,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    6,
+    1
+   ],
+   "anchored": true,
+   "transparency": 1,
+   "cast_shadow": false,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "NO_HIT"
+  },
+  {
+   "path": "Workspace.Stage.Ball",
+   "class": "Part",
+   "cf": [
+    -10,
+    3,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    1,
+    1
+   ],
+   "anchored": false,
+   "transparency": 0,
+   "cast_shadow": false,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "NO_HIT"
+  },
+  {
+   "path": "Workspace.Stage.Mystery",
+   "class": "Part",
+   "cf": [
+    40,
+    2,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    1,
+    1
+   ],
+   "transparency": 0,
+   "contacts": 0,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 2.0
+  },
+  {
+   "path": "Workspace.Stage.Tree",
+   "class": "MeshPart",
+   "cf": [
+    -20,
+    5,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    4,
+    10,
+    4
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": true,
+   "contacts": 1,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.Stage.Ground",
+   "down_dist": 5.0
+  },
+  {
+   "path": "Workspace.Stage.Stalagmite",
+   "class": "MeshPart",
+   "cf": [
+    200,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    1,
+    2,
+    1
+   ],
+   "anchored": true,
+   "transparency": 0,
+   "cast_shadow": false,
+   "contacts": 1,
+   "terrain_y": "NO_HIT",
+   "down_hit": "Workspace.CaveFloor",
+   "down_dist": 1.0
+  }
+ ],
+ "zones": [
+  {
+   "path": "Workspace.Stage.Zones.Falls",
+   "cf": [
+    0,
+    10,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    100,
+    40,
+    100
+   ],
+   "zone_id": "Z-FALLS"
+  },
+  {
+   "path": "Workspace.Stage.Zones.Cave",
+   "cf": [
+    200,
+    10,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    50,
+    40,
+    50
+   ],
+   "zone_id": "Z-CAVE"
+  },
+  {
+   "path": "Workspace.Stage.Zones.Roof",
+   "cf": [
+    0,
+    100,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    10,
+    10,
+    10
+   ],
+   "zone_id": "Z-ROOF"
+  }
+ ],
+ "play_areas": [
+  {
+   "path": "Workspace.Stage.PlayArea",
+   "cf": [
+    0,
+    10,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "size": [
+    420,
+    100,
+    200
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "kind": "light",
+   "class": "PointLight",
+   "path": "Workspace.Stage.Lantern.PointLight",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    10,
+    5,
+    0
+   ],
+   "shadows": true
+  },
+  {
+   "kind": "light",
+   "class": "SurfaceLight",
+   "path": "Workspace.Stage.Tree.SurfaceLight",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    -20,
+    5,
+    0
+   ]
+  },
+  {
+   "kind": "light",
+   "class": "SpotLight",
+   "path": "Workspace.Stage.Stalagmite.SpotLight",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    200,
+    5,
+    0
+   ],
+   "shadows": false
+  },
+  {
+   "kind": "effect",
+   "class": "ParticleEmitter",
+   "path": "Workspace.Stage.FallAnchor.Spray",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    0,
+    2,
+    -20
+   ],
+   "anchor_id": "FALL-MAIN"
+  },
+  {
+   "kind": "audio",
+   "class": "AudioEmitter",
+   "path": "Workspace.Stage.FallAnchor.AudioEmitter",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    0,
+    2,
+    -20
+   ],
+   "anchor_id": "FALL-MAIN"
+  },
+  {
+   "kind": "audio",
+   "class": "AudioPlayer",
+   "path": "Workspace.Stage.FallAnchor.AudioPlayer",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    0,
+    2,
+    -20
+   ],
+   "anchor_id": "FALL-MAIN"
+  },
+  {
+   "kind": "audio",
+   "class": "AudioEmitter",
+   "path": "Workspace.Stage.RiverAnchor.AudioEmitter",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    30,
+    1,
+    30
+   ],
+   "anchor_id": "RIVER-OUT"
+  },
+  {
+   "kind": "audio",
+   "class": "Sound",
+   "path": "Workspace.Stage.CaveDrip.Drip",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    200,
+    3,
+    0
+   ],
+   "anchor_id": "CAVE-DRIP"
+  },
+  {
+   "kind": "audio",
+   "class": "Sound",
+   "path": "Workspace.Stage.Ghost.Hum",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    210,
+    3,
+    0
+   ],
+   "anchor_id": "GHOST-ID"
+  },
+  {
+   "kind": "audio",
+   "class": "Sound",
+   "path": "Workspace.Stage.Lantern.Creak",
+   "scope": "stage",
+   "positioned": true,
+   "pos": [
+    10,
+    5,
+    0
+   ]
+  },
+  {
+   "kind": "audio",
+   "class": "Sound",
+   "path": "SoundService.Music",
+   "scope": "SoundService",
+   "positioned": false
+  }
+ ],
+ "anchors": [
+  {
+   "path": "Workspace.Stage.FallAnchor",
+   "class": "Attachment",
+   "ambience_id": "FALL-MAIN",
+   "scope": "stage"
+  },
+  {
+   "path": "Workspace.Stage.RiverAnchor",
+   "class": "Attachment",
+   "ambience_id": "RIVER-OUT",
+   "scope": "stage"
+  },
+  {
+   "path": "Workspace.Stage.CaveDrip",
+   "class": "Attachment",
+   "ambience_id": "CAVE-DRIP",
+   "scope": "stage"
+  },
+  {
+   "path": "Workspace.Stage.CaveDrip2",
+   "class": "Attachment",
+   "ambience_id": "CAVE-DRIP",
+   "scope": "stage"
+  },
+  {
+   "path": "Workspace.Stage.Ghost",
+   "class": "Attachment",
+   "ambience_id": "GHOST-ID",
+   "scope": "stage"
+  }
+ ],
+ "triangles": "UNKNOWN"
+}

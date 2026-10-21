@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\egg-shop\\export\\egg_galaxy_256.png",
+  "sha256": "54b5cf13f782d4ad7149d0721f483ea297f8398402218bb9f7c16fd1e4a68ad7",
+  "size_px": [
+   256,
+   256
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "target_px": [
+   75,
+   75
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   75,
+   75
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 75,
+   "h": 75
+  },
+  "scale": 0.29296875,
+  "mask_source": "alpha",
+  "value": {
+   "whole": {
+    "n_px": 5625,
+    "mean": 0.0792988280491019,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.008373451385392557,
+    "p75": 0.050660602266323886,
+    "p95": 0.4764759017409098
+   },
+   "subject": {
+    "n_px": 3329,
+    "mean": 0.13007944805341168,
+    "p5": 0.003506304285794105,
+    "p25": 0.011825292605619658,
+    "p50": 0.035001257807101734,
+    "p75": 0.1363390961712374,
+    "p95": 0.6686556834264564
+   },
+   "ring": {
+    "n_px": 514,
+    "mean": 0.025333512074690107,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 3.226491835124143e-05,
+    "p75": 0.002744366256084822,
+    "p95": 0.030401641832951364
+   },
+   "subject_ring_ratio": 1.6989288401358038
+  },
+  "silhouette": {
+   "area_px": 3329,
+   "area_frac": 0.5918222222222222,
+   "bbox_px": {
+    "x0": 8,
+    "y0": 1,
+    "x1": 67,
+    "y1": 74,
+    "w": 59,
+    "h": 73
+   },
+   "bbox_frac": {
+    "x0": 0.10666666666666667,
+    "y0": 0.013333333333333334,
+    "w": 0.7866666666666666,
+    "h": 0.9733333333333334
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_galaxy_256.thumb75x75.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_galaxy_256.thumb75x75-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

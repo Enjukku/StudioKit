@@ -1,0 +1,225 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "palette",
+ "input": {
+  "path": "content\\ui\\anime-summon\\screens\\01-main-1920.png",
+  "sha256": "a9883480126e33631ad4386841a96e826ec65144c59a5a0a904a3a2dd5b4c88f",
+  "size_px": [
+   1920,
+   1080
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "none",
+  "key_estimate": {
+   "estimated_key": "#1F1C54",
+   "border_strip_px": 22,
+   "border_share_within_tol": 0.3171899987698364,
+   "flat_share_needed": 0.9,
+   "flat": false
+  },
+  "region": "whole image",
+  "k": 12,
+  "seed": 0,
+  "k_note": "analysis setting, not the right number of colours",
+  "algorithm": "k-means++ init, Lloyd, Euclidean in CIELAB",
+  "colour_space": "CIELAB D65 2deg from sRGB",
+  "difference": "CIEDE2000 (kL=kC=kH=1)",
+  "sample_max_px": 200000,
+  "roles": {
+   "crystal_top": "#9CF4FF",
+   "crystal_bottom": "#1A8FD6",
+   "panel_top": "#40319A",
+   "mythic": "#FF9AC4",
+   "legendary": "#FFE58A",
+   "epic": "#D49BFF",
+   "rare": "#7CC4FF",
+   "warn_yellow": "#FFD34D"
+  },
+  "max_delta_e": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "n_px": 2073600,
+  "k_requested": 12,
+  "k_effective": 12,
+  "clusters": [
+   {
+    "lab": [
+     23.218683115887266,
+     33.434632017080865,
+     -50.227462164592175
+    ],
+    "hex": "#342784",
+    "share": 0.2784490740740741
+   },
+   {
+    "lab": [
+     6.983789444035629,
+     12.01033355874355,
+     -21.055442689085105
+    ],
+    "hex": "#131131",
+    "share": 0.21487991898148148
+   },
+   {
+    "lab": [
+     15.520362685216671,
+     23.086070117416888,
+     -35.98118935546382
+    ],
+    "hex": "#251D5B",
+    "share": 0.17172550154320987
+   },
+   {
+    "lab": [
+     95.61739225953481,
+     0.5245025928082079,
+     -1.3865864061787516
+    ],
+    "hex": "#F2F2F5",
+    "share": 0.06329041280864198
+   },
+   {
+    "lab": [
+     35.37604790534306,
+     43.17520803819891,
+     -62.42092389034363
+    ],
+    "hex": "#543CB9",
+    "share": 0.05159191743827161
+   },
+   {
+    "lab": [
+     68.2471532571124,
+     8.630620514581432,
+     -17.785298367467213
+    ],
+    "hex": "#A6A3C6",
+    "share": 0.05117766203703704
+   },
+   {
+    "lab": [
+     31.562277675609543,
+     7.643918665398972,
+     -21.652742549246074
+    ],
+    "hex": "#43486C",
+    "share": 0.04911024305555556
+   },
+   {
+    "lab": [
+     49.39750767935719,
+     24.148125240845552,
+     -45.957490700302344
+    ],
+    "hex": "#6F6BC4",
+    "share": 0.04852912808641975
+   },
+   {
+    "lab": [
+     67.67891519191171,
+     -12.525295712707592,
+     -35.01319952282419
+    ],
+    "hex": "#4CAEE3",
+    "share": 0.032744502314814815
+   },
+   {
+    "lab": [
+     85.32627870081505,
+     -19.675426245476817,
+     -18.404936498282247
+    ],
+    "hex": "#8FE1F7",
+    "share": 0.02085551697530864
+   },
+   {
+    "lab": [
+     67.45744673182918,
+     50.09763787013099,
+     -2.52092470362634
+    ],
+    "hex": "#F57EAB",
+    "share": 0.011005015432098765
+   },
+   {
+    "lab": [
+     86.99310162345539,
+     0.6231948563947707,
+     62.07207387908185
+    ],
+    "hex": "#FDD660",
+    "share": 0.00664110725308642
+   }
+  ],
+  "roles": {
+   "crystal_top": {
+    "hex": "#9CF4FF",
+    "nearest_cluster": 9,
+    "cluster_hex": "#8FE1F7",
+    "delta_e2000": 5.591974451030104
+   },
+   "crystal_bottom": {
+    "hex": "#1A8FD6",
+    "nearest_cluster": 8,
+    "cluster_hex": "#4CAEE3",
+    "delta_e2000": 10.34569116385044
+   },
+   "panel_top": {
+    "hex": "#40319A",
+    "nearest_cluster": 0,
+    "cluster_hex": "#342784",
+    "delta_e2000": 4.144877867389817
+   },
+   "mythic": {
+    "hex": "#FF9AC4",
+    "nearest_cluster": 10,
+    "cluster_hex": "#F57EAB",
+    "delta_e2000": 6.442634730080175
+   },
+   "legendary": {
+    "hex": "#FFE58A",
+    "nearest_cluster": 11,
+    "cluster_hex": "#FDD660",
+    "delta_e2000": 5.587021940595931
+   },
+   "epic": {
+    "hex": "#D49BFF",
+    "nearest_cluster": 5,
+    "cluster_hex": "#A6A3C6",
+    "delta_e2000": 14.478413530045714
+   },
+   "rare": {
+    "hex": "#7CC4FF",
+    "nearest_cluster": 8,
+    "cluster_hex": "#4CAEE3",
+    "delta_e2000": 7.742055297861787
+   },
+   "warn_yellow": {
+    "hex": "#FFD34D",
+    "nearest_cluster": 11,
+    "cluster_hex": "#FDD660",
+    "delta_e2000": 1.9930405996177987
+   }
+  }
+ },
+ "images": {
+  "swatches": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\01-main-1920.palette.png"
+ },
+ "verdict": "measured"
+}

@@ -23,12 +23,13 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 | Role | Family | What the image is for |
 | --- | --- | --- |
 | game-designer | `concept` | key art of the fantasy, key moments, places; the first picture every agent shares |
-| art-director | all | writes and keeps the locks; approves anchors; checks that images from all roles look like one game |
+| art-director | all | writes and keeps the locks; proposes anchors (the owner approves each, J009-D3); checks that images from all roles look like one game (`art-direction`, `art-review` skills) |
 | modeler | `model`, `prop`, `environment`, `character`, `creature` | the reference every model starts from (Blender by hand, or Tripo image-to-3D) |
 | animator | `pose` | key poses and silhouettes before keying; how a body or tool should read in motion |
 | vfx-designer | `vfx` | key frames of an effect (build-up, peak, dissipate) next to the frame script |
 | ui-ux-designer | `ui`, `icon` | screen moods, item renders, icons (`ui-figma` routes) |
-| marketing (planned) | `concept` | thumbnail and icon ideas that match the game |
+| marketing | `thumbnail`, `game-icon`, `concept` | Home thumbnails (16:9 crop) and the game icon, from a real game moment; approved title text is added afterwards, never drawn (`marketing-craft` skill; check with `tools/art/thumb_check.py`) |
+| film-director | `storyboard`, `concept` | one panel per shot (staging, eyeline, screen direction, light direction) and colour-script vignettes per sequence; panels are proposals checked for continuity, never camera or geometry truth (`film-craft` skill) |
 
 ## 4. Steps
 1. **Brief:** what the image must show and why (`rules/messages.md`): subject, purpose (target, mood, model input), the family, any input images.
@@ -39,20 +40,22 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 6. **Approve:** images the owner approves can become anchors (`art_refs.py approve <family> <id>`), so later batches match them.
 7. **Hand over** the image path in the next brief's `refs`, with a note on what to take and what to ignore.
 
-**Every agent has ChatGPT image access** through this tool (owner J002-D11, 2026-10-21: "ChatGPT has a better image gen model"). Routes: the tool (default, ChatGPT `gpt-image-2` via Codex); a prompt pack the owner runs in the ChatGPT app for large batches; Figma `generate_image` only when the owner asks for it. Same locks in every route. No art bible yet (a kit test, a new game): `--bible templates/skill/art-bible.md` runs on the template's starter locks.
+**Every agent has ChatGPT image access** through this tool (owner J002-D11, 2026-10-21: "ChatGPT has a better image gen model"). Routes: the tool (default, ChatGPT's newest image model via Codex; the owner always wants the newest model, J009-D9); a prompt pack the owner runs in the ChatGPT app for large batches; Figma `generate_image` only when the owner asks for it. Same locks in every route. No art bible yet (a kit test, a new game): `--bible templates/skill/art-bible.md` runs on the template's starter locks.
 
 ## 5. Craft core
 | ID | Practice | Evidence |
 | --- | --- | --- |
 | I-01 | **One style source.** Locks live once in the art bible; prompts never restate or tweak the style inline. A changed lock is an art-bible change the owner approves | first game: drifting styles until one shared lock per family (DestructionSimulator D-153, D-155) |
-| I-02 | **Anchors beat adjectives.** Attach up to 3 approved anchors; the owner's own images first, our newest approved one last. Anchors give shapes and proportions; the lock gives the rendering | first game anchor library (2026-10) |
+| I-02 | **Anchors beat adjectives.** Attach up to 3 approved anchors; the owner's own images first, our newest approved one last. Anchors guide the whole look (shape, color, light, materials, rendering); where an anchor and the lock disagree, the lock wins (owner J009-D11) | first game anchor library (2026-10) |
 | I-03 | **Identity = subject only.** Name what it is, its parts, pose and the moment, in plain words; no style words, no franchise names | style words in identity fought the locks (first game) |
 | I-04 | **Model references are single, clean views.** One subject, three-quarter view, T- or A-pose, nothing overlapping, plain background. Extra angles in one image make Tripo build extra models | first game, owner D-153 (2026-10-11) |
 | I-05 | **Check before building:** views match, no impossible or hidden geometry, no extra or missing parts, the back is plausible, scale against a player is right, it reads at game distance | owner rejected first builds made without approved refs (first game and the dam game, 2026-10) |
-| I-06 | **Images are inputs.** A reference is a target and a source of shapes, never the shipped asset; UI stays live layers, models are built, effects are built | owner rule (UI built as layers; models from refs) |
+| I-06 | **Images are inputs.** A reference is a target and a source of shapes, never the shipped asset; UI stays live layers, models are built, effects are built. Exception: marketing icons and thumbnails may ship as images after the owner reviews each one (J009-D8) | owner rule (UI built as layers; models from refs) |
 | I-07 | **Franchise themes:** source stills first (kept out of git), then original designs that do not copy a franchise's characters, logos or text | first game franchise stages (2026-10) |
 | I-09 | **Cut-out backgrounds:** for images that need transparency, use a plain magenta `#FF00FF` background; for pure glows, black plus a luminance-to-alpha key. Never green: a glowing subject on `#00FF00` picks up green spill in its glow | UI chat test 2026-10-21 (J002); first game ICON LOCK |
-| I-10 | **Same subject, attach it; name positions; name counts.** An image of an existing character, creature or prop attaches its approved image as `inputs`; layouts say left, middle, right and the key relationship; panels and poses say "exactly N" | kit test batch 2026-10-21: the pose sheet drew a different character until the sheet was attached; a concept put the wave on the wrong side of the dam; 7 VFX panels came back instead of 3 (`references/prompt-patterns.md` §1b) |
+| I-11 | **Prompt budget: exact only where it matters.** Over-explained prompts give usable but stiff, odd, "AI-looking" images: the model keeps satisfying rules instead of using its own skill. Say the purpose, the subject in one or two lines, the 1-3 must-haves and the feeling; let the style come from the lock and anchors; leave camera details, lighting details, exact placement and decorative counts to the model. When an image looks stiff or strange, remove rules before adding any | owner J009-D14 ("we want to be specific in the correct way that allows it to use its creativity and skill properly"); style probe 2026-10-21: a long fixed layout made 8 styles look alike |
+| I-12 | **One image, one chat.** `art_refs.py` runs every manifest row in its own new Codex session (the session id is in the image's `.json`), so a new image never edits or copies the last one. Never generate a batch in one shared ChatGPT chat: the model starts editing its earlier image and every image drifts toward the same style. For a style exploration set `anchors` to `none` (or name only that direction's own anchors) and attach no image from another direction | owner J009-D15 ("each image is in its own chat") |
+| I-10 | **Working references only: attach the subject; name positions; name counts.** (Not for look, mood or concept images: there, I-11 wins.) An image of an existing character, creature or prop attaches its approved image as `inputs`; layouts say left, middle, right and the key relationship; panels and poses say "exactly N" | kit test batch 2026-10-21: the pose sheet drew a different character until the sheet was attached; a concept put the wave on the wrong side of the dam; 7 VFX panels came back instead of 3 (`references/prompt-patterns.md` §1b) |
 | I-08 | **Show the owner images next to what they are for** (the sheet next to the model render, the key frames next to the frame script) in one batched review | owner gate practice, first game |
 
 ## 6. Rules (final check)

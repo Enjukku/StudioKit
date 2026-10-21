@@ -1,0 +1,1 @@
+{"_fixture": "TEST: docs failure envelope", "path": "path/to/poll", "done": true, "metadata": {"createdTime": "2026-10-20T00:00:00Z"}, "error": {"code": 2001, "message": "The requested granularity is not supported for this metric."}}

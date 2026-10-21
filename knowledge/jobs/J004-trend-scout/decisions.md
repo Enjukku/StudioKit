@@ -1,0 +1,27 @@
+---
+type: decision
+scope: universal
+status: active
+updated: 2026-10-20
+source: owner chat 2026-10-20
+supersedes: []
+---
+> Author: orchestrator · claude-opus-5-5 · medium · 2026-10-20
+
+# J004 decisions
+
+| ID | date | decision | owner's words |
+| --- | --- | --- | --- |
+| J004-D1 | 2026-10-20 | G1 approved: job card and brief as written | "All right, seems good." |
+| J004-D2 | 2026-10-20 | Every Sonnet agent in this job runs at high effort: extractors, fact-checkers, grader and the trend-scout's G2 scan run. The role file default stays medium (owner's earlier "Sonnet, medium effort for the agent"); to confirm at G2. | "Just make sure that all the Sonnet models are actually used on high effort." |
+| J004-D3 | 2026-10-20 | G1 digest defaults accepted (no objection): skills `market-trends` + `trend-scan`; report = Markdown + HTML charts; YouTube/Twitch built and tested offline now, owner adds keys later | (defaults from G1 digest; owner did not change them) |
+| J004-D4 | 2026-10-21 | Use RoTrends as a source, inside its terms: the owner reads it (allowed for "personal or internal business purposes") and enters figures or a RoTrends export; agent fetching or automated collection only after RoTrends gives written consent or a documented API (its terms bar "data-mining, robots ... except via documented APIs or with our written consent", fact-check-roblox.md §1.3). Figures labelled 3P-S (counts) or 3P-E (estimates) | "you can also utilize https://www.rotrends.com/" |
+| J004-D5 | 2026-10-21 | Revenue of other games: not obtainable; only labelled third-party estimates or UNKNOWN (confirms the skills' rule) | "Yeah, we can't get the revenue." |
+| J004-D6 | 2026-10-21 | Add Twitch trending games via SullyGnome as an owner-read source (registry row twitch.sullygnome, manual). Owner's "you can just use RoTrends ... scour for information" NOT applied as automated agent reading: RoTrends and SullyGnome terms both forbid robots/automated scraping (lead re-read both on 2026-10-21); lead returned needs-decision with the compliant path (owner reads or exports; or written consent from each site) | "we should also look at trending games on Twitch. https://sullygnome.com/games/3/trending It's fine. You can just use rogue trends. You can just take a look. It's open source for anyone to just look at. And scour for information." |
+| J004-D7 | 2026-10-21 | RoTrends and SullyGnome may be read by an agent in a visible browser (Claude in Chrome or the built-in browser) only when the owner asks for it in chat, at human pace, a few pages, figures used only (SullyGnome credited), no stored page copies; never a scheduled or bulk scraper. The owner accepts the RoTrends grey zone (terms bar robots without consent) | "Okay, using Chrome computer use, I suppose that we can use browser use if I specify it." |
+| J004-D8 | 2026-10-21 | No schedule: the trend-scout runs only when the owner asks. Schedule plan not used (status superseded). Each run takes one snapshot of the allowed sources; growth evidence comes from tracker history read on request (J004-D7) | "I don't want to do like a scheduled scan or whatever. This is only when I specify us to use the trend scouter." |
+| J004-D9 | 2026-10-21 | Roblox collector: default A stands (stops itself after 2026-10-31); no message to Roblox unless the owner asks for one | "And then Roblox, the default is to stop the Roblox collector." |
+| J004-D10 | 2026-10-21 | No data collection from Roblox's own services at all (Games API ruling → not_allowed now, not only after 2026-10-31; no agent reads of roblox.com). Roblox game numbers only from RoTrends/SullyGnome reads on request or the owner's own reading. Outside trends (YouTube, Instagram, Twitch, TikTok, Google Trends, app stores, news) stay the main input | "I don't want to get myself banned by looking at Roblox data, so we just shouldn't do that. ... we can't look at exact player data or anything. We're just gonna have to kind of do it more manually style." |
+| J004-D11 | 2026-10-21 | G3 not approved: the trend-scout is kept as a rough draft and shelved (not "in kit"); files stay as they are; no further work | "it seems like we can't really do a [trend scout] for now. This is just going to be like a rough draft, but we probably won't use this agent because it just didn't work out. That's all right." |
+| J004-D12 | 2026-10-21 | Supersedes J004-D11 and J004-D7. The trend-scout stays in use in a legal-only mode: automatic only through official services used as their rules allow (Apple RSS charts; YouTube Data API with the owner's key, 30-day limit); the agent may read official news and release pages; everything else (RoTrends, SullyGnome, TikTok, Instagram, Google Trends, Google Play, Steam charts, Twitch, Roblox charts) the owner reads in their own browser and pastes or exports, and the scout analyses it. No agent reads of RoTrends or SullyGnome (their terms bar robots); no Roblox collection (J004-D10) | "Okay, actually, maybe we will use this, but like, legally, without getting me banned on any platforms or anything." |
+| J004-D13 | 2026-10-21 | The trend-scout sends no request of any kind to any roblox.com address. The first scan's stored Roblox samples (roblox.games.jsonl, roblox.votes.jsonl in .tools/trend-data/observations/) deleted by the lead on this instruction | "we're going to try not to touch Roblox because I don't want to just like make them think like I'm a bot and then get myself banned." |

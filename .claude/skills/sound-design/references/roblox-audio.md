@@ -12,7 +12,7 @@ at each milestone; the engine changes.
 | --- | --- | --- |
 | AudioPlayer | Plays an asset | `Asset` (use this; `AssetId` deprecated, S-222), Volume (0-10), PlaybackSpeed (0-20; pitch and length), Looping, LoopRegion, PlaybackRegion, IsReady, TimeLength |
 | Wire | Connects SourceInstance → TargetInstance | pin names, e.g. a compressor's `Sidechain` pin |
-| AudioFader | Bus gain | Volume (0-3, default 1) |
+| AudioFader | Bus gain | Volume (0-10; default not stated on the page; `AudioFader.yaml:44-47`, corrected 2026-10-21 by J008 fact-check AU12) |
 | AudioEmitter / AudioListener | 3D speaker / microphone | Custom DistanceAttenuation (≤400 points), AngleAttenuation (0-180°), AcousticSimulationEnabled, GetAudibilityFor(listener) → 0-1 |
 | AudioDeviceOutput | Real output | — |
 | AudioCompressor | Dynamics, ducking via `Sidechain` pin | Threshold (−60 to 0 dB), Ratio (1-50), Attack (0.0001-0.5 s), Release (0.01-5 s), MakeupGain (−30 to 30 dB) |

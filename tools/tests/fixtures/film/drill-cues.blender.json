@@ -1,0 +1,19 @@
+{
+  "format": "film-shotlist-blender/1",
+  "blender_version": "fixture",
+  "scene": "Scene",
+  "fps": 30,
+  "fps_base": 1.0,
+  "frame_start": 1,
+  "frame_end": 105,
+  "sequence": "drill",
+  "revision": 3,
+  "markers": [
+    {"name": "cue:sfx.test.one", "frame": 1, "camera": null},
+    {"name": "shot:S010", "frame": 1, "camera": "CAM_S010"},
+    {"name": "cue:amb.test.bed", "frame": 6, "camera": null},
+    {"name": "shot:S020", "frame": 31, "camera": "CAM_S020"},
+    {"name": "shot:S030", "frame": 61, "camera": "CAM_S030"},
+    {"name": "cue:music.test.sting", "frame": 76, "camera": null}
+  ]
+}

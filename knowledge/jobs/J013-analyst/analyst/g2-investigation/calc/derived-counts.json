@@ -1,0 +1,1459 @@
+{
+ "label": "SYNTHETIC TEST DATA",
+ "assumptions": [
+  "A1",
+  "A2"
+ ],
+ "periods": [
+  {
+   "name": "W-2 baseline",
+   "first_play_from": "2026-09-13",
+   "first_play_to": "2026-09-19",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 4340,
+   "returners_est": 929,
+   "rate_from_counts": 0.2141
+  },
+  {
+   "name": "W-1 baseline",
+   "first_play_from": "2026-09-20",
+   "first_play_to": "2026-09-26",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 4343,
+   "returners_est": 930,
+   "rate_from_counts": 0.2141
+  },
+  {
+   "name": "W0 last week before video",
+   "first_play_from": "2026-09-27",
+   "first_play_to": "2026-10-03",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 4348,
+   "returners_est": 932,
+   "rate_from_counts": 0.2144
+  },
+  {
+   "name": "W1 video week (v112 from Fri 10-09)",
+   "first_play_from": "2026-10-04",
+   "first_play_to": "2026-10-10",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 7223,
+   "returners_est": 1143,
+   "rate_from_counts": 0.1582
+  },
+  {
+   "name": "W2 latest mature whole week (v112)",
+   "first_play_from": "2026-10-11",
+   "first_play_to": "2026-10-17",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 5954,
+   "returners_est": 952,
+   "rate_from_counts": 0.1599
+  },
+  {
+   "name": "B0 matched weekdays before video",
+   "first_play_from": "2026-09-27",
+   "first_play_to": "2026-10-01",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 3087,
+   "returners_est": 663,
+   "rate_from_counts": 0.2148
+  },
+  {
+   "name": "B1 video days before v112",
+   "first_play_from": "2026-10-04",
+   "first_play_to": "2026-10-08",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 5288,
+   "returners_est": 848,
+   "rate_from_counts": 0.1604
+  },
+  {
+   "name": "C1 first 5 days of v112",
+   "first_play_from": "2026-10-09",
+   "first_play_to": "2026-10-13",
+   "outcome": "D1",
+   "all_cohorts_mature": true,
+   "new_players": 4618,
+   "returners_est": 716,
+   "rate_from_counts": 0.155
+  },
+  {
+   "name": "D7 W0",
+   "first_play_from": "2026-09-27",
+   "first_play_to": "2026-10-03",
+   "outcome": "D7",
+   "all_cohorts_mature": true,
+   "new_players": 4348,
+   "returners_est": 391,
+   "rate_from_counts": 0.0899
+  },
+  {
+   "name": "D7 W1",
+   "first_play_from": "2026-10-04",
+   "first_play_to": "2026-10-10",
+   "outcome": "D7",
+   "all_cohorts_mature": true,
+   "new_players": 7223,
+   "returners_est": 480,
+   "rate_from_counts": 0.0665
+  }
+ ],
+ "excess_split_video_days": {
+  "method": "if the usual players kept B0's count and rate, the extra players are B1 minus B0 (both counts estimated, A1)",
+  "extra_new_players": 2201,
+  "extra_returners_est": 185,
+  "extra_players_d1_rate": 0.0841,
+  "usual_players_rate_B0": 0.2148,
+  "observed_rate_B1": 0.1604
+ },
+ "latest_week_rough_split": {
+  "label": "ESTIMATE (A1, A3, A4)",
+  "w0_rate": 0.2144,
+  "w2_rate_observed": 0.1599,
+  "w2_extra_new_players": 1606,
+  "w2_returners_expected_from_mix_only": 1067,
+  "w2_rate_expected_from_mix_only": 0.1792,
+  "w2_returners_observed": 952,
+  "returners_not_explained_by_mix": 115,
+  "points_explained_by_mix": 3.52,
+  "points_not_explained_by_mix": 1.93
+ },
+ "segment_ranges": {
+  "B0": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2763,
+     "max": 0.2847,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.222,
+     "max": 0.2287,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2368,
+     "max": 0.244,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.1677,
+     "max": 0.1728,
+     "days": 5
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2319,
+     "max": 0.2389,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.1776,
+     "max": 0.183,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.2023,
+     "max": 0.2084,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.1924,
+     "max": 0.1982,
+     "days": 5
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 550,
+     "max": 633,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 1650,
+     "max": 1900,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 304,
+     "max": 350,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 421,
+     "max": 485,
+     "days": 5
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 588,
+     "max": 681,
+     "days": 5
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0037,
+     "max": 0.0043,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.0056,
+     "max": 0.0065,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.0075,
+     "max": 0.0087,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.0084,
+     "max": 0.0097,
+     "days": 5
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.3,
+     "max": 52.9,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 47.4,
+     "max": 48.8,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 30.6,
+     "max": 31.5,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 32.6,
+     "max": 33.5,
+     "days": 5
+    }
+   }
+  },
+  "pre-video 9-25..10-03": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2747,
+     "max": 0.2847,
+     "days": 9
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.2207,
+     "max": 0.2287,
+     "days": 9
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2355,
+     "max": 0.244,
+     "days": 9
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.1668,
+     "max": 0.1728,
+     "days": 9
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2306,
+     "max": 0.2389,
+     "days": 9
+    },
+    "Platform=Console": {
+     "min": 0.1766,
+     "max": 0.183,
+     "days": 9
+    },
+    "Platform=Phone": {
+     "min": 0.2011,
+     "max": 0.2084,
+     "days": 9
+    },
+    "Platform=Tablet": {
+     "min": 0.1913,
+     "max": 0.1982,
+     "days": 9
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 550,
+     "max": 633,
+     "days": 9
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 1650,
+     "max": 1900,
+     "days": 9
+    },
+    "AcquisitionSource=Search": {
+     "min": 304,
+     "max": 350,
+     "days": 9
+    },
+    "AcquisitionSource=Other": {
+     "min": 421,
+     "max": 485,
+     "days": 9
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 588,
+     "max": 681,
+     "days": 9
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0036,
+     "max": 0.0043,
+     "days": 9
+    },
+    "Platform=Console": {
+     "min": 0.0054,
+     "max": 0.0065,
+     "days": 9
+    },
+    "Platform=Phone": {
+     "min": 0.0072,
+     "max": 0.0087,
+     "days": 9
+    },
+    "Platform=Tablet": {
+     "min": 0.0081,
+     "max": 0.0097,
+     "days": 9
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.0,
+     "max": 52.9,
+     "days": 9
+    },
+    "Platform=Console": {
+     "min": 47.1,
+     "max": 48.8,
+     "days": 9
+    },
+    "Platform=Phone": {
+     "min": 30.4,
+     "max": 31.5,
+     "days": 9
+    },
+    "Platform=Tablet": {
+     "min": 32.4,
+     "max": 33.5,
+     "days": 9
+    }
+   }
+  },
+  "B1": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2745,
+     "max": 0.2856,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.2206,
+     "max": 0.2295,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2353,
+     "max": 0.2448,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.0998,
+     "max": 0.1037,
+     "days": 5
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2304,
+     "max": 0.2397,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.1765,
+     "max": 0.1836,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.201,
+     "max": 0.2091,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.1912,
+     "max": 0.1989,
+     "days": 5
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 610,
+     "max": 667,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 1820,
+     "max": 1976,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 335,
+     "max": 364,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 875,
+     "max": 993,
+     "days": 5
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 978,
+     "max": 1188,
+     "days": 5
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0036,
+     "max": 0.0044,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.0054,
+     "max": 0.0066,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.0072,
+     "max": 0.0088,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.0081,
+     "max": 0.0099,
+     "days": 5
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.0,
+     "max": 53.0,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 47.1,
+     "max": 49.0,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 30.4,
+     "max": 31.6,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 32.4,
+     "max": 33.7,
+     "days": 5
+    }
+   }
+  },
+  "C1": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2541,
+     "max": 0.2627,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.1999,
+     "max": 0.2067,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2147,
+     "max": 0.2219,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.1049,
+     "max": 0.1096,
+     "days": 5
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2314,
+     "max": 0.2392,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.1773,
+     "max": 0.1832,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.1625,
+     "max": 0.168,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.1773,
+     "max": 0.1832,
+     "days": 5
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 696,
+     "max": 736,
+     "days": 5
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 2059,
+     "max": 2178,
+     "days": 5
+    },
+    "AcquisitionSource=Search": {
+     "min": 379,
+     "max": 401,
+     "days": 5
+    },
+    "AcquisitionSource=Other": {
+     "min": 777,
+     "max": 880,
+     "days": 5
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 856,
+     "max": 976,
+     "days": 5
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0037,
+     "max": 0.0044,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 0.0055,
+     "max": 0.0065,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 0.0184,
+     "max": 0.0197,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 0.0083,
+     "max": 0.0098,
+     "days": 5
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.2,
+     "max": 52.9,
+     "days": 5
+    },
+    "Platform=Console": {
+     "min": 47.3,
+     "max": 48.9,
+     "days": 5
+    },
+    "Platform=Phone": {
+     "min": 21.5,
+     "max": 22.6,
+     "days": 5
+    },
+    "Platform=Tablet": {
+     "min": 28.5,
+     "max": 29.6,
+     "days": 5
+    }
+   }
+  },
+  "W2": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2534,
+     "max": 0.263,
+     "days": 7
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.1994,
+     "max": 0.207,
+     "days": 7
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2141,
+     "max": 0.2223,
+     "days": 7
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.1055,
+     "max": 0.1154,
+     "days": 7
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2308,
+     "max": 0.2396,
+     "days": 7
+    },
+    "Platform=Console": {
+     "min": 0.1768,
+     "max": 0.1835,
+     "days": 7
+    },
+    "Platform=Phone": {
+     "min": 0.1621,
+     "max": 0.1682,
+     "days": 7
+    },
+    "Platform=Tablet": {
+     "min": 0.1768,
+     "max": 0.1835,
+     "days": 7
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 641,
+     "max": 736,
+     "days": 7
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 1901,
+     "max": 2178,
+     "days": 7
+    },
+    "AcquisitionSource=Search": {
+     "min": 350,
+     "max": 401,
+     "days": 7
+    },
+    "AcquisitionSource=Other": {
+     "min": 689,
+     "max": 852,
+     "days": 7
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 802,
+     "max": 947,
+     "days": 7
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0036,
+     "max": 0.0044,
+     "days": 7
+    },
+    "Platform=Console": {
+     "min": 0.0055,
+     "max": 0.0066,
+     "days": 7
+    },
+    "Platform=Phone": {
+     "min": 0.0183,
+     "max": 0.0198,
+     "days": 7
+    },
+    "Platform=Tablet": {
+     "min": 0.0082,
+     "max": 0.0099,
+     "days": 7
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.1,
+     "max": 53.0,
+     "days": 7
+    },
+    "Platform=Console": {
+     "min": 47.1,
+     "max": 48.9,
+     "days": 7
+    },
+    "Platform=Phone": {
+     "min": 21.4,
+     "max": 22.6,
+     "days": 7
+    },
+    "Platform=Tablet": {
+     "min": 28.4,
+     "max": 29.6,
+     "days": 7
+    }
+   }
+  },
+  "post-v112 10-09..10-18": {
+   "d1_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 0.2528,
+     "max": 0.263,
+     "days": 10
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 0.1989,
+     "max": 0.207,
+     "days": 10
+    },
+    "AcquisitionSource=Search": {
+     "min": 0.2136,
+     "max": 0.2223,
+     "days": 10
+    },
+    "AcquisitionSource=Other": {
+     "min": 0.1049,
+     "max": 0.1154,
+     "days": 10
+    }
+   },
+   "d1_by_platform": {
+    "Platform=Computer": {
+     "min": 0.2303,
+     "max": 0.2396,
+     "days": 10
+    },
+    "Platform=Console": {
+     "min": 0.1764,
+     "max": 0.1835,
+     "days": 10
+    },
+    "Platform=Phone": {
+     "min": 0.1617,
+     "max": 0.1682,
+     "days": 10
+    },
+    "Platform=Tablet": {
+     "min": 0.1764,
+     "max": 0.1835,
+     "days": 10
+    }
+   },
+   "dau_by_source": {
+    "AcquisitionSource=Friends": {
+     "min": 628,
+     "max": 736,
+     "days": 10
+    },
+    "AcquisitionSource=HomeRecommendations": {
+     "min": 1881,
+     "max": 2178,
+     "days": 10
+    },
+    "AcquisitionSource=Search": {
+     "min": 347,
+     "max": 401,
+     "days": 10
+    },
+    "AcquisitionSource=Other": {
+     "min": 643,
+     "max": 880,
+     "days": 10
+    }
+   },
+   "new_players": {
+    "IsNewUser=true": {
+     "min": 802,
+     "max": 976,
+     "days": 10
+    }
+   },
+   "crash_rate_by_platform": {
+    "Platform=Computer": {
+     "min": 0.0036,
+     "max": 0.0044,
+     "days": 10
+    },
+    "Platform=Console": {
+     "min": 0.0054,
+     "max": 0.0066,
+     "days": 10
+    },
+    "Platform=Phone": {
+     "min": 0.0182,
+     "max": 0.0198,
+     "days": 10
+    },
+    "Platform=Tablet": {
+     "min": 0.0081,
+     "max": 0.0099,
+     "days": 10
+    }
+   },
+   "fps_p10_by_platform": {
+    "Platform=Computer": {
+     "min": 51.0,
+     "max": 53.0,
+     "days": 10
+    },
+    "Platform=Console": {
+     "min": 47.0,
+     "max": 48.9,
+     "days": 10
+    },
+    "Platform=Phone": {
+     "min": 21.4,
+     "max": 22.6,
+     "days": 10
+    },
+    "Platform=Tablet": {
+     "min": 28.3,
+     "max": 29.6,
+     "days": 10
+    }
+   }
+  }
+ },
+ "reconciliation": {
+  "dau_platform_sum_ne_total": [
+   "2026-09-17",
+   "2026-09-20",
+   "2026-09-21",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-28",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-10-04",
+   "2026-10-07",
+   "2026-10-09",
+   "2026-10-11",
+   "2026-10-12",
+   "2026-10-13",
+   "2026-10-15",
+   "2026-10-16",
+   "2026-10-19"
+  ],
+  "dau_newuser_sum_ne_total": [
+   "2026-09-16",
+   "2026-09-18",
+   "2026-09-21",
+   "2026-09-27",
+   "2026-10-02",
+   "2026-10-06",
+   "2026-10-11",
+   "2026-10-17"
+  ],
+  "dau_source_sum_minus_total": {
+   "2026-09-25": 2,
+   "2026-09-26": -1,
+   "2026-09-27": -1,
+   "2026-09-28": 1,
+   "2026-09-29": 1,
+   "2026-09-30": 0,
+   "2026-10-01": 0,
+   "2026-10-02": 0,
+   "2026-10-03": -1,
+   "2026-10-04": 0,
+   "2026-10-05": 1,
+   "2026-10-06": -1,
+   "2026-10-07": 0,
+   "2026-10-08": 1,
+   "2026-10-09": 1,
+   "2026-10-10": 1,
+   "2026-10-11": 1,
+   "2026-10-12": 1,
+   "2026-10-13": 0,
+   "2026-10-14": 1,
+   "2026-10-15": 0,
+   "2026-10-16": -1,
+   "2026-10-17": 0,
+   "2026-10-18": 1,
+   "2026-10-19": 1,
+   "2026-10-20": 0
+  },
+  "d1_total_outside_platform_range": [
+   {
+    "date": "2026-10-04",
+    "total": 0.1572,
+    "platform_min": 0.1793,
+    "platform_max": 0.2341
+   },
+   {
+    "date": "2026-10-05",
+    "total": 0.1602,
+    "platform_min": 0.1836,
+    "platform_max": 0.2397
+   },
+   {
+    "date": "2026-10-06",
+    "total": 0.1593,
+    "platform_min": 0.1798,
+    "platform_max": 0.2347
+   },
+   {
+    "date": "2026-10-07",
+    "total": 0.1587,
+    "platform_min": 0.1765,
+    "platform_max": 0.2304
+   },
+   {
+    "date": "2026-10-08",
+    "total": 0.1656,
+    "platform_min": 0.1811,
+    "platform_max": 0.2365
+   },
+   {
+    "date": "2026-10-09",
+    "total": 0.1521,
+    "platform_min": 0.168,
+    "platform_max": 0.2392
+   },
+   {
+    "date": "2026-10-10",
+    "total": 0.1525,
+    "platform_min": 0.1632,
+    "platform_max": 0.2324
+   },
+   {
+    "date": "2026-10-11",
+    "total": 0.1538,
+    "platform_min": 0.1625,
+    "platform_max": 0.2314
+   },
+   {
+    "date": "2026-10-12",
+    "total": 0.1577,
+    "platform_min": 0.1674,
+    "platform_max": 0.2385
+   },
+   {
+    "date": "2026-10-13",
+    "total": 0.1591,
+    "platform_min": 0.1669,
+    "platform_max": 0.2377
+   },
+   {
+    "date": "2026-10-14",
+    "total": 0.1565,
+    "platform_min": 0.1621,
+    "platform_max": 0.2308
+   },
+   {
+    "date": "2026-10-15",
+    "total": 0.1599,
+    "platform_min": 0.1639,
+    "platform_max": 0.2334
+   },
+   {
+    "date": "2026-10-16",
+    "total": 0.1657,
+    "platform_min": 0.1682,
+    "platform_max": 0.2396
+   }
+  ],
+  "d1_total_outside_source_range": [],
+  "d1_tablet_equals_console_days": [
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-11",
+   "2026-10-12",
+   "2026-10-13",
+   "2026-10-14",
+   "2026-10-15",
+   "2026-10-16",
+   "2026-10-17",
+   "2026-10-18",
+   "2026-10-19"
+  ],
+  "crash_total_ne_only_returned_version": [
+   {
+    "date": "2026-10-09",
+    "total": 0.0131,
+    "PlaceVersion=112": 0.0147
+   },
+   {
+    "date": "2026-10-10",
+    "total": 0.0121,
+    "PlaceVersion=112": 0.0128
+   },
+   {
+    "date": "2026-10-11",
+    "total": 0.012,
+    "PlaceVersion=112": 0.0125
+   },
+   {
+    "date": "2026-10-12",
+    "total": 0.013,
+    "PlaceVersion=112": 0.0145
+   },
+   {
+    "date": "2026-10-13",
+    "total": 0.0129,
+    "PlaceVersion=112": 0.0143
+   },
+   {
+    "date": "2026-10-14",
+    "total": 0.0119,
+    "PlaceVersion=112": 0.0123
+   },
+   {
+    "date": "2026-10-15",
+    "total": 0.0123,
+    "PlaceVersion=112": 0.013
+   },
+   {
+    "date": "2026-10-16",
+    "total": 0.0131,
+    "PlaceVersion=112": 0.0148
+   },
+   {
+    "date": "2026-10-17",
+    "total": 0.0126,
+    "PlaceVersion=112": 0.0136
+   },
+   {
+    "date": "2026-10-18",
+    "total": 0.0119,
+    "PlaceVersion=112": 0.0122
+   },
+   {
+    "date": "2026-10-19",
+    "total": 0.0126,
+    "PlaceVersion=112": 0.0137
+   },
+   {
+    "date": "2026-10-20",
+    "total": 0.0131,
+    "PlaceVersion=112": 0.0148
+   }
+  ],
+  "identical_series_ServerFrameRateP10_P50_MemoryUsageP90_SessionDurationSecondsP50": true
+ },
+ "daily": [
+  {
+   "date": "2026-09-09",
+   "new_players": 617,
+   "d1_rate": 0.2172,
+   "d1_mature": true,
+   "d1_returners_est": 134,
+   "d7_rate": 0.0912,
+   "d7_mature": true,
+   "d7_returners_est": 56
+  },
+  {
+   "date": "2026-09-10",
+   "new_players": 603,
+   "d1_rate": 0.2146,
+   "d1_mature": true,
+   "d1_returners_est": 129,
+   "d7_rate": 0.0901,
+   "d7_mature": true,
+   "d7_returners_est": 54
+  },
+  {
+   "date": "2026-09-11",
+   "new_players": 582,
+   "d1_rate": 0.2109,
+   "d1_mature": true,
+   "d1_returners_est": 123,
+   "d7_rate": 0.0886,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-09-12",
+   "new_players": 674,
+   "d1_rate": 0.2144,
+   "d1_mature": true,
+   "d1_returners_est": 145,
+   "d7_rate": 0.0901,
+   "d7_mature": true,
+   "d7_returners_est": 61
+  },
+  {
+   "date": "2026-09-13",
+   "new_players": 692,
+   "d1_rate": 0.2173,
+   "d1_mature": true,
+   "d1_returners_est": 150,
+   "d7_rate": 0.0912,
+   "d7_mature": true,
+   "d7_returners_est": 63
+  },
+  {
+   "date": "2026-09-14",
+   "new_players": 594,
+   "d1_rate": 0.213,
+   "d1_mature": true,
+   "d1_returners_est": 127,
+   "d7_rate": 0.0895,
+   "d7_mature": true,
+   "d7_returners_est": 53
+  },
+  {
+   "date": "2026-09-15",
+   "new_players": 584,
+   "d1_rate": 0.2113,
+   "d1_mature": true,
+   "d1_returners_est": 123,
+   "d7_rate": 0.0887,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-09-16",
+   "new_players": 610,
+   "d1_rate": 0.216,
+   "d1_mature": true,
+   "d1_returners_est": 132,
+   "d7_rate": 0.0907,
+   "d7_mature": true,
+   "d7_returners_est": 55
+  },
+  {
+   "date": "2026-09-17",
+   "new_players": 613,
+   "d1_rate": 0.2165,
+   "d1_mature": true,
+   "d1_returners_est": 133,
+   "d7_rate": 0.0909,
+   "d7_mature": true,
+   "d7_returners_est": 56
+  },
+  {
+   "date": "2026-09-18",
+   "new_players": 586,
+   "d1_rate": 0.2117,
+   "d1_mature": true,
+   "d1_returners_est": 124,
+   "d7_rate": 0.0889,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-09-19",
+   "new_players": 661,
+   "d1_rate": 0.2124,
+   "d1_mature": true,
+   "d1_returners_est": 140,
+   "d7_rate": 0.0892,
+   "d7_mature": true,
+   "d7_returners_est": 59
+  },
+  {
+   "date": "2026-09-20",
+   "new_players": 690,
+   "d1_rate": 0.217,
+   "d1_mature": true,
+   "d1_returners_est": 150,
+   "d7_rate": 0.0912,
+   "d7_mature": true,
+   "d7_returners_est": 63
+  },
+  {
+   "date": "2026-09-21",
+   "new_players": 605,
+   "d1_rate": 0.2151,
+   "d1_mature": true,
+   "d1_returners_est": 130,
+   "d7_rate": 0.0903,
+   "d7_mature": true,
+   "d7_returners_est": 55
+  },
+  {
+   "date": "2026-09-22",
+   "new_players": 582,
+   "d1_rate": 0.211,
+   "d1_mature": true,
+   "d1_returners_est": 123,
+   "d7_rate": 0.0886,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-09-23",
+   "new_players": 599,
+   "d1_rate": 0.214,
+   "d1_mature": true,
+   "d1_returners_est": 128,
+   "d7_rate": 0.0899,
+   "d7_mature": true,
+   "d7_returners_est": 54
+  },
+  {
+   "date": "2026-09-24",
+   "new_players": 618,
+   "d1_rate": 0.2173,
+   "d1_mature": true,
+   "d1_returners_est": 134,
+   "d7_rate": 0.0913,
+   "d7_mature": true,
+   "d7_returners_est": 56
+  },
+  {
+   "date": "2026-09-25",
+   "new_players": 596,
+   "d1_rate": 0.2135,
+   "d1_mature": true,
+   "d1_returners_est": 127,
+   "d7_rate": 0.0897,
+   "d7_mature": true,
+   "d7_returners_est": 53
+  },
+  {
+   "date": "2026-09-26",
+   "new_players": 653,
+   "d1_rate": 0.2111,
+   "d1_mature": true,
+   "d1_returners_est": 138,
+   "d7_rate": 0.0887,
+   "d7_mature": true,
+   "d7_returners_est": 58
+  },
+  {
+   "date": "2026-09-27",
+   "new_players": 681,
+   "d1_rate": 0.2156,
+   "d1_mature": true,
+   "d1_returners_est": 147,
+   "d7_rate": 0.0905,
+   "d7_mature": true,
+   "d7_returners_est": 62
+  },
+  {
+   "date": "2026-09-28",
+   "new_players": 615,
+   "d1_rate": 0.2168,
+   "d1_mature": true,
+   "d1_returners_est": 133,
+   "d7_rate": 0.091,
+   "d7_mature": true,
+   "d7_returners_est": 56
+  },
+  {
+   "date": "2026-09-29",
+   "new_players": 588,
+   "d1_rate": 0.212,
+   "d1_mature": true,
+   "d1_returners_est": 125,
+   "d7_rate": 0.089,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-09-30",
+   "new_players": 588,
+   "d1_rate": 0.212,
+   "d1_mature": true,
+   "d1_returners_est": 125,
+   "d7_rate": 0.089,
+   "d7_mature": true,
+   "d7_returners_est": 52
+  },
+  {
+   "date": "2026-10-01",
+   "new_players": 615,
+   "d1_rate": 0.2168,
+   "d1_mature": true,
+   "d1_returners_est": 133,
+   "d7_rate": 0.0911,
+   "d7_mature": true,
+   "d7_returners_est": 56
+  },
+  {
+   "date": "2026-10-02",
+   "new_players": 608,
+   "d1_rate": 0.2155,
+   "d1_mature": true,
+   "d1_returners_est": 131,
+   "d7_rate": 0.0905,
+   "d7_mature": true,
+   "d7_returners_est": 55
+  },
+  {
+   "date": "2026-10-03",
+   "new_players": 653,
+   "d1_rate": 0.2111,
+   "d1_mature": true,
+   "d1_returners_est": 138,
+   "d7_rate": 0.0887,
+   "d7_mature": true,
+   "d7_returners_est": 58
+  },
+  {
+   "date": "2026-10-04",
+   "new_players": 1188,
+   "d1_rate": 0.1572,
+   "d1_mature": true,
+   "d1_returners_est": 187,
+   "d7_rate": 0.066,
+   "d7_mature": true,
+   "d7_returners_est": 78
+  },
+  {
+   "date": "2026-10-05",
+   "new_players": 1096,
+   "d1_rate": 0.1602,
+   "d1_mature": true,
+   "d1_returners_est": 176,
+   "d7_rate": 0.0673,
+   "d7_mature": true,
+   "d7_returners_est": 74
+  },
+  {
+   "date": "2026-10-06",
+   "new_players": 1039,
+   "d1_rate": 0.1593,
+   "d1_mature": true,
+   "d1_returners_est": 166,
+   "d7_rate": 0.0669,
+   "d7_mature": true,
+   "d7_returners_est": 70
+  },
+  {
+   "date": "2026-10-07",
+   "new_players": 987,
+   "d1_rate": 0.1587,
+   "d1_mature": true,
+   "d1_returners_est": 157,
+   "d7_rate": 0.0667,
+   "d7_mature": true,
+   "d7_returners_est": 66
+  },
+  {
+   "date": "2026-10-08",
+   "new_players": 978,
+   "d1_rate": 0.1656,
+   "d1_mature": true,
+   "d1_returners_est": 162,
+   "d7_rate": 0.0695,
+   "d7_mature": true,
+   "d7_returners_est": 68
+  },
+  {
+   "date": "2026-10-09",
+   "new_players": 959,
+   "d1_rate": 0.1521,
+   "d1_mature": true,
+   "d1_returners_est": 146,
+   "d7_rate": 0.0639,
+   "d7_mature": true,
+   "d7_returners_est": 61
+  },
+  {
+   "date": "2026-10-10",
+   "new_players": 976,
+   "d1_rate": 0.1525,
+   "d1_mature": true,
+   "d1_returners_est": 149,
+   "d7_rate": 0.0641,
+   "d7_mature": true,
+   "d7_returners_est": 63
+  },
+  {
+   "date": "2026-10-11",
+   "new_players": 947,
+   "d1_rate": 0.1538,
+   "d1_mature": true,
+   "d1_returners_est": 146,
+   "d7_rate": 0.0646,
+   "d7_mature": true,
+   "d7_returners_est": 61
+  },
+  {
+   "date": "2026-10-12",
+   "new_players": 880,
+   "d1_rate": 0.1577,
+   "d1_mature": true,
+   "d1_returners_est": 139,
+   "d7_rate": 0.0662,
+   "d7_mature": true,
+   "d7_returners_est": 58
+  },
+  {
+   "date": "2026-10-13",
+   "new_players": 856,
+   "d1_rate": 0.1591,
+   "d1_mature": true,
+   "d1_returners_est": 136,
+   "d7_rate": 0.0668,
+   "d7_mature": false,
+   "d7_returners_est": 57
+  },
+  {
+   "date": "2026-10-14",
+   "new_players": 810,
+   "d1_rate": 0.1565,
+   "d1_mature": true,
+   "d1_returners_est": 127
+  },
+  {
+   "date": "2026-10-15",
+   "new_players": 802,
+   "d1_rate": 0.1599,
+   "d1_mature": true,
+   "d1_returners_est": 128
+  },
+  {
+   "date": "2026-10-16",
+   "new_players": 809,
+   "d1_rate": 0.1657,
+   "d1_mature": true,
+   "d1_returners_est": 134
+  },
+  {
+   "date": "2026-10-17",
+   "new_players": 850,
+   "d1_rate": 0.1669,
+   "d1_mature": true,
+   "d1_returners_est": 142
+  },
+  {
+   "date": "2026-10-18",
+   "new_players": 814,
+   "d1_rate": 0.165,
+   "d1_mature": true,
+   "d1_returners_est": 134
+  },
+  {
+   "date": "2026-10-19",
+   "new_players": 752,
+   "d1_rate": 0.1681,
+   "d1_mature": false,
+   "d1_returners_est": 126
+  }
+ ]
+}

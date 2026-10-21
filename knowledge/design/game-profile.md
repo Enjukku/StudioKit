@@ -26,6 +26,8 @@ Fill in at project start. This file is the only place for game-specific taste. A
 | Tech / package choices (transport, data, UI, cleanup) | |
 | Source mode (`files` or `studio`, see skill `studio-mcp` §5) and Studio places (place IDs: main, test, VFX lab) | files |
 | Review order for visible work | |
+| Play camera (type, default distance, FOV, controls) and supported displays (narrowest aspect, portrait yes / no) | |
+| Cinematic frame rate (previs and any rendered video) | |
 
 ## Taste: do and don't
 

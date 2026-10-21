@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "revision": "fixture-lemonade-m01-r1",
+  "title": "M01 Lemonade (simplified, reindexed): one producer, exponential price, x2 milestones at 25 and 50",
+  "source_note": "M01 2016-10-04 inputs as reindexed in the owner's research paper section 4; test fixture only, not tuning for any game",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"],
+  "time": {"mode": "continuous"}
+ },
+ "currencies": {
+  "cash": {"start": {"v": 0, "src": "published:M01"}}
+ },
+ "producers": {
+  "lemonade": {
+   "start_owned": {"v": 1, "src": "published:M01"},
+   "cost": {
+    "currency": "cash",
+    "curve": {"kind": "exponential", "a": {"v": 4, "src": "published:M01"}, "r": {"v": "107/100", "src": "published:M01"}},
+    "index_offset": {"v": -1, "src": "published:M01"},
+    "rounding": "none"
+   },
+   "produces": {"currency:cash": {"v": "167/100", "src": "published:M01"}},
+   "milestones": [
+    {"owned": {"v": 25, "src": "published:M01"}, "mult": {"v": 2, "src": "published:M01"}},
+    {"owned": {"v": 50, "src": "published:M01"}, "mult": {"v": 2, "src": "published:M01"}}
+   ]
+  }
+ },
+ "policies": {"order": ["lemonade"], "objective_currency": "cash"},
+ "goals": [
+  {"id": "own2", "label": "own 2", "when": {"owned": ["lemonade", {"v": 2, "src": "published:M01"}]}},
+  {"id": "own3", "label": "own 3", "when": {"owned": ["lemonade", {"v": 3, "src": "published:M01"}]}},
+  {"id": "own4", "label": "own 4", "when": {"owned": ["lemonade", {"v": 4, "src": "published:M01"}]}},
+  {"id": "own5", "label": "own 5", "when": {"owned": ["lemonade", {"v": 5, "src": "published:M01"}]}},
+  {"id": "own6", "label": "own 6", "when": {"owned": ["lemonade", {"v": 6, "src": "published:M01"}]},
+   "window": {"basis": "active", "max_s": {"v": 10, "src": "EXAMPLE ASSUMPTION"}}}
+ ],
+ "analysis": {
+  "spikes": [{"id": "cash_rate", "metric": "production_per_s", "currency": "cash", "min_ratio": {"v": "3/2", "src": "EXAMPLE ASSUMPTION"}}]
+ },
+ "run": {"horizon_active_s": {"v": 3600, "src": "EXAMPLE ASSUMPTION"}}
+}

@@ -1,0 +1,18 @@
+HTTP/1.1 504 Gateway Time-out
+Server: Apple
+Date: Wed, 21 Oct 2026 03:54:27 GMT
+Content-Type: text/html
+Content-Length: 160
+Connection: keep-alive
+Strict-Transport-Security: max-age=31536000; includeSubdomains
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+
+<html>
+<head><title>504 Gateway Time-out</title></head>
+<body>
+<center><h1>504 Gateway Time-out</h1></center>
+<hr><center>Apple</center>
+</body>
+</html>

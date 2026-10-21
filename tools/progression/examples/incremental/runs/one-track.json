@@ -1,0 +1,3835 @@
+{
+ "tool": "progression_sim",
+ "version": "1.1.0",
+ "curves_version": "1.0.0",
+ "model": {
+  "path": "tools/progression/examples/incremental/model.json",
+  "sha256": "fc64e5d6c02f3eb0fe65541a8d1182f03f10909a518d5d6f5974ca3b47a62e3f",
+  "revision": "example-incremental-r2",
+  "title": "Worked example: Bloom Valley (incremental) - for learning, not tuning"
+ },
+ "mode": "exact",
+ "policy": {
+  "name": "buy-next-in-order",
+  "target": null,
+  "target_level": null,
+  "skill_profile": null,
+  "session_pattern": null
+ },
+ "seed": null,
+ "runs": 1,
+ "random_inputs": false,
+ "semantics": {
+  "event_order": [
+   "produce",
+   "rewards",
+   "caps",
+   "purchase",
+   "unlock",
+   "reset"
+  ],
+  "time": {
+   "mode": "discrete",
+   "tick_s": "1",
+   "new_units_produce_in_creation_tick": false
+  },
+  "duel": null,
+  "horizon_active_s": "3600",
+  "horizon_source": "model run.horizon_active_s",
+  "calendar": "not modelled (no session pattern selected)",
+  "offline": {
+   "efficiency": "1/20",
+   "cap_s": "7200",
+   "currencies": [
+    "petals"
+   ]
+  },
+  "prestige_offline_counts_toward_basis": true,
+  "prestige_min_award": null,
+  "boss_attempt": null,
+  "level_rewards": null,
+  "hard_walls": "every gated buyable or enemy: from affordable (or beatable) while locked until it unlocks; an activity only while the policy pursues it"
+ },
+ "lean": {
+  "on": true,
+  "omitted": [
+   "trace",
+   "steps other than resets, goals, soft walls and spikes",
+   "metric history between segment starts, spikes and the last value"
+  ]
+ },
+ "warnings": [],
+ "never_claims": [
+  "a population forecast (one policy is one strategy)",
+  "that any target feeling passed",
+  "that the game is fun",
+  "any default threshold, rate, horizon or session length"
+ ],
+ "assumptions": {
+  "inputs": [
+   {
+    "input": "meta.time.tick_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "currencies.petals.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/100"
+   },
+   {
+    "input": "currencies.seeds.start",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "currencies.seeds.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "producers.greenhouse.start_owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "producers.greenhouse.cost.curve.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "300"
+   },
+   {
+    "input": "producers.greenhouse.cost.curve.r",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "11/10"
+   },
+   {
+    "input": "producers.greenhouse.produces.currency:petals",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6"
+   },
+   {
+    "input": "producers.greenhouse.milestones[0].owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "25"
+   },
+   {
+    "input": "producers.greenhouse.milestones[0].mult",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "producers.greenhouse.milestones[1].owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50"
+   },
+   {
+    "input": "producers.greenhouse.milestones[1].mult",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "producers.sky_orchard.start_owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "producers.sky_orchard.cost.curve.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50000"
+   },
+   {
+    "input": "producers.sky_orchard.cost.curve.r",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6/5"
+   },
+   {
+    "input": "producers.sky_orchard.produces.currency:petals",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "150"
+   },
+   {
+    "input": "items.watering_can.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1000"
+   },
+   {
+    "input": "items.watering_can.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "items.bee_hive.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "25000"
+   },
+   {
+    "input": "items.bee_hive.requires.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "items.bee_hive.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "items.bridge_pass.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "500"
+   },
+   {
+    "input": "items.bridge_pass.requires.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "items.bridge_pass.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "11/10"
+   },
+   {
+    "input": "prestige.formula.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "prestige.formula.alpha",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/2"
+   },
+   {
+    "input": "prestige.formula.divisor",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50000"
+   },
+   {
+    "input": "prestige.take_when.run[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "7000000"
+   },
+   {
+    "input": "prestige.bonus.per_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/1000"
+   },
+   {
+    "input": "offline.efficiency",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/20"
+   },
+   {
+    "input": "offline.cap_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "7200"
+   },
+   {
+    "input": "sessions.patterns.daily.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "sessions.patterns.daily.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "85200"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "sessions.patterns.returning.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "85200"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].after_session",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].gap_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "603600"
+   },
+   {
+    "input": "goals[0].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "goals[0].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[1].when.spikes[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3"
+   },
+   {
+    "input": "goals[1].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "60"
+   },
+   {
+    "input": "goals[2].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[2].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "120"
+   },
+   {
+    "input": "goals[3].when.soft_walls",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[3].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "720"
+   },
+   {
+    "input": "goals[3].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "goals[4].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[4].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "goals[4].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "goals[5].when.all[0].balance[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "500"
+   },
+   {
+    "input": "goals[5].when.all[1].not.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[5].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "120"
+   },
+   {
+    "input": "goals[6].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[6].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "goals[7].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "172800"
+   },
+   {
+    "input": "goals[8].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[8].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "604800"
+   },
+   {
+    "input": "goals[9].when.balance[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "900"
+   },
+   {
+    "input": "goals[9].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1814400"
+   },
+   {
+    "input": "goals[9].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2592000"
+   },
+   {
+    "input": "goals[10].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[10].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1209600"
+   },
+   {
+    "input": "analysis.soft_wall.min_wait_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "45"
+   },
+   {
+    "input": "analysis.spikes[0].min_ratio",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3/2"
+   },
+   {
+    "input": "run.horizon_active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3600"
+   }
+  ],
+  "behaviour": [
+   "policy buy-next-in-order: one modelled strategy, not the player population"
+  ],
+  "note": "every result below is conditional on all listed inputs and the behaviour lines; the tool does not trace which result uses which input"
+ },
+ "provenance_counts": {
+  "EXAMPLE ASSUMPTION": 65,
+  "published": 10
+ },
+ "stop": {
+  "reason": "horizon reached",
+  "detail": "active time 3600 s",
+  "active_s": "3600",
+  "active_s_approx": 3600.0,
+  "calendar_s": null,
+  "calendar_s_approx": null
+ },
+ "timeline": [
+  {
+   "goal": "TL-01a",
+   "label": "second pot (first purchase)",
+   "when": {
+    "owned": [
+     "pot",
+     "2"
+    ]
+   },
+   "reached": true,
+   "active_s": "3",
+   "active_s_approx": 3.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "10"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 3 s is inside the declared window [-, 10] s (active time)"
+  },
+  {
+   "goal": "TL-01b",
+   "label": "three power spikes (the third is the 25-pot milestone)",
+   "when": {
+    "spikes": [
+     "petal_rate",
+     "3"
+    ]
+   },
+   "reached": true,
+   "active_s": "17",
+   "active_s_approx": 17.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "60"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 17 s is inside the declared window [-, 60] s (active time)"
+  },
+  {
+   "goal": "TL-02",
+   "label": "first greenhouse",
+   "when": {
+    "owned": [
+     "greenhouse",
+     "1"
+    ]
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "active",
+    "max_s": "120"
+   },
+   "verdict": "fail",
+   "evidence": "not reached (horizon reached); window [-, 120] s (active time)"
+  },
+  {
+   "goal": "TL-03",
+   "label": "first soft wall: the garden fills up",
+   "when": {
+    "soft_walls": "1"
+   },
+   "reached": true,
+   "active_s": "824",
+   "active_s_approx": 824.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "min_s": "720",
+    "max_s": "1200"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 824 s is inside the declared window [720, 1200] s (active time)"
+  },
+  {
+   "goal": "TL-04",
+   "label": "first Replant (rebirth)",
+   "when": {
+    "prestiges": "1"
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "active",
+    "min_s": "1200",
+    "max_s": "1800"
+   },
+   "verdict": "fail",
+   "evidence": "not reached (horizon reached); window [1200, 1800] s (active time)"
+  },
+  {
+   "goal": "TL-05a",
+   "label": "hard wall starts: the bridge pass is affordable but locked",
+   "when": {
+    "all": [
+     {
+      "balance": [
+       "petals",
+       "500"
+      ]
+     },
+     {
+      "not": {
+       "prestiges": "1"
+      }
+     }
+    ]
+   },
+   "reached": true,
+   "active_s": "35",
+   "active_s_approx": 35.0,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "window": {
+    "basis": "active",
+    "max_s": "120"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 35 s is inside the declared window [-, 120] s (active time)"
+  },
+  {
+   "goal": "TL-05",
+   "label": "first Sky Orchard (hard wall passed)",
+   "when": {
+    "owned": [
+     "sky_orchard",
+     "1"
+    ]
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "active",
+    "max_s": "1800"
+   },
+   "verdict": "fail",
+   "evidence": "not reached (horizon reached); window [-, 1800] s (active time)"
+  },
+  {
+   "goal": "TL-06",
+   "label": "bridge open on the first return",
+   "when": {
+    "item": "bridge_pass"
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "calendar",
+    "max_s": "172800"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  },
+  {
+   "goal": "TL-07",
+   "label": "10th Replant",
+   "when": {
+    "prestiges": "10"
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "calendar",
+    "max_s": "604800"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  },
+  {
+   "goal": "TL-08",
+   "label": "900 golden seeds",
+   "when": {
+    "balance": [
+     "seeds",
+     "900"
+    ]
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "calendar",
+    "min_s": "1814400",
+    "max_s": "2592000"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  },
+  {
+   "goal": "TL-09",
+   "label": "10th Replant within two weeks",
+   "when": {
+    "prestiges": "10"
+   },
+   "reached": false,
+   "active_s": null,
+   "active_s_approx": null,
+   "calendar_s": null,
+   "calendar_s_approx": null,
+   "reason": "horizon reached",
+   "detail": "active time 3600 s",
+   "window": {
+    "basis": "calendar",
+    "max_s": "1209600"
+   },
+   "verdict": "not testable",
+   "evidence": "calendar window, but no session pattern was selected (--sessions)"
+  }
+ ],
+ "walls": {
+  "soft": {
+   "evaluated": true,
+   "thresholds": {
+    "min_wait_s": "45"
+   },
+   "walls": [
+    {
+     "step": "buy pot (139 owned)",
+     "start_active_s": "778",
+     "end_active_s": "824",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "46",
+     "previous_wait_s": "44",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 778.0,
+     "end_active_s_approx": 824.0,
+     "wait_s_approx": 46.0
+    },
+    {
+     "step": "buy pot (140 owned)",
+     "start_active_s": "824",
+     "end_active_s": "873",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "49",
+     "previous_wait_s": "46",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 824.0,
+     "end_active_s_approx": 873.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy pot (141 owned)",
+     "start_active_s": "873",
+     "end_active_s": "925",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "52",
+     "previous_wait_s": "49",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 873.0,
+     "end_active_s_approx": 925.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy pot (142 owned)",
+     "start_active_s": "925",
+     "end_active_s": "980",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "55",
+     "previous_wait_s": "52",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 925.0,
+     "end_active_s_approx": 980.0,
+     "wait_s_approx": 55.0
+    },
+    {
+     "step": "buy pot (143 owned)",
+     "start_active_s": "980",
+     "end_active_s": "1038",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "58",
+     "previous_wait_s": "55",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 980.0,
+     "end_active_s_approx": 1038.0,
+     "wait_s_approx": 58.0
+    },
+    {
+     "step": "buy pot (144 owned)",
+     "start_active_s": "1038",
+     "end_active_s": "1101",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "63",
+     "previous_wait_s": "58",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1038.0,
+     "end_active_s_approx": 1101.0,
+     "wait_s_approx": 63.0
+    },
+    {
+     "step": "buy pot (145 owned)",
+     "start_active_s": "1101",
+     "end_active_s": "1167",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "66",
+     "previous_wait_s": "63",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1101.0,
+     "end_active_s_approx": 1167.0,
+     "wait_s_approx": 66.0
+    },
+    {
+     "step": "buy pot (146 owned)",
+     "start_active_s": "1167",
+     "end_active_s": "1237",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "70",
+     "previous_wait_s": "66",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1167.0,
+     "end_active_s_approx": 1237.0,
+     "wait_s_approx": 70.0
+    },
+    {
+     "step": "buy pot (147 owned)",
+     "start_active_s": "1237",
+     "end_active_s": "1312",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "75",
+     "previous_wait_s": "70",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1237.0,
+     "end_active_s_approx": 1312.0,
+     "wait_s_approx": 75.0
+    },
+    {
+     "step": "buy pot (148 owned)",
+     "start_active_s": "1312",
+     "end_active_s": "1391",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "79",
+     "previous_wait_s": "75",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1312.0,
+     "end_active_s_approx": 1391.0,
+     "wait_s_approx": 79.0
+    },
+    {
+     "step": "buy pot (149 owned)",
+     "start_active_s": "1391",
+     "end_active_s": "1476",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "85",
+     "previous_wait_s": "79",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1391.0,
+     "end_active_s_approx": 1476.0,
+     "wait_s_approx": 85.0
+    },
+    {
+     "step": "buy pot (150 owned)",
+     "start_active_s": "1476",
+     "end_active_s": "1565",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "89",
+     "previous_wait_s": "85",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1476.0,
+     "end_active_s_approx": 1565.0,
+     "wait_s_approx": 89.0
+    },
+    {
+     "step": "buy pot (151 owned)",
+     "start_active_s": "1565",
+     "end_active_s": "1661",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "96",
+     "previous_wait_s": "89",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1565.0,
+     "end_active_s_approx": 1661.0,
+     "wait_s_approx": 96.0
+    },
+    {
+     "step": "buy pot (152 owned)",
+     "start_active_s": "1661",
+     "end_active_s": "1762",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "101",
+     "previous_wait_s": "96",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1661.0,
+     "end_active_s_approx": 1762.0,
+     "wait_s_approx": 101.0
+    },
+    {
+     "step": "buy pot (153 owned)",
+     "start_active_s": "1762",
+     "end_active_s": "1870",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "108",
+     "previous_wait_s": "101",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1762.0,
+     "end_active_s_approx": 1870.0,
+     "wait_s_approx": 108.0
+    },
+    {
+     "step": "buy pot (154 owned)",
+     "start_active_s": "1870",
+     "end_active_s": "1985",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "115",
+     "previous_wait_s": "108",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1870.0,
+     "end_active_s_approx": 1985.0,
+     "wait_s_approx": 115.0
+    },
+    {
+     "step": "buy pot (155 owned)",
+     "start_active_s": "1985",
+     "end_active_s": "2106",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "121",
+     "previous_wait_s": "115",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1985.0,
+     "end_active_s_approx": 2106.0,
+     "wait_s_approx": 121.0
+    },
+    {
+     "step": "buy pot (156 owned)",
+     "start_active_s": "2106",
+     "end_active_s": "2236",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "130",
+     "previous_wait_s": "121",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2106.0,
+     "end_active_s_approx": 2236.0,
+     "wait_s_approx": 130.0
+    },
+    {
+     "step": "buy pot (157 owned)",
+     "start_active_s": "2236",
+     "end_active_s": "2373",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "137",
+     "previous_wait_s": "130",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2236.0,
+     "end_active_s_approx": 2373.0,
+     "wait_s_approx": 137.0
+    },
+    {
+     "step": "buy pot (158 owned)",
+     "start_active_s": "2373",
+     "end_active_s": "2520",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "147",
+     "previous_wait_s": "137",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2373.0,
+     "end_active_s_approx": 2520.0,
+     "wait_s_approx": 147.0
+    },
+    {
+     "step": "buy pot (159 owned)",
+     "start_active_s": "2520",
+     "end_active_s": "2675",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "155",
+     "previous_wait_s": "147",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2520.0,
+     "end_active_s_approx": 2675.0,
+     "wait_s_approx": 155.0
+    },
+    {
+     "step": "buy pot (160 owned)",
+     "start_active_s": "2675",
+     "end_active_s": "2841",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "166",
+     "previous_wait_s": "155",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2675.0,
+     "end_active_s_approx": 2841.0,
+     "wait_s_approx": 166.0
+    },
+    {
+     "step": "buy pot (161 owned)",
+     "start_active_s": "2841",
+     "end_active_s": "3016",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "175",
+     "previous_wait_s": "166",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2841.0,
+     "end_active_s_approx": 3016.0,
+     "wait_s_approx": 175.0
+    },
+    {
+     "step": "buy pot (162 owned)",
+     "start_active_s": "3016",
+     "end_active_s": "3203",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "187",
+     "previous_wait_s": "175",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 3016.0,
+     "end_active_s_approx": 3203.0,
+     "wait_s_approx": 187.0
+    },
+    {
+     "step": "buy pot (163 owned)",
+     "start_active_s": "3203",
+     "end_active_s": "3402",
+     "start_calendar_s": null,
+     "end_calendar_s": null,
+     "wait_s": "199",
+     "previous_wait_s": "187",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 3203.0,
+     "end_active_s_approx": 3402.0,
+     "wait_s_approx": 199.0
+    }
+   ],
+   "slowest_steps": [
+    {
+     "step": "buy pot (163 owned)",
+     "end_active_s": "3402",
+     "wait_s": "199",
+     "wait_s_approx": 199.0
+    },
+    {
+     "step": "buy pot (162 owned)",
+     "end_active_s": "3203",
+     "wait_s": "187",
+     "wait_s_approx": 187.0
+    },
+    {
+     "step": "buy pot (161 owned)",
+     "end_active_s": "3016",
+     "wait_s": "175",
+     "wait_s_approx": 175.0
+    },
+    {
+     "step": "buy pot (160 owned)",
+     "end_active_s": "2841",
+     "wait_s": "166",
+     "wait_s_approx": 166.0
+    },
+    {
+     "step": "buy pot (159 owned)",
+     "end_active_s": "2675",
+     "wait_s": "155",
+     "wait_s_approx": 155.0
+    },
+    {
+     "step": "buy pot (158 owned)",
+     "end_active_s": "2520",
+     "wait_s": "147",
+     "wait_s_approx": 147.0
+    },
+    {
+     "step": "buy pot (157 owned)",
+     "end_active_s": "2373",
+     "wait_s": "137",
+     "wait_s_approx": 137.0
+    },
+    {
+     "step": "buy pot (156 owned)",
+     "end_active_s": "2236",
+     "wait_s": "130",
+     "wait_s_approx": 130.0
+    },
+    {
+     "step": "buy pot (155 owned)",
+     "end_active_s": "2106",
+     "wait_s": "121",
+     "wait_s_approx": 121.0
+    },
+    {
+     "step": "buy pot (154 owned)",
+     "end_active_s": "1985",
+     "wait_s": "115",
+     "wait_s_approx": 115.0
+    }
+   ]
+  },
+  "hard": [
+   {
+    "id": "bridge_pass",
+    "kind": "item",
+    "condition": "affordable",
+    "start_s": "45",
+    "start_calendar_s": null,
+    "end_s": null,
+    "end_calendar_s": null,
+    "duration_s": "3555",
+    "missing": {
+     "prestiges": "1"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": true,
+    "start_s_approx": 45.0,
+    "duration_s_approx": 3555.0
+   },
+   {
+    "id": "bee_hive",
+    "kind": "item",
+    "condition": "affordable",
+    "start_s": "551",
+    "start_calendar_s": null,
+    "end_s": null,
+    "end_calendar_s": null,
+    "duration_s": "3049",
+    "missing": {
+     "owned": [
+      "greenhouse",
+      "10"
+     ]
+    },
+    "pursued_by_policy": false,
+    "open_at_end": true,
+    "start_s_approx": 551.0,
+    "duration_s_approx": 3049.0
+   },
+   {
+    "id": "sky_orchard",
+    "kind": "producer",
+    "condition": "affordable",
+    "start_s": "978",
+    "start_calendar_s": null,
+    "end_s": null,
+    "end_calendar_s": null,
+    "duration_s": "2622",
+    "missing": {
+     "item": "bridge_pass"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": true,
+    "start_s_approx": 978.0,
+    "duration_s_approx": 2622.0
+   }
+  ]
+ },
+ "spikes": {
+  "metrics": [
+   {
+    "id": "petal_rate",
+    "metric": "production_per_s",
+    "reference": "petals",
+    "direction": "higher is better",
+    "active_when": null,
+    "thresholds": {
+     "min_ratio": "3/2"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "0",
+      "t_calendar_s": null,
+      "value": "167/100",
+      "cause": "start",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "3",
+      "t_calendar_s": null,
+      "value": "167/50",
+      "cause": "buy pot (2 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "5",
+      "t_calendar_s": null,
+      "value": "501/100",
+      "cause": "buy pot (3 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "17",
+      "t_calendar_s": null,
+      "value": "167/2",
+      "cause": "buy pot (25 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "28",
+      "t_calendar_s": null,
+      "value": "334",
+      "cause": "buy pot (50 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "3402",
+      "t_calendar_s": null,
+      "value": "27221/25",
+      "cause": "buy pot (163 owned)"
+     }
+    ]
+   }
+  ],
+  "spikes": [
+   {
+    "metric": "petal_rate",
+    "t_active_s": "3",
+    "t_calendar_s": null,
+    "t_active_s_approx": 3.0,
+    "from": "167/100",
+    "to": "167/50",
+    "cause": "buy pot (2 owned)",
+    "improvement": "167/100",
+    "ratio": "2",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "5",
+    "t_calendar_s": null,
+    "t_active_s_approx": 5.0,
+    "from": "167/50",
+    "to": "501/100",
+    "cause": "buy pot (3 owned)",
+    "improvement": "167/100",
+    "ratio": "3/2",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "17",
+    "t_calendar_s": null,
+    "t_active_s_approx": 17.0,
+    "from": "1002/25",
+    "to": "167/2",
+    "cause": "buy pot (25 owned)",
+    "improvement": "2171/50",
+    "ratio": "25/12",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "28",
+    "t_calendar_s": null,
+    "t_active_s_approx": 28.0,
+    "from": "8183/50",
+    "to": "334",
+    "cause": "buy pot (50 owned)",
+    "improvement": "8517/50",
+    "ratio": "100/49",
+    "rule": "ratio >= 3/2"
+   }
+  ],
+  "changes_ranked": [
+   {
+    "metric": "petal_rate",
+    "t_active_s": "17",
+    "t_calendar_s": null,
+    "t_active_s_approx": 17.0,
+    "from": "1002/25",
+    "to": "167/2",
+    "cause": "buy pot (25 owned)",
+    "improvement": "2171/50",
+    "ratio": "25/12"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "28",
+    "t_calendar_s": null,
+    "t_active_s_approx": 28.0,
+    "from": "8183/50",
+    "to": "334",
+    "cause": "buy pot (50 owned)",
+    "improvement": "8517/50",
+    "ratio": "100/49"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "3",
+    "t_calendar_s": null,
+    "t_active_s_approx": 3.0,
+    "from": "167/100",
+    "to": "167/50",
+    "cause": "buy pot (2 owned)",
+    "improvement": "167/100",
+    "ratio": "2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "5",
+    "t_calendar_s": null,
+    "t_active_s_approx": 5.0,
+    "from": "167/50",
+    "to": "501/100",
+    "cause": "buy pot (3 owned)",
+    "improvement": "167/100",
+    "ratio": "3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "6",
+    "t_calendar_s": null,
+    "t_active_s_approx": 6.0,
+    "from": "501/100",
+    "to": "167/25",
+    "cause": "buy pot (4 owned)",
+    "improvement": "167/100",
+    "ratio": "4/3"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "7",
+    "t_calendar_s": null,
+    "t_active_s_approx": 7.0,
+    "from": "167/25",
+    "to": "167/20",
+    "cause": "buy pot (5 owned)",
+    "improvement": "167/100",
+    "ratio": "5/4"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "8",
+    "t_calendar_s": null,
+    "t_active_s_approx": 8.0,
+    "from": "167/20",
+    "to": "501/50",
+    "cause": "buy pot (6 owned)",
+    "improvement": "167/100",
+    "ratio": "6/5"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "8",
+    "t_calendar_s": null,
+    "t_active_s_approx": 8.0,
+    "from": "501/50",
+    "to": "1169/100",
+    "cause": "buy pot (7 owned)",
+    "improvement": "167/100",
+    "ratio": "7/6"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "9",
+    "t_calendar_s": null,
+    "t_active_s_approx": 9.0,
+    "from": "1169/100",
+    "to": "334/25",
+    "cause": "buy pot (8 owned)",
+    "improvement": "167/100",
+    "ratio": "8/7"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "10",
+    "t_calendar_s": null,
+    "t_active_s_approx": 10.0,
+    "from": "334/25",
+    "to": "1503/100",
+    "cause": "buy pot (9 owned)",
+    "improvement": "167/100",
+    "ratio": "9/8"
+   }
+  ],
+  "evaluated": true
+ },
+ "blocked": [
+  {
+   "goal": "TL-02",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-04",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-05",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-06",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-07",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-08",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  },
+  {
+   "goal": "TL-09",
+   "reason": "horizon reached",
+   "detail": "active time 3600 s"
+  }
+ ],
+ "unlocks": [],
+ "prestige": [],
+ "fights": null,
+ "ledger": {
+  "petals": {
+   "start": "0",
+   "sources": {
+    "production:pot": "350533167/100"
+   },
+   "sinks": {
+    "purchase:pot": "3289550"
+   },
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {},
+   "end": "21578167/100",
+   "residual": "0"
+  },
+  "seeds": {
+   "start": "0",
+   "sources": {},
+   "sinks": {},
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {},
+   "end": "0",
+   "residual": "0"
+  }
+ },
+ "ledger_all_runs_residual_zero": true,
+ "precision": {
+  "petals": {
+   "max_reached": "350533167/100",
+   "exceeds_2_53": false,
+   "smallest_unit": "1/100",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  },
+  "seeds": {
+   "max_reached": "0",
+   "exceeds_2_53": false,
+   "smallest_unit": "1",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  }
+ },
+ "final_state": {
+  "balances": {
+   "petals": "21578167/100",
+   "seeds": "0"
+  },
+  "owned": {
+   "pot": "163",
+   "greenhouse": "0",
+   "sky_orchard": "0"
+  },
+  "items": [],
+  "unlocked": [],
+  "defeated": [],
+  "completed": [],
+  "level": null,
+  "prestiges": 0,
+  "lifetime": {
+   "petals": "350533167/100",
+   "seeds": "0"
+  }
+ },
+ "steps": [
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (2 owned)",
+   "t_active_s": "3",
+   "t_calendar_s": null,
+   "wait_s": "3",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (3 owned)",
+   "t_active_s": "5",
+   "t_calendar_s": null,
+   "wait_s": "2",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (24 owned)",
+   "t_active_s": "17",
+   "t_calendar_s": null,
+   "wait_s": "1",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (25 owned)",
+   "t_active_s": "17",
+   "t_calendar_s": null,
+   "wait_s": "0",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (50 owned)",
+   "t_active_s": "28",
+   "t_calendar_s": null,
+   "wait_s": "1",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (64 owned)",
+   "t_active_s": "35",
+   "t_calendar_s": null,
+   "wait_s": "1",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (65 owned)",
+   "t_active_s": "35",
+   "t_calendar_s": null,
+   "wait_s": "0",
+   "start_calendar_s": null
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (139 owned)",
+   "t_active_s": "824",
+   "t_calendar_s": null,
+   "wait_s": "46",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (140 owned)",
+   "t_active_s": "873",
+   "t_calendar_s": null,
+   "wait_s": "49",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (141 owned)",
+   "t_active_s": "925",
+   "t_calendar_s": null,
+   "wait_s": "52",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (142 owned)",
+   "t_active_s": "980",
+   "t_calendar_s": null,
+   "wait_s": "55",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (143 owned)",
+   "t_active_s": "1038",
+   "t_calendar_s": null,
+   "wait_s": "58",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (144 owned)",
+   "t_active_s": "1101",
+   "t_calendar_s": null,
+   "wait_s": "63",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (145 owned)",
+   "t_active_s": "1167",
+   "t_calendar_s": null,
+   "wait_s": "66",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (146 owned)",
+   "t_active_s": "1237",
+   "t_calendar_s": null,
+   "wait_s": "70",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (147 owned)",
+   "t_active_s": "1312",
+   "t_calendar_s": null,
+   "wait_s": "75",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (148 owned)",
+   "t_active_s": "1391",
+   "t_calendar_s": null,
+   "wait_s": "79",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (149 owned)",
+   "t_active_s": "1476",
+   "t_calendar_s": null,
+   "wait_s": "85",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (150 owned)",
+   "t_active_s": "1565",
+   "t_calendar_s": null,
+   "wait_s": "89",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (151 owned)",
+   "t_active_s": "1661",
+   "t_calendar_s": null,
+   "wait_s": "96",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (152 owned)",
+   "t_active_s": "1762",
+   "t_calendar_s": null,
+   "wait_s": "101",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (153 owned)",
+   "t_active_s": "1870",
+   "t_calendar_s": null,
+   "wait_s": "108",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (154 owned)",
+   "t_active_s": "1985",
+   "t_calendar_s": null,
+   "wait_s": "115",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (155 owned)",
+   "t_active_s": "2106",
+   "t_calendar_s": null,
+   "wait_s": "121",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (156 owned)",
+   "t_active_s": "2236",
+   "t_calendar_s": null,
+   "wait_s": "130",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (157 owned)",
+   "t_active_s": "2373",
+   "t_calendar_s": null,
+   "wait_s": "137",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (158 owned)",
+   "t_active_s": "2520",
+   "t_calendar_s": null,
+   "wait_s": "147",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (159 owned)",
+   "t_active_s": "2675",
+   "t_calendar_s": null,
+   "wait_s": "155",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (160 owned)",
+   "t_active_s": "2841",
+   "t_calendar_s": null,
+   "wait_s": "166",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (161 owned)",
+   "t_active_s": "3016",
+   "t_calendar_s": null,
+   "wait_s": "175",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (162 owned)",
+   "t_active_s": "3203",
+   "t_calendar_s": null,
+   "wait_s": "187",
+   "start_calendar_s": null,
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (163 owned)",
+   "t_active_s": "3402",
+   "t_calendar_s": null,
+   "wait_s": "199",
+   "start_calendar_s": null,
+   "soft_wall": true
+  }
+ ],
+ "curves": [
+  {
+   "id": "cost:pot",
+   "title": "pot: price of the next unit",
+   "x": "pot owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     7
+    ],
+    [
+     9,
+     7
+    ],
+    [
+     10,
+     8
+    ],
+    [
+     11,
+     8
+    ],
+    [
+     12,
+     9
+    ],
+    [
+     13,
+     10
+    ],
+    [
+     14,
+     10
+    ],
+    [
+     15,
+     11
+    ],
+    [
+     16,
+     12
+    ],
+    [
+     17,
+     12
+    ],
+    [
+     18,
+     13
+    ],
+    [
+     19,
+     14
+    ],
+    [
+     20,
+     15
+    ],
+    [
+     21,
+     16
+    ],
+    [
+     22,
+     17
+    ],
+    [
+     23,
+     18
+    ],
+    [
+     24,
+     19
+    ],
+    [
+     25,
+     21
+    ],
+    [
+     26,
+     22
+    ],
+    [
+     27,
+     24
+    ],
+    [
+     28,
+     25
+    ],
+    [
+     29,
+     27
+    ],
+    [
+     30,
+     29
+    ],
+    [
+     31,
+     31
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     33,
+     35
+    ],
+    [
+     34,
+     38
+    ],
+    [
+     35,
+     40
+    ],
+    [
+     36,
+     43
+    ],
+    [
+     37,
+     46
+    ],
+    [
+     38,
+     49
+    ],
+    [
+     39,
+     53
+    ],
+    [
+     40,
+     56
+    ],
+    [
+     41,
+     60
+    ],
+    [
+     42,
+     65
+    ],
+    [
+     43,
+     69
+    ],
+    [
+     44,
+     74
+    ],
+    [
+     45,
+     79
+    ],
+    [
+     46,
+     85
+    ],
+    [
+     47,
+     90
+    ],
+    [
+     48,
+     97
+    ],
+    [
+     49,
+     103
+    ],
+    [
+     50,
+     111
+    ],
+    [
+     51,
+     118
+    ],
+    [
+     52,
+     127
+    ],
+    [
+     53,
+     135
+    ],
+    [
+     54,
+     145
+    ],
+    [
+     55,
+     155
+    ],
+    [
+     56,
+     166
+    ],
+    [
+     57,
+     177
+    ],
+    [
+     58,
+     190
+    ],
+    [
+     59,
+     203
+    ],
+    [
+     60,
+     217
+    ],
+    [
+     61,
+     232
+    ],
+    [
+     62,
+     249
+    ],
+    [
+     63,
+     266
+    ],
+    [
+     64,
+     284
+    ],
+    [
+     65,
+     304
+    ],
+    [
+     66,
+     326
+    ],
+    [
+     67,
+     348
+    ],
+    [
+     68,
+     373
+    ],
+    [
+     69,
+     399
+    ],
+    [
+     70,
+     427
+    ],
+    [
+     71,
+     456
+    ],
+    [
+     72,
+     488
+    ],
+    [
+     73,
+     523
+    ],
+    [
+     74,
+     559
+    ],
+    [
+     75,
+     598
+    ],
+    [
+     76,
+     640
+    ],
+    [
+     77,
+     685
+    ],
+    [
+     78,
+     733
+    ],
+    [
+     79,
+     784
+    ],
+    [
+     80,
+     839
+    ],
+    [
+     81,
+     897
+    ],
+    [
+     82,
+     960
+    ],
+    [
+     83,
+     1027
+    ],
+    [
+     84,
+     1099
+    ],
+    [
+     85,
+     1176
+    ],
+    [
+     86,
+     1259
+    ],
+    [
+     87,
+     1347
+    ],
+    [
+     88,
+     1441
+    ],
+    [
+     89,
+     1542
+    ],
+    [
+     90,
+     1649
+    ],
+    [
+     91,
+     1765
+    ],
+    [
+     92,
+     1888
+    ],
+    [
+     93,
+     2021
+    ],
+    [
+     94,
+     2162
+    ],
+    [
+     95,
+     2313
+    ],
+    [
+     96,
+     2475
+    ],
+    [
+     97,
+     2648
+    ],
+    [
+     98,
+     2834
+    ],
+    [
+     99,
+     3032
+    ],
+    [
+     100,
+     3244
+    ],
+    [
+     101,
+     3471
+    ],
+    [
+     102,
+     3714
+    ],
+    [
+     103,
+     3974
+    ],
+    [
+     104,
+     4252
+    ],
+    [
+     105,
+     4550
+    ],
+    [
+     106,
+     4869
+    ],
+    [
+     107,
+     5209
+    ],
+    [
+     108,
+     5574
+    ],
+    [
+     109,
+     5964
+    ],
+    [
+     110,
+     6382
+    ],
+    [
+     111,
+     6828
+    ],
+    [
+     112,
+     7306
+    ],
+    [
+     113,
+     7818
+    ],
+    [
+     114,
+     8365
+    ],
+    [
+     115,
+     8950
+    ],
+    [
+     116,
+     9577
+    ],
+    [
+     117,
+     10247
+    ],
+    [
+     118,
+     10964
+    ],
+    [
+     119,
+     11732
+    ],
+    [
+     120,
+     12553
+    ],
+    [
+     121,
+     13432
+    ],
+    [
+     122,
+     14372
+    ],
+    [
+     123,
+     15378
+    ],
+    [
+     124,
+     16454
+    ],
+    [
+     125,
+     17606
+    ],
+    [
+     126,
+     18838
+    ],
+    [
+     127,
+     20157
+    ],
+    [
+     128,
+     21568
+    ],
+    [
+     129,
+     23078
+    ],
+    [
+     130,
+     24693
+    ],
+    [
+     131,
+     26422
+    ],
+    [
+     132,
+     28271
+    ],
+    [
+     133,
+     30250
+    ],
+    [
+     134,
+     32367
+    ],
+    [
+     135,
+     34633
+    ],
+    [
+     136,
+     37057
+    ],
+    [
+     137,
+     39651
+    ],
+    [
+     138,
+     42427
+    ],
+    [
+     139,
+     45397
+    ],
+    [
+     140,
+     48575
+    ],
+    [
+     141,
+     51975
+    ],
+    [
+     142,
+     55613
+    ],
+    [
+     143,
+     59506
+    ],
+    [
+     144,
+     63671
+    ],
+    [
+     145,
+     68128
+    ],
+    [
+     146,
+     72897
+    ],
+    [
+     147,
+     78000
+    ],
+    [
+     148,
+     83460
+    ],
+    [
+     149,
+     89302
+    ],
+    [
+     150,
+     95553
+    ],
+    [
+     151,
+     102242
+    ],
+    [
+     152,
+     109399
+    ],
+    [
+     153,
+     117057
+    ],
+    [
+     154,
+     125251
+    ],
+    [
+     155,
+     134018
+    ],
+    [
+     156,
+     143399
+    ],
+    [
+     157,
+     153437
+    ],
+    [
+     158,
+     164178
+    ],
+    [
+     159,
+     175670
+    ],
+    [
+     160,
+     187967
+    ],
+    [
+     161,
+     201125
+    ],
+    [
+     162,
+     215203
+    ],
+    [
+     163,
+     230268
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:pot",
+   "title": "pot: cumulative spend",
+   "x": "pot owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     2,
+     "4"
+    ],
+    [
+     3,
+     "9"
+    ],
+    [
+     4,
+     "14"
+    ],
+    [
+     5,
+     "19"
+    ],
+    [
+     6,
+     "25"
+    ],
+    [
+     7,
+     "31"
+    ],
+    [
+     8,
+     "38"
+    ],
+    [
+     9,
+     "45"
+    ],
+    [
+     10,
+     "52"
+    ],
+    [
+     11,
+     "60"
+    ],
+    [
+     12,
+     "68"
+    ],
+    [
+     13,
+     "77"
+    ],
+    [
+     14,
+     "87"
+    ],
+    [
+     15,
+     "97"
+    ],
+    [
+     16,
+     "108"
+    ],
+    [
+     17,
+     "120"
+    ],
+    [
+     18,
+     "132"
+    ],
+    [
+     19,
+     "145"
+    ],
+    [
+     20,
+     "159"
+    ],
+    [
+     21,
+     "174"
+    ],
+    [
+     22,
+     "190"
+    ],
+    [
+     23,
+     "207"
+    ],
+    [
+     24,
+     "225"
+    ],
+    [
+     25,
+     "244"
+    ],
+    [
+     26,
+     "265"
+    ],
+    [
+     27,
+     "287"
+    ],
+    [
+     28,
+     "311"
+    ],
+    [
+     29,
+     "336"
+    ],
+    [
+     30,
+     "363"
+    ],
+    [
+     31,
+     "392"
+    ],
+    [
+     32,
+     "423"
+    ],
+    [
+     33,
+     "456"
+    ],
+    [
+     34,
+     "491"
+    ],
+    [
+     35,
+     "529"
+    ],
+    [
+     36,
+     "569"
+    ],
+    [
+     37,
+     "612"
+    ],
+    [
+     38,
+     "658"
+    ],
+    [
+     39,
+     "707"
+    ],
+    [
+     40,
+     "760"
+    ],
+    [
+     41,
+     "816"
+    ],
+    [
+     42,
+     "876"
+    ],
+    [
+     43,
+     "941"
+    ],
+    [
+     44,
+     "1010"
+    ],
+    [
+     45,
+     "1084"
+    ],
+    [
+     46,
+     "1163"
+    ],
+    [
+     47,
+     "1248"
+    ],
+    [
+     48,
+     "1338"
+    ],
+    [
+     49,
+     "1435"
+    ],
+    [
+     50,
+     "1538"
+    ],
+    [
+     51,
+     "1649"
+    ],
+    [
+     52,
+     "1767"
+    ],
+    [
+     53,
+     "1894"
+    ],
+    [
+     54,
+     "2029"
+    ],
+    [
+     55,
+     "2174"
+    ],
+    [
+     56,
+     "2329"
+    ],
+    [
+     57,
+     "2495"
+    ],
+    [
+     58,
+     "2672"
+    ],
+    [
+     59,
+     "2862"
+    ],
+    [
+     60,
+     "3065"
+    ],
+    [
+     61,
+     "3282"
+    ],
+    [
+     62,
+     "3514"
+    ],
+    [
+     63,
+     "3763"
+    ],
+    [
+     64,
+     "4029"
+    ],
+    [
+     65,
+     "4313"
+    ],
+    [
+     66,
+     "4617"
+    ],
+    [
+     67,
+     "4943"
+    ],
+    [
+     68,
+     "5291"
+    ],
+    [
+     69,
+     "5664"
+    ],
+    [
+     70,
+     "6063"
+    ],
+    [
+     71,
+     "6490"
+    ],
+    [
+     72,
+     "6946"
+    ],
+    [
+     73,
+     "7434"
+    ],
+    [
+     74,
+     "7957"
+    ],
+    [
+     75,
+     "8516"
+    ],
+    [
+     76,
+     "9114"
+    ],
+    [
+     77,
+     "9754"
+    ],
+    [
+     78,
+     "10439"
+    ],
+    [
+     79,
+     "11172"
+    ],
+    [
+     80,
+     "11956"
+    ],
+    [
+     81,
+     "12795"
+    ],
+    [
+     82,
+     "13692"
+    ],
+    [
+     83,
+     "14652"
+    ],
+    [
+     84,
+     "15679"
+    ],
+    [
+     85,
+     "16778"
+    ],
+    [
+     86,
+     "17954"
+    ],
+    [
+     87,
+     "19213"
+    ],
+    [
+     88,
+     "20560"
+    ],
+    [
+     89,
+     "22001"
+    ],
+    [
+     90,
+     "23543"
+    ],
+    [
+     91,
+     "25192"
+    ],
+    [
+     92,
+     "26957"
+    ],
+    [
+     93,
+     "28845"
+    ],
+    [
+     94,
+     "30866"
+    ],
+    [
+     95,
+     "33028"
+    ],
+    [
+     96,
+     "35341"
+    ],
+    [
+     97,
+     "37816"
+    ],
+    [
+     98,
+     "40464"
+    ],
+    [
+     99,
+     "43298"
+    ],
+    [
+     100,
+     "46330"
+    ],
+    [
+     101,
+     "49574"
+    ],
+    [
+     102,
+     "53045"
+    ],
+    [
+     103,
+     "56759"
+    ],
+    [
+     104,
+     "60733"
+    ],
+    [
+     105,
+     "64985"
+    ],
+    [
+     106,
+     "69535"
+    ],
+    [
+     107,
+     "74404"
+    ],
+    [
+     108,
+     "79613"
+    ],
+    [
+     109,
+     "85187"
+    ],
+    [
+     110,
+     "91151"
+    ],
+    [
+     111,
+     "97533"
+    ],
+    [
+     112,
+     "104361"
+    ],
+    [
+     113,
+     "111667"
+    ],
+    [
+     114,
+     "119485"
+    ],
+    [
+     115,
+     "127850"
+    ],
+    [
+     116,
+     "136800"
+    ],
+    [
+     117,
+     "146377"
+    ],
+    [
+     118,
+     "156624"
+    ],
+    [
+     119,
+     "167588"
+    ],
+    [
+     120,
+     "179320"
+    ],
+    [
+     121,
+     "191873"
+    ],
+    [
+     122,
+     "205305"
+    ],
+    [
+     123,
+     "219677"
+    ],
+    [
+     124,
+     "235055"
+    ],
+    [
+     125,
+     "251509"
+    ],
+    [
+     126,
+     "269115"
+    ],
+    [
+     127,
+     "287953"
+    ],
+    [
+     128,
+     "308110"
+    ],
+    [
+     129,
+     "329678"
+    ],
+    [
+     130,
+     "352756"
+    ],
+    [
+     131,
+     "377449"
+    ],
+    [
+     132,
+     "403871"
+    ],
+    [
+     133,
+     "432142"
+    ],
+    [
+     134,
+     "462392"
+    ],
+    [
+     135,
+     "494759"
+    ],
+    [
+     136,
+     "529392"
+    ],
+    [
+     137,
+     "566449"
+    ],
+    [
+     138,
+     "606100"
+    ],
+    [
+     139,
+     "648527"
+    ],
+    [
+     140,
+     "693924"
+    ],
+    [
+     141,
+     "742499"
+    ],
+    [
+     142,
+     "794474"
+    ],
+    [
+     143,
+     "850087"
+    ],
+    [
+     144,
+     "909593"
+    ],
+    [
+     145,
+     "973264"
+    ],
+    [
+     146,
+     "1041392"
+    ],
+    [
+     147,
+     "1114289"
+    ],
+    [
+     148,
+     "1192289"
+    ],
+    [
+     149,
+     "1275749"
+    ],
+    [
+     150,
+     "1365051"
+    ],
+    [
+     151,
+     "1460604"
+    ],
+    [
+     152,
+     "1562846"
+    ],
+    [
+     153,
+     "1672245"
+    ],
+    [
+     154,
+     "1789302"
+    ],
+    [
+     155,
+     "1914553"
+    ],
+    [
+     156,
+     "2048571"
+    ],
+    [
+     157,
+     "2191970"
+    ],
+    [
+     158,
+     "2345407"
+    ],
+    [
+     159,
+     "2509585"
+    ],
+    [
+     160,
+     "2685255"
+    ],
+    [
+     161,
+     "2873222"
+    ],
+    [
+     162,
+     "3074347"
+    ],
+    [
+     163,
+     "3289550"
+    ],
+    [
+     164,
+     "3519818"
+    ]
+   ]
+  },
+  {
+   "id": "income:pot",
+   "title": "pot: output at k owned (milestones only)",
+   "x": "pot owned",
+   "y": "units per second",
+   "points": [
+    [
+     1,
+     "167/100"
+    ],
+    [
+     2,
+     "167/50"
+    ],
+    [
+     3,
+     "501/100"
+    ],
+    [
+     4,
+     "167/25"
+    ],
+    [
+     5,
+     "167/20"
+    ],
+    [
+     6,
+     "501/50"
+    ],
+    [
+     7,
+     "1169/100"
+    ],
+    [
+     8,
+     "334/25"
+    ],
+    [
+     9,
+     "1503/100"
+    ],
+    [
+     10,
+     "167/10"
+    ],
+    [
+     11,
+     "1837/100"
+    ],
+    [
+     12,
+     "501/25"
+    ],
+    [
+     13,
+     "2171/100"
+    ],
+    [
+     14,
+     "1169/50"
+    ],
+    [
+     15,
+     "501/20"
+    ],
+    [
+     16,
+     "668/25"
+    ],
+    [
+     17,
+     "2839/100"
+    ],
+    [
+     18,
+     "1503/50"
+    ],
+    [
+     19,
+     "3173/100"
+    ],
+    [
+     20,
+     "167/5"
+    ],
+    [
+     21,
+     "3507/100"
+    ],
+    [
+     22,
+     "1837/50"
+    ],
+    [
+     23,
+     "3841/100"
+    ],
+    [
+     24,
+     "1002/25"
+    ],
+    [
+     25,
+     "167/2"
+    ],
+    [
+     26,
+     "2171/25"
+    ],
+    [
+     27,
+     "4509/50"
+    ],
+    [
+     28,
+     "2338/25"
+    ],
+    [
+     29,
+     "4843/50"
+    ],
+    [
+     30,
+     "501/5"
+    ],
+    [
+     31,
+     "5177/50"
+    ],
+    [
+     32,
+     "2672/25"
+    ],
+    [
+     33,
+     "5511/50"
+    ],
+    [
+     34,
+     "2839/25"
+    ],
+    [
+     35,
+     "1169/10"
+    ],
+    [
+     36,
+     "3006/25"
+    ],
+    [
+     37,
+     "6179/50"
+    ],
+    [
+     38,
+     "3173/25"
+    ],
+    [
+     39,
+     "6513/50"
+    ],
+    [
+     40,
+     "668/5"
+    ],
+    [
+     41,
+     "6847/50"
+    ],
+    [
+     42,
+     "3507/25"
+    ],
+    [
+     43,
+     "7181/50"
+    ],
+    [
+     44,
+     "3674/25"
+    ],
+    [
+     45,
+     "1503/10"
+    ],
+    [
+     46,
+     "3841/25"
+    ],
+    [
+     47,
+     "7849/50"
+    ],
+    [
+     48,
+     "4008/25"
+    ],
+    [
+     49,
+     "8183/50"
+    ],
+    [
+     50,
+     "334"
+    ],
+    [
+     51,
+     "8517/25"
+    ],
+    [
+     52,
+     "8684/25"
+    ],
+    [
+     53,
+     "8851/25"
+    ],
+    [
+     54,
+     "9018/25"
+    ],
+    [
+     55,
+     "1837/5"
+    ],
+    [
+     56,
+     "9352/25"
+    ],
+    [
+     57,
+     "9519/25"
+    ],
+    [
+     58,
+     "9686/25"
+    ],
+    [
+     59,
+     "9853/25"
+    ],
+    [
+     60,
+     "2004/5"
+    ],
+    [
+     61,
+     "10187/25"
+    ],
+    [
+     62,
+     "10354/25"
+    ],
+    [
+     63,
+     "10521/25"
+    ],
+    [
+     64,
+     "10688/25"
+    ],
+    [
+     65,
+     "2171/5"
+    ],
+    [
+     66,
+     "11022/25"
+    ],
+    [
+     67,
+     "11189/25"
+    ],
+    [
+     68,
+     "11356/25"
+    ],
+    [
+     69,
+     "11523/25"
+    ],
+    [
+     70,
+     "2338/5"
+    ],
+    [
+     71,
+     "11857/25"
+    ],
+    [
+     72,
+     "12024/25"
+    ],
+    [
+     73,
+     "12191/25"
+    ],
+    [
+     74,
+     "12358/25"
+    ],
+    [
+     75,
+     "501"
+    ],
+    [
+     76,
+     "12692/25"
+    ],
+    [
+     77,
+     "12859/25"
+    ],
+    [
+     78,
+     "13026/25"
+    ],
+    [
+     79,
+     "13193/25"
+    ],
+    [
+     80,
+     "2672/5"
+    ],
+    [
+     81,
+     "13527/25"
+    ],
+    [
+     82,
+     "13694/25"
+    ],
+    [
+     83,
+     "13861/25"
+    ],
+    [
+     84,
+     "14028/25"
+    ],
+    [
+     85,
+     "2839/5"
+    ],
+    [
+     86,
+     "14362/25"
+    ],
+    [
+     87,
+     "14529/25"
+    ],
+    [
+     88,
+     "14696/25"
+    ],
+    [
+     89,
+     "14863/25"
+    ],
+    [
+     90,
+     "3006/5"
+    ],
+    [
+     91,
+     "15197/25"
+    ],
+    [
+     92,
+     "15364/25"
+    ],
+    [
+     93,
+     "15531/25"
+    ],
+    [
+     94,
+     "15698/25"
+    ],
+    [
+     95,
+     "3173/5"
+    ],
+    [
+     96,
+     "16032/25"
+    ],
+    [
+     97,
+     "16199/25"
+    ],
+    [
+     98,
+     "16366/25"
+    ],
+    [
+     99,
+     "16533/25"
+    ],
+    [
+     100,
+     "668"
+    ],
+    [
+     101,
+     "16867/25"
+    ],
+    [
+     102,
+     "17034/25"
+    ],
+    [
+     103,
+     "17201/25"
+    ],
+    [
+     104,
+     "17368/25"
+    ],
+    [
+     105,
+     "3507/5"
+    ],
+    [
+     106,
+     "17702/25"
+    ],
+    [
+     107,
+     "17869/25"
+    ],
+    [
+     108,
+     "18036/25"
+    ],
+    [
+     109,
+     "18203/25"
+    ],
+    [
+     110,
+     "3674/5"
+    ],
+    [
+     111,
+     "18537/25"
+    ],
+    [
+     112,
+     "18704/25"
+    ],
+    [
+     113,
+     "18871/25"
+    ],
+    [
+     114,
+     "19038/25"
+    ],
+    [
+     115,
+     "3841/5"
+    ],
+    [
+     116,
+     "19372/25"
+    ],
+    [
+     117,
+     "19539/25"
+    ],
+    [
+     118,
+     "19706/25"
+    ],
+    [
+     119,
+     "19873/25"
+    ],
+    [
+     120,
+     "4008/5"
+    ],
+    [
+     121,
+     "20207/25"
+    ],
+    [
+     122,
+     "20374/25"
+    ],
+    [
+     123,
+     "20541/25"
+    ],
+    [
+     124,
+     "20708/25"
+    ],
+    [
+     125,
+     "835"
+    ],
+    [
+     126,
+     "21042/25"
+    ],
+    [
+     127,
+     "21209/25"
+    ],
+    [
+     128,
+     "21376/25"
+    ],
+    [
+     129,
+     "21543/25"
+    ],
+    [
+     130,
+     "4342/5"
+    ],
+    [
+     131,
+     "21877/25"
+    ],
+    [
+     132,
+     "22044/25"
+    ],
+    [
+     133,
+     "22211/25"
+    ],
+    [
+     134,
+     "22378/25"
+    ],
+    [
+     135,
+     "4509/5"
+    ],
+    [
+     136,
+     "22712/25"
+    ],
+    [
+     137,
+     "22879/25"
+    ],
+    [
+     138,
+     "23046/25"
+    ],
+    [
+     139,
+     "23213/25"
+    ],
+    [
+     140,
+     "4676/5"
+    ],
+    [
+     141,
+     "23547/25"
+    ],
+    [
+     142,
+     "23714/25"
+    ],
+    [
+     143,
+     "23881/25"
+    ],
+    [
+     144,
+     "24048/25"
+    ],
+    [
+     145,
+     "4843/5"
+    ],
+    [
+     146,
+     "24382/25"
+    ],
+    [
+     147,
+     "24549/25"
+    ],
+    [
+     148,
+     "24716/25"
+    ],
+    [
+     149,
+     "24883/25"
+    ],
+    [
+     150,
+     "1002"
+    ],
+    [
+     151,
+     "25217/25"
+    ],
+    [
+     152,
+     "25384/25"
+    ],
+    [
+     153,
+     "25551/25"
+    ],
+    [
+     154,
+     "25718/25"
+    ],
+    [
+     155,
+     "5177/5"
+    ],
+    [
+     156,
+     "26052/25"
+    ],
+    [
+     157,
+     "26219/25"
+    ],
+    [
+     158,
+     "26386/25"
+    ],
+    [
+     159,
+     "26553/25"
+    ],
+    [
+     160,
+     "5344/5"
+    ],
+    [
+     161,
+     "26887/25"
+    ],
+    [
+     162,
+     "27054/25"
+    ],
+    [
+     163,
+     "27221/25"
+    ]
+   ]
+  },
+  {
+   "id": "cost:greenhouse",
+   "title": "greenhouse: price of the next unit",
+   "x": "greenhouse owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     0,
+     300
+    ],
+    [
+     1,
+     330
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:greenhouse",
+   "title": "greenhouse: cumulative spend",
+   "x": "greenhouse owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     1,
+     "300"
+    ],
+    [
+     2,
+     "630"
+    ]
+   ]
+  },
+  {
+   "id": "income:greenhouse",
+   "title": "greenhouse: output at k owned (milestones only)",
+   "x": "greenhouse owned",
+   "y": "units per second",
+   "points": [
+    [
+     0,
+     "0"
+    ],
+    [
+     1,
+     "6"
+    ]
+   ]
+  },
+  {
+   "id": "cost:sky_orchard",
+   "title": "sky_orchard: price of the next unit",
+   "x": "sky_orchard owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     0,
+     50000
+    ],
+    [
+     1,
+     60000
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:sky_orchard",
+   "title": "sky_orchard: cumulative spend",
+   "x": "sky_orchard owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     1,
+     "50000"
+    ],
+    [
+     2,
+     "110000"
+    ]
+   ]
+  },
+  {
+   "id": "income:sky_orchard",
+   "title": "sky_orchard: output at k owned (milestones only)",
+   "x": "sky_orchard owned",
+   "y": "units per second",
+   "points": [
+    [
+     0,
+     "0"
+    ],
+    [
+     1,
+     "150"
+    ]
+   ]
+  }
+ ],
+ "trace": null
+}

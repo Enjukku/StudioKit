@@ -1,0 +1,20 @@
+{
+ "meta": {"revision": "fixture-obby-random-r1", "title": "Three timed stages with a success chance each (obby-like)",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {"coins": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}},
+ "activities": {
+  "stage1": {"duration_s": {"v": 20, "src": "EXAMPLE ASSUMPTION"}, "success_chance": {"v": "9/10", "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"coins": {"v": 10, "src": "EXAMPLE ASSUMPTION"}}},
+  "stage2": {"duration_s": {"v": 30, "src": "EXAMPLE ASSUMPTION"}, "success_chance": {"v": "3/5", "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"coins": {"v": 20, "src": "EXAMPLE ASSUMPTION"}}, "requires": {"completed": "stage1"}},
+  "stage3": {"duration_s": {"v": 40, "src": "EXAMPLE ASSUMPTION"}, "success_chance": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"coins": {"v": 40, "src": "EXAMPLE ASSUMPTION"}}, "requires": {"completed": "stage2"}}
+ },
+ "policies": {"order": ["stage1", "stage2", "stage3"]},
+ "goals": [
+  {"id": "stage2", "label": "clear stage 2", "when": {"completed": "stage2"}},
+  {"id": "stage3", "label": "clear stage 3", "when": {"completed": "stage3"},
+   "window": {"basis": "active", "max_s": {"v": 300, "src": "PROPOSAL"}}}
+ ],
+ "run": {"horizon_active_s": {"v": 600, "src": "EXAMPLE ASSUMPTION"}}
+}

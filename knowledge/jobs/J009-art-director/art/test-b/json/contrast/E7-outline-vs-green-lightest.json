@@ -1,0 +1,35 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "contrast",
+ "input": null,
+ "params": {
+  "pairs": [
+   "010101,b8ff8f"
+  ],
+  "rule": "wcag-text",
+  "min_ratio": null,
+  "tolerance_source": null,
+  "rounding": "none (a failing ratio is never rounded up, A04)"
+ },
+ "scope": "UI text and UI components only; not a rule for world art, props or characters (AP:559).",
+ "measurements": {
+  "pairs": [
+   {
+    "fg": "#010101",
+    "bg": "#B8FF8F",
+    "l_fg": 0.0003035269835488375,
+    "l_bg": 0.8369351728579956,
+    "ratio": 17.63166970673959,
+    "pass": true
+   }
+  ]
+ },
+ "images": {},
+ "verdict": "pass",
+ "rule": {
+  "name": "wcag-text",
+  "min_ratio": 4.5,
+  "source": "WCAG 2.x SC 1.4.3 Contrast (Minimum), normal text (A04)"
+ }
+}

@@ -1,0 +1,2 @@
+- [Roblox public counters](roblox-public-counters.md) — dated "why now" snapshots from the public games API, place→universe, omni-search
+- [Pitch craft lessons](pitch-craft-lessons.md) — trends notes first, critic must be fresh, name removed core mechanics, owner's existing games, hidden-cases file

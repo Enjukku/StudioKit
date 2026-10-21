@@ -1,0 +1,11 @@
+{
+ "meta": {"revision": "fixture-cap-block-r1", "title": "Wallet cap below the price of the next item",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {"cash": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}, "cap": {"v": 100, "src": "EXAMPLE ASSUMPTION"}}},
+ "producers": {
+  "stand": {"start_owned": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "produces": {"currency:cash": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}}
+ },
+ "items": {"truck": {"cost": {"currency": "cash", "amount": {"v": 150, "src": "EXAMPLE ASSUMPTION"}}, "effects": []}},
+ "goals": [{"id": "truck", "label": "buy the truck", "when": {"item": "truck"}}],
+ "run": {"horizon_active_s": {"v": 86400, "src": "EXAMPLE ASSUMPTION"}}
+}

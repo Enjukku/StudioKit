@@ -1,0 +1,216 @@
+{
+ "label": "SYNTHETIC TEST DATA",
+ "what": "same, placebo: the same calculation one week earlier (video week vs the week before), where no version changed",
+ "runs": [
+  {
+   "before": "2026-09-25",
+   "after": "2026-10-02",
+   "args": [
+    "did",
+    "--tb",
+    "0.2042",
+    "--ta",
+    "0.2068",
+    "--cb",
+    "0.234",
+    "--ca",
+    "0.2371"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2042,
+     "treat_after": 0.2068,
+     "control_before": 0.234,
+     "control_after": 0.2371,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": 0.002600000000000019,
+    "control_change": 0.0030999999999999917,
+    "did": -0.0004999999999999727,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = -0.0005 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-09-26",
+   "after": "2026-10-03",
+   "args": [
+    "did",
+    "--tb",
+    "0.2011",
+    "--ta",
+    "0.2011",
+    "--cb",
+    "0.2306",
+    "--ca",
+    "0.2306"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2011,
+     "treat_after": 0.2011,
+     "control_before": 0.2306,
+     "control_after": 0.2306,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": 0.0,
+    "control_change": 0.0,
+    "did": 0.0,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = +0 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-09-27",
+   "after": "2026-10-04",
+   "args": [
+    "did",
+    "--tb",
+    "0.2068",
+    "--ta",
+    "0.2042",
+    "--cb",
+    "0.2371",
+    "--ca",
+    "0.2341"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2068,
+     "treat_after": 0.2042,
+     "control_before": 0.2371,
+     "control_after": 0.2341,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": -0.002600000000000019,
+    "control_change": -0.0030000000000000027,
+    "did": 0.0003999999999999837,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = +0.0004 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-09-28",
+   "after": "2026-10-05",
+   "args": [
+    "did",
+    "--tb",
+    "0.2084",
+    "--ta",
+    "0.2091",
+    "--cb",
+    "0.2389",
+    "--ca",
+    "0.2397"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2084,
+     "treat_after": 0.2091,
+     "control_before": 0.2389,
+     "control_after": 0.2397,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": 0.0007000000000000062,
+    "control_change": 0.0007999999999999952,
+    "did": -9.999999999998899e-05,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = -0.0001 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-09-29",
+   "after": "2026-10-06",
+   "args": [
+    "did",
+    "--tb",
+    "0.2023",
+    "--ta",
+    "0.2048",
+    "--cb",
+    "0.2319",
+    "--ca",
+    "0.2347"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2023,
+     "treat_after": 0.2048,
+     "control_before": 0.2319,
+     "control_after": 0.2347,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": 0.0025000000000000022,
+    "control_change": 0.002799999999999997,
+    "did": -0.0002999999999999947,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = -0.0003 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-09-30",
+   "after": "2026-10-07",
+   "args": [
+    "did",
+    "--tb",
+    "0.2023",
+    "--ta",
+    "0.201",
+    "--cb",
+    "0.2319",
+    "--ca",
+    "0.2304"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2023,
+     "treat_after": 0.201,
+     "control_before": 0.2319,
+     "control_after": 0.2304,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": -0.0012999999999999956,
+    "control_change": -0.0015000000000000013,
+    "did": 0.00020000000000000573,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = +0.0002 (assumes parallel trends)"
+  },
+  {
+   "before": "2026-10-01",
+   "after": "2026-10-08",
+   "args": [
+    "did",
+    "--tb",
+    "0.2084",
+    "--ta",
+    "0.2063",
+    "--cb",
+    "0.2389",
+    "--ca",
+    "0.2365"
+   ],
+   "output": {
+    "inputs": {
+     "treat_before": 0.2084,
+     "treat_after": 0.2063,
+     "control_before": 0.2389,
+     "control_after": 0.2365,
+     "se": null,
+     "confidence": 0.95
+    },
+    "treat_change": -0.0020999999999999908,
+    "control_change": -0.0024000000000000132,
+    "did": 0.00030000000000002247,
+    "assumption": "parallel trends; not tested by this arithmetic"
+   },
+   "stderr": "difference in differences = +0.0003 (assumes parallel trends)"
+  }
+ ]
+}

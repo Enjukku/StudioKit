@@ -1,0 +1,7800 @@
+{
+ "tool": "progression_sim",
+ "version": "1.1.0",
+ "curves_version": "1.0.0",
+ "model": {
+  "path": "tools/progression/examples/incremental/model.json",
+  "sha256": "fc64e5d6c02f3eb0fe65541a8d1182f03f10909a518d5d6f5974ca3b47a62e3f",
+  "revision": "example-incremental-r2",
+  "title": "Worked example: Bloom Valley (incremental) - for learning, not tuning"
+ },
+ "mode": "exact",
+ "policy": {
+  "name": "greedy-roi",
+  "target": null,
+  "target_level": null,
+  "skill_profile": null,
+  "session_pattern": "daily"
+ },
+ "seed": null,
+ "runs": 1,
+ "random_inputs": false,
+ "semantics": {
+  "event_order": [
+   "produce",
+   "rewards",
+   "caps",
+   "purchase",
+   "unlock",
+   "reset"
+  ],
+  "time": {
+   "mode": "discrete",
+   "tick_s": "1",
+   "new_units_produce_in_creation_tick": false
+  },
+  "duel": null,
+  "horizon_active_s": "36000",
+  "horizon_source": "cli",
+  "calendar": "session pattern daily",
+  "offline": {
+   "efficiency": "1/20",
+   "cap_s": "7200",
+   "currencies": [
+    "petals"
+   ]
+  },
+  "prestige_offline_counts_toward_basis": true,
+  "prestige_min_award": null,
+  "boss_attempt": null,
+  "level_rewards": null,
+  "hard_walls": "every gated buyable or enemy: from affordable (or beatable) while locked until it unlocks; an activity only while the policy pursues it"
+ },
+ "lean": {
+  "on": true,
+  "omitted": [
+   "trace",
+   "steps other than resets, goals, soft walls and spikes",
+   "metric history between segment starts, spikes and the last value"
+  ]
+ },
+ "warnings": [],
+ "never_claims": [
+  "a population forecast (one policy is one strategy)",
+  "that any target feeling passed",
+  "that the game is fun",
+  "any default threshold, rate, horizon or session length"
+ ],
+ "assumptions": {
+  "inputs": [
+   {
+    "input": "meta.time.tick_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "currencies.petals.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/100"
+   },
+   {
+    "input": "currencies.seeds.start",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "currencies.seeds.smallest_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "producers.greenhouse.start_owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "producers.greenhouse.cost.curve.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "300"
+   },
+   {
+    "input": "producers.greenhouse.cost.curve.r",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "11/10"
+   },
+   {
+    "input": "producers.greenhouse.produces.currency:petals",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6"
+   },
+   {
+    "input": "producers.greenhouse.milestones[0].owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "25"
+   },
+   {
+    "input": "producers.greenhouse.milestones[0].mult",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "producers.greenhouse.milestones[1].owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50"
+   },
+   {
+    "input": "producers.greenhouse.milestones[1].mult",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "producers.sky_orchard.start_owned",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "0"
+   },
+   {
+    "input": "producers.sky_orchard.cost.curve.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50000"
+   },
+   {
+    "input": "producers.sky_orchard.cost.curve.r",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "6/5"
+   },
+   {
+    "input": "producers.sky_orchard.produces.currency:petals",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "150"
+   },
+   {
+    "input": "items.watering_can.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1000"
+   },
+   {
+    "input": "items.watering_can.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "items.bee_hive.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "25000"
+   },
+   {
+    "input": "items.bee_hive.requires.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "items.bee_hive.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "items.bridge_pass.cost.amount",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "500"
+   },
+   {
+    "input": "items.bridge_pass.requires.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "items.bridge_pass.effects[0].value",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "11/10"
+   },
+   {
+    "input": "prestige.formula.a",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "prestige.formula.alpha",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/2"
+   },
+   {
+    "input": "prestige.formula.divisor",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "50000"
+   },
+   {
+    "input": "prestige.take_when.run[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "7000000"
+   },
+   {
+    "input": "prestige.bonus.per_unit",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/1000"
+   },
+   {
+    "input": "offline.efficiency",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1/20"
+   },
+   {
+    "input": "offline.cap_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "7200"
+   },
+   {
+    "input": "sessions.patterns.daily.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "sessions.patterns.daily.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "85200"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "sessions.patterns.returning.gaps_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": [
+     "85200"
+    ]
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].after_session",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "sessions.patterns.returning.absences[0].gap_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "603600"
+   },
+   {
+    "input": "goals[0].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2"
+   },
+   {
+    "input": "goals[0].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[1].when.spikes[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3"
+   },
+   {
+    "input": "goals[1].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "60"
+   },
+   {
+    "input": "goals[2].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[2].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "120"
+   },
+   {
+    "input": "goals[3].when.soft_walls",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[3].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "720"
+   },
+   {
+    "input": "goals[3].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "goals[4].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[4].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1200"
+   },
+   {
+    "input": "goals[4].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "goals[5].when.all[0].balance[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "500"
+   },
+   {
+    "input": "goals[5].when.all[1].not.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[5].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "120"
+   },
+   {
+    "input": "goals[6].when.owned[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1"
+   },
+   {
+    "input": "goals[6].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1800"
+   },
+   {
+    "input": "goals[7].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "172800"
+   },
+   {
+    "input": "goals[8].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[8].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "604800"
+   },
+   {
+    "input": "goals[9].when.balance[1]",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "900"
+   },
+   {
+    "input": "goals[9].window.min_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1814400"
+   },
+   {
+    "input": "goals[9].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "2592000"
+   },
+   {
+    "input": "goals[10].when.prestiges",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "10"
+   },
+   {
+    "input": "goals[10].window.max_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "1209600"
+   },
+   {
+    "input": "analysis.soft_wall.min_wait_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "45"
+   },
+   {
+    "input": "analysis.spikes[0].min_ratio",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3/2"
+   },
+   {
+    "input": "run.horizon_active_s",
+    "src": "EXAMPLE ASSUMPTION",
+    "value": "3600"
+   }
+  ],
+  "behaviour": [
+   "policy greedy-roi: one modelled strategy, not the player population",
+   "session pattern daily (model sessions.patterns.daily)"
+  ],
+  "note": "every result below is conditional on all listed inputs and the behaviour lines; the tool does not trace which result uses which input"
+ },
+ "provenance_counts": {
+  "EXAMPLE ASSUMPTION": 65,
+  "published": 10
+ },
+ "stop": {
+  "reason": "all goals reached",
+  "detail": "",
+  "active_s": "31201",
+  "active_s_approx": 31201.0,
+  "calendar_s": "2246401",
+  "calendar_s_approx": 2246401.0
+ },
+ "timeline": [
+  {
+   "goal": "TL-01a",
+   "label": "second pot (first purchase)",
+   "when": {
+    "owned": [
+     "pot",
+     "2"
+    ]
+   },
+   "reached": true,
+   "active_s": "3",
+   "active_s_approx": 3.0,
+   "calendar_s": "3",
+   "calendar_s_approx": 3.0,
+   "window": {
+    "basis": "active",
+    "max_s": "10"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 3 s is inside the declared window [-, 10] s (active time)"
+  },
+  {
+   "goal": "TL-01b",
+   "label": "three power spikes (the third is the 25-pot milestone)",
+   "when": {
+    "spikes": [
+     "petal_rate",
+     "3"
+    ]
+   },
+   "reached": true,
+   "active_s": "17",
+   "active_s_approx": 17.0,
+   "calendar_s": "17",
+   "calendar_s_approx": 17.0,
+   "window": {
+    "basis": "active",
+    "max_s": "60"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 17 s is inside the declared window [-, 60] s (active time)"
+  },
+  {
+   "goal": "TL-02",
+   "label": "first greenhouse",
+   "when": {
+    "owned": [
+     "greenhouse",
+     "1"
+    ]
+   },
+   "reached": true,
+   "active_s": "43",
+   "active_s_approx": 43.0,
+   "calendar_s": "43",
+   "calendar_s_approx": 43.0,
+   "window": {
+    "basis": "active",
+    "max_s": "120"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 43 s is inside the declared window [-, 120] s (active time)"
+  },
+  {
+   "goal": "TL-03",
+   "label": "first soft wall: the garden fills up",
+   "when": {
+    "soft_walls": "1"
+   },
+   "reached": true,
+   "active_s": "992",
+   "active_s_approx": 992.0,
+   "calendar_s": "992",
+   "calendar_s_approx": 992.0,
+   "window": {
+    "basis": "active",
+    "min_s": "720",
+    "max_s": "1200"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 992 s is inside the declared window [720, 1200] s (active time)"
+  },
+  {
+   "goal": "TL-04",
+   "label": "first Replant (rebirth)",
+   "when": {
+    "prestiges": "1"
+   },
+   "reached": true,
+   "active_s": "1201",
+   "active_s_approx": 1201.0,
+   "calendar_s": "86401",
+   "calendar_s_approx": 86401.0,
+   "window": {
+    "basis": "active",
+    "min_s": "1200",
+    "max_s": "1800"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 1201 s is inside the declared window [1200, 1800] s (active time)"
+  },
+  {
+   "goal": "TL-05a",
+   "label": "hard wall starts: the bridge pass is affordable but locked",
+   "when": {
+    "all": [
+     {
+      "balance": [
+       "petals",
+       "500"
+      ]
+     },
+     {
+      "not": {
+       "prestiges": "1"
+      }
+     }
+    ]
+   },
+   "reached": true,
+   "active_s": "24",
+   "active_s_approx": 24.0,
+   "calendar_s": "24",
+   "calendar_s_approx": 24.0,
+   "window": {
+    "basis": "active",
+    "max_s": "120"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 24 s is inside the declared window [-, 120] s (active time)"
+  },
+  {
+   "goal": "TL-05",
+   "label": "first Sky Orchard (hard wall passed)",
+   "when": {
+    "owned": [
+     "sky_orchard",
+     "1"
+    ]
+   },
+   "reached": true,
+   "active_s": "1251",
+   "active_s_approx": 1251.0,
+   "calendar_s": "86451",
+   "calendar_s_approx": 86451.0,
+   "window": {
+    "basis": "active",
+    "max_s": "1800"
+   },
+   "verdict": "pass",
+   "evidence": "measured active time 1251 s is inside the declared window [-, 1800] s (active time)"
+  },
+  {
+   "goal": "TL-06",
+   "label": "bridge open on the first return",
+   "when": {
+    "item": "bridge_pass"
+   },
+   "reached": true,
+   "active_s": "1202",
+   "active_s_approx": 1202.0,
+   "calendar_s": "86402",
+   "calendar_s_approx": 86402.0,
+   "window": {
+    "basis": "calendar",
+    "max_s": "172800"
+   },
+   "verdict": "pass",
+   "evidence": "measured calendar time 86402 s is inside the declared window [-, 172800] s (calendar time)"
+  },
+  {
+   "goal": "TL-07",
+   "label": "10th Replant",
+   "when": {
+    "prestiges": "10"
+   },
+   "reached": true,
+   "active_s": "7640",
+   "active_s_approx": 7640.0,
+   "calendar_s": "518840",
+   "calendar_s_approx": 518840.0,
+   "window": {
+    "basis": "calendar",
+    "max_s": "604800"
+   },
+   "verdict": "pass",
+   "evidence": "measured calendar time 518840 s is inside the declared window [-, 604800] s (calendar time)"
+  },
+  {
+   "goal": "TL-08",
+   "label": "900 golden seeds",
+   "when": {
+    "balance": [
+     "seeds",
+     "900"
+    ]
+   },
+   "reached": true,
+   "active_s": "31201",
+   "active_s_approx": 31201.0,
+   "calendar_s": "2246401",
+   "calendar_s_approx": 2246401.0,
+   "window": {
+    "basis": "calendar",
+    "min_s": "1814400",
+    "max_s": "2592000"
+   },
+   "verdict": "pass",
+   "evidence": "measured calendar time 2246401 s is inside the declared window [1814400, 2592000] s (calendar time)"
+  },
+  {
+   "goal": "TL-09",
+   "label": "10th Replant within two weeks",
+   "when": {
+    "prestiges": "10"
+   },
+   "reached": true,
+   "active_s": "7640",
+   "active_s_approx": 7640.0,
+   "calendar_s": "518840",
+   "calendar_s_approx": 518840.0,
+   "window": {
+    "basis": "calendar",
+    "max_s": "1209600"
+   },
+   "verdict": "pass",
+   "evidence": "measured calendar time 518840 s is inside the declared window [-, 1209600] s (calendar time)"
+  }
+ ],
+ "walls": {
+  "soft": {
+   "evaluated": true,
+   "thresholds": {
+    "min_wait_s": "45"
+   },
+   "walls": [
+    {
+     "step": "buy greenhouse (72 owned)",
+     "start_active_s": "943",
+     "end_active_s": "992",
+     "start_calendar_s": "943",
+     "end_calendar_s": "992",
+     "wait_s": "49",
+     "previous_wait_s": "13",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 943.0,
+     "end_active_s_approx": 992.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy greenhouse (73 owned)",
+     "start_active_s": "1020",
+     "end_active_s": "1072",
+     "start_calendar_s": "1020",
+     "end_calendar_s": "1072",
+     "wait_s": "52",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1020.0,
+     "end_active_s_approx": 1072.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy greenhouse (74 owned)",
+     "start_active_s": "1088",
+     "end_active_s": "1145",
+     "start_calendar_s": "1088",
+     "end_calendar_s": "1145",
+     "wait_s": "57",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1088.0,
+     "end_active_s_approx": 1145.0,
+     "wait_s_approx": 57.0
+    },
+    {
+     "step": "buy sky_orchard (12 owned)",
+     "start_active_s": "1688",
+     "end_active_s": "1733",
+     "start_calendar_s": "86888",
+     "end_calendar_s": "86933",
+     "wait_s": "45",
+     "previous_wait_s": "13",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1688.0,
+     "end_active_s_approx": 1733.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (13 owned)",
+     "start_active_s": "1763",
+     "end_active_s": "1815",
+     "start_calendar_s": "86963",
+     "end_calendar_s": "87015",
+     "wait_s": "52",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1763.0,
+     "end_active_s_approx": 1815.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "1850",
+     "end_active_s": "1910",
+     "start_calendar_s": "87050",
+     "end_calendar_s": "87110",
+     "wait_s": "60",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1850.0,
+     "end_active_s_approx": 1910.0,
+     "wait_s_approx": 60.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "1951",
+     "end_active_s": "2020",
+     "start_calendar_s": "87151",
+     "end_calendar_s": "87220",
+     "wait_s": "69",
+     "previous_wait_s": "22",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 1951.0,
+     "end_active_s_approx": 2020.0,
+     "wait_s_approx": 69.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "2068",
+     "end_active_s": "2149",
+     "start_calendar_s": "87268",
+     "end_calendar_s": "87349",
+     "wait_s": "81",
+     "previous_wait_s": "25",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2068.0,
+     "end_active_s_approx": 2149.0,
+     "wait_s_approx": 81.0
+    },
+    {
+     "step": "buy sky_orchard (13 owned)",
+     "start_active_s": "2433",
+     "end_active_s": "2482",
+     "start_calendar_s": "172833",
+     "end_calendar_s": "172882",
+     "wait_s": "49",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2433.0,
+     "end_active_s_approx": 2482.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "2516",
+     "end_active_s": "2574",
+     "start_calendar_s": "172916",
+     "end_calendar_s": "172974",
+     "wait_s": "58",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2516.0,
+     "end_active_s_approx": 2574.0,
+     "wait_s_approx": 58.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "2613",
+     "end_active_s": "2680",
+     "start_calendar_s": "173013",
+     "end_calendar_s": "173080",
+     "wait_s": "67",
+     "previous_wait_s": "21",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2613.0,
+     "end_active_s_approx": 2680.0,
+     "wait_s_approx": 67.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "2726",
+     "end_active_s": "2803",
+     "start_calendar_s": "173126",
+     "end_calendar_s": "173203",
+     "wait_s": "77",
+     "previous_wait_s": "24",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 2726.0,
+     "end_active_s_approx": 2803.0,
+     "wait_s_approx": 77.0
+    },
+    {
+     "step": "buy sky_orchard (13 owned)",
+     "start_active_s": "3325",
+     "end_active_s": "3373",
+     "start_calendar_s": "173725",
+     "end_calendar_s": "173773",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 3325.0,
+     "end_active_s_approx": 3373.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "3405",
+     "end_active_s": "3461",
+     "start_calendar_s": "173805",
+     "end_calendar_s": "173861",
+     "wait_s": "56",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 3405.0,
+     "end_active_s_approx": 3461.0,
+     "wait_s_approx": 56.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "3499",
+     "end_active_s": "3564",
+     "start_calendar_s": "173899",
+     "end_calendar_s": "173964",
+     "wait_s": "65",
+     "previous_wait_s": "20",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 3499.0,
+     "end_active_s_approx": 3564.0,
+     "wait_s_approx": 65.0
+    },
+    {
+     "step": "buy sky_orchard (13 owned)",
+     "start_active_s": "4105",
+     "end_active_s": "4151",
+     "start_calendar_s": "259705",
+     "end_calendar_s": "259751",
+     "wait_s": "46",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4105.0,
+     "end_active_s_approx": 4151.0,
+     "wait_s_approx": 46.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "4183",
+     "end_active_s": "4236",
+     "start_calendar_s": "259783",
+     "end_calendar_s": "259836",
+     "wait_s": "53",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4183.0,
+     "end_active_s_approx": 4236.0,
+     "wait_s_approx": 53.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "4273",
+     "end_active_s": "4336",
+     "start_calendar_s": "259873",
+     "end_calendar_s": "259936",
+     "wait_s": "63",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4273.0,
+     "end_active_s_approx": 4336.0,
+     "wait_s_approx": 63.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "4379",
+     "end_active_s": "4451",
+     "start_calendar_s": "259979",
+     "end_calendar_s": "260051",
+     "wait_s": "72",
+     "previous_wait_s": "23",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4379.0,
+     "end_active_s_approx": 4451.0,
+     "wait_s_approx": 72.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "4801",
+     "end_active_s": "4847",
+     "start_calendar_s": "345601",
+     "end_calendar_s": "345647",
+     "wait_s": "46",
+     "previous_wait_s": "28",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4801.0,
+     "end_active_s_approx": 4847.0,
+     "wait_s_approx": 46.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "4889",
+     "end_active_s": "4960",
+     "start_calendar_s": "345689",
+     "end_calendar_s": "345760",
+     "wait_s": "71",
+     "previous_wait_s": "22",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 4889.0,
+     "end_active_s_approx": 4960.0,
+     "wait_s_approx": 71.0
+    },
+    {
+     "step": "buy sky_orchard (13 owned)",
+     "start_active_s": "5444",
+     "end_active_s": "5489",
+     "start_calendar_s": "346244",
+     "end_calendar_s": "346289",
+     "wait_s": "45",
+     "previous_wait_s": "13",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 5444.0,
+     "end_active_s_approx": 5489.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "5519",
+     "end_active_s": "5571",
+     "start_calendar_s": "346319",
+     "end_calendar_s": "346371",
+     "wait_s": "52",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 5519.0,
+     "end_active_s_approx": 5571.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "5606",
+     "end_active_s": "5666",
+     "start_calendar_s": "346406",
+     "end_calendar_s": "346466",
+     "wait_s": "60",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 5606.0,
+     "end_active_s_approx": 5666.0,
+     "wait_s_approx": 60.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "5707",
+     "end_active_s": "5777",
+     "start_calendar_s": "346507",
+     "end_calendar_s": "346577",
+     "wait_s": "70",
+     "previous_wait_s": "21",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 5707.0,
+     "end_active_s_approx": 5777.0,
+     "wait_s_approx": 70.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "6075",
+     "end_active_s": "6125",
+     "start_calendar_s": "432075",
+     "end_calendar_s": "432125",
+     "wait_s": "50",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 6075.0,
+     "end_active_s_approx": 6125.0,
+     "wait_s_approx": 50.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "6160",
+     "end_active_s": "6219",
+     "start_calendar_s": "432160",
+     "end_calendar_s": "432219",
+     "wait_s": "59",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 6160.0,
+     "end_active_s_approx": 6219.0,
+     "wait_s_approx": 59.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "6260",
+     "end_active_s": "6328",
+     "start_calendar_s": "432260",
+     "end_calendar_s": "432328",
+     "wait_s": "68",
+     "previous_wait_s": "21",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 6260.0,
+     "end_active_s_approx": 6328.0,
+     "wait_s_approx": 68.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "6868",
+     "end_active_s": "6919",
+     "start_calendar_s": "432868",
+     "end_calendar_s": "432919",
+     "wait_s": "51",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 6868.0,
+     "end_active_s_approx": 6919.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "6953",
+     "end_active_s": "7011",
+     "start_calendar_s": "432953",
+     "end_calendar_s": "433011",
+     "wait_s": "58",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 6953.0,
+     "end_active_s_approx": 7011.0,
+     "wait_s_approx": 58.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "7051",
+     "end_active_s": "7118",
+     "start_calendar_s": "433051",
+     "end_calendar_s": "433118",
+     "wait_s": "67",
+     "previous_wait_s": "21",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 7051.0,
+     "end_active_s_approx": 7118.0,
+     "wait_s_approx": 67.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "7394",
+     "end_active_s": "7444",
+     "start_calendar_s": "518594",
+     "end_calendar_s": "518644",
+     "wait_s": "50",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 7394.0,
+     "end_active_s_approx": 7444.0,
+     "wait_s_approx": 50.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "7477",
+     "end_active_s": "7534",
+     "start_calendar_s": "518677",
+     "end_calendar_s": "518734",
+     "wait_s": "57",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 7477.0,
+     "end_active_s_approx": 7534.0,
+     "wait_s_approx": 57.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "7574",
+     "end_active_s": "7640",
+     "start_calendar_s": "518774",
+     "end_calendar_s": "518840",
+     "wait_s": "66",
+     "previous_wait_s": "21",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 7574.0,
+     "end_active_s_approx": 7640.0,
+     "wait_s_approx": 66.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "8166",
+     "end_active_s": "8214",
+     "start_calendar_s": "519366",
+     "end_calendar_s": "519414",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 8166.0,
+     "end_active_s_approx": 8214.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "8248",
+     "end_active_s": "8304",
+     "start_calendar_s": "519448",
+     "end_calendar_s": "519504",
+     "wait_s": "56",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 8248.0,
+     "end_active_s_approx": 8304.0,
+     "wait_s_approx": 56.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "8343",
+     "end_active_s": "8401",
+     "start_calendar_s": "519543",
+     "end_calendar_s": "604801",
+     "wait_s": "58",
+     "previous_wait_s": "20",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 8343.0,
+     "end_active_s_approx": 8401.0,
+     "wait_s_approx": 58.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "8916",
+     "end_active_s": "8963",
+     "start_calendar_s": "605316",
+     "end_calendar_s": "605363",
+     "wait_s": "47",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 8916.0,
+     "end_active_s_approx": 8963.0,
+     "wait_s_approx": 47.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "8996",
+     "end_active_s": "9051",
+     "start_calendar_s": "605396",
+     "end_calendar_s": "605451",
+     "wait_s": "55",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 8996.0,
+     "end_active_s_approx": 9051.0,
+     "wait_s_approx": 55.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "9089",
+     "end_active_s": "9154",
+     "start_calendar_s": "605489",
+     "end_calendar_s": "605554",
+     "wait_s": "65",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 9089.0,
+     "end_active_s_approx": 9154.0,
+     "wait_s_approx": 65.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "10104",
+     "end_active_s": "10150",
+     "start_calendar_s": "691704",
+     "end_calendar_s": "691750",
+     "wait_s": "46",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 10104.0,
+     "end_active_s_approx": 10150.0,
+     "wait_s_approx": 46.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "10182",
+     "end_active_s": "10236",
+     "start_calendar_s": "691782",
+     "end_calendar_s": "691836",
+     "wait_s": "54",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 10182.0,
+     "end_active_s_approx": 10236.0,
+     "wait_s_approx": 54.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "10273",
+     "end_active_s": "10336",
+     "start_calendar_s": "691873",
+     "end_calendar_s": "691936",
+     "wait_s": "63",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 10273.0,
+     "end_active_s_approx": 10336.0,
+     "wait_s_approx": 63.0
+    },
+    {
+     "step": "buy sky_orchard (14 owned)",
+     "start_active_s": "11293",
+     "end_active_s": "11338",
+     "start_calendar_s": "778093",
+     "end_calendar_s": "778138",
+     "wait_s": "45",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 11293.0,
+     "end_active_s_approx": 11338.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "11370",
+     "end_active_s": "11422",
+     "start_calendar_s": "778170",
+     "end_calendar_s": "778222",
+     "wait_s": "52",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 11370.0,
+     "end_active_s_approx": 11422.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "11459",
+     "end_active_s": "11520",
+     "start_calendar_s": "778259",
+     "end_calendar_s": "778320",
+     "wait_s": "61",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 11459.0,
+     "end_active_s_approx": 11520.0,
+     "wait_s_approx": 61.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "12558",
+     "end_active_s": "12609",
+     "start_calendar_s": "864558",
+     "end_calendar_s": "864609",
+     "wait_s": "51",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 12558.0,
+     "end_active_s_approx": 12609.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "12645",
+     "end_active_s": "12705",
+     "start_calendar_s": "864645",
+     "end_calendar_s": "864705",
+     "wait_s": "60",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 12645.0,
+     "end_active_s_approx": 12705.0,
+     "wait_s_approx": 60.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "13747",
+     "end_active_s": "13798",
+     "start_calendar_s": "950947",
+     "end_calendar_s": "950998",
+     "wait_s": "51",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 13747.0,
+     "end_active_s_approx": 13798.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "13833",
+     "end_active_s": "13891",
+     "start_calendar_s": "951033",
+     "end_calendar_s": "951091",
+     "wait_s": "58",
+     "previous_wait_s": "19",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 13833.0,
+     "end_active_s_approx": 13891.0,
+     "wait_s_approx": 58.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "14937",
+     "end_active_s": "14986",
+     "start_calendar_s": "1037337",
+     "end_calendar_s": "1037386",
+     "wait_s": "49",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 14937.0,
+     "end_active_s_approx": 14986.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "15021",
+     "end_active_s": "15078",
+     "start_calendar_s": "1037421",
+     "end_calendar_s": "1037478",
+     "wait_s": "57",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 15021.0,
+     "end_active_s_approx": 15078.0,
+     "wait_s_approx": 57.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "16127",
+     "end_active_s": "16176",
+     "start_calendar_s": "1123727",
+     "end_calendar_s": "1123776",
+     "wait_s": "49",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 16127.0,
+     "end_active_s_approx": 16176.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "16210",
+     "end_active_s": "16266",
+     "start_calendar_s": "1123810",
+     "end_calendar_s": "1123866",
+     "wait_s": "56",
+     "previous_wait_s": "18",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 16210.0,
+     "end_active_s_approx": 16266.0,
+     "wait_s_approx": 56.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "17318",
+     "end_active_s": "17366",
+     "start_calendar_s": "1210118",
+     "end_calendar_s": "1210166",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 17318.0,
+     "end_active_s_approx": 17366.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "17399",
+     "end_active_s": "17455",
+     "start_calendar_s": "1210199",
+     "end_calendar_s": "1210255",
+     "wait_s": "56",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 17399.0,
+     "end_active_s_approx": 17455.0,
+     "wait_s_approx": 56.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "18509",
+     "end_active_s": "18557",
+     "start_calendar_s": "1296509",
+     "end_calendar_s": "1296557",
+     "wait_s": "48",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 18509.0,
+     "end_active_s_approx": 18557.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "18589",
+     "end_active_s": "18644",
+     "start_calendar_s": "1296589",
+     "end_calendar_s": "1296644",
+     "wait_s": "55",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 18589.0,
+     "end_active_s_approx": 18644.0,
+     "wait_s_approx": 55.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "19149",
+     "end_active_s": "19196",
+     "start_calendar_s": "1297149",
+     "end_calendar_s": "1297196",
+     "wait_s": "47",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 19149.0,
+     "end_active_s_approx": 19196.0,
+     "wait_s_approx": 47.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "19701",
+     "end_active_s": "19748",
+     "start_calendar_s": "1382901",
+     "end_calendar_s": "1382948",
+     "wait_s": "47",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 19701.0,
+     "end_active_s_approx": 19748.0,
+     "wait_s_approx": 47.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "19780",
+     "end_active_s": "19834",
+     "start_calendar_s": "1382980",
+     "end_calendar_s": "1383034",
+     "wait_s": "54",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 19780.0,
+     "end_active_s_approx": 19834.0,
+     "wait_s_approx": 54.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "20331",
+     "end_active_s": "20377",
+     "start_calendar_s": "1383531",
+     "end_calendar_s": "1383577",
+     "wait_s": "46",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 20331.0,
+     "end_active_s_approx": 20377.0,
+     "wait_s_approx": 46.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "20894",
+     "end_active_s": "20939",
+     "start_calendar_s": "1469294",
+     "end_calendar_s": "1469339",
+     "wait_s": "45",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 20894.0,
+     "end_active_s_approx": 20939.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "20971",
+     "end_active_s": "21024",
+     "start_calendar_s": "1469371",
+     "end_calendar_s": "1469424",
+     "wait_s": "53",
+     "previous_wait_s": "17",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 20971.0,
+     "end_active_s_approx": 21024.0,
+     "wait_s_approx": 53.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "21514",
+     "end_active_s": "21559",
+     "start_calendar_s": "1469914",
+     "end_calendar_s": "1469959",
+     "wait_s": "45",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 21514.0,
+     "end_active_s_approx": 21559.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "22086",
+     "end_active_s": "22131",
+     "start_calendar_s": "1555686",
+     "end_calendar_s": "1555731",
+     "wait_s": "45",
+     "previous_wait_s": "14",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 22086.0,
+     "end_active_s_approx": 22131.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "22162",
+     "end_active_s": "22215",
+     "start_calendar_s": "1555762",
+     "end_calendar_s": "1555815",
+     "wait_s": "53",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 22162.0,
+     "end_active_s_approx": 22215.0,
+     "wait_s_approx": 53.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "start_active_s": "22697",
+     "end_active_s": "22742",
+     "start_calendar_s": "1556297",
+     "end_calendar_s": "1556342",
+     "wait_s": "45",
+     "previous_wait_s": "13",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 22697.0,
+     "end_active_s_approx": 22742.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "23354",
+     "end_active_s": "23406",
+     "start_calendar_s": "1642154",
+     "end_calendar_s": "1642206",
+     "wait_s": "52",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 23354.0,
+     "end_active_s_approx": 23406.0,
+     "wait_s_approx": 52.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "23956",
+     "end_active_s": "24001",
+     "start_calendar_s": "1642756",
+     "end_calendar_s": "1728001",
+     "wait_s": "45",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 23956.0,
+     "end_active_s_approx": 24001.0,
+     "wait_s_approx": 45.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "24546",
+     "end_active_s": "24597",
+     "start_calendar_s": "1728546",
+     "end_calendar_s": "1728597",
+     "wait_s": "51",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 24546.0,
+     "end_active_s_approx": 24597.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "25139",
+     "end_active_s": "25190",
+     "start_calendar_s": "1729139",
+     "end_calendar_s": "1729190",
+     "wait_s": "51",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 25139.0,
+     "end_active_s_approx": 25190.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "25529",
+     "end_active_s": "25580",
+     "start_calendar_s": "1814729",
+     "end_calendar_s": "1814780",
+     "wait_s": "51",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 25529.0,
+     "end_active_s_approx": 25580.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "26117",
+     "end_active_s": "26168",
+     "start_calendar_s": "1815317",
+     "end_calendar_s": "1815368",
+     "wait_s": "51",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 26117.0,
+     "end_active_s_approx": 26168.0,
+     "wait_s_approx": 51.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "26967",
+     "end_active_s": "27017",
+     "start_calendar_s": "1901367",
+     "end_calendar_s": "1901417",
+     "wait_s": "50",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 26967.0,
+     "end_active_s_approx": 27017.0,
+     "wait_s_approx": 50.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "27547",
+     "end_active_s": "27596",
+     "start_calendar_s": "1901947",
+     "end_calendar_s": "1901996",
+     "wait_s": "49",
+     "previous_wait_s": "16",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 27547.0,
+     "end_active_s_approx": 27596.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "27929",
+     "end_active_s": "27978",
+     "start_calendar_s": "1987529",
+     "end_calendar_s": "1987578",
+     "wait_s": "49",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 27929.0,
+     "end_active_s_approx": 27978.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "28503",
+     "end_active_s": "28552",
+     "start_calendar_s": "1988103",
+     "end_calendar_s": "1988152",
+     "wait_s": "49",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 28503.0,
+     "end_active_s_approx": 28552.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "29322",
+     "end_active_s": "29370",
+     "start_calendar_s": "2074122",
+     "end_calendar_s": "2074170",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 29322.0,
+     "end_active_s_approx": 29370.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "29888",
+     "end_active_s": "29937",
+     "start_calendar_s": "2074688",
+     "end_calendar_s": "2074737",
+     "wait_s": "49",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 29888.0,
+     "end_active_s_approx": 29937.0,
+     "wait_s_approx": 49.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "30216",
+     "end_active_s": "30264",
+     "start_calendar_s": "2160216",
+     "end_calendar_s": "2160264",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 30216.0,
+     "end_active_s_approx": 30264.0,
+     "wait_s_approx": 48.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "start_active_s": "30778",
+     "end_active_s": "30826",
+     "start_calendar_s": "2160778",
+     "end_calendar_s": "2160826",
+     "wait_s": "48",
+     "previous_wait_s": "15",
+     "rule": "wait >= 45 s",
+     "start_active_s_approx": 30778.0,
+     "end_active_s_approx": 30826.0,
+     "wait_s_approx": 48.0
+    }
+   ],
+   "slowest_steps": [
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "2149",
+     "wait_s": "81",
+     "wait_s_approx": 81.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "2803",
+     "wait_s": "77",
+     "wait_s_approx": 77.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "4451",
+     "wait_s": "72",
+     "wait_s_approx": 72.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "4960",
+     "wait_s": "71",
+     "wait_s_approx": 71.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "5777",
+     "wait_s": "70",
+     "wait_s_approx": 70.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "end_active_s": "2020",
+     "wait_s": "69",
+     "wait_s_approx": 69.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "6328",
+     "wait_s": "68",
+     "wait_s_approx": 68.0
+    },
+    {
+     "step": "buy sky_orchard (15 owned)",
+     "end_active_s": "2680",
+     "wait_s": "67",
+     "wait_s_approx": 67.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "7118",
+     "wait_s": "67",
+     "wait_s_approx": 67.0
+    },
+    {
+     "step": "buy sky_orchard (16 owned)",
+     "end_active_s": "7640",
+     "wait_s": "66",
+     "wait_s_approx": 66.0
+    }
+   ]
+  },
+  "hard": [
+   {
+    "id": "bridge_pass",
+    "kind": "item",
+    "condition": "affordable",
+    "start_s": "24",
+    "start_calendar_s": "24",
+    "end_s": "1201",
+    "end_calendar_s": "86401",
+    "duration_s": "1177",
+    "missing": {
+     "prestiges": "1"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": false,
+    "start_s_approx": 24.0,
+    "duration_s_approx": 1177.0
+   },
+   {
+    "id": "sky_orchard",
+    "kind": "producer",
+    "condition": "affordable",
+    "start_s": "364",
+    "start_calendar_s": "364",
+    "end_s": "1202",
+    "end_calendar_s": "86402",
+    "duration_s": "838",
+    "missing": {
+     "item": "bridge_pass"
+    },
+    "pursued_by_policy": false,
+    "open_at_end": false,
+    "start_s_approx": 364.0,
+    "duration_s_approx": 838.0
+   }
+  ]
+ },
+ "spikes": {
+  "metrics": [
+   {
+    "id": "petal_rate",
+    "metric": "production_per_s",
+    "reference": "petals",
+    "direction": "higher is better",
+    "active_when": null,
+    "thresholds": {
+     "min_ratio": "3/2"
+    },
+    "evaluated": true,
+    "history": [
+     {
+      "t_active_s": "0",
+      "t_calendar_s": "0",
+      "value": "167/100",
+      "cause": "start",
+      "segment_start": true
+     },
+     {
+      "t_active_s": "3",
+      "t_calendar_s": "3",
+      "value": "167/50",
+      "cause": "buy pot (2 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "5",
+      "t_calendar_s": "5",
+      "value": "501/100",
+      "cause": "buy pot (3 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "17",
+      "t_calendar_s": "17",
+      "value": "167/2",
+      "cause": "buy pot (25 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "29",
+      "t_calendar_s": "29",
+      "value": "5344/25",
+      "cause": "buy watering_can",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "33",
+      "t_calendar_s": "33",
+      "value": "668",
+      "cause": "buy pot (50 owned)",
+      "spike": "ratio >= 3/2"
+     },
+     {
+      "t_active_s": "31201",
+      "t_calendar_s": "2246401",
+      "value": "27163719/6250",
+      "cause": "prestige 52"
+     }
+    ]
+   }
+  ],
+  "spikes": [
+   {
+    "metric": "petal_rate",
+    "t_active_s": "3",
+    "t_calendar_s": "3",
+    "t_active_s_approx": 3.0,
+    "from": "167/100",
+    "to": "167/50",
+    "cause": "buy pot (2 owned)",
+    "improvement": "167/100",
+    "ratio": "2",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "5",
+    "t_calendar_s": "5",
+    "t_active_s_approx": 5.0,
+    "from": "167/50",
+    "to": "501/100",
+    "cause": "buy pot (3 owned)",
+    "improvement": "167/100",
+    "ratio": "3/2",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "17",
+    "t_calendar_s": "17",
+    "t_active_s_approx": 17.0,
+    "from": "1002/25",
+    "to": "167/2",
+    "cause": "buy pot (25 owned)",
+    "improvement": "2171/50",
+    "ratio": "25/12",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "29",
+    "t_calendar_s": "29",
+    "t_active_s_approx": 29.0,
+    "from": "2672/25",
+    "to": "5344/25",
+    "cause": "buy watering_can",
+    "improvement": "2672/25",
+    "ratio": "2",
+    "rule": "ratio >= 3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "33",
+    "t_calendar_s": "33",
+    "t_active_s_approx": 33.0,
+    "from": "8183/25",
+    "to": "668",
+    "cause": "buy pot (50 owned)",
+    "improvement": "8517/25",
+    "ratio": "100/49",
+    "rule": "ratio >= 3/2"
+   }
+  ],
+  "changes_ranked": [
+   {
+    "metric": "petal_rate",
+    "t_active_s": "17",
+    "t_calendar_s": "17",
+    "t_active_s_approx": 17.0,
+    "from": "1002/25",
+    "to": "167/2",
+    "cause": "buy pot (25 owned)",
+    "improvement": "2171/50",
+    "ratio": "25/12"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "33",
+    "t_calendar_s": "33",
+    "t_active_s_approx": 33.0,
+    "from": "8183/25",
+    "to": "668",
+    "cause": "buy pot (50 owned)",
+    "improvement": "8517/25",
+    "ratio": "100/49"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "3",
+    "t_calendar_s": "3",
+    "t_active_s_approx": 3.0,
+    "from": "167/100",
+    "to": "167/50",
+    "cause": "buy pot (2 owned)",
+    "improvement": "167/100",
+    "ratio": "2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "29",
+    "t_calendar_s": "29",
+    "t_active_s_approx": 29.0,
+    "from": "2672/25",
+    "to": "5344/25",
+    "cause": "buy watering_can",
+    "improvement": "2672/25",
+    "ratio": "2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "5",
+    "t_calendar_s": "5",
+    "t_active_s_approx": 5.0,
+    "from": "167/50",
+    "to": "501/100",
+    "cause": "buy pot (3 owned)",
+    "improvement": "167/100",
+    "ratio": "3/2"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "313",
+    "t_calendar_s": "313",
+    "t_active_s_approx": 313.0,
+    "from": "70816/25",
+    "to": "101416/25",
+    "cause": "buy greenhouse (50 owned)",
+    "improvement": "1224",
+    "ratio": "12677/8852"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "6",
+    "t_calendar_s": "6",
+    "t_active_s_approx": 6.0,
+    "from": "501/100",
+    "to": "167/25",
+    "cause": "buy pot (4 owned)",
+    "improvement": "167/100",
+    "ratio": "4/3"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "1473",
+    "t_calendar_s": "86673",
+    "t_active_s_approx": 1473.0,
+    "from": "136839153/25000",
+    "to": "174504693/25000",
+    "cause": "buy greenhouse (50 owned)",
+    "improvement": "1883277/1250",
+    "ratio": "14177/11117"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "2401",
+    "t_calendar_s": "172801",
+    "t_active_s_approx": 2401.0,
+    "from": "142708929/25000",
+    "to": "181990149/25000",
+    "cause": "buy greenhouse (50 owned)",
+    "improvement": "1964061/1250",
+    "ratio": "14177/11117"
+   },
+   {
+    "metric": "petal_rate",
+    "t_active_s": "3056",
+    "t_calendar_s": "173456",
+    "t_active_s_approx": 3056.0,
+    "from": "29471167/5000",
+    "to": "37583227/5000",
+    "cause": "buy greenhouse (50 owned)",
+    "improvement": "405603/250",
+    "ratio": "14177/11117"
+   }
+  ],
+  "evaluated": true
+ },
+ "blocked": [],
+ "unlocks": [],
+ "prestige": [
+  {
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "basis_value": "708591189/100",
+   "award": 119,
+   "removed": {
+    "currency:petals": "6963989/100",
+    "producer:greenhouse": "78",
+    "producer:sky_orchard": "0",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "2149",
+   "t_calendar_s": "87349",
+   "basis_value": "176110462173/12500",
+   "award": 48,
+   "removed": {
+    "currency:petals": "6590887/3125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "2803",
+   "t_calendar_s": "173203",
+   "basis_value": "131811101943/6250",
+   "award": 38,
+   "removed": {
+    "currency:petals": "7791713/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "3601",
+   "t_calendar_s": "259201",
+   "basis_value": "386434457901/12500",
+   "award": 43,
+   "removed": {
+    "currency:petals": "1726798303/2500",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "4451",
+   "t_calendar_s": "260051",
+   "basis_value": "473966142141/12500",
+   "award": 27,
+   "removed": {
+    "currency:petals": "1386712/625",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "4960",
+   "t_calendar_s": "345760",
+   "basis_value": "280745061183/6250",
+   "award": 24,
+   "removed": {
+    "currency:petals": "801209/500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "5777",
+   "t_calendar_s": "346577",
+   "basis_value": "1298104356873/25000",
+   "award": 23,
+   "removed": {
+    "currency:petals": "116212141/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "6328",
+   "t_calendar_s": "432328",
+   "basis_value": "1473165126427/25000",
+   "award": 21,
+   "removed": {
+    "currency:petals": "26434777/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "7118",
+   "t_calendar_s": "433118",
+   "basis_value": "206030926224/3125",
+   "award": 20,
+   "removed": {
+    "currency:petals": "14876673/5000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "7640",
+   "t_calendar_s": "518840",
+   "basis_value": "911645597277/12500",
+   "award": 18,
+   "removed": {
+    "currency:petals": "17942381/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "8401",
+   "t_calendar_s": "604801",
+   "basis_value": "262737074437/3125",
+   "award": 29,
+   "removed": {
+    "currency:petals": "1241925471/12500",
+    "producer:greenhouse": "77",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "9154",
+   "t_calendar_s": "605554",
+   "basis_value": "1138576781053/12500",
+   "award": 16,
+   "removed": {
+    "currency:petals": "24906661/2500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "9601",
+   "t_calendar_s": "691201",
+   "basis_value": "246445324901/2500",
+   "award": 18,
+   "removed": {
+    "currency:petals": "722045238/3125",
+    "producer:greenhouse": "72",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "10336",
+   "t_calendar_s": "691936",
+   "basis_value": "263963391401/2500",
+   "award": 15,
+   "removed": {
+    "currency:petals": "34553/5",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "10801",
+   "t_calendar_s": "777601",
+   "basis_value": "283710690863/2500",
+   "award": 17,
+   "removed": {
+    "currency:petals": "439134731/1250",
+    "producer:greenhouse": "73",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "11520",
+   "t_calendar_s": "778320",
+   "basis_value": "1506110208259/12500",
+   "award": 14,
+   "removed": {
+    "currency:petals": "13200986/3125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "12001",
+   "t_calendar_s": "864001",
+   "basis_value": "1611105138299/12500",
+   "award": 17,
+   "removed": {
+    "currency:petals": "532489002/625",
+    "producer:greenhouse": "73",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "12705",
+   "t_calendar_s": "864705",
+   "basis_value": "1698655801257/12500",
+   "award": 14,
+   "removed": {
+    "currency:petals": "23356479/6250",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "13201",
+   "t_calendar_s": "950401",
+   "basis_value": "904448606769/6250",
+   "award": 16,
+   "removed": {
+    "currency:petals": "399162281/12500",
+    "producer:greenhouse": "74",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "13891",
+   "t_calendar_s": "951091",
+   "basis_value": "3792807998391/25000",
+   "award": 13,
+   "removed": {
+    "currency:petals": "1134263/5000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "14401",
+   "t_calendar_s": "1036801",
+   "basis_value": "4022507814891/25000",
+   "award": 17,
+   "removed": {
+    "currency:petals": "2686583/50",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "15078",
+   "t_calendar_s": "1037478",
+   "basis_value": "524691730873/3125",
+   "award": 12,
+   "removed": {
+    "currency:petals": "18132093/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "15601",
+   "t_calendar_s": "1123201",
+   "basis_value": "554949345216/3125",
+   "award": 16,
+   "removed": {
+    "currency:petals": "1713048718/3125",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "16266",
+   "t_calendar_s": "1123866",
+   "basis_value": "576825591641/3125",
+   "award": 12,
+   "removed": {
+    "currency:petals": "10357/125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "16801",
+   "t_calendar_s": "1209601",
+   "basis_value": "608303113926/3125",
+   "award": 16,
+   "removed": {
+    "currency:petals": "586591332/625",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "17455",
+   "t_calendar_s": "1210255",
+   "basis_value": "5041611633657/25000",
+   "award": 12,
+   "removed": {
+    "currency:petals": "178822249/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "18001",
+   "t_calendar_s": "1296001",
+   "basis_value": "662795325744/3125",
+   "award": 16,
+   "removed": {
+    "currency:petals": "932359459/5000",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "18644",
+   "t_calendar_s": "1296644",
+   "basis_value": "5477548533583/25000",
+   "award": 10,
+   "removed": {
+    "currency:petals": "178027631/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "19201",
+   "t_calendar_s": "1382401",
+   "basis_value": "2874652852651/12500",
+   "award": 17,
+   "removed": {
+    "currency:petals": "6128771719/25000",
+    "producer:greenhouse": "76",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "19834",
+   "t_calendar_s": "1383034",
+   "basis_value": "296230538167/1250",
+   "award": 10,
+   "removed": {
+    "currency:petals": "148579019/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "20401",
+   "t_calendar_s": "1468801",
+   "basis_value": "1551485090423/6250",
+   "award": 16,
+   "removed": {
+    "currency:petals": "651006044/3125",
+    "producer:greenhouse": "77",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "21024",
+   "t_calendar_s": "1469424",
+   "basis_value": "1595283004979/6250",
+   "award": 10,
+   "removed": {
+    "currency:petals": "22969778/3125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "21601",
+   "t_calendar_s": "1555201",
+   "basis_value": "1668002713293/6250",
+   "award": 16,
+   "removed": {
+    "currency:petals": "1844660407/3125",
+    "producer:greenhouse": "77",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "22215",
+   "t_calendar_s": "1555815",
+   "basis_value": "3423657539981/12500",
+   "award": 10,
+   "removed": {
+    "currency:petals": "29632679/2500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "22801",
+   "t_calendar_s": "1641601",
+   "basis_value": "3573374754221/12500",
+   "award": 16,
+   "removed": {
+    "currency:petals": "582821962/625",
+    "producer:greenhouse": "77",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "23406",
+   "t_calendar_s": "1642206",
+   "basis_value": "3661041192861/12500",
+   "award": 9,
+   "removed": {
+    "currency:petals": "8124432/625",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "24001",
+   "t_calendar_s": "1728001",
+   "basis_value": "953734736759/3125",
+   "award": 16,
+   "removed": {
+    "currency:petals": "633479167/500",
+    "producer:greenhouse": "77",
+    "producer:sky_orchard": "18",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "24597",
+   "t_calendar_s": "1728597",
+   "basis_value": "7805067414149/25000",
+   "award": 9,
+   "removed": {
+    "currency:petals": "181620077/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "25190",
+   "t_calendar_s": "1729190",
+   "basis_value": "7980263737539/25000",
+   "award": 9,
+   "removed": {
+    "currency:petals": "18842339/2500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "25580",
+   "t_calendar_s": "1814780",
+   "basis_value": "8155633855539/25000",
+   "award": 8,
+   "removed": {
+    "currency:petals": "362218/25",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "26168",
+   "t_calendar_s": "1815368",
+   "basis_value": "2082744508959/6250",
+   "award": 9,
+   "removed": {
+    "currency:petals": "336280297/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "26435",
+   "t_calendar_s": "1900835",
+   "basis_value": "425301859623/1250",
+   "award": 8,
+   "removed": {
+    "currency:petals": "6407078/3125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "27017",
+   "t_calendar_s": "1901417",
+   "basis_value": "2170306697739/6250",
+   "award": 9,
+   "removed": {
+    "currency:petals": "22712312/3125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "27596",
+   "t_calendar_s": "1901996",
+   "basis_value": "1771271646717/5000",
+   "award": 8,
+   "removed": {
+    "currency:petals": "123542629/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "27978",
+   "t_calendar_s": "1987578",
+   "basis_value": "2257877126201/6250",
+   "award": 9,
+   "removed": {
+    "currency:petals": "142371219/25000",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "28552",
+   "t_calendar_s": "1988152",
+   "basis_value": "2301684204901/6250",
+   "award": 8,
+   "removed": {
+    "currency:petals": "1102074/125",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "28801",
+   "t_calendar_s": "2073601",
+   "basis_value": "4690898467439/12500",
+   "award": 8,
+   "removed": {
+    "currency:petals": "26107637/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "29370",
+   "t_calendar_s": "2074170",
+   "basis_value": "4778469752273/12500",
+   "award": 8,
+   "removed": {
+    "currency:petals": "33667417/6250",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "29937",
+   "t_calendar_s": "2074737",
+   "basis_value": "2433065285413/6250",
+   "award": 8,
+   "removed": {
+    "currency:petals": "156868553/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "30264",
+   "t_calendar_s": "2160264",
+   "basis_value": "990726982537/2500",
+   "award": 8,
+   "removed": {
+    "currency:petals": "391859/12500",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "30826",
+   "t_calendar_s": "2160826",
+   "basis_value": "1008260154193/2500",
+   "award": 8,
+   "removed": {
+    "currency:petals": "8095414/625",
+    "producer:greenhouse": "71",
+    "producer:sky_orchard": "16",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  },
+  {
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "basis_value": "1032063704821/2500",
+   "award": 10,
+   "removed": {
+    "currency:petals": "241974532/625",
+    "producer:greenhouse": "75",
+    "producer:sky_orchard": "17",
+    "item:bee_hive": true
+   },
+   "kept": [
+    "currency:seeds",
+    "producer:pot",
+    "item:watering_can",
+    "item:bridge_pass"
+   ]
+  }
+ ],
+ "fights": null,
+ "ledger": {
+  "petals": {
+   "start": "0",
+   "sources": {
+    "production:pot": "548336113427/5000",
+    "production:greenhouse": "643743257967/5000",
+    "offline": "63253711656/625",
+    "production:sky_orchard": "73203669"
+   },
+   "sinks": {
+    "purchase:pot": "1914553",
+    "purchase:watering_can": "1000",
+    "purchase:greenhouse": "158959192",
+    "purchase:bee_hive": "1300000",
+    "purchase:bridge_pass": "500",
+    "purchase:sky_orchard": "242760442"
+   },
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {
+    "reset": "-19724487321/2500"
+   },
+   "end": "0",
+   "residual": "0"
+  },
+  "seeds": {
+   "start": "0",
+   "sources": {
+    "prestige_award": "908"
+   },
+   "sinks": {},
+   "transfers_in": {},
+   "transfers_out": {},
+   "adjustments": {},
+   "end": "908",
+   "residual": "0"
+  }
+ },
+ "ledger_all_runs_residual_zero": true,
+ "precision": {
+  "petals": {
+   "max_reached": "1032063704821/2500",
+   "exceeds_2_53": false,
+   "smallest_unit": "1/100",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  },
+  "seeds": {
+   "max_reached": "908",
+   "exceeds_2_53": false,
+   "smallest_unit": "1",
+   "unit_lost_in_float": false,
+   "unit_check": "ok at the maximum reached",
+   "flagged": false
+  }
+ },
+ "final_state": {
+  "balances": {
+   "petals": "0",
+   "seeds": "908"
+  },
+  "owned": {
+   "pot": "155",
+   "greenhouse": "0",
+   "sky_orchard": "0"
+  },
+  "items": [
+   "bridge_pass",
+   "watering_can"
+  ],
+  "unlocked": [],
+  "defeated": [],
+  "completed": [],
+  "level": null,
+  "prestiges": 52,
+  "lifetime": {
+   "petals": "1032063704821/2500",
+   "seeds": "908"
+  }
+ },
+ "steps": [
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (2 owned)",
+   "t_active_s": "3",
+   "t_calendar_s": "3",
+   "wait_s": "3",
+   "start_calendar_s": "0"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (3 owned)",
+   "t_active_s": "5",
+   "t_calendar_s": "5",
+   "wait_s": "2",
+   "start_calendar_s": "3"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (24 owned)",
+   "t_active_s": "17",
+   "t_calendar_s": "17",
+   "wait_s": "1",
+   "start_calendar_s": "16"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (25 owned)",
+   "t_active_s": "17",
+   "t_calendar_s": "17",
+   "wait_s": "0",
+   "start_calendar_s": "17"
+  },
+  {
+   "kind": "purchase",
+   "id": "watering_can",
+   "label": "buy watering_can",
+   "t_active_s": "29",
+   "t_calendar_s": "29",
+   "wait_s": "9",
+   "start_calendar_s": "20"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (50 owned)",
+   "t_active_s": "33",
+   "t_calendar_s": "33",
+   "wait_s": "0",
+   "start_calendar_s": "33"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (77 owned)",
+   "t_active_s": "43",
+   "t_calendar_s": "43",
+   "wait_s": "1",
+   "start_calendar_s": "42"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (1 owned)",
+   "t_active_s": "43",
+   "t_calendar_s": "43",
+   "wait_s": "0",
+   "start_calendar_s": "43"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (72 owned)",
+   "t_active_s": "992",
+   "t_calendar_s": "992",
+   "wait_s": "49",
+   "start_calendar_s": "943",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (73 owned)",
+   "t_active_s": "1072",
+   "t_calendar_s": "1072",
+   "wait_s": "52",
+   "start_calendar_s": "1020",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (74 owned)",
+   "t_active_s": "1145",
+   "t_calendar_s": "1145",
+   "wait_s": "57",
+   "start_calendar_s": "1088",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (75 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "23",
+   "start_calendar_s": "1178"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (152 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (76 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (153 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (77 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (154 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "pot",
+   "label": "buy pot (155 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (78 owned)",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 1",
+   "label": "prestige 1",
+   "t_active_s": "1201",
+   "t_calendar_s": "86401",
+   "wait_s": "0",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "bridge_pass",
+   "label": "buy bridge_pass",
+   "t_active_s": "1202",
+   "t_calendar_s": "86402",
+   "wait_s": "1",
+   "start_calendar_s": "86401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (1 owned)",
+   "t_active_s": "1202",
+   "t_calendar_s": "86402",
+   "wait_s": "0",
+   "start_calendar_s": "86402"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (2 owned)",
+   "t_active_s": "1202",
+   "t_calendar_s": "86402",
+   "wait_s": "0",
+   "start_calendar_s": "86402"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (3 owned)",
+   "t_active_s": "1202",
+   "t_calendar_s": "86402",
+   "wait_s": "0",
+   "start_calendar_s": "86402"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (4 owned)",
+   "t_active_s": "1202",
+   "t_calendar_s": "86402",
+   "wait_s": "0",
+   "start_calendar_s": "86402"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (1 owned)",
+   "t_active_s": "1251",
+   "t_calendar_s": "86451",
+   "wait_s": "14",
+   "start_calendar_s": "86437"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (12 owned)",
+   "t_active_s": "1733",
+   "t_calendar_s": "86933",
+   "wait_s": "45",
+   "start_calendar_s": "86888",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (13 owned)",
+   "t_active_s": "1815",
+   "t_calendar_s": "87015",
+   "wait_s": "52",
+   "start_calendar_s": "86963",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "1910",
+   "t_calendar_s": "87110",
+   "wait_s": "60",
+   "start_calendar_s": "87050",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "2020",
+   "t_calendar_s": "87220",
+   "wait_s": "69",
+   "start_calendar_s": "87151",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "2149",
+   "t_calendar_s": "87349",
+   "wait_s": "81",
+   "start_calendar_s": "87268",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 2",
+   "label": "prestige 2",
+   "t_active_s": "2149",
+   "t_calendar_s": "87349",
+   "wait_s": "0",
+   "start_calendar_s": "87349"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (13 owned)",
+   "t_active_s": "2482",
+   "t_calendar_s": "172882",
+   "wait_s": "49",
+   "start_calendar_s": "172833",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "2574",
+   "t_calendar_s": "172974",
+   "wait_s": "58",
+   "start_calendar_s": "172916",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "2680",
+   "t_calendar_s": "173080",
+   "wait_s": "67",
+   "start_calendar_s": "173013",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "2803",
+   "t_calendar_s": "173203",
+   "wait_s": "77",
+   "start_calendar_s": "173126",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 3",
+   "label": "prestige 3",
+   "t_active_s": "2803",
+   "t_calendar_s": "173203",
+   "wait_s": "0",
+   "start_calendar_s": "173203"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (13 owned)",
+   "t_active_s": "3373",
+   "t_calendar_s": "173773",
+   "wait_s": "48",
+   "start_calendar_s": "173725",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "3461",
+   "t_calendar_s": "173861",
+   "wait_s": "56",
+   "start_calendar_s": "173805",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "3564",
+   "t_calendar_s": "173964",
+   "wait_s": "65",
+   "start_calendar_s": "173899",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 4",
+   "label": "prestige 4",
+   "t_active_s": "3601",
+   "t_calendar_s": "259201",
+   "wait_s": "0",
+   "start_calendar_s": "259201"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (13 owned)",
+   "t_active_s": "4151",
+   "t_calendar_s": "259751",
+   "wait_s": "46",
+   "start_calendar_s": "259705",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "4236",
+   "t_calendar_s": "259836",
+   "wait_s": "53",
+   "start_calendar_s": "259783",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "4336",
+   "t_calendar_s": "259936",
+   "wait_s": "63",
+   "start_calendar_s": "259873",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "4451",
+   "t_calendar_s": "260051",
+   "wait_s": "72",
+   "start_calendar_s": "259979",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 5",
+   "label": "prestige 5",
+   "t_active_s": "4451",
+   "t_calendar_s": "260051",
+   "wait_s": "0",
+   "start_calendar_s": "260051"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "4847",
+   "t_calendar_s": "345647",
+   "wait_s": "46",
+   "start_calendar_s": "345601",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "4960",
+   "t_calendar_s": "345760",
+   "wait_s": "71",
+   "start_calendar_s": "345689",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 6",
+   "label": "prestige 6",
+   "t_active_s": "4960",
+   "t_calendar_s": "345760",
+   "wait_s": "0",
+   "start_calendar_s": "345760"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (13 owned)",
+   "t_active_s": "5489",
+   "t_calendar_s": "346289",
+   "wait_s": "45",
+   "start_calendar_s": "346244",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "5571",
+   "t_calendar_s": "346371",
+   "wait_s": "52",
+   "start_calendar_s": "346319",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "5666",
+   "t_calendar_s": "346466",
+   "wait_s": "60",
+   "start_calendar_s": "346406",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "5777",
+   "t_calendar_s": "346577",
+   "wait_s": "70",
+   "start_calendar_s": "346507",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 7",
+   "label": "prestige 7",
+   "t_active_s": "5777",
+   "t_calendar_s": "346577",
+   "wait_s": "0",
+   "start_calendar_s": "346577"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "6125",
+   "t_calendar_s": "432125",
+   "wait_s": "50",
+   "start_calendar_s": "432075",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "6219",
+   "t_calendar_s": "432219",
+   "wait_s": "59",
+   "start_calendar_s": "432160",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "6328",
+   "t_calendar_s": "432328",
+   "wait_s": "68",
+   "start_calendar_s": "432260",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 8",
+   "label": "prestige 8",
+   "t_active_s": "6328",
+   "t_calendar_s": "432328",
+   "wait_s": "0",
+   "start_calendar_s": "432328"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "6919",
+   "t_calendar_s": "432919",
+   "wait_s": "51",
+   "start_calendar_s": "432868",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "7011",
+   "t_calendar_s": "433011",
+   "wait_s": "58",
+   "start_calendar_s": "432953",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "7118",
+   "t_calendar_s": "433118",
+   "wait_s": "67",
+   "start_calendar_s": "433051",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 9",
+   "label": "prestige 9",
+   "t_active_s": "7118",
+   "t_calendar_s": "433118",
+   "wait_s": "0",
+   "start_calendar_s": "433118"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "7444",
+   "t_calendar_s": "518644",
+   "wait_s": "50",
+   "start_calendar_s": "518594",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "7534",
+   "t_calendar_s": "518734",
+   "wait_s": "57",
+   "start_calendar_s": "518677",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "7640",
+   "t_calendar_s": "518840",
+   "wait_s": "66",
+   "start_calendar_s": "518774",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 10",
+   "label": "prestige 10",
+   "t_active_s": "7640",
+   "t_calendar_s": "518840",
+   "wait_s": "0",
+   "start_calendar_s": "518840"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "8214",
+   "t_calendar_s": "519414",
+   "wait_s": "48",
+   "start_calendar_s": "519366",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "8304",
+   "t_calendar_s": "519504",
+   "wait_s": "56",
+   "start_calendar_s": "519448",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "8401",
+   "t_calendar_s": "604801",
+   "wait_s": "58",
+   "start_calendar_s": "519543",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 11",
+   "label": "prestige 11",
+   "t_active_s": "8401",
+   "t_calendar_s": "604801",
+   "wait_s": "0",
+   "start_calendar_s": "604801"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "8963",
+   "t_calendar_s": "605363",
+   "wait_s": "47",
+   "start_calendar_s": "605316",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "9051",
+   "t_calendar_s": "605451",
+   "wait_s": "55",
+   "start_calendar_s": "605396",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "9154",
+   "t_calendar_s": "605554",
+   "wait_s": "65",
+   "start_calendar_s": "605489",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 12",
+   "label": "prestige 12",
+   "t_active_s": "9154",
+   "t_calendar_s": "605554",
+   "wait_s": "0",
+   "start_calendar_s": "605554"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 13",
+   "label": "prestige 13",
+   "t_active_s": "9601",
+   "t_calendar_s": "691201",
+   "wait_s": "0",
+   "start_calendar_s": "691201"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "10150",
+   "t_calendar_s": "691750",
+   "wait_s": "46",
+   "start_calendar_s": "691704",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "10236",
+   "t_calendar_s": "691836",
+   "wait_s": "54",
+   "start_calendar_s": "691782",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "10336",
+   "t_calendar_s": "691936",
+   "wait_s": "63",
+   "start_calendar_s": "691873",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 14",
+   "label": "prestige 14",
+   "t_active_s": "10336",
+   "t_calendar_s": "691936",
+   "wait_s": "0",
+   "start_calendar_s": "691936"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 15",
+   "label": "prestige 15",
+   "t_active_s": "10801",
+   "t_calendar_s": "777601",
+   "wait_s": "0",
+   "start_calendar_s": "777601"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "11338",
+   "t_calendar_s": "778138",
+   "wait_s": "45",
+   "start_calendar_s": "778093",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "11422",
+   "t_calendar_s": "778222",
+   "wait_s": "52",
+   "start_calendar_s": "778170",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "11520",
+   "t_calendar_s": "778320",
+   "wait_s": "61",
+   "start_calendar_s": "778259",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 16",
+   "label": "prestige 16",
+   "t_active_s": "11520",
+   "t_calendar_s": "778320",
+   "wait_s": "0",
+   "start_calendar_s": "778320"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 17",
+   "label": "prestige 17",
+   "t_active_s": "12001",
+   "t_calendar_s": "864001",
+   "wait_s": "0",
+   "start_calendar_s": "864001"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "12609",
+   "t_calendar_s": "864609",
+   "wait_s": "51",
+   "start_calendar_s": "864558",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "12705",
+   "t_calendar_s": "864705",
+   "wait_s": "60",
+   "start_calendar_s": "864645",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 18",
+   "label": "prestige 18",
+   "t_active_s": "12705",
+   "t_calendar_s": "864705",
+   "wait_s": "0",
+   "start_calendar_s": "864705"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 19",
+   "label": "prestige 19",
+   "t_active_s": "13201",
+   "t_calendar_s": "950401",
+   "wait_s": "0",
+   "start_calendar_s": "950401"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "13798",
+   "t_calendar_s": "950998",
+   "wait_s": "51",
+   "start_calendar_s": "950947",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "13891",
+   "t_calendar_s": "951091",
+   "wait_s": "58",
+   "start_calendar_s": "951033",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 20",
+   "label": "prestige 20",
+   "t_active_s": "13891",
+   "t_calendar_s": "951091",
+   "wait_s": "0",
+   "start_calendar_s": "951091"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 21",
+   "label": "prestige 21",
+   "t_active_s": "14401",
+   "t_calendar_s": "1036801",
+   "wait_s": "0",
+   "start_calendar_s": "1036801"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "14986",
+   "t_calendar_s": "1037386",
+   "wait_s": "49",
+   "start_calendar_s": "1037337",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "15078",
+   "t_calendar_s": "1037478",
+   "wait_s": "57",
+   "start_calendar_s": "1037421",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 22",
+   "label": "prestige 22",
+   "t_active_s": "15078",
+   "t_calendar_s": "1037478",
+   "wait_s": "0",
+   "start_calendar_s": "1037478"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 23",
+   "label": "prestige 23",
+   "t_active_s": "15601",
+   "t_calendar_s": "1123201",
+   "wait_s": "0",
+   "start_calendar_s": "1123201"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "16176",
+   "t_calendar_s": "1123776",
+   "wait_s": "49",
+   "start_calendar_s": "1123727",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "16266",
+   "t_calendar_s": "1123866",
+   "wait_s": "56",
+   "start_calendar_s": "1123810",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 24",
+   "label": "prestige 24",
+   "t_active_s": "16266",
+   "t_calendar_s": "1123866",
+   "wait_s": "0",
+   "start_calendar_s": "1123866"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 25",
+   "label": "prestige 25",
+   "t_active_s": "16801",
+   "t_calendar_s": "1209601",
+   "wait_s": "0",
+   "start_calendar_s": "1209601"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "17366",
+   "t_calendar_s": "1210166",
+   "wait_s": "48",
+   "start_calendar_s": "1210118",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "17455",
+   "t_calendar_s": "1210255",
+   "wait_s": "56",
+   "start_calendar_s": "1210199",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 26",
+   "label": "prestige 26",
+   "t_active_s": "17455",
+   "t_calendar_s": "1210255",
+   "wait_s": "0",
+   "start_calendar_s": "1210255"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 27",
+   "label": "prestige 27",
+   "t_active_s": "18001",
+   "t_calendar_s": "1296001",
+   "wait_s": "0",
+   "start_calendar_s": "1296001"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "18557",
+   "t_calendar_s": "1296557",
+   "wait_s": "48",
+   "start_calendar_s": "1296509",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "18644",
+   "t_calendar_s": "1296644",
+   "wait_s": "55",
+   "start_calendar_s": "1296589",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 28",
+   "label": "prestige 28",
+   "t_active_s": "18644",
+   "t_calendar_s": "1296644",
+   "wait_s": "0",
+   "start_calendar_s": "1296644"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "19196",
+   "t_calendar_s": "1297196",
+   "wait_s": "47",
+   "start_calendar_s": "1297149",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 29",
+   "label": "prestige 29",
+   "t_active_s": "19201",
+   "t_calendar_s": "1382401",
+   "wait_s": "0",
+   "start_calendar_s": "1382401"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "19748",
+   "t_calendar_s": "1382948",
+   "wait_s": "47",
+   "start_calendar_s": "1382901",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "19834",
+   "t_calendar_s": "1383034",
+   "wait_s": "54",
+   "start_calendar_s": "1382980",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 30",
+   "label": "prestige 30",
+   "t_active_s": "19834",
+   "t_calendar_s": "1383034",
+   "wait_s": "0",
+   "start_calendar_s": "1383034"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "20377",
+   "t_calendar_s": "1383577",
+   "wait_s": "46",
+   "start_calendar_s": "1383531",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 31",
+   "label": "prestige 31",
+   "t_active_s": "20401",
+   "t_calendar_s": "1468801",
+   "wait_s": "0",
+   "start_calendar_s": "1468801"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "20939",
+   "t_calendar_s": "1469339",
+   "wait_s": "45",
+   "start_calendar_s": "1469294",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "21024",
+   "t_calendar_s": "1469424",
+   "wait_s": "53",
+   "start_calendar_s": "1469371",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 32",
+   "label": "prestige 32",
+   "t_active_s": "21024",
+   "t_calendar_s": "1469424",
+   "wait_s": "0",
+   "start_calendar_s": "1469424"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "21559",
+   "t_calendar_s": "1469959",
+   "wait_s": "45",
+   "start_calendar_s": "1469914",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 33",
+   "label": "prestige 33",
+   "t_active_s": "21601",
+   "t_calendar_s": "1555201",
+   "wait_s": "0",
+   "start_calendar_s": "1555201"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "22131",
+   "t_calendar_s": "1555731",
+   "wait_s": "45",
+   "start_calendar_s": "1555686",
+   "soft_wall": true
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "22215",
+   "t_calendar_s": "1555815",
+   "wait_s": "53",
+   "start_calendar_s": "1555762",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 34",
+   "label": "prestige 34",
+   "t_active_s": "22215",
+   "t_calendar_s": "1555815",
+   "wait_s": "0",
+   "start_calendar_s": "1555815"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "22742",
+   "t_calendar_s": "1556342",
+   "wait_s": "45",
+   "start_calendar_s": "1556297",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 35",
+   "label": "prestige 35",
+   "t_active_s": "22801",
+   "t_calendar_s": "1641601",
+   "wait_s": "0",
+   "start_calendar_s": "1641601"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "23406",
+   "t_calendar_s": "1642206",
+   "wait_s": "52",
+   "start_calendar_s": "1642154",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 36",
+   "label": "prestige 36",
+   "t_active_s": "23406",
+   "t_calendar_s": "1642206",
+   "wait_s": "0",
+   "start_calendar_s": "1642206"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "24001",
+   "t_calendar_s": "1728001",
+   "wait_s": "45",
+   "start_calendar_s": "1642756",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 37",
+   "label": "prestige 37",
+   "t_active_s": "24001",
+   "t_calendar_s": "1728001",
+   "wait_s": "0",
+   "start_calendar_s": "1728001"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "24597",
+   "t_calendar_s": "1728597",
+   "wait_s": "51",
+   "start_calendar_s": "1728546",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 38",
+   "label": "prestige 38",
+   "t_active_s": "24597",
+   "t_calendar_s": "1728597",
+   "wait_s": "0",
+   "start_calendar_s": "1728597"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "25190",
+   "t_calendar_s": "1729190",
+   "wait_s": "51",
+   "start_calendar_s": "1729139",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 39",
+   "label": "prestige 39",
+   "t_active_s": "25190",
+   "t_calendar_s": "1729190",
+   "wait_s": "0",
+   "start_calendar_s": "1729190"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "25580",
+   "t_calendar_s": "1814780",
+   "wait_s": "51",
+   "start_calendar_s": "1814729",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 40",
+   "label": "prestige 40",
+   "t_active_s": "25580",
+   "t_calendar_s": "1814780",
+   "wait_s": "0",
+   "start_calendar_s": "1814780"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "26168",
+   "t_calendar_s": "1815368",
+   "wait_s": "51",
+   "start_calendar_s": "1815317",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 41",
+   "label": "prestige 41",
+   "t_active_s": "26168",
+   "t_calendar_s": "1815368",
+   "wait_s": "0",
+   "start_calendar_s": "1815368"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 42",
+   "label": "prestige 42",
+   "t_active_s": "26435",
+   "t_calendar_s": "1900835",
+   "wait_s": "0",
+   "start_calendar_s": "1900835"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "27017",
+   "t_calendar_s": "1901417",
+   "wait_s": "50",
+   "start_calendar_s": "1901367",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 43",
+   "label": "prestige 43",
+   "t_active_s": "27017",
+   "t_calendar_s": "1901417",
+   "wait_s": "0",
+   "start_calendar_s": "1901417"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "27596",
+   "t_calendar_s": "1901996",
+   "wait_s": "49",
+   "start_calendar_s": "1901947",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 44",
+   "label": "prestige 44",
+   "t_active_s": "27596",
+   "t_calendar_s": "1901996",
+   "wait_s": "0",
+   "start_calendar_s": "1901996"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "27978",
+   "t_calendar_s": "1987578",
+   "wait_s": "49",
+   "start_calendar_s": "1987529",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 45",
+   "label": "prestige 45",
+   "t_active_s": "27978",
+   "t_calendar_s": "1987578",
+   "wait_s": "0",
+   "start_calendar_s": "1987578"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "28552",
+   "t_calendar_s": "1988152",
+   "wait_s": "49",
+   "start_calendar_s": "1988103",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 46",
+   "label": "prestige 46",
+   "t_active_s": "28552",
+   "t_calendar_s": "1988152",
+   "wait_s": "0",
+   "start_calendar_s": "1988152"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 47",
+   "label": "prestige 47",
+   "t_active_s": "28801",
+   "t_calendar_s": "2073601",
+   "wait_s": "0",
+   "start_calendar_s": "2073601"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "29370",
+   "t_calendar_s": "2074170",
+   "wait_s": "48",
+   "start_calendar_s": "2074122",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 48",
+   "label": "prestige 48",
+   "t_active_s": "29370",
+   "t_calendar_s": "2074170",
+   "wait_s": "0",
+   "start_calendar_s": "2074170"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "29937",
+   "t_calendar_s": "2074737",
+   "wait_s": "49",
+   "start_calendar_s": "2074688",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 49",
+   "label": "prestige 49",
+   "t_active_s": "29937",
+   "t_calendar_s": "2074737",
+   "wait_s": "0",
+   "start_calendar_s": "2074737"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "30264",
+   "t_calendar_s": "2160264",
+   "wait_s": "48",
+   "start_calendar_s": "2160216",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 50",
+   "label": "prestige 50",
+   "t_active_s": "30264",
+   "t_calendar_s": "2160264",
+   "wait_s": "0",
+   "start_calendar_s": "2160264"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "30826",
+   "t_calendar_s": "2160826",
+   "wait_s": "48",
+   "start_calendar_s": "2160778",
+   "soft_wall": true
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 51",
+   "label": "prestige 51",
+   "t_active_s": "30826",
+   "t_calendar_s": "2160826",
+   "wait_s": "0",
+   "start_calendar_s": "2160826"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (67 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "3",
+   "start_calendar_s": "2161198"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (14 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (68 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (69 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (15 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (70 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (71 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (16 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (72 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (73 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "sky_orchard",
+   "label": "buy sky_orchard (17 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (74 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "purchase",
+   "id": "greenhouse",
+   "label": "buy greenhouse (75 owned)",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  },
+  {
+   "kind": "prestige",
+   "id": "prestige 52",
+   "label": "prestige 52",
+   "t_active_s": "31201",
+   "t_calendar_s": "2246401",
+   "wait_s": "0",
+   "start_calendar_s": "2246401"
+  }
+ ],
+ "curves": [
+  {
+   "id": "cost:pot",
+   "title": "pot: price of the next unit",
+   "x": "pot owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     1,
+     4
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     7
+    ],
+    [
+     9,
+     7
+    ],
+    [
+     10,
+     8
+    ],
+    [
+     11,
+     8
+    ],
+    [
+     12,
+     9
+    ],
+    [
+     13,
+     10
+    ],
+    [
+     14,
+     10
+    ],
+    [
+     15,
+     11
+    ],
+    [
+     16,
+     12
+    ],
+    [
+     17,
+     12
+    ],
+    [
+     18,
+     13
+    ],
+    [
+     19,
+     14
+    ],
+    [
+     20,
+     15
+    ],
+    [
+     21,
+     16
+    ],
+    [
+     22,
+     17
+    ],
+    [
+     23,
+     18
+    ],
+    [
+     24,
+     19
+    ],
+    [
+     25,
+     21
+    ],
+    [
+     26,
+     22
+    ],
+    [
+     27,
+     24
+    ],
+    [
+     28,
+     25
+    ],
+    [
+     29,
+     27
+    ],
+    [
+     30,
+     29
+    ],
+    [
+     31,
+     31
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     33,
+     35
+    ],
+    [
+     34,
+     38
+    ],
+    [
+     35,
+     40
+    ],
+    [
+     36,
+     43
+    ],
+    [
+     37,
+     46
+    ],
+    [
+     38,
+     49
+    ],
+    [
+     39,
+     53
+    ],
+    [
+     40,
+     56
+    ],
+    [
+     41,
+     60
+    ],
+    [
+     42,
+     65
+    ],
+    [
+     43,
+     69
+    ],
+    [
+     44,
+     74
+    ],
+    [
+     45,
+     79
+    ],
+    [
+     46,
+     85
+    ],
+    [
+     47,
+     90
+    ],
+    [
+     48,
+     97
+    ],
+    [
+     49,
+     103
+    ],
+    [
+     50,
+     111
+    ],
+    [
+     51,
+     118
+    ],
+    [
+     52,
+     127
+    ],
+    [
+     53,
+     135
+    ],
+    [
+     54,
+     145
+    ],
+    [
+     55,
+     155
+    ],
+    [
+     56,
+     166
+    ],
+    [
+     57,
+     177
+    ],
+    [
+     58,
+     190
+    ],
+    [
+     59,
+     203
+    ],
+    [
+     60,
+     217
+    ],
+    [
+     61,
+     232
+    ],
+    [
+     62,
+     249
+    ],
+    [
+     63,
+     266
+    ],
+    [
+     64,
+     284
+    ],
+    [
+     65,
+     304
+    ],
+    [
+     66,
+     326
+    ],
+    [
+     67,
+     348
+    ],
+    [
+     68,
+     373
+    ],
+    [
+     69,
+     399
+    ],
+    [
+     70,
+     427
+    ],
+    [
+     71,
+     456
+    ],
+    [
+     72,
+     488
+    ],
+    [
+     73,
+     523
+    ],
+    [
+     74,
+     559
+    ],
+    [
+     75,
+     598
+    ],
+    [
+     76,
+     640
+    ],
+    [
+     77,
+     685
+    ],
+    [
+     78,
+     733
+    ],
+    [
+     79,
+     784
+    ],
+    [
+     80,
+     839
+    ],
+    [
+     81,
+     897
+    ],
+    [
+     82,
+     960
+    ],
+    [
+     83,
+     1027
+    ],
+    [
+     84,
+     1099
+    ],
+    [
+     85,
+     1176
+    ],
+    [
+     86,
+     1259
+    ],
+    [
+     87,
+     1347
+    ],
+    [
+     88,
+     1441
+    ],
+    [
+     89,
+     1542
+    ],
+    [
+     90,
+     1649
+    ],
+    [
+     91,
+     1765
+    ],
+    [
+     92,
+     1888
+    ],
+    [
+     93,
+     2021
+    ],
+    [
+     94,
+     2162
+    ],
+    [
+     95,
+     2313
+    ],
+    [
+     96,
+     2475
+    ],
+    [
+     97,
+     2648
+    ],
+    [
+     98,
+     2834
+    ],
+    [
+     99,
+     3032
+    ],
+    [
+     100,
+     3244
+    ],
+    [
+     101,
+     3471
+    ],
+    [
+     102,
+     3714
+    ],
+    [
+     103,
+     3974
+    ],
+    [
+     104,
+     4252
+    ],
+    [
+     105,
+     4550
+    ],
+    [
+     106,
+     4869
+    ],
+    [
+     107,
+     5209
+    ],
+    [
+     108,
+     5574
+    ],
+    [
+     109,
+     5964
+    ],
+    [
+     110,
+     6382
+    ],
+    [
+     111,
+     6828
+    ],
+    [
+     112,
+     7306
+    ],
+    [
+     113,
+     7818
+    ],
+    [
+     114,
+     8365
+    ],
+    [
+     115,
+     8950
+    ],
+    [
+     116,
+     9577
+    ],
+    [
+     117,
+     10247
+    ],
+    [
+     118,
+     10964
+    ],
+    [
+     119,
+     11732
+    ],
+    [
+     120,
+     12553
+    ],
+    [
+     121,
+     13432
+    ],
+    [
+     122,
+     14372
+    ],
+    [
+     123,
+     15378
+    ],
+    [
+     124,
+     16454
+    ],
+    [
+     125,
+     17606
+    ],
+    [
+     126,
+     18838
+    ],
+    [
+     127,
+     20157
+    ],
+    [
+     128,
+     21568
+    ],
+    [
+     129,
+     23078
+    ],
+    [
+     130,
+     24693
+    ],
+    [
+     131,
+     26422
+    ],
+    [
+     132,
+     28271
+    ],
+    [
+     133,
+     30250
+    ],
+    [
+     134,
+     32367
+    ],
+    [
+     135,
+     34633
+    ],
+    [
+     136,
+     37057
+    ],
+    [
+     137,
+     39651
+    ],
+    [
+     138,
+     42427
+    ],
+    [
+     139,
+     45397
+    ],
+    [
+     140,
+     48575
+    ],
+    [
+     141,
+     51975
+    ],
+    [
+     142,
+     55613
+    ],
+    [
+     143,
+     59506
+    ],
+    [
+     144,
+     63671
+    ],
+    [
+     145,
+     68128
+    ],
+    [
+     146,
+     72897
+    ],
+    [
+     147,
+     78000
+    ],
+    [
+     148,
+     83460
+    ],
+    [
+     149,
+     89302
+    ],
+    [
+     150,
+     95553
+    ],
+    [
+     151,
+     102242
+    ],
+    [
+     152,
+     109399
+    ],
+    [
+     153,
+     117057
+    ],
+    [
+     154,
+     125251
+    ],
+    [
+     155,
+     134018
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:pot",
+   "title": "pot: cumulative spend",
+   "x": "pot owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     2,
+     "4"
+    ],
+    [
+     3,
+     "9"
+    ],
+    [
+     4,
+     "14"
+    ],
+    [
+     5,
+     "19"
+    ],
+    [
+     6,
+     "25"
+    ],
+    [
+     7,
+     "31"
+    ],
+    [
+     8,
+     "38"
+    ],
+    [
+     9,
+     "45"
+    ],
+    [
+     10,
+     "52"
+    ],
+    [
+     11,
+     "60"
+    ],
+    [
+     12,
+     "68"
+    ],
+    [
+     13,
+     "77"
+    ],
+    [
+     14,
+     "87"
+    ],
+    [
+     15,
+     "97"
+    ],
+    [
+     16,
+     "108"
+    ],
+    [
+     17,
+     "120"
+    ],
+    [
+     18,
+     "132"
+    ],
+    [
+     19,
+     "145"
+    ],
+    [
+     20,
+     "159"
+    ],
+    [
+     21,
+     "174"
+    ],
+    [
+     22,
+     "190"
+    ],
+    [
+     23,
+     "207"
+    ],
+    [
+     24,
+     "225"
+    ],
+    [
+     25,
+     "244"
+    ],
+    [
+     26,
+     "265"
+    ],
+    [
+     27,
+     "287"
+    ],
+    [
+     28,
+     "311"
+    ],
+    [
+     29,
+     "336"
+    ],
+    [
+     30,
+     "363"
+    ],
+    [
+     31,
+     "392"
+    ],
+    [
+     32,
+     "423"
+    ],
+    [
+     33,
+     "456"
+    ],
+    [
+     34,
+     "491"
+    ],
+    [
+     35,
+     "529"
+    ],
+    [
+     36,
+     "569"
+    ],
+    [
+     37,
+     "612"
+    ],
+    [
+     38,
+     "658"
+    ],
+    [
+     39,
+     "707"
+    ],
+    [
+     40,
+     "760"
+    ],
+    [
+     41,
+     "816"
+    ],
+    [
+     42,
+     "876"
+    ],
+    [
+     43,
+     "941"
+    ],
+    [
+     44,
+     "1010"
+    ],
+    [
+     45,
+     "1084"
+    ],
+    [
+     46,
+     "1163"
+    ],
+    [
+     47,
+     "1248"
+    ],
+    [
+     48,
+     "1338"
+    ],
+    [
+     49,
+     "1435"
+    ],
+    [
+     50,
+     "1538"
+    ],
+    [
+     51,
+     "1649"
+    ],
+    [
+     52,
+     "1767"
+    ],
+    [
+     53,
+     "1894"
+    ],
+    [
+     54,
+     "2029"
+    ],
+    [
+     55,
+     "2174"
+    ],
+    [
+     56,
+     "2329"
+    ],
+    [
+     57,
+     "2495"
+    ],
+    [
+     58,
+     "2672"
+    ],
+    [
+     59,
+     "2862"
+    ],
+    [
+     60,
+     "3065"
+    ],
+    [
+     61,
+     "3282"
+    ],
+    [
+     62,
+     "3514"
+    ],
+    [
+     63,
+     "3763"
+    ],
+    [
+     64,
+     "4029"
+    ],
+    [
+     65,
+     "4313"
+    ],
+    [
+     66,
+     "4617"
+    ],
+    [
+     67,
+     "4943"
+    ],
+    [
+     68,
+     "5291"
+    ],
+    [
+     69,
+     "5664"
+    ],
+    [
+     70,
+     "6063"
+    ],
+    [
+     71,
+     "6490"
+    ],
+    [
+     72,
+     "6946"
+    ],
+    [
+     73,
+     "7434"
+    ],
+    [
+     74,
+     "7957"
+    ],
+    [
+     75,
+     "8516"
+    ],
+    [
+     76,
+     "9114"
+    ],
+    [
+     77,
+     "9754"
+    ],
+    [
+     78,
+     "10439"
+    ],
+    [
+     79,
+     "11172"
+    ],
+    [
+     80,
+     "11956"
+    ],
+    [
+     81,
+     "12795"
+    ],
+    [
+     82,
+     "13692"
+    ],
+    [
+     83,
+     "14652"
+    ],
+    [
+     84,
+     "15679"
+    ],
+    [
+     85,
+     "16778"
+    ],
+    [
+     86,
+     "17954"
+    ],
+    [
+     87,
+     "19213"
+    ],
+    [
+     88,
+     "20560"
+    ],
+    [
+     89,
+     "22001"
+    ],
+    [
+     90,
+     "23543"
+    ],
+    [
+     91,
+     "25192"
+    ],
+    [
+     92,
+     "26957"
+    ],
+    [
+     93,
+     "28845"
+    ],
+    [
+     94,
+     "30866"
+    ],
+    [
+     95,
+     "33028"
+    ],
+    [
+     96,
+     "35341"
+    ],
+    [
+     97,
+     "37816"
+    ],
+    [
+     98,
+     "40464"
+    ],
+    [
+     99,
+     "43298"
+    ],
+    [
+     100,
+     "46330"
+    ],
+    [
+     101,
+     "49574"
+    ],
+    [
+     102,
+     "53045"
+    ],
+    [
+     103,
+     "56759"
+    ],
+    [
+     104,
+     "60733"
+    ],
+    [
+     105,
+     "64985"
+    ],
+    [
+     106,
+     "69535"
+    ],
+    [
+     107,
+     "74404"
+    ],
+    [
+     108,
+     "79613"
+    ],
+    [
+     109,
+     "85187"
+    ],
+    [
+     110,
+     "91151"
+    ],
+    [
+     111,
+     "97533"
+    ],
+    [
+     112,
+     "104361"
+    ],
+    [
+     113,
+     "111667"
+    ],
+    [
+     114,
+     "119485"
+    ],
+    [
+     115,
+     "127850"
+    ],
+    [
+     116,
+     "136800"
+    ],
+    [
+     117,
+     "146377"
+    ],
+    [
+     118,
+     "156624"
+    ],
+    [
+     119,
+     "167588"
+    ],
+    [
+     120,
+     "179320"
+    ],
+    [
+     121,
+     "191873"
+    ],
+    [
+     122,
+     "205305"
+    ],
+    [
+     123,
+     "219677"
+    ],
+    [
+     124,
+     "235055"
+    ],
+    [
+     125,
+     "251509"
+    ],
+    [
+     126,
+     "269115"
+    ],
+    [
+     127,
+     "287953"
+    ],
+    [
+     128,
+     "308110"
+    ],
+    [
+     129,
+     "329678"
+    ],
+    [
+     130,
+     "352756"
+    ],
+    [
+     131,
+     "377449"
+    ],
+    [
+     132,
+     "403871"
+    ],
+    [
+     133,
+     "432142"
+    ],
+    [
+     134,
+     "462392"
+    ],
+    [
+     135,
+     "494759"
+    ],
+    [
+     136,
+     "529392"
+    ],
+    [
+     137,
+     "566449"
+    ],
+    [
+     138,
+     "606100"
+    ],
+    [
+     139,
+     "648527"
+    ],
+    [
+     140,
+     "693924"
+    ],
+    [
+     141,
+     "742499"
+    ],
+    [
+     142,
+     "794474"
+    ],
+    [
+     143,
+     "850087"
+    ],
+    [
+     144,
+     "909593"
+    ],
+    [
+     145,
+     "973264"
+    ],
+    [
+     146,
+     "1041392"
+    ],
+    [
+     147,
+     "1114289"
+    ],
+    [
+     148,
+     "1192289"
+    ],
+    [
+     149,
+     "1275749"
+    ],
+    [
+     150,
+     "1365051"
+    ],
+    [
+     151,
+     "1460604"
+    ],
+    [
+     152,
+     "1562846"
+    ],
+    [
+     153,
+     "1672245"
+    ],
+    [
+     154,
+     "1789302"
+    ],
+    [
+     155,
+     "1914553"
+    ],
+    [
+     156,
+     "2048571"
+    ]
+   ]
+  },
+  {
+   "id": "income:pot",
+   "title": "pot: output at k owned (milestones only)",
+   "x": "pot owned",
+   "y": "units per second",
+   "points": [
+    [
+     1,
+     "167/100"
+    ],
+    [
+     2,
+     "167/50"
+    ],
+    [
+     3,
+     "501/100"
+    ],
+    [
+     4,
+     "167/25"
+    ],
+    [
+     5,
+     "167/20"
+    ],
+    [
+     6,
+     "501/50"
+    ],
+    [
+     7,
+     "1169/100"
+    ],
+    [
+     8,
+     "334/25"
+    ],
+    [
+     9,
+     "1503/100"
+    ],
+    [
+     10,
+     "167/10"
+    ],
+    [
+     11,
+     "1837/100"
+    ],
+    [
+     12,
+     "501/25"
+    ],
+    [
+     13,
+     "2171/100"
+    ],
+    [
+     14,
+     "1169/50"
+    ],
+    [
+     15,
+     "501/20"
+    ],
+    [
+     16,
+     "668/25"
+    ],
+    [
+     17,
+     "2839/100"
+    ],
+    [
+     18,
+     "1503/50"
+    ],
+    [
+     19,
+     "3173/100"
+    ],
+    [
+     20,
+     "167/5"
+    ],
+    [
+     21,
+     "3507/100"
+    ],
+    [
+     22,
+     "1837/50"
+    ],
+    [
+     23,
+     "3841/100"
+    ],
+    [
+     24,
+     "1002/25"
+    ],
+    [
+     25,
+     "167/2"
+    ],
+    [
+     26,
+     "2171/25"
+    ],
+    [
+     27,
+     "4509/50"
+    ],
+    [
+     28,
+     "2338/25"
+    ],
+    [
+     29,
+     "4843/50"
+    ],
+    [
+     30,
+     "501/5"
+    ],
+    [
+     31,
+     "5177/50"
+    ],
+    [
+     32,
+     "2672/25"
+    ],
+    [
+     33,
+     "5511/50"
+    ],
+    [
+     34,
+     "2839/25"
+    ],
+    [
+     35,
+     "1169/10"
+    ],
+    [
+     36,
+     "3006/25"
+    ],
+    [
+     37,
+     "6179/50"
+    ],
+    [
+     38,
+     "3173/25"
+    ],
+    [
+     39,
+     "6513/50"
+    ],
+    [
+     40,
+     "668/5"
+    ],
+    [
+     41,
+     "6847/50"
+    ],
+    [
+     42,
+     "3507/25"
+    ],
+    [
+     43,
+     "7181/50"
+    ],
+    [
+     44,
+     "3674/25"
+    ],
+    [
+     45,
+     "1503/10"
+    ],
+    [
+     46,
+     "3841/25"
+    ],
+    [
+     47,
+     "7849/50"
+    ],
+    [
+     48,
+     "4008/25"
+    ],
+    [
+     49,
+     "8183/50"
+    ],
+    [
+     50,
+     "334"
+    ],
+    [
+     51,
+     "8517/25"
+    ],
+    [
+     52,
+     "8684/25"
+    ],
+    [
+     53,
+     "8851/25"
+    ],
+    [
+     54,
+     "9018/25"
+    ],
+    [
+     55,
+     "1837/5"
+    ],
+    [
+     56,
+     "9352/25"
+    ],
+    [
+     57,
+     "9519/25"
+    ],
+    [
+     58,
+     "9686/25"
+    ],
+    [
+     59,
+     "9853/25"
+    ],
+    [
+     60,
+     "2004/5"
+    ],
+    [
+     61,
+     "10187/25"
+    ],
+    [
+     62,
+     "10354/25"
+    ],
+    [
+     63,
+     "10521/25"
+    ],
+    [
+     64,
+     "10688/25"
+    ],
+    [
+     65,
+     "2171/5"
+    ],
+    [
+     66,
+     "11022/25"
+    ],
+    [
+     67,
+     "11189/25"
+    ],
+    [
+     68,
+     "11356/25"
+    ],
+    [
+     69,
+     "11523/25"
+    ],
+    [
+     70,
+     "2338/5"
+    ],
+    [
+     71,
+     "11857/25"
+    ],
+    [
+     72,
+     "12024/25"
+    ],
+    [
+     73,
+     "12191/25"
+    ],
+    [
+     74,
+     "12358/25"
+    ],
+    [
+     75,
+     "501"
+    ],
+    [
+     76,
+     "12692/25"
+    ],
+    [
+     77,
+     "12859/25"
+    ],
+    [
+     78,
+     "13026/25"
+    ],
+    [
+     79,
+     "13193/25"
+    ],
+    [
+     80,
+     "2672/5"
+    ],
+    [
+     81,
+     "13527/25"
+    ],
+    [
+     82,
+     "13694/25"
+    ],
+    [
+     83,
+     "13861/25"
+    ],
+    [
+     84,
+     "14028/25"
+    ],
+    [
+     85,
+     "2839/5"
+    ],
+    [
+     86,
+     "14362/25"
+    ],
+    [
+     87,
+     "14529/25"
+    ],
+    [
+     88,
+     "14696/25"
+    ],
+    [
+     89,
+     "14863/25"
+    ],
+    [
+     90,
+     "3006/5"
+    ],
+    [
+     91,
+     "15197/25"
+    ],
+    [
+     92,
+     "15364/25"
+    ],
+    [
+     93,
+     "15531/25"
+    ],
+    [
+     94,
+     "15698/25"
+    ],
+    [
+     95,
+     "3173/5"
+    ],
+    [
+     96,
+     "16032/25"
+    ],
+    [
+     97,
+     "16199/25"
+    ],
+    [
+     98,
+     "16366/25"
+    ],
+    [
+     99,
+     "16533/25"
+    ],
+    [
+     100,
+     "668"
+    ],
+    [
+     101,
+     "16867/25"
+    ],
+    [
+     102,
+     "17034/25"
+    ],
+    [
+     103,
+     "17201/25"
+    ],
+    [
+     104,
+     "17368/25"
+    ],
+    [
+     105,
+     "3507/5"
+    ],
+    [
+     106,
+     "17702/25"
+    ],
+    [
+     107,
+     "17869/25"
+    ],
+    [
+     108,
+     "18036/25"
+    ],
+    [
+     109,
+     "18203/25"
+    ],
+    [
+     110,
+     "3674/5"
+    ],
+    [
+     111,
+     "18537/25"
+    ],
+    [
+     112,
+     "18704/25"
+    ],
+    [
+     113,
+     "18871/25"
+    ],
+    [
+     114,
+     "19038/25"
+    ],
+    [
+     115,
+     "3841/5"
+    ],
+    [
+     116,
+     "19372/25"
+    ],
+    [
+     117,
+     "19539/25"
+    ],
+    [
+     118,
+     "19706/25"
+    ],
+    [
+     119,
+     "19873/25"
+    ],
+    [
+     120,
+     "4008/5"
+    ],
+    [
+     121,
+     "20207/25"
+    ],
+    [
+     122,
+     "20374/25"
+    ],
+    [
+     123,
+     "20541/25"
+    ],
+    [
+     124,
+     "20708/25"
+    ],
+    [
+     125,
+     "835"
+    ],
+    [
+     126,
+     "21042/25"
+    ],
+    [
+     127,
+     "21209/25"
+    ],
+    [
+     128,
+     "21376/25"
+    ],
+    [
+     129,
+     "21543/25"
+    ],
+    [
+     130,
+     "4342/5"
+    ],
+    [
+     131,
+     "21877/25"
+    ],
+    [
+     132,
+     "22044/25"
+    ],
+    [
+     133,
+     "22211/25"
+    ],
+    [
+     134,
+     "22378/25"
+    ],
+    [
+     135,
+     "4509/5"
+    ],
+    [
+     136,
+     "22712/25"
+    ],
+    [
+     137,
+     "22879/25"
+    ],
+    [
+     138,
+     "23046/25"
+    ],
+    [
+     139,
+     "23213/25"
+    ],
+    [
+     140,
+     "4676/5"
+    ],
+    [
+     141,
+     "23547/25"
+    ],
+    [
+     142,
+     "23714/25"
+    ],
+    [
+     143,
+     "23881/25"
+    ],
+    [
+     144,
+     "24048/25"
+    ],
+    [
+     145,
+     "4843/5"
+    ],
+    [
+     146,
+     "24382/25"
+    ],
+    [
+     147,
+     "24549/25"
+    ],
+    [
+     148,
+     "24716/25"
+    ],
+    [
+     149,
+     "24883/25"
+    ],
+    [
+     150,
+     "1002"
+    ],
+    [
+     151,
+     "25217/25"
+    ],
+    [
+     152,
+     "25384/25"
+    ],
+    [
+     153,
+     "25551/25"
+    ],
+    [
+     154,
+     "25718/25"
+    ],
+    [
+     155,
+     "5177/5"
+    ]
+   ]
+  },
+  {
+   "id": "cost:greenhouse",
+   "title": "greenhouse: price of the next unit",
+   "x": "greenhouse owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     0,
+     300
+    ],
+    [
+     1,
+     330
+    ],
+    [
+     2,
+     363
+    ],
+    [
+     3,
+     400
+    ],
+    [
+     4,
+     440
+    ],
+    [
+     5,
+     484
+    ],
+    [
+     6,
+     532
+    ],
+    [
+     7,
+     585
+    ],
+    [
+     8,
+     644
+    ],
+    [
+     9,
+     708
+    ],
+    [
+     10,
+     779
+    ],
+    [
+     11,
+     856
+    ],
+    [
+     12,
+     942
+    ],
+    [
+     13,
+     1036
+    ],
+    [
+     14,
+     1140
+    ],
+    [
+     15,
+     1254
+    ],
+    [
+     16,
+     1379
+    ],
+    [
+     17,
+     1517
+    ],
+    [
+     18,
+     1668
+    ],
+    [
+     19,
+     1835
+    ],
+    [
+     20,
+     2019
+    ],
+    [
+     21,
+     2221
+    ],
+    [
+     22,
+     2443
+    ],
+    [
+     23,
+     2687
+    ],
+    [
+     24,
+     2955
+    ],
+    [
+     25,
+     3251
+    ],
+    [
+     26,
+     3576
+    ],
+    [
+     27,
+     3933
+    ],
+    [
+     28,
+     4327
+    ],
+    [
+     29,
+     4759
+    ],
+    [
+     30,
+     5235
+    ],
+    [
+     31,
+     5759
+    ],
+    [
+     32,
+     6335
+    ],
+    [
+     33,
+     6968
+    ],
+    [
+     34,
+     7665
+    ],
+    [
+     35,
+     8431
+    ],
+    [
+     36,
+     9274
+    ],
+    [
+     37,
+     10202
+    ],
+    [
+     38,
+     11222
+    ],
+    [
+     39,
+     12344
+    ],
+    [
+     40,
+     13578
+    ],
+    [
+     41,
+     14936
+    ],
+    [
+     42,
+     16430
+    ],
+    [
+     43,
+     18073
+    ],
+    [
+     44,
+     19880
+    ],
+    [
+     45,
+     21868
+    ],
+    [
+     46,
+     24054
+    ],
+    [
+     47,
+     26460
+    ],
+    [
+     48,
+     29106
+    ],
+    [
+     49,
+     32016
+    ],
+    [
+     50,
+     35218
+    ],
+    [
+     51,
+     38739
+    ],
+    [
+     52,
+     42613
+    ],
+    [
+     53,
+     46875
+    ],
+    [
+     54,
+     51562
+    ],
+    [
+     55,
+     56718
+    ],
+    [
+     56,
+     62390
+    ],
+    [
+     57,
+     68629
+    ],
+    [
+     58,
+     75492
+    ],
+    [
+     59,
+     83041
+    ],
+    [
+     60,
+     91345
+    ],
+    [
+     61,
+     100479
+    ],
+    [
+     62,
+     110527
+    ],
+    [
+     63,
+     121580
+    ],
+    [
+     64,
+     133738
+    ],
+    [
+     65,
+     147112
+    ],
+    [
+     66,
+     161823
+    ],
+    [
+     67,
+     178005
+    ],
+    [
+     68,
+     195806
+    ],
+    [
+     69,
+     215386
+    ],
+    [
+     70,
+     236925
+    ],
+    [
+     71,
+     260617
+    ],
+    [
+     72,
+     286679
+    ],
+    [
+     73,
+     315346
+    ],
+    [
+     74,
+     346881
+    ],
+    [
+     75,
+     381569
+    ],
+    [
+     76,
+     419726
+    ],
+    [
+     77,
+     461699
+    ],
+    [
+     78,
+     507868
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:greenhouse",
+   "title": "greenhouse: cumulative spend",
+   "x": "greenhouse owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     1,
+     "300"
+    ],
+    [
+     2,
+     "630"
+    ],
+    [
+     3,
+     "993"
+    ],
+    [
+     4,
+     "1393"
+    ],
+    [
+     5,
+     "1833"
+    ],
+    [
+     6,
+     "2317"
+    ],
+    [
+     7,
+     "2849"
+    ],
+    [
+     8,
+     "3434"
+    ],
+    [
+     9,
+     "4078"
+    ],
+    [
+     10,
+     "4786"
+    ],
+    [
+     11,
+     "5565"
+    ],
+    [
+     12,
+     "6421"
+    ],
+    [
+     13,
+     "7363"
+    ],
+    [
+     14,
+     "8399"
+    ],
+    [
+     15,
+     "9539"
+    ],
+    [
+     16,
+     "10793"
+    ],
+    [
+     17,
+     "12172"
+    ],
+    [
+     18,
+     "13689"
+    ],
+    [
+     19,
+     "15357"
+    ],
+    [
+     20,
+     "17192"
+    ],
+    [
+     21,
+     "19211"
+    ],
+    [
+     22,
+     "21432"
+    ],
+    [
+     23,
+     "23875"
+    ],
+    [
+     24,
+     "26562"
+    ],
+    [
+     25,
+     "29517"
+    ],
+    [
+     26,
+     "32768"
+    ],
+    [
+     27,
+     "36344"
+    ],
+    [
+     28,
+     "40277"
+    ],
+    [
+     29,
+     "44604"
+    ],
+    [
+     30,
+     "49363"
+    ],
+    [
+     31,
+     "54598"
+    ],
+    [
+     32,
+     "60357"
+    ],
+    [
+     33,
+     "66692"
+    ],
+    [
+     34,
+     "73660"
+    ],
+    [
+     35,
+     "81325"
+    ],
+    [
+     36,
+     "89756"
+    ],
+    [
+     37,
+     "99030"
+    ],
+    [
+     38,
+     "109232"
+    ],
+    [
+     39,
+     "120454"
+    ],
+    [
+     40,
+     "132798"
+    ],
+    [
+     41,
+     "146376"
+    ],
+    [
+     42,
+     "161312"
+    ],
+    [
+     43,
+     "177742"
+    ],
+    [
+     44,
+     "195815"
+    ],
+    [
+     45,
+     "215695"
+    ],
+    [
+     46,
+     "237563"
+    ],
+    [
+     47,
+     "261617"
+    ],
+    [
+     48,
+     "288077"
+    ],
+    [
+     49,
+     "317183"
+    ],
+    [
+     50,
+     "349199"
+    ],
+    [
+     51,
+     "384417"
+    ],
+    [
+     52,
+     "423156"
+    ],
+    [
+     53,
+     "465769"
+    ],
+    [
+     54,
+     "512644"
+    ],
+    [
+     55,
+     "564206"
+    ],
+    [
+     56,
+     "620924"
+    ],
+    [
+     57,
+     "683314"
+    ],
+    [
+     58,
+     "751943"
+    ],
+    [
+     59,
+     "827435"
+    ],
+    [
+     60,
+     "910476"
+    ],
+    [
+     61,
+     "1001821"
+    ],
+    [
+     62,
+     "1102300"
+    ],
+    [
+     63,
+     "1212827"
+    ],
+    [
+     64,
+     "1334407"
+    ],
+    [
+     65,
+     "1468145"
+    ],
+    [
+     66,
+     "1615257"
+    ],
+    [
+     67,
+     "1777080"
+    ],
+    [
+     68,
+     "1955085"
+    ],
+    [
+     69,
+     "2150891"
+    ],
+    [
+     70,
+     "2366277"
+    ],
+    [
+     71,
+     "2603202"
+    ],
+    [
+     72,
+     "2863819"
+    ],
+    [
+     73,
+     "3150498"
+    ],
+    [
+     74,
+     "3465844"
+    ],
+    [
+     75,
+     "3812725"
+    ],
+    [
+     76,
+     "4194294"
+    ],
+    [
+     77,
+     "4614020"
+    ],
+    [
+     78,
+     "5075719"
+    ],
+    [
+     79,
+     "5583587"
+    ]
+   ]
+  },
+  {
+   "id": "income:greenhouse",
+   "title": "greenhouse: output at k owned (milestones only)",
+   "x": "greenhouse owned",
+   "y": "units per second",
+   "points": [
+    [
+     0,
+     "0"
+    ],
+    [
+     1,
+     "6"
+    ],
+    [
+     2,
+     "12"
+    ],
+    [
+     3,
+     "18"
+    ],
+    [
+     4,
+     "24"
+    ],
+    [
+     5,
+     "30"
+    ],
+    [
+     6,
+     "36"
+    ],
+    [
+     7,
+     "42"
+    ],
+    [
+     8,
+     "48"
+    ],
+    [
+     9,
+     "54"
+    ],
+    [
+     10,
+     "60"
+    ],
+    [
+     11,
+     "66"
+    ],
+    [
+     12,
+     "72"
+    ],
+    [
+     13,
+     "78"
+    ],
+    [
+     14,
+     "84"
+    ],
+    [
+     15,
+     "90"
+    ],
+    [
+     16,
+     "96"
+    ],
+    [
+     17,
+     "102"
+    ],
+    [
+     18,
+     "108"
+    ],
+    [
+     19,
+     "114"
+    ],
+    [
+     20,
+     "120"
+    ],
+    [
+     21,
+     "126"
+    ],
+    [
+     22,
+     "132"
+    ],
+    [
+     23,
+     "138"
+    ],
+    [
+     24,
+     "144"
+    ],
+    [
+     25,
+     "300"
+    ],
+    [
+     26,
+     "312"
+    ],
+    [
+     27,
+     "324"
+    ],
+    [
+     28,
+     "336"
+    ],
+    [
+     29,
+     "348"
+    ],
+    [
+     30,
+     "360"
+    ],
+    [
+     31,
+     "372"
+    ],
+    [
+     32,
+     "384"
+    ],
+    [
+     33,
+     "396"
+    ],
+    [
+     34,
+     "408"
+    ],
+    [
+     35,
+     "420"
+    ],
+    [
+     36,
+     "432"
+    ],
+    [
+     37,
+     "444"
+    ],
+    [
+     38,
+     "456"
+    ],
+    [
+     39,
+     "468"
+    ],
+    [
+     40,
+     "480"
+    ],
+    [
+     41,
+     "492"
+    ],
+    [
+     42,
+     "504"
+    ],
+    [
+     43,
+     "516"
+    ],
+    [
+     44,
+     "528"
+    ],
+    [
+     45,
+     "540"
+    ],
+    [
+     46,
+     "552"
+    ],
+    [
+     47,
+     "564"
+    ],
+    [
+     48,
+     "576"
+    ],
+    [
+     49,
+     "588"
+    ],
+    [
+     50,
+     "1200"
+    ],
+    [
+     51,
+     "1224"
+    ],
+    [
+     52,
+     "1248"
+    ],
+    [
+     53,
+     "1272"
+    ],
+    [
+     54,
+     "1296"
+    ],
+    [
+     55,
+     "1320"
+    ],
+    [
+     56,
+     "1344"
+    ],
+    [
+     57,
+     "1368"
+    ],
+    [
+     58,
+     "1392"
+    ],
+    [
+     59,
+     "1416"
+    ],
+    [
+     60,
+     "1440"
+    ],
+    [
+     61,
+     "1464"
+    ],
+    [
+     62,
+     "1488"
+    ],
+    [
+     63,
+     "1512"
+    ],
+    [
+     64,
+     "1536"
+    ],
+    [
+     65,
+     "1560"
+    ],
+    [
+     66,
+     "1584"
+    ],
+    [
+     67,
+     "1608"
+    ],
+    [
+     68,
+     "1632"
+    ],
+    [
+     69,
+     "1656"
+    ],
+    [
+     70,
+     "1680"
+    ],
+    [
+     71,
+     "1704"
+    ],
+    [
+     72,
+     "1728"
+    ],
+    [
+     73,
+     "1752"
+    ],
+    [
+     74,
+     "1776"
+    ],
+    [
+     75,
+     "1800"
+    ],
+    [
+     76,
+     "1824"
+    ],
+    [
+     77,
+     "1848"
+    ],
+    [
+     78,
+     "1872"
+    ]
+   ]
+  },
+  {
+   "id": "cost:sky_orchard",
+   "title": "sky_orchard: price of the next unit",
+   "x": "sky_orchard owned",
+   "y": "price (petals)",
+   "points": [
+    [
+     0,
+     50000
+    ],
+    [
+     1,
+     60000
+    ],
+    [
+     2,
+     72000
+    ],
+    [
+     3,
+     86400
+    ],
+    [
+     4,
+     103680
+    ],
+    [
+     5,
+     124416
+    ],
+    [
+     6,
+     149300
+    ],
+    [
+     7,
+     179160
+    ],
+    [
+     8,
+     214991
+    ],
+    [
+     9,
+     257990
+    ],
+    [
+     10,
+     309587
+    ],
+    [
+     11,
+     371505
+    ],
+    [
+     12,
+     445806
+    ],
+    [
+     13,
+     534967
+    ],
+    [
+     14,
+     641960
+    ],
+    [
+     15,
+     770352
+    ],
+    [
+     16,
+     924422
+    ],
+    [
+     17,
+     1109306
+    ],
+    [
+     18,
+     1331167
+    ]
+   ]
+  },
+  {
+   "id": "cumulative:sky_orchard",
+   "title": "sky_orchard: cumulative spend",
+   "x": "sky_orchard owned after buying",
+   "y": "total spent (petals)",
+   "points": [
+    [
+     1,
+     "50000"
+    ],
+    [
+     2,
+     "110000"
+    ],
+    [
+     3,
+     "182000"
+    ],
+    [
+     4,
+     "268400"
+    ],
+    [
+     5,
+     "372080"
+    ],
+    [
+     6,
+     "496496"
+    ],
+    [
+     7,
+     "645796"
+    ],
+    [
+     8,
+     "824956"
+    ],
+    [
+     9,
+     "1039947"
+    ],
+    [
+     10,
+     "1297937"
+    ],
+    [
+     11,
+     "1607524"
+    ],
+    [
+     12,
+     "1979029"
+    ],
+    [
+     13,
+     "2424835"
+    ],
+    [
+     14,
+     "2959802"
+    ],
+    [
+     15,
+     "3601762"
+    ],
+    [
+     16,
+     "4372114"
+    ],
+    [
+     17,
+     "5296536"
+    ],
+    [
+     18,
+     "6405842"
+    ],
+    [
+     19,
+     "7737009"
+    ]
+   ]
+  },
+  {
+   "id": "income:sky_orchard",
+   "title": "sky_orchard: output at k owned (milestones only)",
+   "x": "sky_orchard owned",
+   "y": "units per second",
+   "points": [
+    [
+     0,
+     "0"
+    ],
+    [
+     1,
+     "150"
+    ],
+    [
+     2,
+     "300"
+    ],
+    [
+     3,
+     "450"
+    ],
+    [
+     4,
+     "600"
+    ],
+    [
+     5,
+     "750"
+    ],
+    [
+     6,
+     "900"
+    ],
+    [
+     7,
+     "1050"
+    ],
+    [
+     8,
+     "1200"
+    ],
+    [
+     9,
+     "1350"
+    ],
+    [
+     10,
+     "1500"
+    ],
+    [
+     11,
+     "1650"
+    ],
+    [
+     12,
+     "1800"
+    ],
+    [
+     13,
+     "1950"
+    ],
+    [
+     14,
+     "2100"
+    ],
+    [
+     15,
+     "2250"
+    ],
+    [
+     16,
+     "2400"
+    ],
+    [
+     17,
+     "2550"
+    ],
+    [
+     18,
+     "2700"
+    ]
+   ]
+  }
+ ],
+ "trace": null
+}

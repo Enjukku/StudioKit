@@ -10,7 +10,7 @@ Every agent reads this file. It exists so that agents can call each other freely
 | --- | --- | --- |
 | **Owner** | the human | Creative direction, taste, every gate answer, every locked decision |
 | **Lead** | the first chat (orchestrator) | Talking to the owner, sizing jobs, routing, briefs, merging, the decision digest, final report |
-| **Job owner** | the lead, or a production lead the lead appoints (e.g. cutscene director, art director) | One job from brief to final gate: its crew, ledger, budget and quality |
+| **Job owner** | the lead, or a production lead the lead appoints (e.g. film director, art director) | One job from brief to final gate: its crew, ledger, budget and quality |
 | **Specialist** | any agent doing craft work (modeler, animator, VFX, sound, UI, builder...) | How its part is made, inside the brief |
 | **Checker** | reviewer, QA, verifier agents | Measurable checks against stated pass rules; never taste |
 

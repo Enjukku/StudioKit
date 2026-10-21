@@ -1,0 +1,6 @@
+- [Cut definition on merged meshes](craft_cut_definition.md) — landmark cuts + seeded flood fill; report cover type (crease / overhang / colour edge)
+- [S2 posed proxy](craft_s2_posed_proxy.md) — rigid-by-label proxy of stress poses; BVH overlap with rest gap; seat-on-floor solve; headless Blender tips
+- [Ring ratio and cap look](craft_ring_ratio_and_cap_look.md) — elongated rings always show a joint surface; judge caps on textured close-ups
+- [Skinned shoulder helpers](craft_skinned_shoulder_helpers.md) — clavicle 10% + half-bone + twist on the rigid wrist; visible-fold flag pass
+- [Blender bake and export pitfalls](craft_blender_bake_export.md) — rotation_mode after sweeps, FBX +1 frame, take = scene name, diff weights vs accepted evidence
+- [Owner render budget](owner_budget_renders.md) — numbers for every pose, look at failures + max 8 key poses, report render/image counts

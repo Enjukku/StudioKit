@@ -1,0 +1,52 @@
+{
+ "meta": {"revision": "fixture-rpg-duel-r1",
+  "title": "RPG test model: M04 XP table, discrete duels, a boss gate, one sword",
+  "source_note": "XP requirement 1000*l is M04 (2010-07-14). Every combat number is an EXAMPLE ASSUMPTION for tests; the slime mirrors the separate M04 5-HP teaching example and is not Dark Alliance data.",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"},
+  "duel": {"player_first_hit": "after_interval", "enemy_first_hit": "after_interval", "simultaneous": "player_first"}},
+ "currencies": {
+  "xp": {"start": {"v": 0, "src": "published:M04"}},
+  "gold": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "levels": {"currency": "xp", "max_level": {"v": 6, "src": "EXAMPLE ASSUMPTION"},
+  "per_level": {"kind": "affine", "a": {"v": 0, "src": "published:M04"}, "b": {"v": 1000, "src": "published:M04"}}},
+ "player": {"stats": {
+  "hp": {"kind": "table", "values": {"v": [20, 24, 28, 32, 36, 40], "src": "EXAMPLE ASSUMPTION"}, "index_offset": {"v": -1, "src": "EXAMPLE ASSUMPTION"}},
+  "attack": {"kind": "table", "values": {"v": [4, 5, 5, 6, 6, 7], "src": "EXAMPLE ASSUMPTION"}, "index_offset": {"v": -1, "src": "EXAMPLE ASSUMPTION"}},
+  "attack_interval_s": {"kind": "affine", "a": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "b": {"v": 0, "src": "EXAMPLE ASSUMPTION"}}
+ }},
+ "enemies": {
+  "slime": {"hp": {"v": 5, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"xp": {"v": 100, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 5, "src": "EXAMPLE ASSUMPTION"}}, "overhead_s": {"v": 3, "src": "EXAMPLE ASSUMPTION"}},
+  "wolf": {"hp": {"v": 12, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 3, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": "3/2", "src": "EXAMPLE ASSUMPTION"},
+   "rewards": {"xp": {"v": 250, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 12, "src": "EXAMPLE ASSUMPTION"}}, "overhead_s": {"v": 4, "src": "EXAMPLE ASSUMPTION"}},
+  "boss": {"hp": {"v": 60, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 6, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "boss": true, "once": true, "rewards": {"xp": {"v": 2000, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 100, "src": "EXAMPLE ASSUMPTION"}}, "overhead_s": {"v": 10, "src": "EXAMPLE ASSUMPTION"}},
+  "ogre": {"hp": {"v": 30, "src": "EXAMPLE ASSUMPTION"}, "damage": {"v": 5, "src": "EXAMPLE ASSUMPTION"}, "attack_interval_s": {"v": 2, "src": "EXAMPLE ASSUMPTION"},
+   "requires": {"unlocked": "zone2"},
+   "rewards": {"xp": {"v": 600, "src": "EXAMPLE ASSUMPTION"}, "gold": {"v": 30, "src": "EXAMPLE ASSUMPTION"}}, "overhead_s": {"v": 5, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "items": {"sword": {"cost": {"currency": "gold", "amount": {"v": 60, "src": "EXAMPLE ASSUMPTION"}},
+   "effects": [{"target": "stat:attack", "op": "add", "value": {"v": 2, "src": "EXAMPLE ASSUMPTION"}}]}},
+ "unlocks": {"zone2": {"when": {"defeated": "boss"}}},
+ "skill_profiles": {
+  "struggling": {"extra_attack_delay_s": {"v": "1/2", "src": "EXAMPLE ASSUMPTION"}, "damage_factor": {"v": "3/4", "src": "EXAMPLE ASSUMPTION"}},
+  "clumsy": {"accuracy": {"v": "3/4", "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "policies": {"objective_currency": "xp"},
+ "goals": [
+  {"id": "level3", "label": "reach level 3", "when": {"level": {"v": 3, "src": "EXAMPLE ASSUMPTION"}},
+   "window": {"basis": "active", "max_s": {"v": 600, "src": "PROPOSAL"}}},
+  {"id": "sword", "label": "own the sword", "when": {"item": "sword"}},
+  {"id": "boss", "label": "defeat the boss", "when": {"defeated": "boss"}},
+  {"id": "ogre", "label": "defeat an ogre (zone 2)", "when": {"defeated": "ogre"}}
+ ],
+ "analysis": {
+  "soft_wall": {"min_ratio_to_previous": {"v": 3, "src": "EXAMPLE ASSUMPTION"}},
+  "spikes": [
+   {"id": "slime_hits", "metric": "hits_to_kill", "enemy": "slime", "min_change": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+   {"id": "boss_ttk", "metric": "ttk_s", "enemy": "boss", "min_ratio": {"v": "6/5", "src": "EXAMPLE ASSUMPTION"}}
+  ]
+ },
+ "run": {"horizon_active_s": {"v": 36000, "src": "EXAMPLE ASSUMPTION"}}
+}

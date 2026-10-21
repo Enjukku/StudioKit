@@ -10,7 +10,7 @@ Formatting and lint are the tools' job (StyLua, selene, Luau-LSP). This page lis
 | `wait(n)`, `delay(n, f)`, `spawn(f)` | `task.wait(n)`, `task.delay(n, f, ...)`, `task.defer(f, ...)` (old non-immediate timing) or `task.spawn` (run now) | D | G/RobloxGlobals.yaml:117-121,244-249,400-404; scripting/scheduler.md:23-30 |
 | `ypcall` | `pcall` | D | G/RobloxGlobals.yaml:428 |
 | `tick()` | `os.clock()` for timing, `os.time()` / `DateTime` for wall time, `time()` for game time | S | G/RobloxGlobals.yaml:274-279 |
-| `getfenv` / `setfenv` | `debug.info`; they also disable optimisation and native code | D | G/LuaGlobals.yaml:180-187,745-751 |
+| `getfenv` / `setfenv` | `debug.info`; they also turn off import optimisations and may de-optimise native code (J010 fact-check: luau/native-code-gen.md:58-64) | D | G/LuaGlobals.yaml:180-187,745-751 |
 | `table.foreach`, `table.getn` | `for k, v in t do`, `#t` | D | L/table.yaml:204-282 |
 | `math.pow(x, y)` | `x ^ y` | S | L/math.yaml:684 |
 | lowercase members: `:clone()`, `:destroy()`, `:findFirstChild()`, `:getChildren()`, `.childAdded`, `:connect()`, `Players.localPlayer`, `Player.userId` … | PascalCase (`:Clone()`, `:Destroy()`, `:Connect()` …) | D | Y/Instance.yaml; Y/Players.yaml; Y/Player.yaml |
@@ -40,6 +40,9 @@ Formatting and lint are the tools' job (StyLua, selene, Luau-LSP). This page lis
 | require by string (`./`, `../`, `@self/`, `@game/`) | live; errors if the module does not exist yet (no waiting) | G/LuaGlobals.yaml:616-633 |
 | `buffer`, `vector`, `utf8`, `bit32`; `math.lerp`, `math.map`, `table.clone`, `table.create` | live | L/*.yaml |
 | `if local` / `if const` | **Studio beta** (2026-10-06): do not ship | DF 4918297 (jjtangerine) |
+| `const` bindings (stop reassignment, not mutation; use `table.freeze` for the value) | documented (luau/variables.md:112-136); compiles and rejects reassignment in Studio (MCP probe 2026-10-21); use once the game's gate (luau-analyze 0.743 accepts it) passes | J010 factcheck-engine + lead addendum |
+| non-type `export` keyword for module values | **rolled back** 2026-08-26: use `return` (`export type` is unaffected) | DF 4831433 |
+| Table semantics | `table.clone` shallow, keeps the metatable; `table.freeze` shallow, errors on a frozen table (check `table.isfrozen`); `table.clear` keeps capacity; `table.create(n)` array part only. Iteration: array part in order, rest unordered; never change keys you are not visiting | luau.org/syntax; L/table.yaml (J010 factcheck-engine §3) |
 | Exact tables, classes, integer types | **experimental in open-source Luau**: do not use | github.com/luau-lang/luau releases 0.737-0.743 (2026-09/10) |
 
 ## C. Types

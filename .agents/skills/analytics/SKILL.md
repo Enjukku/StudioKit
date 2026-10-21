@@ -1,6 +1,6 @@
 ---
 name: analytics
-description: Plan and add player analytics in any Roblox game so the owner can see where players drop off, how far they get, why they leave and whether the economy flows - AnalyticsService funnel, onboarding, economy and custom events, custom fields, limits, Roblox Experiments (A/B tests through ConfigService), Creator Hub dashboards and the 2026 Open Cloud analytics APIs. Use when a feature adds a step new players must pass, a currency source or sink, or a moment players might quit; when asked "how is retention", "where do players quit", "did the update help"; and before an A/B test.
+description: Plan and add player analytics in any Roblox game so the owner can see where players drop off, how far they get, why they leave and whether the economy flows - AnalyticsService funnel, onboarding, economy and custom events, custom fields, limits, Roblox Experiments (A/B tests through ConfigService), Creator Hub dashboards and the 2026 Open Cloud analytics APIs. Use when a feature adds a step new players must pass, a currency source or sink, or a moment players might quit, and when an A/B-testable number must become a config. This skill owns the logging code; reading the data ("how is retention", "where do players quit", "did the update help", reading a test) belongs to the analyst (`analysis-design`, `analysis-craft`).
 ---
 
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J001 step 9. Ported from the DestructionSimulator analytics skill (2026-10) with game details removed; numbers re-checked against the docs mirror (upstream 7400643). PA = `knowledge/external/roblox-creator-docs/production/analytics/`, Y = `knowledge/external/roblox-creator-docs/_api-reference/classes/`.
@@ -8,7 +8,7 @@ description: Plan and add player analytics in any Roblox game so the owner can s
 # Analytics: know why players stay or leave
 
 ## 1. When this skill starts
-A feature is designed or changed (does it need events?), the owner asks a question about players, or a number should be A/B tested. The game's event plan lives in `knowledge/design/telemetry.md` (create it on first use): every event, its fields, where it fires and which question it answers. Change the plan in the same task as the code.
+A feature is designed or changed (does it need events?) or a number should be A/B tested. The analyst's measurement spec (`analysis-craft/references/event-planning.md`) says what each event means and which decision it serves; this skill says how to log it. Questions about players go to the analyst. The game's event plan lives in `knowledge/design/telemetry.md` (create it on first use): every event, its fields, where it fires and which question it answers. Change the plan in the same task as the code.
 
 ## 2. Read this file when
 | You need | Open |
@@ -23,7 +23,7 @@ A feature is designed or changed (does it need events?), the owner asks a questi
 2. **Pick the method** (§4 table) and the fields (≤ 3, bucketed values).
 3. **Wire it** through the game's one telemetry module on the server, after the action succeeded.
 4. **Check after publishing:** Creator Hub → Analytics → View Events (near-live); charts after about 24 h.
-5. **Answer questions** from dashboards first, events second; compare our own updates over time (benchmarks need 100+ DAU).
+5. **Questions about the data** go to the analyst (`analysis-design`, `analysis-craft`): it reads dashboards and the Open Cloud pulls and answers in the owner's shape.
 
 ## 4. Craft core
 | ID | Practice | Evidence |
@@ -37,9 +37,9 @@ A feature is designed or changed (does it need events?), the owner asks a questi
 | T-07 | **Never per-frame or per-hit.** Aggregate high-frequency actions (seconds, counts) and log once per trip or session. Gate one-time steps with a saved flag instead of re-logging every join | PA funnel-events.md:128 |
 | T-08 | **Funnel breakdowns use step 1's fields**: put segment fields (platform, new or returning) on step 1. Renumbering steps splits the chart; append instead | PA funnel-events.md:138 |
 | T-09 | **A/B-testable numbers live in Configs.** Experiments test one config key (baseline + up to 2 variants) and report D1/D7 retention, playtime, ARPU, payer conversion. Server code reads `ConfigService:GetConfigForPlayerAsync(player)` then `snapshot:GetValue(key)`; the default comes from the game's content data. A number hard-coded in content cannot be tested. A config snapshot does not update by itself: listen to `UpdateAvailable` and call `Refresh` (or `GetValueChangedSignal`); new values arrive in about 15-60 s; `SetTestingValue` lasts one session; a restored config value must be published again | production/experiments.md:180-189 |
-| T-10 | **Experiment discipline:** 14-60 days; one active experiment per key; size by the minimum detectable effect shown at setup (few players → only big differences show); stop on Early Harm Detection or a sample-ratio warning; never pick a winner from early results. Early Harm Detection needs 10,000+ enrolled players before it flags anything, so in a small game no flag means not enough data, not safe. Save and purchase checks stay outside any experiment's winner decision | cloud/guides/experiments.md:265-270; DF 4907734 (2026-09) |
-| T-11 | **Agents can read results** through the Open Cloud Analytics Query, Events and Experiments APIs (live 2026-08-24) with an owner-made key scoped `universe.analytics:read`; key handling per `networking-security` N-11 | DF 4828676 (OrogeneIstari, 2026-08-24) |
-| T-12 | **Watch updates by place version:** retention, playtime, crashes and client CPU on the Performance page; discovery numbers changed pipeline on 2026-10-12, so do not compare across that date | PA performance.md; DF 4930122 |
+| T-10 | **Experiment discipline:** 14-60 days; one active experiment per key; size by the minimum detectable effect shown at setup (few players → only big differences show); stop on Early Harm Detection or a sample-ratio warning; never pick a winner from early results. Early Harm Detection needs 10,000+ enrolled players before it flags anything and watches only playtime, ARPU and payer conversion, so in a small game no flag means not enough data, not safe. Save and purchase checks stay outside any experiment's winner decision | cloud/guides/experiments.md:265-270; DF 4907734 (2026-10-01); `knowledge/reference/analyst/01-roblox-platform-facts.md` RF-44..46 |
+| T-11 | **Agents read data through Open Cloud** (live 2026-08-24): Analytics Query API with scope `universe.analytics:read`; Experiments API reads (list, get, stats with the SRM flag; no documented per-metric results endpoint) with `universe:read`; the Events API only manages the event calendar (`universe.event:read`) and returns no numbers. The analyst's tool is `tools/analytics/`; key handling per `networking-security` N-11 | DF 4828676 (OrogeneIstari, 2026-08-24); `knowledge/reference/analyst/01-roblox-platform-facts.md` §4 |
+| T-12 | **Watch updates by place version:** crashes, frame rate, memory and client CPU break down by place version on the Performance page (retention and playtime are on their own pages, without a version split); discovery numbers changed pipeline on 2026-10-12, so do not compare across that date | PA performance.md:40-44; DF 4930122 |
 
 ## 5. Rules (final check)
 - No AnalyticsService call outside the telemetry module or from the client.

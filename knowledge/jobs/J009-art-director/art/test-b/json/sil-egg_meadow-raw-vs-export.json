@@ -1,0 +1,116 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "silhouette",
+ "input": {
+  "path": "content\\ui\\egg-shop\\refs\\raw\\egg_meadow_raw.png",
+  "sha256": "dbabfa60e2d38c7d74f3ca1088e2232a52269171c3fe80f4eda31f8ca0168f6f",
+  "size_px": [
+   1024,
+   1024
+  ],
+  "mode": "RGB",
+  "compare": {
+   "path": "content\\ui\\egg-shop\\export\\egg_meadow.png",
+   "sha256": "447fda8a17403e02a8f5549f91f8a7828d937fb882d70b02337450bc496b6265",
+   "size_px": [
+    512,
+    512
+   ],
+   "mask_source": "alpha",
+   "key_estimate": {}
+  }
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "key-auto",
+  "key_estimate": {
+   "estimated_key": "#FF00FF",
+   "border_strip_px": 20,
+   "border_share_within_tol": 1.0,
+   "flat_share_needed": 0.9,
+   "flat": true,
+   "hole_fill": true,
+   "filled_holes": 0,
+   "filled_area_px": 0
+  },
+  "compare": "content/ui/egg-shop/export/egg_meadow.png",
+  "compare_mask": null,
+  "min_iou": null,
+  "tolerance_source": null
+ },
+ "measurements": {
+  "area_px": 381071,
+  "area_frac": 0.3634176254272461,
+  "bbox_px": {
+   "x0": 170,
+   "y0": 120,
+   "x1": 836,
+   "y1": 901,
+   "w": 666,
+   "h": 781
+  },
+  "bbox_frac": {
+   "x0": 0.166015625,
+   "y0": 0.1171875,
+   "w": 0.650390625,
+   "h": 0.7626953125
+  },
+  "components": [
+   {
+    "label": 1,
+    "area_px": 381071,
+    "area_frac": 0.3634176254272461,
+    "bbox_px": {
+     "x0": 170,
+     "y0": 120,
+     "x1": 836,
+     "y1": 901,
+     "w": 666,
+     "h": 781
+    },
+    "n": 1
+   }
+  ],
+  "component_count": 1,
+  "compare": {
+   "iou": 0.9948731496909503,
+   "alignment": {
+    "method": "crop to bbox, scale to common bbox height keeping aspect (bilinear, threshold 0.5), centre",
+    "canvas_px": [
+     667,
+     781
+    ],
+    "scale_a": 1.0,
+    "scale_b": 1.558882,
+    "bbox_a_px": [
+     170,
+     120,
+     836,
+     901
+    ],
+    "bbox_b_px": [
+     42,
+     6,
+     470,
+     507
+    ]
+   }
+  }
+ },
+ "images": {
+  "silhouette": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_meadow_raw.silhouette.png"
+ },
+ "verdict": "measured"
+}

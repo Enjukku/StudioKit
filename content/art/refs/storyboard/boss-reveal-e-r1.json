@@ -1,0 +1,12 @@
+{
+  "id": "boss-reveal-e-r1",
+  "family": "storyboard",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. The first 2 attached image(s) are inputs the prompt refers to. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nStoryboard panel, shot E of 5: the gameplay view from behind and to the right of the explorer, above head height. Image 1 is the greybox layout of this shot: keep the camera, the framing and the positions exactly. Image 2 is the earlier panel of this place: keep the statue, the explorer, the pedestal and the beacon exactly. The explorer in the middle, seen from behind, facing right; at the right the stone guardian crouches over the pedestal with one huge hand planted flat in the water between the explorer and the beacon, the beacon's faint amber glow under its chest, its amber eyes on the explorer; at the left, on the far wall, the cool glowing arched exit doorway, clear and open. A small splash of water around the planted hand.\n\nSTORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one shot, drawn as a clear staging proposal, not as polished key art. Shows the named shot size and camera angle, the subject placed where the panel says (left, middle or right of frame), its eyeline and direction of travel, the named action at the named moment, and the light direction. Same characters, props and places as the game, at true scale to each other; readable silhouettes and simple shapes over detail. Wide landscape composition made for a 16:9 crop, nothing essential near the frame edges. No text, letters, numbers, arrows, speech bubbles, panel borders, letterbox bars, user-interface elements or watermark (camera moves and notes are written outside the image).\n\nWORLD STYLE LOCK: <the game's art style in exact words: rendering (e.g. stylized hand-painted, toy plastic, cel-shaded), shape language, proportions, material look, palette (named colours or hex), lighting>. No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [
+    "output\\J015-g2\\stills\\board_inputs\\E_layout.png",
+    "content\\art\\refs\\storyboard\\boss-reveal-p1-r1.png"
+  ],
+  "codex_session": "01a15e0a-1bb7-7640-a8e1-745977bf6f16",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15e0a-1bb7-7640-a8e1-745977bf6f16\\exec-083bb37c-4fce-46ce-aad8-2f3edc211a85.png",
+  "seconds": 50
+}

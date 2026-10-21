@@ -1,0 +1,42 @@
+{
+  "_about": "Copy to <TREND_DATA_DIR>/watchlist.json. universe_id is the key; root_place_id is kept for identity checks; label is a mutable display name, never a key. event_windows mark known in-game events (UTC) so off-event troughs exclude them.",
+  "games": [
+    {
+      "universe_id": "7436755782",
+      "root_place_id": null,
+      "label": "Grow a Garden",
+      "event_windows": []
+    }
+  ],
+  "outside": {
+    "_about": "Fixed outside panels. apple: countries (2-letter), feeds top-free/top-paid, limit 10/25/50. steam: app ids. youtube: channel ids (uploads playlist), video ids, optional queries {q, days, max_results, regionCode, relevanceLanguage}; searches are capped by collector.youtube_search_daily_budget.",
+    "apple": {
+      "countries": [
+        "us",
+        "gb",
+        "jp",
+        "br",
+        "de"
+      ],
+      "feeds": [
+        "top-free",
+        "top-paid"
+      ],
+      "limit": 25
+    },
+    "steam": {
+      "apps": [
+        {
+          "app_id": "730",
+          "label": "Counter-Strike 2"
+        }
+      ]
+    },
+    "youtube": {
+      "channels": [],
+      "videos": [],
+      "queries": [],
+      "uploads_per_channel": 10
+    }
+  }
+}

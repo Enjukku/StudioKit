@@ -1,0 +1,1 @@
+{"_fixture_note":"SYNTHETIC (J004-T06): no recorded response (no key in the studio). Shape from the documented channels.list resource (contentDetails.relatedPlaylists.uploads). Ids are made up.","kind":"youtube#channelListResponse","items":[{"kind":"youtube#channel","id":"UCsynthetic000000000001","contentDetails":{"relatedPlaylists":{"uploads":"UUsynthetic000000000001"}}}]}

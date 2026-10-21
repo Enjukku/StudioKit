@@ -35,7 +35,7 @@ Values: `pro-defaults.md`. Exact properties and limits: `knowledge/reference/vfx
 - Camera shake allowed (rare), distance-scaled; sound brief marks the big beats.
 
 ## T6. Cutscenes (camera is ours, plays once, nothing else on screen)
-- Plan on one shared beat list with the animator and sound designer (one timeline in ms; feedback "crafts collaborate").
+- Plan on one shared beat list with the animator and sound designer (one timeline in ms; feedback "crafts collaborate"). For cutscenes the film director's shot list (`<sequence>.shots.json`, `film-craft`) is that timeline: take shot ids, cue ids and times from it.
 - Heavier assets are fine: more particles, big meshes, mesh flipbooks **only here** with load/unload around the shot (ZO-03); preload textures before the shot (ContentProvider:PreloadAsync).
 - Effects are framed for the planned camera, not for all angles: frame scripts per shot.
 - Keep flash safety and the reduced-motion option.

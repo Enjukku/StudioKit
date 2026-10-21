@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\egg-shop\\export\\egg_lava_256.png",
+  "sha256": "3313f0318c4bd1a8efbd094039392b668833ab34006a003cacb74f5c1fc20703",
+  "size_px": [
+   256,
+   256
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "target_px": [
+   75,
+   75
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   75,
+   75
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 75,
+   "h": 75
+  },
+  "scale": 0.29296875,
+  "mask_source": "alpha",
+  "value": {
+   "whole": {
+    "n_px": 5625,
+    "mean": 0.09115112078579235,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.019312947797592475,
+    "p75": 0.1070535560594194,
+    "p95": 0.46050309224644326
+   },
+   "subject": {
+    "n_px": 3216,
+    "mean": 0.15634782572118033,
+    "p5": 0.008726064951029813,
+    "p25": 0.02871170862853844,
+    "p50": 0.07987643488497947,
+    "p75": 0.20965567867428256,
+    "p95": 0.6104575920272572
+   },
+   "ring": {
+    "n_px": 507,
+    "mean": 0.019547232545889387,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.0,
+    "p75": 0.0042134193160976215,
+    "p95": 0.0479622989801418
+   },
+   "subject_ring_ratio": 2.5975286976995893
+  },
+  "silhouette": {
+   "area_px": 3216,
+   "area_frac": 0.5717333333333333,
+   "bbox_px": {
+    "x0": 9,
+    "y0": 1,
+    "x1": 66,
+    "y1": 74,
+    "w": 57,
+    "h": 73
+   },
+   "bbox_frac": {
+    "x0": 0.12,
+    "y0": 0.013333333333333334,
+    "w": 0.76,
+    "h": 0.9733333333333334
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_lava_256.thumb75x75.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\egg_lava_256.thumb75x75-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

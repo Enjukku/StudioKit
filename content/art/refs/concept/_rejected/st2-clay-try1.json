@@ -1,0 +1,9 @@
+{
+  "id": "st2-clay",
+  "family": "concept",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nConcept scene for a prehistoric adventure game. A Tyrannosaurus charges through a shallow jungle river, roaring up at a huge meteor streaking across the dusk sky behind it; water bursts up around its legs and a flock of small pterosaurs scatters from the trees. The Tyrannosaurus is the focal point; the meteor's fiery trail is the brightest light in the image and washes the scene in warm orange. Feeling: awe and danger, the end of an age. No people.\n\nCONCEPT LOCK: Concept art of a game world, wide landscape frame. One clear focal subject; a readable foreground, middle ground and background; the focal subject stands apart from its surroundings by value as well as colour. No text, no letters, no logos, no user interface, no border, no watermark.\n\nWORLD STYLE LOCK: Handmade stop-motion clay miniature set, photographed for real. Every creature, plant and rock is sculpted from matte plasticine with visible thumbprints, tool marks and slightly uneven edges; chunky, simplified forms with soft rounded volumes; creatures have small glossy bead eyes. Water, fire and smoke are practical craft materials: twisted cellophane, glossy resin, cotton wool and painted wire. Real miniature photography: shallow depth of field, soft studio lights with gentle falloff, true scale of a tabletop set. Warm earthy palette of moss green, terracotta, ochre and cream, with deep teal shadows. Not resembling any existing franchise or studio.",
+  "images": [],
+  "codex_session": "01a15dc6-1b2b-7e12-b661-89df1f900370",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15dc6-1b2b-7e12-b661-89df1f900370\\exec-a9ae9d0c-edb4-45ea-8b2b-b1665e074f6e.png",
+  "seconds": 98
+}

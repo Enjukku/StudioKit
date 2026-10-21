@@ -1,0 +1,11 @@
+{
+ "meta": {"revision": "fixture-big-numbers-r1", "title": "A balance that passes 2^53",
+  "event_order": ["produce", "rewards", "caps", "purchase", "unlock", "reset"], "time": {"mode": "continuous"}},
+ "currencies": {
+  "cash": {"start": {"v": 0, "src": "EXAMPLE ASSUMPTION"}, "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}},
+  "gems": {"start": {"v": 5, "src": "EXAMPLE ASSUMPTION"}, "smallest_unit": {"v": 1, "src": "EXAMPLE ASSUMPTION"}}
+ },
+ "producers": {"mint": {"start_owned": {"v": 1, "src": "EXAMPLE ASSUMPTION"}, "produces": {"currency:cash": {"v": "1000000000000000", "src": "EXAMPLE ASSUMPTION"}}}},
+ "goals": [{"id": "ten_quadrillion", "label": "1e16 cash", "when": {"balance": ["cash", {"v": "10000000000000000", "src": "EXAMPLE ASSUMPTION"}]}}],
+ "run": {"horizon_active_s": {"v": 3600, "src": "EXAMPLE ASSUMPTION"}}
+}

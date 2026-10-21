@@ -1,0 +1,58 @@
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Tools built in J011-T07 and extended in J011-T11 after real use (sim and chart 1.1.0; 91 offline tests, standard library only). The authority for the model-file schema and every definition is the header docstring of `tools/progression/sim.py`; this page is how to use the tools and read their output. Never edit the tools; ask the lead for a change.
+
+# The tools: curves, simulator, charts
+
+| Tool | Does | Never does |
+| --- | --- | --- |
+| `tools/progression/curves.py` | exact formulas (Fraction): curve library, per-level ↔ cumulative, time from a requirement, bulk buy and max affordable (inequality-checked), waits (zero income → `UNREACHABLE`), payback, prestige (3 published formulas + accounting rules + inverse), offline, hits-to-kill, TTK both conventions, effective health, stacking, luck (c/p, 1 − (1 − p)^n, n_q, pity) | pick a coefficient; extrapolate a table past its end |
+| `tools/progression/sim.py` | plays one named policy through one JSON model; JSON report: goals in active and calendar time with pass / fail / not testable, soft and hard walls, power spikes, blocked paths with reasons, fights (TTK, TTD, duel time), ledger per currency, precision flags, assumptions list, optional event trace | fill a missing number (no default rate, session, horizon, threshold, offline cap); call a policy optimal; forecast a population |
+| `tools/progression/chart.py` | one self-contained HTML page from one or more reports: curves (log axis when > 3 orders of magnitude), timeline per policy with walls and spikes, window bands with verdicts, assumptions panel, run identity, tables for every value | compute anything new |
+
+## 1. Write the model (schema: `sim.py` docstring)
+- **Every number is a value object** `{"v": 4, "src": "<label>"}`, label one of `published:<source id>`, `owner:<decision id>`, `measured:<dataset>`, `EXAMPLE ASSUMPTION`, `PROPOSAL`. A bare number is an error. Exact rationals as `"107/100"`.
+- Tables: `meta` (revision, event_order, time mode, duel rules) · `currencies` (start, cap, smallest_unit) · `producers` (output, cost curve with index_offset and rounding, milestones, requires) · `items` (cost, requires, effects on stats, producers or currencies) · `levels` (per-level or cumulative XP) · `player.stats` (curves by level) · `enemies` (hp, damage, interval, overhead, rewards, drops, boss, once) · `activities` (duration, success chance, rewards; this is how obbies and tycoon tasks fit) · `unlocks` · `prestige` (basis lifetime / maximum / run, rule, formula, reset and keep lists covering every state id, bonus) · `offline` (efficiency, cap) · `sessions.patterns` · `skill_profiles` · `policies` · `goals` (= timeline rows, same ids, with windows) · `analysis` (soft-wall and spike thresholds) · `run.horizon_active_s`.
+- **Goals are the feeling timeline.** Use the timeline row id (`TL-03`) as the goal id; window `{basis: active|calendar, min_s, max_s}` from the owner's decision or labelled PROPOSAL / EXAMPLE ASSUMPTION.
+- **Thresholds are design decisions.** Soft wall (`min_wait_s`, `min_ratio_to_previous`) and spike (`metric`, `enemy`/`currency`, `min_change`, `min_ratio`) thresholds come from the timeline; without them the report says "not evaluated" and lists the slowest steps.
+- **Spikes need reference content:** name the enemy (hits_to_kill, ttk_s) or currency (production_per_s) the spike is measured on (`progression-design` D-06).
+- Continuous mode needs piecewise-constant rates (no producers that make producers; use discrete ticks with the creation-tick rule stated). Continuous exact mode with exponential prices grows fractions without bound (a 17 MB report for 18 minutes of play in J011-T08): for long incremental runs use 1-second discrete ticks and whole-unit prices, and `--lean`.
+- **Resets that grow** (G-01): any predicate number may be a threshold object `{"curve": spec, "index": "prestiges", "index_offset"?}`; `prestige.min_award` stops resets for tiny awards; `prestige.offline_counts_toward_basis` decides whether offline income feeds the basis (default true). A fixed requirement shortens every later run. With a lifetime-based award, a rising requirement mostly changes how many resets happen and how big each one is, much less the total award over a month (J011-T12: 20 resets instead of 40 by day 21, each +3.6-5.2 % instead of +0.9-2.9 %, total seeds about the same). `--lean` thins steps: keep the exact early trace (waits shrinking, then growing) from a non-lean run in the design file.
+- **Rewards on levels** (track rewards): `levels.rewards [{level, currencies?, items?}]`, booked as ledger source `level_reward:<L>`, once per level per player.
+- **Orders with counts:** `policies.order` entries `"id"` or `{"id", "until": N}` (units owned, enemy wins or activity completions).
+- **Boss attempts:** `policies.boss_attempt {min_margin, recovery_s}` makes policies try a boss at a declared preview margin and count attempts, losses and attempts-to-first-win; without it, policies fight only when the preview wins (no lost fights appear).
+- **Spike metrics:** `hits_to_kill`, `ttk_s`, `production_per_s`, and defensive `hits_to_die`, `ttd_s`; `active_when` (a predicate) so content the player cannot reach yet is not measured.
+- **Goals on walls and spikes:** predicates `{"soft_walls": N}` and `{"spikes": [metric id, N]}` give wall and spike timeline rows a verdict like any goal (thresholds required). Also `{"not": predicate}`.
+- **Model limits to state:** no equipment slots (every owned item stacks; two swords add up); defeat times include the enemy's `overhead_s` (walk and respawn), so a first-kill goal includes it.
+- Fixtures for engineering (cost at n, X_l, hits per build × enemy, prestige award at L) are computed with `curves.py` in exact mode from the same model revision and shipped in the export (`references/data-handoff.md`); the model file itself has no fixtures section.
+
+## 2. Run it
+```text
+python tools/progression/sim.py MODEL.json --policy greedy-roi --mode exact --out run/greedy.json
+python tools/progression/sim.py MODEL.json --policy save-for --target factory --out run/save.json
+python tools/progression/sim.py MODEL.json --policy fight-best --skill struggling --out run/struggle.json
+python tools/progression/sim.py MODEL.json --policy fight-best --sessions returning --out run/return.json
+python tools/progression/sim.py MODEL.json --policy fight-best --seed 1 --runs 400 --out run/drops.json
+python tools/progression/chart.py run/greedy.json run/save.json run/struggle.json --out run/compare.html
+```
+- Policies: `buy-next-in-order`, `cheapest-eligible`, `greedy-roi` (heuristic, not optimal), `save-for --target`, `fight-best`, `grind-to-level --target-level`; `--skill` applies a struggling profile; `--sessions` applies a session pattern (calendar time, offline, returning after absence).
+- Minimum set per question (C-05): an efficient policy, a saver or cheapest-first, a struggling or explorer variant, a returning pattern; paid and unpaid routes as separate models or items when both exist. Incremental games have no fights: explorer = `cheapest-eligible`, impatient player = `save-for` a gated target. Hard walls are recorded for every policy (affordable or beatable but locked → unlocked, with `pursued_by_policy`).
+- Horizon for calendar rows: sessions × session length (30 days × 20 min = 36,000 s active); a run stops early when every goal is reached.
+- `--lean` keeps goals, resets, walls and spikes and drops the trace (a month run: 2.67 MB → 143 KB); use it for long runs and anything committed.
+- `--mode exact` for fixtures and checks; `float` only for speed on long horizons (the report says which, and float books a `float_rounding` ledger adjustment).
+- Randomness (drops, success chances, accuracy < 1) needs `--seed` and `--runs`; decide runs from the precision you need before running; the report gives Wilson 95 % intervals per goal (C-06). A model with no random inputs refuses `--runs > 1`.
+- Every run needs a horizon (model or `--horizon-s`).
+
+## 3. Read the report (in this order)
+1. **Identity:** model revision + SHA-256, policy, mode, seed, runs. A chart or claim without these is not evidence.
+2. **Assumptions:** every EXAMPLE ASSUMPTION / PROPOSAL input. Every result is conditional on all of them (the tool does not trace which result uses which input). Say so in the hand-back.
+3. **Ledger:** residual must be `0` in exact mode; named adjustments (cap_loss, reset) explained.
+4. **Precision:** any currency over 2^53 or losing its smallest unit → design question, not a footnote.
+5. **Blocked paths:** each with its reason; a required goal blocked for any supported policy fails checklist row 5.
+6. **Goals:** pass / fail / not testable against windows, per policy. "Pass" is arithmetic only.
+7. **Walls and spikes:** match each to a timeline row (planned) or raise it (unplanned). Hard walls show kind, the missing prerequisite, time blocked and whether the policy was pursuing the target. Charts mark resets, plot the wait per step against the soft-wall line and each reference metric over time.
+8. **Fights (RPG):** TTK, TTD, actual duel time per enemy, attempts and losses with `boss_attempt`; check breakpoints against the reference enemies. A boss at a TTK = TTD tie is decided by the simultaneous-hit rule: engineering must copy that rule exactly.
+
+## 4. Charts for the owner
+One page per decision: the compared policies or options side by side, the curves, the timeline with windows. Put the page path (and, for the owner, a published private page if the lead asks) in the hand-back with one line on what to look at. The page already states that each row is one strategy and that a pass is not fun.
+
+## 5. Known limits (after T11, 2026-10-21)
+No cap-upgrade items (a cap below cost is a blocked path); no currency conversion or player transfers (ledger slots exist, empty); no equipment slots; `cheapest-eligible` compares prices across currencies by amount (avoid mixed-currency choices or use `save-for`); assumption dependence is not traced per result; level rewards are not re-granted after a reset lowers the level. Ask the lead for a tool ticket when a model needs one of these.

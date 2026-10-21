@@ -1,0 +1,1 @@
+- [Retention-drop investigation craft](craft-retention-drop-investigation.md) — reconcile segments vs total, overlapping events, excess-player mix split, calc scripts

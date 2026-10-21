@@ -1,0 +1,9 @@
+{
+  "id": "probe-cartoon",
+  "family": "concept",
+  "prompt": "Use your built-in image generation tool to create exactly one image from the prompt below. Do not edit any files, do not run shell commands and do not write code. After generating, reply with only the word DONE.\n\nPROMPT:\nNight on a flat rocky mountain ledge above a sea of clouds. In the middle of the frame: a giant egg about three times as tall as a player, standing upright in a round nest of stones and sticks; it glows from inside and is the brightest thing in the image. Exactly 6 torches on poles in a ring around the nest: 2 in front, 1 on each side, 2 behind. Exactly 3 small player characters stand around the egg holding lanterns and spears, one front left, one front right, one behind on the right, facing outward. Exactly 2 winged thieves glide near the top edge of the frame, far from the egg. No text, no user interface.\n\nCONCEPT LOCK: An in-game screenshot of a Roblox-style game, from the third-person gameplay camera: a high three-quarter view looking down at about 45 degrees from behind and above the players, wide landscape frame. Real-time game rendering, the whole play space around the focal point visible, one clear focal point in the middle. Not an illustration, not a painting, not a cinematic poster.\n\nWORLD STYLE LOCK: Bright flat cartoon game style: bold clean shapes, thick dark outlines around every object, flat cel colours with one shadow tone, very saturated cheerful palette, simple big-headed characters with large eyes, minimal texture detail, sunny-cartoon energy even at night (night is a saturated purple-blue, not dark). No text, no logos, no watermark. Not resembling any existing franchise.",
+  "images": [],
+  "codex_session": "01a15dab-3a3a-7122-9ecc-759dca8971c9",
+  "source": "C:\\Users\\Firew\\.codex\\generated_images\\01a15dab-3a3a-7122-9ecc-759dca8971c9\\exec-f31b00af-6e67-46c4-b842-60e5cd8531eb.png",
+  "seconds": 49
+}

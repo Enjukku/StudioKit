@@ -1,0 +1,609 @@
+{
+  "tool": "feedback_count/0.1.0",
+  "window": {
+    "start_utc": "2026-09-29T00:00:00Z",
+    "end_utc": "2026-10-21T00:00:00Z",
+    "rule": "start inclusive, end exclusive"
+  },
+  "dedup_rule": "author_key within source",
+  "sampling": [
+    {
+      "source": "in-game",
+      "status": "data",
+      "items": 22,
+      "sampled_authors": 22,
+      "untagged_items": 2
+    },
+    {
+      "source": "discord",
+      "status": "data",
+      "items": 69,
+      "sampled_authors": 32,
+      "untagged_items": 6
+    },
+    {
+      "source": "reviews",
+      "status": "data",
+      "items": 60,
+      "sampled_authors": 60,
+      "untagged_items": 15
+    }
+  ],
+  "themes": [
+    {
+      "theme": "audio.music-loop",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "audio.music-loop",
+      "source": "reviews",
+      "distinct_authors": 2,
+      "sampled_authors": 60,
+      "share": 0.03333333333333333,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "bug.moth-stuck",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "bug.moth-stuck",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "bug.moth-stuck",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "content.more-moths",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "content.more-rewards",
+      "source": "in-game",
+      "distinct_authors": 3,
+      "sampled_authors": 22,
+      "share": 0.13636363636363635,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "content.more-rewards",
+      "source": "discord",
+      "distinct_authors": 6,
+      "sampled_authors": 32,
+      "share": 0.1875,
+      "messages": 6,
+      "flags": []
+    },
+    {
+      "theme": "content.more-rewards",
+      "source": "reviews",
+      "distinct_authors": 6,
+      "sampled_authors": 60,
+      "share": 0.1,
+      "messages": 6,
+      "flags": []
+    },
+    {
+      "theme": "controls.net-too-easy",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "controls.net-too-easy",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "controls.net-too-hard",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "controls.net-too-hard",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "controls.net-too-hard",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "crate.odds-not-shown",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "crate.odds-not-shown",
+      "source": "discord",
+      "distinct_authors": 4,
+      "sampled_authors": 32,
+      "share": 0.125,
+      "messages": 4,
+      "flags": []
+    },
+    {
+      "theme": "crate.odds-not-shown",
+      "source": "reviews",
+      "distinct_authors": 2,
+      "sampled_authors": 60,
+      "share": 0.03333333333333333,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "crate.value-poor",
+      "source": "reviews",
+      "distinct_authors": 2,
+      "sampled_authors": 60,
+      "share": 0.03333333333333333,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "economy.dust-surplus",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "economy.dust-surplus",
+      "source": "discord",
+      "distinct_authors": 3,
+      "sampled_authors": 32,
+      "share": 0.09375,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "economy.dust-surplus",
+      "source": "reviews",
+      "distinct_authors": 3,
+      "sampled_authors": 60,
+      "share": 0.05,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "economy.upgrade-too-cheap",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "economy.upgrade-too-cheap",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "economy.upgrade-too-costly",
+      "source": "in-game",
+      "distinct_authors": 2,
+      "sampled_authors": 22,
+      "share": 0.09090909090909091,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "economy.upgrade-too-costly",
+      "source": "discord",
+      "distinct_authors": 3,
+      "sampled_authors": 32,
+      "share": 0.09375,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "economy.upgrade-too-costly",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "event.ended-too-soon",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "event.ended-too-soon",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "event.parade-positive",
+      "source": "discord",
+      "distinct_authors": 3,
+      "sampled_authors": 32,
+      "share": 0.09375,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "event.parade-positive",
+      "source": "reviews",
+      "distinct_authors": 4,
+      "sampled_authors": 60,
+      "share": 0.06666666666666667,
+      "messages": 4,
+      "flags": []
+    },
+    {
+      "theme": "feature.pvp",
+      "source": "discord",
+      "distinct_authors": 3,
+      "sampled_authors": 32,
+      "share": 0.09375,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "feature.pvp",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "feature.trading",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "feature.trading",
+      "source": "discord",
+      "distinct_authors": 4,
+      "sampled_authors": 32,
+      "share": 0.125,
+      "messages": 15,
+      "flags": [
+        "one loud author: 9 of 15 messages from one author"
+      ]
+    },
+    {
+      "theme": "feature.trading",
+      "source": "reviews",
+      "distinct_authors": 2,
+      "sampled_authors": 60,
+      "share": 0.03333333333333333,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "onboarding.confusing-start",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "onboarding.confusing-start",
+      "source": "reviews",
+      "distinct_authors": 4,
+      "sampled_authors": 60,
+      "share": 0.06666666666666667,
+      "messages": 4,
+      "flags": []
+    },
+    {
+      "theme": "onboarding.lantern-placement-mobile",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "onboarding.lantern-placement-mobile",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "perf.lag-pond-area-mobile",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "perf.lag-pond-area-mobile",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "perf.lag-pond-area-mobile",
+      "source": "reviews",
+      "distinct_authors": 3,
+      "sampled_authors": 60,
+      "share": 0.05,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "praise",
+      "source": "in-game",
+      "distinct_authors": 3,
+      "sampled_authors": 22,
+      "share": 0.13636363636363635,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "praise",
+      "source": "discord",
+      "distinct_authors": 6,
+      "sampled_authors": 32,
+      "share": 0.1875,
+      "messages": 6,
+      "flags": []
+    },
+    {
+      "theme": "praise",
+      "source": "reviews",
+      "distinct_authors": 5,
+      "sampled_authors": 60,
+      "share": 0.08333333333333333,
+      "messages": 5,
+      "flags": []
+    },
+    {
+      "theme": "progress.next-zone-unclear",
+      "source": "in-game",
+      "distinct_authors": 2,
+      "sampled_authors": 22,
+      "share": 0.09090909090909091,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "progress.next-zone-unclear",
+      "source": "discord",
+      "distinct_authors": 1,
+      "sampled_authors": 32,
+      "share": 0.03125,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "progress.next-zone-unclear",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "progress.nothing-after-pond",
+      "source": "discord",
+      "distinct_authors": 3,
+      "sampled_authors": 32,
+      "share": 0.09375,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "progress.nothing-after-pond",
+      "source": "reviews",
+      "distinct_authors": 2,
+      "sampled_authors": 60,
+      "share": 0.03333333333333333,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "purchase.not-delivered",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "purchase.not-delivered",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "purchase.not-delivered",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "save.progress-lost",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "save.progress-lost",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 2,
+      "flags": []
+    },
+    {
+      "theme": "save.progress-lost",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "trend.frog-skins",
+      "source": "in-game",
+      "distinct_authors": 1,
+      "sampled_authors": 22,
+      "share": 0.045454545454545456,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "trend.frog-skins",
+      "source": "discord",
+      "distinct_authors": 2,
+      "sampled_authors": 32,
+      "share": 0.0625,
+      "messages": 3,
+      "flags": []
+    },
+    {
+      "theme": "trend.frog-skins",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    },
+    {
+      "theme": "ui.crowded-mobile",
+      "source": "reviews",
+      "distinct_authors": 1,
+      "sampled_authors": 60,
+      "share": 0.016666666666666666,
+      "messages": 1,
+      "flags": []
+    }
+  ],
+  "overlap": {
+    "same_key_scheme": [],
+    "status": "unknown",
+    "reason": "No shared key scheme declared (--same-key-scheme); counts are per source only",
+    "themes": []
+  },
+  "urgent": [
+    {
+      "source": "in-game",
+      "item_ids": [
+        "ig-013",
+        "ig-016"
+      ]
+    },
+    {
+      "source": "discord",
+      "item_ids": [
+        "dcf-037",
+        "dcf-038",
+        "dcf-041",
+        "dcf-050",
+        "dcg-012"
+      ]
+    },
+    {
+      "source": "reviews",
+      "item_ids": [
+        "rbx-039",
+        "rbx-045"
+      ]
+    }
+  ],
+  "rejected_lines": []
+}

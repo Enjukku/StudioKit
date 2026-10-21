@@ -1,0 +1,118 @@
+{
+ "tool": "look_check",
+ "version": "1.1.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\art\\refs\\character\\dragonegg-a-keeper.png",
+  "sha256": "19cb48a7f72c4e3d32d68bb26df03c39a157c19b75c1eb2d87973150282fb6af",
+  "size_px": [
+   1145,
+   1374
+  ],
+  "mode": "RGB"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask | --box > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "boxes": null,
+  "box_key": false,
+  "box_coords": "pixels [x0, y0, x1, y1), x1/y1 exclusive",
+  "exclude": null,
+  "mask_source": "key-auto",
+  "key_estimate": {
+   "estimated_key": "#ABA9AA",
+   "border_strip_px": 23,
+   "border_share_within_tol": 0.9980045359447247,
+   "flat_share_needed": 0.9,
+   "flat": true,
+   "hole_fill": true,
+   "filled_holes": 1361,
+   "filled_area_px": 36229
+  },
+  "target_px": [
+   1170,
+   540
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   1170,
+   540
+  ],
+  "content_box_px": {
+   "x0": 360,
+   "y0": 0,
+   "w": 450,
+   "h": 540
+  },
+  "scale": 0.3930131004366812,
+  "mask_source": "key-auto",
+  "value": {
+   "whole": {
+    "n_px": 243000,
+    "mean": 0.2817452754393766,
+    "p5": 0.010832311222776786,
+    "p25": 0.07898589569281037,
+    "p50": 0.37844411328718225,
+    "p75": 0.4042450793015312,
+    "p95": 0.4600762056853304
+   },
+   "subject": {
+    "n_px": 115422,
+    "mean": 0.15230164887359712,
+    "p5": 0.004951866380994054,
+    "p25": 0.028788342728976575,
+    "p50": 0.07159853573480536,
+    "p75": 0.22721929064727775,
+    "p95": 0.5274914878926975
+   },
+   "ring": {
+    "n_px": 5944,
+    "mean": 0.40908262738411577,
+    "p5": 0.28781343777080964,
+    "p25": 0.38864543551797315,
+    "p50": 0.41411105884902544,
+    "p75": 0.4456178040182428,
+    "p95": 0.4946599758197211
+   },
+   "subject_ring_ratio": 3.816748746557333
+  },
+  "silhouette": {
+   "area_px": 115422,
+   "area_frac": 0.182687559354226,
+   "bbox_px": {
+    "x0": 424,
+    "y0": 7,
+    "x1": 802,
+    "y1": 533,
+    "w": 378,
+    "h": 526
+   },
+   "bbox_frac": {
+    "x0": 0.3623931623931624,
+    "y0": 0.012962962962962963,
+    "w": 0.3230769230769231,
+    "h": 0.9740740740740741
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-a-keeper.thumb1170x540.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-a\\diag\\dragonegg-a-keeper.thumb1170x540-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}

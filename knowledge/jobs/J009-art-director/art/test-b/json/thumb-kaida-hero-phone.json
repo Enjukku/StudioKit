@@ -1,0 +1,105 @@
+{
+ "tool": "look_check",
+ "version": "1.0.0",
+ "check": "thumb",
+ "input": {
+  "path": "content\\ui\\anime-summon\\refs\\keyed\\kaida.png",
+  "sha256": "7b2d0031855250450910aaa13598f420b2b58d59cb39939c8561b9961fa44b3b",
+  "size_px": [
+   820,
+   1200
+  ],
+  "mode": "RGBA"
+ },
+ "params": {
+  "key": "AUTO",
+  "key_tol": 40,
+  "alpha_cut": 128,
+  "mask": null,
+  "key_order": "--mask > alpha > key (auto = flat border estimate) > none",
+  "valid_mask_frac": [
+   0.001,
+   0.98
+  ],
+  "hole_fill": true,
+  "component": null,
+  "component_min_frac": 0.005,
+  "mask_source": "alpha",
+  "key_estimate": {},
+  "target_px": [
+   140,
+   206
+  ],
+  "filter": "lanczos",
+  "aspect": "preserved, centred, transparent padding",
+  "ring_px": 2
+ },
+ "measurements": {
+  "thumb_size_px": [
+   140,
+   206
+  ],
+  "content_box_px": {
+   "x0": 0,
+   "y0": 0,
+   "w": 140,
+   "h": 205
+  },
+  "scale": 0.17073170731707318,
+  "mask_source": "alpha",
+  "value": {
+   "whole": {
+    "n_px": 28700,
+    "mean": 0.21967459379770432,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.07695737768470762,
+    "p75": 0.3911652003943901,
+    "p95": 0.8137869723762683
+   },
+   "subject": {
+    "n_px": 15364,
+    "mean": 0.34543829979054974,
+    "p5": 0.03146093562940753,
+    "p25": 0.09688071349682752,
+    "p50": 0.2764840746926235,
+    "p75": 0.5674283913306517,
+    "p95": 0.8348933348348196
+   },
+   "ring": {
+    "n_px": 4111,
+    "mean": 0.2250635557025643,
+    "p5": 0.0,
+    "p25": 0.0,
+    "p50": 0.0738679101761329,
+    "p75": 0.36819293906168893,
+    "p95": 1.0
+   },
+   "subject_ring_ratio": 2.6357437873003775
+  },
+  "silhouette": {
+   "area_px": 15364,
+   "area_frac": 0.5327323162274619,
+   "bbox_px": {
+    "x0": 0,
+    "y0": 1,
+    "x1": 140,
+    "y1": 205,
+    "w": 140,
+    "h": 204
+   },
+   "bbox_frac": {
+    "x0": 0.0,
+    "y0": 0.0048543689320388345,
+    "w": 1.0,
+    "h": 0.9902912621359223
+   }
+  }
+ },
+ "images": {
+  "thumb": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\kaida.thumb140x206.png",
+  "sheet": "knowledge\\jobs\\J009-art-director\\art\\test-b\\diag\\kaida.thumb140x206-sheet.png",
+  "sheet_layout": "original at 4x thumb height | thumbnail 1:1 | thumbnail nearest x4 (grey = padding)"
+ },
+ "verdict": "measured"
+}
