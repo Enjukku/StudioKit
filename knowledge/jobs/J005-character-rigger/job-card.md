@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, shared three-role workflow, 3 skill books, two papers to extract and fact-check, first real test in Blender + Studio) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | step 1 approved and G1 approved 2026-10-21 (J005-D1..D5). Step 2 (extract + fact-check) running |
+| Status | closed 2026-10-21 (J005-D10): rigger in the kit; G2 ran S1-S5 in Blender on the Tripo teddy, Studio import and G3 not run (owner: test in real games) |
 | Next job | J006-animator (own job card, gates; starts after J005 G3) |
 
 ## Owner's words (2026-10-20, excerpts)
@@ -83,5 +83,5 @@ Subagents in waves of 3 (company limit). Lead writes the skills (needs both pape
 | --- | --- | --- |
 | Step 1 workflow review | 2026-10-21 | "All right." |
 | G1 brief | 2026-10-21 | "All right. And when you do this, set all the Sonnet models to high" |
-| G2 first real test | | |
-| G3 final approval | | |
+| G2 first real test | 2026-10-21 | S1-S5 run in Blender (teddy); Studio import not run (J005-D10) |
+| G3 final approval | 2026-10-21 | "For now, the agent is just done." |

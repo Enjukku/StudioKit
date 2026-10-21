@@ -21,7 +21,7 @@ A counter-proposal names the rig sheet §B/§C rows it still meets, goes to the 
 5. **Caps and roots**: normals out, 0 open edges, real thickness, no visible backfaces; **exposed roots and sockets carry the skin's texture and shading continuously, rims rounded, never a flat swatch or a knife-edge ring** (GP07).
 6. **Close open shells with tuck-and-cap**: tuck the open rim inward to the first inner surface, then cap. Never delete faces to close a shell: it opened holes (FG05). Never pass every open edge to a hole-fill: an intended open cloth edge is not a hole (REV07).
 7. **Never add a bridge mesh** between a separated head and a no-neck body: it creased. Bury the head root in the body instead (FG02).
-8. **Repeated limbs fused together** (Tripo legs, arms): build one clean limb and copy it, rather than cutting each fused one apart (FM41, owner D-167).
+8. **Repeated limbs fused together** (Tripo legs, arms): build one clean limb and copy it, rather than cutting each fused one apart (FM41, owner, first game).
 9. **Joint covers centred on pivots** where a moving limb holds a prop, so the limb does not leave the body when it turns (FM38).
 10. **UVs and textures per part**: each cut part gets its own UVs and a re-bake from the raw model; one shared atlas across cut parts failed (FG06). See `references/textures-materials.md`.
 11. **Self-check (numbers only, rig-pipeline §4a)** and the one rest review set. Fill only the §D modeler keys. Hand back to the rigger (`references/handoffs.md`).

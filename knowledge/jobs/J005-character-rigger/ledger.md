@@ -18,10 +18,10 @@ supersedes: []
 | J005-T04 | lead | extractor (Sonnet high) | animation paper §1-§8 → notes (shared with J006) | yes | done | 1 | knowledge/reference/animation/01-body-motion-timing.md | 2026-10-21 |
 | J005-T05 | lead | extractor (Sonnet high) | animation paper §9-§14 + timing library → notes (shared with J006) | yes | done | 1 | knowledge/reference/animation/02-blender-roblox-process.md | 2026-10-21 |
 | J005-T06 | lead | lead (self; sources already read in step 1) | first-game sources (read-only) → kit-neutral lessons | yes | done | 1 | knowledge/reference/rigging/03-first-game-experience.md | 2026-10-21 |
-| J005-T07 | lead | fact-checker (Sonnet high) | Blender claims (MCP docs + web) | yes | working | 1 | knowledge/reference/rigging/fact-check-blender.md | 2026-10-21 |
+| J005-T07 | lead | fact-checker (Sonnet high) | Blender claims (MCP docs + web) | yes | done | 1 | knowledge/reference/rigging/fact-check-blender.md | 2026-10-21 |
 | J005-T08 | lead | fact-checker (Sonnet high) | Tripo + other rig-tool claims (web) | yes | done | 1 | knowledge/reference/rigging/fact-check-tools.md | 2026-10-21 |
 | J005-T09 | lead | animator stand-in (Opus high) | G2 S1: teddy motion needs + motion profile (brief in this chat, 2026-10-21) | yes | done | 1 | output/rigs/teddy/s1/, rig-sheet.md §B animator keys | 2026-10-21 |
-| J005-T10 | lead | character-rigger (Opus high) | G2 S2-S5 on teddy (S2 done 2026-10-21; S4-S5 after S3) | yes | working | 1 | output/rigs/teddy/ | 2026-10-21 |
+| J005-T10 | lead | character-rigger (Opus high) | G2 S2-S5 on teddy | yes | done (Studio import not run, J005-D10) | 1 | output/rigs/teddy/ | 2026-10-21 |
 | J005-T11 | character-rigger | modeler stand-in (Opus high) | G2 S3 cuts: brief output/rigs/teddy/s3-brief.md (rigger) + lead addendum for K2 ranges | yes | done (needs-decision items routed to S4) | 2 | output/rigs/teddy/geometry/ | 2026-10-21 |
 | J005-T12 | character-rigger | modeler stand-in (Opus high) | S4 fix note round 1: output/rigs/teddy/s4/fix-note-r1.md (N1 cap texture, N2 rounded seam rims; applied to the 9 rigid cuts, shoulder/hip items void after J005-D7) | yes | done | 2 | output/rigs/teddy/geometry/ | 2026-10-21 |
 | J005-T13 | lead | character-rigger | revise S2 for shoulders + hips to R-skin (owner J005-D7) and write s3b-brief.md | yes | done | 1 | output/rigs/teddy/s2b/, s3b-brief.md | 2026-10-21 |

@@ -33,20 +33,20 @@
 ## 2a. What the owner rejected before (check these in the review set before any hand-off; FM87)
 | Rejected | Check |
 | --- | --- |
-| Built without an approved reference: "it's poorly built" (FM01, owner D-008) | approved image id in the record |
-| Too small, a "miniature" with cramped insides (FM15, FM32, owner D-091) | size in studs vs the record; player dummy render; doors, stairs, seats at player scale (FM31) |
+| Built without an approved reference: "it's poorly built" (FM01, owner, first game) | approved image id in the record |
+| Too small, a "miniature" with cramped insides (FM15, FM32, owner, first game) | size in studs vs the record; player dummy render; doors, stairs, seats at player scale (FM31) |
 | Boxy shapes where the art is organic; furniture too coarse; directional pieces facing the wrong way (FM32) | review set by eye, facing listed in the record |
 | Held prop that does not read from the front at game view (FM36) | game-camera render |
 | Head accessory that looks wrong from the side (FM37) | side render |
 | Limb that comes off the body when it turns (FM38) | joint covers centred on pivots; rigger's S4 sweep |
 | Rideable model with no seat or rider cut-out (FM39) | seated test figure, high and side views |
 | Props clipping the body in key poses, props not scaling with the form (FM40) | clearance in the animator's key poses |
-| Micro-detail that costs triangles but adds no read: "a lot of triangles that aren't necessarily needed" (FM18, owner D-157) | triangles spent vs silhouette change |
+| Micro-detail that costs triangles but adds no read: "a lot of triangles that aren't necessarily needed" (FM18, owner, first game) | triangles spent vs silhouette change |
 | Generic ornament that ignores the theme or material (FM19, FM21) | ornament comes from the subject's own theme |
-| Variants that are only recolours when the owner asked for different designs (FM20, owner D-140) | variant list: what changes in shape |
+| Variants that are only recolours when the owner asked for different designs (FM20, owner, first game) | variant list: what changes in shape |
 | A flat blockout or procedurally painted boxes shown as the finished look (FM53: "I want details, and I want it to look really nice.") | label blockouts as blockouts; texture pass planned |
-| A plain, untextured look (FM61, owner D-081) | texture pass in the plan |
-| Gaps between pieces, misplaced pieces: "incredibly sloppy" (FM85, owner D-036) | assembled kit render at player scale |
+| A plain, untextured look (FM61, owner, first game) | texture pass in the plan |
+| Gaps between pieces, misplaced pieces: "incredibly sloppy" (FM85, owner, first game) | assembled kit render at player scale |
 
 Keep an approved simple placeholder when the owner likes it; do not replace it unasked (FM22).
 

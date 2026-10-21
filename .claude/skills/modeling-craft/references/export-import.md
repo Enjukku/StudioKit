@@ -36,7 +36,7 @@
 - An uploaded texture returns a Decal asset id; `MeshPart.TextureID` needs the image id behind it (FM68).
 - The first import of a project is a pilot for axes, scale, pivots and joints (FM66). Never apply an exporter fix and a place fix together: the model moved twice (FM78).
 - Keep seat, pivot and effect points in one record per model, in Blender space, with the Roblox mapping beside them (FM76; `references/handoffs.md` §3).
-- **Upload is an owner gate**: nothing is uploaded before the owner approves; a dry run lists exactly what would upload; keys stay outside the repo (FM89, owner D-168).
+- **Upload is an owner gate**: nothing is uploaded before the owner approves; a dry run lists exactly what would upload; keys stay outside the repo (FM89, owner, first game).
 - Uploaded is not in the game: keep an id registry per asset family and mark each USED / UNUSED / STALE; track models built but not uploaded (FM91-FM93).
 
 ## 4. Reimport

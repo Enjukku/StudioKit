@@ -9,11 +9,11 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | orchestrator (lead, via orchestration skill) | lead → Opus | owner sets with `/effort`: medium; high for design or wiring | skill exists |
 | game-designer | craft → Opus | high, always (owner J003-D3) | in kit (J003, closed 2026-10-21) |
 | progression-designer (feeling timeline → curves, data tables, simulation, live tuning; replaces economy-designer, J011-D3) | craft → Opus | high (owner J011-D1); its tools and scripts Opus medium or higher | building (J011) |
-| art-director | craft → Opus | high (owner J009-D1) | building (J009; skills art-direction, art-review; G2 pending) |
-| film-director (every cinematic moment: beat sheet, shot list + `tools/film/shotlist.py`, ChatGPT storyboards, Blender animatic, craft briefs, Roblox playback checks, capture review; replaces cutscene-director, J015-D2) | craft → Opus | high (owner J015-D1) | building (J015; skills film-direction, film-craft; G2 pending) |
+| art-director | craft → Opus | high (owner J009-D1) | in kit (J009 closed 2026-10-21) |
+| film-director (every cinematic moment: beat sheet, shot list + `tools/film/shotlist.py`, ChatGPT storyboards, Blender animatic, craft briefs, Roblox playback checks, capture review; replaces cutscene-director, J015-D2) | craft → Opus | high (owner J015-D1) | in kit (J015, owner 2026-10-21: done; tested in real game work) |
 | animator | craft → Opus | high | planned (J006, after J005) |
 | vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | in kit |
-| character-rigger | craft → Opus | high | building (J005) |
+| character-rigger | craft → Opus | high | in kit (J005, closed 2026-10-21; Studio import untested) |
 | modeler | craft → Opus | high for hero models and new kinds of models; medium for simple models (J007-D1) | building (J007; G2 pending) |
 | ui-ux-designer | craft → Opus | medium (high for a new look or a shop, brief-level) | in kit (J002, owner-approved 2026-10-21) |
 | sound-designer | craft → Opus | medium | in kit |
