@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role that replaces economy-designer, 2 skill books, a 1,310-line paper with about 60 dated sources to extract and fact-check, 3 tools with tests, 2 worked examples with charts, a real test) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J011-D5). Steps 2-5 done 2026-10-21: 4 notes + 2 fact-checks in `knowledge/reference/progression/`; tools `tools/progression/` (curves, sim, chart 1.1.0; 91 tests); skills progression-design, progression-craft; role progression-designer (replaces economy-designer); evals + hidden evals; hand-offs. Step 6 done: worked examples (T08, refreshed T12 on tools 1.1.0), hidden evals (T09), grader (T10: examples 8/8, hidden 14 pass / 8 partial / 1 fail), tool fixes (T11). G2 sent to owner 2026-10-21 |
+| Status | G1 approved 2026-10-21 (J011-D5). Steps 2-5 done 2026-10-21: 4 notes + 2 fact-checks in `knowledge/reference/progression/`; tools `tools/progression/` (curves, sim, chart 1.1.0; 91 tests); skills progression-design, progression-craft; role progression-designer (replaces economy-designer); evals + hidden evals; hand-offs. Step 6 done: worked examples (T08, refreshed T12 on tools 1.1.0), hidden evals (T09), grader (T10: examples 8/8, hidden 14 pass / 8 partial / 1 fail), tool fixes (T11). G2 approved 2026-10-21 (J011-D7). G3 approved 2026-10-21 (J011-D8). **Job closed 2026-10-21.** Follow-ups: tool gaps G-16..G-20 after the first real game job; first real job = the owner's J003 pick |
 | Depends on | `game-design` (systems-economy reference), `platform-policy`, `analytics`, `data-saving` skills (exist); J003 game-designer (G2 sent) for the real G2 task |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -92,5 +92,5 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "All right, go ahead. You can begin." |
-| G2 first real task (worked examples + charts) | | |
-| G3 final approval | | |
+| G2 first real task (worked examples + charts) | 2026-10-21 | "Okay, so it looks like the test did fine, right? So you can go ahead and approve it, I suppose." (J011-D7) |
+| G3 final approval | 2026-10-21 | "Okay, go ahead and do gate 3." (J011-D8) |

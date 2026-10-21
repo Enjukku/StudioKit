@@ -23,4 +23,4 @@ supersedes: []
 - Continuous exact simulation with exponential prices made huge reports (17 MB for 18 minutes); size, not speed, is the limit; a lean mode was needed.
 
 ## Owner corrections
-None yet (G2 pending).
+None. G2 and G3 approved after a quick re-test (owner 2026-10-21: "Okay, so it looks like the test did fine, right? So you can go ahead and approve it, I suppose."; "Okay, go ahead and do gate 3."). The owner asked for Gate 2 as "just like a simple test": numbers (tests, byte-for-byte re-runs, timeline verdicts), not a long review.
