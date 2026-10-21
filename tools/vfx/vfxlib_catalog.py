@@ -209,6 +209,7 @@ def _fetch_thumbs(ids: list[str], size: int, folder: Path, states: dict) -> int:
 
 
 def cmd_fetch(_args) -> None:
+    WORK.mkdir(parents=True, exist_ok=True)
     (WORK / "VFXData.json").write_bytes(_get(DATA_URL))
     data = load_data()
     states_path = WORK / "thumb_states.json"
