@@ -64,7 +64,7 @@ UI LOCK: One game UI element or screen mood in the game's UI style <style words>
 ```
 
 ```text
-ICON LOCK: One object as a game icon, centred, plain flat background, clean silhouette readable at 48 px, <style words>. No text, no letters, no numbers, no border.
+ICON LOCK: One object as a game icon, centred, plain flat magenta #FF00FF background (for cut-out), clean silhouette readable at 48 px, <style words>. No text, no letters, no numbers, no border.
 ```
 
 ## Anchors

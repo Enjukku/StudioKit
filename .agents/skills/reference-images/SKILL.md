@@ -52,6 +52,7 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 | I-06 | **Images are inputs.** A reference is a target and a source of shapes, never the shipped asset; UI stays live layers, models are built, effects are built | owner rule (UI built as layers; models from refs) |
 | I-07 | **Franchise themes:** source stills first (kept out of git), then original designs that do not copy a franchise's characters, logos or text | first game franchise stages (2026-10) |
 | I-09 | **Cut-out backgrounds:** for images that need transparency, use a plain magenta `#FF00FF` background; for pure glows, black plus a luminance-to-alpha key. Never green: a glowing subject on `#00FF00` picks up green spill in its glow | UI chat test 2026-10-21 (J002); first game ICON LOCK |
+| I-10 | **Same subject, attach it; name positions; name counts.** An image of an existing character, creature or prop attaches its approved image as `inputs`; layouts say left, middle, right and the key relationship; panels and poses say "exactly N" | kit test batch 2026-10-21: the pose sheet drew a different character until the sheet was attached; a concept put the wave on the wrong side of the dam; 7 VFX panels came back instead of 3 (`references/prompt-patterns.md` §1b) |
 | I-08 | **Show the owner images next to what they are for** (the sheet next to the model render, the key frames next to the frame script) in one batched review | owner gate practice, first game |
 
 ## 6. Rules (final check)
