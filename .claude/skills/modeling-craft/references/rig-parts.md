@@ -25,6 +25,7 @@ A counter-proposal names the rig sheet §B/§C rows it still meets, goes to the 
 9. **Joint covers centred on pivots** where a moving limb holds a prop, so the limb does not leave the body when it turns (FM38).
 10. **UVs and textures per part**: each cut part gets its own UVs and a re-bake from the raw model; one shared atlas across cut parts failed (FG06). See `references/textures-materials.md`.
 11. **Self-check (numbers only, rig-pipeline §4a)** and the one rest review set. Fill only the §D modeler keys. Hand back to the rigger (`references/handoffs.md`).
+12. **After any geometry fix** (a fix note, a retopology, a re-cut): list which §B poses the change touches and ask the rigger to re-run the S4 sweep through **every** required pose, then the S5 tests in Blender and Studio; a fix is not done until those pass. Weights never hide a fused bridge: if repainting weights did not stop a stretch, the cause is geometry (FG01, J007 hidden test).
 
 ## 3. Checks you hand back (modeler-handoff C1-C5, unchanged)
 | Check | How |

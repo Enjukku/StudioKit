@@ -23,14 +23,14 @@ The modeler makes every **reusable** asset: kit pieces, props, plants, hero buil
 5. **Canonical vs placed** (ENV20 [O]): keep the canonical asset apart from placed copies, so a fix spreads on purpose. Upload once; duplicate in Studio (budgets §5).
 
 ## 3a. Kit lessons from the second game (FM48-FM57 [E]/owner)
-- **Pilot, then copy**: build one member of a kit, get it approved, then build the rest "the same way" from data, one entry per variant (FM17, owner D-155).
+- **Pilot, then copy**: build one member of a kit, get it approved, then build the rest "the same way" from data, one entry per variant (FM17, owner, first game).
 - Derive module sizes from every size the game can make, not from one example (FM48).
 - A mesh cannot stretch on one axis without stretching its detail: model the surface skin, and scale the plain inside as a primitive (FM49).
 - Tall or deep kits: a bottom support zone, a repeating middle, a finished top (FM50).
 - Make seams symmetric about the module edge so any two neighbours join flush, no gap, no z-fight; test two side by side (FM51).
 - Bigger stacked pieces cut part count but repeat their painted detail: use two or more paint variants per tier (FM52).
 - A blockout proves sizes and joins; it is not the look (FM53). The accepted rebuild had real modelled detail (chamfers, recessed panels, framed trims), one atlas at equal texel density, and paint baked with the neighbours in place (FM54).
-- Never change an approved mesh to fix a placement problem; change the placement data (FM57, owner D-171).
+- Never change an approved mesh to fix a placement problem; change the placement data (FM57, owner, first game).
 - Budget the assembled worst case (total triangles, parts, unique meshes) and measure the heaviest assembly in Studio; record estimate and measurement side by side (FM43-FM44).
 
 ## 4. Style rules for built things (CS8, ENV18 [O])

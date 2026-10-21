@@ -62,7 +62,7 @@ Name the asset category first: avatar limits apply only to platform avatar items
 ## 6. Collision and distance
 - CollisionFidelity has five options: Default, Hull, Box, PreciseConvexDecomposition, Tunable (Tunable adds CollisionPrecision 0-1, set in Studio). Tunable did not replace the others [V] MR25.
 - Choose collision for gameplay, not looks (BG-41 [O]):
-  - **Walkable or stood-on meshes keep Default** (or PreciseConvexDecomposition for merged multi-piece meshes). Box or Hull on walkable meshes made players float in the second game; the owner had it reverted (FM71, owner D-170: "make these ones have more accurate collisions"). Test with foot-height checks, not surface tops only.
+  - **Walkable or stood-on meshes keep Default** (or PreciseConvexDecomposition for merged multi-piece meshes). Box or Hull on walkable meshes made players float in the second game; the owner had it reverted (FM71, owner, first game: "make these ones have more accurate collisions"). Test with foot-height checks, not surface tops only.
   - Box or Hull only on parts nobody stands on or brushes against closely (small anchored props, distant pieces); a few simple proxy parts for blockers; no collision (CanCollide, CanQuery, CanTouch off) for pure decoration.
   - Doorways and walk paths stay open at real player size.
 - Mesh streaming (`Workspace.MeshStreamingAndImprovedLoDs`), when enabled, ignores `MeshPart.RenderFidelity` and makes cloud LoDs; it does not support skinned meshes and does not change collision [V] MR26, MR29. Default-on was forecast for about July 2026 and is not confirmed: read the place's setting. Without it, the legacy Automatic bands apply (< 250 studs highest, 250-500 medium, ≥ 500 lowest) [V] MR28.

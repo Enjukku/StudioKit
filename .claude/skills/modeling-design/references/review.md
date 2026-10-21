@@ -12,7 +12,7 @@
 | Check | Pass evidence | How (light) |
 | --- | --- | --- |
 | Approved reference | image id and revision in the record | record |
-| Identity and silhouette | recognizable at the game camera; signature features present | review set |
+| Identity and silhouette | recognizable at the game camera; signature features present | review set; silhouette overlap with the reference at the same camera (`tools/art/look_check.py silhouette --compare`) |
 | Proportions | landmarks match the approved image or an approved exception | review set; numbers if a ratio is named |
 | Scale | size in studs matches the record; next to the player dummy | number + one render |
 | Part inventory | every required part exists once; no extras | number (object list vs record) |
@@ -54,6 +54,8 @@ Keep an approved simple placeholder when the owner likes it; do not replace it u
 1. **Sort the defect** (REV02 [O]): identity (silhouette, proportion, palette, signature feature), construction (loose or fused parts, inside faces, normals, holes, duplicates, unapplied transforms), motion (collapsed joints, open cuts, grip), runtime (collision, cost, materials, missing data after import).
 2. **Fix the biggest effect first**, not the most visible close-up (REV03).
 3. **Find the cause before editing** (BK12 [O]): geometry, camera, pose, material, light, or a bad reference. Change one cause at a time. A head that looks small only in a perspective render is a camera question.
+   - **Drift from the reference:** render every saved revision (raw, each clean-up, final) in the **same camera, projection and lens as each reference view** (orthographic front with orthographic front, the same 3/4 lens), then read counts and ratios per revision. Repair at the first revision where a difference appears; never compare revisions shot with different cameras (BK10 [O], J007 hidden test).
+   - **"Does not look like our game":** compare with the approved neighbouring models axis by axis, each with a number: value grouping and palette (`tools/art/look_check.py` value and palette), silhouette (`look_check silhouette`), edge treatment (bevel size as a share of height), surface roughness (mean of the roughness map), detail scale (smallest readable feature at the game camera). The range comes from the approved models, never from an outside threshold; fix the axes that fall outside it (J007 hidden test).
 4. **Re-run every check the fix can break** (REV09 [O]): retopology changes UVs, bakes and bends; an atlas changes material groups; separating a part changes pivots, collision and rigging; an export option changes scale or normals.
 5. **Repair tools are not fixes by default** (REV05-REV07 [O]): one global merge distance can close eyelids or fuse clothing to the body; never fill every open edge (an intended open cloth edge differs from a hole that motion exposes).
 

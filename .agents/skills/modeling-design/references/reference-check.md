@@ -15,10 +15,10 @@ One record per asset revision: `templates/model/asset-record.md`. Fields (RF7, B
 A turnaround collage is an approval aid, not a Tripo input: cut it into separate clean views (TR-24 [O]; reference-images I-04).
 
 First-game practice (FM ids, `knowledge/reference/modeling/04-first-game-experience.md`):
-- Extra views in one image made the image-to-3D tool build extra models; the owner asked for one subject, open stance, plain background (FM05, owner D-153: "the extra angles just make it make other models"). Turn the subject about 40 degrees so anything on its back shows (FM06; a first-game value).
+- Extra views in one image made the image-to-3D tool build extra models; the owner asked for one subject, open stance, plain background (FM05, owner, first game: "the extra angles just make it make other models"). Turn the subject about 40 degrees so anything on its back shows (FM06; a first-game value).
 - Refine an image by locking it: attach the last good image, say what stays exactly the same, change one thing per pass, proportions before face and detail (FM10).
-- A real-world subject (a real building, vehicle or animal) starts from real photos and drawings; an AI image of a real place was inaccurate (FM12, owner D-164: "I would prioritize our real references").
-- A large structure gets a measured plan (floor plans, views, a player figure) approved before building; a first set built without plans came out as miniatures (FM15, owner D-091). The size factor over real life is the owner's choice, recorded once and applied to every model (FM16).
+- A real-world subject (a real building, vehicle or animal) starts from real photos and drawings; an AI image of a real place was inaccurate (FM12, owner, first game: "I would prioritize our real references").
+- A large structure gets a measured plan (floor plans, views, a player figure) approved before building; a first set built without plans came out as miniatures (FM15, owner, first game). The size factor over real life is the owner's choice, recorded once and applied to every model (FM16).
 - Say what the model must NOT look like; a style described only by what it is drifted to the nearest cliché (FM02). That belongs in the art bible's locks, not in each prompt (`reference-images` I-01).
 
 ## 3. Check the image before building (RF18 a-j [O]; reference-images I-05)

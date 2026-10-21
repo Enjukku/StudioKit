@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 1,974-line paper to extract and fact-check, first-game sources, a model audit script, two real test models in Blender + Studio) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J007-D3..D7). Step 2 (extract + fact-check) running |
+| Status | Steps 2-5 done 2026-10-21 (notes, 3 fact-checks, 2 skills, role, tools, evals, hidden test 4/6 then gaps fixed). G2 test models wait for the owner (digest-g2.md) |
 | Depends on | J005 `rig-pipeline`, `rigging-design`, `rigging-craft` and the `character-rigger` role (all exist now) for the G2 rig loop |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -68,9 +68,9 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 ## Budget
 | | Estimate | Actual |
 | --- | --- | --- |
-| Sessions | 1 (this one) | |
-| Agents | 4 extract + 3 fact-check + 1 tool + 2 tests + 1 grader = 11 | |
-| Models / effort | Sonnet high ×8; Opus medium ×2; Opus high ×1 + lead | |
+| Sessions | 1 (this one) | 1 |
+| Agents | 4 extract + 3 fact-check + 1 tool + 2 tests + 1 grader = 11 | so far 11: 4 extract + 3 fact-check + 1 tool + 1 case writer + 1 modeler (hidden test) + 1 grader; G2 adds 2 modeler tests + 1 rigger (S2/S4) |
+| Models / effort | Sonnet high ×8; Opus medium ×2; Opus high ×1 + lead | so far Sonnet high ×9, Opus medium ×1, Opus high ×1 + lead (high) |
 | Image generations | test references: about 4-8 ChatGPT images (2 subjects, front/side/back views, retries) | |
 | Tripo | 1-3 generations for test B, run by the owner (J007-D4) | |
 
