@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 1,695-line paper with 80 dated sources to extract and fact-check, first-game sources, a look-check script with tests, two real tests with reference images) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J009-D5). Steps 2-5 done 2026-10-21: 5 notes + 2 fact-checks in `knowledge/reference/art-direction/`; tool `tools/art/look_check.py` (20 tests); skills art-direction, art-review; role art-director; art-bible template direction record; evals. Gate PASS. Step 6 done 2026-10-21: hidden evals 29/30 (T10), blind UI review T09 (0 false claims; grades egg B- / anime B+ vs owner C- / B-, J009-D6), grader T11 (`grades-g2.md`); 19 skill gaps fixed + calibration (grade scale, finish as finding); tool v1.1.0 UI options (T12, 27 tests). Gate PASS. G2 sent to owner 2026-10-21; test A waits for a concept |
+| Status | G1 approved 2026-10-21 (J009-D5). Steps 2-5 done 2026-10-21: 5 notes + 2 fact-checks in `knowledge/reference/art-direction/`; tool `tools/art/look_check.py` (20 tests); skills art-direction, art-review; role art-director; art-bible template direction record; evals. Gate PASS. Step 6 done 2026-10-21: hidden evals 29/30 (T10), blind UI review T09 (0 false claims; grades egg B- / anime B+ vs owner C- / B-, J009-D6), grader T11 (`grades-g2.md`); 19 skill gaps fixed + calibration (grade scale, finish as finding); tool v1.1.0 UI options (T12, 27 tests). Gate PASS. G2 sent to owner 2026-10-21; test A waits for a concept. **Job closed 2026-10-21 (G3, J009-D19).** Follow-ups: the vfx-design gaps (N17, owner: drop); J003 preproduction hand-off pointer (N13); a fresh hidden eval set for later regrades (N16) |
 | Depends on | `reference-images` skill + `tools/art/art_refs.py` (exist); `templates/skill/art-bible.md` (exists); J003 game-designer (G2 sent) for the direction test |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -90,4 +90,4 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "Okay, I believe you can get started now." |
 | G2 first real tests (direction + review) | | |
-| G3 final approval | | |
+| G3 final approval | 2026-10-21 | "For now, the agent is just done." (J009-D19) |

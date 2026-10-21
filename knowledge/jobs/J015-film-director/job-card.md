@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 1,931-line paper with ~60 dated sources (Roblox, Blender 5.2 and ChatGPT Images facts after the model cutoff) to extract and fact-check, a read-only earlier-game source to distil, 3 templates, a shot-list format with a small tool and tests, an art-bible family, a real test with ChatGPT boards, Blender previs and a Roblox playback check) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J015-D7). Steps 2-5 done 2026-10-21: 4 notes + 3 fact-checks in `knowledge/reference/film/` (Roblox 33 rows, Blender/images 23 rows with 10 probes, craft sources 47 rows); tool `tools/film/shotlist.py` (47 tests); skills film-direction, film-craft; templates beat sheet (extended), shot list, storyboard brief, shotlist.example.json; art-bible family `storyboard`; role `film-director`; evals E1-E5 + hidden H1-H4; roster row. Step 6: G2 test run (J015-T09, planning half: hybrid boss reveal, 4 shots, 175 frames at 30/1, 8 images, animatic, check + diff clean); 19 gaps found (18 agent + 1 lead) and fixed (J015-T10 tool; skills, templates, game profile). G2 decision waits for the owner (`digest-g2.md`); Roblox step waits for a separate Studio |
+| Status | done 2026-10-21 (J015-D8): agent accepted by the owner without further testing. Not run: shot E relight, Roblox playback capture, hidden-case grader; open items carried by real game work. Follow-up proposed: kit cutscene player (engineering) |
 | Depends on | `reference-images` skill + `tools/art/art_refs.py` + `templates/skill/art-bible.md` (exist); Blender MCP (connected); Studio MCP; `vfx-design`/`vfx-craft`, `sound-design`, `environment-design`, `ui-design`, `art-direction`, `engineering-craft` skills (exist); animator role (planned, J006, not built) |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -90,5 +90,5 @@ Subagents, max 3 at a time. Wave 1: 3 extractors. Wave 2: 3 fact-checkers (they 
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "You may begin." |
-| G2 first real test | | |
-| G3 final approval | | |
+| G2 first real test | 2026-10-21 | test run (planning half); owner closed the job without a G2 verdict: "For now, the agent is just done." (J015-D8) |
+| G3 final approval | 2026-10-21 | "For now, the agent is just done." (J015-D8) |
