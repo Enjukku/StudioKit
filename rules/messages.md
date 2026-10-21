@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit rule: universal. Owner request 2026-10-20: agents are LLMs, not humans; exact where it must be exact, open where the specialist decides. Evidence, Opus 5.5 first: `knowledge/reference/studio/agent-messaging-research-2026-10.md` (M-01..M-17).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit rule: universal. Owner request 2026-10-20: agents are LLMs, not humans; exact where it must be exact, open where the specialist decides. Evidence, Opus 5.5 first: `knowledge/reference/studio/agent-messaging-research-2026-10.md` (M-01..M-21).
 
 # Agent messages: how agents brief, ask and hand back
 
@@ -59,7 +59,8 @@ time_budget: 900 s      # optional; Opus 5.5 paces to it
 Rules: self-contained (the receiver sees no history); set `effort` before adding prompt text (M-13); `fixed`, `not_in_scope` and `checks` come last, next to the task (scope reminders work best last); one runnable check per acceptance rule, never "double-check everything" (M-05, M-06).
 - **Loose brief** (much in `open`): add one line telling the receiver to look through `refs` and nearby files before it acts. Opus 5.5 starts work fast and misses context the brief did not point to; this line measurably raised correct results (M-14).
 - **`time_budget`** (optional): a time in seconds. Opus 5.5 paces its work to it and usually finishes early, so set it a little above the time you want. It is advice, not a stop: keep a real timeout. Under time pressure it may check a little less, so do not use it on money, saves or security work (M-15).
-- **Workflows:** an `agent()` call that returns a spec or hand-back uses a `schema`, so the keys are checked, not hoped for (M-16).
+- **Workflows:** an `agent()` call that returns a spec or hand-back uses a `schema`, so the keys are checked, not hoped for (M-16). For a Sonnet or Haiku agent, add the line "Think the problem through before you answer.": asked for JSON only, Sonnet 5.5 often skips its thinking and is less accurate (M-18).
+- **Do not shorten rules.** Write `fixed`, `not_in_scope` and the checks in full words. When messages are cut short, rules and boundaries are lost first (M-20). Save tokens with paths and narrow tool lists, not with clipped wording (M-21).
 
 ## 3. Hand-back (receiver → whoever asked)
 

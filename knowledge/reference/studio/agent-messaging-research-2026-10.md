@@ -46,6 +46,11 @@ O55 has **no section on message format between agents**. Its multiagent section 
 | M-16 | For schema-valid JSON use structured outputs or strict tools (forced tool use is not supported on Opus 5.5) | W55 | workflow `schema` for specs and hand-backs |
 | M-17 | A text-only end of turn is a report, not proof of done; name the open items and continue; stop after 2-3 automatic pushes | O55 "Unattended agentic runs" | hand-back rule; 2 pushes then `failed` |
 
+| M-18 | Sonnet 5.5 asked for a JSON-only answer on a task that needs working out often answers without thinking first and is less accurate; the line "Think the problem through before you answer." restores most accuracy | Sonnet 5.5 prompting page (current, read by orchestrator) | schema returns from Sonnet/Haiku agents add that line |
+| M-19 | Non-text agent messages (sharing hidden states) cut output tokens 70.3 % at comparable accuracy, but need model internals; tested on Qwen3-4B only | arXiv 2609.37017 LatCom (2026-09-29, read by orchestrator) | not usable with Claude: text stays |
+| M-20 | No study after 2026-09-22 compares English, shortened English, JSON, YAML, tags or codes between agents on 5.5 models. Older-model papers conflict (JSON handoff worse on one 7B model, better in another study); under a 25-word cap, rules and boundaries were lost first while plain facts survived (2608.29028, GPT-5-mini, ideas only) | researcher pass 2026-10-20 | keep constraints in full sentences; measure ourselves |
+| M-21 | Measured token savings in a 2026-10-09 third-party Claude Code test came from narrow tool lists (about 3-5×), not from wording | ovidius.ai benchmark (2026-10-09, Haiku/Sonnet/Opus 5.5; third party, not re-read) | tool lists in role files stay narrow |
+
 Also from O55, already in the kit: reports "say plainly what it did, what it found, and what it needs" (matches the hand-back shape); stronger code review with fewer false alarms (`code-review`).
 
 Not adopted: agent teams for peer debate (D: "significantly more tokens"; off in `rules/company.md` §4).
