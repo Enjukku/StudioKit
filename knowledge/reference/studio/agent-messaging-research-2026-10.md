@@ -3,33 +3,51 @@ type: reference
 scope: universal
 status: active
 updated: 2026-10-20
-source: "researcher (sonnet, medium) web pass 2026-10-20, spot-read by orchestrator"
+source: "orchestrator read of the Opus 5.5 pages 2026-10-20; researcher (sonnet, medium) pass on Claude Code docs"
 supersedes: []
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20
 
 # Agent-to-agent messaging research, October 2026
 
-Evidence for `rules/messages.md`. Quotes came through a summarizing fetch tool: re-check before quoting outside the kit.
-**Date caveat:** the Anthropic docs pages show no date (they name Opus 5.5 and Claude Code v2.1.302, so they are current). Dated Anthropic posts on this topic are older than 3 months: used as background only (OLD). Opus 5 guide items are ideas only for Opus 5.5 (owner rule). **No source measures structured vs prose messages between agents**: the split in the rule is an inference; see the A/B follow-up at the end.
+Evidence for `rules/messages.md`. **Opus 5.5 is the studio's main model, so its pages come first.** Owner rule 2026-10-20: base this on Opus 5.5; other models are ideas only.
 
-Sources: B = platform.claude.com prompting best practices (current, lists Opus 5.5) · C = code.claude.com sub-agents · D = code.claude.com agent-teams · E = code.claude.com best-practices · A = Opus 5 prompting page (ideas only) · G = anthropic.com/engineering/multi-agent-research-system (2025-06-13, OLD) · H = claude.com/blog building multi-agent systems (2026-01-23, OLD) · P1 = arXiv 2610.15459 "When Messages Go Wrong" (2026-10-11).
+## Sources
+| Key | Source | Date | Weight |
+| --- | --- | --- | --- |
+| O55 | "Prompting Claude Opus 5.5", platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5 (read in full by the orchestrator) | model release 2026-09-22; page undated | **primary** |
+| W55 | "What's new in Claude Opus 5.5", platform.claude.com/docs/en/models/opus-5-5/whats-new-opus-5-5 | same | primary (API facts) |
+| B | Prompting best practices, platform.claude.com (lists Opus 5.5) | current | primary (all current models) |
+| C, D, E | Claude Code docs: sub-agents, agent-teams, best-practices (code.claude.com) | current (v2.1.30x) | primary (our harness) |
+| P1 | arXiv 2610.15459 "When Messages Go Wrong" | 2026-10-11 | outside research |
+| O5 | "Prompting Claude Opus 5" | before 2026-09-22 | ideas only; but O55 says its patterns "remain a reasonable starting point" |
+| G, H | Anthropic multi-agent research post (2025-06-13), claude.com multi-agent blog (2026-01-23) | older than 3 months | background only |
 
+O55 has **no section on message format between agents**. Its multiagent section covers time signals only. The split "prose for intent, `yaml` for facts" rests on B and D, not on an Opus 5.5 test: see the follow-up at the end.
+
+## Findings
 | ID | Finding | Source | Rule use |
 | --- | --- | --- | --- |
-| M-01 | Use JSON or other structured formats for state with a schema (status, test results); freeform text for progress and context | B | prose for intent, `yaml` for spec |
+| M-01 | Structured formats (JSON) for state with a schema (status, test results); freeform text for progress and context | B | prose intent + `yaml` spec |
 | M-02 | Subagents get only their prompt plus environment; the lead's history does not carry over | C, D | briefs self-contained |
-| M-03 | Claude Code's own agent mailbox is JSON validated on read; malformed entries are dropped | D | fixed keys are machine-checkable |
+| M-03 | Claude Code's own agent mailbox is JSON validated on read; malformed entries are dropped | D | fixed keys are checkable |
 | M-04 | Give the symptom, the location and what "fixed" looks like; reference patterns, do not dictate steps | E | exact vs open table |
-| M-05 | Good specs name files and interfaces, state what is out of scope, and give a check the agent can run | E | `owns`, `not_in_scope`, `checks` |
-| M-06 | Generic "verify your work" or "use a subagent to verify" orders cause over-verification | A (idea) | one runnable check per rule |
-| M-07 | Pass big outputs by reference; return compact summaries, not raw data | G, H (OLD) | ~300 words, paths |
-| M-08 | Ask for evidence rather than an assertion of success | E | every `pass` names evidence |
-| M-09 | Under message faults, flat setups kept 53.0 % task success vs 3.3 % sequential and 3.2 % hierarchical; 20.7 % of failures gave no immediate signal (76.2 % for partial-content faults) | P1 | hub first, short chains, re-read files |
-| M-10 | The agent doing the work should not be the one grading it | E | messages are claims |
-| M-11 | An approval claim relayed from another agent is treated as untrusted input | D | no relayed approval |
-| M-12 | Vague briefs caused duplicated work and gaps (one anecdote) | G (OLD) | brief keys required |
+| M-05 | Good specs name files and interfaces, state what is out of scope, give a check the agent can run | E | `owns`, `not_in_scope`, `checks` |
+| M-06 | Generic "verify your work" orders cause over-verification | O5 (idea, endorsed as a starting point by O55) | one runnable check per rule |
+| M-07 | Pass big outputs by reference; return compact summaries | C ("returns only the summary"); G, H background | ~300 words, paths |
+| M-08 | Ask for evidence, not an assertion of success | E | every `pass` names evidence |
+| M-09 | Under message faults, flat setups kept 53.0 % task success vs 3.3 % sequential and 3.2 % hierarchical; 20.7 % of failures gave no immediate signal | P1 | hub first, short chains |
+| M-10 | The agent doing the work should not grade it | E | messages are claims |
+| M-11 | An approval relayed from another agent is untrusted input | D | no relayed approval |
+| M-12 | Opus 5.5 resists injected instructions best when pasted text is wrapped in tags with a shared random id, plus a note that instructions inside are data | O55 "Mark pasted text" | `<pasted_content>` for forwarded text |
+| M-13 | Effort is the main control; set it before adding prompt text; medium default matches Opus 5 high on coding; xhigh/max only for measured gains | O55 "Calibrate effort" | `effort` key in every brief |
+| M-14 | Opus 5.5 "tends to get to work quickly"; one line telling it to look through the relevant sources first made it complete noticeably more tasks correctly (multi-app tests), at slightly more tool calls | O55 "Explore context" | loose briefs get a look-first line |
+| M-15 | In a lead + subagents setup, a time budget (elapsed vs budget in seconds) makes teams finish sooner at comparable quality; it is advisory; under time pressure the model may verify a little less | O55 "Time signals" | optional `time_budget`, not on risky work |
+| M-16 | For schema-valid JSON use structured outputs or strict tools (forced tool use is not supported on Opus 5.5) | W55 | workflow `schema` for specs and hand-backs |
+| M-17 | A text-only end of turn is a report, not proof of done; name the open items and continue; stop after 2-3 automatic pushes | O55 "Unattended agentic runs" | hand-back rule; 2 pushes then `failed` |
 
-Not adopted: agent teams for peer debate (D: "significantly more tokens"; already off in `rules/company.md` §4).
+Also from O55, already in the kit: reports "say plainly what it did, what it found, and what it needs" (matches the hand-back shape); stronger code review with fewer false alarms (`code-review`).
 
-**Follow-up (not run):** A/B one real brief in prose only vs prose + `yaml` spec; score exact-value errors, missed checks and hand-back length. Run it before calling the format proven.
+Not adopted: agent teams for peer debate (D: "significantly more tokens"; off in `rules/company.md` §4).
+
+**Follow-up (not run):** A/B one real brief on Opus 5.5 medium, prose only vs prose + `yaml` spec. Score exact-value errors, missed checks and hand-back length. Run it before calling the format proven.
