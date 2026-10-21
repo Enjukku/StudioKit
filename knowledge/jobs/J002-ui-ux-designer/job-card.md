@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: done
+status: active
 updated: 2026-10-20
 source: owner chat 2026-10-20 (/build-agent)
 supersedes: []
