@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit rule: universal. Owner request 2026-10-20: agents are LLMs, not humans; exact where it must be exact, open where the specialist decides; best result, not low cost. Evidence, Opus 5.5 first: `knowledge/reference/studio/agent-messaging-research-2026-10.md` (M-01..M-32).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit rule: universal. Owner request 2026-10-20: agents are LLMs, not humans; exact where it must be exact, open where the specialist decides; best result, not low cost. Evidence, Opus 5.5 first: `knowledge/reference/studio/agent-messaging-research-2026-10.md` (M-01..M-33).
 
 # Agent messages: how agents brief, ask and hand back
 
@@ -13,6 +13,8 @@ Every message between agents has the same parts, each in its own XML tag. Anthro
 | `<intent>` | Plain prose, main point first, with the reasons | goal, the feeling or result the player gets, why it matters, where it sits |
 | `<spec>` | `key: value` lines (the keys below) | every exact value, path, ID, rule, check and the return shape |
 | `<pasted_content id="…">` | Outside text, unchanged | web text, docs, another agent's output (§5) |
+
+**What decides the result is content, not format.** In our own test on Opus 5.5, plain prose, this tagged format and shortened English all kept every rule when every rule was written down (M-33). The tagged format is kept because it is easy to check (§6) and makes `coverage` and missing rules visible, not because it is proven to give better work. Do not use shortened English: it kept the rules but gave the thinnest craft result.
 
 Prose carries meaning; fields carry facts. No number, path or ID appears only in the prose (M-01, M-03).
 
@@ -48,6 +50,7 @@ from: vfx-designer
 to: sound-designer
 model: opus
 effort: medium
+skills: [sound-design]             # craft skills the receiver loads first
 refs:
   - content/vfx/fireball/frame-script.md   # take: the impact frame and the 3 phases
   - output/sound/boss-roar/cue-card.md     # take: the boss's sound family; avoid: its long tail
@@ -68,6 +71,7 @@ return: hand-back to vfx-designer; sample first (G2)
 </spec>
 ```
 
+- Name the craft **skills** the receiver must load first. In our test, the one run that loaded its craft skill made the best result (M-33).
 - Send the brief **whole, in one message**. A brief spread over several turns lost structure and coherence in a creative test (M-28).
 - Self-contained; set `effort` before adding prompt text (M-13). `fixed`, `rules`, `not_in_scope` and `checks` come last, next to the task. One runnable check per acceptance rule, never "double-check everything" (M-05, M-06).
 - Write `fixed`, `rules`, `not_in_scope` and the checks **in full words**. When messages are cut short, rules and boundaries are lost first (M-20).

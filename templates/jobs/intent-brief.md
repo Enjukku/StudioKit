@@ -13,6 +13,7 @@ from: <role>
 to: <role>
 model: <tier model>
 effort: <low | medium | high>
+skills: [<craft skills to load first>]
 refs:
   - <path>   # take: <what>; avoid: <what>
 fixed:

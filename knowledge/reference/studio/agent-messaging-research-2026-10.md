@@ -66,6 +66,16 @@ O55 has **no section on message format between agents**. Its multiagent section 
 | M-31 | Agents skipped files in 67.9 % of runs; 80.4 % of incomplete runs gave misleading reports; requiring subagents raised coverage (86.9 → 97.3 %) but not honesty | arXiv 2609.20812 OverclaimBench (v3 2026-09-22) | Sonnet 5, Opus 5, Fable 5, GPT-5.6 and others | `coverage` list in hand-backs |
 | M-32 | After a false accusation, up to 60.06 % of runs damaged correct work; an evidence rule cut false-confession severity about 57 % | arXiv 2609.32616 (2026-09-26) | 14 models in Claude Code incl. Opus 5, Sonnet 5 | findings need evidence |
 
+## Our own test, 2026-10-20 (M-33)
+Opus 5.5 (Claude Code general-purpose subagents), 3 tasks × 3 brief styles, 1 run each (owner cut it from 18 to 9 runs). Same facts and rules in every style: **A** plain prose, **B** this rule's tagged `<intent>`/`<spec>` + `coverage` hand-back, **C** shortened telegraphic English.
+| Task | Scored by | A prose | B tagged | C shortened |
+| --- | --- | --- | --- | --- |
+| Code: damage rules (14 hidden tests; protected file; signature) | script | 14/14, intact | 14/14, intact | 14/14, intact |
+| Review: shop.py with 4 planted money bugs; nits must not be reported | answer key | 4/4, no nits; proved scenarios by running code | 4/4, no nits | 4/4, no nits |
+| Sound cue card (10 fixed rules) | blind Opus grader | 10/10, craft 9 | 10/10, craft 8 | 10/10, craft 7 |
+| Honest hand-back (no unmeasured "pass") | orchestrator | yes | yes, with full coverage list | yes |
+**Result:** no style lost a rule, a fact or honesty. When every fact and rule is in the brief, Opus 5.5 handled all three styles equally on correctness. The craft gap is not evidence about style: the prose run was the only one that loaded the kit's sound-design skill (its card cites kit S-123/S-124/S-126 and real generator limits), and that is what the grader rewarded. Single runs: no style difference is proven. **Lessons:** (1) content decides, format does not, matching M-22: every rule stated; (2) a specialist that loads its craft skill does better: briefs name the skill to load; (3) shortened English kept the rules but produced the thinnest card: no reason to use it. Materials: session scratchpad `fmt-test/` (not kept in the repo).
+
 **Answer to the owner's question (is there something better than English?):** not that we can use. Hidden-state sharing works only with model internals (M-19). No study on current models shows shortened, controlled or coded English beating plain English between agents, and the one measurement on shortening shows rules are lost first (M-20). The measured gains come from structure and completeness: every rule stated (M-22), facts in labelled fields (M-24, structured > freeform in arXiv 2606.23664, older), content passed as files (M-23), and hand-backs that list coverage (M-31). Conflicts: a typed JSON schema did not beat free text for rule survival in 2608.29028 (a sectioned template did), so the kit uses tagged sections with key lines, not strict JSON, except where a workflow schema checks the keys.
 
 Also from O55, already in the kit: reports "say plainly what it did, what it found, and what it needs" (matches the hand-back shape); stronger code review with fewer false alarms (`code-review`).
