@@ -1,24 +1,24 @@
-<!-- > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20 -->
-# Intent brief: <job-id> <craft>
+<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20 -->
+# Brief: <job-id>-T<nn> <craft>
 
-What and why, never how. See the orchestration skill section 3.
+Format and rules: `rules/messages.md` §1-2. Prose for intent, `yaml` for every exact value. A `fixed` value needs a source; the how goes in `open`.
 
-| Part | Content |
-| --- | --- |
-| Goal and feeling | |
-| Context | |
-| Fixed | |
-| Open | |
-| Deliverable | |
-| Acceptance checks | |
-| Status return | |
+<Intent: goal, the feeling or result for the player, why it matters, where it sits. Max 6 sentences.>
 
-<!-- Example (cutscene beat to animator)
-Goal and feeling: The player must feel the dragon is too big to fight.
-Context: Beat 3 of 6; after the gate opens; ref: shot 4 of the approved shot list.
-Fixed: 4.0-6.5 s; low tracking camera; approved style; dragon rig v2.
-Open: Flight path, wing timing, how it lands, any secondary motion.
-Deliverable: clip + key poses at knowledge/jobs/J07/animator/.
-Acceptance checks: Lands on the tower ledge mark; no foot sliding; 30 fps clip from the shot camera.
-Status return: Report to cutscene director; sample first (G2).
--->
+```yaml
+id: <job-id>-T<nn>
+from: <role>
+to: <role>
+model: <tier model>
+effort: <low | medium | high>
+refs: [<paths>]
+fixed:
+  <key>: <value with unit>   # <source: owner D-id | contract | budget | style lock>
+open: [<choices the receiver owns>]
+owns: [<paths the receiver may write>]
+not_in_scope: [<items>]
+deliver: <path>
+checks:
+  - C1: <runnable pass rule>
+return: <hand-back to whom; sample first (G2) or full>
+```

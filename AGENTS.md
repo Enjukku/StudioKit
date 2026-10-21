@@ -9,7 +9,7 @@ This project is built by an **AI game studio**: the owner is the creative direct
 | Priority | Source | Holds |
 | --- | --- | --- |
 | 1 | The owner, in chat | Anything. Always wins. |
-| 2 | `rules/company.md`, `rules/knowledge.md`, `rules/packages.md`, `rules/anti-overengineering.md` | How the studio works (jobs, gates, tickets, limits, statuses), how context is kept (notes, scopes, learning loop), how packages are chosen and how big a change may be (binding) |
+| 2 | `rules/company.md`, `rules/knowledge.md`, `rules/packages.md`, `rules/anti-overengineering.md`, `rules/messages.md` | How the studio works (jobs, gates, tickets, limits, statuses), how agents write to each other, how context is kept (notes, scopes, learning loop), how packages are chosen and how big a change may be (binding) |
 | 3 | `rules/*.md` | Binding conventions (owner profile, architecture, security, Luau, UI, performance, platform policy, ...) |
 | 4 | This file + your harness profile | Process |
 | 5 | `knowledge/design/decisions.md` | The only list of locked design decisions (dated, with the owner's words) |

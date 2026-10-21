@@ -27,17 +27,11 @@ description: Use at the start of every owner request in the lead chat, and whene
 
 ## 3. Intent briefs: what and why, never how
 
-A brief gives the specialist everything it needs to make **its own best craft choices**. Template: `templates/jobs/intent-brief.md`. Every brief has:
+A brief gives the specialist everything it needs to make **its own best craft choices**. Format: `rules/messages.md` (template `templates/jobs/intent-brief.md`): prose intent (goal and feeling, context, why), then a `yaml` spec with `fixed` (each value with its source), `open` (what the specialist decides), `owns`, `not_in_scope`, `deliver`, `checks`, `return`.
 
-| Part | Content | Example (cutscene beat → animator) |
-| --- | --- | --- |
-| Goal and feeling | what the player must feel or understand | "The player must feel the dragon is too big to fight." |
-| Context | where it sits: story beat, before/after, references (owner-approved) | "Beat 3 of 6; after the gate opens; ref: shot 4 of the approved shot list" |
-| Fixed | what is not the specialist's choice: timing, camera, style locks, gameplay truth, budget | "4.0-6.5 s; low tracking camera; game art-style lock; dragon rig v2" |
-| Open | what the specialist decides | "Flight path, wing timing, how it lands, any secondary motion" |
-| Deliverable | files, format, where | "clip + key poses at knowledge/jobs/J07/animator/" |
-| Acceptance checks | measurable pass rules | "Lands on the tower ledge mark; no foot sliding; 30 fps clip from the shot camera" |
-| Status return | to whom, by when in the job | "Report to cutscene director; sample first (G2)" |
+Example (cutscene beat → animator). Intent: "The player must feel the dragon is too big to fight. Beat 3 of 6, after the gate opens; follow shot 4 of the approved shot list." Spec: `fixed: {length: 4.0-6.5 s  # shot list, camera: low tracking  # shot list, rig: dragon v2}`, `open: [flight path, wing timing, landing, secondary motion]`, `checks: [C1: lands on the tower ledge mark, C2: no foot sliding in a 30 fps clip from the shot camera]`.
+
+**Talking to each role.** Exact where another system or the owner depends on the value; open where the role is the expert. The sound designer picks the sound, the VFX designer picks how the effect is built, the builder picks the code structure inside its files. Give a feeling as a target plus an observable sign, never as a method.
 
 **Code briefs** also state, as part of Fixed: the files the agent owns, the public interface it must keep, the invariants that must hold, allowed dependencies and non-goals. The briefer writes the acceptance checks, including failure cases, so tests do not just mirror the code (owner research paper, `knowledge/reference/architecture/strong-codebases-2026-10.md` A-20). This is still what, not how. Give one runnable check instead of "double-check everything" or "verify with another agent": vague verification orders cause over-verification. For Opus 5.5, set effort (medium default, high for hard work, xhigh/max only for measured gains) before adding prompt text (Anthropic Opus 5.5 guide, 2026-09-22). Scope follows `rules/anti-overengineering.md`. Put Fixed, non-goals and scope at the **end** of the brief, next to the task: scope reminders work best in the most recent turn (Anthropic research, 2026-09-09).
 
