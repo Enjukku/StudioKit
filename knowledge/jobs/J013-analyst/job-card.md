@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, an 831-line paper with 41 dated sources (several after the model cutoff) to extract and fact-check, a data tool on Open Cloud with tests, a stats helper with tests, 3 templates, a real test) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J013-D6). Steps 2-6 done 2026-10-21: 3 fact-checks (192 rows) in `knowledge/reference/analyst/`; tool `tools/analytics/` (51 tests); skills analysis-design, analysis-craft; 4 templates in `templates/analytics/`; role `analyst`; evals E1-E5 + hidden H1-H5 (5/5 pass after fixes); G2 on a SYNTHETIC TEST history (`g2-scenario.md`). G3 waits: `digest-g3.md` |
+| Status | done 2026-10-21 (G3, J013-D7). Real-data run deferred to the first game with 10+ DAU and an owner-set key (`digest-g3.md` item 4) |
 | Depends on | `analytics` skill (J001, logging side, exists); Open Cloud Analytics Query API (local mirror `knowledge/external/roblox-creator-docs/cloud/guides/analytics/`); Experiments API (`cloud/guides/experiments.md`); `trend_keys.py` key pattern (J004); `networking-security` N-11 (keys); `platform-policy`, `ste-writing`, `dataviz` skills; game-designer, progression-designer, marketing roles (exist); live-ops-designer role (planned, not built) |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -88,5 +88,5 @@ Subagents, max 3 at a time. Wave 1: the 3 extract+fact-check agents (the paper i
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "You may begin." |
-| G2 first real test | | |
-| G3 final approval | | |
+| G2 first real test | 2026-10-21 | synthetic TEST history (no key); see `g2-scenario.md`, `grade-J013-hidden.md` |
+| G3 final approval | 2026-10-21 | "For now, the agent is just done. We're not going to do any testing right now." |

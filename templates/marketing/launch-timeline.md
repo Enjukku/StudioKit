@@ -44,5 +44,5 @@ Workflow: `marketing-design` (launch), `marketing-craft` (kit). For a new game t
 | hook and promise ledger | game designer | 4 weeks before |
 | trend signals with dates | trend scout | 4 weeks before |
 | art bible + approved anchors, review of each image | art director | 3 weeks before |
-| measurement dictionary, test specs | analyst (planned role; the lead routes until it exists) | 1 week before |
+| measurement dictionary, test specs | analyst | 1 week before |
 | event and update calendar | live-ops designer (planned; the lead routes) | week 3 after |

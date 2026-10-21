@@ -1,6 +1,6 @@
 # Testing and measurement with the analyst
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `marketing-craft`. Sources: `knowledge/reference/marketing/03-...md` §2 (ME ids), §8 (OQ ids); `01-...md` §4-5 (TI, IM); fact-check `fact-check-roblox-discovery.md` (FD ids, read 2026-10-21). The analyst role is planned: until it exists, use the `analytics` skill yourself and send the test spec to the lead, who holds the analyst ticket (J012-D6).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `marketing-craft`. Sources: `knowledge/reference/marketing/03-...md` §2 (ME ids), §8 (OQ ids); `01-...md` §4-5 (TI, IM); fact-check `fact-check-roblox-discovery.md` (FD ids, read 2026-10-21). The analyst role exists (J013): send it the test spec as a ticket (`handoffs.md` §4); its side is `analysis-craft`.
 
 ## 1. What each "test" really is
 | What changes | Roblox tool | What the result can show | Label in every report |

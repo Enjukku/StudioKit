@@ -8,7 +8,7 @@ The scout sends **files, not chat**: the weekly page and the opportunity cards l
 | --- | --- | --- | --- |
 | owner + game-designer | every week; at once on a breakout flag that passes the gates | weekly page (Markdown + HTML), top 3 cards with the 9 record fields | a game design, a pitch, a green light |
 | marketing | every week, section "outside trends" and "rising games" as it bears on titles, thumbnails and timing; on request | trend signals on promises, title and thumbnail patterns, timing windows, audience vocabulary, rights flags | creative wording or art; marketing decides execution |
-| analyst (planned) | never by default | — | own-game player data stays with the analyst; the scout only reads public and licensed market data |
+| analyst | never by default | — | own-game player data stays with the analyst; the scout only reads public and licensed market data |
 
 ## 1. Weekly hand-off to the game-designer
 

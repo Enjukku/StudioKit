@@ -9,7 +9,7 @@ Marketing sends **files, not chat**. Asks to another role are tickets in the job
 | game-designer | concept and preproduction step 1; each new feature that marketing will show | the promise ledger (which claims are playable now), the signature moment and when a new player reaches it, the audience, what is not built yet | a feature added only so an ad can show it |
 | trend-scout | before title and thumbnail work; weekly | dated, labelled signals on audience words, title and thumbnail patterns, timing, rights flags | creative wording; a number without its label |
 | art-director | before any image; for every image before the owner | the art bible with the `thumbnail` and `game-icon` families, approved anchors, a review of each candidate at real size | the message or the title (marketing owns them) |
-| analyst *(planned)* | before every test and launch; weekly | the test spec (decision, metric label, denominator, cohort, window, guardrails), readings of results | a "winner" without counts |
+| analyst | before every test and launch; weekly | the test spec (decision, metric label, denominator, cohort, window, guardrails), readings of results | a "winner" without counts |
 | live-ops-designer | update and event planning; week 3 after launch | the calendar of real playable changes, event ids, dates, what is new for returning players | a hype message for a change that is not live |
 
 ## 1. Marketing → game-designer (promise check)
@@ -111,7 +111,7 @@ return: hand-back to marketing (rules/messages.md §3)
 </spec>
 ```
 
-## 4. Marketing → analyst (planned; to the lead until built)
+## 4. Marketing → analyst
 ```text
 <intent>
 We want to learn whether <change> brings players who enjoy <game>, not only more clicks. Please define the test before it starts, so the result can be read honestly.
@@ -119,10 +119,10 @@ We want to learn whether <change> brings players who enjoy <game>, not only more
 <spec>
 id: <job>-T<nn>
 from: marketing
-to: analyst (planned: lead holds)
+to: analyst
 model: sonnet
 effort: medium                                # analyst roster
-skills: [analytics]
+skills: [analysis-design, analysis-craft]
 refs:
   - .agents/skills/marketing-craft/references/testing-measurement.md   # take: §1 test types, §2 spec fields
 fixed:
