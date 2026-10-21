@@ -20,6 +20,7 @@ supersedes: []
 | J016-D6 | 2026-10-21 | Add `SendMessage` to the tool lists of the 11 working roles that lacked it (analyst, art-director, game-designer, live-ops-designer, marketing, progression-designer, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer); helpers (doc-keeper, explore, researcher) stay without | "Okay, go ahead and add the 11 tools to the working roles that they lack." |
 | J016-D7 | 2026-10-21 | The image roles get the built-in browser (`mcp__Claude_Browser__*`): art-director, vfx-designer and marketing generate their own images; the owner's yes per download batch still applies | "The image roles and browser, yes, the VFX designer should be able to also use the browser to get images." |
 | J016-D8 | 2026-10-21 | No cutscene pilot now. The first real cutscene job (a GreatWallSim cutscene is the candidate) runs on the new design and serves as the pilot | "I don't plan to make any cutscene right now, but yeah, it would be, it could be used for the that game, yes." |
+| J016-D9 | 2026-10-21 | **G3: J016 closed.** Kit 0.6.1 stands after the internal audit; no separate pilot. The first real cutscene job runs on the new design and is its test; its result goes to `/improve` | "Close J016. File it into the vault and leave the real test for the first cutscene job." |
 
 ## Lead decisions at G3 (the lead's own calls inside the approved design; not owner decisions)
 Made 2026-10-21 to resolve audit findings that left a choice open; every fixer followed them (commit 763a11e). Cited as LD1-LD16 in the fix notes and reviews.

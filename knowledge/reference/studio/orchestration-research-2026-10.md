@@ -24,7 +24,7 @@ supersedes: []
 | Plan mode prevents expensive re-work when the initial direction is wrong | code.claude.com/docs/en/costs | read 2026-10-20 | Plan and brief before building (G1). |
 
 ## Replaced conclusions (J016, 2026-10-21)
-The findings above stay; some consequences changed after the owner's two orchestration papers and a live check on Claude Code 2.1.296 and 2.1.306 (`knowledge/jobs/J016-orchestration/design.md`, `capability-check.md`):
+The findings above stay; some consequences changed after the owner's two orchestration papers and a live check on Claude Code 2.1.296 and 2.1.306 (`knowledge/jobs/J016-orchestration/design.md`, `knowledge/reference/studio/claude-code-capabilities.md`):
 | Old consequence | Now | Why |
 | --- | --- | --- |
 | Hop limit 3 (from the nesting limit) | round, repair and depth limits (`rules/company.md` §9) | nesting limits spawning, not production stages (C04) |
@@ -36,3 +36,15 @@ The findings above stay; some consequences changed after the owner's two orchest
 
 - No 2026 study found on approval gates for creative or game-art work.
 - No measurement of how often blocked or needs-decision statuses occur. Track them in ledgers.
+
+## Tried and rejected in J016 (2026-10-21)
+| tried | why it failed | evidence | retry only if |
+| --- | --- | --- | --- |
+| Agent teams for messages between crafts | experimental, interactive only, one team per session; SendMessage works without them | `knowledge/reference/studio/claude-code-capabilities.md` C01, C12 | teams leave preview and support nesting and resume |
+| Peer ids inside saved workflows | a workflow's agent() exposes no agent id; parallel agents cannot hold each other's ids | J016 audit A F05 (`knowledge/jobs/J016-orchestration/reviews/core-rules-322c8ad-auditor-a.md`) | workflows expose agent ids |
+| VFX and sound "read the other's note if it exists" inside one parallel() step | neither sees the other's note | J016 audit B F4 | never; use producer writes → consumer answers → producer merges |
+| Silent default workflow args (size L, money false) | an M job skipped its proof; money rules never loaded | J016 audits A F02, E TT-05 | never; required args return blocked |
+| "Closest type" for a mixed request | it drops part of the request (the gold skin's shop sale) | J016 audit E TT-09 | never; split into one job per type with one owner per shared interface |
+| Withholding held-out material by file name only | grade and eval-answer notes with normal names repeated held-out rubrics | J016 recheck E N-01 | never; names containing "hidden" plus frontmatter `held_out: true` |
+| Image downloads inside a workflow run without the owner's yes | a workflow cannot ask the owner mid-run | J016 audit E TT-02 | a workflow can pause for the owner |
+| The lead editing role tool lists on its own | refused as self-modification; tool lists are agent permissions | J016 lesson 3 (`knowledge/inbox/2026-10-21-J016-G3-orchestrator.md`) | never; the owner decides, as in J016-D6 and J016-D7 |
