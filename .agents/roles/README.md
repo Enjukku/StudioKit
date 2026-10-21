@@ -25,12 +25,12 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | quick-builder | craft → Opus | medium (code is Opus medium at least) | planned |
 | qa-lead | craft → Opus | medium | new |
 | performance-engineer | craft → Opus | medium; high for big investigations | new |
-| researcher | research → Sonnet | medium | planned |
+| researcher | research → Sonnet | medium | in kit |
 | analyst | research → Sonnet | medium | planned |
-| studio-operator | research → Sonnet | medium | planned |
+| studio-operator | research → Sonnet | medium | in kit |
 | marketing-store | research → Sonnet | medium | later |
-| doc-keeper | mechanical → Haiku | medium | planned |
-| explore | mechanical → Haiku | low | planned |
+| doc-keeper | mechanical → Haiku | medium | in kit |
+| explore | mechanical → Haiku | low | in kit |
 
 xhigh and max: nobody by default; only after a measured gain. Owner decisions 2026-10-20 ("Opus for animating ... on high. For UI ... Opus on medium. For sound, Opus on medium"; modeler "for simple things, medium is fine ... models that we want to look really good ... high").
 
