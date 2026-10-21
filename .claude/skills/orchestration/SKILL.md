@@ -27,7 +27,7 @@ description: Use at the start of every owner request in the lead chat, and whene
 
 ## 3. Intent briefs: what and why, never how
 
-A brief gives the specialist everything it needs to make **its own best craft choices**. Format: `rules/messages.md` (template `templates/jobs/intent-brief.md`): prose intent (goal and feeling, context, why), then a `yaml` spec with `fixed` (each value with its source), `open` (what the specialist decides), `owns`, `not_in_scope`, `deliver`, `checks`, `return`.
+A brief gives the specialist everything it needs to make **its own best craft choices**. Format: `rules/messages.md` (template `templates/jobs/intent-brief.md`): an `<intent>` tag in prose (goal and feeling, context, why), then a `<spec>` tag with `fixed` (each value with its source), `open` (what the specialist decides), `refs` with notes, `avoid`, `owns`, `not_in_scope`, `rules` (every rule the work must keep, restated), `deliver`, `checks`, `return`. Send it whole, in one message.
 
 Example (cutscene beat → animator). Intent: "The player must feel the dragon is too big to fight. Beat 3 of 6, after the gate opens; follow shot 4 of the approved shot list." Spec: `fixed: {length: 4.0-6.5 s  # shot list, camera: low tracking  # shot list, rig: dragon v2}`, `open: [flight path, wing timing, landing, secondary motion]`, `checks: [C1: lands on the tower ledge mark, C2: no foot sliding in a 30 fps clip from the shot camera]`.
 

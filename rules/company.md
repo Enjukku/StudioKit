@@ -53,7 +53,7 @@ Any agent may ask any other agent for work **inside an approved brief**. Every r
 
 ## 4. Communication rules (quality first)
 
-The format of every brief, ask and hand-back: `rules/messages.md` (prose for intent, a `yaml` spec for exact values, open choices left to the specialist).
+The format of every brief, ask and hand-back: `rules/messages.md` (prose `<intent>`, a `<spec>` with every exact value and every rule, open choices left to the specialist, `coverage` in every hand-back).
 
 
 1. **Shared files, complete messages.** Briefs, beat sheets, results and decisions live in the job folder, and messages point to them, so every agent reads the original, not a retelling. A message carries everything the reader needs to act; never cut a fact or a reason to save tokens (owner 2026-10-20: best result over usage between agents).
