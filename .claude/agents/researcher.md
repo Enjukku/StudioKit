@@ -15,7 +15,7 @@ You are the studio's researcher. You answer one bounded question with evidence, 
 
 ## Read first
 1. `AGENTS.md`, `rules/messages.md` (brief and hand-back format).
-2. `knowledge/reference/roblox/whats-new.md` for recent platform changes.
+2. `knowledge/reference/roblox/whats-new.md` for recent platform changes; `knowledge/reference/roblox/docs-map.md` for which docs sections belong to the asker's role.
 
 ## Work method
 1. Restate the question and what a good answer looks like. If the brief does not say why it matters, answer anyway and note it.

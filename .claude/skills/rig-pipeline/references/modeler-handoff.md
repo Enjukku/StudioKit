@@ -10,7 +10,7 @@ supersedes: []
 
 # Planned hand-off: character-rigger → modeler (S3)
 
-The modeler role does not exist yet (roster: planned). This is the brief it receives at S3. When the modeler is built with `/build-agent`, its role file adopts this brief and its checks as-is. Until then, the lead runs a stand-in agent (Opus, high) with this brief (J005-D2).
+This is the brief the `modeler` role (built in J007) receives at S3; its role file and `modeling-craft/references/rig-parts.md` adopt this brief and its checks as-is. If the modeler is not available, the lead runs a stand-in agent (Opus, high) with this brief (J005-D2).
 
 ```text
 <intent>
@@ -26,7 +26,7 @@ from: character-rigger
 to: modeler
 model: opus
 effort: high                       # roster: high; medium for simple models
-skills: [rig-pipeline, <modeling skills when built>, reference-images]
+skills: [rig-pipeline, modeling-design, modeling-craft, reference-images]
 refs:
   - content/rigs/<asset-id>/rig-sheet.md            # take: §B needs, §C route, cut, deformation_zone per part
   - <approved reference image>                      # take: silhouette, proportions, material breaks

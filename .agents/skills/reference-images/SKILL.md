@@ -16,7 +16,7 @@ Before any visual work is built: a new game or stage, a character, creature, mod
 | The style locks and families for this game | `knowledge/design/art-bible.md` |
 | How to write the `identity` for each family, edits, several images, text, refining, usage limits | `references/prompt-patterns.md` |
 | UI images inside Figma, icon prompts, image credits | `ui-figma` skill, `references/image-generation.md` |
-| How a model is built from the reference | the modeler's skills (planned) |
+| How a model is built from the reference | `modeling-design`, `modeling-craft` (modeler) |
 | Brief format for asking another agent for images | `rules/messages.md` |
 
 ## 3. Who uses it, for what

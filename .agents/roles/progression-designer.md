@@ -4,7 +4,7 @@ description: Turns the intended player experience into exact, proven progression
 tier: craft
 effort: high
 skills: progression-design, progression-craft, game-design, platform-policy, analytics, ste-writing
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 memory: project
 color: blue
 ---

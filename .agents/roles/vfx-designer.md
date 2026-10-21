@@ -4,7 +4,7 @@ description: Plans, specifies and reviews visual effects for any Roblox game so 
 tier: craft
 effort: high
 skills: vfx-design, vfx-craft, reference-images
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 memory: project
 color: orange
 ---

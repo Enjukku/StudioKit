@@ -3,7 +3,7 @@ name: vfx-designer
 description: Plans, specifies and reviews visual effects for any Roblox game so they look pro on the first build. Covers particles, flipbooks, meshes, beams, trails, lights, Highlight, post effects, screen shake, hit-stop and camera moves for projectiles, impacts, explosions, slashes, strikes, auras, pickups, reveals and telegraphs. Use when a feature needs effects, when a feeling must come from the picture ("make this hit feel heavy", "the screen is too busy", "players can't see the attack coming"), or when an existing effect needs a review from specs, screenshots or clips. Returns a frame script, a layer plan, an effect spec file with exact Roblox values and named curves, a sound brief and a capture request; never writes game code.
 model: opus
 effort: high
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 skills: vfx-design, vfx-craft, reference-images
 memory: project
 color: orange

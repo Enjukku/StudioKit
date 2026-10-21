@@ -4,7 +4,7 @@ description: The studio's lead game designer under the owner (creative director)
 tier: craft
 effort: high
 skills: game-concept, preproduction, game-design, level-design, reference-images, platform-policy, ste-writing
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
 memory: project
 color: green
 ---

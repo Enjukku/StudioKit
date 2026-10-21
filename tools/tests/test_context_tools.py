@@ -138,6 +138,119 @@ class RankingTests(Repo):
         self.assertEqual(cp.stem("statuses"), cp.stem("status"))
 
 
+MIRROR = "knowledge/external/roblox-creator-docs"
+
+
+def page(title: str, description: str, body: str) -> str:
+    return f"---\ntitle: {title}\ndescription: {description}\ntags: [roblox]\n---\n\n> [!info] Local Roblox Creator Docs mirror\n> Mirrored from [x](https://example.com/x).\n\n{body}\n"
+
+
+class RobloxDocsTests(Repo):
+    def mirror(self):
+        self.write(f"{MIRROR}/README.md", "---\ntitle: Mirror readme\n---\n\n# Mirror\n\nTrails beams sword.\n")
+        self.write(f"{MIRROR}/effects/trails.md", page("Trails", "Trails create visual motion effects as an object moves.", "A `Class.Trail` draws a streak behind two attachments, such as a sword slashing through the air.\n\n## Lifetime\n\nHow long the streak lasts."))
+        self.write(f"{MIRROR}/effects/beams.md", page("Beams", "Beams connect two attachments.", "A `Class.Beam` draws a texture between two points, like a laser.\n\n## Width\n\nBeam width."))
+        self.write(f"{MIRROR}/tutorials/long.md", page("Build a whole game", "A long tutorial.", "Step text about doors and coins. " * 80 + "A sword appears once."))
+        self.write(f"{MIRROR}/audio/effects.md", page("Audio effects", "Change how sound is heard.", "Reverb makes a cave echo.\n\n## Echo\n\nEcho repeats the sound."))
+        for name in ("Trail", "Beam", "Part", "UICorner"):
+            self.write(f"{MIRROR}/_api-reference/classes/{name}.yaml", f"name: {name}\nsummary: The {name} class.\n")
+        self.write(f"{MIRROR}/_includes/fragment.md", "Trails trails trails sword sword.\n")
+
+    def test_section_lists_pages_after_kit_notes(self):
+        self.mirror()
+        self.write("knowledge/design/vfx.md", fm() + "# Sword effects\n\nThe sword swing gets a streak.\n")
+        packet = cp.build(self.root, "a glowing streak that follows the sword swing")
+        pages = packet["roblox_docs"]["pages"]
+        self.assertEqual(pages[0]["path"], f"{MIRROR}/effects/trails.md")
+        self.assertEqual(pages[0]["title"], "Trails")
+        self.assertTrue(pages[0]["why"])
+        paths = [p["path"] for p in pages]
+        self.assertNotIn(f"{MIRROR}/README.md", paths)
+        self.assertFalse(any("/_includes/" in p or "/_api-reference/" in p for p in paths))
+        text = cp.render(packet)
+        self.assertIn("## Roblox docs", text)
+        self.assertLess(text.index("## Ranked"), text.index("knowledge/design/vfx.md"))
+        self.assertLess(text.index("knowledge/design/vfx.md"), text.index("## Roblox docs"))
+        self.assertLess(text.index("## Roblox docs"), text.index("## Read next"))
+        self.assertIn(f"`{MIRROR}/effects/trails.md` · Trails", text)
+
+    def test_at_most_five_pages_and_focused_page_beats_long_tutorial(self):
+        self.mirror()
+        for i in range(8):
+            self.write(f"{MIRROR}/misc/p{i}.md", page(f"Page {i}", "Sword notes.", f"Sword fact {i}."))
+        pages = cp.build(self.root, "sword trail")["roblox_docs"]["pages"]
+        self.assertEqual(len(pages), 5)
+        self.assertEqual(pages[0]["path"], f"{MIRROR}/effects/trails.md")
+        self.assertNotEqual(pages[0]["path"], f"{MIRROR}/tutorials/long.md")
+
+    def test_api_lines_only_for_exact_class_names(self):
+        self.mirror()
+        packet = cp.build(self.root, "add a Trail and a UICorner, not a trail or a Partition or a Beams")
+        api = packet["roblox_docs"]["api"]
+        self.assertEqual([a["class"] for a in api], ["Trail", "UICorner"])
+        self.assertEqual(api[0]["path"], f"{MIRROR}/_api-reference/classes/Trail.yaml")
+        self.assertIn(f"API: Trail → {MIRROR}/_api-reference/classes/Trail.yaml", cp.render(packet))
+
+    def test_kit_ranking_unchanged_by_mirror(self):
+        self.write("knowledge/design/vfx.md", fm() + "# Sword effects\n\nThe sword swing gets a streak.\n")
+        before = cp.build(self.root, "sword streak")
+        self.mirror()
+        after = cp.build(self.root, "sword streak")
+        self.assertEqual(before["results"], after["results"])
+        self.assertEqual(before["searched"], after["searched"])
+        self.assertEqual(before["roblox_docs"], {"pages": [], "api": []})
+        self.assertNotIn("## Roblox docs", cp.render(before))
+
+    def test_cache_written_and_rebuilt_when_mirror_changes(self):
+        self.mirror()
+        first = cp.build(self.root, "cave echo")["roblox_docs"]["pages"]
+        self.assertEqual(first[0]["path"], f"{MIRROR}/audio/effects.md")
+        cache = self.root / cp.DOCS_CACHE
+        self.assertTrue(cache.is_file())
+        self.assertTrue(cp.DOCS_CACHE.startswith("knowledge/generated/"))
+        self.assertEqual(cp.build(self.root, "cave echo")["roblox_docs"], cp.build(self.root, "cave echo")["roblox_docs"])
+        self.write(f"{MIRROR}/environment/caves.md", page("Caves", "Cave echo and cave sound.", "Cave echo cave echo."))
+        again = cp.build(self.root, "cave echo")["roblox_docs"]["pages"]
+        self.assertIn(f"{MIRROR}/environment/caves.md", [p["path"] for p in again])
+
+    def test_corrupt_cache_is_rebuilt(self):
+        self.mirror()
+        cache = self.root / cp.DOCS_CACHE
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text("{not json", encoding="utf-8")
+        pages = cp.build(self.root, "laser beam")["roblox_docs"]["pages"]
+        self.assertEqual(pages[0]["path"], f"{MIRROR}/effects/beams.md")
+        json.loads(cache.read_text(encoding="utf-8"))
+
+    def test_pages_cited_by_top_kit_notes_rank_up(self):
+        self.mirror()
+        self.write(f"{MIRROR}/physics/sleep.md", page("Sleep system", "Assemblies at rest stop simulating.", "Sleeping parts wake on contact."))
+        self.write(f"{MIRROR}/scripting/index.md", page("Scripting", "Scripts.", "Scripts run code."))
+        # No page shares the task's words; kit notes about the task cite the right pages in three forms.
+        task = "idle bricks ignore nudges"
+        self.assertEqual(cp.build(self.root, task)["roblox_docs"]["pages"], [])
+        self.write("knowledge/reference/a.md", fm() + "# Idle bricks\n\nIdle bricks ignore nudges: see `knowledge/external/roblox-creator-docs/physics/sleep.md`.\n")
+        self.write("knowledge/reference/b.md", fm() + "# Nudges\n\nNudges and idle bricks: [[external/roblox-creator-docs/scripting]] and effects/beams.md.\n")
+        pages = cp.build(self.root, task)["roblox_docs"]["pages"]
+        paths = [p["path"] for p in pages]
+        self.assertEqual(paths[0], f"{MIRROR}/physics/sleep.md")
+        self.assertIn(f"{MIRROR}/scripting/index.md", paths)
+        self.assertIn(f"{MIRROR}/effects/beams.md", paths)
+        self.assertIn("cited by top kit notes", pages[0]["why"])
+
+    def test_generated_related_files_tail_is_not_indexed(self):
+        self.mirror()
+        self.write(f"{MIRROR}/effects/glow.md", page("Glow", "Light bloom.", "Bloom.\n\n## Related Files\n\n- [[external/roblox-creator-docs/effects/trails]] - Gizmo widgets."))
+        self.assertEqual(cp.build(self.root, "gizmo widgets")["roblox_docs"]["pages"], [])
+
+    def test_cli_docs_flag_and_json(self):
+        self.mirror()
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(cp.main(["--root", str(self.root), "packet", "sword trail", "--docs", "1", "--json"]), 0)
+        self.assertEqual(len(json.loads(out.getvalue())["roblox_docs"]["pages"]), 1)
+
+
 class LintTests(Repo):
     def test_frontmatter_errors(self):
         self.write("knowledge/design/none.md", "# No frontmatter\n\ntext\n")
@@ -236,6 +349,24 @@ class EvalTests(Repo):
         self.assertTrue(dropped)
         _, dropped = ev.compare(result, result)
         self.assertFalse(dropped)
+
+    def test_mirror_expectations_scored_against_docs_list(self):
+        self.write("knowledge/systems/sword.md", fm("system") + "# Sword\n\nSword swing streak.\n")
+        base = "knowledge/external/roblox-creator-docs"
+        self.write(f"{base}/effects/trails.md", page("Trails", "Streak behind a moving sword.", "Trail streak sword."))
+        self.write(f"{base}/effects/beams.md", page("Beams", "Laser between points.", "Beam laser."))
+        self.write(f"{base}/_api-reference/classes/Trail.yaml", "name: Trail\n")
+        cases = [
+            {"task": "sword streak", "expect": [f"{base}/effects/trails.md"]},
+            {"task": "sword streak with a Trail", "expect": ["knowledge/systems/sword.md", f"{base}/_api-reference/classes/Trail.yaml", f"{base}/effects/beams.md"]},
+        ]
+        result = ev.evaluate(self.root, cases)
+        self.assertEqual(result["cases"][0]["ranks"], [1])
+        ranks = result["cases"][1]["ranks"]
+        self.assertEqual(ranks[0], 1)
+        self.assertEqual(ranks[1], 1)
+        self.assertIsNone(ranks[2])
+        self.assertTrue(any(t.startswith(f"{base}/effects/trails.md") for t in result["cases"][0]["top"]))
 
     def test_cli_save_compare_and_bad_lines(self):
         self.write("knowledge/systems/eggs.md", fm("system") + "# Eggs\n\nEgg hatch odds.\n")

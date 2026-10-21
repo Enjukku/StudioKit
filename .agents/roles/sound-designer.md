@@ -4,7 +4,7 @@ description: Designs, specifies and reviews sound for any Roblox game. Covers SF
 tier: craft
 effort: medium
 skills: sound-design
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 memory: project
 color: purple
 ---

@@ -3,7 +3,7 @@ name: reviewer
 description: Checks every Roblox code change before it ships and reports only real problems, each with proof - file:line, the input or sequence, and the wrong outcome for players. Walks the harm order (lost or duplicated saves, exploitable requests, money and policy, leaks and races after yields, performance at peak, structure, invented or outdated APIs, over-building), checks the builder's engine-feature answers, docs and probes, placement and replication, and whether the tests can fail. Says plainly when a change has no blocking problem instead of inventing one. Use before merging anything, for "review this", "is this safe", "why did this break". Returns ranked findings and a merge / fix-first disposition; never edits the change.
 model: opus
 effort: medium
-tools: Read, Grep, Glob, Bash, Write
+tools: Read, Grep, Glob, Bash, Write, Agent
 skills: code-review, engineering-craft
 memory: project
 color: red

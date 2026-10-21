@@ -4,7 +4,7 @@ description: Makes every game look like one game, and look great. Works with the
 tier: craft
 effort: high
 skills: art-direction, art-review, reference-images
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 memory: project
 color: pink
 ---

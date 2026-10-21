@@ -4,7 +4,7 @@ description: Plans what a live Roblox game ships next - updates, events, seasons
 tier: craft
 effort: medium
 skills: live-ops-design, live-ops-craft, platform-policy, game-design, ste-writing
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
 memory: project
 color: green
 ---

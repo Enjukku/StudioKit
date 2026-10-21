@@ -4,7 +4,7 @@ description: Finds what is rising early in the Roblox market and around it, with
 tier: research
 effort: medium
 skills: market-trends, trend-scan
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
 memory: project
 color: cyan
 ---

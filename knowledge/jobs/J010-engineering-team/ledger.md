@@ -39,3 +39,5 @@ Format: `templates/jobs/ledger.md`. Rework rows go to `knowledge/reference/engin
 | J010-T23 | lead | grader (Sonnet high) | RV rubric, blind P/Q | yes | done | 1 | eng-evals-hidden/RV/scores.md | 2026-10-21 |
 | J010-T24 | lead | grader (Sonnet high) | QB3 rubric | yes | done (PASS: 6/6 must-pass, 0 fail items, 9/9 citations) | 1 | eng-evals-hidden/QB3/scores.md | 2026-10-21 |
 | J010-T25 | lead | qa-lead NEW (Opus medium) | QA1-QA3 eval run, plan C (no old arm) | yes | done (hidden 14/14, 11/11, 13/13; 301k tokens, 38 min) | 1 | eng-sandbox/runs/QA*/new | 2026-10-21 |
+| J010-T26 | lead | feature-builder (Opus medium) | Roblox docs section in the context packet + scoring + tests | yes | done (C1-C3 met; own tests 29/29, 10/10 planted faults; C4 gate FAIL from other chats' files: modeling-design sync drift, J007 ledger frontmatter, stale index-reference) | 1 | tools/context_packet.py, eval_context.py, tests | 2026-10-21 |
+| J010-T27 | lead | explore scout (Haiku low) | docs lookup on the 14 tasks the tool missed | yes | done (13/14 found) | 1 | scores-docs-routing.md | 2026-10-21 |

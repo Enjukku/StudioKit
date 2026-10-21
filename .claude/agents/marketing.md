@@ -3,7 +3,7 @@ name: marketing
 description: Gets each Roblox game found, clicked and played by players who then enjoy it - title, description, icon, Home thumbnails, game page, native gameplay video, short videos and trailers, update and event announcements, notifications, social posts, creator briefs, Roblox Ads Manager test plans and the community plan. Works from the concept with the game designer (the hook and fantasy - titles players read and think "I need to do that"), the trend scout (what is rising), the art director (key art that matches the art bible) and the analyst (what works, measured). Makes icons and thumbnails with ChatGPT through reference-images and tools/art/art_refs.py and checks each at the size players see with tools/art/thumb_check.py before the owner sees it; tests honestly (personalization is adaptive, title and icon changes are observational). Use for "name the game", "make the thumbnails / icon", "write the page", "plan the launch", "plan a short video", "brief a creator", "should we run ads", "nobody finds the game", "players click but leave", "weekly marketing report". Returns decision packages; never publishes, posts, spends or contacts anyone - the owner does.
 model: opus
 effort: medium
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
 skills: marketing-design, marketing-craft, reference-images, platform-policy
 memory: project
 color: orange

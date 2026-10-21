@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: draft
+status: active
 updated: 2026-10-21
 source: owner chat 2026-10-21 (/build-agent modeler)
 supersedes: []
@@ -42,10 +42,13 @@ fixed:
   hero_route: Tripo from the reference, then Blender clean-up and finish          # owner 2026-10-21
   rig_split: animator - what moves; rigger - which parts, where the cuts go; modeler - cutting, seam clean-up, re-modelling, counter-proposals   # owner 2026-10-20 and 2026-10-21; J005-D1
   s3_brief: knowledge/jobs/J005-character-rigger/modeler-handoff.md, as-is      # J005-D1
-  max_triangles_per_mesh: 20000                         # knowledge/external/roblox-creator-docs/art/modeling/specifications.md:34; re-checked in step 2
-  hand_offs: rigger, animator, art director (planned), VFX (attach points), UI (icon renders); rules/messages.md format   # owner 2026-10-21
+  upload_ceiling_triangles_per_mesh: 20000               # knowledge/external/roblox-creator-docs/art/modeling/specifications.md:34 (ceiling, not a target, J007-D5)
+  creature_and_character_triangles: under about 7000     # owner J007-D5
+  tripo_operator: the owner (modeler writes the input pack)   # owner J007-D4
+  checks: light - numbers for every check, images only on failure plus one review set per hand-off   # J005-D8, J007-D7
+  hand_offs: rigger, animator, animator, art director, environment designer, VFX (attach points), UI (icon renders); rules/messages.md format   # owner 2026-10-21
 open: [book structure inside the two skills, audit script structure, recipe choice per model kind, hand-off wording]
-not_in_scope: [rigging, weights, animation, level placement, game code, art-director agent, Tripo API tool unless the owner says yes]
+not_in_scope: [rigging, weights, animation, level placement, game code, art-director agent, Tripo API tool (J007-D4)]
 rules:
   - Paraphrase sources; never copy paper text; the paper stays outside git.
   - Evidence tags kept. A number without a checked source is PROPOSAL or UNKNOWN, never a rule. Project budgets come from the owner or a phone measurement.
@@ -71,10 +74,10 @@ return: G1 to owner now; G2 two real test models; G3 approval
 2. Phone budgets: the paper says scene budgets are UNKNOWN. The skill gives per-mesh platform limits as facts and project budgets as owner decisions with a measurement method.
 3. Blender version: the owner's installer is Blender 5.1.2; API calls are checked against the Blender MCP docs for that version.
 4. J005 overlap: J005 is writing the Blender and Tripo fact-check tables now. J007 reads them first and checks only new claims.
-5. Test B needs the rigger. If J005's rigger is not built at G2 time, the lead writes the S2 rig sheet for test B as a stand-in (J005-D2 pattern).
+5. Test B uses the character-rigger (built in J005) for the S2 rig sheet and the S4 check.
 
 ## Hidden test set (evals)
-Held out of the skills: the paper's AI-model failure cases (§13 "Common AI made model failures") and two first-game import problems from GreatWallSim's hook-up audit. The eval gives the agent a symptom and asks for the diagnosis and the fix order. A separate grader scores it.
+Held out of the skills: the paper's AI-model failure cases (lines 913-926, "Common AI made model failures"); the extractors skip them. The eval gives the agent a symptom and asks for the diagnosis and the fix order. A separate grader scores it.
 
 ## First real tests (G2), proposed
 - **Test A (medium, hand-built):** one simple model with attach points, for example a sword or a pickaxe. Reference image → Blender by hand → audit → renders → Studio import → VFX attach-point note and UI icon renders.

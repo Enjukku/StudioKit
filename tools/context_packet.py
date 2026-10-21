@@ -4,7 +4,7 @@
 Kit tool (universal). Standard library only, deterministic output.
 
 Usage:
-    python tools/context_packet.py packet "<task>" [--budget 8000] [--max 12] [--json] [--root DIR]
+    python tools/context_packet.py packet "<task>" [--budget 8000] [--max 12] [--docs 5] [--json] [--root DIR]
 
 How it ranks (spec: rules/knowledge.md §2, §3, §6):
     1. Notes under the search roots are split into heading-level sections (#, ##, ###).
@@ -18,6 +18,9 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
     6. A matched skill or role with `knowledge/overlays/<name>.md` pulls that overlay in.
     Matching rows of knowledge/design/decisions.md, AGENTS.md section headings and
     src/ file-name hints are listed separately.
+    7. "## Roblox docs": up to --docs pages of the local Roblox docs mirror (own ranking, own cap,
+       not part of the kit-note budget; see the "Roblox docs mirror" block) plus an API line for
+       every exact Roblox class name in the task. Index cached in knowledge/generated/.
 
 Search roots: kit.json key `context.search_roots` (list of repo-relative paths) when present,
 else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present.
@@ -28,8 +31,10 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
 import math
+import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -672,13 +677,297 @@ def code_hints(root: Path, terms: list[str], limit: int = 6) -> list[dict]:
     return found[:limit]
 
 
+# ---------------------------------------------------------------- Roblox docs mirror
+#
+# A separate ranked list over the local Roblox Creator Docs mirror, shown after the kit notes with
+# its own cap (DOCS_PAGES), so mirror pages never take kit-note slots or budget. How a page scores:
+#   1. BM25F over one document per page; fields and their (weight, length normalisation b) in
+#      DOCS_FIELDS. Code blocks, the mirror banner, link targets, URLs and the generated
+#      "## Related Files" tail are left out; `Class.X` / `Enum.X` prefixes are dropped.
+#   2. Times a coverage factor (share of query words the page matches), as the kit ranking does.
+#   3. Times a folder prior (DOCS_FOLDER_PRIOR): project walkthroughs and showcase write-ups repeat
+#      many words but are rarely the page that explains an engine system.
+#   4. Times a small authority prior from incoming page-body links inside the mirror.
+#   5. Plus a kit-citation term: mirror pages that the top-ranked kit sections cite (by path or
+#      [[external/roblox-creator-docs/...]] link) gain up to DOCS_CITE_WEIGHT x the best page score.
+#      The kit's own notes thereby route player words ("a streak behind the sword") to pages.
+# Pages under underscore folders (_includes, _api-reference) and the mirror README are skipped.
+# The page index is cached in DOCS_CACHE and rebuilt when any page's path, size or mtime changes.
+
+DOCS_MIRROR = "knowledge/external/roblox-creator-docs"
+DOCS_API_CLASSES = f"{DOCS_MIRROR}/_api-reference/classes"
+DOCS_CACHE = "knowledge/generated/roblox-docs-index.json"
+DOCS_CACHE_VERSION = 2
+DOCS_PAGES = 5
+DOCS_FIELDS = {"title": (4.0, 0.3), "description": (2.5, 0.5), "headings": (1.5, 0.5), "path": (2.0, 0.3), "body": (1.0, 0.75)}
+DOCS_K1 = 2.0
+DOCS_COVERAGE = 0.5  # score *= (1 - c) + c * matched / query words
+DOCS_FOLDER_PRIOR = {"tutorials/": 0.5, "resources/": 0.7}
+DOCS_INLINK_WEIGHT = 0.1  # score *= 1 + w * ln(1 + incoming links)
+DOCS_CITE_SECTIONS = 10  # top kit sections scanned for mirror citations
+DOCS_CITE_WEIGHT = 0.5
+DOCS_SKIP_FILES = {"README.md"}  # the mirror's own index page, top level only
+DOCS_TAIL_HEADINGS = {"Related Files"}  # generated link lists at the end of each page
+DOCS_PREFIX_RE = re.compile(r"\b(?:Class|Enum|Datatype|Library|Global)\.")
+DOCS_HTML_RE = re.compile(r"<[^>\n]+>")
+DOCS_LINK_TARGET_RE = re.compile(r"\]\([^)\s]*\)")
+DOCS_WIKI_RE = re.compile(r"\[\[([^\[\]|\n]+?)(?:\|([^\[\]\n]*))?\]\]")
+DOCS_URL_RE = re.compile(r"https?://\S+")
+DOCS_CITE_RE = re.compile(r"((?:[A-Za-z0-9_-]+/)+[A-Za-z0-9_-]+|[A-Za-z0-9_-]+(?=\.md))(\.md)?")
+DOCS_MIRROR_LINK = "external/roblox-creator-docs/"
+ACRONYM_RE = re.compile(r"(?<=[A-Z])(?=[A-Z][a-z])")
+IDENT_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+_DOCS_STEMS: dict[str, list[str]] = {}  # raw word -> its tokens
+DOCS_RAW_WORD_RE = re.compile(r"[A-Za-z0-9]+")
+
+
+def docs_tokenize(text: str) -> list[str]:
+    """tokenize() plus acronym splits (UICorner -> UI Corner), so class-named pages match plain words.
+    Same tokens as tokenize(); stems are memoised because the mirror is ~11 MB of text."""
+    out: list[str] = []
+    for raw in DOCS_RAW_WORD_RE.findall(text):
+        cached = _DOCS_STEMS.get(raw)
+        if cached is None:
+            words = WORD_RE.findall(CAMEL_RE.sub(" ", ACRONYM_RE.sub(" ", raw)).lower())
+            cached = _DOCS_STEMS[raw] = [stem(w) for w in words if w not in STOP_WORDS and (len(w) > 1 or w.isdigit())]
+        out.extend(cached)
+    return out
+
+
+def _docs_page_files(mirror: Path) -> list[tuple[str, int, int]]:
+    """(path relative to the mirror, size, mtime_ns) for every page, sorted."""
+    found: list[tuple[str, int, int]] = []
+    for folder, dirs, files in os.walk(mirror):
+        dirs[:] = [d for d in dirs if not d.startswith("_") and d not in SKIP_DIRS]
+        base = Path(folder)
+        for name in files:
+            if not name.endswith(".md") or name.startswith("_"):
+                continue
+            rel = (base / name).relative_to(mirror).as_posix()
+            if rel in DOCS_SKIP_FILES:
+                continue
+            info = (base / name).stat()
+            found.append((rel, info.st_size, info.st_mtime_ns))
+    found.sort()
+    return found
+
+
+def _docs_clean(value: str) -> str:
+    value = DOCS_WIKI_RE.sub(lambda m: f" {m.group(2) or ''} ", value)
+    value = DOCS_LINK_TARGET_RE.sub("]", value)
+    value = DOCS_URL_RE.sub(" ", DOCS_HTML_RE.sub(" ", value))
+    return DOCS_PREFIX_RE.sub("", value)
+
+
+def _docs_fields(rel: str, text: str) -> tuple[str, str, dict[str, list[str]], set[str]]:
+    """(title, description, field tokens, mirror pages this page's body links to)."""
+    meta, fm_len, _ = parse_frontmatter(text)
+    meta = meta or {}
+    lines = text.lstrip("﻿").splitlines()[fm_len:]
+    headings: list[str] = []
+    body: list[str] = []
+    links: set[str] = set()
+    in_fence = False
+    for line in lines:
+        if FENCE_RE.match(line):
+            in_fence = not in_fence
+            continue
+        stripped = line.strip()
+        if in_fence or stripped.startswith(("> [!info] Local Roblox", "> Mirrored from")):
+            continue
+        match = HEADING_RE.match(stripped)
+        if match:
+            if match.group(2).strip() in DOCS_TAIL_HEADINGS:
+                break
+            headings.append(match.group(2))
+            continue
+        body.append(line)
+        for wiki in DOCS_WIKI_RE.finditer(line):
+            target = wiki.group(1).split("#", 1)[0].strip()
+            if target.startswith(DOCS_MIRROR_LINK):
+                links.add(target[len(DOCS_MIRROR_LINK) :].removesuffix(".md") + ".md")
+    title = str(meta.get("title") or "") or next((h for h in headings[:1]), "") or Path(rel).stem.replace("-", " ")
+    description = _docs_clean(str(meta.get("description") or ""))
+    path_words = rel.removesuffix(".md").removesuffix("/index").replace("/", " ")
+    fields = {
+        "title": docs_tokenize(_docs_clean(title)),
+        "description": docs_tokenize(description),
+        "headings": docs_tokenize(_docs_clean("\n".join(headings))),
+        "path": docs_tokenize(path_words),
+        "body": docs_tokenize(_docs_clean("\n".join(body))),
+    }
+    links.discard(rel)
+    return title, description, fields, links
+
+
+def _build_docs_index(mirror: Path, files: list[tuple[str, int, int]]) -> dict:
+    pages: list[dict] = []
+    per_page: list[dict[str, list[str]]] = []
+    incoming: dict[str, int] = {}
+    for rel, _, _ in files:
+        title, description, fields, links = _docs_fields(rel, (mirror / rel).read_text(encoding="utf-8", errors="replace"))
+        pages.append({"path": rel, "title": clip(title, 120), "description": clip(description, 200)})
+        per_page.append(fields)
+        for target in links:
+            incoming[target] = incoming.get(target, 0) + 1
+    for page in pages:
+        page["inlinks"] = incoming.get(page["path"], 0)
+    count = max(1, len(per_page))
+    avg = {name: max(1.0, sum(len(f[name]) for f in per_page) / count) for name in DOCS_FIELDS}
+    postings: dict[str, list[str]] = {}
+    for doc, fields in enumerate(per_page):
+        weighted: dict[str, float] = {}
+        for name, (weight, b) in DOCS_FIELDS.items():
+            tokens = fields[name]
+            if not tokens:
+                continue
+            norm = 1 - b + b * len(tokens) / avg[name]
+            counts: dict[str, int] = {}
+            for term in tokens:
+                counts[term] = counts.get(term, 0) + 1
+            for term, tf in counts.items():
+                weighted[term] = weighted.get(term, 0.0) + weight * tf / norm
+        for term, value in weighted.items():
+            postings.setdefault(term, []).append(f"{doc}:{value:.3f}")
+    return {"pages": pages, "postings": {term: " ".join(items) for term, items in postings.items()}}
+
+
+class DocsIndex:
+    """Page index of the Roblox docs mirror (cached). `load` returns None when there is no mirror."""
+
+    def __init__(self, root: Path, data: dict):
+        self.root = root
+        self.pages: list[dict] = data["pages"]
+        self.postings: dict[str, str] = data["postings"]
+        self.by_path = {page["path"]: doc for doc, page in enumerate(self.pages)}
+        classes = root / DOCS_API_CLASSES
+        self.classes = {p.stem for p in classes.glob("*.yaml")} if classes.is_dir() else set()
+
+    @classmethod
+    def load(cls, root: Path) -> "DocsIndex | None":
+        mirror = root / DOCS_MIRROR
+        if not mirror.is_dir():
+            return None
+        files = _docs_page_files(mirror)
+        digest = hashlib.sha1(f"v{DOCS_CACHE_VERSION}\n".encode())
+        for rel, size, mtime in files:
+            digest.update(f"{rel}|{size}|{mtime}\n".encode())
+        signature = digest.hexdigest()
+        cache = root / DOCS_CACHE
+        try:
+            data = json.loads(cache.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and data.get("signature") == signature:
+                return cls(root, data)
+        except (OSError, ValueError):
+            pass
+        data = _build_docs_index(mirror, files)
+        data = {"signature": signature, "note": f"generated by tools/context_packet.py from {DOCS_MIRROR}; safe to delete", **data}
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            temp = cache.with_suffix(".tmp")
+            temp.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            os.replace(temp, cache)
+        except OSError:
+            pass  # read-only checkout: rank from memory this run
+        return cls(root, data)
+
+    def cited(self, corpus: Corpus, hits: list[Hit]) -> dict[int, float]:
+        """Mirror pages cited by the top kit sections: page -> sum of (section score / top score) / pages cited there."""
+        matches = [h for h in hits if h.kind == "match"][:DOCS_CITE_SECTIONS]
+        if not matches:
+            return {}
+        top = matches[0].score
+        strength: dict[int, float] = {}
+        for hit in matches:
+            text = "\n".join(corpus.notes[hit.path].lines[hit.start - 1 : hit.end])
+            found: list[int] = []
+            for match in DOCS_CITE_RE.finditer(text):
+                rel, in_mirror = match.group(1), False
+                if "roblox-creator-docs/" in rel:
+                    rel, in_mirror = rel.split("roblox-creator-docs/", 1)[1], True
+                doc = self.by_path.get(rel + ".md")
+                if doc is None and in_mirror and not match.group(2):
+                    doc = self.by_path.get(rel + "/index.md")  # [[external/roblox-creator-docs/x]] for a folder index
+                if doc is not None and doc not in found:
+                    found.append(doc)
+            for doc in found:
+                strength[doc] = strength.get(doc, 0.0) + (hit.score / top) / len(found)
+        return strength
+
+    def rank(self, query: str, limit: int = DOCS_PAGES, cited: dict[int, float] | None = None) -> list[dict]:
+        terms = query_terms(ACRONYM_RE.sub(" ", query))
+        if not terms or not self.pages:
+            return []
+        total = len(self.pages)
+        scores: dict[int, float] = {}
+        matched: dict[int, list[str]] = {}
+        for term in terms:
+            raw = self.postings.get(term)
+            if not raw:
+                continue
+            items = raw.split(" ")
+            idf = math.log(1 + (total - len(items) + 0.5) / (len(items) + 0.5))
+            for item in items:
+                doc, _, value = item.partition(":")
+                tf = float(value)
+                key = int(doc)
+                scores[key] = scores.get(key, 0.0) + idf * tf * (DOCS_K1 + 1) / (tf + DOCS_K1)
+                matched.setdefault(key, []).append(term)
+        final: dict[int, float] = {}
+        for doc, value in scores.items():
+            page = self.pages[doc]
+            prior = next((w for prefix, w in DOCS_FOLDER_PRIOR.items() if page["path"].startswith(prefix)), 1.0)
+            prior *= 1 + DOCS_INLINK_WEIGHT * math.log1p(page.get("inlinks", 0))
+            final[doc] = value * (1 - DOCS_COVERAGE + DOCS_COVERAGE * len(matched[doc]) / len(terms)) * prior
+        cited = cited or {}
+        if cited:
+            best = max(final.values(), default=1.0) or 1.0
+            most = max(cited.values())
+            for doc, value in cited.items():
+                final[doc] = final.get(doc, 0.0) + DOCS_CITE_WEIGHT * best * value / most
+        ranked = sorted(final.items(), key=lambda item: (-round(item[1], 9), self.pages[item[0]]["path"]))
+        out = []
+        for doc, value in ranked[:limit]:
+            page = self.pages[doc]
+            words = matched.get(doc, [])
+            title_terms = set(docs_tokenize(page["title"]))
+            reasons = []
+            if words:
+                in_title = [t for t in words if t in title_terms]
+                reasons.append(f"matched {', '.join(words)}" + (f" (title: {', '.join(in_title)})" if in_title else ""))
+            if doc in cited:
+                reasons.append("cited by top kit notes")
+            out.append({"path": f"{DOCS_MIRROR}/{page['path']}", "title": page["title"], "score": round(value, 3), "why": "; ".join(reasons)})
+        return out
+
+    def api(self, query: str) -> list[dict]:
+        """Exact (case-sensitive) Roblox class names in the task text, in order of first mention."""
+        found: list[dict] = []
+        for word in IDENT_RE.findall(query):
+            if word in self.classes and all(f["class"] != word for f in found):
+                found.append({"class": word, "path": f"{DOCS_API_CLASSES}/{word}.yaml"})
+        return found
+
+
+def roblox_docs(root: Path, query: str, limit: int = DOCS_PAGES, index: DocsIndex | None = None, corpus: Corpus | None = None, hits: list[Hit] | None = None) -> dict:
+    """The packet's "Roblox docs" part. Pass the kit corpus and its ranked hits to use kit citations."""
+    index = index or DocsIndex.load(root)
+    if index is None or limit < 1:
+        return {"pages": [], "api": []}
+    cited = index.cited(corpus, hits) if corpus is not None and hits else {}
+    return {"pages": index.rank(query, limit, cited), "api": index.api(query)}
+
+
 # ---------------------------------------------------------------- packet
 
 
-def build(root: Path, query: str, budget: int = 8000, max_items: int = 12) -> dict:
+def build(root: Path, query: str, budget: int = 8000, max_items: int = 12, docs: int = DOCS_PAGES) -> dict:
     corpus = Corpus(root)
     terms = query_terms(query)
     hits, superseded = rank(corpus, query)
+    docs_index = DocsIndex.load(root) if docs > 0 else None
     limit_chars = budget * CHARS_PER_TOKEN
     used = 600  # header, side lists and read-next reserve
     chosen: list[Hit] = []
@@ -720,6 +1009,10 @@ def build(root: Path, query: str, budget: int = 8000, max_items: int = 12) -> di
             read_next.append(f"`{item['path']}` is superseded: read `{item['see']}` instead")
     if not chosen:
         read_next.append("nothing matched: start from `knowledge/index.md`")
+    docs_part = roblox_docs(root, query, docs, docs_index, corpus, hits) if docs_index else {"pages": [], "api": []}
+    if docs_part["pages"]:
+        top_page = docs_part["pages"][0]
+        read_next.append(f"open Roblox docs `{top_page['path']}` ({top_page['title']}) before using that engine system")
 
     return {
         "query": query,
@@ -741,6 +1034,7 @@ def build(root: Path, query: str, budget: int = 8000, max_items: int = 12) -> di
             for i, h in enumerate(chosen)
         ],
         "superseded": superseded,
+        "roblox_docs": docs_part,
         "decisions": decision_rows(root, terms),
         "code_hints": code_hints(root, terms),
         "agents_sections": agents_headings(root),
@@ -766,6 +1060,12 @@ def render(packet: dict) -> str:
         out.append(f"{item['rank']}. `{item['ref']}` L{item['lines'][0]}-{item['lines'][1]} · {item['score']} · {item['why']}")
         for line in item["excerpt"]:
             out.append(f"   > {line}")
+    docs_part = packet.get("roblox_docs") or {}
+    if docs_part.get("pages") or docs_part.get("api"):
+        out += ["", "## Roblox docs", ""]
+        for i, page in enumerate(docs_part["pages"], start=1):
+            out.append(f"{i}. `{page['path']}` · {page['title']} · {page['why']}")
+        out += [f"- API: {item['class']} → {item['path']}" for item in docs_part["api"]]
     if packet["superseded"]:
         out += ["", "## Superseded (strong matches, skipped)", ""]
         for item in packet["superseded"]:
@@ -791,6 +1091,7 @@ def parser() -> argparse.ArgumentParser:
     packet.add_argument("task", help="plain-language task or question")
     packet.add_argument("--budget", type=int, default=8000, help="token budget (4 chars/token)")
     packet.add_argument("--max", type=int, default=12, help="maximum ranked entries")
+    packet.add_argument("--docs", type=int, default=DOCS_PAGES, help="Roblox docs mirror pages to list (0 = none)")
     packet.add_argument("--json", action="store_true", help="machine-readable output")
     return result
 
@@ -803,7 +1104,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.budget < 200 or args.max < 1:
             raise ValueError("--budget must be >= 200 and --max >= 1")
-        packet = build(args.root.resolve(), args.task, args.budget, args.max)
+        packet = build(args.root.resolve(), args.task, args.budget, args.max, args.docs)
     except (OSError, ValueError) as error:
         print(f"context_packet: {error}", file=sys.stderr)
         return 2

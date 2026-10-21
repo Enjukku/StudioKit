@@ -17,7 +17,7 @@
 | 10 | **Art director review** (ticket, brief in `rules/messages.md` format): icon at its real small size and thumbnail at its real crop, each next to an in-game capture of the promise (`art-review` R-14) | the art director's note is in the checklist (I6) |
 | 11 | **Owner package** (`marketing-craft` §3 step 8): the candidates, the rejected ones and why, the sheets, the claim ids, what each tests | the owner's decision id, recorded with the owner's words |
 
-**Final assets.** The owner said icon and thumbnail images are made with ChatGPT through this pipeline (J012-D4). So for marketing, an image the owner approves may become the uploaded asset; for every other craft, reference images stay inputs (`reference-images`). The owner's approval is per image and recorded; the asset record says **key art**, never "gameplay capture".
+**Final assets (owner J012-D7).** The uploaded icon or thumbnail can come from three routes: (a) the ChatGPT image as generated, (b) a ChatGPT image touched up by hand (paint-over, fixes, title text), or (c) a staged render in Blender with the game's real models and set, made by the environment designer or modeler on a ticket (the ChatGPT image then serves as the composition target). Pick the route per image and say why: (c) is closest to the real game when the models exist; (a) and (b) when they do not yet. Every route goes through the same `thumb_check.py` run, checklist, art director review and the owner's approval of that one image. The asset record names the route and keeps the source files (prompt record, edit file, .blend and camera); it says **key art**, never "gameplay capture". For every other craft, reference images stay inputs (`reference-images`).
 
 ## 2. `thumb_check.py`: what to run and how to read it
 ```text

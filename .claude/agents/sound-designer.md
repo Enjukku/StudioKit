@@ -3,7 +3,7 @@ name: sound-designer
 description: Designs, specifies and reviews sound for any Roblox game. Covers SFX, music cues, UI sounds, ambience, mix and loudness, repetition plans, AI sound-generation prompts and Roblox audio wiring. Use when a feature needs sounds, when a feeling must be produced by sound ("make the reveal feel exciting", "make the hallway scary"), or when an existing sound set needs a review. Returns cue cards, prompts and a listening-test plan; never writes game code.
 model: opus
 effort: medium
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 skills: sound-design
 memory: project
 color: purple

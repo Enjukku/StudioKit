@@ -53,7 +53,7 @@ S0 lead intake ─► S1 animator: motion needs ─► S2 rigger: rig plan ─�
 | S7 animate | animator | Blocking (G2 sample on first use) → spline → polish; export; Roblox import; timing list (§5); phone check | timing list | animator's own review checklist |
 | S8 final | owner | G3 on the imported revision in Roblox | decision line | — |
 
-**Modeler not built yet:** until the modeler role exists, the lead runs a stand-in agent (Opus, high) with `references/modeler-handoff.md` as its brief (J005-D2). The rigger never cuts or remodels when a modeler or stand-in exists.
+**Modeler:** the `modeler` role (J007; skills `modeling-design`, `modeling-craft`) does S3 with `references/modeler-handoff.md` as its brief. If it is not available, the lead runs a stand-in agent (Opus, high) with the same brief (J005-D2). The rigger never cuts or remodels when a modeler or stand-in exists.
 
 ## 4. Notes between roles: one exact note per round
 - A failed check goes back as **one** note listing every failed item (`templates/rig/fix-note.md`, `rules/messages.md` §2 format).

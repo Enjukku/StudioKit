@@ -43,7 +43,7 @@ Workflow: `marketing-craft` (images and checks). One copy per candidate image, n
 | I10 | Protected characters, logos, fonts, music references and likenesses are cleared | rights record, not "it is trending" | |
 | I11 | Distinct from our other live images and from competitors | comparison sheet with ids and date | |
 | I12 | It tests one clear hypothesis | one line: which player expectation this image changes | |
-| I13 | Traceable and reversible | brief id, art_refs record (prompt, inputs), edit history, owner approval, the image it replaces | |
+| I13 | Traceable and reversible | route (ChatGPT / touched up / Blender render, J012-D7), brief id, art_refs record (prompt, inputs), edit file or .blend + camera, owner approval, the image it replaces | |
 | I14 | Generated key art is not called gameplay | label on the asset record: key art / gameplay capture | |
 
 ## C. Result

@@ -4,7 +4,7 @@ description: Gets each Roblox game found, clicked and played by players who then
 tier: craft
 effort: medium
 skills: marketing-design, marketing-craft, reference-images, platform-policy
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, WebSearch, Agent
 memory: project
 color: orange
 ---

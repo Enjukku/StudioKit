@@ -13,6 +13,9 @@ Case line: {"task": "...", "expect": ["path", "path#heading", ...], "note": "...
 Metrics per case: recall@5, recall@10 (share of expected items found in the top k) and MRR
 (1 / rank of the first expected item, 0 if none in the ranked list). A case passes when
 recall@10 is 1.0. `--compare` exits 1 if overall recall@10 drops below the saved run.
+An expected path under the Roblox docs mirror (knowledge/external/roblox-creator-docs/) is
+ranked in the packet's "Roblox docs" list instead of the kit-note list: a page by its rank among
+the docs pages (top DOCS_DEPTH), an `_api-reference/` file by its rank among the API lines.
 """
 
 from __future__ import annotations
@@ -27,6 +30,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import context_packet as cp  # noqa: E402
 
 CASES = "knowledge/evals/retrieval.jsonl"
+DOCS_DEPTH = 10  # docs pages ranked for scoring; the packet shows the first cp.DOCS_PAGES
+API_PREFIX = cp.DOCS_API_CLASSES.rsplit("/", 1)[0] + "/"
 
 
 def load_cases(path: Path) -> list[dict]:
@@ -73,13 +78,31 @@ def reciprocal_rank(ranks: list[int | None]) -> float:
     return 1.0 / min(found) if found else 0.0
 
 
+def item_rank(item: str, ranked: list[tuple[str, str]], docs: list[str], api: list[str]) -> int | None:
+    path = item.partition("#")[0].strip()
+    if path.startswith(API_PREFIX):
+        pool = api
+    elif path.startswith(cp.DOCS_MIRROR + "/"):
+        pool = docs
+    else:
+        return first_ranks([item], ranked)[0]
+    return pool.index(path) + 1 if path in pool else None
+
+
 def evaluate(root: Path, cases: list[dict]) -> dict:
     corpus = cp.Corpus(root)
+    index = cp.DocsIndex.load(root)
     rows = []
     for case in cases:
         hits, _ = cp.rank(corpus, case["task"])
         ranked = [(h.path, h.heading) for h in hits]
-        ranks = first_ranks(case["expect"], ranked)
+        found = cp.roblox_docs(root, case["task"], DOCS_DEPTH, index, corpus, hits) if index else {"pages": [], "api": []}
+        docs = [p["path"] for p in found["pages"]]
+        api = [a["path"] for a in found["api"]]
+        ranks = [item_rank(item, ranked, docs, api) for item in case["expect"]]
+        wants_docs = any(item.startswith(cp.DOCS_MIRROR + "/") for item in case["expect"])
+        wants_kit = any(not item.startswith(cp.DOCS_MIRROR + "/") for item in case["expect"])
+        top = (docs + api if wants_docs else []) + ([f"{p}#{cp.slugify(h)}" for p, h in ranked[:10]] if wants_kit else [])
         rows.append(
             {
                 "task": case["task"],
@@ -89,7 +112,7 @@ def evaluate(root: Path, cases: list[dict]) -> dict:
                 "recall@10": round(recall_at(ranks, 10), 4),
                 "mrr": round(reciprocal_rank(ranks), 4),
                 "pass": recall_at(ranks, 10) == 1.0,
-                "top": [f"{p}#{cp.slugify(h)}" for p, h in ranked[:10]],
+                "top": top,
             }
         )
     count = max(1, len(rows))

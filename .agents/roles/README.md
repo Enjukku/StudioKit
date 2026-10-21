@@ -14,16 +14,16 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | animator | craft → Opus | high | planned (J006, after J005) |
 | vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | in kit |
 | character-rigger | craft → Opus | high | building (J005) |
-| modeler | craft → Opus | high; medium for simple models | planned (hand-off brief: `knowledge/jobs/J005-character-rigger/modeler-handoff.md`) |
+| modeler | craft → Opus | high for hero models and new kinds of models; medium for simple models (J007-D1) | building (J007; G2 pending) |
 | ui-ux-designer | craft → Opus | medium (high for a new look or a shop, brief-level) | in kit (J002, G3 pending) |
 | sound-designer | craft → Opus | medium | in kit |
 | environment-designer (stages, levels, worlds: space, terrain, dressing, light, atmosphere, ambience map; replaces content-builder, J008-D3) | craft → Opus | high for new stages and big environments; medium for small changes and fixes (owner 2026-10-21, J008-D1) | building (J008) |
 | live-ops-designer (updates, events, seasons, limited-time content, fixes after launch; feedback sort and count; ranked update plan; update briefs; post-update review) | craft → Opus | medium; high for a season plan or a big update (owner J014-D1) | building (J014; skills live-ops-design, live-ops-craft; G2 pending) |
-| architect | lead → Opus | high (owner J010) | building (J010) |
-| reviewer | craft → Opus | medium; high for money, saves, remotes | building (J010) |
-| feature-builder | craft → Opus | medium; high for money, saves, remotes (owner J010) | building (J010) |
-| quick-builder | craft → Opus | medium (code is Opus medium at least) | building (J010) |
-| qa-lead | craft → Opus | medium | building (J010) |
+| architect | lead → Opus | high (owner J010) | in kit (J010, owner 2026-10-21) |
+| reviewer | craft → Opus | medium; high for money, saves, remotes | in kit (J010, owner 2026-10-21) |
+| feature-builder | craft → Opus | medium; high for money, saves, remotes (owner J010) | in kit (J010, owner 2026-10-21) |
+| quick-builder | craft → Opus | medium (code is Opus medium at least) | in kit (J010, owner 2026-10-21) |
+| qa-lead | craft → Opus | medium | in kit (J010, owner 2026-10-21) |
 | performance-engineer | craft → Opus | high (owner J010) | building (J010) |
 | researcher | research → Sonnet | medium | in kit |
 | analyst (own-game player data: diagnosis, A/B tests, event planning, weekly page; tool `tools/analytics/`) | research → Sonnet | medium; Opus high for a deep investigation (owner J013-D1) | building (J013; skills analysis-design, analysis-craft; G2 pending) |

@@ -4,7 +4,7 @@ description: Checks every Roblox code change before it ships and reports only re
 tier: craft
 effort: medium
 skills: code-review, engineering-craft
-tools: Read, Grep, Glob, Bash, Write
+tools: Read, Grep, Glob, Bash, Write, Agent
 memory: project
 color: red
 ---

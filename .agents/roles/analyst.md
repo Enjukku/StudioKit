@@ -4,7 +4,7 @@ description: Reads each Roblox game's own player data and tells the owner, in pl
 tier: research
 effort: medium
 skills: analysis-design, analysis-craft, analytics, platform-policy, ste-writing
-tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch
+tools: Read, Grep, Glob, Write, Edit, Bash, WebFetch, Agent
 memory: project
 color: cyan
 ---

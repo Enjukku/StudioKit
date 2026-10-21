@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role that replaces content-builder, 2 skill books, a 1,469-line paper to extract and fact-check, first-game stage history, a scene audit tool, a real test stage in Blender + Studio) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J008-D4..D6). Steps 2-5 done 2026-10-21 (5 notes + 3 fact-checks + look-dev research in `knowledge/reference/environment/`; skills environment-design, environment-craft; templates/environment/; role environment-designer; tools/env/ scene audit with 19 tests; evals). Step 6: Studio/Blender G2 test moved to the owner's later full-workflow project (J008-D8); hidden test run once (T10) and graded (T11), gaps fixed. Waiting for G3 |
+| Status | G1 approved 2026-10-21 (J008-D4..D6). Steps 2-5 done 2026-10-21 (5 notes + 3 fact-checks + look-dev research in `knowledge/reference/environment/`; skills environment-design, environment-craft; templates/environment/; role environment-designer; tools/env/ scene audit with 19 tests; evals). Step 6: Studio/Blender G2 test moved to the owner's later full-workflow project (J008-D8); hidden test run once (T10) and graded (T11), gaps fixed. G3 accepted 2026-10-21 (J008-D9); job closed. Test in the full-workflow project |
 | Depends on | `level-design` (J003, exists), `reference-images` (exists), `sound-design` and `vfx-design` (exist, pointer lines only), J007 modeler (G1 pending) for the asset-request brief |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -93,4 +93,4 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "Just make sure you run the agents. All right, yeah, looks good." |
 | G2 first real test (stage slice + fix) | 2026-10-21 | not run here: "we're going to do a test by making doing a project that goes through the entire workflow" (J008-D8) |
-| G3 final approval | | |
+| G3 final approval | 2026-10-21 | "Okay, yeah, it's fine for now. Go ahead and commit." (J008-D9) |

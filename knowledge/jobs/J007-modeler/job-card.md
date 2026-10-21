@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: draft
+status: active
 updated: 2026-10-21
 source: owner chat 2026-10-21 (/build-agent modeler)
 supersedes: []
@@ -16,8 +16,8 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 1,974-line paper to extract and fact-check, first-game sources, a model audit script, two real test models in Blender + Studio) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | proposed: G1 waits for the owner (digest.md) |
-| Depends on | J005 `rig-pipeline` (exists), J005 rigger skills and role (step 2 running) for the G2 rig loop |
+| Status | G1 approved 2026-10-21 (J007-D3..D7). Step 2 (extract + fact-check) running |
+| Depends on | J005 `rig-pipeline`, `rigging-design`, `rigging-craft` and the `character-rigger` role (all exist now) for the G2 rig loop |
 
 ## Owner's words (2026-10-21, excerpts)
 - "It builds characters, creatures, pets, weapons, tools, props, vehicles, buildings and environment pieces for Roblox games."
@@ -45,11 +45,11 @@ One `modeler` agent that turns an approved reference image into a Roblox-ready m
 | In | Out |
 | --- | --- |
 | Reference notes in `knowledge/reference/modeling/` + fact-check tables (Roblox, Blender, Tripo); reuse J005's tables where a claim is already checked | Rig, bones, weights, animation (rigger, animator) |
-| Skills `modeling-design` and `modeling-craft` (brief.md) | Placing models in levels and maps (content-builder, planned) |
+| Skills `modeling-design` and `modeling-craft` (brief.md) | Placing models in levels and maps, terrain, lighting (environment-designer) |
 | Model audit script `tools/model/` (Blender side through MCP, pure parts tested offline): evaluated triangles, loose parts, non-manifold edges, size against a player, UV sets, materials per mesh, texture sizes | Game code, runtime scripts |
 | Role file `modeler`; adopts `modeler-handoff.md` and the rig sheet §D keys as-is | Changing `rig-pipeline` beyond naming the new skills in the S3 brief |
-| Hand-off briefs to rigger, animator, art director (planned), VFX (attach points), UI (icon renders), `rules/messages.md` format | Building the art-director agent |
-| Eval briefs + hidden cases; 2 real test models (G2) | A Tripo API tool, unless the owner says yes (digest item 3) |
+| Hand-off briefs to rigger, animator (planned), art director, environment designer, VFX (attach points), UI (icon renders), `rules/messages.md` format | Changing other roles' skills beyond pointers |
+| Eval briefs + hidden cases; 2 real test models (G2) | A Tripo API tool (owner runs Tripo, J007-D4) |
 
 ## Crew
 | Role | Model | Effort | Deliverable |
@@ -63,7 +63,7 @@ One `modeler` agent that turns an approved reference image into a Roblox-ready m
 | grader (hidden cases, separate context) | Sonnet | high | rubric scores |
 
 ## Mechanism
-Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: first-game extractor + Roblox and Blender fact-checkers. Wave 3: Tripo fact-checker + tool builder. The lead writes the skills (it needs the paper, the first-game history and the rig pipeline together). The new modeler runs the tests as a subagent with Blender MCP and Studio MCP; test B uses the real rigger S2 sheet if J005 has built the rigger by then.
+Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: first-game extractor + Roblox and Blender fact-checkers. Wave 3: Tripo fact-checker + tool builder. The lead writes the skills (it needs the paper, the first-game history and the rig pipeline together). The new modeler runs the tests as a subagent with Blender MCP and Studio MCP; test B uses a real S2 rig sheet from the character-rigger.
 
 ## Budget
 | | Estimate | Actual |
@@ -72,11 +72,12 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 | Agents | 4 extract + 3 fact-check + 1 tool + 2 tests + 1 grader = 11 | |
 | Models / effort | Sonnet high ×8; Opus medium ×2; Opus high ×1 + lead | |
 | Image generations | test references: about 4-8 ChatGPT images (2 subjects, front/side/back views, retries) | |
-| Tripo | 1-3 generations for test B (owner's account or API, digest item 3) | |
+| Tripo | 1-3 generations for test B, run by the owner (J007-D4) | |
 
 ## Acceptance checks
 - [ ] Every number, Blender fact, Tripo fact and Roblox limit in a skill has a source and a fact-check verdict (confirmed / corrected / unverified-kept-as-OPINION / dropped); dropped claims listed with the reason.
-- [ ] No invented budgets: project triangle, texture and scene budgets stay PROPOSAL or UNKNOWN until the owner sets them or a phone measurement exists (paper rule 14).
+- [ ] Budgets: 20,000 triangles per mesh stated as the upload ceiling only; creatures and characters ≤ about 7,000 triangles (J007-D5); every other budget is PROPOSAL (owner confirms at G2) or a phone measurement, never invented as fact.
+- [ ] Light checks (J007-D7): every check scripted as numbers; each brief has a check budget; hand-backs report how many renders were made and looked at.
 - [ ] Nothing specific to the first games in kit files (grep for brick style terms, game names, D-ids = 0 hits outside source tables).
 - [ ] The role adopts `modeler-handoff.md` C1-C5 and the rig sheet §D keys without change; counter-proposal rule (one round) stated.
 - [ ] Reference step: the modeler uses `reference-images` (families model, character, creature, prop, environment; `tools/art/art_refs.py`; the art bible) and attaches the approved image for a subject that has one.
@@ -90,6 +91,6 @@ Subagents, max 3 at a time (company limit). Wave 1: 3 paper extractors. Wave 2: 
 ## Gates
 | Gate | Date | Owner's words |
 | --- | --- | --- |
-| G1 brief | | |
+| G1 brief | 2026-10-21 | "I will be the one using Tripo. ... Even for like things like creatures, we should probably keep it like under 7k or whatever. But yeah, go ahead and begin." |
 | G2 first real tests (2 models) | | |
 | G3 final approval | | |
