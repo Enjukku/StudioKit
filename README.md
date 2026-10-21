@@ -16,10 +16,11 @@ An AI game studio setup for Roblox games. Clone it into every new game. It holds
 
 1. Clone the kit folder and rename it.
 2. Fill `knowledge/design/game-profile.md` and `rules/owner-profile.md`.
-3. Set `kit_path` in `kit.json` (where the kit lives, for `/kit-sync`).
-4. Run `python tools/sync_harness.py` (generates `.claude/` and `.codex/`).
-5. Run `python tools/verify.py` (the gate).
-6. Open the folder in Claude Code or Codex.
+3. Give the lead this game's API key file paths (one key per .txt file). They go into `knowledge/design/keys.json`, paths only; `python tools/keys.py list` shows which are found.
+4. Set `kit_path` in `kit.json` (where the kit lives, for `/kit-sync`).
+5. Run `python tools/sync_harness.py` (generates `.claude/` and `.codex/`).
+6. Run `python tools/verify.py` (the gate).
+7. Open the folder in Claude Code or Codex.
 
 ## How the studio works
 

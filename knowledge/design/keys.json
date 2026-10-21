@@ -1,5 +1,5 @@
 {
-  "_about": "Where each API key file lives on the owner's PC. Paths only, never key values. One key per .txt file. Agents load keys with `python tools/keys.py run -- <command>` and never open a key file. When the owner gives a new key path, add or fill one entry here (rules: AGENTS.md section 3 item 4).",
+  "_about": "This game's API keys: where each key file lives on the owner's PC. Paths only, never key values. One key per .txt file. Every game has its own keys; in the kit the paths are blank. Agents load keys with `python tools/keys.py run -- <command>` and never open a key file. When the owner gives a key path, fill or add one entry here (rules: AGENTS.md section 3 item 4).",
   "keys": [
     {
       "env": "ROBLOX_ANALYTICS_API_KEY",

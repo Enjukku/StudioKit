@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Key registry tool: loads API keys from the owner's key files into a command's environment.
 
-The owner keeps each key in a .txt file on their PC and gives the path. keys.json (repo root) lists, per key,
-the environment variable the tools read and the path of its file. Paths only: no key value is ever stored in
-the repo, printed, logged or put on a command line by this tool.
+The owner keeps each key in a .txt file on their PC and gives the path. Every game has its own keys:
+knowledge/design/keys.json is game-owned (kit-sync never overwrites it) and lists, per key, the environment
+variable the tools read and the path of its file. In the kit the paths are blank; a new game fills them.
+Paths only: no key value is ever stored in the repo, printed, logged or put on a command line by this tool.
 
   python tools/keys.py list                         every entry: variable, service, file found or not
   python tools/keys.py run [--only VAR ...] -- CMD  run CMD with the keys loaded as environment variables
@@ -23,7 +24,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REGISTRY = Path(__file__).resolve().parent.parent / "keys.json"
+REGISTRY = Path(__file__).resolve().parent.parent / "knowledge" / "design" / "keys.json"
 
 
 class KeyError_(Exception):

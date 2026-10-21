@@ -41,7 +41,7 @@ Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, s
 1. **Code lives where the game profile's source mode says** (default `files`: on disk, synced by Rojo or Script Sync). In `files` mode never edit scripts through Studio MCP.
 2. **The gate** (`powershell -File tools/verify.ps1` or the game's equivalent): `RESULT: PASS` or not done.
 3. **Studio MCP** (skill `studio-mcp`) for what the gate cannot reach: live data model, Output, play-tests, screenshots. Every call names its `studio_id`; one driver per Studio instance.
-4. **Secrets** (API keys, tokens) live outside the repo (environment variables or key files) and in the place's Secrets store; never in code, notes, commits or chat. `keys.json` lists every key file the owner has given (paths only): when the owner gives a key path, add it there; load keys with `python tools/keys.py run -- <command>`; never open a key file.
+4. **Secrets** (API keys, tokens) live outside the repo (environment variables or key files) and in the place's Secrets store; never in code, notes, commits or chat. `knowledge/design/keys.json` lists this game's key files (paths only; each game has its own): when the owner gives a key path, add it there; load keys with `python tools/keys.py run -- <command>`; never open a key file.
 5. **Visual work** starts from an approved reference image (`reference-images` skill: one art bible, ChatGPT image model) and gets the agent's own multi-angle review before the owner sees it. Label every check: gate-verified / MCP-verified / owner-confirmed / not verified.
 
 ## 4. How to work
