@@ -13,8 +13,8 @@ supersedes: []
 ## 1. The three parts
 | Part | Question it answers | Who | Status |
 | --- | --- | --- | --- |
-| Quality audit | Do the written files implement the approved design, without contradictions, gaps or broken references? | 5 independent Opus reviewers, read-only (crew.md J016-A1..A5); the lead verifies each finding, the maker fixes | running |
-| Rehearsal | Do the mechanisms the rules rely on work on Claude Code 2.1.306 with the real role files? | lead + real role files on Haiku (mechanics only, not craft quality) | running |
+| Quality audit | Do the written files implement the approved design, without contradictions, gaps or broken references? | 5 independent Opus reviewers, read-only (crew.md J016-A1..A5); the lead verifies each finding, the maker fixes | done: 57 blocking found, fixed by 4 makers, rechecked (§4) |
+| Rehearsal | Do the mechanisms the rules rely on work on Claude Code 2.1.306 with the real role files? | lead + real role files on Haiku (mechanics only, not craft quality) | done (§2); one gap needs the owner (R2a) |
 | Pilot | Does the new design make a better cutscene than the old process and one strong agent, at what cost? | owner + three runs of one short cutscene | needs the owner's go (§3) |
 
 ## 2. Rehearsal results (scratch files: the lead's scratchpad `rehearsal/`)
@@ -44,3 +44,21 @@ Same for all three: the owner's brief (words), the game's art bible and assets, 
 3. The explicit go to run `/job-cutscene` (the Workflow tool runs only when the owner asks).
 
 **Before the first run:** kit 0.6.0 pulled into the game on a pilot branch (`kit-sync`, owner approves); Studio open with the pilot place and its `studio_id`; the owner's decision on the role tool lists (R2a); hooks 1-2 from `tools/hooks/README.md` (optional, recommended).
+
+## 4. Audit results (kit 0.6.0 at 322c8ad → 0.6.1)
+| Lane (review files in `reviews/`) | Blocking found | After fixes (recheck at 763a11e) | New from the fixes | Now |
+| --- | --- | --- | --- | --- |
+| A core rules and playbook | 8 | 7 closed; F08 waits on the owner (tool lists) | 1 blocking + 3 small (lead fixed) | owner decision only |
+| B seven workflows | 16 | 15 closed; F11 open in 3 workflows | 1 blocking + 2 small | fixed in repair round 1 (34 tests) |
+| C roles and templates | 13 | 13 closed | 1 blocking + 4 small (lead fixed) | closed |
+| D context system | 7 | 6 closed; B4 (retrieval drop) open | 2 small | fixed: 16/19 on the original cases, as before J016 (90 tests) |
+| E tabletop (3 requests to G3) | 13 | 12 closed; TT-01 narrowed | 3 blocking | fixed (`held_out: true`, split-job owner, image stops) |
+
+Gate after the fixes: PASS, 641 tests. The repair-round fixes were checked by tests and by the lead; a final targeted recheck runs before the commit is reported.
+
+**Usage (G3 so far, as the app reports subagent tokens):** audits 1.53 M · rehearsal and docs check 0.58 M · fixes 2.82 M · rechecks 1.98 M · lead about 0.4 M · total about **7.3 M tokens**. Resuming a large reviewer for a recheck resends its whole context (0.3-0.54 M each).
+
+## 5. Owner decisions before the pilot
+1. **Role tool lists (R2a, C22):** add `SendMessage` to the 11 working roles that lack it (analyst, art-director, game-designer, live-ops-designer, marketing, progression-designer, reviewer, sound-designer, studio-operator, trend-scout, vfx-designer). Recommendation: yes. Today they work through exchange notes, which is slower but safe. The docs say the same tool can also message other Claude sessions on this machine.
+2. **Browser for image roles:** add the built-in browser tools to art-director, vfx-designer and marketing, so they can make images themselves. Recommendation: not yet. The lead runs image batches between stages with your yes per batch, which keeps your download rule.
+3. **The pilot:** the game and cutscene, two or three arms, and the explicit go to run `/job-cutscene` (§3).

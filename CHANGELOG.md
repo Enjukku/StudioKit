@@ -2,6 +2,14 @@
 
 > Author: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20
 
+## 0.6.1 (2026-10-21): J016 G3 audit fixes before the pilot
+
+- Five independent audits (core rules, workflows, roles and templates, context system, a tabletop run of three requests) found 57 blocking defects at 0.6.0; all are closed or waiting on an owner decision (role tool lists). Reviews: `knowledge/jobs/J016-orchestration/reviews/`.
+- Context: the packet and indexes never list held-out material (names containing `hidden`, or frontmatter `held_out: true`), other leads' direction proposals, `_` material from other games or skill eval briefs; `--role` ranks the role's own book first and lists its precedents; job reviews rank lower for crafts; eval cases carry `role`, `job` and `forbid`; retrieval back to 16/19 on the original cases, baseline in `knowledge/logs/improve/`.
+- Workflows: required args with no silent defaults; scripts first and recapture after every repair; VFX then sound in sequence; code review whenever the candidate has code; code file owners from the contract; image steps write `image-prompts.md` and a pending batch stops the stage where later work builds on it; `docs_read` and `lesson` in every hand-back; at most 5 agents at once.
+- Rules and roles: interfaces where the recipe places them; the recipe's proof reviewers; sizing; who spawns crafts; no agent ids inside workflows; must-consult column; cross-type rules; split requests with one owner job per shared interface; Codex gate path; role proofs match recipes; reviewer uses the §6 format; templates carry frontmatter.
+- Capability check: C22 (a `tools:` list without `SendMessage` cannot send), C23 (`memory: project` adds file tools).
+
 ## 0.6.0 (2026-10-21): J016 orchestration and context redesign (owner approvals J016-D4, J016-D5)
 
 - Flow: one accountable lead, a job lead per job, independent direction proposals and one direction sheet, a shared contract per job, an integrated cheap proof, sideways work between crafts, one integrator and Studio writer, an ordered review chain where reviewers never edit; gates G1 direction, G2 integrated proof, G3 final, bound to revisions. Rewritten: `rules/company.md`, `rules/messages.md`, `orchestration` skill (+ `references/job-types.md`), `rules/knowledge.md`; aligned: `AGENTS.md`, harness profiles.

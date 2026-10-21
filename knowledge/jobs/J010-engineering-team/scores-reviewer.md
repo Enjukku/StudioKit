@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J010-T20, T21, T23 (blind grade eng-evals-hidden/RV/scores.md; P = new, Q = old, map.json)
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 

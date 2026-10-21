@@ -512,6 +512,72 @@ class WithheldTests(Repo):
         self.assertEqual(sum(1 for line in rows if cp.names_held_out(line)), 0, "index rows that name a held-out file")
 
 
+class RepairRoundTests(Repo):
+    """J016 G3 repair round 1: audit E N-01 (held_out frontmatter key), audit D N1 (job history for craft roles), N2 (distinct siblings)."""
+
+    def test_held_out_key_withholds_a_visible_name_like_a_hidden_one(self):
+        grade = "# Grades\n\nDaily reward rubric line: spacing of usable rewards, pass.\n"
+        self.write("knowledge/jobs/J1-x/grades-g2.md", fm("job", extra="held_out: true\n") + grade)
+        self.write("knowledge/jobs/J1-x/contract-rubric.md", fm("job", extra="held_out: true\nrevision: 2\n") + "# Contract\n\nDaily reward rubric.\n")
+        self.write("knowledge/jobs/J1-x/kept.md", fm("job", extra="held_out: false\n") + "# Kept\n\nDaily reward rubric spacing notes.\n")
+        self.write("knowledge/jobs/J1-x/job-card.md", fm("job") + "# Job card\n\nDaily reward chest.\n")
+        self.write("knowledge/design/reward.md", fm() + "# Daily reward\n\nDaily reward rubric spacing. See [[jobs/J1-x/grades-g2]] and [[grades-g2]].\n")
+        corpus = cp.Corpus(self.root)
+        self.assertNotIn("knowledge/jobs/J1-x/grades-g2.md", corpus.notes)
+        self.assertIsNone(corpus.resolve_link("grades-g2"))
+        packet = cp.build(self.root, "daily reward rubric spacing usable rewards", job="J1-x")
+        paths = [r["path"] for r in packet["results"]] + [f["path"] for f in packet["job"]["files"]]
+        self.assertNotIn("knowledge/jobs/J1-x/grades-g2.md", paths)
+        self.assertNotIn("knowledge/jobs/J1-x/contract-rubric.md", paths)
+        self.assertIn("knowledge/jobs/J1-x/kept.md", paths)  # held_out: false is an ordinary note
+        self.assertNotIn("grades-g2.md", " ".join(packet["read_next"]))
+        index = "".join(kb.build_indexes(self.root).values())
+        self.assertNotIn("grades-g2.md", index)
+        self.assertNotIn("contract-rubric.md", index)
+        self.assertIn("kept.md", index)
+        errors, warnings = kb.lint(self.root)
+        self.assertEqual(errors, [])
+        self.assertFalse(any("`held_out`" in w for w in warnings), warnings)
+
+    def test_real_repo_marked_notes_are_withheld(self):
+        marked = sorted(rel for rel in kb.knowledge_notes(REPO) if cp.marked_held_out((cp.load_note(REPO, REPO / rel).meta or {})))
+        self.assertGreaterEqual(len(marked), 20)
+        corpus = cp.Corpus(REPO)
+        self.assertEqual([p for p in marked if p in corpus.notes], [])
+        index = "".join(kb.build_indexes(REPO).values())
+        self.assertEqual([p for p in marked if "(../" + p.split("/", 1)[1] + ")" in index], [])
+
+    def job_history(self) -> None:
+        self.write(".agents/roles/sound-designer.md", role_file("sound-designer", "sound-design", "Sound."))
+        self.write(".agents/roles/doc-keeper.md", role_file("doc-keeper", "orchestration", "Records."))
+        self.write(".agents/skills/sound-design/SKILL.md", "---\nname: sound-design\ndescription: Use for SFX.\n---\n\n# Sound design\n\nA boss stinger cue for the reveal.\n")
+        audit = fm("job") + "# Audit\n\n## Design the boss stinger and reveal cue sounds\n\nDesign the boss stinger and reveal cue sounds: boss stinger, reveal cue, sounds ranked for the boss stinger.\n"
+        self.write("knowledge/jobs/J7-x/reviews/audit.md", audit)
+        self.write("knowledge/jobs/J7-x/exchange/r1-vfx.md", audit.replace("# Audit", "# Exchange"))
+        self.write("knowledge/jobs/J7-x/job-card.md", fm("job") + "# Job card\n\nBoss intro.\n")
+
+    def test_job_history_ranks_below_a_craft_roles_book(self):
+        self.job_history()
+        corpus = cp.Corpus(self.root)
+        task = "design the boss stinger and reveal cue sounds"
+        plain = [h.path for h in cp.rank(corpus, task, None, "J7-x")[0]]
+        self.assertLess(plain.index("knowledge/jobs/J7-x/reviews/audit.md"), plain.index(".agents/skills/sound-design/SKILL.md"))
+        craft = [h.path for h in cp.rank(corpus, task, "sound-designer", "J7-x")[0]]
+        self.assertEqual(craft[0], ".agents/skills/sound-design/SKILL.md")
+        self.assertLess(craft.index(".agents/skills/sound-design/SKILL.md"), craft.index("knowledge/jobs/J7-x/exchange/r1-vfx.md"))
+        for role in ("orchestrator", "doc-keeper"):  # the lead and the filer keep the job history at full weight
+            with self.subTest(role=role):
+                hits = {h.path: h.score for h in cp.rank(corpus, task, role, "J7-x")[0]}
+                base = {h.path: h.score for h in cp.rank(corpus, task, None, "J7-x")[0]}
+                self.assertAlmostEqual(hits["knowledge/jobs/J7-x/reviews/audit.md"], base["knowledge/jobs/J7-x/reviews/audit.md"])
+
+    def test_distinct_sibling_sections_both_rank(self):
+        self.write("knowledge/inbox/2026-10-21-J11-lead.md", fm("lesson") + "# Lead draft\n\n## Owner corrections\n\nThe owner said the curve felt too slow after level ten; cut the wall.\n")
+        self.write("knowledge/inbox/2026-10-21-J11-designer.md", fm("lesson") + "# Designer draft\n\n## Owner corrections\n\nThe owner asked for owner-visible milestones and fewer corrections to pity odds.\n")
+        heads = [h.path for h in self.ranked("owner corrections in the lesson drafts") if h.heading == "Owner corrections"]
+        self.assertEqual(sorted(heads), ["knowledge/inbox/2026-10-21-J11-designer.md", "knowledge/inbox/2026-10-21-J11-lead.md"])
+
+
 class RoleRankingTests(Repo):
     """J016 G3 audit D R1, B6, E TT-15, TT-16: --role ranks the role's own book and lists its precedents."""
 

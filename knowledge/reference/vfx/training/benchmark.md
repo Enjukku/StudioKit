@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-20
 source: "moved from DestructionSimulator 2026-10-20"
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: kit-mover · claude-sonnet-5-5 · medium · 2026-10-20 (moved from DestructionSimulator; original author line kept below)
 

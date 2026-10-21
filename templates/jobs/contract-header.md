@@ -14,7 +14,7 @@ revision: 1
 
 | Field | Value |
 | --- | --- |
-| Owner (one writer) | <role> |
+| Owner (one writer) | <role>; the one exception is the Code file owners section below, written by the architect (`rules/company.md` §4 step 4) |
 | Ids | <the stable ids it defines; new ones also go to knowledge/design/vocabulary.md at close> |
 
 ## Consumers (the job's dependency map for this contract)

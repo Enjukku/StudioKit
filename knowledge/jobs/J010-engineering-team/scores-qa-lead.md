@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J010-T25 (hidden runner: the agent's suites run against the correct module and planted-fault versions it never saw)
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 

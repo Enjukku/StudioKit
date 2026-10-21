@@ -23,7 +23,9 @@ Lint (rules/knowledge.md §9):
     WARN   missing source, unknown keys, supersedes path not found, no author line,
            note over 300 lines, duplicate titles, a `roles:` name that is not a kit role
     Optional keys: `roles:` (list of kit roles, stems of .agents/roles/*.md; context_packet --role
-    ranks these notes higher) and `revision:` (integer or short string; context_packet --job prints it).
+    ranks these notes higher), `revision:` (integer or short string; context_packet --job prints it) and
+    `held_out: true` (the note repeats held-out cases, keys, rubrics or answers: linted, never indexed;
+    the packet withholds it like a hidden-named file). WARN when `held_out` is not true or false.
     README.md files and anything under a templates/ folder are exempt from frontmatter.
     Dead-link check also covers rules/, .agents/ and AGENTS.md (the packet corpus).
 """
@@ -49,7 +51,7 @@ TYPES = {"decision", "lesson", "failed", "system", "job", "reference", "log", "i
 SCOPES = {"universal", "game"}
 STATUSES = {"draft", "active", "superseded"}
 REQUIRED = ("type", "scope", "status", "updated")
-KNOWN_KEYS = {"type", "scope", "status", "updated", "source", "supersedes", "superseded_by", "description", "name", "roles", "revision"}
+KNOWN_KEYS = {"type", "scope", "status", "updated", "source", "supersedes", "superseded_by", "description", "name", "roles", "revision", "held_out"}
 RELATIVE_DATE_RE = re.compile(
     r"\b(today|yesterday|tomorrow|now|recently|last|next|this|ago|week|month|year|days?)\b", re.IGNORECASE
 )
@@ -113,7 +115,10 @@ def build_indexes(root: Path) -> dict[str, str]:
         parts = rel.split("/")
         if len(parts) < 3 or cp.withheld(rel):
             continue  # root files belong to no area; withheld notes (direction proposals, `_` material) are not indexed
-        by_area.setdefault(parts[1], []).append(cp.load_note(root, root / rel))
+        note = cp.load_note(root, root / rel)
+        if cp.marked_held_out(note.meta):
+            continue  # `held_out: true`: withheld from the indexes like a hidden-named file
+        by_area.setdefault(parts[1], []).append(note)
     outputs: dict[str, str] = {}
     for area in sorted(by_area):
         notes = sorted(by_area[area], key=lambda n: n.path.lower())
@@ -212,6 +217,8 @@ def lint(root: Path) -> tuple[list[str], list[str]]:
             warnings.append(f"{rel}: frontmatter missing `source`")
         for key in sorted(set(meta) - KNOWN_KEYS):
             warnings.append(f"{rel}: unknown frontmatter key `{key}`")
+        if "held_out" in meta and str(meta["held_out"]).strip().lower() not in ("true", "false", "yes", "no"):
+            warnings.append(f"{rel}: `held_out: {meta['held_out']}` is not true or false (the note is NOT withheld)")
         for name in cp.as_list(meta.get("roles")):
             if name not in kit_roles:
                 warnings.append(f"{rel}: roles lists `{name}`, not a kit role (.agents/roles/)")
@@ -226,10 +233,12 @@ def lint(root: Path) -> tuple[list[str], list[str]]:
             errors.append(f"{rel}: superseded but links no replacement (add [[link]] or superseded_by)")
 
     checked = sorted(set(corpus.notes) | set(knowledge_notes(root)), key=str.lower)
+    marked_stems = {Path(m).stem.lower() for m in corpus.marked}  # `held_out: true` notes exist; a link to one is not dead
     for rel in checked:
         note = corpus.notes.get(rel) or cp.load_note(root, root / rel)
         for line, target in note.links:
-            if corpus.resolve_link(target, rel) is None:
+            stem_name = Path(target.split("|", 1)[0].split("#", 1)[0].strip()).name.removesuffix(".md").lower()
+            if corpus.resolve_link(target, rel) is None and stem_name not in marked_stems:
                 errors.append(f"{rel}:{line}: dead link [[{target}]]")
 
     for title, paths in sorted(titles.items()):

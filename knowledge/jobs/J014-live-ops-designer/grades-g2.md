@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: "J014-T09 grader"
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: grader · claude-sonnet-5-5 · high · 2026-10-21
 

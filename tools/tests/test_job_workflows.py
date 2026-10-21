@@ -250,6 +250,37 @@ class JobWorkflowTests(unittest.TestCase):
                 self.assertEqual(len(makers), expected, "one browser user per step, prompts first")
                 for d in makers:
                     self.assertIn("images_approved: false", d["prompt"], "no download without the owner's yes (LD2)")
+                    self.assertIn("image-prompts.md", d["prompt"], "one prompts-file name, as reference-images §4 says (N-07)")
+
+    # ------------------------------------------------------------------ repair round 1 (auditor B recheck F11, N1-N3; auditor E recheck N-03)
+    def test_direction_completes_with_pending_pictures(self):
+        for name in ("job-character.js", "job-stage.js", "job-ui-screen.js"):
+            with self.subTest(script=name):
+                out = run(name, full(name, stage="direction"), {"images": "pending", "dump": r"D3-synthesis|D3-sign-"})
+                self.assertEqual(out["status"], "done", out["outcome"])
+                synth = next(d for d in out["dumps"] if "D3-synthesis" in d["label"])["prompt"]
+                self.assertIn("pictures on disk or rows in a pending prompts file", synth, "F11: a pending D1 batch must not fail the synthesis check")
+                self.assertNotIn("pictures that exist on disk", synth)
+                for d in out["dumps"]:
+                    if "D3-sign-" in d["label"]:
+                        self.assertIn("judge the prompt rows against the art bible", d["prompt"], "N2")
+
+    def test_pending_art_that_later_steps_build_on_stops_the_stage(self):
+        cases = [("job-ui-screen.js", dict(stage="build"), r"B1-figma", r"B2-implement"),
+                 ("job-character.js", dict(stage="build", size="M"), r"P1-reference-set", r"S0-sheet|P2-blockout|S3-"),
+                 ("job-character.js", dict(stage="proof"), r"P1-reference-set", r"S0-sheet|P2-blockout"),
+                 ("job-cutscene.js", dict(stage="build", size="M"), r"P4-boards", r"P5-animatic|B1-"),
+                 ("job-cutscene.js", dict(stage="proof"), r"P4-boards", r"P3-probes|P5-animatic")]
+        for name, changes, maker, later in cases:
+            with self.subTest(script=name, changes=changes):
+                out = run(name, full(name, **changes), {"images": "pending"})
+                self.assertEqual(out["status"], "blocked", out["outcome"])
+                self.assertGreaterEqual(index(out["labels"], maker), 0)
+                self.assertEqual(index(out["labels"], later), -1, "nothing is built or reviewed on unapproved images")
+                self.assertTrue(out["result"]["images_pending"])
+        kit = run("job-stage.js", full("job-stage.js", stage="build"), {"images": "pending", "set": {"kit_piece_ids": ["rock-a"]}})
+        self.assertEqual(kit["status"], "blocked", kit["outcome"])
+        self.assertEqual(index(kit["labels"], r"B3-light"), -1)
 
     # ------------------------------------------------------------------ cutscene: the pilot (auditor B F1-F13, auditor E TT-03, TT-04, TT-12)
     def test_cutscene_repair_recaptures_before_review(self):

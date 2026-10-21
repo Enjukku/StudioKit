@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J007-T10, J007-T11 (hidden test), build-agent step 5
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 

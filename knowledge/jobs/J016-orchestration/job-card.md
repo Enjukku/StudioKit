@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (the rules every agent follows, the lead's skill, 6+ saved job workflows, role files; two research papers and 14 Riot transcripts as evidence) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | working: steps 1-7 done (G1 J016-D4, G2 J016-D5; gate PASS, 585 tests; committed, not pushed); step 8 report sent; G3 open: the owner's quality audit and pilot. Map page: https://claude.ai/artifact/XAJRbSA5W887CBu5AtXcAa |
+| Status | working: steps 1-8 done (G1 J016-D4, G2 J016-D5). G3 part 1 done 2026-10-21: quality audit (57 blocking found, fixed, rechecked), mechanics rehearsal, kit 0.6.1 (gate PASS, 641 tests; committed, not pushed). G3 part 2 open: the owner's decisions and the cutscene pilot (`pilot-plan.md`). Map page: https://claude.ai/artifact/XAJRbSA5W887CBu5AtXcAa |
 
 ## Goal (owner's words, 2026-10-21)
 "I am the CEO and design lead. I give my decisions and what the game needs to the orchestrator (the lead)."

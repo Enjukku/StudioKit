@@ -7,7 +7,6 @@
 | [J001 lessons: rebuilding engineering skills](../inbox/2026-10-20-J001-orchestrator.md) | lesson | universal | draft | 2026-10-20 | - |
 | [Lessons: building the UI/UX designer agent (J002)](../inbox/2026-10-20-J002-lead-build-agent-ui.md) | lesson | universal | draft | 2026-10-20 | Owner words: "the quality is just like alright ... |
 | [J002-T07 lessons: first cartoon egg shop in Figma](../inbox/2026-10-20-J002-ui-ux-designer.md) | lesson | universal | draft | 2026-10-20 | - |
-| [Lesson draft: reading held-out Roblox cases with game-concept](../inbox/2026-10-20-J003-T08-game-designer-case-readings.md) | lesson | universal | draft | 2026-10-20 | - |
 | [J002-T09 lessons: anime summon screen with the VFX library](../inbox/2026-10-21-J002-T09-ui-ux-designer-anime.md) | lesson | universal | draft | 2026-10-21 | - |
 | [J003 lessons (build the game-designer agent)](../inbox/2026-10-21-J003-orchestrator.md) | lesson | universal | draft | 2026-10-21 | - |
 | [J003-T07 lessons: first pitch set (3 pitches, 1 recommendation)](../inbox/2026-10-21-J003-T07-game-designer.md) | lesson | universal | draft | 2026-10-21 | Owner corrections: none yet (G2 not answered). |
@@ -30,6 +29,7 @@
 | [Lessons: live-ops designer, first test on a synthetic live game (J014-T08)](../inbox/2026-10-21-J014-T08-live-ops-designer.md) | lesson | universal | draft | 2026-10-21 | Owner corrections: none yet (no owner answer in this test). |
 | [2026 10 21 J015 lead build film director](../inbox/2026-10-21-J015-lead-build-film-director.md) | lesson | universal | draft | 2026-10-21 | - |
 | [2026 10 21 J015 T09 film director](../inbox/2026-10-21-J015-T09-film-director.md) | lesson | universal | draft | 2026-10-21 | - |
+| [J016 G3 lessons (quality audit, rehearsal and fixes before the pilot)](../inbox/2026-10-21-J016-G3-orchestrator.md) | lesson | universal | draft | 2026-10-21 | - |
 | [J016 lessons (orchestration and context redesign, through G1 and step 4)](../inbox/2026-10-21-J016-orchestrator.md) | lesson | universal | draft | 2026-10-21 | - |
 | [J016-T01 lessons (context tools and hooks)](../inbox/2026-10-21-J016-T01-feature-builder.md) | lesson | universal | draft | 2026-10-21 | - |
 | [Inbox: lesson drafts](../inbox/README.md) | - | - | - | - | Drafts only. |

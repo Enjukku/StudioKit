@@ -19,6 +19,6 @@ M and L jobs get a folder `knowledge/jobs/<job-id>/`, copied from `templates/job
 | digest.md | decision-digest.md | lead | open owner questions |
 | `<role>/` | | that role | each craft's output files |
 
-Held-out evaluation keys (any file or folder with `hidden` in its name) are never opened, listed or quoted by agents or tools (`rules/knowledge.md` §3).
+Held-out evaluation keys (any file or folder with `hidden` in its name) are never opened, listed or quoted by agents or tools (`rules/knowledge.md` §3). A visibly named note that repeats held-out cases, keys, rubrics or answers (a grade file, eval answers, a grader brief) carries `held_out: true` in its frontmatter: the packet and the area indexes withhold it the same way.
 
 Job id: `J<nn>` plus a short slug. Re-list this folder right before creating a job: parallel chats take numbers.

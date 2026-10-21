@@ -156,7 +156,7 @@
             "craft error",
             "tool failure",
             "review broke correct work",
-            "found by the owner after internal review",
+            "defect found by the owner after internal review",
             "owner taste change",
             "win"
           ]

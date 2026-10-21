@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J010-T26, T27; 30 held-out cases eng-evals-hidden/docs-routing/cases.jsonl (written before the tool change; builder saw only the 10 practice cases in knowledge/evals/docs-retrieval.jsonl)
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 

@@ -25,6 +25,7 @@ supersedes: []
 | Integrator | |
 | Studio place (`studio_id`) | <the test place the Studio writer uses; none = Blender or files only> |
 | Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect at the interfaces step |
+| Linked jobs | <job-id: which shared interface it owns (saved fields, ids, who grants, who checks)>; none = a single job |
 | Status | proposed |
 
 ## Goal and feeling

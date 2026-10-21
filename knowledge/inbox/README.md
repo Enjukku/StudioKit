@@ -17,6 +17,7 @@ updated: YYYY-MM-DD
 source: <job id>
 supersedes: []
 roles: [<roles this lesson is for>]   # optional; ranks it higher in their context packet
+held_out: true       # only when the draft repeats held-out cases, keys, rubrics or answers (withheld from packets and indexes)
 ---
 > Author: <role> · <model id> · <effort> · <date>
 ```

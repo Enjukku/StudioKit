@@ -35,7 +35,7 @@ Everything the studio knows is plain markdown or data files **in this repository
 1. L0 loads by itself.
 2. The role file and its preloaded `skills:` load by themselves; "Read first" names the rest of its book, opened through each skill's "Read this file when" table.
 3. **The brief** (`rules/messages.md` §2): `owner_words`, intent, `refs` with take/avoid notes, `inputs@rev`, every rule, checks. The briefer decides what is needed.
-4. **The packet for this role and job.** `--role` adds the role's skills, overlays, Roblox docs-map rows and precedent rows, names `knowledge/design/vocabulary.md`, and ranks the role's own book (role file and skill folders) and notes tagged with the role (optional frontmatter `roles: [<role>, ...]`) higher and other roles' files lower; `--role orchestrator` is the lead. `--job` lists the job's canonical files with their revisions and ranks notes in that folder higher. The packet seeds; the brief decides.
+4. **The packet for this role and job.** `--role` adds the role's skills, overlays, Roblox docs-map rows and precedent rows, names `knowledge/design/vocabulary.md`, and ranks the role's own book (role file and skill folders) and notes tagged with the role (optional frontmatter `roles: [<role>, ...]`) higher and other roles' files lower; `--role orchestrator` is the lead. `--job` lists the job's canonical files with their revisions and ranks notes in that folder higher; with a craft role, the job's `reviews/` and `exchange/` files rank lower (not for the lead or the doc-keeper). The packet seeds; the brief decides.
 5. Open only what the packet and the brief cite. Nothing fits, or a Roblox system is new to you → the kit's `explore` scout or the `researcher` (`AGENTS.md` §0).
 6. The role's own memory loads by itself.
 
@@ -48,7 +48,7 @@ A `SubagentStart` hook (`tools/hooks/subagent_context.py`, enabled by the owner 
 | Any review | the maker's hand-back before the reviewer's own first look | judge the artifact, not the story |
 | Creative review | the agent instance that made the work | correlated errors |
 | Every craft step | the whole job history and other crafts' working files | more shared context raised completion but lowered robustness to wrong context |
-| Every step | **any file or folder whose name contains `hidden`** (held-out keys: `hidden-answers.md`, `grades-hidden.md`, `evals-hidden.md`, `hidden-rerun/`): withheld from every agent, packet, index and scout. Never open, quote or list one | honest scores |
+| Every step | **any file or folder whose name contains `hidden`** (held-out keys: `hidden-answers.md`, `grades-hidden.md`, `evals-hidden.md`, `hidden-rerun/`), and any note whose frontmatter says `held_out: true` (grade records that repeat held-out cases, rubrics or answers): withheld from every agent, packet, index and scout. Never open, quote or list one. Only a grader the lead or the owner names in a grading brief opens the one key it grades (`/build-agent`), and never shows it to the agent under test | honest scores |
 | Every game | other games' facts (`scope: game`), and any file or folder under `knowledge/` whose name starts with `_` (kit history, material moved from another game): never in packets or indexes | no leaks between games |
 | Every working step | skill eval briefs (`.agents/skills/*/evals/`): never in the packet; `/build-agent` and `/improve` open them by path | pass criteria are not task context |
 
@@ -69,6 +69,7 @@ updated: 2026-10-20          # absolute dates only
 source: J07 | session 2026-10-20 | url
 supersedes: []               # paths of notes this one replaces
 roles: [film-director]       # optional: roles that need this note (ranks it higher in their packet)
+held_out: true               # optional: the note repeats held-out cases, rubrics or answers (withheld like hidden-named files, §3)
 ---
 > Author: <role> · <model id> · <effort> · <date>
 ```

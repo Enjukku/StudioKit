@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J010-T22, T24 (hidden runner; QB3 rubric grade eng-evals-hidden/QB3/scores.md)
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
 

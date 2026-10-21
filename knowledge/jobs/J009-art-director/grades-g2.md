@@ -5,6 +5,7 @@ status: active
 updated: 2026-10-21
 source: J009-T11 (grader); evals-hidden.md; output/art-direction/j009-t10/case-1..3.md; art/test-b/*; J002-D9, J002-D12
 supersedes: []
+held_out: true   # repeats held-out cases, keys, rubrics or answers (rules/knowledge.md §3)
 ---
 > Author: grader · claude-sonnet-5-5 · high · 2026-10-21
 

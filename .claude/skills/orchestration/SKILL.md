@@ -29,7 +29,7 @@ description: The lead's playbook for running the AI studio. Use at the start of 
 | Marketing art (icon, thumbnails, key art family) | marketing | `job-marketing-art` | §7 |
 | New game pre-production | game-designer | none: `preproduction` skill, one owner decision per step | — |
 | Live update or event | live-ops-designer plans; the lead splits it into jobs of the types above | none | — |
-| Mixed request | one job per type, linked in `knowledge/jobs/active.md` ("a gold skin to sell in the shop" = a character variant job + a shop-listing feature job with money); never a "closest type" that drops part of the request | — | — |
+| Mixed request | one job per type, linked in `knowledge/jobs/active.md` ("a gold skin to sell in the shop" = a character variant job + a shop-listing feature job with money); never a "closest type" that drops part of the request. For each interface the jobs share (saved fields, ids, who grants, who checks) the lead names one owner job, writes it in both job cards' "Linked jobs" row and in `active.md`, and runs the owner job's contract first; the other job cites that contract revision | — | — |
 | Unclear (no type fits) | the closest type that covers the whole request, with the reason in the job card; none covers it → one question in the owner digest | — | — |
 
 A role that is still planned (the animator, J006) runs as a stand-in: a general subagent on Opus high with that role's brief and the skills it would load (same pattern as J005-D2).
@@ -59,7 +59,7 @@ A role that is still planned (the animator, J006) runs as a stand-in: a general 
 - Decision owners check in at the recipe's named points (e.g. film reviews blocking before polish; the game-designer checks the stage build as it grows). Visual notes are paint-overs.
 - A contract change: new revision, change table row, a notice to each consumer (`rules/messages.md` §5; relay it when the producer cannot send), stale outputs marked. On Claude Code 2.1.306 a message reaches a working agent at its next tool step; a message to a finished agent resumes it with its context.
 - Repairs go back to the maker with the finding file and the protected list: resume a hand-spawned maker by id; in a workflow, a fresh call.
-- One Studio writer at a time; name the `studio_id` in every Studio brief.
+- One Studio driver (read or write) at a time; name the `studio_id` in every Studio brief.
 
 ## 7. Integration, review chain, readiness
 1. The recipe's integrator assembles one frozen, revision-pinned candidate.
@@ -83,7 +83,8 @@ Give a doc-keeper (Haiku or Sonnet) the list; check its result; then run `python
 7. Job metrics in `evidence.md`: first-pass acceptance, repair rounds by cause, defects the owner found after internal review, stale handoffs, unsupported "done" claims, usage vs estimate, owner decisions.
 8. Inbox drafts from the hand-backs' `lesson` fields and your own, with `cause` and `layer`; remove the job from `active.md`; final ledger statuses; a short retrospective line: what more iteration would fix.
 
-## 10. Briefs: what and why, never how
+## 10. Intent briefs: what and why, never how
+Example (cutscene beat → animator): intent "the player must feel the dragon is too big to fight; beat 3 of 6, shot 4"; spec `fixed` length and camera from the shot list, `open` the poses and timing inside it.
 A brief gives the receiver everything it needs to make **its own best craft choices**, in the `rules/messages.md` §2 format: `<intent>` prose (goal, feeling, context, why), then `<spec>` with `packet`, `owner_words`, `refs` with notes, `inputs@rev`, `fixed` (each value with its source), `open`, `avoid`, `protected`, `consumers`, `peers`, `owns`, `not_in_scope`, every `rule`, `deliver`, `checks`, `return`. Send it whole, in one message.
 - **Exact where another system, craft or the owner depends on the value; open where the role is the expert.** A feeling is a target plus an observable sign, never a method. Never prescribe craft ("use 3 flaps per second") unless it is a locked owner decision. If the brief cannot say *why*, it is not ready.
 - **Every brief names the Roblox docs** the work touches: the packet's "Roblox docs" section and the receiver's rows in `knowledge/reference/roblox/docs-map.md` (a brief without docs pointers led to invented class names and a rebuilt lighting system: `knowledge/reference/engineering/rework-study.md` B08).
@@ -108,7 +109,7 @@ Per-role defaults: `.agents/roles/README.md` (owner-approved). Helpers without a
 
 ## 12. Statuses
 - `blocked` / `failed`: fix it if you can (missing file, unclear brief); otherwise send it one level up with the reason.
-- `needs-decision`: into the owner digest with a recommendation and a default. `inside: no` requests: never start them; digest them.
+- `needs-decision`: the lead first decides what is its own (`rules/company.md` §3, §8); only scope, taste or budget goes into the owner digest, with a recommendation and a default. `inside: no` requests: never start them; digest them.
 - `stale`: the output's owner rechecks or rebuilds against the new revision.
 - Two pushes on open coverage items, then `failed`. Two repair rounds per review gate, then `needs-decision` to the lead, who diagnoses (§7.3).
 

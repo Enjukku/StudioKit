@@ -38,11 +38,15 @@ How it ranks (spec: rules/knowledge.md §2, §3, §6):
     --json carries them as keys `role` and `job`. Without both flags the output is unchanged
     (regression test: tools/tests/fixtures/context/golden/).
     10. Withheld context (rules/knowledge.md §3; `withheld()`): held-out keys (any path with "hidden"
-       in a file or folder name), direction proposals (`*/direction/proposal-*`), `_`-named material under
+       in a file or folder name, or a note with frontmatter `held_out: true`), direction proposals (`*/direction/proposal-*`), `_`-named material under
        knowledge/ (kit history, another game's notes) and skill eval briefs (`.agents/skills/*/evals/`)
        are never in the corpus, link neighbours, job blocks or read-next list, whatever kit.json says;
        a line that names a held-out file is never excerpted. kb_index.py uses the same rules.
-    11. Sibling files that repeat one section (same folder, same heading) take one ranked slot.
+    11. Sibling files that repeat one section (same folder, same heading, SIBLING_OVERLAP of its words in
+       the kept one) take one ranked slot; distinct sections under a shared template heading all rank.
+    12. With --role for a craft role (not orchestrator or doc-keeper), files under a job's reviews/ or
+       exchange/ folder score x JOB_HISTORY_FACTOR (rules/knowledge.md §3: a craft step does not get the
+       whole job history); briefs name the ones a step needs.
 
 Search roots: kit.json key `context.search_roots` (list of repo-relative paths) when present,
 else DEFAULT_ROOTS. `context.exclude` (list) replaces DEFAULT_EXCLUDE when present (never the withheld
@@ -132,6 +136,10 @@ VOCABULARY = "knowledge/design/vocabulary.md"
 PRECEDENT_ROWS = 5  # newest rows of the role's craft in the role block
 ROLE_ALIASES = {"orchestrator": ["orchestration"]}  # the lead has no role file; its book is this skill
 OTHER_ROLE_FACTOR = 1 / ROLE_BOOST  # with --role, other roles' identity files
+JOB_HISTORY_RE = re.compile(r"^knowledge/jobs/[^/]+/(?:.*/)?(?:reviews|exchange)/")
+JOB_HISTORY_FACTOR = 0.5  # PROPOSAL (J016 G3, audit D N1): a craft role's packet, review and exchange files
+JOB_HISTORY_ROLES = frozenset({"orchestrator", "doc-keeper"})  # the lead and the filer read the job history at full weight
+SIBLING_OVERLAP = 0.8  # a same-folder, same-heading section is a copy when this share of its words is in the kept one
 PROPOSAL_RE = re.compile(r"(?:^|/)direction/proposal-[^/]*$")
 
 
@@ -155,6 +163,12 @@ def held_out(rel: str) -> bool:
 def names_held_out(line: str) -> bool:
     """True when a line of a visible note names a held-out file; such lines are never excerpted."""
     return bool(HELD_OUT_MENTION_RE.search(line))
+
+
+def marked_held_out(meta: dict | None) -> bool:
+    """Frontmatter `held_out: true`: a visibly named note that repeats held-out cases, keys, rubrics or
+    answers (grade files, eval answers). Withheld exactly like a hidden-named file (J016 G3 repair, E N-01)."""
+    return str((meta or {}).get("held_out", "")).strip().lower() in ("true", "yes")
 
 
 def withheld(rel: str) -> str | None:
@@ -455,8 +469,13 @@ class Corpus:
         self.root = root
         self.config = load_config(root) if config is None else config
         self.notes: dict[str, Note] = {}
+        self.marked: set[str] = set()  # notes with `held_out: true`, never ranked, linked or resolved
         for rel in corpus_files(root, self.config):
-            self.notes[rel] = load_note(root, root / rel)
+            note = load_note(root, root / rel)
+            if marked_held_out(note.meta):
+                self.marked.add(rel)
+                continue
+            self.notes[rel] = note
         self.sections: list[Section] = [s for n in self.notes.values() for s in n.sections]
         self._index()
 
@@ -531,7 +550,7 @@ class Corpus:
             if knowledge.is_dir():
                 for path in knowledge.rglob("*.md"):
                     rel = path.relative_to(self.root).as_posix()
-                    if not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel):
+                    if not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel) and rel not in self.marked:
                         paths.add(rel)
             for rel in sorted(paths):
                 stems.setdefault(Path(rel).stem.lower(), []).append(rel)
@@ -552,7 +571,7 @@ class Corpus:
                 return other.path
         for _, target in note.links:
             resolved = self.resolve_link(target, note.path)
-            if resolved and resolved != note.path and not withheld(resolved):
+            if resolved and resolved != note.path and not withheld(resolved) and resolved not in self.marked:
                 return resolved
         return None
 
@@ -663,13 +682,17 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
                 value *= ROLE_BOOST
             elif book and note.kind == "role":
                 value *= OTHER_ROLE_FACTOR
+            history = bool(role) and role not in JOB_HISTORY_ROLES and bool(JOB_HISTORY_RE.match(note.path))
+            if history:
+                value *= JOB_HISTORY_FACTOR
             if job_hit:
                 value *= JOB_BOOST
-            if role_hit or own_book or job_hit:
+            if role_hit or own_book or job_hit or history:
                 boosted[note.path] = (
                     (f"; tagged for role {role}" if role_hit else "")
                     + (f"; own book of role {role}" if own_book and not role_hit else "")
                     + (f"; in job {job}" if job_hit else "")
+                    + ("; job review or exchange file, lower for a craft role" if history else "")
                 )
             scored.append((value, section, matched, fields_hit))
     scored.sort(key=lambda item: (-item[0], item[1].path.lower(), item[1].start))
@@ -677,7 +700,7 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
     top = scored[0][0] if scored else 0.0
     hits: list[Hit] = []
     per_note: dict[str, int] = {}
-    seen_copies: set[tuple[str, str]] = set()  # (folder, heading): sibling files repeating one section take one slot (audit D R12)
+    kept_copies: dict[tuple[str, str], list[set[str]]] = {}  # (folder, heading) -> word sets of kept sections (audit D R12, N2)
     superseded: dict[str, dict] = {}
     for value, section, matched, fields_hit in scored:
         note = corpus.notes[section.path]
@@ -692,9 +715,11 @@ def rank(corpus: Corpus, query: str, role: str | None = None, job: str | None = 
         if per_note.get(section.path, 0) >= PER_NOTE_CAP:
             continue
         copy_key = (section.path.rpartition("/")[0].lower(), section.heading.strip().lower())
-        if copy_key in seen_copies:
-            continue
-        seen_copies.add(copy_key)
+        words = set(section.tokens["body"])
+        kept = kept_copies.setdefault(copy_key, [])
+        if any(len(words & other) >= SIBLING_OVERLAP * max(1, min(len(words), len(other))) for other in kept):
+            continue  # a sibling file repeats this section: one slot for both
+        kept.append(words)
         per_note[section.path] = per_note.get(section.path, 0) + 1
         where = "/".join(f for f in ("heading", "title", "path", "meta", "body") if f in fields_hit)
         why = f"matched {', '.join(matched)} in {where}"
@@ -1241,6 +1266,16 @@ def file_revision(path: Path) -> str | None:
     return None
 
 
+def file_marked(path: Path) -> bool:
+    """`held_out: true` in a markdown file's frontmatter (JSON job files carry no frontmatter)."""
+    if path.suffix != ".md":
+        return False
+    try:
+        return marked_held_out(parse_frontmatter(path.read_text(encoding="utf-8", errors="replace"))[0])
+    except OSError:
+        return False
+
+
 def job_info(root: Path, job: str) -> dict:
     """The --job block. `job` is an id or unique prefix; raises ValueError when unknown or ambiguous."""
     name = resolve_job(root, job)
@@ -1250,7 +1285,7 @@ def job_info(root: Path, job: str) -> dict:
         matches = []
         for path in folder.rglob(pattern):
             rel = path.relative_to(root).as_posix()
-            if path.is_file() and not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel) and rel not in found:
+            if path.is_file() and not SKIP_DIRS.intersection(rel.split("/")) and not withheld(rel) and rel not in found and not file_marked(path):
                 matches.append(rel)
         found += sorted(matches, key=lambda rel: (rel.count("/"), rel.lower()))
     files = [{"path": rel, "revision": file_revision(root / rel)} for rel in found]
