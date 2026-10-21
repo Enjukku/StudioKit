@@ -1,7 +1,7 @@
 ---
 type: job
 scope: universal
-status: active
+status: done
 updated: 2026-10-21
 source: owner chat 2026-10-21 (/build-agent marketing)
 supersedes: []
@@ -16,7 +16,7 @@ supersedes: []
 | Size | L (new role, 2 skill books, a 1,164-line paper with 79 dated sources (many after the model cutoff) to extract and fact-check, 6 templates, a thumbnail check on top of `look_check.py` with tests, an art-bible family change, a real test with ChatGPT images) |
 | Owner (human) | owner |
 | Job owner (agent) | lead (orchestrator) |
-| Status | G1 approved 2026-10-21 (J012-D6). Steps 2-5 done 2026-10-21: 3 notes + 3 fact-checks (FD 74, FA 70, FS 66 rows) in `knowledge/reference/marketing/`; tool `tools/art/thumb_check.py` (15 tests); skills marketing-design, marketing-craft; 6 templates in `templates/marketing/`; art-bible families `thumbnail`, `game-icon`; role `marketing`; evals E1-E5 + hidden H1-H4; roster row. Gate PASS. Step 6 (G2) waits: owner go for the test (digest-g2-start.md) |
+| Status | G1 approved 2026-10-21 (J012-D6). Steps 2-5 done 2026-10-21: 3 notes + 3 fact-checks (FD 74, FA 70, FS 66 rows) in `knowledge/reference/marketing/`; tool `tools/art/thumb_check.py` (15 tests); skills marketing-design, marketing-craft; 6 templates in `templates/marketing/`; art-bible families `thumbnail`, `game-icon`; role `marketing`; evals E1-E5 + hidden H1-H4; roster row. Gate PASS. Step 6 (G2) not run (J012-D8). Closed 2026-10-21 (J012-D9): in kit, not yet tested |
 | Depends on | `reference-images` skill + `tools/art/art_refs.py` (exist); `tools/art/look_check.py` (J009, exists, 20 tests); `templates/skill/art-bible.md` (exists); `platform-policy`, `analytics`, `game-concept`, `market-trends`, `art-direction` skills (exist); analyst and live-ops-designer roles (planned, not built) |
 
 ## Owner's words (2026-10-21, excerpts)
@@ -90,5 +90,5 @@ Subagents, max 3 at a time. Wave 1: 3 extractors. Wave 2: 3 fact-checkers (they 
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | G1 brief | 2026-10-21 | "All right, understood. Go ahead and begin." |
-| G2 first real test | | |
-| G3 final approval | | |
+| G2 first real test | — | not run: "No." (J012-D8) |
+| G3 final approval | 2026-10-21 | "I think we're just fine. Because I don't want to do any testing right now." (accepted without the G2 test, J012-D9) |

@@ -29,7 +29,7 @@ Roles move in from the first game in phase 3; canonical format: see tools/sync_h
 | analyst (own-game player data: diagnosis, A/B tests, event planning, weekly page; tool `tools/analytics/`) | research → Sonnet | medium; Opus high for a deep investigation (owner J013-D1) | building (J013; skills analysis-design, analysis-craft; G2 pending) |
 | studio-operator | research → Sonnet | medium | in kit |
 | trend-scout (market and loop trends with data) | research → Sonnet | medium (J004-D2: high inside J004 only) | in kit, legal-only mode (J004-D12) |
-| marketing (title, icon, thumbnails, game page, video, updates, social, creators, Roblox ads, community; replaces marketing-store, J012-D2) | craft → Opus | medium; high for a new game's title, icon and launch plan (owner J012-D1) | building (J012; skills marketing-design, marketing-craft; G2 pending) |
+| marketing (title, icon, thumbnails, game page, video, updates, social, creators, Roblox ads, community; replaces marketing-store, J012-D2) | craft → Opus | medium; high for a new game's title, icon and launch plan (owner J012-D1) | in kit, not yet tested (J012 closed, J012-D9; skills marketing-design, marketing-craft) |
 | doc-keeper | mechanical → Haiku | medium | in kit |
 | explore | mechanical → Haiku | low | in kit |
 
