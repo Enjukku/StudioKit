@@ -57,6 +57,7 @@ Read the distribution and the segment (new vs returning, source, device, region,
 - Themes for events and variants come from player data and fill their own niche (`systems-economy.md` §8); each recurring event states its tone shift against the last.
 - Maps are revisited from evidence (`spaces.md` §8); a new world is a clear escape from the previous ones. Cosmetics refresh repeated play without touching balance.
 - Event or season review (9): entry requirements · late-join and comeback path · learning cost · meaningful activity · individual vs team conflicts · intended stopping point · permanence or reset · effect on the existing economy · what stays valuable after.
+- The live-ops designer's event review on named captures (`live-ops-craft/references/event-review.md` §3) checks the promise, tiers, identity and confirmed celebrations; this list checks the play.
 - Before release name: audience, expected behaviour mechanism, success signal, harm guardrails, analysis window, alternative causes. After release compare new, existing, returning, solo, grouped and progression cohorts; read exposure and adoption apart from outcomes. Longer sessions can mean enjoyment, confusion, compulsion or a slower economy. Separate balance fixes, novelty, marketing and seasonal effects before any causal claim.
 
 ## 5. Update evaluation (10 fields, O)

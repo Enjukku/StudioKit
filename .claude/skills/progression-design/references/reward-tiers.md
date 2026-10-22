@@ -57,7 +57,7 @@ The ceilings are not pacing targets (no universal rewards-per-session number exi
 | vfx-designer, sound-designer | tier (first / repeat), rate, trigger, text name | shape, length, loudness and caps per tier, merge windows | before any reward effect or cue is built |
 | ui-ux-designer | tier, counter, text name, odds rows; the number display rule (`progression-craft/references/data-handoff.md` §5) | layout, motion, where the reward flies | before reward and shop screens are styled |
 | art-director | family and rank ladders, style-break rows, premium rows | how rank shows (size, complexity, finish, secondary motion) | before item families are drawn |
-| live-ops-designer | the tiers and their ceilings | event rewards placed in the same tiers; a new top-tier reward needs the same rarity proof | event planning |
+| live-ops-designer | the tiers and their ceilings | event rewards placed in the same tiers; a new top-tier reward needs the same rarity proof | before the event plan is ranked (feasibility), then before any event reward moment is briefed to VFX, sound and UI |
 
 Each partner restates the tiers and rates it uses in its exchange note; an open question there means the table is not done.
 

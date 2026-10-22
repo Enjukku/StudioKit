@@ -84,7 +84,7 @@ Inputs: B = brief, plan, spec rows, manifest · D = the candidate's diff and fil
 - [ ] (D) Outcome size from the server's result, escalation thresholds from data (PT-02).
 - [ ] (D) Logic and affordability read the true balance; the display only counts up to it (PT-03).
 - [ ] (D, P) Paid random: result decided on the server first; windup code takes no tier input; one odds table, effective odds; restricted gate; the S-44 frame compare requested from the UI designer (PT-04).
-- [ ] (D) Telegraph shape, radius and fuse from the hit test's data; removed on the end event; every attack path fires it (PT-05).
+- [ ] (D, G) Telegraph sent when the wind-up starts, with its server time, never in the same step as the damage; shape, radius and fuse from the hit test's data; removed on the end event; every attack path fires it (PT-05, S11).
 - [ ] (D, G) Camera, FOV, post effects and shake only from the local player's own events at the allowed importance; shake rotates, decays, is restored; others' effects toned only locally (PT-06, PT-07).
 - [ ] (D, G) Each hit-stop pause restored on its timer and on interruption; nothing pauses the server or physics (PT-08).
 - [ ] (D, G) The comfort module answers the contract's five settings (reduced motion, shake, flashes, screen effects, clarity); every tween, shake, flash, tint, FOV punch and toned effect in the change asks the setting that owns it, and each reduced path keeps the information (PT-09).
@@ -111,7 +111,7 @@ The studio's universal principles, written for code review. The master is `knowl
 
 | # | Principle for my work | Example (our pipeline) | Check |
 | --- | --- | --- | --- |
-| 1 | **Players first.** The harm order ranks by what players lose, and code must never show a player a state the server did not confirm | A sell handler plays the coin burst before `InvokeServer` returns; a denied sale still shows "+50" | Each player path: what is shown equals the server's result (PT-01, PT-03) |
+| 1 | **Players first.** The harm order ranks by what players lose; code must never show a player a state the server did not confirm, and a threat's tell leaves the server when its wind-up starts, never with the damage | A sell handler plays the coin burst before `InvokeServer` returns; a denied sale still shows "+50"; a boss sends its slam tell in the same step as the damage, so on a slow connection the warning arrives with the hit | Each player path: what is shown equals the server's result (PT-01, PT-03); each threat's tell is sent before the wind-up wait, never beside the damage (PT-05, S11) |
 | 2 | **Judge where players meet it.** A runtime claim holds only on the input that can prove it; static reading cannot prove timing, replication or phone cost | "The debounce works" is proven by a two-client run, not by reading the debounce | Every runtime claim names its input and label (`review-method.md` §1) |
 | 3 | **Decide what is read first.** The verdict leads, the most harmful finding comes first, few findings; nothing small competes with a blocking finding | A Critical dupe followed by nine style notes buries the dupe: write the dupe and nothing below the bar | Findings in severity order; no style or taste items |
 | 4 | **Big before small.** The whole change at the harm-area level first, then depth; owners, contracts and data flow before line details | In a 12-file shop change, pass 1 finds a second balance writer in `Inventory.luau` before any time goes into a tween | Candidates cover every changed file and all 8 areas before the first proof |

@@ -317,3 +317,20 @@ The rev2 keep list is kept whole; every change below is a clause on an existing 
 | Note: library GD-35 "static" | Unchanged: proposal row already filed for the lead |
 | Note: J003 citations that name Riot | Left for the lead, as both reviews ask (they cite the owner's J003 research paper) |
 | Note: `ReducedMotionEnabled` in this file's header | No book change: the books say "reduced motion"; the property exists (GuiService.yaml:262) |
+
+## Proposal sweep (J018 close)
+
+Close-out sweep by orchestrator-sweep for game-designer · claude-opus-5-5 · high · 2026-10-22. Rows from other makers against `game-concept`, `preproduction`, `game-design` and the role body; the partner books were opened before each decision. Last grep of all 20 proposal files for the skill names, the reference file names and `game-designer`: one more row found (`reference-images.md:24`); the other hits target recipes, workflows, tools, the library or other roles' files.
+
+| proposal file:line | decision (adopted / already in the book / declined) | where or why |
+| --- | --- | --- |
+| level-design.md:25 | adopted | `preproduction/references/handoffs.md` §2 environment-designer row, `fixed` column: per node the geometry the level books produce (stop or pass, sight lines to keep clear, key positions, floor types with the smallest gameplay object, events heard from it), pointed to `level-design/references/review-artifact.md` §1, not copied |
+| level-design.md:26 | adopted | `game-design/references/review.md` §7 flat-key capture definition (the one place): shadows off (`Lighting.GlobalShadows` false, restored after; probe first), the floor key within `--key-tol` of the backdrop key, a key colour far from every colour on the subject, with why (a shadow or shaded floor joins the outline, a near-key part is keyed out, both with no error); role file studio-operator row adds "shadows off" |
+| level-design.md:28 | adopted | `game-design/references/spaces.md`:1 header: "the fixed checks C1-C19" |
+| level-design.md:32 | adopted | `game-design/references/spaces.md` §1 check: stills-based wording (never the brightest or most saturated in view, no motion near a decision; seconds of eye draw from the owner's play-test), pointing to the level review's C15 as its source |
+| live-ops-designer.md:24 | adopted | `game-design/references/playtest-live.md` §4: a line after "Event or season review (9)" pointing to `live-ops-craft/references/event-review.md` §3 and splitting the two lists (promise, tiers, identity, confirmed celebrations there; the play here) |
+| progression-designer.md:19 | adopted | `preproduction/references/documents.md` §6 Celebration (tier from the reward tier table, `progression-design/references/reward-tiers.md`) and Frequency (measured rate from the same table) when the feature has rewards; attempt cue, outcome response and lengths stay mine; matches `reward-tiers.md` §6 game-designer row |
+| vfx-designer.md:32 | adopted | `preproduction/references/documents.md` §9 new row "Information areas": what must stay visible per scene and the maximum effect height in studs (PROPOSAL until a capture tests it); the VFX read card reads them (`vfx-design/references/read-card.md`) |
+| reference-images.md:24 | adopted | role body, "Reference images" line: "`reference-images` §4 steps 1-3 (rounds R0-R3) and "Who generates"", matching the rounds table in `reference-images/SKILL.md` §4 |
+
+Edits written with LF endings (no carriage return byte in any changed file); role frontmatter untouched; no SKILL.md, description or section number changed.

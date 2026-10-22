@@ -320,3 +320,13 @@ Checks after the edits: role frontmatter lines 1-10 identical to df13ff4 (`cmp`)
 | Change | Where | Why |
 | --- | --- | --- |
 | Flash count: read both counts per the shared counter's known-limits note, not the 10 % count alone | film-craft/references/blender-previs.md §7, review.md R-10 | The vfx-designer final repair found that with rain or a pan past dark shapes the 10 % count can read too low; the shared counter (`vfx-craft/references/measure.md` §6) now says to read both counts. Consistency fix (brief V6), no craft decision. |
+
+## Proposal sweep (J018 close)
+Swept by J018 close-out animator / film-director · claude-opus-5-5 · high · 2026-10-22. Edited file is LF; role frontmatter unchanged (lines 1-10 equal HEAD).
+
+| proposal file:line | decision (adopted / already in the book / declined) | where or why |
+| --- | --- | --- |
+| vfx-designer.md:19 | already in the book | repair round 3 F1: `film-craft/references/blender-previs.md:77-81` §7 "Flash count (R-10): the frames to export" points to `vfx-craft/references/measure.md` §6 and keeps no copy (the printed `flash_count_film.py` is gone); the lead's integration fix added "read both counts"; `review.md` R-10, `film-direction/SKILL.md` §7 #20 and the role file point to the same counter |
+| reference-images.md:24 | adopted (film-director part) | `roles/film-director.md:27` now reads: §4 steps 1-3 (rounds R0-R3) and "Who generates" |
+
+Rows that name the film-director but target files outside these books: art-director.md:42 (`tools/art/look_check.py`), vfx-designer.md:18 (new flash tool), sound-designer.md:18 (`tools/film/shotlist.py`). Not decided here; they stay with the lead and the owner.

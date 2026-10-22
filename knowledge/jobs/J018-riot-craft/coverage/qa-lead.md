@@ -250,3 +250,15 @@ V10 conflict found while fixing F1: the VFX craft book's own spec example (`vfx-
 V11 after this round: grep of all proposal files for `testing`, `qa-lead`, `player-facing`, `PF-` and `QS-`: `feature-builder.md` rows 29 (adopted, round 1) and 36 (adopted, this round); no other row targets my books.
 
 V5 pass after the repair: every location changed this round (SKILL T-19, §3 step 3, QS-12, QS-16, §7 row 12, header; methods §1 range row, §2, header; player-facing PF-07, PF-10, PF-16, §3 hook rows, header; records §3, header; worked examples §1 hooks, PF-16 and T-19 rows, planted faults, honest end, §3 burst row and honest end, header) was opened after the edit; every coverage row whose finding has a runnable check names its QS line (VR-19 QS-05, VR-21 QS-05/QS-15/QS-16, VR-25 QS-12, VR-26 QS-16); the three worked examples were re-read against the changed T-19, PF-07, PF-10 and PF-16. Files written with LF endings.
+
+## Proposal sweep (J018 close)
+
+Close-out sweep by orchestrator-sweep for qa-lead · claude-opus-5-5 · high · 2026-10-22. Last grep of all 20 proposal files for `testing`, `qa-lead`, `player-facing`, `methods.md`, `records.md`, `worked-examples`, `PF-` and `QS-`: no row beyond the three below targets my books (the architect's and reviewer's rows that name the qa-lead target `job-types.md` and `job-feature.js`).
+
+| proposal file:line | decision (adopted / already in the book / declined) | where or why |
+| --- | --- | --- |
+| feature-builder.md:29 | already in the book | `testing/references/player-facing.md` PF-02 (rejected request, no success layer, `Reject`), PF-05 (burst ends exact, buying right after a gain, `Set`), PF-06 (windup identical for every tier, `Outcome`/`Seed`), PF-07 (reduced keeps every warning, `Reduced`), PF-10 (burst at the real rate merges labels and cues); adopted in repair round 1 |
+| feature-builder.md:32 | declined | no change asked ("none") and the target is the feature-builder's own frontmatter; nothing in the qa-lead books depends on it (`testing` stays in the builder's preloaded pair) |
+| feature-builder.md:36 | already in the book | `testing/references/player-facing.md` §3 hooks table: `Outcome` = `<event id>:<outcome or tier>` or `Seed`, `Set` = `<key>:<value>` (rounds 1), `Reduced`; `Clarity` = all / reduced / essential; `Viewer` (round 2); PF-16 uses `Clarity`; grep "not in the builder" over the testing books = 0 |
+
+No book change this sweep.

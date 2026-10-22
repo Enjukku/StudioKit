@@ -81,7 +81,7 @@ return: hand-back to architect, short change manifest
 <spec>
 id: <id>  from: feature-builder  to: reviewer  model: opus  effort: high   # money
 skills: [code-review, engineering-craft, data-saving, networking-security, platform-policy]
-refs: [knowledge/jobs/<job>/architect/plan.md, <change manifest path>, <test log path>, <presentation contract revision>, <feedback stack sheet>, <debug log of the Reject, DelayMs, Viewer, Reduced, DebugShape and Rate runs>]   # last three when players see or hear the change; the manifest lists the stand-ins still in place
+refs: [knowledge/jobs/<job>/architect/plan.md, <change manifest path>, <test log path>, <presentation contract revision>, <feedback stack sheet>, <debug log of the Reject, DelayMs, Viewer, Reduced, Clarity, DebugShape and Rate runs>, <production-build log (SR-18)>]   # last four when players see or hear the change; the manifest lists the stand-ins still in place
 fixed: {base: <commit>, candidate: <commit>, files: [<owned files>]}
 rules: [Find first, filter second. Report only real problems with proof: file:line, input or sequence, wrong outcome. No style findings. A clean change gets "no blocking findings". Check engine-gate answers, docs read, placement, and that the tests can fail.]
 checks: [C1 every harm area walked or skipped with a reason, C2 every finding re-read in the code]

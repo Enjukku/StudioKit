@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [vfx-designer, art-director, game-designer, ui-ux-designer, environment-designer, animator, sound-designer, film-director, modeler, reference-images, level-design, feature-builder, architect, reviewer, qa-lead]
@@ -248,7 +248,7 @@ Stage 1c (DestructionSimulator cross-check) added VR-19 to VR-26: per-viewer eff
 - mistake: Raising the clouds but not the centre glow and lightning (R06:248, 254, 263).
 - examples:
   - R06: everything doubled: scale 1.5 to 2, height to 500 (R06:239-250, 263).
-- roblox_fit: ParticleEmitter Size does not follow a model's scale automatically [unverified]; scale Size sequences in code from one factor.
+- roblox_fit: `Model:ScaleTo` scales particle emitter sizes with the model (knowledge/external/roblox-creator-docs/_api-reference/classes/Model.yaml:716-740, "Visual properties like sizes of particle emitters" at :739); a Part or Attachment resized by hand does not rescale its emitters [inference]; keep one scale factor in data and scale through `ScaleTo` or from that factor (lead fix 2026-10-22: the docs say the opposite of the earlier [unverified] line).
 - roles: vfx-designer, feature-builder, architect
 - also: pipeline-production
 - sources: R06-F25 (R06:239-250, 263)
@@ -297,7 +297,7 @@ Stage 1c (DestructionSimulator cross-check) added VR-19 to VR-26: per-viewer eff
 ### VR-21 Camera and screen punches are rare, local, rotation-only and gated by importance
 - principle: Camera shake, field-of-view punches, slow motion and full-screen flashes or grades are the loudest channels in the game. Use them only for rare, high-importance moments of the local player, never for frequent events and never because of another player's effect. With a third-person 3D camera, shake rotates the view; it does not move it.
 - why: A camera that moves on every hit numbs the player, costs aim and causes discomfort; moving (translating) the camera pushes it into walls; another player's effect shaking your screen is noise you cannot act on.
-- apply: Each effect spec names its importance and the camera channels it uses. PROPOSAL bands [inference, DS start values]: importance 1-2 uses no camera or screen channel; middle tiers may add a small shake; only the top tier (about 8-10 of 10) gets a field-of-view punch (at most about 4° in about 0.15 s, back over 0.2-0.3 s), local slow motion (eased, and only when no other live threat is near) or a full-screen grade pulse. Shake uses a trauma value: each event adds trauma (small about +0.2, big about +0.5), trauma clamps at 1 and decays (about 1 per second), and the shake angle is trauma squared or cubed times a maximum angle (about 3°, tested against 1° and 6°) on smoothed noise, never fresh random offsets per frame. Blast shake falls off with distance and starts when the shockwave reaches the viewer. When the camera is far back, cut shake and carry the weight in sound and animation. No film cuts, zooms or depth of field during active play unless control is paused.
+- apply: Each effect spec names its importance and the camera channels it uses. PROPOSAL bands [inference, DS start values]: importance 1-2 uses no camera or screen channel; middle tiers use no camera channel by default, and a small shake only on a rare heavy hit when the owner allows it (lead fix 2026-10-22: the kit's shake is occasional, vfx-design §4); only the top tier (about 8-10 of 10) gets a field-of-view punch (at most about 4° in about 0.15 s, back over 0.2-0.3 s), local slow motion (eased, and only when no other live threat is near) or a full-screen grade pulse. Shake uses a trauma value: each event adds trauma (small about +0.2, big about +0.5), trauma clamps at 1 and decays (about 1 per second), and the shake angle is trauma squared or cubed times a maximum angle (about 3°, tested against 1° and 6°) on smoothed noise, never fresh random offsets per frame. Blast shake falls off with distance and starts when the shockwave reaches the viewer. When the camera is far back, cut shake and carry the weight in sound and animation. No film cuts, zooms or depth of field during active play unless control is paused.
 - check: For each effect, list its camera channels against its importance band (a channel above its band fails); capture a frequent effect at its real rate: the camera never moves; two-client capture: the bystander's camera never shakes or tints; near a wall in third person, the shake causes no clipping; aim and move during a shake at the lowest setting.
 - mistake: Shake on every brick, pickup or hit; translation shake in 3D; a full-screen flash on routine critical hits; slow motion while another threat is live.
 - examples:
@@ -315,7 +315,7 @@ Stage 1c (DestructionSimulator cross-check) added VR-19 to VR-26: per-viewer eff
 - mistake: Freezing the whole game; the same stop for every hit; hit-stop on every shot of rapid fire.
 - examples:
   - DS: Celeste-style freezes of 0.05 s on a dash and 0.1 s on an explosion launch as practice references (DS:vfx-design/references/camera-and-screen.md:49).
-- roblox_fit: AnimationTrack:AdjustSpeed(0) pauses a track (knowledge/external/roblox-creator-docs/_api-reference/classes/AnimationTrack.yaml:320-324); ParticleEmitter.TimeScale 0 freezes a particle system (_api-reference/classes/ParticleEmitter.yaml:962-968); restore both after the stop; there is no global time scale, so the server never pauses [inference].
+- roblox_fit: AnimationTrack:AdjustSpeed(0) pauses a track (knowledge/external/roblox-creator-docs/_api-reference/classes/AnimationTrack.yaml:320-324); ParticleEmitter.TimeScale 0 freezes a particle system (_api-reference/classes/ParticleEmitter.yaml:962-968); after the stop restore both to the base speed the track's one owner holds, never to a value saved when the stop began, so overlapping stops cannot restore a saved 0 (lead fix 2026-10-22: two overlapping stops left a track frozen, J018 reviewer run R5); there is no global time scale, so the server never pauses [inference].
 - roles: vfx-designer, animator, feature-builder, game-designer, sound-designer, reviewer, qa-lead
 - also: weight-timing, game-design-fun
 - sources: DS:vfx-design/references/camera-and-screen.md:45-55, 92-94, 115; DS:vfx-design/references/juice-repetition-sync.md:38-39, 55; DS:vfx-design/references/moment-recipes.md:28, 53-54, 86-88; DS:vfx-design/references/review.md:89; R00a:136-164 (hit-pause as a kind of satisfaction, via GD-02)

@@ -50,7 +50,7 @@ Ask inside the approved brief (a ticket for new work, `rules/messages.md` §2); 
 | ui-ux-designer | a restatement of the display rule and fixtures; a phone-size frame of the shop or progress screen at two timeline points (next goal, cost, counter, odds, locked reason) | UI jobs for shops and progress screens |
 | vfx-designer, sound-designer | an exchange note restating the tiers, rates and triggers their reward moments are built to | before reward effects and cues are built |
 | art-director | an exchange note restating the rank order of each item family and any proposed top-tier style break (the owner decides the break) | before item families are drawn |
-| live-ops-designer | event plans with their rewards and timings, to re-simulate and tier | event planning |
+| live-ops-designer | event plans with their rewards and timings, to re-simulate and tier | before the event plan is ranked; again before its reward moments are briefed |
 | the owner (through the lead) | the choice between options; the feel on a playable preview at the gate | options; gates |
 
 Ask **vfx-designer** and **sound-designer** for new work only through a ticket. If a role is still planned (not built), say so and give the brief to the lead.

@@ -161,12 +161,13 @@ Written once per game (default path `output/sound/identity/sound-identity.md` un
 | When | Partner | I ask for | I give back |
 | --- | --- | --- | --- |
 | Step 1 | game designer | the feedback stack, threat sheet, read rank and tiers for this feature | the cue list per state change; a missing cue or reason |
+| Step 1, gameplay features | architect | the presentation contract rows at their revision (event id, layer, source, viewers, cap owner) | before the contract freezes: my needs in the exchange note (the list is in the role file's partner table) |
 | Step 2 | animator | the draft timing list (event ids, verb, sound words, end-of-state tells) | the stage sheet keyed to its ids; a missing event as a request |
 | Step 2 | VFX designer | the frame script on the same ids | the shared envelope (wind-up, peak, tail) as an exchange note |
 | Step 1, stages | environment designer | the ambience map (emotion per zone, signature element) and floor-material list | the `sound:` keys; footstep sets; refusal of a material I cannot cover in time, with the material to use instead |
 | Step 1, rewards | progression designer | the reward tier table (tier, trigger, measured rate) | reward cues sized per tier; a tier whose rate is too high for its cue length, as a finding |
 | Step 2, screens | UI designer | the screen's event names and the motion table | the UI cue list (cue id per motion-table row) |
 | Step 3 | art director | the character card and tone words | the signature plan per character |
-| Step 5 | integrator (feature-builder) | the temp cues wired on the event ids; a debug cue log line per play (`cue <id> <event> <time>`) | the temp cue list and wiring notes |
+| Step 5 | integrator (feature-builder) | the temp cues wired on the event ids; a debug log `cue` line per play (`engineering-craft/references/presentation.md` §9) | the temp cue list and wiring notes |
 | Step 9-10 | studio operator, owner | a playable preview for check-ins A and C; a device capture with sound for sync | the questions and pass rules for each check-in |
 | Any timing change | animator | the new revision in the same hand-back | re-keyed stage sheet, acknowledged |

@@ -43,6 +43,7 @@ You cannot hear. You judge from your documents, numbers measured from the files,
 | When | Ask | For |
 | --- | --- | --- |
 | Before staging | game designer | the feature spec's feedback stack (named stages, attempt and outcome, tiers, merge window), the threat sheet (reaction windows, tells), the read rank and loudness tiers |
+| Before the presentation contract freezes (gameplay features) | architect | you send first your needs: cue ids, buses, voice cap, merge and repeat needs, cues that must carry off screen; then the contract rows you key to (event id, layer attempt / outcome / pending / refusal, source, viewers, cap owner) at its revision (`architecture/references/presentation-contract.md` §2-3) |
 | Before staging; again on every retime | animator | the timing list revision (event ids, verb, sound words, end-of-state tells); draft markers early enough for the temp pass |
 | Before either builds | VFX designer | the frame script on the same event ids; the shared envelope as an exchange note |
 | Before any ambience or footsteps | environment designer | the ambience map (zones, the emotion per zone, the stage's signature element, causes, checkpoints, the acoustic choice per space) and the floor-material list |

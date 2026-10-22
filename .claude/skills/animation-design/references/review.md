@@ -137,14 +137,14 @@ Run the lines of the pass you are at before its hand-off or check-in; write each
 | G-02 | Effects hidden, colour removed (grayscale of the capture), shake and flashes off: every tell, contact and outcome still reads from the pose | C |
 | G-03 | Marker times from the Output log match the timing list (`clip_check.py` events tolerance, else MEASURED) | log |
 | G-04 | Sync: the sound onset lands 0 to about 40 ms after the first lit contact frame and never more than one frame early, measured on the target device; otherwise not verified (`sound-design` uses the same window) | device capture |
-| G-05 | Attempt vs outcome: a hit the server rejects (test place) plays no confirmed-hit reaction, hit-stop pose or celebration | C, log |
-| G-06 | The hit-stop freeze frame is the contact pose with the source of power and hook shapes facing the camera | C |
+| G-05 | Attempt vs outcome: a hit the server rejects (test place, the builder's `Reject` hook) plays no confirmed-hit reaction, hit-stop pose or celebration | C, log |
+| G-06 | The hit-stop freeze frame is the contact pose with the source of power and hook shapes facing the camera, also in a capture with the builder's `DelayMs` hook at 150 (or the agreed hold; `animation-craft` → `references/roblox-playback.md` §9) | C |
 | G-07 | Every listed transition, captured: no pop, foot slide or stuck grip; clean-up clears trails and loops | C |
 | G-08 | Variants: base and variant key frames side by side (`look_check.py silhouette --compare`): same tell and contact frames, anchors visible, no fewer secondary sources | K, C |
 | G-09 | One code: jump and fall root curves and tell lengths match the other clips of the same class, or the difference is recorded | N |
 | G-10 | In the busiest expected moment, the player's own move is identifiable from its silhouette at its key pose | C |
-| G-11 | Frequent motions at their real rate (for example 100 triggers at one per second, from the builder's rate trigger in the test place): no pile-up (the playing-track count it logs to the Output stays flat), the clip ends before the next trigger; whether it tires is the owner's call on a playable preview at the gate | log, C |
+| G-11 | Frequent motions at their real rate (for example 100 triggers at one per second, from the builder's `Rate` hook in the test place): no pile-up (its `live track:<clip-id>` lines in the Output stay flat), the clip ends before the next trigger; whether it tires is the owner's call on a playable preview at the gate | log, C |
 | G-12 | Ambient copies out of step; never the fastest motion near a sightline; pulses at most 3 per second; a still or slow variant exists | C, spec |
 | G-13 | Paid reveals: the lowest and highest results share an identical windup, frame by frame, up to the result frame | C |
-| G-14 | Truth: with the builder's debug overlay of the hit area on in the test place, the swing's visible reach does not exceed it; a danger pose ends when the danger ends | C |
+| G-14 | Truth: with the builder's `DebugShape` hook (the hit area) on in the test place, the swing's visible reach does not exceed it; a danger pose ends when the danger ends | C |
 | G-15 | Scale: a giant's stride period and settles are longer than a normal-size character's; a fresh read names the intended emotion | N, C |

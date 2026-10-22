@@ -1,11 +1,11 @@
-> Author: J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22. Part of `game-design`. Built also from the owner's Riot transcripts (J018). Roblox defaults from the local docs mirror (`_api-reference/classes/StarterPlayer.yaml`: CharacterWalkSpeed 16; CharacterUseJumpPower defaults to true, so CharacterJumpPower 50 governs the jump, and CharacterJumpHeight 7.2 applies only when it is false). The full level review (route graph, 14 checks, walk-throughs) is the `level-design` skill; this file is what I decide and check as the owner of routes, cover, sight lines and blocking surfaces.
+> Author: J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22. Part of `game-design`. Built also from the owner's Riot transcripts (J018). Roblox defaults from the local docs mirror (`_api-reference/classes/StarterPlayer.yaml`: CharacterWalkSpeed 16; CharacterUseJumpPower defaults to true, so CharacterJumpPower 50 governs the jump, and CharacterJumpHeight 7.2 applies only when it is false). The full level review (route graph, the fixed checks C1-C19, walk-throughs) is the `level-design` skill; this file is what I decide and check as the owner of routes, cover, sight lines and blocking surfaces.
 
 # Spaces: maps and modes as gameplay
 
 ## 1. The map is the board
 - The map is the board the real game is played on; players notice it only when they need to. A bespoke map mechanic (teleporter, moving door, jump pad, hazard) stays in the background and comes forward only at the 1-3 moments I plan for it. In an obby or a simulator the mechanic may be the game itself: decide which layer is the board and which is the game, in writing.
 - Spec line per map mechanic: the core activity it must not compete with, its planned moments, its default look (quiet).
-- Check: in a normal-round capture at the game camera, count the seconds the mechanic draws the eye (motion, glow) outside its planned moments; target near zero.
+- Check (the level review's C15, `level-design/references/review-artifact.md` §4): on the normal-round stills, outside its planned moments the mechanic is never the brightest or most saturated thing in view and shows no motion near a decision; the seconds of eye draw at speed come from the owner's play-test.
 
 ## 2. The stage's job
 - Each stage brief starts with its job: the target experience, the four parts for this space (goal, opposition, decisions, rules), what it teaches, the session shape (first visit, return visit, short phone session), and the place's personality in 3-5 words (a place or a hero prop is designed like a character: "rigid, old, timeless").

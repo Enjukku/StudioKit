@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [level-design, environment-designer, game-designer, art-director, modeler, vfx-designer, ui-ux-designer, film-director, marketing, reference-images, orchestrator, architect, sound-designer, reviewer, qa-lead, feature-builder, progression-designer]
@@ -290,7 +290,7 @@ Stage 1c (DestructionSimulator cross-check) added WL-29 (routes in seconds at wa
   - R00b: the twenty-foot desk (R00b:2013-2035).
   - R02: grass blades tell the fox is about human size (R02:500-518, 984-990).
   - R13: plants beside the shrine set its size and make the disk look grand (R13:388-404).
-- roblox_fit: The Roblox greybox sample keeps doorways and hallways at least 10 studs wide and walls at least 10 studs tall, with a default jump height of 5 studs and camera room (knowledge/external/roblox-creator-docs/tutorials/curriculums/environmental-art/greybox-your-environment.md:77). Roblox often exaggerates doorways for the third-person camera.
+- roblox_fit: The Roblox greybox sample keeps doorways and hallways at least 10 studs wide and walls at least 10 studs tall, with a default jump height of 5 studs and camera room (knowledge/external/roblox-creator-docs/tutorials/curriculums/environmental-art/greybox-your-environment.md:77); the API gives a different default (JumpPower 50 with `CharacterUseJumpPower` true, WL-29), so measure the real jump in Studio before sizing walls and ledges to it (lead fix 2026-10-22: the tutorial's 5 studs is not the engine default). Roblox often exaggerates doorways for the third-person camera.
 - roles: environment-designer, level-design, modeler, art-director, film-director, marketing, reference-images, reviewer, qa-lead
 - also: composition-focus, pipeline-production
 - sources: R00b-F14 (R00b:2013-2035); R02-F27 (R02:500-518, 984-990); R13-F17 (R13:388-404)
@@ -333,7 +333,7 @@ Stage 1c (DestructionSimulator cross-check) added WL-29 (routes in seconds at wa
 - mistake: "Anyone can make, like, a badass tequila bottle" and stop there (R00b).
 - examples:
   - R00b: push yourself to make the whole bar (R00b:2203-2215, 2237-2253).
-- roblox_fit: No change.
+- roblox_fit: A bar, bottles of alcohol, blood or an adult venue in set dressing raise the experience's content maturity (alcohol, or a place that sells it, makes it Restricted, 18+ age-verified: knowledge/external/roblox-creator-docs/production/promotion/content-maturity.md:103, 401): load `platform-policy` (`references/rules.md` §D Restricted triggers) before dressing them (lead fix 2026-10-22: the source's bar example would land in a Roblox stage as alcohol dressing).
 - roles: environment-designer, modeler, art-director
 - also: critique-feedback, style-identity
 - sources: R00b-F17 (R00b:2203-2215, 2237-2253)
@@ -342,7 +342,7 @@ Stage 1c (DestructionSimulator cross-check) added WL-29 (routes in seconds at wa
 - principle: Reduce contrast and detail with distance; it creates depth and pushes attention to the nearer, sharper play space.
 - why: Distant low-contrast areas read as far and stop competing.
 - apply: Use Atmosphere and fog to drop distant contrast; use simpler distant models; keep high-detail work in the near and mid ground the player uses.
-- check: Capture from the play camera: `look_check.py value` on near and far bands shows contrast falling with distance.
+- check: Environment-only capture from the play camera (UI, effects and characters off): `look_check.py value` on a near-band box and a far-band box, both below the horizon, shows contrast falling with distance (lead fix 2026-10-22: 22 characters in the near rows took the near spread from 0.048 to 0.953 with no error).
 - mistake: Full-contrast, full-detail backgrounds that compete with the play space [inference].
 - examples:
   - R00a: Uncharted and God of War reduce detail in the distance (R00a:368-378).

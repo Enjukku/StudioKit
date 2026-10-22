@@ -114,7 +114,7 @@ Hit-stop never pauses server damage or physics: no global time scale exists on R
 | --- | --- | --- |
 | Shake / kick | `RunService:BindToRenderStep(name, Enum.RenderPriority.Camera.Value + 1, fn)`; each frame set `Camera.CFrame = Camera.CFrame * CFrame.Angles(pitch, yaw, roll)` from `math.noise` per axis × trauma³ × max angle × player multiplier; never accumulate offsets across frames | R-187 (+1 runs after the default camera; X-82); R-403; [inference] |
 | FOV punch | tween `Camera.FieldOfView` relative to the current base (speed-boost state included), then back; clamp 1-120 | R-182; 02a build notes |
-| Hit-stop | `AnimationTrack:AdjustSpeed(0)` on attacker (and animated target), `ParticleEmitter.TimeScale = 0` on the hit's emitters, restore after the stop | R-171; R-211; 02a build notes |
+| Hit-stop | on the attacker's and the target's clients (bystanders only where the presentation contract's per-viewer column says so): `AnimationTrack:AdjustSpeed(0)` on attacker (and animated target), `ParticleEmitter.TimeScale = 0` on the hit's emitters; restore the base speed through one owner per track and emitter, also on interruption (death, unequip, a new clip), never a saved speed (two overlapping stops would restore 0); the builder's rule and the open replication probe: `engineering-craft/references/presentation.md` §4 | R-171; R-211; 02a build notes |
 | Slow motion | `AdjustSpeed(0.3)` + `TimeScale = 0.3` on local effects, camera ease; server untouched | 02a final blow build note |
 | Flash / grade pulse | `ColorCorrectionEffect` parented to `workspace.CurrentCamera` (that player only); tween Brightness/Saturation/TintColor and back | R-219; R-184 |
 | Overlays | `ScreenGui` `ImageLabel` for vignette, speed lines, CA fringe, impact card | R-220 |

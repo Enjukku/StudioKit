@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [art-director, environment-designer, modeler, reference-images, marketing, film-director, ui-ux-designer, vfx-designer, animator, level-design, character-rigger, game-designer, reviewer, qa-lead]
@@ -63,7 +63,7 @@ The line marked (DS) in CF-13 was added in stage 1c from the DestructionSimulato
 ### CF-04 Compose inside the real frame, crop and UI, at final scale
 - principle: Compose from the first sketch inside the delivery frame: the crop players see most, the platform template, the UI over it, at the final size. Most player contact happens in a small crop seen many times, so define that crop first; still finish the full image for out-of-game use.
 - why: Size and balance can be judged only in the final frame with its type and UI; elements under the UI, in the bleed or outside the crop are lost.
-- apply: Before any key art, icon, shop card or thumbnail, load the frame as an overlay (Roblox thumbnail 16:9 with title, icon square with rounding, pass and product circles, the HUD at phone size for in-game shots) and keep face and focal object out of overlay zones. For every character or item image, define its in-game crop and compose the reference so the crop works; drop the art into the real layout early and judge scale there.
+- apply: Before any key art, icon, shop card or thumbnail, load the frame as an overlay (Roblox thumbnail 16:9 with title, icon square (any corner rounding is [unverified]: the icon docs give a square 512x512 icon and 150x150 previews but no rounding, so measure it from a capture (lead fix 2026-10-22: rounding is not in the docs)), pass and product circles, the HUD at phone size for in-game shots) and keep face and focal object out of overlay zones. For every character or item image, define its in-game crop and compose the reference so the crop works; drop the art into the real layout early and judge scale there.
 - check: Render with the overlay on: no focal element under UI, crop or rounding. Crop the render to each in-game frame and view at player size (`thumb_check.py icon` at 150x150, `thumb_check.py thumbnail --size` for tiles): it still says who it is.
 - mistake: Composing on a blank canvas and fitting UI later; judging scale on bare art; composing only for the full image so the crop shows nothing useful.
 - examples:

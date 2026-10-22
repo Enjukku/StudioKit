@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [art-director, reference-images, modeler, character-rigger, animator, vfx-designer, sound-designer, ui-ux-designer, environment-designer, level-design, film-director, marketing, game-designer, progression-designer, live-ops-designer, architect, feature-builder, orchestrator, reviewer, qa-lead]
@@ -34,7 +34,7 @@ UP-19 and UP-20 were added in J018 stage 1c from the DestructionSimulator cross-
 | UP-09 | Push what must read past real, on a believable base | visual makers, motion, effect, sound |
 | UP-10 | The subject's character drives every choice | all makers, design |
 | UP-11 | One world, one style; identity survives every variant | all makers, design, live-ops |
-| UP-12 | Controlled variation and life, never exact repetition | visual makers, motion, effect, sound, space |
+| UP-12 | Controlled variation and life, never exact repetition | visual makers, motion, effect, sound, UI, space (lead fix 2026-10-22: UI added; the UI line already holds) |
 | UP-13 | Problem, constraints and target before making anything | everyone |
 | UP-14 | Research, then many distinct options, then a reasoned pick | all makers, design, lead |
 | UP-15 | Cheap stages first; gates freeze decisions; do not be precious | everyone |
@@ -58,7 +58,7 @@ UP-19 and UP-20 were added in J018 stage 1c from the DestructionSimulator cross-
   - cinematic: the shot's story beat and the hero read in the first second.
   - marketing art: the launched thing is the hero; the promise reads at icon and tile size.
   - design: art and mechanics promise the same thing; every threat telegraphs and behaves consistently.
-  - engineering: the small attempt cue (VFX, sound, UI) fires on the client at once so the read is not delayed by the network; the big outcome layer waits for the server-confirmed result (UP-19).
+  - engineering: the small attempt cue (VFX, sound, UI) fires on the client at once so the read is not delayed by the network; the big outcome layer waits for the server-confirmed result (UP-19); a threat's tell is sent when its wind-up starts, never with the damage, so network delay does not eat the reaction window (lead fix 2026-10-22: WT-01's latency note needed its engineering answer).
 - general check: In a capture of the busiest expected moment at the game camera on a phone-size viewport, name each critical fact (route, ally or enemy, threat, objective, own state) at a glance; ask "what is the gameplay read here, and does any element weaken it?" before any style question.
 - applies to: art-director, reference-images, modeler, character-rigger, animator, vfx-designer, sound-designer, ui-ux-designer, environment-designer, level-design, film-director, marketing, game-designer, progression-designer, live-ops-designer, feature-builder, reviewer, qa-lead
 - rests on: GD-01, WL-01, WL-02, WL-03, WL-19, VH-01, VH-04, VH-07, VR-02, VR-07, WT-01, SD-01, UI-02, UI-10, GD-07, GD-13, GD-16, GD-21, RI-01, RI-04, VR-19, VR-20
@@ -89,7 +89,7 @@ UP-19 and UP-20 were added in J018 stage 1c from the DestructionSimulator cross-
   - picture/2D: one focal point with the full value range; background detail in values close to the background; read order planned and led by flow lines.
   - model: highest contrast and saturation on head, shoulders, hands and the source of power; the rest quieter; extremes only on small accents.
   - motion: the key pose and the hit get the clearest silhouette and the biggest change; the rest supports.
-  - effect: rank effects by importance and cap size, brightness and duration per tier; inside one effect, primary over secondary over tertiary; never blow out to white.
+  - effect: rank effects by importance and cap size, brightness and duration per tier; inside one effect, primary over secondary over tertiary; nothing blows out: clipped white only at the single focus on the peak frames (1-2 frames), a large white core only at the top tier (VC-07) (lead fix 2026-10-22: "never blow out to white" contradicted VC-07's focus exception).
   - sound: the important cue gets the unique timbre, the space before it and the highest priority in the mix; small sounds carry only up close.
   - UI: one attention motion at a time; the critical state in a fixed, prominent position; the brightest element is the next action.
   - space/level: value bands per layer (environment narrowest, characters wider, VFX and UI the extremes); light and saturation lead to the objective.
@@ -169,7 +169,7 @@ UP-19 and UP-20 were added in J018 stage 1c from the DestructionSimulator cross-
   - marketing art: brand colours, fonts and naming patterns kept; one property changes per event.
   - design: consistent rules and telegraphs make failure learnable; hazards have written rules.
   - engineering: codes live as shared data (colour roles, motion tables, sound IDs), never hard-coded per script.
-- general check: Sample colours, shapes, motions and sounds across captures and data tables against the code tables: any signal used for two meanings, or one meaning shown two ways, fails; the reserved hue's share outside gameplay objects is near zero (`look_check.py palette`).
+- general check: Sample colours, shapes, motions and sounds across captures and data tables against the code tables: any signal used for two meanings, or one meaning shown two ways, fails; on an environment-only capture, the share of pixels within a colour distance of each reserved swatch (authored and as rendered) outside gameplay objects is near zero; a k-means `look_check.py palette` merges small accents and cannot show it (lead fix 2026-10-22: same fix as the LC-01 check).
 - applies to: art-director, reference-images, modeler, animator, vfx-designer, sound-designer, ui-ux-designer, environment-designer, level-design, film-director, marketing, game-designer, live-ops-designer, feature-builder, architect, reviewer, qa-lead
 - rests on: LC-01, LC-02, LC-20, VR-05, UI-06, UI-15, SS-06, WT-02, GD-07, GD-13, GD-30, SD-21, SD-23, WL-11, WL-18, SI-14, LC-14, VR-25, VR-26
 
@@ -257,8 +257,8 @@ UP-19 and UP-20 were added in J018 stage 1c from the DestructionSimulator cross-
   - space/level: lived-in story details; kit pieces rotated so no duplicate is seen twice in one view.
   - cinematic: crowds and backgrounds vary in pose and timing.
   - marketing art: avoid the generic first output; one unexpected element.
-- general check: Look for exact repeats in captures (same piece at the same angle, mirrored marks, identical limbs on the same frame, the same sample twice in a row); fail on flat single-swatch materials (`look_check.py palette` shows one cluster); and check variation stays inside the colour family and value band.
-- applies to: art-director, reference-images, modeler, animator, vfx-designer, sound-designer, environment-designer, level-design, film-director, marketing, reviewer
+- general check: Look for exact repeats in captures (same piece at the same angle, mirrored marks, identical limbs on the same frame, the same sample twice in a row); fail on flat or one-hue materials (chromaticity spread over small blocks on one lit side under its limit, LC-09; a k-means cluster count passes value texture in one hue) (lead fix 2026-10-22: same fix as the LC-09 check); and check variation stays inside the colour family and value band.
+- applies to: art-director, reference-images, modeler, animator, vfx-designer, sound-designer, ui-ux-designer, environment-designer, level-design, film-director, marketing, reviewer (lead fix 2026-10-22: ui-ux-designer added; the UI line already holds)
 - rests on: MD-09, MD-10, LC-07, LC-09, SS-16, RH-02, WT-24, WT-25, VR-11, VR-14, SD-20, SD-29, WL-22, PP-24, RI-21, RI-23, VR-25
 
 ### UP-13 Problem, constraints and target before making anything

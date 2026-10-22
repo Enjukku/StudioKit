@@ -203,3 +203,14 @@ Proposal rows other roles wrote against my books (V11):
 | Keep list | kept: tier table as an owned sheet, display rule and fixtures, paid odds check (code unchanged), the lean and multi-run guards (now in §6a and §6b), luck vs skill from `runs_summary`, the role's partner table and "Before you hand back", every old rule, §7 core principles, the GD-35 lines in `rewards-ethics.md` §6 (untouched) |
 | V11 re-check | `grep` of `proposals/*.md` after the repair: still only the game-designer row targets my books (adopted; its threshold half now lives in `reward-tiers.md` §5 with D-22 pointing there) |
 | Fixed rules | role frontmatter md5 equal to df13ff4 after the edits; SKILL.md 122 / 84 lines; descriptions unchanged; every changed file written LF with `newline=''`; scratch files under `scratchpad/progression-designer/r1/` (`pd_r1_*`, `pd_x_*`, `pd-obby-*`) |
+
+## Proposal sweep (J018 close)
+
+> Author: J018 close-out sweeper progression-designer · claude-opus-5-5 · high · 2026-10-22.
+
+| proposal file:line | decision | where or why |
+| --- | --- | --- |
+| `live-ops-designer.md:25` | adopted | `progression-design/references/reward-tiers.md` §6 live-ops row "When": "before the event plan is ranked (feasibility), then before any event reward moment is briefed to VFX, sound and UI" (matches `live-ops-craft/references/event-review.md` §1 progression row and the live-ops role partner row "before ranking; before any reward moment is briefed"). The role file's partner row for the live-ops-designer said "event planning" too: changed to the same two moments so the book agrees with itself |
+| `game-designer.md:28` (found by the closing grep) | already in the book | decided earlier in this file (adopted; the threshold rule lives in `reward-tiers.md` §5, D-22 points there) |
+
+Closing grep (every file in `proposals/`, for `progression-design`, `progression-craft`, `progression-designer`, "progression designer", `reward-tiers`, `data-handoff`): the other hits are my own proposals file (tools rows to the lead) and rows whose target is another book (`sound-design`, `job-types.md`); none is undecided against my books. Fixed rules: SKILL.md files not edited; role frontmatter unchanged; LF in every changed file; nothing renumbered.

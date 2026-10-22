@@ -32,7 +32,7 @@ The owner's second, full message (2026-10-21) is copied verbatim in `owner-spec.
 | Integrator | lead |
 | Studio place (`studio_id`) | none (files only) |
 | Linked jobs | none |
-| Status | open: waves 1-2 committed (9d8fa2a, 034dce9); wave 3 (5 roles + 3 shared skills, brief v3) running |
+| Status | open: G3 packet sent (`g3-packet.md`, `g3-proposals.md`); waiting for the owner |
 
 ## Owner instructions for stage 2 onward (2026-10-21, during stage 1b, verbatim)
 This message replaces the owner's earlier G1 message and its correction (J018-D1 is folded into point 2 and superseded by J018-D2).
@@ -132,9 +132,9 @@ Keys follow `J016-orchestration/riot-extracts.md` §1. The J016 extracts in `J01
 | 1a readers (17) | 2.5 M | 2.08 M (649 findings) |
 | 1b synthesizer | 1.5 M | 0.77 M (427 findings) |
 | 1c cross-check | 0.3 M | 0.50 M (16 + 2 UP) |
-| 2 + 3 first wave (3 roles) | 2.0 M | |
-| 2 + 3 (14 roles + 3 shared skills) | 5.5 M | |
-| Total | 11.8 M (inside 10-15 M) | |
+| 2 + 3 first wave (3 roles) | 2.0 M | 6.27 M (incl. modeler round 3) |
+| 2 + 3 (14 roles + 3 shared skills) | 5.5 M | 33.66 M (waves 2-3, repairs, sweep, master follow, G3 list) |
+| Total | 11.8 M (inside 10-15 M) | 45.99 M subagents (J018-D4: no limit; reasons in `g3-packet.md`) |
 
 ## Acceptance checks
 - [ ] 17 extracts, each finding with a source line; the synthesizer's library cites every extract key.

@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [art-director, environment-designer, vfx-designer, ui-ux-designer, game-designer, modeler, reference-images, marketing, film-director, level-design, character-rigger, animator, live-ops-designer, sound-designer, reviewer, qa-lead]
@@ -21,7 +21,7 @@ Lines marked (DS) in LC-01 and LC-19 were added in stage 1c from the Destruction
 - why: A hue no other object uses becomes a code the player learns instantly; red or moving set dressing competes with the danger signal, and a player shot by someone they could not see loses unfairly. An artist's own eye can oversaturate.
 - apply: The art bible holds a reserved-colour table (enemy, danger, team, interactable, route) with the hues and the saturation limit allowed in set dressing. Environment and modeling keep large surfaces neutral; reference-images prompts state "neutral environment, no red accents" when red is reserved. A bright hazard that must be red is tamed (LC-18).
 - apply (DS): For two sides, pair orange with blue, not red with green; plan for about 8 % of male players with a colour-vision deficiency, to whom red often looks darker (DS:vfx-design/references/scene-and-clutter.md:116; DS:vfx-design/references/elements.md:104, 111).
-- check: `look_check.py palette` on game-camera captures: share of pixels in each reserved hue band outside gameplay objects (target near 0; the owner sets the number); saturation of environment greens and reds measured against the bible. View a capture in a deuteranopia and protanopia simulation [inference]: the danger still reads by shape. Watch a 10 s capture for moving set pieces near sightlines [inference].
+- check: On an environment-only capture at the game camera (UI, effects and characters off; gameplay objects that may wear the hue excluded by a mask): the share of pixels within a CIEDE2000 distance of each reserved swatch, authored and as rendered in the same capture (target near 0; the owner sets the number; `art-review` `references/look-check.md` §5 line 4); not a `look_check.py palette` cluster, since k-means merges small accents into neighbours (lead fix 2026-10-22: palette clusters passed a small reserved accent; composed captures counted HUD and avatars as decoration); saturation of environment greens and reds measured against the bible. View a capture in a deuteranopia and protanopia simulation [inference]: the danger still reads by shape. Watch a 10 s capture for moving set pieces near sightlines [inference].
 - mistake: The signal colour on decoration so it loses meaning; "red is normally a color we try to avoid, and then fast movement is also something we wanna avoid" (R09:60-62); "when I get shot by someone I can't see, that can be rough" (R02:212-214).
 - examples:
   - R00a: red enemies in Superhot, red jump spots in Mirror's Edge (R00a:326-336).
@@ -132,7 +132,7 @@ Lines marked (DS) in LC-01 and LC-19 were added in stage 1c from the Destruction
 - principle: Do not fill a material with one colour. Shift hue and value slightly in random patches, because nature is not uniform.
 - why: Slight shifts make forms pop and give "happy accidents"; flat fills read sterile and fake.
 - apply: In Blender materials mix 2-4 near hues by a noise texture (PROPOSAL default: hue within a few degrees, value within 5-10 % [inference]); in Studio vary Color slightly across neighbouring Parts of the same material, or use MaterialVariant or a SurfaceAppearance ColorMap.
-- check: `look_check.py palette` on a material region: more than one hue cluster, all inside the colour family; a single flat swatch fails.
+- check: On a PNG capture of one lit side of the surface: the chromaticity spread over small pixel blocks (blind to a smooth light gradient) is above its starting limit and stays inside the colour family; value texture in one hue fails as monochrome and a single flat swatch fails (`environment-craft` `references/measure-captures.md` flat-fill measure) (lead fix 2026-10-22: k-means clusters split by value as well as hue, so a one-hue brick wall gave four clusters and passed).
 - mistake: "they are pretty monochromatic ... people don't tend to shift their color wheel ... ever so slightly" (R02:86-94).
 - examples:
   - R02: a little red added into the grey stonework (R02:68-74, 84-96, 152-154, 230).
@@ -253,7 +253,7 @@ Lines marked (DS) in LC-01 and LC-19 were added in stage 1c from the Destruction
 - principle: When a hazard or warm material is too bright, tame it (shift red toward orange, lower its emission). To fit strong colour into a play space, run a gradient: neutral at ground and player height, more saturated higher up.
 - why: Saturation near player height competes with enemies; higher up it adds colour without hurting the fight read.
 - apply: The most saturated environment colour sits above head height; the player band (floor to head height) stays neutral; hazard brightness is tuned until characters in front of it still separate [inference on the band].
-- check: `look_check.py palette` on game-camera captures: saturation in the player band lower than above it; `look_check.py value` with a character in front of the hazard: the character still separates.
+- check: On an environment-only capture (UI, effects and characters off), with boxes below the horizon so the sky stays out of the upper band: saturation (chroma) in the player-band box lower than in the box above head height (`art-review` `references/look-check.md` §5 line 5) (lead fix 2026-10-22: on composed captures 12 avatars moved the player band from 12.0 to 47.2 with no error); `look_check.py value` with a character in front of the hazard: the character still separates.
 - mistake: "Oh my God, whoa, it's so bright" (R09:806): a hazard emissive overpowering the scene.
 - examples:
   - R09: lava made "a little bit more orange"; the brick goes from neutral beige to saturated orange higher up (R09:806-819, 830-835).
@@ -319,7 +319,7 @@ Lines marked (DS) in LC-01 and LC-19 were added in stage 1c from the Destruction
 ### LC-23 Iterate colour globally; colourways are the same object
 - principle: Try colour fast with global moves (shift all darks or all lights, apply saved palette gradients) and make several colourways. Silhouette leads and colour is partly taste; a colourway is the same object in new colours, but it can change the value balance, so re-check it.
 - why: Global changes test the whole composition's colour in seconds; recolours (too many yellows) change volumes and feel.
-- apply: Lock the silhouette first. Make 3-5 colourways of a capture with ColorCorrectionEffect presets or image tools, or by material swaps in Blender; keep a palette library in the art bible. Re-check value balance per colourway. Colourway variants are cheap live-ops content [inference].
+- apply: Lock the silhouette first. Make 3-5 colourways of a capture with ColorCorrectionEffect presets or image tools, or by material swaps in Blender; keep a palette library in the art bible. Re-check value balance per colourway. Colourway variants are cheap live-ops content: Roblox's content-cadence guide names simple variants with slight colour changes as ideal recurring content (knowledge/external/roblox-creator-docs/production/game-design/content-updates.md:34) (lead fix 2026-10-22: documented, not an inference).
 - check: Grayscale of each colourway side by side: the value structure and balance hold (VC-16), palette proportions still pass (LC-04).
 - mistake: Repainting locally when a global change would answer; spending a day on colours instead of silhouette.
 - examples:

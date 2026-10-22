@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [art-director, reference-images, modeler, environment-designer, vfx-designer, ui-ux-designer, sound-designer, character-rigger, animator, game-designer, marketing, live-ops-designer, progression-designer, orchestrator, level-design, reviewer]
@@ -185,7 +185,7 @@ Related: identity anchors in `character-design.md` (CD-04), shape vocabulary in 
 - examples:
   - R05: "never back down until you're dead again": bad in a good way (R05:293-295, 589-595, 896-900).
   - R01: Star Guardian 2019 pushed the magical-girl line darker (R01:841-854).
-- roblox_fit: Live-ops cadence is weeks, not years [inference]; text must pass Roblox text filtering [unverified].
+- roblox_fit: Live-ops cadence is weeks, not years [inference]; names and taglines the studio writes are not player text; any player-entered or generated text the event shows is filtered on the server (`platform-policy` `references/rules.md` §D; knowledge/external/roblox-creator-docs/ui/text-filtering.md:11-40) (lead fix 2026-10-22: the filtering rule covers text the game does not control).
 - roles: marketing, art-director, game-designer, sound-designer, ui-ux-designer, live-ops-designer
 - also: character-design, references-ideation
 - sources: R05-F39 (R05:293-295, 589-595, 896-900); R01-F48 (R01:841-854)

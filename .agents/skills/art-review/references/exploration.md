@@ -64,19 +64,16 @@ Fix the identity or the lock, not the image by hand. A rejected image goes to `_
 5. Ask specialists for representative tests at the game camera next to a player-size avatar before calling the direction proven (modeler: a blockout or proxy of the hero subject; environment designer: one key place in greybox with 2-3 lighting variants; UI: controls; VFX and animator: one shared event) (04:PS06). No polish is asked for before these pass.
 
 ## 7. Research board and keyword table
-- **Two halves:** (a) our own anchors, art-bible images and approved targets, for colour, composition and gesture; (b) real-world reference per aspect (pose, material, place, phenomenon), each entry with what it is for. Reference made only of other games is a copy of a copy; real sources add what invention misses.
-- **One outside-games source family** (architecture, fashion, a craft, another medium) and one named unexpected element; note one reference you dislike and what it teaches.
-- **One narrow direction per board**, 3-5 pillar words, a one-line sensitivity note (culture, age, franchise risk → `platform-policy`), and the 3-5 key features that make each subject read.
-- **Keyword table** before the first prompt: keyword → colour key, setting, expression or pose, prop ("apocalypse" → dust colours, an abandoned street). Every element of the first rough maps to a row.
-- **Fusions** (two ideas in one brief): reference the overlap (an object that is both, a costume piece of the new idea, a pose from both worlds); when no reference shows the needed pose or angle, make one (a ChatGPT pose image, a posed Blender mannequin with the game's proportions).
-- Moodboards for a new theme also build its library: shorthand motifs, iconography, a name and a logo idea (`art-direction/references/identity-variants.md` §2).
+The board and the keyword table follow `reference-images/references/rounds.md` §2 (two halves, one outside-games source family and one disliked reference, one narrow direction with pillar words, key features and a sensitivity note, fusions, missing reference made, keyword table): the one copy. A style-direction round adds:
+- **One named unexpected element** per board, beside the outside-games source family.
+- **A new theme's library** (shorthand motifs, iconography, a name and a logo idea: `art-direction/references/identity-variants.md` §2) is built from the board and recorded in the Theme libraries row of `art-bible.md` §7.
 
 ## 8. The image budget for a direction round
-Under the light-check rule (owner J005-D8: numbers for every case, images only for a failing number plus a few key cases). A brief's own cap always wins.
+Under the light-check rule (owner J005-D8: numbers for every case, images only for a failing number plus a few key cases). A brief's own cap always wins. A style-direction round is its own round type, not the rough round of one subject (`reference-images` R1, at most 6 images): it shows the same cast of 2-3 subjects in each of 3-4 directions (§3 item 3), so a style is judged apart from any one subject, and it has the cap below; each image keeps `reference-images`'s rules (one per chat, at most 2 regenerations, medium quality while exploring).
 | Item | Starting budget (PROPOSAL) |
 | --- | --- |
 | Hooks | 6-12 written lines; no images |
-| Generated roughs per round | at most 9 images per round including regenerations (max 2 per image), one per chat, medium quality (`reference-images` I-13) |
+| Generated roughs per round | at most 9 images per round including regenerations |
 | Measured | every rough: `value` (grey) and `thumb` (phone size) JSON; `silhouette` where the subject can be masked |
 | Looked at | one colour-and-grey contact sheet per round (`look-check.md` §5), each rough whose number fails, the pick; nothing else |
 | Owner sheet | one image per option that passed the grey pass (2-3, the recipe's G1 count) on one labelled sheet; failing options as a numbers list |

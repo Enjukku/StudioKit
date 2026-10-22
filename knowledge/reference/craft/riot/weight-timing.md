@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [animator, vfx-designer, sound-designer, game-designer, ui-ux-designer, film-director, feature-builder, character-rigger, reference-images, marketing, modeler, art-director, live-ops-designer, reviewer, qa-lead]
@@ -254,7 +254,7 @@ Lines marked (DS) in WT-01, WT-02 and WT-11 were added in stage 1c from the Dest
 - mistake: The head rotating rigidly with the body; note that world space makes spins harder to key (R04:142-144).
 - examples:
   - R04: Akali's head keeps its rotation as the body turns, then turns "quickly, like a ballerina" (R04:134-146, 940-948).
-- roblox_fit: The exported clip stores local joint transforms (Neck under UpperTorso), so the world-space behaviour must be baked into keys in Blender [unverified].
+- roblox_fit: The exported clip stores local joint transforms (Neck under UpperTorso), so the world-space hold reaches the export only through a visual-key bake: in a Blender 5.1.2 test a default bake lost it and a visual-key bake kept it through FBX export and re-import (J018 `coverage/character-rigger.md` §d runs d-05, d-06); the Studio import is still to be checked [unverified] (lead fix 2026-10-22: tested in Blender, was unverified).
 - roles: animator, character-rigger
 - also: character-design
 - sources: R04-F05 (R04:134-146, 940-948)

@@ -20,7 +20,7 @@ Fill it at `vfx-design` §2 step 1. It is §1 of `content/vfx/<effect-id>/brief.
 | Reduced | the off path of every intense channel and what it keeps: a flash becomes a steady shape, a blink a steady glow with a fill countdown, shake none, FOV punch and push-ins none | me |
 | Budget | unique textures, emitters, est. live particles at peak, lights; what the lowest tier drops (decoration only, never a truth layer) | `vfx-craft/references/pro-defaults.md` §C |
 | Context and technique | gameplay moment, world event, object change, cutscene or UI; the tool per part | `vfx-design` §3 |
-| Joining crafts | animator (markers, the freeze frame), sound (envelope), UI (world-to-HUD), builder (trigger, debug overlay of the hit area, a hook that rejects a request, a rate trigger) | me |
+| Joining crafts | animator (markers, the freeze frame), sound (envelope), UI (world-to-HUD), builder (the test hooks by the names in `vfx-craft/references/measure.md` §1 Builder hooks), architect (the presentation contract rows, gameplay features) | me |
 | Stop criteria and pass budget | the §I lines that must pass to stop; build passes and capture rounds allowed | brief, me |
 
 ## 2. Loudness tiers (PROPOSAL starting caps)

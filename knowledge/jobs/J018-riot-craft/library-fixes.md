@@ -1,0 +1,72 @@
+---
+type: job
+scope: universal
+status: active
+updated: 2026-10-22
+source: J018 close
+supersedes: []
+---
+> Author: J018 library keeper · claude-opus-5-5 · high · 2026-10-22
+
+# J018 library fixes (close-out)
+
+Every proposal row whose target names the Riot craft library (`knowledge/reference/craft/riot/`, a topic file, `universal-principles.md`, "library" or "master"), decided once. Applied changes are edited in place, IDs unchanged, each marked "(lead fix 2026-10-22: ...)" inside the changed line; `updated:` set to 2026-10-22 in each edited file. Engine claims checked in `knowledge/external/roblox-creator-docs/`; policy claims against `.agents/skills/platform-policy/references/rules.md`. `matrix.md` not touched (no `roles` field changed). Rows that mention the library but target a skill, template, tool or workflow (for example `animator.md:25`, `game-designer.md:22`, `reviewer.md:26`, `sound-designer.md:23`, `marketing.md:20, 23, 27`) are out of scope here.
+
+Totals: 27 rows; 24 applied, 2 already right, 1 declined.
+
+## 1. Decisions
+
+| proposal file:line | library ID | decision | what changed / why |
+| --- | --- | --- | --- |
+| `architect.md:22` | SD-01, SD-31 (also SD-12, SD-25, SD-26) | applied | SoundGroups replaced by the mix plan's AudioFader buses in SD-01 roblox_fit, SD-31 apply, check and roblox_fit; the same legacy route removed from SD-12 and SD-25 roblox_fit, SD-25 apply and SD-26 roblox_fit. Docs: `audio/objects.md:23` (Sound, SoundGroup, SoundEffect discouraged), `audio/effects.md:56-58, 224-226`; binding book `sound-design/SKILL.md:112` S-140 |
+| `art-director.md:27` | LC-01 check; UP-07 general check | applied | Reserved-hue share = pixels within a CIEDE2000 distance of the swatch (authored and as rendered) on an environment-only capture, gameplay objects masked out; k-means `palette` named as unable to show it. Evidence: `art-review/references/look-check.md` §5 line 4 (palette at k 8 merged a 0.072 % red accent, ΔE 24) |
+| `art-director.md:28` | VC-05 apply | applied | Band unit stated: grey-view value (sRGB grey level) with WCAG luminance equivalents 8 % ≈ 0.007, 15 % ≈ 0.020, 85 % ≈ 0.69, 92 % ≈ 0.83 (computed with the sRGB transfer function `tools/art/look_check.py:138`). Same edit as `modeler.md:34` |
+| `art-director.md:35` | VC-08 check | applied | "ratio above 1" replaced: in-scene capture over the real ground, lower-body mask with the upper body excluded from the ring, ratio at or above a set value (starting 1.5 [inference]), never on a flat-key render. Ratio formula checked at `tools/art/look_check.py:152-155` ((hi + 0.05) ÷ (lo + 0.05), never below 1) |
+| `art-director.md:36` | VC-05 check; VC-07 check | applied | VC-05: environment band on an environment-only capture plus a near-black pixel count (p5/p95 cannot see a small black patch). VC-07: clipped pixels (luminance ≥ about 0.98) counted on a UI-off capture below the horizon, accents masked out. Measures: `look-check.md` §5 lines 8-9 |
+| `art-director.md:41` | WL-25, LC-01, LC-18, VC-07 checks | applied | WL-25 near and far boxes and LC-18 player-band vs above-head boxes measured on an environment-only capture, boxes below the horizon (sky out of the upper band); LC-01 and VC-07 covered by the rows above. Evidence: composed captures moved the numbers with no error (22 characters: 0.048 → 0.953; 12 avatars: 12.0 → 47.2) |
+| `character-rigger.md:26` | WT-18 roblox_fit | applied | "[unverified]" replaced by the Blender 5.1.2 result (default bake lost the world-space hold; visual-key bake kept it through FBX export and re-import; `coverage/character-rigger.md:247-248` runs d-05, d-06); the Studio import stays [unverified] |
+| `environment-designer.md:33` | WL-21 roblox_fit (WL-29) | applied (WL-21); WL-29 already right | WL-21 keeps the greybox tutorial's "5 studs" quote and adds that the API default differs (JumpPower 50, `CharacterUseJumpPower` true: `StarterPlayer.yaml:270-284, 326-341`), so the jump is measured in Studio. WL-29 already carries the earlier lead fix of 2026-10-22 with the same facts |
+| `environment-designer.md:34` | WL-24 roblox_fit | applied | "No change." replaced: alcohol, a place that sells it, blood or an adult venue in set dressing raise the maturity label (alcohol → Restricted, 18+ age-verified: `production/promotion/content-maturity.md:103, 401`; `rules.md:56` §D); load `platform-policy` before dressing them |
+| `environment-designer.md:43` | LC-09 check (also UP-12 general check) | applied | "more than one hue cluster" replaced by chromaticity spread over small blocks on one lit side (blind to a light gradient) above a starting limit; one-hue value texture fails as monochrome (`environment-craft/references/measure-captures.md:63`). The master's UP-12 check had the same cluster test and got the same fix (master first) |
+| `feature-builder.md:31` | UP-01 engineering line | applied | Appended: a threat's tell is sent when its wind-up starts, never with the damage, so network delay does not eat the reaction window (WT-01 roblox_fit; `engineering-craft/SKILL.md:62` EC-19) |
+| `game-designer.md:31` | GD-35 apply | applied (completes the earlier lead fix) | The earlier lead fix of 2026-10-22 already removed "static, behind Details" and added the modifier and once-only updates; now added: the shown odds sum to 100 % (`rules.md:11` §A, `paid-random-items.md:55`) |
+| `level-design.md:22` | WL-29 roblox_fit | already right | The earlier lead fix of 2026-10-22 already says JumpPower 50 governs by default and 7.2 applies only with JumpPower off, and requires a Studio measurement. The computed 6.4 studs (50² ÷ 392.4 at `Workspace.yaml:458-467` Gravity 196.2) is not added: the line asks for a measurement, not a derived number |
+| `live-ops-designer.md:22` | SI-13 roblox_fit | applied | "text must pass Roblox text filtering [unverified]" replaced: studio-written names and taglines are not player text; player-entered or generated text is filtered on the server (`rules.md:54` §D; `ui/text-filtering.md:11-40`) |
+| `live-ops-designer.md:23` | LC-23 apply; GD-33 roblox_fit | applied | Both [inference] marks replaced by the docs: simple colour variants are ideal recurring content (`production/game-design/content-updates.md:34`); playable maps and levels are content-cadence updates (`content-updates.md:13, 25-34`) |
+| `marketing.md:31` | CF-04 apply | applied | "icon square with rounding" → square icon, any corner rounding [unverified], measured from a capture (`production/publishing/experience-icons.md:34, 55` give 512x512 square and 150x150 previews; no rounding on the page) |
+| `modeler.md:34` | VC-05 apply; universal-principles.md | applied (VC-05); master: no change needed | VC-05 unit: same edit as `art-director.md:28`. The master states no value-band numbers (UP-03 space/level line names bands without numbers), so it has no unit gap |
+| `progression-designer.md:30` | GD-14, GD-17, GD-35, SI-19 | already right | The row proposes no change and confirms these lines match `rules.md` §A after the GD-35 lead fix; re-read, still true |
+| `qa-lead.md:29` | SS-02, SS-03, VC-05, VC-08, LC-21, WT-06, VH-07, WL-02, WL-14, PP-23 `roles` | declined | `roles` lists every role a finding helps, not only roles that adopt it; QA's reject is already recorded in `coverage/qa-lead.md`. Several of these have tool oracles QA can run as screening aids (WT-06 `clip_check.py contact_slide`, PP-23 `clip_check.py pops`, VC-05 and VC-08 `look_check.py value` measures). Untagging would also change the generated `matrix.md` at close for low gain |
+| `reviewer.md:22` | VR-22 roblox_fit | applied | "restore both after the stop" → restore to the base speed the track's one owner holds, never a value saved when the stop began, so overlapping stops cannot restore a saved 0 (`coverage/reviewer.md:266` run R5: final speed 0). APIs re-checked: `AnimationTrack.yaml:320-324`, `ParticleEmitter.yaml:962-968` |
+| `sound-designer.md:31` | sound.md intro; SD-13, SD-32; SD-18 | applied | (a) intro line: "listen" or "a fresh listener" checks are owner check-ins (or a named human listener); the maker runs its file measures first (`sound-design/SKILL.md:18, 135`). (b) SD-13 apply: the cue's designed space is baked (SD-32), the room comes from the zone's live reverb. (c) SD-18 roblox_fit: DopplerScale affects legacy `Sound` only, not AudioPlayer or AudioEmitter (`SoundService.yaml:178-195`); no Audio* class has a Doppler property (grep of `_api-reference/classes/Audio*.yaml`), so a graph emitter's pass-by is baked or scripted |
+| `sound-designer.md:32` | GD-35 apply | applied | "crescendo" defined for sound: added notes, register and tail, never added loudness, results within 1 LU (`sound-design/SKILL.md:123` D-03) |
+| `ui-ux-designer.md:35` | UP-12 applies to; index row | applied | ui-ux-designer added to UP-12 "applies to" and "UI" to the index row; the UP-12 UI line already holds (`ui-design/SKILL.md:108` row 12) |
+| `ui-ux-designer.md:36` | UI-18 roblox_fit | applied | Added: calm sales wording for younger players ("View Item", "See Price", never "GET IT NOW") and a quiet return from a declined or cancelled purchase prompt (a parent's limit can decline it) (`rules.md:59` §D) |
+| `vfx-designer.md:30` | VR-21 apply; universal-principles.md | applied (VR-21); master: no change needed | "middle tiers may add a small shake" → no camera channel by default; a small shake only on a rare heavy hit when the owner allows it (`vfx-design/SKILL.md:63`). The master has no middle-tier shake line (UP-20 effect line only asks for an off path) |
+| `vfx-designer.md:31` | UP-03 effect line | applied | "never blow out to white" → nothing blows out: clipped white only at the single focus on the peak frames (1-2 frames), a large white core only at the top tier (VC-07; `vfx-design/SKILL.md:57`) |
+| `vfx-designer.md:34` | VR-17 roblox_fit | applied | "[unverified] Size does not follow a model's scale" replaced: `Model:ScaleTo` scales particle emitter sizes (`_api-reference/classes/Model.yaml:716-740`, ":739 Visual properties like sizes of particle emitters"); a part resized by hand does not rescale its emitters [inference]; one scale factor in data |
+
+## 2. Master changes and the role books that must follow
+
+Changes to `universal-principles.md` and each role book's "Core principles for this craft" row for that principle. Book rows are numbered by the book; the master ID is in the first column. "agrees" = already consistent; "must follow" = the book row or its named check contradicts the fixed master; "should follow" = no contradiction, the new point is missing. Reviewers fix in the book, not here.
+
+| master change | role book row (file:line) | status | note |
+| --- | --- | --- | --- |
+| UP-01 engineering line: tell sent at wind-up start | `.agents/skills/engineering-craft/SKILL.md:111` row 1 | agrees | already: "the threat tell is sent when the wind-up starts" |
+| UP-01 | `.agents/skills/architecture/SKILL.md:111` row 1 | should follow | states attempt cue and outcome, not tell timing (architect is not in UP-01 "applies to", but the row restates the engineering line) |
+| UP-01 | `.agents/skills/code-review/SKILL.md:114` row 1 | should follow | no check for a tell sent with the damage |
+| UP-01 | `.agents/skills/testing/SKILL.md:110` row 1 | agrees | tests the tell row; no engineering line to copy |
+| UP-03 effect line: white only at the focus on peak frames, large white core top tier only | `.agents/skills/vfx-design/SKILL.md:119` row 3 | should follow (wording) | row says "nothing blows out to white"; its check (near-white only on the flash frames at the focus) and §4 Value (`:57`) already hold the exception |
+| UP-03 | `.agents/skills/art-direction/SKILL.md:107` P3; `.agents/skills/modeling-design/SKILL.md:88` P3 | agrees | extremes on small focal spots only |
+| UP-07 general check: reserved-hue pixel share by colour distance on an environment-only capture | `.agents/skills/art-direction/SKILL.md:115` P7 (CL1 → `art-review/references/look-check.md` §5 line 4) | agrees | already the distance measure |
+| UP-07 | `.agents/skills/environment-design/SKILL.md:98` P7 (M3 `reserved_share`, `environment-craft/references/measure-captures.md:18, 51`) | agrees | CIEDE2000 share in environment boxes, gameplay objects excluded |
+| UP-07 | `.agents/skills/modeling-design/SKILL.md:96` P7 (CL1 `modeling-design/references/review.md:122`) | must follow | check is "`palette --roles` finds no reserved hue on a decorative region": k-means clusters merge small accents |
+| UP-07 | `.agents/skills/ui-design/SKILL.md:103` row 7 (S-19 `ui-design/references/review.md:130`) | must follow | "no cluster sits near the danger swatch": same cluster flaw |
+| UP-07 | `.agents/skills/marketing-design/SKILL.md:99` row 7 (MR-15 `marketing-craft/references/image-review.md:38`) | should follow | reserved colours judged from `palette` clusters; add the pixel share for the reserved part |
+| UP-07 | `.agents/skills/live-ops-design/SKILL.md:108` row 7 (E-05 `live-ops-craft/references/event-review.md:55`) | agrees | uses the art director's measure |
+| UP-07 | `.agents/skills/reference-images/SKILL.md:113` P7; `.agents/skills/level-design/SKILL.md:88`; `.agents/skills/game-design/SKILL.md:104`; `.agents/skills/vfx-design/SKILL.md:123` | agrees | no reserved-share measure named (image or list checks; vfx checks effect hue roles, a different check) |
+| UP-12 applies to: ui-ux-designer added | `.agents/skills/ui-design/SKILL.md:108` row 12 | agrees | states the UI line already |
+| UP-12 general check: flat or one-hue material by chromaticity spread, not cluster count | `.agents/skills/art-direction/SKILL.md:123` P12 (CL6 `art-review/references/self-review.md:107`, MD4 `:125`) | must follow | "more than one colour cluster inside each material family" passes one-hue value texture |
+| UP-12 | `.agents/skills/modeling-design/SKILL.md:104` P11 (CL5 `modeling-design/references/review.md:126`) | must follow | same cluster count |
+| UP-12 | `.agents/skills/environment-design/SKILL.md:103` P12 | agrees | already `hue_spread` with monochrome failing |
+| UP-12 | `.agents/skills/reference-images/SKILL.md:118` P12; `animation-design/SKILL.md:134`; `vfx-design/SKILL.md:128`; `sound-design/SKILL.md:198`; `level-design/SKILL.md:93`; `film-direction/SKILL.md:138`; `marketing-design/SKILL.md:104`; `live-ops-design/SKILL.md:112` | agrees | no cluster-count check in these rows |

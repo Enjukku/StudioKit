@@ -24,7 +24,7 @@ brightness or duration (X-27), so every rating below is [P]; test T-RANK.
 | MO-06 | Amplify only what is tied to the real outcome; the request (button, throw, open) stays small. | R-043 [study] (competence −.43, n=678) |
 | MO-07 | Sound transient from the same event as the P frame; measured offset 0 to +40 ms late, never >1 frame early. No deliberate sound lead. | PD-14; R-070 [study]; R-170 [spec]; X-17 |
 | MO-08 | Flash safety on the combined screen: hard governor ≤3 general and ≤3 red flashes in any 1 s; design target ≤2 large-area flashes per rolling 1 s. Red pulses count as red flashes. | R-165 [spec]; PD-11 [P] |
-| MO-09 | Hit-stop only on weapon contact, local client only. 0 ms on explosions, charges, the projectile's thrower, rapid fire and crowds. | R-156, R-134 [practice]; PD-02 [P] |
+| MO-09 | Hit-stop only on weapon contact, on the attacker's and the target's clients only (`camera-and-screen.md` §D). 0 ms on explosions, charges, the projectile's thrower, rapid fire and crowds. | R-156, R-134 [practice]; PD-02 [P] |
 | MO-10 | Shake = trauma model, rotation only, shake = t³, delayed by distance for blasts. No shake on light hits, blocked hits, warnings, per block, dash in multiplayer. Respect the shake slider and off. | R-124 [practice]; R-363 single C; R-074 [practice]; X-40 |
 | MO-11 | A telegraph, zone or area ring equals the real hit area and timing; progress ends and the cue is removed on the damage frame. Never draw an indicator larger than its hitbox by default. | R-080, R-060 [practice]; X-31 |
 | MO-12 | Colour never carries meaning alone: add shape, icon, tier name or layer count. Must pass greyscale and a colour-blind filter. | R-398 [practice]; R-015 [practice]; 02b G7 |

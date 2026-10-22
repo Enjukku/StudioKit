@@ -386,3 +386,35 @@ Scratch: `<scratchpad>/marketing_r3/` (`marketing_r3_make.py` builds the edits; 
 | Change | Where | Why |
 | --- | --- | --- |
 | Flash count: read both counts per the shared counter's known-limits note, not the 10 % count alone | marketing-craft/references/channel-kits.md §3 | The vfx-designer final repair found that with rain or a pan past dark shapes the 10 % count can read too low; the shared counter (`vfx-craft/references/measure.md` §6) now says to read both counts. Consistency fix (brief V6), no craft decision. |
+
+## Proposal sweep (J018 close)
+
+Sweep by the marketing sweep agent · claude-opus-5-5 · high · 2026-10-22. Every row in `proposals/*.md` (other roles) that names `marketing-design`, `marketing-craft` or the marketing role was re-read against the current books; a last grep of every proposals file before hand-back found no further row. Paths relative to `.agents/skills/` (CS = `marketing-craft/SKILL.md`, IP = `marketing-craft/references/image-pipeline.md`, IR = `image-review.md`, HO = `handoffs.md`, CK = `channel-kits.md`, DS = `marketing-design/SKILL.md`).
+
+| proposal file:line | decision (adopted / already in the book / declined) | where or why |
+| --- | --- | --- |
+| art-director.md:30 | already in the book | IP §1 stage 2 names the `art-review/references/art-bible.md` §7 rows I measure against (identity anchors, palette roles, reserved colours, shape vocabulary, theme library, tier and format exceptions); IR MR-01, MR-08, MR-15, MR-16 read them. The bible has no row called "likeness set": its Identity anchors row (anchors and recognition features) is that input |
+| vfx-designer.md:20 | already in the book | CK §3 "Flashes" bullet: the count comes from `vfx-craft/references/measure.md` §6 run on the frame command's folder (no copy); the frame command's list is labelled "whole-frame changes of mean grey, for finding cuts", never a flash count; the still at every listed onset is looked at; red stays "not verified" unless an analyser measures it. "Readable for everyone" reads the counter |
+| animator.md:29 | already in the book | CS §4 K-05 (the signature key pose from the animator, not a new pose); IP §1 stages 1-2; HO table animator row and §7; IR MR-09; DS §4 M-21 |
+| reference-images.md:24 | adopted | Role body "Reference images": "§4 steps 1-3 (rounds R0-R3) and 'Who generates'" (matches `reference-images` SKILL §4 rounds table) |
+
+Rows that name marketing but target other files (no change in these books): art-director.md:39 and reference-images.md:18 (the `thumbnail-rough` family in the art-bible template: they support my own proposal row); reference-images.md:29 (owner confirmation of medium roughs at G3, the same question as my I-13 row); vfx-designer.md:18 (`tools/vfx/flash_count.py`, which my proposal row supports). Checks after the sweep: role frontmatter md5 unchanged; no SKILL.md or description changed; LF endings.
+
+## Master follow (J018 close)
+> Author: J018 close master follow (ui-ux-designer, marketing books) · claude-opus-5-5 · high · 2026-10-22
+
+Source: `library-fixes.md` §2, every row naming `marketing-design` or `marketing-craft` with status "must follow" or "should follow" (the UP-12 row `marketing-design/SKILL.md:104` says "agrees": no change). Paths relative to `.agents/skills/` (IP = `marketing-craft/references/image-pipeline.md`, IR = `marketing-craft/references/image-review.md`).
+
+| master change | book row | done where |
+| --- | --- | --- |
+| UP-07 general check: reserved-hue pixel share by colour distance (authored and as rendered) outside the things that carry the meaning; a k-means `palette` cannot show it (should follow: reserved colours were judged from `palette` clusters) | `marketing-design/SKILL.md:99` row 7 (check MR-15; the row text and example "the enemy red never goes on the hero" unchanged) | IR §4 MR-15: for each reserved colour the reserved-colour share outside the things that carry the meaning is near 0 and on the hero 0 for the enemy colour, every marked spot looked at, a `palette` cluster never stands in; input adds the marked image when a share is above 0. IP §2: the `palette` sentence says it shows presence, never absence or place; a new "Reserved-colour share" paragraph (screening aid) names the input, the two mask cases, the swatches (bible hex and as painted), the false readings and the test, and points to the art director's one-liner (`art-review/references/look-check.md` §5 line 4), not a copy. IP §4: a hero-only count mask row (the hero mask inverted) |
+
+Run (scratch `<scratchpad>/ui-ux-designer_marketing_up07/`; `ui-ux-designer_marketing_verbatim.py` takes the IP §4 invert line from the book text and the reserved-hue line from the `look-check.md` text and runs both as written). Input: a real generated key art, `content/art/refs/concept/dragonegg-a-nest.png` (1536 × 1024 PNG), with its egg mask `knowledge/jobs/J009-art-director/art/test-a/diag/dragonegg-a-nest-p90-eggmask.png` (dark = egg); its bible draft (`J009 .../art-bible-draft.md` Color roles) keeps the egg's gold for the egg ("never used for: decoration"). Swatches as painted, sampled inside the egg with `contrast --sample`: `#FDBF69` (crack light), `#F3A168` (body); the bible gives no hex. Distance 10.
+| Case | Result |
+| --- | --- |
+| `#FDBF69`, egg mask as the mask argument (outside the egg) | 1.77 % (25,943 px), in torch flames, lanterns and the lantern-lit snow (marked image looked at) |
+| `#F3A168`, outside the egg | 4.72 % (69,067 px) |
+| hero-only mask (the egg mask inverted by the IP §4 line) | `#FDBF69` 39.4 %, `#F3A168` 49.4 % of the egg (the colour is on its carrier) |
+| `palette --k 8 --exclude <egg mask>`, roles egg gold | one cluster `#F1A05B`, 4.6 %, ΔE 9.6 / 3.1: says the gold is present, not where |
+
+Reading: the torches carry the bible's "interactable" gold-lit edge, so this is the false reading the paragraph names (allowed light in the reserved colour counts); the bible decides. Checks: role frontmatter unchanged (role files not touched); no SKILL.md or description changed; no library ID or franchise name added to the books; LF endings; the one-liners run as printed.

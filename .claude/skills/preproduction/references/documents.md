@@ -89,8 +89,8 @@ Every player action gets feedback; its size teaches what matters (`game-design/r
 | Outcome response | what plays on the confirmed result only, per channel; the confirmation source (server event or replicated state); the pending state when confirmation is slow (PROPOSAL default: `game-design/references/principles.md` §7) |
 | Outcome tiers | miss · blocked · hit · big hit (or sale sizes, rarity tiers), each graded by a cause the player can learn; never random; never louder than the outcome |
 | Failure and refusal | the distinct cue per failure; for a refusal, the message at the control (cause and fix), the icon, the rate-limited sound |
-| Celebration | tier, what triggers it (real threshold only), length (PROPOSAL default: `principles.md` §7), where bigger ceremonies run |
-| Frequency | expected rate and burst; merge window (PROPOSAL default: `principles.md` §7); cap on live copies; label and sound once per window |
+| Celebration | tier (from the progression designer's reward tier table, `progression-design/references/reward-tiers.md`, when the feature has rewards), what triggers it (real threshold only), length (PROPOSAL default: `principles.md` §7), where bigger ceremonies run |
+| Frequency | expected rate (the measured rate from the same reward tier table when the feature has rewards) and burst; merge window (PROPOSAL default: `principles.md` §7); cap on live copies; label and sound once per window |
 | Counters | the true value used by logic; count-up length; exact final number |
 | Channels and comfort | every state change in at least two channels; shake, flash, tint or slow motion only at the top tier of the local player; the reduced variant of each intense channel |
 | Checks | press-to-first-change and celebration length from a fixed-camera frame folder with `tools/vfx/clip_metrics.py` (`onset_ms`, `visible_ms`; the clip conditions in `game-design/references/principles.md` §7 checks); rejected-request capture; outcomes distinct with sound off; 100-trigger repeat at the real rate |
@@ -139,6 +139,7 @@ Hazard sheet, one row per hazard (`game-design/references/spaces.md` §5):
 | --- | --- |
 | Read rank | what must be noticed 1st, 2nd, 3rd... (default: threat to the local player, own action, objective and pickups, other players' effects, ambient; environment is the backdrop) |
 | Information per moment | what the player must know to decide, at each moment of the loop (health, ability ready, objective, currency, timer); each item names where it lives (world, HUD, menu) and how fast it must be read (critical: about 1 s, PROPOSAL) |
+| Information areas | what must stay visible in this scene (other players, HUD zones, targets, shop and placement areas, the smallest gameplay object on each floor) and the maximum effect height in studs that keeps them clear (PROPOSAL until a capture tests it); the VFX read card reads them (`vfx-design/references/read-card.md`) |
 | Loudness tiers | the importance tiers of effects, sounds and celebrations in this scene and their caps |
 | Reserved signals | the gameplay colours and shapes this scene uses, kept out of decoration |
 | Screens and states | every screen and popup the feature needs, with empty, error, loading, disabled, reward and purchase states |

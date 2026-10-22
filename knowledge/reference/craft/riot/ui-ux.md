@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [ui-ux-designer, game-designer, feature-builder, art-director, vfx-designer, sound-designer, animator, marketing, film-director, reference-images, environment-designer, level-design, orchestrator, reviewer, qa-lead, progression-designer]
@@ -249,7 +249,7 @@ Stage 1c (DestructionSimulator cross-check) added UI-17 to UI-19 (starting motio
 - mistake: A red flash only; a whole-screen shake for a UI error; a disabled button with no reason; silent refusals.
 - examples:
   - DS: a blocked hit shows a "too strong" icon and a clink, never silence; a full backpack shows FULL plus an icon and a soft, rate-limited thud per refused item (DS:vfx-design/references/moment-recipes.md:90, 139).
-- roblox_fit: Tween the control's Position offset for the shake so the layout stays untouched [inference]; colour roles come from the UI rule sheet (UI-06).
+- roblox_fit: Tween the control's Position offset for the shake so the layout stays untouched [inference]; colour roles come from the UI rule sheet (UI-06). Sales wording stays calm for younger players ("View Item", "See Price", never "GET IT NOW"), and a declined or cancelled purchase prompt returns quietly, since a parent's spend limit can decline it for a reason the game cannot see (`platform-policy` `references/rules.md` §D, younger players row) (lead fix 2026-10-22: the binding policy rows were missing from the UI findings).
 - roles: ui-ux-designer, feature-builder, sound-designer, game-designer, reviewer, qa-lead
 - also: game-design-fun, light-colour
 - sources: DS:gui-ui/references/ui-effects.md:12, 24; DS:gui-ui/SKILL.md:25; DS:vfx-design/references/moment-recipes.md:90, 139

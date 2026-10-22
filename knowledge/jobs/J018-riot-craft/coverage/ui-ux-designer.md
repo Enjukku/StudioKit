@@ -352,3 +352,52 @@ V5 after repair: scripted pass over table a (every S-id named in a landed-in cel
 V11 in round 2: no new proposal row against my books since round 1 (grep of every `proposals/*.md` for `ui-design`, `ui-figma`, `ui-style`: only the game-designer, art-director, progression-designer and sound-designer rows already answered in table d).
 
 V5 after repair 2: scripted pass over table a (every S-id in a landed-in cell exists in `review.md` §6; every landed-in file exists); the rows that cite S-33 (UI-12, GD-02, WT-01), S-44 (GD-35; UP-19 through `ui-design/SKILL.md` §7 row 19) and S-49 (UI-03) re-read against the new cells; worked example 1 re-read after the S-33, S-44 and S-49 changes (step 3's 2-tap flow, step 6's boxes and step 9's identical windup agree; step 10 rewritten); example 2 uses no changed check. The three one-liners were run verbatim from the book file (table d).
+
+## Proposal sweep (J018 close)
+> Author: J018 close-out sweep (ui-ux-designer and architect books) · claude-opus-5-5 · high · 2026-10-22
+
+| proposal file:line | decision (adopted / already in the book / declined) | where or why |
+| --- | --- | --- |
+| `proposals/art-director.md:30` (UI names the bible §7 rows it uses as inputs) | already in the book | `ui-design/references/style-choice.md` §5 rule sheet: the Thematic row points to the bible §7 "UI thematic" row, Colour roles to "Colour roles" and "Reserved colours", Motion to "Motion line", never re-typed (adopted in repair round 1, table e R3) |
+| `proposals/feature-builder.md:22` (`contrast` false readings on an in-scene capture) | adopted | `ui-design/references/review.md` §6: the `contrast` note now gives the box placement (text box tight, `p90` for light text, `p10` for dark text; background box directly behind the text on the weakest backdrop) and the three false readings (a loose text box: a false FAIL near 1:1; a background box on the wrong part of a translucent panel: a false PASS; `p90` on dark text: a false FAIL near 1:1); the command line notes `p10` for dark text; the note list opens with the screening-aid rule (a FAIL or borderline number is checked by eye on the still before any fix note, V14). `screen-contract.md` §5 Contrast: the weakest background is the backdrop closest to the text colour (brightest for light text, darkest for dark text), the one place for that rule; the note points to it. V3 run below |
+| `proposals/feature-builder.md:23` (`motion.md` §8 points to `ui-effects.md` §A instead of restating) | adopted | `ui-design/references/motion.md` §7 Duration and easing column (points to the §A "Travel and growth" row and the anchors), §8 Refusals (sound rate: §A "Error / refusal" row), §8 Frequent events (merge window: §A "Currency change" row); `review.md` §6 S-38 (spam rate by pointer). Kept: S-32's "eased, never linear; exits ≤ entrances" as the pass words of the check (no number); worked example 1's "about 100 ms" is a quoted example value that agrees with §A |
+| `proposals/progression-designer.md:23` (number display rule, readable requirement, tier names) | already in the book | `motion.md` §8 Counters (points to `progression-craft/references/data-handoff.md` §5); `review.md` §6 S-39 (shown numbers match the display fixtures); `shops-rewards-onboarding.md` §1 (a locked item's readable requirement from the progression export, the tier name from the tier table); role file partner table, progression-designer row |
+| `proposals/sound-designer.md:24` (sound column and pulse rates in the motion table) | already in the book | `motion.md` §7 Sound column (cue id from the sound designer's UI cue list, the sync rule) and the "pulse class" element-type row; the pulse rate classes in §8 |
+| `proposals/reference-images.md:24` (role bodies: "§4 steps 1-3 (rounds R0-R3) and 'Who generates'") | adopted | `.agents/roles/ui-ux-designer.md` Work method step 5: "(`reference-images` §4 steps 1-3 (rounds R0-R3) and "Who generates")" (was "§4 step 3") |
+| `proposals/architect.md:26` (an "architect" row in the ui-ux-designer partner table) | adopted | `.agents/roles/ui-ux-designer.md` "What you ask your partners for, and when": architect row (you ask for the presentation contract at its revision: event ids and result payloads with outcome, tier and denial reason codes; you send its needs: screen states, refusal texts' data, counter rules, motion-table rows; before the contract freezes, two rounds at most), the mirror of the ui-ux-designer row in `.agents/roles/architect.md` and of `architecture/references/presentation-contract.md` §3 step 2 |
+
+Final grep (every `proposals/*.md` for `ui-design`, `ui-figma`, `ui-style`, `ui-ux-designer`): besides the rows above, only `game-designer.md:29` (already adopted, table d) and recipe rows for `orchestration/references/job-types.md` (not my books).
+
+V3 run for the `contrast` note (scratch `ui-ux-designer-sweep/`): an 800 × 400 in-scene sample, a sky gradient over dark grass, a 60 %-transparent panel across both, a 28 px line of text over the sky part; `look_check.py contrast --rule wcag-text`.
+| Case | Boxes | Result |
+| --- | --- | --- |
+| white text, navy panel, right boxes | tight text box `p90`; background box directly under the text, brightest sky part | #FFFFFF vs #929DB9, 2.71, FAIL (right) |
+| loose text box | the whole panel `p90` | #929EB9 vs #909CB8, 1.02, FAIL (false: the sample is the backdrop) |
+| background box on the wrong part | background box on the grass part of the panel | #FFFFFF vs #1F4235, 11.12, PASS (false) |
+| dark #1E1E1E text, light panel, `p90` | tight text box `p90` | #E3EFF9 vs #EAF1F9, 1.03, FAIL (false: the sample is the panel) |
+| dark text, `p10`, darkest backdrop | background box on the grass part | #1E1E1E vs #779675, 5.08, PASS (right: the weakest case) |
+| dark text, `p10`, brightest backdrop | background box on the sky part | 14.65, PASS (a false PASS when the text can sit over the grass) |
+
+Checks after the edits: role frontmatter byte-identical to HEAD; no CR in any edited file; no library ID or franchise name added; no SKILL.md changed.
+
+## Master follow (J018 close)
+> Author: J018 close master follow (ui-ux-designer, marketing books) · claude-opus-5-5 · high · 2026-10-22
+
+Source: `library-fixes.md` §2, every row naming `ui-design` with status "must follow" or "should follow" (the UP-12 row 12 says "agrees": no change).
+
+| master change | book row | done where |
+| --- | --- | --- |
+| UP-07 general check: reserved-hue pixel share by colour distance (authored and as rendered) outside the things that carry the meaning; a k-means `palette` cannot show it (must follow: "no cluster sits near the danger swatch") | `ui-design/SKILL.md:103` row 7 (check S-19; the row text already keeps reserved hues out of decoration, unchanged) | `ui-design/references/review.md` §6: S-19 now asks for the reserved-hue share near 0 (PROPOSAL 0 px) on the UI's own frames with the meaning-carrying controls and item art cut out, every marked spot looked at, and says a `palette` cluster never stands in for it; the commands block drops `--exclude-box <danger controls>` from the `palette` line (roles must be found, so the danger control stays in) and adds the count-area box line; the `palette` note says it shows presence, never absence; a new "Reserved-hue share" note names the input, the swatches, the count area, the false readings and the test, and points to the art director's one-liner (`art-review/references/look-check.md` §5 line 4), not a copy |
+
+Run (scratch `<scratchpad>/ui-ux-designer_marketing_up07/`; `ui-ux-designer_marketing_verbatim.py` takes the count-area line from the book text and the reserved-hue line from the `look-check.md` text and runs both as written). Input: the real styled screen `content/ui/egg-shop/screens/01-inspect-main-1920-v2.png` (1920 × 1080 PNG over the context backdrop; the red role `#FF7A7A → #E0303F` from `content/ui/egg-shop/spec.md`, used on the close X). Count area `+` panel and header, `-` close X and the four egg arts; distance 10.
+| Case | Result |
+| --- | --- |
+| rendered red sampled inside the X (`contrast --sample`, median) | `#F45F66` |
+| `#E0303F`, `#FF7A7A`, `#F45F66`, X and egg art cut out | 0 px each (pass) |
+| `#F45F66`, X left in the count area | 4,057 px (the carrier counts if not cut out) |
+| whole frame, no mask | 8,883 px: 8,852 in the X, 31 in the galaxy egg's pink nebula (item art counts its own colours) |
+| a planted 444-pixel `#E0303F` accent (12 px dot and 3 × 100 px line on the panel), share | 444 px (found) |
+| the same frame, `palette --k 8` and `--k 12`, danger role | nearest cluster `#A45CEF` / `#A25AEE`, ΔE 36.5: the old S-19 ("no cluster near the danger swatch") passes it |
+| a planted 1,600-pixel accent (40 px square) | share 1,600 px; `palette --k 8` found it too (ΔE 0.3): the cluster flaw shows on small accents |
+
+Checks: role frontmatter unchanged (role files not touched); no SKILL.md or description changed; no library ID or franchise name added to the book; LF endings; the one-liners run as printed.

@@ -27,7 +27,7 @@ When the blockout is itself the hand-off (a proof), the hand-off row is its set.
 | Read plan | job, sell list, anchors, read order, viewing conditions, stop criteria filled before the blockout (simple models: the four rows of `read-and-form.md` §1) | record |
 | Identity and silhouette | recognizable at the game camera and at phone size; every identity anchor visible; signature features present | review set; black-fill and phone-size view; silhouette overlap with the reference at the same camera (`tools/art/look_check.py silhouette --compare` with `--compare-mask`, `modeling-craft` §7) |
 | Value structure | the grey view reads; focal zone has the widest luminance spread; extremes only on small accents; separates from its ground | `look_check.py value` on the game-camera view and the Studio capture |
-| Light and colour | one key light direction; palette roles; no reserved hue on decoration; shadows shift hue | review set; `look_check.py palette --roles` |
+| Light and colour | one key light direction; palette roles; no reserved hue on decoration; no flat or one-hue material; shadows shift hue | review set; `look_check.py palette --roles` for the roles; the reserved-hue and hue-spread rows of `modeling-craft` §7 |
 | Proportions | landmarks match the approved image or an approved exception | review set; numbers if a ratio is named |
 | Scale | size in studs matches the record; next to the player dummy | number + one render |
 | Part inventory | every required part exists once; no extras | number (object list vs record) |
@@ -89,7 +89,7 @@ Run the lines for the stage you are in; at a hand-off, run every line that appli
 
 **Simple models** (medium effort: a plain prop, a kit variant built on an approved piece, a fix of an approved model): run RP1, SL1-SL3, VL1, VL4, DT2, GR1-GR2 (GR5 for kit pieces), IM1-IM3; the other lines only when the brief or a failing number calls for them.
 
-**Regions and units.** Every per-region number (upper vs lower body, focal zone, one material) is measured with a region mask cut from the black-fill, never with a box that holds background pixels (`modeling-craft` §7 region row). Value bands are grey-view value (the luminance image's grey level ÷ 255); `look_check.py value` reports linear luminance, so compare its p-values against the converted numbers: 8 % ≈ 0.007, 15 % ≈ 0.020, 85 % ≈ 0.69, 92 % ≈ 0.83.
+**Regions and units.** Every per-region number (upper vs lower body, focal zone, one material) is measured with a region mask cut from the black-fill, never with a box that holds background pixels (`modeling-craft` §7 region row). Value bands are grey-view value (the luminance image's grey level ÷ 255); `look_check.py value` reports linear luminance, so compare its p-values against the converted numbers (conversions only; the band values are the value-bands row of `art-review/references/art-bible.md` §7, the kit's one copy): 8 % ≈ 0.007, 15 % ≈ 0.020, 85 % ≈ 0.69, 92 % ≈ 0.83.
 
 **Read plan (before the blockout)**
 - RP1 Read plan rows filled; anchors agreed with the art director for characters, heroes and variant families; viewing conditions taken from the game profile (on-screen height in px recorded).
@@ -110,20 +110,20 @@ Run the lines for the stage you are in; at a hand-off, run every line that appli
 
 **Value (value gate, before texture polish; again on the Studio capture)**
 - VL1 The grey view reads: parts and major planes separate as value steps; it still reads with Bloom and post effects off.
-- VL2 The focal zone (head, shoulders, hands, held item, or anchor 1) holds the widest luminance spread; upper vs lower body medians (one region mask each, split at the waist) show the lower body quieter (starting value 15-20 % lower in grey-view value, a luminance ratio of about 0.6-0.7, PROPOSAL); the lower body still separates from the ground.
+- VL2 The focal zone (head, shoulders, hands, held item, or anchor 1) holds the widest luminance spread; upper vs lower body medians (one region mask each, split at the waist) show the lower body quieter (starting value: the lower-body line of the bible's value-bands row, `art-review/references/art-bible.md` §7, read as the lower ÷ upper luminance median, PROPOSAL); the lower body still separates from the ground.
 - VL3 A value step at each tracked joint (neck, wrists, ankles, weapon hand) and between overlapping parts (two sampled boxes, each fully inside its part, `look_check.py contrast --sample`; ratio recorded).
 - VL4 The top-5 % image (the brightest 5 % of the model's pixels; on flat-region renders, where ties mark more than 10 %, only the brightest grey level: record both shares), any clipped white and every emissive or Neon area sit on the named small accents only.
-- VL5 The model's p5-p95 luminance sits inside the art bible's character band (starting values 8-92 % grey-view value = 0.007-0.83 luminance, PROPOSAL); environment pieces inside the environment band (15-85 % = 0.020-0.69), no pure black.
+- VL5 The model's p5-p95 luminance sits inside the art bible's character band; environment pieces inside the environment band, no pure black (starting values: the bible's value-bands row, `art-review/references/art-bible.md` §7, PROPOSAL; in luminance by the conversions above).
 - VL6 At phone size: detail groups sit in a narrow value band inside a framing colour; no shimmering pattern of tiny bright marks; no lonely bright outlier; the value centre sits where intended.
 - VL7 A lit grey render shows a clear terminator on each major form and a contact seam where parts overlap; the unlit flat render still shows form from the texture once AO is in.
 - VL8 The same lit grey render (and later the grey of the Studio capture): each part shades as its basic form (limbs as cylinders lit on top, the head as a sphere, plates as planes, ribbons rounding toward the camera); ribbon, cloth and hair ends are darker than their middles; the parts the player always sees (arms holding the item, in third person) have the cleanest forms.
 
 **Colour and light (material pass)**
 - CL1 `look_check.py palette --roles` with the bible's swatches: main, support and accent near 60/30/10 (PROPOSAL); no cluster far from every role.
-- CL2 No reserved hue on a decorative region; team, faction and rarity also differ by shape or trim (the grey view tells them apart).
+- CL2 No reserved hue on a decorative region: on the colour render (front and back), with the parts that may wear the hue excluded, the reserved-hue count (`modeling-craft` §7 Reserved hue row, a screening aid) is 0 px or the owner's number; open its marked image when it is not 0. Team, faction and rarity also differ by shape or trim (the grey view tells them apart).
 - CL3 Every highlight faces the bible's key light; no painted light from another side; baked shading soft.
 - CL4 Sampled lit and shadow pixels of one material: the hue shifts and saturation holds (here saturation is colour against grey at the pixel's own darkness, as HSV S; CL7's peak uses chroma instead); gold shadows stay saturated; skin one temperature; same-hue overlapping parts separated.
-- CL5 Each material region (`palette --mask` with its region mask) shows more than one colour cluster inside one family: no flat single-swatch fill.
+- CL5 Each material: on a box inside its lit face, the hue spread (`modeling-craft` §7 Hue spread row, a screening aid) is above the flat limit, the variation inside one family: no flat single-swatch fill and no value texture in one hue (monochrome). A near-neutral material (steel, grey stone) is judged by eye on the colour render and recorded so.
 - CL6 The Studio capture next to the Blender render: any colour or value shift noted; the Studio capture decides.
 - CL7 The top-5 % colour image of the colour render (`modeling-craft` §7 top-5 % row, channel S = chroma: how colourful a pixel looks, so a tinted near-black boot or shadow never ranks high) sits on the focal zone; no lower-body, trim or background-side region holds the colour peak; after every colour change the grey of the colour render still passes VL2 and VL4.
 

@@ -2,7 +2,7 @@
 type: reference
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: "J018 stage 1b: synthesis of knowledge/jobs/J018-riot-craft/extracts (owner-supplied Riot transcripts, 14 videos)"
 supersedes: []
 roles: [game-designer, progression-designer, live-ops-designer, level-design, art-director, vfx-designer, sound-designer, animator, ui-ux-designer, feature-builder, environment-designer, modeler, character-rigger, film-director, marketing, reference-images, orchestrator, architect, reviewer, qa-lead]
@@ -446,7 +446,7 @@ Stage 1c (DestructionSimulator cross-check) added GD-34 (feedback follows the co
 - examples:
   - R09: "you know that map you took like so long to build? ... we want to update it" (R09:972-987).
   - R13: TFT changes worlds every four months: space, K/DA arena, cyber city (R13:174-178, 914-926).
-- roblox_fit: Fits the Roblox update cadence [inference]; load `live-ops-design`.
+- roblox_fit: Roblox's content-cadence guide lists playable maps and levels among recurring content updates (knowledge/external/roblox-creator-docs/production/game-design/content-updates.md:13, 25-34); load `live-ops-design` (lead fix 2026-10-22: documented, not an inference).
 - roles: live-ops-designer, level-design, environment-designer, game-designer, art-director, marketing
 - also: style-identity, process-iteration
 - sources: R09-F47 (R09:972-987); R13-F39 (R13:174-178, 914-926)
@@ -467,7 +467,7 @@ Stage 1c (DestructionSimulator cross-check) added GD-34 (feedback follows the co
 ### GD-35 Paid random reveals are honest
 - principle: When players pay (directly or through bought currency) for a random result, the reveal must not mislead: odds for every outcome are shown before purchase; the windup is the same for every result; escalation and rarity colour start only after the result is shown; a lower result never shows a higher tier's layers (no near-miss); a result worth less than its cost is not celebrated; luck effects never suggest better odds than the numbers.
 - why: A reveal that hints at a rarer result than the roll is a near-miss trick that misleads players, many of them children, and breaks platform rules on paid random items.
-- apply: The reveal spec has one shared windup (same beats and length for every tier), the result frame, then a tier ladder that adds layers with rarity (ring, rays, crescendo, a unique motif; pure white only for the top tiers) and names the tier in text and frame shape, not by colour alone. After the result is confirmed, a tap skips to it; batch opens give only the best result the full ceremony. The odds are shown as numbers before purchase and never covered by effects; they update while a modifier (luck boost, pity) is active and when a once-only outcome is won; only a long list may move into a pop-up behind a visible worded "Info" or "Details" label (lead fix 2026-10-22: the earlier "static, behind Details" wording contradicted platform-policy `references/rules.md`). Load `platform-policy` for the current rules; it wins over this line.
+- apply: The reveal spec has one shared windup (same beats and length for every tier), the result frame, then a tier ladder that adds layers with rarity (ring, rays, crescendo, a unique motif; for sound the crescendo is added notes, register and tail, never added loudness, results within 1 LU (lead fix 2026-10-22: sound-design D-03 is stricter than 'crescendo'); pure white only for the top tiers) and names the tier in text and frame shape, not by colour alone. After the result is confirmed, a tap skips to it; batch opens give only the best result the full ceremony. The odds are shown as numbers summing to 100 % before purchase (lead fix 2026-10-22: platform-policy rules.md §A requires the sum) and never covered by effects; they update while a modifier (luck boost, pity) is active and when a once-only outcome is won; only a long list may move into a pop-up behind a visible worded "Info" or "Details" label (lead fix 2026-10-22: the earlier "static, behind Details" wording contradicted platform-policy `references/rules.md`). Load `platform-policy` for the current rules; it wins over this line.
 - check: Capture the windup for the lowest and the highest tier and compare them frame by frame: identical up to the result frame; no higher-tier layer appears on any lower result; each tier is nameable in a grayscale capture; odds sum to 100 % and are visible before the buy button; the restricted-player path exists.
 - mistake: A rarity tint during the windup; a "so close" near-miss animation; a fanfare on a common result from a paid egg; luck-boost sparkles that imply more than the shown odds.
 - examples:
