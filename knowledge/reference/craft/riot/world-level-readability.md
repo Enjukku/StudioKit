@@ -399,7 +399,7 @@ Stage 1c (DestructionSimulator cross-check) added WL-29 (routes in seconds at wa
 - mistake: Judging routes from a top-down view in studs only; a decorative ledge just under jump height that lets players climb out of the map; a 40-second walk back to sell.
 - examples:
   - DS: at 16 studs per second, 160 studs is 10 s (DS:level-design/SKILL.md:47).
-- roblox_fit: Default WalkSpeed is 16 studs per second (knowledge/external/roblox-creator-docs/_api-reference/classes/StarterPlayer.yaml:358-364) and default JumpHeight is 7.2 studs (StarterPlayer.yaml:243-249); a game that changes them uses its own values from the game profile.
+- roblox_fit: Default WalkSpeed is 16 studs per second (knowledge/external/roblox-creator-docs/_api-reference/classes/StarterPlayer.yaml:358-364) ; the jump depends on `CharacterUseJumpPower`, which defaults to true (StarterPlayer.yaml:329-341), so the default character jumps by JumpPower 50 and the 7.2-stud JumpHeight (StarterPlayer.yaml:243-249) applies only when a game turns JumpPower off: measure the real jump in Studio before placing ledges (lead fix 2026-10-22, from the level-design rebuild). A game that changes them uses its own values from the game profile.
 - roles: level-design, environment-designer, game-designer, progression-designer, feature-builder, reviewer, qa-lead
 - also: game-design-fun, process-iteration
 - sources: DS:level-design/SKILL.md:21-22, 47-49, 54, 67

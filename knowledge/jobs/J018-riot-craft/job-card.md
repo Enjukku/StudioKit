@@ -32,7 +32,7 @@ The owner's second, full message (2026-10-21) is copied verbatim in `owner-spec.
 | Integrator | lead |
 | Studio place (`studio_id`) | none (files only) |
 | Linked jobs | none |
-| Status | open: wave 1 done and committed (9d8fa2a); wave 2 (9 roles, brief v2) running |
+| Status | open: waves 1-2 committed (9d8fa2a, 034dce9); wave 3 (5 roles + 3 shared skills, brief v3) running |
 
 ## Owner instructions for stage 2 onward (2026-10-21, during stage 1b, verbatim)
 This message replaces the owner's earlier G1 message and its correction (J018-D1 is folded into point 2 and superseded by J018-D2).

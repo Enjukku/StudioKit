@@ -3,7 +3,7 @@ name: live-ops-design
 description: What and why of a live Roblox game's next move - updates, events, seasons, limited-time content, fixes - from evidence and real capacity. Use for "what should we update next", "plan an event", "plan a season", "players are bored", "Discord wants X", "did the event work", "limited-time offer". Live-ops designer reads first; live-ops-craft is the how.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Built in J014 from the owner's live-ops research paper (2026-10-21; VERIFIED / EXPERIENCE / OPINION tags kept) and its fact-checks (`knowledge/reference/live-ops/`: notes `01`, `02`; `fact-check-roblox.md` FR ids; `fact-check-cases.md` FG ids; `feedback-routes-fact-sheet.md` Q ids; all read 2026-10-21). Tags: **V** platform-documented · **E** someone's reported result, never a forecast · **O** the paper's or the kit's proposal.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Built in J014 from the owner's live-ops research paper (2026-10-21; VERIFIED / EXPERIENCE / OPINION tags kept) and its fact-checks (`knowledge/reference/live-ops/`: notes `01`, `02`; `fact-check-roblox.md` FR ids; `fact-check-cases.md` FG ids; `feedback-routes-fact-sheet.md` Q ids; all read 2026-10-21). Tags: **V** platform-documented · **E** someone's reported result, never a forecast · **O** the paper's or the kit's proposal. Rebuilt by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the target experience and one promise every craft keeps, identity across variants and limited items, rarer feels bigger, confirmed celebrations, what fans want from evidence, cheap stages and gates, the event review on named captures, §7 core principles).
 
 # Live-ops design: what the game does next, and why
 
@@ -13,54 +13,66 @@ Live ops keep a renewable relationship between players and a game: a reason to r
 When a game is live, at every decision period (default: a weekly evidence review, which is **not** a weekly release, LP:433), after an incident, and when the owner asks what comes next. It answers, in order:
 1. **Is anything harming players now?** Lost progress, failed purchases, safety, broken access, severe instability, exploitable currency. That goes first, to its owner, outside any ranking.
 2. **What is the binding problem?** For which players, on what evidence (analyst + feedback + trends), with which other explanations.
-3. **What is the smallest change that could remove it,** and what does it cost to build, test, support and keep?
+3. **What experience must the change give, and what is the smallest change that could give it?** The target experience (one or two kinds of fun from the game profile, never "content" or "fun") and what it costs to build, test, support and keep.
 4. **How will we know?** Predeclared with the analyst.
 5. **What may we not do?** Roblox rules, younger players, the studio's capacity, the owner's gate.
 
-How to run the cycle, fill the templates and brief other roles: `live-ops-craft`.
+How to run the cycle, fill the templates and brief other roles: `live-ops-craft`. §4 (craft core) and §7 (core principles for this craft) apply to every task; after a compaction, re-read §4 and §7.
 
 ## 2. Read this file when
 | You need | Open |
 | --- | --- |
 | Roblox's rhythm guidance, choosing a rhythm, capacity, content types, season pass, retirement | `references/cadence-content.md` |
 | Events, honest urgency, announcements and notifications, Roblox rules on offers, paid random items, ages | `references/events-offers-rules.md` |
-| The evidence contract, feedback sources and their populations, sorting, counting, loud vs silent, closing the loop | `references/evidence-feedback.md` |
+| The evidence contract, feedback sources and their populations, sorting, counting, loud vs silent, what fans want, closing the loop | `references/evidence-feedback.md` |
 | Measuring with the analyst, Roblox tools and their limits, reading results, failing safely, economy, catch-up, burnout | `references/measurement-health.md` |
 | What durable games teach, with what not to copy | `references/cases.md` |
+| What each craft is asked for and when; the capture set; the event review checklist | `live-ops-craft/references/event-review.md` |
+| Rules for variants, cosmetics, identity anchors, theme niches and honest paid random reveals (the game designer's) | `game-design/references/systems-economy.md` §8-§9 |
+| Reward and celebration tiers, their rate ceilings and rarity proof | `progression-design/references/reward-tiers.md` |
 | Metric definitions, designs, verdicts | `analysis-design` (analyst) |
 | Reward amounts, curves, economy simulation | `progression-design`, `progression-craft` |
 | Loops and live-content design review | `game-design` (`references/playtest-live.md` §4-5) |
-| Announcements, voice, store page | `marketing-design` |
+| Announcements, voice, store page, event art standards | `marketing-design` (§4 M-15..M-23) |
 | Policy code patterns (odds table, PolicyService, receipts) | `platform-policy` |
 | Trend labels | `market-trends` |
 
 ## 3. Steps (the decision)
 1. **Protect.** Route urgent harm to its owner now (incident request). *Check:* nothing urgent sits inside a ranking.
-2. **Diagnose.** Name the constraint; separate symptom from cause; write other explanations. Never diagnose "not enough content" from a falling DAU chart alone: weak core loop, friction for arriving players, unreachable content, exhausting progress, costly return, competition, season, discovery change or a technical regression are all candidates (LP:41). *Check:* the analyst confirmed the denominator.
-3. **Generate options** across improve / add / simplify or remove / communicate / investigate, all for the same player objective (LP:443). *Check:* each has a mechanism and fits the core game.
-4. **Estimate.** Builders give effort and lead time, the progression designer gives economy feasibility, marketing gives channel limits. *Check:* no date, lift or licence assumed.
+2. **Diagnose.** Name the constraint; separate symptom from cause; write other explanations. Never diagnose "not enough content" from a falling DAU chart alone: weak core loop, friction for arriving players, unreachable content, exhausting progress, costly return, competition, season, discovery change or a technical regression are all candidates (LP:41). List the current build's pain points with where each was observed (a studio-operator capture, the analyst's funnel step, a feedback theme id); a player request is a pointer to a problem: restate the problem before any option. *Check:* the analyst confirmed the denominator; every pain point names its observation.
+3. **Generate options** across improve / add / simplify or remove / communicate / investigate, all for the same player objective and target experience (LP:443). Options differ in mechanism, not in packaging; one is the cheapest that could work; one is deliberately atypical (an idea from outside the genre, inside the game's tone). For event-scope work: the promise, what fans want (counted, `evidence-feedback.md` §4 item 7) and the niche, as the brief lines (craft `process.md` §3). Ranking detail: craft `process.md` §2. *Check:* each option has a mechanism, a target experience and fits the core game.
+4. **Estimate.** Builders give effort and lead time, the progression designer gives economy feasibility and the tier each reward would hold, marketing gives channel limits. *Check:* no date, lift or licence assumed.
 5. **Rank** by evidence, reach, reversibility, cost and fit; show the recommended option, a cheaper alternative and what is deferred, with counter-evidence and opportunity cost (`cadence-content.md` §3, craft `process.md`). *Check:* exactly one recommendation.
-6. **Owner decides.** Silence is not approval. *Check:* decision recorded with the owner's words.
-7. **After release, decide again:** repeat / revise / retire / investigate (`measurement-health.md` §4).
+6. **Owner decides.** Silence is not approval. The decision freezes the target cohort, the target experience and the scope; for event-scope work (an event, theme, variant line, limited item, or new world or zone), the concept round then freezes the premise, promise and theme (craft §3 step 8); a later "it would be cooler" idea is new scope with a cost, or the next update. *Check:* decision recorded with the owner's words.
+7. **Brief, then review the build against the promise.** The update brief asks each craft for what it owns, at the stage where a change is cheapest (craft `references/event-review.md` §1); before release I review the event on the named captures (§2-§3 there), not on hand-backs. *Check:* every craft row has what, when and the capture it will be judged on.
+8. **After release, decide again:** repeat / revise / retire / investigate (`measurement-health.md` §4), including whether the look, sound and wording kept the promise. *Check:* the review names what the next run keeps and the one thing it changes.
 
 ## 4. Craft core (what separates great live ops from weak)
-| ID | Practice | Evidence |
+| ID | Practice | Evidence or why |
 | --- | --- | --- |
 | L-01 | **Fix harm before buying attention.** A verified blocker in the existing game beats more content players cannot enjoy; a small paid-entitlement failure can outrank a large cosmetic complaint | O: paper rules 4, LP:214-216 |
 | L-02 | **Rhythm = what players need × what the team can sustain.** Roblox's pages say weekly is ideal (monetization), every two weeks to a month (content cadence, under three weeks' effort each), a month for a season: different scopes, all recommendations. Never average them; never promise a public cadence without a credible minimum release behind it | V: FR-01..FR-07; E: Adopt Me moved from fixed Fridays to announced times, naming team and player wellbeing (FG-01) |
-| L-03 | **Name the player problem before the content type.** "Add a season" is packaging. No source gives a portable lift for any content type | O: LP:131; OQ-01 |
+| L-03 | **Name the player problem and the target experience before the content type.** "Add a season" is packaging; "fun" is not a target. Every brief quotes the one or two kinds of fun the update serves; an addition that serves another kind is filed, not built. No source gives a portable lift for any content type | O: LP:131; OQ-01; without a named experience each craft pushes a different kind of fun |
 | L-04 | **Hypothesis form:** for <cohort>, <problem> prevents <behaviour>; changing <cause> should improve <metric> through <mechanism>, without harming <guardrails>. Each clause has evidence or says "uncertain" | O: LP:218 |
 | L-05 | **No fake precision.** Impact = reach × justified effect with its uncertainty; otherwise "unknown; test required". Never turn low / medium / high into decimals and rank on them | O: LP:220 |
 | L-06 | **Count players, not messages.** Distinct authors per theme, per source, per window, with the count tool; messages are intensity; a Discord share is never "% of players" | O: paper rule 8; `tools/liveops/feedback_count.py` |
 | L-07 | **Loud is not wrong, silent is not happy.** Weigh severity and reproducibility with prevalence; check silent cohorts in behaviour data | V: Roblox warns community feedback may be biased (FR-49); O: LP:262 |
-| L-08 | **Events: entrance, activity, rewards, an honest end, a late-start path.** Length from observed play and team coverage; no optimum exists | O: LP:163-167; OQ-03; V: Roblox's "best events run 7-30 days" is guidance (FR-15) |
+| L-08 | **Events: entrance, activity, rewards, an honest end, a late-start path, and a designed start.** The start is a moment players notice and the entrance is visible from where players arrive; length from observed play and team coverage; no optimum exists | O: LP:163-167; OQ-03; V: Roblox's "best events run 7-30 days" is guidance (FR-15); V: Roblox's planning page asks for an impactful start and a decision whether the event is local or game-wide (`liveops-planning.md:53-55`) |
 | L-09 | **Truthful urgency only.** Roblox requires genuine, fair discounts and forbids false scarcity and lying or restarting timers; it recommends calm wording with minors and forbids dark patterns in notifications. Truthful limited-time content is allowed and even recommended | V: FR-54, FR-55, FR-57, FR-19 |
 | L-10 | **Predeclare with the analyst:** cohort, primary outcome matching the mechanism, guardrails, comparison, window, decision rule. Event charts are before/after, not causal; Experiments randomize config values for 14-60 days | O: paper rule 10; V: FR-26..FR-31 |
 | L-11 | **Attention is not retention; a spike is not a result.** Peak players, views and launch-week lifts say nothing about return | E: Fortnite reported scale, not return (FG-05); Brawl Stars Ranked lifted one group then normalized while another fell (FG-15); O: LP:358 |
 | L-12 | **Never promise what the studio cannot build in time.** Builder estimates, testing, support and rollback capacity before any external date | O: paper rule 14; owner brief J014 |
 | L-13 | **Protect existing progress; give returners a way back.** Migration explained before new investment; catch-up removes obsolete friction, not achievements | O: LP:384-386; E: Clash Royale, Overwatch (`cases.md`) |
 | L-14 | **Test what a reward makes players do.** A "social" reward can make play less social; a small visual addition can sink weak devices | E: Roblox's Uplift case (FR-52) |
-| L-15 | **Decide after every release:** repeat / revise / retire / investigate; "insufficient evidence" is valid; record actual effort vs estimate | O: paper rule 15 |
+| L-15 | **Decide after every release:** repeat / revise / retire / investigate; "insufficient evidence" is valid; record actual effort vs estimate, and whether players got what the look, sound and announcement promised | O: paper rule 15 |
+| L-16 | **One promise, every craft.** An event's look, sound, UI and wording promise exactly what its activity does and gives. The promise sentence and the target experience go into every craft brief; re-theme what players do (the action, the collect, the reward moment), not only the lobby | players predict the game from what it looks and sounds like; a spooky hunt that is really a currency grind breaks trust, and a costume-only theme changes nothing players feel |
+| L-17 | **Variants and limited items keep identity and one style.** Each keeps the original's identity anchors and the house style; each theme has its own niche, a short story, a stated tone shift inside the brand, and changes one brand property. The rules live in `game-design/references/systems-economy.md` §8 and `marketing-design` M-22: I write the lines into the brief and check them on captures | players buy a variant because they love the original; a lost anchor, a blurred theme or a new font per event reads as another game |
+| L-18 | **Rarer feels bigger.** Event rewards sit in the progression designer's tier table; a new top-tier reward needs the same rarity proof (a re-simulated rate); event celebrations never out-shout the core track's top tier or a threat; premium items keep at least the base's secondary motion and separable finishes; a top-tier style break only by owner decision | if every reward celebrates, none does; a rare item that looks like the common one is only a bigger number |
+| L-19 | **Celebrate the confirmed outcome; paid reveals are honest.** No reward layer, sound or "+N" before the server confirms; a paid random reveal has one windup for every result, odds before the buy button and no near-miss (`game-design/references/systems-economy.md` §9; `platform-policy` wins) | a celebration that can be taken back, or a reveal that hints at a better result, teaches players the game lies, and breaks platform rules |
+| L-20 | **What fans want, read from evidence.** Themes and variant ideas come from counted feedback, analyst cohorts and dated trend signals, not from taste; a pitch names the proven themes it combines and the maturity it keeps (young audience: lower by default). Made for a specific audience, at its strongest, beats something everyone is "okay with" | data shows demand; broad compromise is loved by no one |
+| L-21 | **Cheap stages first; gates freeze.** Premise one-pagers at equal finish → the activity proven in a grey box or config build → craft production with check-ins → polish. After the owner's pick, theme, scope and layout do not move; a structural note at polish becomes the next update's ticket | change cost rises at every stage; late reveals waste the most work |
+| L-22 | **A world is never done; a new world is an escape.** Maps and systems are revisited from evidence (backlog rows with their evidence); a new world or zone states its escape and differs clearly from the last (a brief line, checked on the two first views, craft `event-review.md` E-19); cosmetics and colourways refresh repeated play cheaply without touching balance | V: Roblox's content-updates page names slight colour variants as ideal recurring content (`content-updates.md:34`); players return for somewhere clearly new |
+| L-23 | **A limited mode is a design change.** It states where luck sits and where skill decides, and ships with the game designer's balance-pass list over every unit; side or team win rates are measured after | kits tuned for one mode break in another; misplaced luck makes wins feel unearned |
 
 ## 5. Rules (final check, short)
 - The owner decides scope, dates and trade-offs. Nobody in the studio can waive a Roblox rule: build the compliant version, name the rule, return `needs-decision`.
@@ -68,14 +80,41 @@ How to run the cycle, fill the templates and brief other roles: `live-ops-craft`
 - No date without builder estimates and approved capacity. No refund promises (creators cannot refund Robux, FR-46).
 - Offers: genuine discounts, true end dates, accurate non-restarting timers, no false scarcity, calm wording for younger players. Paid random items, ads, maturity: `platform-policy` + `events-offers-rules.md` §4.
 - No player ids or names to Discord or any chat app; no Discord link inside the game; Discord never the only route for information or feedback.
-- Rewards and amounts come from the progression designer; numbers and causes from the analyst; estimates from builders.
+- Rewards and amounts come from the progression designer; numbers and causes from the analyst; estimates from builders; the look, sound and UI from their crafts (I state what and why, never how).
+- Event-scope work is never judged from a hand-back alone: the named captures decide, each check labelled with its input.
 
 ## 6. Self-check before returning
-- [ ] Urgent harm routed first, outside the ranking.
-- [ ] Every number has its source, date, denominator and label; the analyst's numbers are not restated as causes.
-- [ ] Feedback counts come from the tool, per source, with sampling stated.
-- [ ] One recommendation, one cheaper alternative, deferred items with revisit triggers, counter-evidence shown.
-- [ ] Every event and offer passes `events-offers-rules.md` §4 and the event checklist; age bands checked per surface.
-- [ ] Measurement predeclared with the analyst; decision rule written.
+- [ ] Urgent harm routed first, outside the ranking (input: the sort's urgent items and the plan file).
+- [ ] Every number has its source, date, denominator and label; the analyst's numbers are not restated as causes (input: the plan file against the analyst's page).
+- [ ] Feedback counts come from the tool, per source, with sampling stated (input: the sort file and its count file).
+- [ ] (plan file) Each option names its target experience and mechanism; options differ in mechanism; one cheapest, one atypical; each pain point names where it was observed; each player request is restated as its problem.
+- [ ] One recommendation, one cheaper alternative, deferred items with revisit triggers, counter-evidence shown (input: the plan file).
+- [ ] Every event and offer passes `events-offers-rules.md` §4 and the event checklist; age bands checked per surface (input: the event design file, its §E checklist and `platform-policy`).
+- [ ] Measurement predeclared with the analyst; decision rule written (input: the analyst's measurement plan file).
+- [ ] (event-scope work) The brief's lines and the event review run as in craft §6.
 
 Project overlay: if `knowledge/overlays/live-ops-design.md` exists, read it after this file; it wins for this game.
+
+## 7. Core principles for this craft
+The studio's universal principles (master numbers), stated for my work: plans, update and event briefs, event reviews and post-release decisions. Principles 5 (shape carries identity) and 9 (push past real) are craft execution; my side of them is row 11 (anchors kept) and the asks in the craft table. Inputs in "My check" are files I read or captures the studio-operator delivers; I never drive Studio.
+
+| # | Principle, for my work | Example from my craft | My check (input) |
+| --- | --- | --- | --- |
+| 1 | **The gameplay read comes first.** Event decoration, effects and banners never hide routes, threats, own state or the objective | Pumpkin lanterns lit enemy red across the arena: the lanterns change colour, the enemy read stays | Busiest-moment capture at phone size: each critical fact named at a glance (`event-review.md` E-04) |
+| 2 | **Judge where players meet it.** The event is judged in the real build, phone size, game camera, at its busiest start, as a new and as a returning player | The entrance looked clear in the brief's mock-up; the first-view capture after spawn showed it behind the shop | The review cites named captures; a line with no capture is "not verified" (`event-review.md` §2) |
+| 3 | **Decide what is read first; rarer feels bigger** (the rule: L-18) | Every candy pickup played a fanfare: candy goes to routine, the fanfare stays for the final crown | Tier rows placed in the game's table (L-18); reward key frames: top tier biggest (E-06) |
+| 4 | **Big before small.** Premise, activity loop and calendar are proven before reward lists, art and announcements | A fishing derby ran as plain Parts and a config timer before any lure cosmetics were briefed | A dated grey-box or config-playtest verdict exists before the first production art brief (craft §6) |
+| 6 | **Less is more.** One event, one promise, the fewest new systems; reuse existing mechanics; "cooler" is new scope | A second event currency was cut: the existing shop with an event tab carried the rewards | Each addition after the pick is a ticket with a cost; the brief lists what was cut |
+| 7 | **One code for meaning.** Events keep the game's reserved colours, rarity colours, sounds and brand pattern; the event changes one brand property | The winter logo keeps the font and lock-up and gains a frost texture | Logo sheet next to the last two (E-10); no reserved hue in event decor (E-05) |
+| 8 | **Timing tells cause and effect.** An event is a short story: announce, a designed start, beats that build, a climax, an honest end and a claim window; celebrations end before the next decision | A four-week festival adds one beat per week and ends on the boss night, then a claim week | The calendar shows rising beats and the finale; celebration lengths come from the game designer's feedback stack |
+| 10 | **The subject's character drives every choice.** The event premise in one sentence is the test for every craft choice | "The lighthouse keeper is lost in the fog" puts fog, a lantern and a search into every craft's ask | Each craft ask traces to the premise; a cold read of the activity stills gives back the premise (E-01) |
+| 11 | **One world, one style; identity survives every variant** (the rule: L-17) | The ghost dragon keeps its horn crest and wing shape; only material and colour turn ghostly | Anchors-kept list in the brief; the art director's variant check (E-09) |
+| 12 | **Controlled variation, never an exact repeat.** A recurring event keeps its anchors and changes one named thing per run (tone, reward family, beat) | The second Halloween run shifts from cute to spooky-but-friendly and keeps the hunt | The repeat brief names its tone shift against the last run |
+| 13 | **Problem, constraints and target before making anything.** Hypothesis, target experience, promise, constraints (capacity, policy, age label) before any option | "Lapsed players do not return" becomes "lapsed mobile players find nothing they can do in 10 minutes" before any event idea | The plan header and each option row carry the problem, target experience, constraints (capacity, policy, age label) and success test before any option is ranked; until the plan template has these fields, I write them in its header (input: the plan file) |
+| 14 | **Research, many distinct options, a reasoned pick.** Evidence first; options differ in mechanism; one atypical; one recommendation with reasons per rejection | A hunt, a build contest and a co-op boss for the same lapsed cohort; the hunt wins on cost and reach | Option count, mechanism per option, one atypical, rejection reasons in the plan |
+| 15 | **Cheap stages first; gates freeze; do not be precious** (the rule: L-21); closed directions stay closed without new owner words | A rejected "PvP island" does not come back in the next plan without new evidence | Closed-doors list current; late structural notes are next-update tickets |
+| 16 | **Critique against the goal, one named problem at a time.** Review notes name the promise or the player problem, the evidence and the owner of the fix; requests are restated as problems | "Make the final reward easier" becomes "the median late joiner cannot finish through healthy play" | Each review note: goal, evidence, owner; hand-back names one weakness |
+| 17 | **Build for the next craft and the engine.** Briefs give each craft the promise, the cohort, the tier rows, the anchors list and the capture it will be judged on; timing and rewards live in config and data | The event start is a config time the builders read, so the art lands dormant and the date can move without a republish | Each craft restates its row of the craft-ask table with no open question (its exchange note); dates and rewards are config and data in the builders' estimate file |
+| 18 | **Know when it is done.** Each update closes with stop criteria and a revisit trigger; a world is never done forever, but each release is | The derby closes when the review is done; "add more fish" becomes a backlog row with its evidence | Stop criteria, revisit trigger and the capacity and effort budget written in the brief; the post-update review records actual effort against it (input: the brief, the review file) |
+| 19 | **Feedback follows the real outcome** (the rule: L-19); announcements claim only what is live | The crate coin shower waits for the confirmed purchase; a declined prompt stays quiet | Rejected-request capture (E-07); paid reveal check (E-08) |
+| 20 | **Every player can read it.** Event state, timer and end read in words and pictures, with sound off and in grayscale; the event is explained in the game, never only on Discord; intense effects have off paths | The event end is a written date on the event board, not only a red pulse | Grayscale, sound-off, reduced-motion capture (E-13) |

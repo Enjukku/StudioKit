@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Facts extracted by a researcher agent (claude-sonnet-5-5, medium) from the docs mirror (upstream 7400643) and Roblox staff DevForum posts 2026; spot-checked by the orchestrator. Paths relative to `knowledge/external/roblox-creator-docs/`; Y = `_api-reference/classes/`. "practice" = common industry practice, not a Roblox doc.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Facts extracted by a researcher agent (claude-sonnet-5-5, medium) from the docs mirror (upstream 7400643) and Roblox staff DevForum posts 2026; spot-checked by the orchestrator. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (rows for world-to-screen points, BillboardGui, PreferredTransparency, server time). Paths relative to `knowledge/external/roblox-creator-docs/`; Y = `_api-reference/classes/`. "practice" = common industry practice, not a Roblox doc.
 
 # Roblox UI facts (2026)
 
@@ -18,6 +18,8 @@
 | Console: viewers 8-10 ft away; design for low resolution first; TV-safe area; every element reachable with D-pad, select and back in a few moves | production/publishing/console-guidelines.md:17-59 |
 | Gamepad: `GuiService.SelectedObject`, `GuiService:Select(parent)` (lowest `SelectionOrder`), `NextSelectionUp/Down/Left/Right`, `SelectionImageObject` | Y/GuiService.yaml; Y/GuiObject.yaml:531-810 |
 | Touch target size: no Roblox number. Practice: ≥ 44 pt (Apple HIG) / 48 dp (Material) | practice |
+| `Camera:WorldToScreenPoint` accounts for the GUI inset; `Camera:WorldToViewportPoint` does not: use the one that matches the ScreenGui's insets for fly-to-HUD start points | Y/Camera.yaml:1254-1266, 1306-1312 |
+| `BillboardGui` children always face the camera; `Adornee` (a BasePart or Attachment) places it over a world object from a script | ui/in-experience-containers.md:93-112 |
 
 ## Text
 | Fact | Source |
@@ -61,6 +63,8 @@
 | `InputActionLabel` (binding hints) | **beta, not publishable**; build hints from `InputAction.PreferredBinding` meanwhile | DF 4779420 |
 | `UserInputService.PreferredInput` (Touch, KeyboardAndMouse, Gamepad) beats `TouchEnabled` checks; listen for changes | live | input/index.md:31-102 |
 | `GuiService.ReducedMotionEnabled` → tween time 0 or a fade; `GuiService.PreferredTransparency` multiplies background transparency | live | production/publishing/accessibility.md:102-245 |
+| PreferredTransparency: 1 = the player keeps the default, 0 = fully opaque; the docs' pattern tags translucent elements, stores each default `BackgroundTransparency`, sets default × PreferredTransparency, and re-applies on `GetPropertyChangedSignal("PreferredTransparency")` | live | production/publishing/accessibility.md:104-154 |
+| `Workspace:GetServerTimeNow()` is the client's best estimate of the server's time: countdowns and timers follow it, not a local start | live | Y/Workspace.yaml:1524-1528 |
 | Accessibility: enough contrast; never meaning by colour alone or sound alone | live | production/publishing/accessibility.md:46-96 |
 | `ZIndexBehavior` Sibling (default); ZIndex gaps of 100; `ScreenGui.DisplayOrder` layers whole screens | live | Y/GuiObject.yaml:943-965; Y/ScreenGui.yaml:81-90 |
 | `ResetOnSpawn` (default true) re-clones the ScreenGui on respawn; false only works on a direct child of StarterGui. `ScreenGui.Enabled = false` stops render and input | live | ui/on-screen-containers.md:35-82 |

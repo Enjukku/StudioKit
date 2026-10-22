@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Surprises from the first game's rework study (`knowledge/reference/engineering/rework/` git-a E-rows, git-b EG-rows, logs EL-rows, records RG-rows); each was found by a measurement or a probe. Docs lines checked in the mirror where named.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§4 open probes for presentation wiring). Surprises from the first game's rework study (`knowledge/reference/engineering/rework/` git-a E-rows, git-b EG-rows, logs EL-rows, records RG-rows); each was found by a measurement or a probe. Docs lines checked in the mirror where named.
 
 # Studio probes: ask the engine, then build
 
@@ -42,3 +42,17 @@ Your design depends on an engine behaviour, and the docs page does not state it 
 | MCP | `screen_capture` camera arguments work during Play | the player camera scripts overrode them; set the camera to Scriptable and move it first | logs EL6 |
 | Input | a `MoveTo` probe carries walking intent | it did not; observe the real client move | logs EL7, records RG3 |
 | Streaming | a screenshot shows the whole stage from anywhere | the client draws only what has streamed in near the character | git-c G7 |
+
+## 4. Open probes for presentation wiring (run once per game before relying on them; record the output)
+| Question | Why it matters | Probe |
+| --- | --- | --- |
+| Does an attribute change set from `execute_luau` reach the game's hook script in the same play-test, on Server and on Client? | the test hooks (`presentation.md` §9) depend on it | set `TestHooks.FxLog = true`, read the hook's acknowledgement line in Output |
+| Can `execute_luau` (plugin context) write `settings().Network.InboundNetworkMinDelayMs` before Play, and does the delay show in a remote round trip? | the optional slow-network check; the property is PluginSecurity (Y/NetworkSettings.yaml:173-197) | Edit: set 300; Play; log send and result `os.clock` on the client; positive control: 0 |
+| Where must a camera shake run so the default camera does not overwrite it or accumulate it? | shake that drifts was the first game's recoil bug (§3 Camera row) | `BindToRenderStep` at `Enum.RenderPriority.Camera.Value + 1`: apply a 2° offset one frame, remove it the next; read `CurrentCamera.CFrame` over 60 frames: no drift |
+| Do a marker's VFX emit and cue play started in one handler land in the same rendered frame? | the sync rule can only be met from one trigger | log `f` for both on 20 hits at 60 and 30 fps caps |
+| Does `ParticleEmitter.TimeScale = 0` hold a frame still for `screen_capture` during Play? | key stills of an effect | freeze, capture twice 0.5 s apart, compare; restore 1 |
+| Does `Model:ScaleTo` scale emitter sizes with the model? | one scale factor per effect | scale a model with one emitter by 2, read `Size` keypoints |
+| Does `GuiService.ReducedMotionEnabled` signal a change while the game runs (`GetPropertyChangedSignal`)? | the comfort module reads it once per screen or effect until this is known | Play; connect the signal; toggle Reduce Motion in the in-game settings; log the signal; positive control: `PreferredTransparency`'s signal, which the docs show |
+| How many `print` lines per second does Output keep in a burst before `get_console_output` drops or merges them? | repetition counts (`presentation.md` §11) | print 200 numbered lines in one second; read history; count gaps |
+| In the Device Simulator, does an `execute_luau` read on Client see the emulated screen, and does a ScreenGui under `CoreUISafeInsets` report the inset area as its own `AbsolutePosition` and `AbsoluteSize`? | the UI bounds and `TextFits` read (`ui-basics` U-S03) | Play at the smallest phone size; read `workspace.CurrentCamera.ViewportSize` and the ScreenGui's rectangle; positive control: a second ScreenGui with `ScreenInsets` None reports the full viewport |
+| Does `AdjustSpeed(0)` on another player's replicated character track hold on the observing client, and does the owning client's own pause replicate to everyone? | the hit-stop on the target's client and the bystander rule (`presentation.md` §4); the docs state only that clips started on the owning client replicate (Y/Animator.yaml:217-232) | two-client session (the lead batches it): on client A pause A's own playing track for 2 s and read its `TimePosition` on client B three times 0.5 s apart; then on B pause A's track as B sees it and read `TimePosition` on B and on A; positive control: the same reads at speed 1 advance |

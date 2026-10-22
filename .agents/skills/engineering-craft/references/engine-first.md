@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Paths relative to `knowledge/external/roblox-creator-docs/` (Y = `_api-reference/classes/`, E = `_api-reference/enums/`). Capabilities from the owner paper §5 (P201-P225), fact-checked (`knowledge/reference/engineering/paper/factcheck-engine.md`); "first game" cells point into `knowledge/reference/engineering/rework/`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the presentation rows after Post-launch speed). Paths relative to `knowledge/external/roblox-creator-docs/` (Y = `_api-reference/classes/`, E = `_api-reference/enums/`). Capabilities from the owner paper §5 (P201-P225), fact-checked (`knowledge/reference/engineering/paper/factcheck-engine.md`); "first game" cells point into `knowledge/reference/engineering/rework/`.
 
 # Engine first: which built-in does the job
 
@@ -31,5 +31,17 @@ Read the docs page before you design. Custom work in the right column is normal 
 | Text players type | TextService filtering | ui/text-filtering.md | `platform-policy` rules | — |
 | Purchases | MarketplaceService `ProcessReceipt` | see `data-saving` and `platform-policy` | idempotent grant after a committed save | — |
 | Post-launch speed | Creator Hub performance dashboards | see `performance` F-12 | — | — |
+| Cues keyed to animation | `AnimationTrack:GetMarkerReachedSignal` (connect before `Play`) | animation/events.md:12, 47-72 | one handler that starts the effect and the cue together | — |
+| Hit-stop | `AnimationTrack:AdjustSpeed(0)` pauses a track; `ParticleEmitter.TimeScale` 0 freezes particles | Y/AnimationTrack.yaml:320-324; Y/ParticleEmitter.yaml:962-968 | on the attacker's and the target's clients, one hit-stop owner per track and emitter: a stop-until time, the base speed (the speed the game last set, through the owner) set back when it passes and on interruption, never a saved "previous" speed (`presentation.md` §4); lengths per hit tier in data; never a global pause | — |
+| Bursts and particle effects | `ParticleEmitter:Emit`, emitter properties (rate, lifetime, acceleration, drag, flipbooks) | effects/particle-emitters.md | stage scheduling from the spec's seconds; never code that imitates an emitter property | — |
+| Per-viewer toning | `LocalTransparencyModifier` on ParticleEmitter, Beam, Trail (local, not replicated) | Y/ParticleEmitter.yaml:502-511; Y/Beam.yaml:325-335; Y/Trail.yaml:278-291 | relation lookup per client | — |
+| Outlines for must-find actors | `Highlight` (255 per client) | effects/highlighting.md:37 | which actors get one; count them | — |
+| Local screen tint | `ColorCorrectionEffect` under `Workspace.CurrentCamera` | Y/ColorCorrectionEffect.yaml:22-27 | tier gating; reduced path | — |
+| Reduced motion, background transparency | `GuiService.ReducedMotionEnabled`, `GuiService.PreferredTransparency` | Y/GuiService.yaml:225, 262; production/publishing/accessibility.md:104-208 | one comfort module with the five settings (motion, shake, flashes, screen effects, clarity; `presentation.md` §6); the game's own settings for the last four | — |
+| Sound playback and buses | AudioPlayer, AudioFader per bus, AudioEmitter (the sound graph; legacy Sound discouraged) | audio/objects.md; `sound-design` `roblox-audio.md` §A-B | a pool that sets `Asset` from the cue table | — |
+| Shared server clock | `Workspace:GetServerTimeNow` | Y/Workspace.yaml:1524 | tells and countdowns scheduled against the server's time | — |
+| World point to UI | `Camera:WorldToScreenPoint` (accounts for the GUI inset), `WorldToViewportPoint` (does not) | Y/Camera.yaml:1254-1266, 1306-1312 | fly-to-HUD paths; pick the call that matches the ScreenGui's insets | — |
+| Paid random eligibility | `PolicyService:GetPolicyInfoForPlayerAsync` → `ArePaidRandomItemsRestricted` (the call can error) | Y/PolicyService.yaml:66, 91-94, 175-184 | features ask the game's one policy module, which fails closed (`platform-policy` P-02), never `PolicyService` directly; the restricted path (§ A) | — |
+| Latency in play-tests | Network Simulator (beta), `NetworkSettings` delay properties | studio/network-simulator.md; Y/NetworkSettings.yaml:119-296 | a server delay test hook for the pending path | — |
 
 Release dates and beta status change: check `knowledge/reference/roblox/whats-new.md` and the page's banner before you rely on a row.

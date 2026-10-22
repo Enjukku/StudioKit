@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-craft`. Format: `rules/messages.md` §2 (brief) and §3 (hand-back). Owner J014 brief 2026-10-21: hand-offs to the analyst, game designer, progression designer, trend scout, marketing and the engineering team, in the brief format. The other sides: `analysis-craft/references/handoffs.md` §4 (analyst → live-ops), `marketing-craft/references/handoffs.md` §5 (marketing → live-ops), `trend-scan/references/handoffs.md`, `progression-craft/references/data-handoff.md`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-craft`. Format: `rules/messages.md` §2 (brief) and §3 (hand-back). Owner J014 brief 2026-10-21: hand-offs to the analyst, game designer, progression designer, trend scout, marketing and the engineering team, in the brief format. The other sides: `analysis-craft/references/handoffs.md` §4 (analyst → live-ops), `marketing-craft/references/handoffs.md` §5 (marketing → live-ops), `trend-scan/references/handoffs.md`, `progression-craft/references/data-handoff.md`. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 craft rows, §3 tier placement, §4 promise and grey-box verdict, §6 event kit, new §9 to the art director).
 
 # Hand-offs: who gets what from live-ops
 
@@ -11,8 +11,10 @@ Live-ops sends **files, not chat**: the update plan, the update brief, the event
 | game designer | after the owner picks, for play | player promise, loop fit, activity constraints, acceptance criteria, edge cases, the question the update answers | a feature list dressed as finished design |
 | progression designer | before ranking (feasibility) and after the pick (amounts) | effort distribution target, reward purpose, flows, ownership, catch-up, expiry and migration, monetization limits | a multiplier picked to "feel exciting" |
 | trend scout | when an event or theme leans on a trend | the theme, the audience, the build-and-review lead time | "what's hot" without dates and rights |
-| marketing | after the pick; again when the build is live | calendar rows, benefit, audience, exact dates, eligibility, reward terms, channel limits, fallback wording; patch-notes fact sheet | wording for anything not live in the build on its date |
-| engineering (architect for new systems; feature-builder for money, saves, remotes; quick-builder for table and config changes), via the lead | estimate request before ranking; build brief after the pick | scope, dependencies, interfaces, device limits, save and entitlement behaviour, exposure ids, safe-disable needs, acceptance criteria | a date before their estimate |
+| marketing | after the pick (calendar rows, fact sheet); the event kit when the build is credible (`event-review.md` §1); again when the build is live | calendar rows, benefit, audience, exact dates, eligibility, reward terms, channel limits, fallback wording; patch-notes fact sheet | wording for anything not live in the build on its date |
+| engineering (architect for new systems; feature-builder for money, saves, remotes; quick-builder for table and config changes), via the lead | estimate request before ranking; build brief after the pick | scope, dependencies, interfaces, device limits, save and entitlement behaviour, exposure ids, safe-disable needs, event timing and rewards as config and data, acceptance criteria | a date before their estimate |
+| art-director (§9) | the concept round of event-scope work (`event-review.md` top), before any production art | the promise, the target experience, the nearest existing themes, the variants and their base items, what fans want | a finished image before the theme is picked |
+| vfx, sound, ui, environment, animation, modeling crafts, through the lead's job recipes | after the tier rows and the grey-box verdict | their row of the craft-ask table (`event-review.md` §1) with the capture they will be judged on | how to build it; a look that promises what the activity does not do |
 
 ## 2. Live-ops → analyst (measurement plan, before release)
 ```text
@@ -66,6 +68,7 @@ fixed:
   window: <start - gameplay end - claim end, timezone>   # owner decision <id>
   target_cohort: <cohort>                            # plan
   reward_purpose: <what the reward must make players feel or do>
+  tier_table: <path to the game's reward-tiers.md, model revision>   # progression designer
 open: [amounts, issuance range, sinks, expiry and conversion rules, catch-up mechanics]
 avoid: [a multiplier chosen to look exciting; power that obsoletes old content; paid power as the fix for a spike the event created]
 owns: [the event's economy section and tables]
@@ -73,9 +76,11 @@ not_in_scope: [the activity design (game designer), the dates]
 rules:
   - Paid random items follow platform-policy §A (odds, PolicyService, every outcome a benefit).
   - Model alt accounts, automation, trading and stacked bonuses.
-deliver: amounts, issuance range with assumptions, abuse cases, catch-up path, effect on existing ownership
+  - Every event reward is placed in the game's tier table; a new top-tier reward carries the same rarity proof as the core track (a re-simulated rate); no event celebration out-ranks the core track's top tier.
+deliver: amounts, issuance range with assumptions, abuse cases, catch-up path, effect on existing ownership, the event's tier rows (tier, trigger, rate, text name)
 checks:
   - C1: a player who starts at the median late-join day can finish through healthy play (show the trace)
+  - C2: the event's tier rows pass the tier table's rate and order checks for every named policy (`reward-tiers.md` §8)
 return: hand-back to live-ops-designer, copy to lead
 </spec>
 ```
@@ -98,15 +103,20 @@ refs:
 fixed:
   scope: <must deliver> ; excluded: <list>       # owner decision <id>
   window: <dates>                                # owner decision
+  target_experience: <one or two kinds of fun>  # brief
+  promise: <one sentence, player words>        # owner decision; every craft brief quotes it
 open: [the activity, entrance, feedback, edge cases inside the scope]
 avoid: [a new system where an existing mechanic can carry it]
 owns: [the play spec]
 not_in_scope: [reward amounts (progression designer), dates]
 rules:
   - Returning players do not need every system added while they were away.
-deliver: play spec with interaction acceptance criteria and edge cases
+  - The activity is proven in its crudest playable form (plain Parts or a config build) and judged from the studio-operator's play captures before any art brief.
+  - Every action has an attempt cue on input and the big layer only on the confirmed result.
+deliver: play spec with interaction acceptance criteria and edge cases; the grey-box verdict; the feedback stack; for a limited mode, luck placement and a balance-pass list over every unit
 checks:
   - C1: entrance findable by a new player and a returning player (state how it is tested)
+  - C2: a request the server rejects shows no success layer (the capture that shows it)
 return: hand-back to live-ops-designer, copy to lead
 </spec>
 ```
@@ -167,7 +177,8 @@ not_in_scope: [publishing (owner), dates]
 rules:
   - Every item has a build version and the date it is live.
   - No false scarcity or restarting timers in any offer copy (FR-54).
-deliver: announcement and event-listing drafts for the owner
+  - The launched thing is the hero; one crop-safe master feeds the event kit; the event changes one brand property (`marketing-design` §4 M-15, M-22).
+deliver: announcement and event-listing drafts for the owner; the event kit list (icon, thumbnails, listing, in-game banner) from one master
 checks:
   - C1: every claim maps to a fact-sheet line
 return: hand-back to live-ops-designer, copy to lead
@@ -204,3 +215,36 @@ return: hand-back to live-ops-designer, copy to lead
 
 ## 8. What live-ops hands back
 To the lead or the owner, in `rules/messages.md` §3: `STATUS`, coverage of every item in scope, evidence (files, tool outputs, decision ids), the open choices taken, owner actions, the next decision with a recommendation and a default.
+
+## 9. Live-ops → art director (event theme, variants, limited items)
+```text
+<intent>
+The owner chose <event / variant line>. Players must recognise every variant as the thing they love, see a theme that is clearly new next to our last one, and feel the event as the promise says. I need the theme and the anchors settled while a change is still cheap.
+</intent>
+<spec>
+id: <job>-T<nn>
+from: live-ops-designer
+to: art-director
+model: opus
+effort: high                                     # art-director role
+skills: [art-direction, art-review, reference-images]
+refs:
+  - knowledge/jobs/<job>/live-ops/brief-<decision id>.md   # take: promise, target experience, cohort, story line, tone shift, twist line
+  - knowledge/jobs/<job>/live-ops/feedback-<date>.md       # take: what fans want, with counts
+fixed:
+  promise: <one sentence>                        # owner decision <id>
+  nearest_themes: [<earlier events and theme lines>]
+  variants: [<variant id: base item>]
+open: [style levers, theme cues, colourways, the motif, a top-tier style break proposal]
+avoid: [production art before the theme rough is picked; reserved gameplay colours in event decor]
+owns: [the theme niche line, the anchors-kept list per variant, the theme rough]
+not_in_scope: [reward tiers (progression designer), activity design (game designer), dates]
+rules:
+  - Each variant keeps its base's identity anchors (`game-design/references/systems-economy.md` §8).
+  - A top-tier style break is a proposal for the owner, never a default.
+deliver: theme niche line; theme rough at equal finish with the options; anchors-kept list per variant; colourway value check
+checks:
+  - C1: variant next to base, flat key, same distance: every anchor present (their review capture)
+return: hand-back to live-ops-designer, copy to lead
+</spec>
+```

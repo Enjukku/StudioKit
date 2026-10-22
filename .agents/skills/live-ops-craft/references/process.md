@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-craft`. Evidence: note `02` §6 (LP:431-518: 12 steps ST-01..ST-12, update brief UB, hand-off contract HO, post-update review PV, do-not-do DN), note `01` §7 (ranking). All O (the paper's operating method) unless marked. Owner rules: J014 brief.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-craft`. Evidence: note `02` §6 (LP:431-518: 12 steps ST-01..ST-12, update brief UB, hand-off contract HO, post-update review PV, do-not-do DN), note `01` §7 (ranking). All O (the paper's operating method) unless marked. Owner rules: J014 brief. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 rows 9-10, §2 items 9-10, §3 brief lines and craft row, §4 event review row, §6 promise, tier, identity and keep / change rows, §7 one pointer row).
 
 # The live-ops cycle: from evidence to decision to review
 
@@ -15,8 +15,8 @@ Work folder: `knowledge/jobs/<job>/live-ops/`. One **live-ops log** there (`log.
 | 6 | **Estimate:** builders, progression designer, marketing (handoffs §5, §3, §6) | impact and effort ranges, economy effects, risks | no unverified date, assumed licence or invented lift |
 | 7 | **Rank** (§2) | `templates/live-ops/update-plan.md` | counter-evidence and opportunity cost visible |
 | 8 | **Decide:** owner chooses | decision record with the owner's words | approval is concrete; silence is not approval |
-| 9 | **Hand off:** update brief (§3) to each role | briefs (handoffs.md) | each owner accepts scope, estimate and dependencies |
-| 10 | **Verify:** implementation, economy scenarios, usability, policy, measurement readiness | release-readiness record (§4) | required checks pass; promised behaviour matches shipped behaviour |
+| 9 | **Hand off:** update brief (§3) to each role; for event-scope work (`event-review.md` top), first the concept round, then the craft-ask table (`event-review.md` §1) | briefs (handoffs.md); concept pick; craft-ask table | each owner accepts scope, estimate and dependencies; the owner's concept pick freezes theme and scope |
+| 10 | **Verify:** implementation, economy scenarios, usability, policy, measurement readiness, the event review on named captures | release-readiness record (§4) | required checks pass; promised behaviour matches shipped behaviour, seen in captures |
 | 11 | **Release and monitor** | incident log, first operational read | stop conditions enforced; early activity is not called mature retention |
 | 12 | **Evaluate and learn:** analyst reports; live-ops recommends | post-update review (§6) | no causal overclaim; real cost and counter-evidence kept |
 
@@ -41,9 +41,12 @@ Effort: medium; **high for a season plan or a big update** (owner J014-D1). Say 
 6. **Mandatory fixes and dependencies are never outranked** by an impact × effort chart.
 7. **Capacity check** (design `cadence-content.md` §3) before any date appears. For a package option, total each role's days across all its parts and compare with that role's free days; any part that is only *assumed* to be data or config work is listed as an assumption to confirm with the builders.
 8. **The biggest silent problem gets a cheap next step this period** (a data-only cue, a config switch, a logging spec), not only "diagnose later", unless the builders say no cheap step exists.
+9. **Options differ in mechanism, not packaging.** Two options that change the same cause the same way are one option. Include the cheapest option that could work and one deliberately atypical option (an idea from outside the genre, inside the game's tone); the first idea is a warm-up, not the answer. Each option names the target experience it serves; one that serves another kind of fun is filed.
+10. **Themes and variants are chosen from evidence.** An event or variant option cites what fans want (theme ids with distinct-author counts per source, the analyst's cohort, the trend scout's dated signal), the proven themes it combines and the maturity it keeps, and its niche against the nearest existing theme in one line. Taste alone is not a reason.
 
 ## 3. The update brief (step 9; base for every hand-off)
-Fields (LP:454-460): identity (decision id, title, version, owner approval, responsible lead) · player problem (cohort, evidence, baseline, source dates, uncertainty) · objective (primary behaviour or outcome; why now) · hypothesis (change → mechanism → outcome; alternatives) · scope (must deliver; optional only if capacity remains; excluded) · player journey (entry, first meaningful action, repeat activity, completion, next core action) · new / returning / veteran paths (access, comprehension, progression, preserved identity).
+Fields (LP:454-460): identity (decision id, title, version, owner approval, responsible lead) · player problem (cohort, evidence, baseline, source dates, uncertainty) · objective (primary behaviour or outcome; why now) · target experience (one or two kinds of fun from the game profile) · hypothesis (change → mechanism → outcome; alternatives) · scope (must deliver; optional only if capacity remains; excluded) · player journey (entry, first meaningful action, repeat activity, completion, next core action) · new / returning / veteran paths (access, comprehension, progression, preserved identity) · stop criteria and revisit trigger.
+**The event brief lines (the one list; the self-checks, the role file and the templates point here).** For event-scope work (an event, a season beat, a theme, a variant line, a limited item, or a new world or zone; `event-review.md` top), also, each line filled or marked "n/a: <reason>": the promise in one sentence of player words (every craft brief quotes it) · what fans want, with its count file · the theme's niche against the nearest existing theme · the story in one line (the subject's role in the theme) and, when an iconic item changes, "keep core X, swap Y for Z because of W" · the tone shift against the last run and its limit (the subject keeps its appeal; a darker tone re-checks the maturity answers) · the reward family (event items share one named theme family and motif players can collect) · the anchors-kept list per variant (the art director's), and for each variant whether it is a new version (new palette) or the same subject in a new scene (base palette) · for a new world or zone: its escape in one line (what players get away to) and how it differs from the last world (palette, shapes, theme) · the tier rows (the progression designer's) · the craft-ask table and the capture set (`event-review.md` §1-§2).
 Then one brief per receiving role, in the `rules/messages.md` §2 format (handoffs.md §2-§7). What each role receives (LP:462-472):
 
 | Role | Receives | Returns before any date is committed |
@@ -54,6 +57,7 @@ Then one brief per receiving role, in the `rules/messages.md` §2 format (handof
 | marketing | approved benefit, audience, exact dates, eligibility, true reward terms, assets, channel limits, proof, fallback wording; the patch-notes fact sheet | announcement drafts for the owner; no teaser promises optional scope |
 | analyst | hypothesis, cohort and assignment or exposure definitions, primary outcome, guardrails, comparison, windows, decision criteria | confirmation the question can be answered, or why not |
 | release owner (lead) | launch checklist, sign-offs, incident contacts, stop conditions, rollback or disable behaviour, communication plan, review dates | go / no-go |
+| art-director and the other crafts (event-scope work) | their row of the craft-ask table (`event-review.md` §1, the one place for what, when and the capture) | as that row says |
 
 **Configs (V, FR-32):** Roblox configs change values without publishing. A config switch helps only if builders implemented and tested the behaviour; it does not undo saved rewards or migrations. Keep the config version and exposure record so the analyst knows which rules players had (LP:474).
 
@@ -67,6 +71,7 @@ Then one brief per receiving role, in the `rules/messages.md` §2 format (handof
 | safe disable tested; persistent-state response written | QA evidence |
 | patch-notes fact sheet matches the build | `patch-notes.md` checks P1-P5 |
 | incident responder named; stop conditions | names, thresholds |
+| event review E-01..E-19 on the named capture set (event-scope work only) | `event-review.md` §3, each line with its input and status; the could-not-check list |
 
 ## 5. Incidents (step 3 and 11)
 Request format to the lead: what is happening, affected players and how known, reproducibility, harm now, safe mitigation options (disable a feature, config change), what must not be done (blind rollback of saved state), player message facts. Never post exploit steps. Never promise refunds (creators cannot give Robux refunds, FR-46), and never promise compensation ("we will add your missing items") in a draft player message before the owner decides it. Measurement or logging that an urgent item needs (for example a save-loss measure) goes to the analyst **now**, not after the plan is picked.
@@ -84,8 +89,13 @@ Request format to the lead: what is happening, affected players and how known, r
 | feedback changes; unresolved themes | feedback sort ids |
 | actual active effort, elapsed time, support cost; estimate error | builders, lead |
 | best explanation; credible alternatives; limits of causal attribution | |
+| promise kept? what players expected from the look, sound and announcement vs what they got | feedback theme ids (for example `event.promise-mismatch`) with counts; the analyst's reading of what players did |
+| tiers felt? did the rare rewards feel rarer than the common ones | feedback themes (for example `event.rare-feels-same`); the tier table's planned rates vs the live rates (progression designer) |
+| identity: were the variants recognised | feedback themes (for example `variant.not-recognised`); the art director's anchor check |
+| keep / change for the next run | what the next run keeps (anchors, activity, tone) and the one thing it changes; map or system revisit rows with their evidence |
+| closed directions | rejected options and failed approaches, proposed for `knowledge/design/tried-and-failed.md` |
 | **decision: repeat / revise / retire / investigate** | |
-| what becomes a reusable rule, with its evidence label | lesson draft in `knowledge/inbox/` |
+| what becomes a reusable rule, with its evidence label | the hand-back's `lesson` field (the lead writes the inbox draft) |
 | owner decision; next review trigger | owner's words |
 
 ## 7. Do-not-do (detection → replacement)
@@ -107,3 +117,4 @@ Request format to the lead: what is happening, affected players and how known, r
 | blind rollback of saved state | keep valid entitlements; test migration or compensation |
 | AI confidence instead of unknown effort or effect | explicit unknowns; ask for estimates; a bounded test |
 | treat an announced platform feature as available | confirm current docs and account access (Roblox's "Late 2026" roadmap items: FR-50, FR-53) |
+| an event that breaks `live-ops-design` L-16..L-21: a costume-only theme, a celebration on every pickup or before the server confirms, a variant without its anchors, a theme picked by taste, a "make it cooler" change after the pick | the brief lines (§3), the tier rows, a ticket for late ideas, and the event review on named captures (`event-review.md` §3), never the makers' hand-backs alone |

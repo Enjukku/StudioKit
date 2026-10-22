@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. J010. Format: `rules/messages.md` (§2 brief, §3 hand-back). Values in angle brackets are filled per ticket; example values are examples, not defaults. Every brief is sent whole in one message and lists every rule the receiver must keep.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. J010. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 feedback stack and checks C5-C6; §11-§14 attempt and outcome, tables as data, test hooks, the shared marker names and sync rule). Format: `rules/messages.md` (§2 brief, §3 hand-back). Values in angle brackets are filled per ticket; example values are examples, not defaults. Every brief is sent whole in one message and lists every rule the receiver must keep.
 
 # Engineering hand-offs
 
@@ -17,6 +17,7 @@
 | performance-engineer → builder | fix inside the builder's files | capture, bottleneck, budget, behaviour to keep |
 | builder → architect | third patch, or the API cannot meet the contract | the attempts and measurements, or the 4-part decision |
 | engineer → game-designer | missing design intent | the question, options, default |
+| architect ↔ animator, vfx-designer, sound-designer, ui-ux-designer | before the plan freezes | the needs round for the presentation contract (`architecture` `references/presentation-contract.md` §3) |
 | engineer ↔ ui-ux-designer, vfx-designer, sound-designer, animator, environment-designer | a feature needs their craft, or their output needs wiring | the gameplay contract (fixed), the craft (open) |
 
 Rules for every hand-off: the receiver checks what it gets, at the named revision, against the brief before building on it; the reply goes to the asker; new work has a ledger ticket, clarifying questions go to the peer directly and their outcome into the contract (`rules/company.md` §5); `inside: no` → `needs-decision`.
@@ -38,9 +39,10 @@ refs:
   - knowledge/external/roblox-creator-docs/<page for each engine system>
 fixed:
   files_owned: [src/server/Shop/PurchaseService.luau, src/shared/Shop/Prices.luau, tests/shop/*.spec.luau]
-  interface: "PurchaseService.requestPurchase(player: Player, itemId: string): (\"done\" | \"denied\" | \"unavailable\", string?)"   # plan §3
+  interface: "PurchaseService.requestPurchase(player: Player, itemId: string): (\"done\" | \"denied\" | \"unavailable\", string?)"   # plan §3; full row set: architecture references/module-contract.md "Builder brief interface rows"
   invariants: [I-1 balance never negative, I-2 one grant per request id, I-3 price read on the server from Prices, I-4 rejected request changes nothing]
   remote: Shop.Purchase (RemoteFunction)        # plan §4
+  feedback_stack: knowledge/jobs/<job>/feature-spec.md §feedback   # attempt cue, outcome per tier, refusal per reason, pending; engineering-craft references/presentation.md §1
 open: [code structure inside the owned files, helper names, test layout]
 avoid: [a purchase framework, a second balance owner, trusting a client price]
 not_in_scope: [shop UI, new items, analytics events]
@@ -51,6 +53,8 @@ checks:
   - C2: leave between charge and save → no grant without a committed save, no lost purchase (spec with the store fake)
   - C3: NaN, negative, unknown itemId → "denied", balance unchanged
   - C4: luau-analyze clean; full test run PASS; Studio purchase run MCP-verified
+  - C5: with the reject hook, no success layer or chime plays and the refusal names the reason; the press feedback is in the press frame or the next (debug log, presentation.md §10)
+  - C6: affordability uses the true balance while a count-up runs; the final shown balance equals the server value
 return: hand-back to architect, rules/messages.md §3, change manifest (engineering-craft EC-13)
 </spec>
 ```
@@ -77,7 +81,7 @@ return: hand-back to architect, short change manifest
 <spec>
 id: <id>  from: feature-builder  to: reviewer  model: opus  effort: high   # money
 skills: [code-review, engineering-craft, data-saving, networking-security, platform-policy]
-refs: [knowledge/jobs/<job>/architect/plan.md, <change manifest path>, <test log path>]
+refs: [knowledge/jobs/<job>/architect/plan.md, <change manifest path>, <test log path>, <presentation contract revision>, <feedback stack sheet>, <debug log of the Reject, DelayMs, Viewer, Reduced, DebugShape and Rate runs>]   # last three when players see or hear the change; the manifest lists the stand-ins still in place
 fixed: {base: <commit>, candidate: <commit>, files: [<owned files>]}
 rules: [Find first, filter second. Report only real problems with proof: file:line, input or sequence, wrong outcome. No style findings. A clean change gets "no blocking findings". Check engine-gate answers, docs read, placement, and that the tests can fail.]
 checks: [C1 every harm area walked or skipped with a reason, C2 every finding re-read in the code]
@@ -190,43 +194,45 @@ To UI (a feature needs a screen):
 id: <id>  from: feature-builder  to: ui-ux-designer
 fixed:
   states: [idle, confirming, pending, done, denied(reason), unavailable]   # PurchaseService results, plan §3
+  denial_reasons: [not_enough_coins, sold_out, limit_reached]             # each needs a message with its cause and fix
   data_from_server: {price: number, itemId: string, balanceAfter: number}
   events: [Shop.Purchase result arrives 0.1-2 s after the press]
 open: [layout, look, motion, wording]
-rules: [Every state from the list has a screen state. Phones first. Paid-random rules in ui-design if the item is random.]
-return: spec + Figma node ids + export notes to feature-builder
+rules: [Every state from the list has a screen state. Phones first. Paid-random rules in ui-design if the item is random. Press feedback is the attempt cue; success only on the result.]
+return: spec + motion-table rows + message table + Figma node ids + export notes to feature-builder
 </spec>
 ```
-From UI (a spec to build): the builder builds the states and bindings exactly as specified, keeps every state, and returns screenshots per state at phone size (MCP-verified) to the ui-ux-designer for a look check.
+From UI (a spec to build): the builder builds the states and bindings exactly as specified (`ui-basics` §3), keeps every state, reads every motion value from the motion table and every message from the message table, wires attempt and outcome by `presentation.md` §2, and returns the captures of `presentation.md` §10 (each state at the smallest phone and a PC size, a rejected request, reduced motion, the press frame folders for S-33) to the ui-ux-designer for the review slot.
 
 ## 12. engineer ↔ vfx-designer
-To VFX: `fixed` holds the gameplay truth the effect must show and must not change (radius, timing, hit frame, who sees it), the event name the code fires, the per-frame budget (`max_particles`, emitter count) and where the effect is anchored; `open` holds every craft choice. From VFX: the builder wires the effect from `spec.json` as data on the event it names, plays it on the client, never adds gameplay to it (visual effects never deal damage), and returns a capture request to the vfx-designer.
+To VFX: `fixed` holds the gameplay truth the effect must show and must not change (radius, timing, contact event, who sees it, and the data field each comes from), the event names the code fires (attempt and confirmed outcome apart), the viewers (self, ally, enemy, bystander), the per-frame budget (`max_particles`, emitter count) and where the effect is anchored; `open` holds every craft choice. From VFX: the builder wires the effect from `spec.json` as data on the events it names (attempt on input, outcome on the result), plays it on the client per viewer with its reduced variant, never adds gameplay to it (visual effects never deal damage), delivers the test hooks and debug log of `presentation.md` §9 before the first capture, and returns the capture request to the vfx-designer.
 ```text
 <spec>
 id: <id>  from: feature-builder  to: vfx-designer
-fixed: {event: Combat.HitResolved (client), radius_studs: 6, impact_t: 0.18 s, budget: {max_particles: 400}}   # combat contract, perf budget
+fixed: {attempt_event: Combat.Swing (client, input), outcome_event: Combat.HitResolved (client, server result), radius_studs: Combat.Config.slamRadius, contact: timing list contact_candidate, viewers: [self, ally, enemy, bystander], budget: {max_particles: 400}}   # combat contract, perf budget
+hooks: [Trigger, Rate, Reject, DelayMs, DebugShape, Viewer, Reduced, Clarity, FxLog]   # presentation.md §9
 open: [layers, textures, curves, camera feel]
 return: spec.json + frame script + capture request to feature-builder
 </spec>
 ```
 
 ## 13. engineer ↔ sound-designer
-To sound: cue ids the code will play, the moment each fires (event name and timing), how often it can repeat at worst, and the voice budget. From sound: the builder plays each cue by its id from data, on the client unless the brief says otherwise, respects priority and the voice cap, and reports any cue it cannot place.
+To sound: cue ids the code will play, the moment each fires (event name and timing; attempt or confirmed outcome), how often it can repeat at worst and the merge window, and the voice budget. From sound: the builder plays each cue by its id from the cue table through pooled AudioPlayers on the bus the card names, on the client unless the brief says otherwise, from the same handler as the VFX of that event, respects priority, merge window and the voice cap, adds no live audio effect the card does not name (processing is baked into the file; live effects only for context such as zone reverb or ducking), prints the debug cue line (`cue <cue-id> <event-id> <t>`), and reports any cue it cannot place.
 ```text
 <spec>
 id: <id>  from: feature-builder  to: sound-designer
-fixed: {cues: [sfx.shop.confirm, sfx.shop.denied], fires_on: Shop.Purchase result, max_rate: 2 per second per player}
+fixed: {cues: [sfx.ui.press (attempt, on input), sfx.shop.confirm (outcome: done), sfx.shop.denied (outcome: denied, at most 1 per 0.5 s)], fires_on: Shop.Purchase result, max_rate: 2 per second per player}
 open: [the sounds, layers, mix inside the budget]
 return: cue cards + asset ids to feature-builder
 </spec>
 ```
 
 ## 14. engineer ↔ animator
-To animation: the action states the code drives, the gameplay timing contract (wind-up, hit frame, recovery in seconds), the marker names the code listens for, and whether the server or the client plays the clip. From animation: the builder loads clips through `Animator`, listens for the named markers instead of guessing times, and never lets an animation finishing decide gameplay (`architecture` R-04).
+To animation: the action states, transitions and interruptions the code drives (planned together before keying: priorities and fades per transition), the gameplay windows in seconds (wind-up, active, recovery; the gameplay owner's values, copied into the timing list), and whether the server or the client plays the clip. From animation: the timing list with event ids (`templates/anim/timing-list.md`); the builder loads clips through `Animator`, connects marker listeners before `Play`, keys VFX and sound from them in one handler, plays confirmed-hit layers and hit-stop only on the server's result (hit-stop on the attacker's and the target's clients through the one owner per track, `presentation.md` §4; under latency a hold of the contact pose or a shorter stop, agreed here, or a predicted stop where the game designer chose one as a predicted contract row), and never lets an animation finishing decide gameplay (`architecture` R-04). It delivers the reject and rate hooks before the animator's in-game pass.
 ```text
 <spec>
 id: <id>  from: feature-builder  to: animator
-fixed: {states: [idle, windup, strike, recover], timing: {windup: 0.25, hit_marker: "Hit", recover: 0.4}, plays_on: client (server decides the hit)}
+fixed: {states: [idle, windup, strike, recover], windows_s: {windup: 0.25, recover: 0.4}, events: [windup_start, contact_candidate, cleanup], outcome: contact_confirmed (server result, not in the clip), plays_on: client (server decides the hit)}
 open: [poses, arcs, secondary motion]
 return: clip ids + marker list + rig notes to feature-builder
 </spec>

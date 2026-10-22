@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `02` §3-4 (LP:338-399), Roblox fact-check FR-06, FR-26..FR-34, FR-46. The analyst owns metric definitions, designs and verdicts: `analysis-design/references/experiments-updates.md` (§6 verdicts, §7 updates and events) and `metrics-roblox.md`. This file says what live-ops must bring to the analyst and how it decides after. Tags: V · E · O.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `02` §3-4 (LP:338-399), Roblox fact-check FR-06, FR-26..FR-34, FR-46. The analyst owns metric definitions, designs and verdicts: `analysis-design/references/experiments-updates.md` (§6 verdicts, §7 updates and events) and `metrics-roblox.md`. This file says what live-ops must bring to the analyst and how it decides after. Tags: V · E · O. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§4 promise, tier and identity rows).
 
 # Measuring an update, failing safely, long-term health
 
@@ -33,6 +33,9 @@ In the update brief, agreed with the analyst before release: target population �
 | High participation, completion collapses | where does progress stall: requirement, bug, skill, time, reward relevance? | fix that bottleneck; no blanket reward inflation |
 | Event improves, core queues decline | did the event move existing play instead of adding value? | adjust schedule, integration or queues |
 | Numbers move but data is inconsistent | version mismatch, missing events, assignment errors, delayed cohorts? | fix evidence quality; result "unknown" meanwhile |
+| Players say the event was not what they expected | did the look, sound, UI or announcement promise something the activity did not give? | fix the mismatch in the next run's brief; re-theme the activity, not the lobby |
+| Rare rewards get no reaction; common ones feel the same | are event rewards in the right tiers; did a frequent reward hold a high tier? | re-place the tier rows with the progression designer before the next run |
+| Players did not recognise the variants | which anchors did the variants lose? | restore the anchors in the next variants; the art director's anchors list |
 
 **Close with a decision (paper rule 15):** **repeat** (mechanism and cost support it) · **revise** (a specific fixable bottleneck) · **retire** (value too low or harm too high) · **investigate** (inconclusive). "Insufficient evidence" is a valid result. Record what would change the decision, and compare estimated with actual effort (LP:367). The analyst's five verdicts (`experiments-updates.md` §6) feed this decision; they are not replaced by it.
 

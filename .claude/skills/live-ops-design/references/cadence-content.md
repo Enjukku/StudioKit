@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §4-5 (LP:98-159), Roblox fact-check FR-01..FR-10 (read 2026-10-21), cases fact-check FG (`fact-check-cases.md`). Tags: V platform-documented · E someone's account · O the paper's or the kit's proposal.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §4-5 (LP:98-159), Roblox fact-check FR-01..FR-10 (read 2026-10-21), cases fact-check FG (`fact-check-cases.md`). Tags: V platform-documented · E someone's account · O the paper's or the kit's proposal. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§4 items row, variants and colourways, worlds revisited).
 
 # Update rhythm and content types
 
@@ -49,7 +49,7 @@ This table is a menu, not a benchmark. Starting shape for a small studio (O): **
 | Type | Player job it may do | Measure | How it fails |
 | --- | --- | --- | --- |
 | Areas, quests, story | a next destination for progressed players; a return reason for lapsed ones | eligibility, reach, completion, return after completion, cost | most players cannot reach it |
-| Items, pets, characters, gear | expression, collection, strategic choice | adoption and continued use, collection goals, spending displacement, balance | inventory bloat, strictly better purchases, old rewards made worthless |
+| Items, pets, characters, gear | expression, collection, strategic choice | adoption and continued use, collection goals, spending displacement, balance | inventory bloat, strictly better purchases, old rewards made worthless; a variant that loses the original's anchors; a premium item that reads like the standard one |
 | Limited-time modes | temporary novelty and social play | participation among eligible players, repeat sessions, core-mode displacement, queue health | split matchmaking; a mode unrelated to the game's appeal |
 | Seasonal goals and passes | readable progress across visits | start / finish / drop-off by cohort, payer and non-payer health | homework, missed-day penalties, rewards that need unhealthy play |
 | Collaborations, holiday themes | recognition, a shared moment | qualified arrivals, reactivation, later core play, margin | spectacle swamps the game; expires before costs return |
@@ -60,5 +60,9 @@ This table is a menu, not a benchmark. Starting shape for a small studio (O): **
 **Season pass (V starting points, O sizing).** Roblox's season-pass page also recommends automatic enrolment, daily missions that never need hard currency, double XP in the final week as catch-up, full premium rewards for tiers already passed, and a visible countdown (FR-10, FR-09). Size the real pass from observed session opportunities and earning rates, and model late starters and low-frequency players. A large tier count can add admin work without adding meaningful play (LP:144).
 
 **Add, improve, remove (O).** Add when the need requires a new capability and the game can absorb it. Improve when an existing system serves the need badly (access, usability, balance, depth). Remove or merge when systems duplicate each other, split play, cost too much to maintain or undermine the intended experience. "More rewards" may really mean unclear progress, irrelevant rewards or a missing social goal (LP:224).
+
+**Variants and colourways (V, O).** Roblox's content-updates page names simple variants of existing assets, such as slight colour changes, as ideal recurring content because few people can make them quickly (`content-updates.md:34`, read 2026-10-22). Each variant keeps the original's identity anchors and changes no stat (`game-design/references/systems-economy.md` §8); a colourway can change the value balance, so the art director re-checks it before it ships.
+
+**Worlds are revisited (O).** A map or system is never done forever: keep revisit rows with their evidence in the backlog. A new world or zone states its escape in one line and differs clearly from the last one (palette, shapes, theme).
 
 **Retirement (O).** Before removing content, check active use, paid entitlements, dependencies and an alternative path for affected players. Retirement is a design and communication project; an announcement is not a safe migration (LP:152). When progression changes, explain the migration before asking players to invest more in the old system (Clash Royale, `cases.md`).

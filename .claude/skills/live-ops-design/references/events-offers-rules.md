@@ -1,9 +1,13 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §6 (LP:161-210), `02` §2 and §5 (LP:287-336, 401-429), Roblox fact-check FR-05..FR-58 (read 2026-10-21), feedback-routes fact sheet Q6. Tags: V platform-documented · E someone's account · O proposal. Code patterns for policy: `platform-policy`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §6 (LP:161-210), `02` §2 and §5 (LP:287-336, 401-429), Roblox fact-check FR-05..FR-58 (read 2026-10-21), feedback-routes fact sheet Q6. Tags: V platform-documented · E someone's account · O proposal. Code patterns for policy: `platform-policy`. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 the promise and the start, §2 confirmed celebrations and honest reveals).
 
 # Events, offers, communication and Roblox rules
 
 ## 1. What an event is (O)
 A temporary player proposition with **an entrance, a repeatable activity, a progress or reward structure and a stated end** (LP:163). A themed lobby is a theme. A discount is an offer. Either can support an event; neither gives a reason to return by itself. Roblox itself separates temporary events from permanent updates and expects an event to move several measures at once (FR-05).
+
+**The promise (O).** Every event has one sentence, in player words, that says what players do and get; its look, sound, UI and announcement promise exactly that (rule: SKILL §4 L-16; checked on captures: `live-ops-craft/references/event-review.md` E-01, E-02).
+
+**The start (V, O).** Roblox's planning page asks for an impactful, memorable start and a decision whether the event is limited to one space or game-wide (`liveops-planning.md:53-55`, read 2026-10-22). The start is a designed moment, and the entrance is visible in the first view of a player arriving by spawn or teleport (E-03).
 
 **Audience first.** Active players wanting variety, lapsed players needing a return reason, new players needing an easy introduction, friends coordinating play: do not use one completion curve for all four. A returner event must not require every system added while the player was away. A new-player event must not hide its activity behind veteran progression (LP:165).
 
@@ -19,6 +23,7 @@ A temporary player proposition with **an entrance, a repeatable activity, a prog
 Urgency = **a true end, clear consequences, a fair way to take part.** Tell players which rewards expire, whether currency converts, whether a cosmetic may return, whether purchases speed progress (LP:175).
 Never: fake stock counters, timers that reset, hidden requirements, streak loss that punishes absence, late purchase prompts for rewards the player can no longer earn in time, permanent competitive power that depends on being present in a narrow window.
 A returning player gets a clear next action and a route back; absence never grows into a penalty (paper rule 13).
+Celebrations and paid random reveals: SKILL §4 L-19.
 
 ## 3. Communication (V limits, O practice)
 | Channel | Limit (read 2026-10-21) | Use it for | FR |

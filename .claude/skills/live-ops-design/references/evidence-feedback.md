@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §1 and §7 (LP:5-17, 212-246), `02` §1 (LP:248-285), Roblox fact-check FR-49, feedback-routes fact sheet (Q ids). Shared with the analyst: `analysis-design/references/diagnosis.md` §6 (player voice), which this file follows. Tags: V · E · O.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `live-ops-design`. Evidence: notes `01` §1 and §7 (LP:5-17, 212-246), `02` §1 (LP:248-285), Roblox fact-check FR-49, feedback-routes fact sheet (Q ids). Shared with the analyst: `analysis-design/references/diagnosis.md` §6 (player voice), which this file follows. Tags: V · E · O. Revised by J018 maker live-ops-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§4 item 7 what fans want, §5 pain points from the current build).
 
 # Evidence and player feedback
 
@@ -46,12 +46,14 @@ Roblox's own testing page warns community feedback "may be biased" (fans are mor
 4. **Count with the tool,** never by model estimate: distinct authors per theme, per source, per window; messages as a separate intensity column; share = theme authors ÷ sampled authors **of that source** (`tools/liveops/feedback_count.py`). Cross-source overlap is "unknown" unless the sources share an id scheme; Roblox gives new players a per-game id and Discord ids are separate, so in practice overlap stays unknown (Q8-09, X-01).
 5. **Quality checks** (template §E): read raw examples for every theme you use; review ambiguous items; keep a sample of exclusions with reasons; mark new themes apart from repeated ones; keep evidence that contradicts your preferred proposal.
 6. A Discord poll measures the voters, not the game. Weighting is allowed only with a known sampling model and the analyst's approval (LP:260).
+7. **What fans want (the line every theme, event or variant brief carries).** Name the audience first (age band, devices, which players: the brief's cohort), then the top problem themes and wanted traits with their distinct-author counts per source and the count file, plus the analyst's behaviour check for the same cohort. Write it as what this audience wants at its strongest, not what every player is "okay with". Never a model's guess, never one source as all players. A wanted trait the evidence does not show is marked `uncertain`.
 
 ## 5. Loud and silent (O)
 - A loud minority is **neither representative nor wrong by default.** Detailed reports can expose a real exploit or an advanced-system problem: weigh **severity and reproducibility** with prevalence (LP:262).
 - **Silence is not satisfaction.** Ask the analyst whether the same friction shows in behaviour for new players, non-payers, mobile players, returning players and veterans.
 - The tool flags "one loud author" when one author wrote most of a theme's messages (threshold: at least 5 of a theme's messages and at least half of them; PROPOSAL, `tools/liveops/README.md`; owner digest J014 item 11). The flag is a warning; it changes no count.
 - Never infer sensitive traits from language, usernames or spending.
+- **Pain points from the current build.** Before a change to a live game, list what costs players now (extra taps, a hidden entrance, missed information, a dead walk) with where each was observed: a studio-operator capture walk of the area the feedback names, a funnel step from the analyst, or a theme id. A change that names no observed pain point is a restyle, not a fix.
 
 ## 6. Closing the loop (O)
 Tell players: what they reported, what the studio verified, what changed, what is still open, when the next status comes. "You asked, we did" only where the sort links the theme to the change. When declining a request, explain the trade-off without blaming players. After the change, check whether the original problem is solved in behaviour; praise for an announcement is not evidence (LP:278).
