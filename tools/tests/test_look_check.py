@@ -264,6 +264,18 @@ class NearKeyTest(unittest.TestCase):  # J018: a lit head on a flat grey render 
         self.assertNotIn("near_key_warning", info)
 
 
+class InvertedMaskTest(unittest.TestCase):  # J018: a white-subject-on-black mask image
+    def test_inverted_mask_warns(self):
+        img = Image.fromarray(np.full((120, 160, 3), 200, dtype=np.uint8))
+        good = np.full((120, 160), 255, dtype=np.uint8)
+        good[40:80, 60:100] = 0                              # dark = subject (the expected format)
+        _, src, info = lc.subject_mask(img, mask_img=Image.fromarray(good))
+        self.assertEqual(src, "mask-image")
+        self.assertNotIn("mask_warning", info)
+        _, _, info2 = lc.subject_mask(img, mask_img=Image.fromarray(255 - good))
+        self.assertIn("mask_warning", info2)
+
+
 class HolesAndComponentsTest(unittest.TestCase):  # push 2: hole fill, components, --component
     GREY = (211, 211, 211)
 

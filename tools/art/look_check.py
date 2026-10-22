@@ -339,6 +339,24 @@ def key_subject(rgb: np.ndarray, key, tol: int, fill_holes: bool) -> tuple[np.nd
     return m, {"hole_fill": False, "filled_holes": 0, "filled_area_px": 0}
 
 
+def inverted_mask_check(m: np.ndarray) -> dict:
+    """Warn when a --mask image looks inverted: its border strip is nearly all subject.
+
+    Mask images are read dark = subject (the silhouette output format). A white-subject-on-black mask makes the
+    background the subject and every number describes the background, with no error (J018 marketing review).
+    Never changes the mask.
+    """
+    h, w = m.shape
+    s = max(1, round(BORDER_STRIP * min(h, w)))
+    border = np.concatenate([m[:s].ravel(), m[-s:].ravel(), m[s:-s, :s].ravel(), m[s:-s, -s:].ravel()])
+    share = float(border.mean())
+    out = {"mask_border_subject_share": round(share, 4)}
+    if share >= BORDER_FLAT_SHARE:
+        out["mask_warning"] = (f"{share:.0%} of the mask's border is subject: the mask may be inverted (mask images "
+                               "are read dark = subject, white = background); check it on an overlay")
+    return out
+
+
 def near_key_check(rgb: np.ndarray, key, key_tol: int) -> dict:
     """Warn when pixels counted as background differ from a very flat border by more than the border's own spread.
 
@@ -375,7 +393,7 @@ def subject_mask(img: Image.Image, key: str = "auto", key_tol: int = DEFAULT_KEY
         m = mask_from_mask_image(mask_img)
         if m.shape != (img.height, img.width):
             raise ValueError(f"mask size {m.shape[::-1]} differs from image size {img.size}")
-        return m, "mask-image", {}
+        return m, "mask-image", inverted_mask_check(m)
     if "A" in img.getbands():
         alpha = np.asarray(img.getchannel("A"))
         if alpha.min() < 255:
