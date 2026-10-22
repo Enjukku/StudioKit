@@ -32,7 +32,7 @@ The owner's second, full message (2026-10-21) is copied verbatim in `owner-spec.
 | Integrator | lead |
 | Studio place (`studio_id`) | none (files only) |
 | Linked jobs | none |
-| Status | open: G3 packet sent (`g3-packet.md`, `g3-proposals.md`); waiting for the owner |
+| Status | G3 answered (J018-D6, J018-D7); applying the decisions and the close-out filing move to J019-g3-apply |
 
 ## Owner instructions for stage 2 onward (2026-10-21, during stage 1b, verbatim)
 This message replaces the owner's earlier G1 message and its correction (J018-D1 is folded into point 2 and superseded by J018-D2).
@@ -147,7 +147,7 @@ Keys follow `J016-orchestration/riot-extracts.md` §1. The J016 extracts in `J01
 | Gate | Date | Revision approved | Owner's words |
 | --- | --- | --- | --- |
 | G1 library | 2026-10-22 | `knowledge/reference/craft/riot/` as at the stage 1 commit (443 findings, UP-01..UP-20; `g1-packet.md`) | "G1 approved: start stage 2 wave 1 (animator, modeler, game-designer)." |
-| G3 final | | | |
+| G3 final | 2026-10-22 | rebuilt agents at commit `7876e3d` (all 17 roles + reference-images, orchestration, level-design) accepted; the 11 proposal decisions in `g3-proposals.md` still open (owner named changes, list not received yet) | "G3: accept the rebuilt agents, but change these decisions:" |
 
 ## Close-out
 Metrics in `evidence.md` §4. Filed into the vault (`orchestration` skill §9): [ ] decisions [ ] precedents [ ] vocabulary [ ] systems [ ] tried-and-failed [ ] taste log [ ] catalogs [ ] lesson drafts [ ] removed from `knowledge/jobs/active.md`
