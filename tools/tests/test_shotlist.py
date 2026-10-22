@@ -516,6 +516,15 @@ class LogDiffTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("--early-ms", err)
 
+    def test_prefixed_ids_match(self):
+        """J018: a log that writes shot:<id> or cue:<id> matches the planned ids."""
+        pref = [dict(e, id=("shot:" if e["id"].startswith("S0") else "cue:") + e["id"]) for e in self.log
+                if e["id"] != "debug.extra"]
+        res = sl.log_diff(DRILL, self.tl, pref)
+        plain = sl.log_diff(DRILL, self.tl, [e for e in self.log if e["id"] != "debug.extra"])
+        self.assertEqual(res["rows"], plain["rows"])
+        self.assertEqual(res["not_planned"], [])
+
     def test_bad_log_entry(self):
         with self.assertRaises(sl.ShotlistError):
             sl.log_diff(DRILL, self.tl, [{"id": "S010", "t": "soon"}])

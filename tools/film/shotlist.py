@@ -1160,10 +1160,15 @@ def log_diff(data, tl, log, tol_ms: Fraction | None = None, early_ms: Fraction |
     for i, e in enumerate(log):
         if not (isinstance(e, dict) and isinstance(e.get("id"), str) and isinstance(e.get("t"), Fraction)):
             raise ShotlistError(f"log[{i}] must be {{\"id\": text, \"t\": seconds}}, got {e!r}")
-        if e["id"] in measured:
-            dupes.append(e["id"])
+        lid = e["id"]
+        # a "shot:" or "cue:" prefix on a planned id is the same id (J018: a prefixed log read as all missing)
+        for pre in ("shot:", "cue:"):
+            if lid.startswith(pre) and lid[len(pre):] in planned and lid not in planned:
+                lid = lid[len(pre):]
+        if lid in measured:
+            dupes.append(lid)
             continue
-        measured[e["id"]] = e["t"]
+        measured[lid] = e["t"]
     rows = []
     for pid, p in planned.items():
         if pid not in measured:
