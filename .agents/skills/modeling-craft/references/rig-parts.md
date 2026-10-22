@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. The workflow and the brief you receive: `rig-pipeline` (S3) and `rig-pipeline/references/modeler-handoff.md`, adopted as-is. Why a cut is where it is: `rigging-design/references/region-routes.md`. Evidence: rigging first-game rows FG01-FG14, J005 G2 gaps GP07-GP10, paper notes `02-*.md` §10 (RG ids), first-game FM ids.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. The workflow and the brief you receive: `rig-pipeline` (S3) and `rig-pipeline/references/modeler-handoff.md`, adopted as-is. Why a cut is where it is: `rigging-design/references/region-routes.md`. Evidence: rigging first-game rows FG01-FG14, J005 G2 gaps GP07-GP10, paper notes `02-*.md` §10 (RG ids), first-game FM ids. Revised by J018 maker modeler · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): design for motion at S3 (§6).
 
 # S3: making the rigger's cuts, caps and bend zones
 
@@ -51,3 +51,16 @@ Scripts, renders and part files only inside `content/rigs/<asset-id>/geometry/` 
 | Vehicle | wheels, steering, doors, turret | soft boots, hoses | fenders, bearings, panel gaps |
 | Building or prop | doors, drawers, levers, break chunks | — | frames, reveals, trims |
 | Cape, tail, tentacle | — | the whole chain | enough cross-sections for both bend directions |
+
+## 6. Design for motion while you build (checked again by the rigger's S4 sweep)
+The standards (mass off the joints, nothing over the arms, costly parts, model what the rig moves, moving parts with room, contact points, hook shapes) live in `modeling-design/references/read-and-form.md` §6. What S3 adds:
+| Standard | How at S3 | Check |
+| --- | --- | --- |
+| Mass off the joints | read the rigger's plan renders: any static mass inside a marked deformation zone or across a cut (collar edges, scarves, armour rims, static hair) is moved, bundled or raised with the rigger; hair is bundled into one unit away from the nape | `modeling-design/references/review.md` §5 MO1 |
+| Nothing over the arms | the rest views show the arm outline clear of drapes, cowls and capes | MO2 |
+| Costly parts flagged early | sent to the rigger at the blockout with a reason and a rigid or bundled fallback, before they are modelled | MO3 |
+| Model what the rig moves | circular loops around the mouth so it can open and fold, eyelids with enough lines to close (`knowledge/external/roblox-creator-docs/art/characters/creating/modeling-best-practices.md` mouth and eye rows); never a mouth sewn shut | a test pose with the mouth open and eyes closed on the proxy rig shows no tear (the rigger's sweep) |
+| Shared bodies | a new skin is overlaid on the base mesh and armature in Blender, so joints and fingers stay where the shared clips expect them | joint offsets against the base within the rig sheet's tolerance (MO4) |
+| Moving parts with room | separate named objects with pivots and nesting cross-sections that travel without hitting the arms or body | MO4; the animator's inspect or use clip in the rigger's sweep |
+| Contact points fixed | grip, seat and hand positions measured against the base in every variant | MO5 (numbers in studs) |
+| Signature shape on the held moments | the hook shape (a ponytail swoop, a cape tip, a weapon fin) is built so it can face the camera in the animator's key poses | MO6 on the rigger's posed captures, when they exist |

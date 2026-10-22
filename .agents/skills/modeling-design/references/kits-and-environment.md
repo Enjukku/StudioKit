@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-design`. Paper notes: `knowledge/reference/modeling/03-*.md` (ENV ids), `01-*.md` (CS2, CS8-CS10). Placement, terrain and lighting belong to the environment designer (`environment-design`).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-design`. Paper notes: `knowledge/reference/modeling/03-*.md` (ENV ids), `01-*.md` (CS2, CS8-CS10). Placement, terrain and lighting belong to the environment designer (`environment-design`). Revised by J018 maker modeler · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): pieces that live in a place (§6).
 
 # Buildings, kits and environment pieces
 
@@ -40,3 +40,24 @@ Lean, sag and wear follow one written reason (age, weight, material), not random
 - Delete hidden faces only because the beauty camera cannot see them; collision, shadows and other cameras may (ENV16, CS9-c [O]).
 - Copy another game's module size, camera scale or cut-down factor (CS9-a: one sample's numbers, not a standard).
 - Assume a Blender linked duplicate or an atlas means one draw call (budgets §5).
+
+## 6. Pieces that live in a place
+The environment is the backdrop: routes, cover, hazards and objectives read before decoration. Kit pieces and props serve that read. Every Check below that applies is a line of your self-review (`review.md` §5 GR5).
+| Standard | How | Check |
+| --- | --- | --- |
+| Art stays inside the blockout's gameplay | import the approved greybox into Blender at its world origin and scale and build on the same snap grid; bespoke shells export at their world position (importer: Set Pivot to Scene Origin off), reusable kit pieces export at their snap origin (§2) and the environment designer places them; collision, cover and sightlines never move without the level designer's sign-off | art bounding boxes vs blockout parts differ by less than one snap step |
+| Backdrop pieces are calm | environment pieces sit in the environment value band (no pure black, no reserved hues) with lower saturation than characters; detail clusters above head height or at edges, the player band calm | `review.md` §5 VL5, CL2 on a capture with a character in front |
+| One shape vocabulary | rocks, trims and ornaments use the game's shape family (for example knife-like rocks, rectangular trims) | silhouette sheet of the set: one family dominates |
+| Size steps in groups | rocks, crystals, plants and debris ship as big, medium and small pieces, never three of one size | `review.md` §5 SL4 |
+| Backdrop gesture | plants and backdrop props: simple surfaces and a few triangles, but a clear, elegant curve that reads from afar; grass cards only a few, at edges and rest areas, never over play floors | black-fill: each plant is a clear curve, not a blob |
+| No visible duplicates | pieces are built to read differently when rotated; two or more variants per repeated piece; a bespoke layout gets unique shells sharing one trim sheet instead of a forced kit | in a game-camera capture no piece shows twice at the same angle |
+| Trim sheets | one trim sheet with a normal map per environment family; a boring strip is fixed by remapping UVs to another strip, not by modelling more | texture sets per environment counted; a side-lit capture shows the normal detail |
+| Grounding | the standard in `read-and-form.md` §8; for set pieces, leave room for the environment designer's blend (paint, decal, debris) | `review.md` §5 GR1 |
+| Story through use and time | each hero prop carries 1-2 history facts (age, who uses it, what happened) as wear, chips, repairs or burial, at a size the game camera reads | a cold read of the capture names one history fact |
+| Theme cues | 2-3 signature materials or shapes of the setting appear on its pieces so the place is not generic (crystals in the rocks of a space desert) | a cold read names the theme without UI |
+| Identity symbols and landmarks | zone symbols (a statue, a banner shape) read in black-fill and are the tallest, clearest shape where they mark a goal; objective floors are their own piece with a border trim | black-fill of the level view: the landmark is the tallest shape |
+| Head-height cues | long sightline walls carry a trim or ledge line at the character's eye height (measured in Studio) where the level designer asks for one | the line sits at the measured eye height |
+| Hazards explain themselves | a hazard piece shows its source and believable containment (rails, fences, a darker rim) | your cold read of one capture says where the hazard comes from |
+| Materials follow gameplay | the standard in `read-and-form.md` §8; floors match their footstep material in the sound table; an interactive surface reads its use the same way everywhere (a climbable ledge looks like a ledge) | `review.md` §5 GR4 |
+| Predictable geometry | the standard in `read-and-form.md` §8; height changes only where the level plan lists them | Studio collision view; a walk along each route finds no snag |
+| Judge it in the whole set | the standard in `read-and-form.md` §8; the assembled capture has a player and known-size objects in frame | `review.md` §5 GR3 |

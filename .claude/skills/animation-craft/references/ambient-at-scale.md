@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-techniques.md` (TC, RT<q>-<n>, SD; mirror revision 7400643, read 2026-10-21), `fact-check-roblox-runtime.md` (RA). Measurement method and floor devices: `performance` skill (`references/budgets.md`, `measure.md`). Paper: AP:705, AP:835-870 (no public phone budget exists).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-techniques.md` (TC, RT<q>-<n>, SD; mirror revision 7400643, read 2026-10-21), `fact-check-roblox-runtime.md` (RA). Measurement method and floor devices: `performance` skill (`references/budgets.md`, `measure.md`). Paper: AP:705, AP:835-870 (no public phone budget exists). Revised by J018 maker animator · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§3).
 
 # Ambient loops and many copies
 
@@ -14,12 +14,14 @@ Cost per copy × copies on screen decides the technique, and **no documented per
 | Trees, plants, hanging signs | a gentle sway: code (identical for all, cheap) or a local hinge (reacts to players) | GlobalWind does not move parts or meshes (TC19) | static far away |
 | Water, lava, belts | `Texture` offset scroll | cheapest surface motion, no rig (TC16) | — |
 | Fire, torches, glow | flipbook particle (≤ 8×8 frames, ≤ 30 fps) | may be switched off on low-memory phones: the object must read without it (TC17) | a static emissive part |
-| Crowds of cosmetic NPCs | client Animator, shared clips, LOD variants | documented choice for crowds (RA02, RA42); keep identity and major contacts in LOD clips (AP:432) | proxies or fewer bones far away, measured |
+| Crowds of cosmetic NPCs | client Animator, shared clips, LOD variants | documented choice for crowds (RA02, RA42); keep identity and major contacts in LOD clips | proxies or fewer bones far away, measured |
 
 ## 3. Variation without noise
-- Copies must not move in step: a phase offset or a small speed range per copy (seeded by position so it is stable across sessions). Identical repeats lose punch fastest in the first few (03 §6, RE:109-110, inference from one paper).
-- Variation comes from a cause (wind strength, the object's size, its stiffness), not free randomness (AP:460).
-- Keep it calm: ambient motion must never pull the eye from gameplay (`animation-design` §6). The art-director judges where the eye goes.
+- Copies must not move in step: a phase offset or a small speed range per copy (seeded by position so it is stable across sessions). Identical repeats lose punch fastest in the first few (an inference from one paper).
+- Variation comes from a cause (wind strength, the object's size, its stiffness), not free randomness.
+- Keep it calm: ambient motion must never pull the eye from gameplay (`animation-design` §6): slower and smaller than anything near a sightline, partly hidden where possible, and no fast motion in the play space. The art-director judges where the eye goes.
+- Vary only what decorates (phase, speed, amplitude, which variant plays); lock what means something (a hazard's period, a pickup's pulse rate, any timing the player reads).
+- The sway follows the object's own gesture: a plant bends along its curve, a banner from its pole; a sway that fights the shape reads as noise.
 - Offer a still or slow variant for players who reduce motion (the player setting exists and grass honours it, TC29; the variant is a design choice).
 
 ## 4. Streaming, LOD, throttling

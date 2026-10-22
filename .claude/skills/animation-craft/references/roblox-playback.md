@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-roblox-runtime.md` (RA rows; mirror revision 7400643 refreshed 2026-10-20, forum posts dated), `knowledge/reference/rigging/fact-check-roblox.md` (RR rows), technique sheet (TC). Re-sync the mirror (`python tools/sync_roblox_docs.py`) before relying on a feature newer than the mirror (RA extra findings). Studio work: `studio-mcp` skill, one driver per Studio instance, the test place only.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-roblox-runtime.md` (RA rows; mirror revision 7400643 refreshed 2026-10-20, forum posts dated), `knowledge/reference/rigging/fact-check-roblox.md` (RR rows), technique sheet (TC). Re-sync the mirror (`python tools/sync_roblox_docs.py`) before relying on a feature newer than the mirror (RA extra findings). Studio work: `studio-mcp` skill, one driver per Studio instance, the test place only. Revised by J018 maker animator · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§9 hit-stop playback, §10 judging in the game; facts checked in the docs mirror: `AnimationTrack.yaml`, `GuiService.yaml`, `production/publishing/accessibility.md`).
 
 # Roblox: import, publish, play
 
@@ -53,3 +53,13 @@ Publish the graph, load it like a clip, drive it with `SetParameter` (RA38). Gra
 
 ## 8. Doc traps (mirror revision 7400643)
 `walkTrack.isPlaying` in a sample should be `IsPlaying` (RA46); `GetKeyframeMarkerReached` does not exist (RA21); the editor's "30 fps" timeline is the authoring display, not proof of the runtime rate (RA44).
+
+## 9. Hit-stop playback
+- A hit-stop is `AnimationTrack:AdjustSpeed(0)` on the attacker's track (and the animated target's) for the stop's length, then the previous speed restored; the hit's own particles freeze with `ParticleEmitter.TimeScale = 0` and are restored the same way. Physics, debris, other players and server results keep running: there is no global time scale, and the server never pauses.
+- The builder writes it, triggered by the confirmed hit; you supply the freeze frame (the contact pose, named in the timing list) and check in a capture that the frozen frame is that pose. Lengths are game values (`animation-design` → `references/game-timing.md` §5).
+
+## 10. Judging in the game
+- Captures: Studio MCP play mode at the game camera, the phone viewport (the capture resampled to the floor phone's screen size from the game profile: a one-line Pillow resize, or `python tools/art/look_check.py thumb <capture> --size <WxH> --box ...` around the subject to also re-measure its value against the surroundings; with `--box` the subject is the rectangle, so silhouette numbers come from the black-fill renders or from `--mask` drawn from the effects-hidden capture), in the real place, with effects, other players and HUD on; then the same moment with the effects hidden and a grayscale copy (a one-line image conversion). These are stills: timing comes from the Output log and a known capture rate, never from one still.
+- Sound sync cannot be judged from MCP stills; it is "not verified" unless captured with audio on the target device (phone speaker and Bluetooth differ).
+- Reduced motion: `GuiService.ReducedMotionEnabled` reflects the player's toggle and code reads it (tweens snap to time 0 or fade). Test the clip's read with the game's shake, flashes and camera effects off; the tell and the contact must still read.
+- Attempt vs outcome: in the test place, have the builder's test hook reject a hit; the confirmed-hit reaction, freeze and celebration must not play.

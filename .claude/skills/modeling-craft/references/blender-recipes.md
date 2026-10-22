@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. Facts: `knowledge/reference/modeling/fact-check-blender.md` (MB rows; probed on the studio's Blender 5.1.2 on 2026-10-21; "rule N" = line N of its "Rules a skill may state"). Rig-side Blender rules: `rigging-craft/references/blender-mcp.md`. Method rows marked [O] are studio procedure (paper HM6-HM24), not Blender documentation.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. Facts: `knowledge/reference/modeling/fact-check-blender.md` (MB rows; probed on the studio's Blender 5.1.2 on 2026-10-21; "rule N" = line N of its "Rules a skill may state"). Rig-side Blender rules: `rigging-craft/references/blender-mcp.md`. Method rows marked [O] are studio procedure (paper HM6-HM24), not Blender documentation. Revised by J018 maker modeler · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): game cameras, key light and the extra review views (§6).
 
 # Blender recipes for models
 
@@ -15,6 +15,7 @@ Both run the same scripts. Keep scripts in `content/models/<asset-id>/scripts/`,
 2. Units: `scene.unit_settings.system = 'NONE'`, `system_rotation = 'DEGREES'` (factory default is METRIC) → 1 Blender unit = 1 stud (rule 24; MR36).
 3. Player dummy: a plain block or capsule of the player height from the game profile (5 studs if unset, PROPOSAL), in a `_ref` collection that is never exported.
 4. Reference images: the approved views as image empties or camera backgrounds, in `_ref`.
+4a. Game camera(s) and key light (§6), in `_ref`, named `GameCam_Front`, `GameCam_Back` (and `GameCam_Top` for top-down games), `KeyLight`.
 5. Collections: `Export` (only what ships), `_ref`, `_work`. The audit and the exporter read `Export` only.
 
 ## 3. Hand-modeling recipes (verified behaviour on 5.1.2)
@@ -52,3 +53,18 @@ blender -b <work.blend> --python tools/model/review_renders.py -- --collection E
 
 ## 5. Export
 Kit FBX profile `tools/rig/roblox_fbx.py`: every option name exists on 5.1.2 and every value is valid (rule 23); Blender's own defaults are wrong for Roblox (rule 22: no unit-scale option, leaf bones on, animation baked, `embed_textures` off). `embed_textures` only works with `path_mode='COPY'`. glTF (`bpy.ops.export_scene.gltf`) needs no scale fix but changes the Roblox hierarchy (rule 26; MR40). Not yet run on a written file in this kit: confirm with the first calibration round trip (`references/export-import.md` §1).
+
+## 6. Game cameras, key light and the extra review views
+Values come from the game profile (play camera: type, default distance, FOV) and the art bible (key light direction). Missing → measure once in Studio (start play, read `workspace.CurrentCamera.CFrame` and `FieldOfView` against the character's head with `execute_luau` and `datamodel_type` Client: the server's camera is not the player's), record it in the game profile request, and use it as PROPOSAL until confirmed. The model faces -Y (review_renders convention), so the third-person view of your own character is from +Y.
+| Need | Recipe |
+| --- | --- |
+| Front game camera | `review_renders.py --game-cam <distance,height,fov>` (perspective from -Y, height above the model's lowest point, vertical FOV = Roblox `Camera.FieldOfView`) |
+| Back game camera (third person behind and above) | in the MCP or a script: a camera at `(0, +distance, lowest_z + height)` relative to the box centre, aimed at the box centre (reuse `review_renders.look_at`), `lens_unit = 'FOV'`, `sensor_fit = 'VERTICAL'`, vertical angle = the FOV; same Workbench look and grey world as the set; render at the phone aspect (for example 1600x720 for an 800x360 viewport) to `renders/review_game_back.png`. Remove the temporary camera afterwards |
+| Top camera (top-down games) | the set's `top` orthographic view, plus a perspective camera straight above at the game distance when the game is top-down |
+| Key light for a lit grey view | a Sun lamp `KeyLight` rotated to the art bible's sun direction; render the game-camera view once with `scene.render.engine = 'BLENDER_EEVEE'` (5.1.2 name) and `view_layer.material_override` set to a plain mid-grey material, then clear the override; this shows terminators and form, not final colour |
+| Flat (unlit) view of regions or textures | Workbench with `shading.light = 'FLAT'` and `color_type` 'MATERIAL' (regions) or 'TEXTURE' (painted maps): reads form from the texture alone |
+| Clean keying for the black-fill | `look_check.py` keys the set's flat grey background automatically; pass `--key-tol 4` on these renders (the background is a flat sRGB 127-128; the default tolerance 40 drops every model pixel within 40 levels of it, with no error); open the black-fill: if a part near that grey is still missing, render the view once with a magenta `#FF00FF` world colour or pass `--mask` |
+| Projected size of each part | for each named object: evaluated bounding-box corners → `world_to_camera_view(scene, cam, co)` at the game camera; height in px = (max y - min y) × the phone viewport height; the part's box in a render's pixels (for region masks and sample boxes) = x × render width, (1 - y) × render height, since image rows run down; also check the part is in front of the camera (depth > 0) and not hidden behind the body |
+| Texel density (DT9) | per mesh of the export copy: px per stud = sqrt(texture width × height × sum of UV face areas ÷ sum of world face areas); UV areas from the active UV layer's loops per polygon, world areas from `polygon.area` on the evaluated mesh with the world scale applied; record per asset and compare with the approved neighbours |
+| Blender check: names before use | an operator or enum value not in §3 is checked with the Blender MCP `search_api_docs` / `get_python_api_docs` before the first run |
+Which of these views each gate uses: `modeling-design/references/review.md` §1; none is repeated per change unless a number failed.

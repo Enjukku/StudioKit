@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-blender-keying.md` (KB rows; every name **run on Blender 5.1.2** headless, J006-T04), `knowledge/reference/rigging/fact-check-blender.md` (RB rows; 5.2.2 source reads). Paper: AP:542-701 (BL rows). MCP and headless rules: `rigging-craft` → `references/blender-mcp.md`. On 5.2, re-run the snippet in §6 once before the first real job (KB recipe 21).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-blender-keying.md` (KB rows; every name **run on Blender 5.1.2** headless, J006-T04), `knowledge/reference/rigging/fact-check-blender.md` (RB rows; 5.2.2 source reads). Paper: AP:542-701 (BL rows). MCP and headless rules: `rigging-craft` → `references/blender-mcp.md`. On 5.2, re-run the snippet in §6 once before the first real job (KB recipe 21). Revised by J018 maker animator · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (holds, handles, §7 game-camera and black-fill renders, §8 reading the samples; `View3DShading.single_color` checked in the bundled Blender API docs).
 
 # Blender: key, loop, sample, bake
 
@@ -18,10 +18,11 @@
 ## 3. Keys, interpolation, handles
 - **Batch keys:** `kp = fc.keyframe_points; kp.add(n); kp.foreach_set('co', [f0, v0, f1, v1, ...]); fc.update()` — the fast path (20,000 keys in 5 ms vs 360 ms per-key insert, one machine) (KB03).
 - **Always write interpolation and handle types**: new keys default to BEZIER and AUTO_CLAMPED from user preferences. `INTERP = {e.identifier: e.value for e in bpy.types.Keyframe.bl_rna.properties['interpolation'].enum_items}`; `kp.foreach_set('interpolation', [INTERP['CONSTANT']] * n)`; same pattern for `handle_left_type` / `handle_right_type` (FREE, ALIGNED, VECTOR, AUTO, AUTO_CLAMPED); then `fc.update()` (KB03-KB05, KB24).
-- **Stepped blocking:** `'CONSTANT'` holds the value exactly until the next key; switch the same keys to `'BEZIER'` or `'LINEAR'` later (KB04). Copied-pair holds (a duplicated key) are the other blocking style (03 TS11); both show real holds.
+- **Holds while blocking:** make a hold as a copied key pair (copy every channel of the key to the later frame), so the preview runs with normal interpolation and shows the real timing between poses. `'CONSTANT'` (stepped) holds the value exactly until the next key (KB04): use it only for a quick pose-by-pose review, never as the only blocking preview, because it hides the in-between timing.
+- **Shape eases with handles, not extra keys:** fewer keys per control are easier to read and retime; an added key can bend a curve unexpectedly.
 - **Handles:** AUTO_CLAMPED does not overshoot a key value; AUTO can (3.0275 on a 3.0 peak in the test); VECTOR gives straight segments. Moving a key in time: `co_ui` moves the handles with it, `co` moves only the point — an overlap offset must move both (KB05, KB06; BL27).
 - **Easing:** `Keyframe.easing` (AUTO, EASE_IN, EASE_OUT, EASE_IN_OUT) applies to the SINE ... ELASTIC interpolation types (KB07). Key `type` (KEYFRAME, BREAKDOWN, MOVING_HOLD, EXTREME, JITTER, GENERATED) can mark blocking poses and breakdowns (KB04).
-- **Interpolation per segment, not per clip:** contacts flat or hand-set, ballistic and mechanical motion with their own velocity profile, impacts hard (BL24). Weighted tangents (a Maya habit, 03 TS12) have no checked Blender equivalent: use handle types and handle positions.
+- **Interpolation per segment, not per clip:** contacts flat or hand-set, ballistic and mechanical motion with their own velocity profile, impacts hard (BL24). Weighted tangents (a habit from other tools) have no checked Blender equivalent: use handle types and handle positions.
 - **Rotation:** one rotation mode per bone, the rig's (the manifest names it; bones default to QUATERNION). Quaternion component curves do not give even angular speed: judge orientations and end points, not component curves (KB21, RB42).
 
 ## 4. Loops
@@ -64,3 +65,28 @@ fc.update()
 m = fc.modifiers.new('CYCLES'); m.mode_before = m.mode_after = 'REPEAT'
 assert len(fc.modifiers) == 1
 ```
+
+## 7. Game-camera and black-fill renders (key frames)
+- **Game camera:** one camera per asset from the game profile (third-person behind and above, or top-down; distance, height and vertical field of view as the game uses them; Roblox `Camera.FieldOfView` is vertical, so set `cam.data.sensor_fit = 'VERTICAL'` and `angle_y`). Render at a phone-like size (the game profile's floor device, or PROPOSAL 1170x540 landscape) with a player-sized reference block in frame. Save the transform in `renders/cameras.json` so every pass and every clip uses the same view.
+- **Shaded key frames:** Workbench, `STUDIO` light, `TEXTURE` colour, Standard view transform, a capture of the game's ground behind the character where possible.
+- **Black-fill from the same pass:** set `scene.display.shading.light = 'FLAT'`, `color_type = 'SINGLE'`, `single_color = (0, 0, 0)` and the world colour to magenta `(1, 0, 1)` (displays as `#FF00FF` under Standard, which `look_check.py` keys automatically); render the same frames; restore every setting in `finally` (the pattern of `tools/model/review_renders.py`). Then `python tools/art/look_check.py silhouette <frame.png>` (area, box, components: separated limbs show as separate components only where they really part) and `look_check.py thumb <frame.png> --size <phone size>`; `silhouette --compare` gives the aligned overlap of two poses (base vs variant, option A vs B). These measure; the read itself is judged by looking at the same ≤ 8 frames.
+- **Strips:** for a mass or pop check, render consecutive frames of one short range only when a number (`pops`, a root jump) points there.
+- **Contact sheet (plan stage):** render each key-pose option's black-fill once at the game camera, then tile them into one image per clip with a few lines of Python (Pillow: paste the frames side by side, label each option), resampled to phone size. One sheet per key clip is the whole plan-stage silhouette budget (`animation-design/references/review.md` §5).
+- **Promo or cutscene still:** set the signature clip's key frame on the rig (never re-pose it from scratch), stage the camera the brief names for its premise, and render shaded plus a black-fill from the game camera; `look_check.py silhouette <still-black-fill> --compare <clip-key-frame-black-fill>` shows that it is the same pose (MEASURED).
+- **Playable preview:** for a timing or feel pick by the owner at a gate, render the clip's frame range at the game camera as a video: Workbench, `render.image_settings.media_type = 'VIDEO'` (Blender 5.x; codec under `render.ffmpeg`), the clip's fps, then `bpy.ops.render.render(animation=True)`; restore the settings in `finally`. It is for the owner to watch at normal speed; you do not inspect its frames. Until the owner picks, the take with the better recorded reasons is used as a PROPOSAL.
+
+## 8. Reading the samples (the curve lines of `animation-design/references/review.md` §8b)
+`clip_check.py` measures length, loop seam, contact slide, events, ROM and pops. The other curve lines read the same samples file (`landmarks` and `controls` per frame) with a few lines of Python until the tool has a mode for them; report them as MEASURED unless the brief gives a tolerance.
+| Line | Compute |
+| --- | --- |
+| Gravity spacing (S-07) | per-frame step length of the landmark; compare the mean step in the frames around the apex (height maximum) with the mean step near the ground |
+| Arcs (S-08) | for each landmark, the longest run of frames whose points stay within a small distance of the straight chord between the run's ends |
+| Stalled travel (S-06) | in the flight frames (no planted contact), runs where the root's horizontal step is near zero |
+| Driver leads (S-04) | the first frame each of two landmarks or controls moves more than a small threshold from its start value; the driver's frame comes first |
+| Push-off (S-05) | frames between the root's first rise and each foot's last contact frame |
+| Hang time (S-09) | frames from launch to apex vs apex to landing on the root height |
+| Landing depth (S-11) | the root height minimum after contact vs standing height and the stance limit in the rig sheet |
+| Overshoot (S-12) | how many times the curve crosses its final value before settling, and by how much |
+| Twinning (S-14) | the share of key frames the left and right controls have in common; the difference of their mirrored angles at key frames |
+| Head lag (S-15) | the head's world yaw vs the chest's per frame; the lag in frames |
+| Hold (B-10) | the largest pose change over the first frames of the clip |

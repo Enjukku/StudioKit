@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. Facts: `knowledge/reference/modeling/fact-check-tripo.md` (MT ids; ST01-ST22 = what the owner can set in Tripo Studio; "rule N" = line N of its "Rules a skill may state"; every page read 2026-10-21, docs only, nobody logged in). Rig-side Tripo tools: `rig-pipeline/references/tripo-routes.md`. Owner runs Tripo (J007-D4). Tripo changes fast: re-read the Studio panel before trusting a row; a control marked "unknown" may exist.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-craft`. Facts: `knowledge/reference/modeling/fact-check-tripo.md` (MT ids; ST01-ST22 = what the owner can set in Tripo Studio; "rule N" = line N of its "Rules a skill may state"; every page read 2026-10-21, docs only, nobody logged in). Rig-side Tripo tools: `rig-pipeline/references/tripo-routes.md`. Owner runs Tripo (J007-D4). Tripo changes fast: re-read the Studio panel before trusting a row; a control marked "unknown" may exist. Revised by J018 maker modeler · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): restoring iconic qualities (§2-§3).
 
 # Tripo route: input pack → owner run → raw check → finish in Blender
 
@@ -26,14 +26,14 @@ The owner drops the exported files in `content/models/<asset-id>/tripo/raw/`. **
 ## 2. Raw-candidate check (before any clean-up work; FW-04, TR-32 [O])
 1. Import a copy; measure size, objects, materials, textures, UV maps; run `tools/model/model_audit.py` (triangles, open edges, loose parts, inverted parts).
 2. Look in **clay** (no texture), **wireframe** and **face orientation**, from the reference angle, the back and the underside: texture can paint a feature that has no shape; backs and undersides are invented and often wrong (TR-31, TR-34 [E]).
-3. Compare silhouette and landmarks with the approved reference at the same camera.
+3. Compare silhouette and landmarks with the approved reference at the same camera, and each iconic quality listed in the record (`modeling-design/references/reference-check.md` §7): note every one Tripo softened (rounded tips, mushy planes, lost proportion pushes, a generic face).
 4. **Reject early** (send back to the owner with one exact note, or switch to hand modeling): wrong anatomy or part count, fused grips, missing openings, false backs, weak identity, fused repeated limbs that cannot be copied clean (FM41), a mesh far over budget with no clean way down. Max 2 regenerations, then the lead decides (route change).
 
 ## 3. Finish in Blender (FW-05..FW-13 [O]; the steps are a studio procedure, not measured results)
 1. **Working copy**; scale to studs, set front and up, apply transforms.
 2. **Rig parts first** (if it moves): cuts, caps, bend zones per the rig sheet (`references/rig-parts.md`). Treat any Tripo part split as a proposal; the rigger's cut list wins (X-04).
 3. **Simplify by error, not by count**: decimate only static, irregular pieces where the silhouette survives; retopologize joints, silhouette turns and mechanical contacts by hand (FW-07; HM14-HM15 [V] B06, B07).
-4. **Repair shape as shape**: a missing handle is modelled, never painted on (FW-08). Fix normals, thin slivers, intersections.
+4. **Repair shape as shape**: a missing handle is modelled, never painted on (FW-08). Fix normals, thin slivers, intersections. Restore the iconic qualities the raw model softened: re-sharpen tips and planes, push the anchors back past the reference, rebuild a generic face to the anchor images; the black-fill at the game camera matches the frozen blockout or beats it.
 5. **UVs after structure is final**, one map per mesh; then **re-bake** colour (and normal if the plan uses it) from the untouched raw model onto the finished mesh (FW-09; `references/textures-materials.md` §4). Repaint baked light or cast shadows the art bible does not want (TX-45).
 6. **Materials to the texture plan**, not Tripo's defaults (4K or 8K maps are reduced to the plan) (FW-10).
 7. **Export copy**, recount triangles, export, import, measure (`references/export-import.md`).

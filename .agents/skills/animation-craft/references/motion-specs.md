@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-techniques.md` (RT<q>-<n> rows, TC facts, SD silent items; mirror revision 7400643, read 2026-10-21). Template: `templates/anim/motion-spec.md`. The animator writes the spec; a builder (feature-builder or quick-builder) writes the code; values live in data.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `animation-craft`. Facts: `knowledge/reference/animation/fact-check-techniques.md` (RT<q>-<n> rows, TC facts, SD silent items; mirror revision 7400643, read 2026-10-21). Template: `templates/anim/motion-spec.md`. The animator writes the spec; a builder (feature-builder or quick-builder) writes the code; values live in data. Revised by J018 maker animator · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§2 items 10-12).
 
 # Code-driven and physics motion: what the spec must say
 
@@ -22,6 +22,9 @@
 7. **Streaming and late join:** client motion on server-made instances is lost on stream-out; restart on stream-in from the current state (TC23). A late joiner sees the current state, never a replay.
 8. **Events** on the timing list (same ids as VFX and sound).
 9. **Checks:** pivot right; phase times from the Output log; copies out of step; off-screen rule.
+10. **Feel of the curve:** the prop's personality in 3-5 words (a door that is "heavy, old, grinding" vs "light, cheap, rattly") and the curve that shows it: a small anticipation where something gives first (a latch rattle), eased starts and stops (constant speed only for a mechanism running steadily), one clear arrival, a small overshoot and settle (Back or Elastic easing) where energy should show, never ease-in-out on the whole travel of something heavy. The end state reads in a still.
+11. **Reduced motion and pulses:** what the motion does when the player reduces motion (stop, slow, or snap to the end state; the state change itself stays visible). A looping bob or pulse on a pickup or hazard is at most 3 cycles per second and follows its meaning: slow and steady for safe, faster for urgent.
+12. **Truth:** a trap's danger pose lasts exactly as long as the danger, and its visible reach matches the gameplay area read from data.
 
 ## 3. Examples (short; full reasoning in `animation-design/references/worked-examples.md`)
 | Object | Mover | Spec core |

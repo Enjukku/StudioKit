@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-design`. Sources: N3 §4 (systems, economies, balance, rewards, Roblox monetization), FR (Roblox facts, RC ids), FI. Tags as in SKILL.md. Roblox rules change: recheck with `platform-policy` before launch.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-design`. Sources: N3 §4 (systems, economies, balance, rewards, Roblox monetization), FR (Roblox facts, RC ids), FI. Tags as in SKILL.md. Roblox rules change: recheck with `platform-policy` before launch. Revised by J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (new §8 cosmetics and variants, §9 honest paid random reveals).
 
 # Systems, progression, economy, rewards
 
@@ -53,3 +53,25 @@ Run every applicable item; "not applicable" needs a reason. Pass / Fail / Unprov
 | 8 | Tuning | every value has units, rationale, revision and a test | unexplained constants cannot be changed safely |
 | 9 | Interactions | cross-system effects and feedback loops simulated or tested | locally fine rewards can add up to a runaway |
 | 10 | Cadence | new content told apart from repeatable variation; production dependency stated | an update plan beyond the team's capacity is not a design |
+
+## 8. Cosmetics and variants (skins, pets, trails, auras, tower and building tiers)
+Gameplay comes first. Cosmetics refresh repeated play (the same routine in a new look) without changing balance; players must never pay for a disadvantage.
+- **The role read stays.** A cosmetic keeps the unit reading as the role it plays (a fragile ranged unit stays slim and sharp, never armoured and tanky), keeps the base proportions and height, takes no extra screen room and never hides combat information. Each class has a silhouette rule (mass and shape) every variant is checked against.
+- **No stats.** Cosmetic items change no value in the data tables. A skin that changes reach, hitbox size, visibility or sound loudness changes gameplay and is reviewed as a balance change.
+- **Footprint limit.** Every cosmetic brief sets a screen-footprint limit; cosmetic effects stay below combat-effect brightness and never pulse like a threat or pickup.
+- **Identity anchors.** A variant keeps the 2-5 features players know the original by (its anchors, held in the art bible) and changes theme, material, colour and costume; for a held item, its recognition features and contact points. A remake or update lists what players love (kept, brought forward) and what feels dated (trimmed, or kept with a reason), so it never becomes a parody of the original.
+- **A variant is a story.** The brief has a short narrative (the character's role in the new theme), one line "keep core X, swap item Y for Z because of W" when an iconic item changes, and a re-theme of each ability's effect and sound, not only the costume (players feel the theme through what they do).
+- **Each theme has its niche.** Before a new theme or event line, list existing themes and write the new one's differentiator in one line; pick themes from player data and say which proven themes it combines and at what maturity (young audience: lower maturity is the default). Refresh a tired line by one extreme pass and one pass pulled back to the brand; the owner picks.
+- **Tiers.** Standard items follow the art bible; the top rarity tier may break the mould only by a documented decision (art director proposes, owner decides). Premium items keep at least the base's secondary motion; richer motion and separate finishes signal value.
+- **Sensitive themes** (captivity, violence, real cultures) move onto a prop motif instead of an act or scene; culture and ethnicity are represented accurately; `platform-policy` for anything that could read badly.
+- Checks: black-fill area and width-to-height ratio of variant vs base, on flat-key captures at the game camera at the same distance (`review.md` §7: an in-scene capture gives no mask), stay in the class band (PROPOSAL default: within about 10 % of base area; `python tools/art/look_check.py silhouette <flat-key capture>` on each gives area and bbox, or `--mask` when no flat key is possible; `--compare <base capture>` adds the aligned shape IoU); phone-size captures with and without the cosmetic: covered screen area compared and combat cues still visible; the data diff of a cosmetic shows no gameplay value; every anchor present (at most one hidden by a pose); a fresh reader names the base character or item from the variant's silhouette and also names the new theme.
+
+## 9. Honest paid random reveals
+When players pay (Robux or bought currency) for a random result, the reveal must not mislead. This is a design rule and a platform rule; `platform-policy` holds the current wording and PolicyService checks.
+- Odds for every outcome are visible before the buy button and sum to 100 %; effects never cover or animate them; they update for the player while a boost is active or after a once-only outcome is won; a long list may open in a pop-up from a visible worded "Info" or "Details" label, never a bare icon.
+- **One windup for every result.** The same beats and length up to the result frame for the lowest and the highest tier; rarity colour, escalation and tier layers start only after the result is shown.
+- **No near-miss.** A lower result never shows a higher tier's layers ("so close" animations are banned); a result worth less than its price is not celebrated; luck boosts never look like better odds than the numbers.
+- **Tiers read without colour alone.** Each tier adds layers with rarity (ring, rays, a crescendo, a unique motif; pure white only for the top tiers) and is named in text and frame shape.
+- After the result is confirmed, a tap skips to it; in batch opens only the best result gets the full ceremony.
+- The restricted-player path (paid random items not allowed in the player's region) exists and is tested.
+- Checks: frame-compare the lowest and highest tier captures up to the result frame (a short Python image diff of the two frame sequences): identical; no higher-tier layer on any lower result; each tier nameable in a grayscale capture; odds visible before the buy button, and changed in a capture with a boost active; the restricted path captured.

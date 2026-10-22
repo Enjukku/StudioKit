@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §10 (hook and promise), N2 §2 (promise ledger, marketing), FR (Roblox discovery facts, fact-checked). Tags as in SKILL.md.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §10 (hook and promise), N2 §2 (promise ledger, marketing), FR (Roblox discovery facts, fact-checked). Tags as in SKILL.md. Revised by J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (tile-size first-image check, HC11-HC12).
 
 # Hook and promise: what the title says, ordinary play must deliver
 
@@ -26,8 +26,9 @@ Every title, image, thumbnail and trailer claim links to a playable feature or t
 4. **Promise delivery in play.** Do players do the advertised action by themselves, notice its consequence, and find a reason to continue? Record the actual time and path; never swap in a generic target (TS4-TS5).
 5. Five different causes need five different fixes: weak hook · unclear controls · delayed delivery · absent payoff · shallow repetition (TS6).
 6. Read acquisition and first-play behaviour together. High clicks with high first-play bounce fits a promise mismatch, but loading, device performance, audience targeting or a confusing opening can do it too. Diagnose before rewriting the game (TS7). A thumbnail test that changes who arrives is not a clean gameplay experiment (TS8).
+7. **The first image at tile size.** Before a first image goes to the owner, run `python tools/art/thumb_check.py thumbnail <image> --size <WxH> --size-source "<capture id, device>" --box <hero and its action> --bottom-band <percent>` (and `icon` for a square crop, 150x150 by default). The tile size and the bottom band come from the phone capture in `knowledge/design/marketing/surfaces.md` (marketing measures it; no Roblox doc gives it): with no row there, ask marketing for it and report the tile check `not measured`, never invent a size. A concept image is a full scene, so `--box` around the hero and its action gives the subject; without it the subject fields say "not measured". The sheet shows the image at the size players meet it, its grayscale and the subject mask. Read it as measured, not as a click score: one clear subject (the action and the outsized object), the action readable in grayscale, nothing important in the bottom band Roblox may cover. The image is drawn from the game camera's angle, so the fantasy survives the real view; the outsized object is clearly bigger than the player (size reads as importance and threat); one message, one symbol.
 
-## 4. Hook check (10 items, O)
+## 4. Hook check (12 items, O)
 PASS only with the named evidence; otherwise FAIL with a reason. A missing test is **FAIL FOR READINESS**, not proof the game is bad.
 | # | Pass when |
 | --- | --- |
@@ -41,6 +42,8 @@ PASS only with the named evidence; otherwise FAIL with a reason. A missing test 
 | HC08 | The minimum build still supports the fantasy, including its critical visual, audio or social part |
 | HC09 | The owner can name the intended tradeoff and the open risk before approving production |
 | HC10 | Rights, content maturity and current platform-policy questions are resolved, or are listed as blocking release |
+| HC11 | The first image is from the game camera's angle and reads at tile size: one clear subject, the action and scale readable in grayscale (`thumb_check.py` sheet attached) |
+| HC12 | What things look like in the first image matches what they do in the loop (the big thing really is the goal or the threat; nothing shown that play does not have) |
 
 ## 5. Roblox discovery facts (fact-checked; recheck before launch)
 Checked 2026-10-20 against the Roblox docs mirror and live pages (`knowledge/reference/game-design/fact-check-roblox.md`, RC ids). Live docs change: recheck before launch.

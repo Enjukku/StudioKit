@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §3-§7, N2 §5.1 (owner research paper Part 1). All steps are **O** (a configurable studio procedure, not a proven optimum); evidence rows keep their tags.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §3-§7, N2 §5.1 (owner research paper Part 1). All steps are **O** (a configurable studio procedure, not a proven optimum); evidence rows keep their tags. Revised by J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (warm-up round, hook sources, critic flags).
 
 # Idea method: from opportunities to 3 pitches
 
@@ -9,10 +9,10 @@ Record the **actual** count and budget at every step, recounted from the step's 
 | --- | --- | --- | --- |
 | 1 Intake | Take opportunity records from the trend scout (fields in §2). Reject unsupported trend claims, **not** unusual fantasies | usable records | N1 ≤ N0 |
 | 2 Budget | Set the raw-concept budget from review capacity and time **before** generating; write who set it and why | budget, reason | N2 |
-| 3 Diverge | One-sentence concepts across the 6 axes (§3) and the proven-loop table (§5). Unranked. No criticism | raw list | N2 |
+| 3 Diverge | Warm-up round first (the expected ideas, labelled and kept in the count), then one-sentence concepts across the 6 axes (§3) and the proven-loop table (§5), each with its own hook source; at least one from outside games and one big swing. Unranked. No criticism | raw list with hook sources | N2 |
 | 4 Expand | Per promising seed vary the 4 mechanism axes (§3) with the 5 techniques. Expand mechanisms, not synonyms | candidates, mechanism families | N3, F3 (measured) |
-| 5 Dedupe | Group by playable action + reward + escalation. Merge true duplicates; keep distinct fantasies on one loop; keep an odd candidate whose risk is cheap to test | distinct candidates | N4 ≤ N3 |
-| 6 Critic | Separate pass (a fresh context, not the generator's thread): rate every candidate on the rubric (`rubric-taste-evidence.md` §1). Name the evidence gap and the cheapest test | ratings, gaps, tests | N5 |
+| 5 Dedupe | Group by playable action + reward + escalation. Merge true duplicates (two candidates on the same hook source are suspect); keep distinct fantasies on one loop; keep an odd candidate whose risk is cheap to test | distinct candidates | N4 ≤ N3 |
+| 6 Critic | Separate pass (a fresh context, not the generator's thread): rate every candidate on the rubric (`rubric-taste-evidence.md` §1). Name the evidence gap and the cheapest test. Flag a loop with no real decision, a theme outside the owner's tone, a theme with no niche next to existing ones, a closed direction | ratings, gaps, tests | N5 |
 | 7 Owner / tests | When taste or risk tolerance decides the ranking, ask the owner or ask for a test. Report test sample, build, variant, measures, negative results. Never call an untested candidate validated | tested or explicitly untested | N6 |
 | 8 Pitch | Exactly 3 pitches if 3 are defensible; else show the shortfall. One recommendation with its tradeoff; keep a materially different alternative when evidence cannot decide | 3 pitch cards + records | 3 |
 | 9 After the pick | Replace the funnel with an uncertainty register and start `preproduction` | register | 1 |
@@ -29,6 +29,8 @@ The trend scout's weekly report (`templates/trends/weekly-report.md`, skills `ma
 | --- | --- | --- |
 | action · role · setting · threat · social relationship · consequence | what the player can do · what can go wrong · who changes the outcome · what persists | inversion (reverse role, information, reward or failure) · distant analogy (map an outside mechanism to a player action) · constraint (remove a default action or resource) · counterfactual ("what if the sun could be destroyed?") · anti-cliché pass (ban the familiar mechanism for one round) |
 
+**Hook sources.** Give each candidate a one-line hook from its own source and write the source next to it: a real-world system (a dam's spillway, a bakery's rush hour), another medium (a heist film, a cooking show), an odd reading of the theme ("what is the sun really?", the theme's past or future), or a known story moved into another genre. Keep what players expect from the loop and add one unexpected element; list what the subject has and lacks. When an idea repels you, write why: it often names the cliché to avoid. Expand one named element per variant ("A's verb + B's stake"), so variants stay comparable.
+
 Human methods and their failure signs (N1 §5):
 | Method | Use | Failure to watch for | Tag |
 | --- | --- | --- | --- |
@@ -41,7 +43,7 @@ Human methods and their failure signs (N1 §5):
 | Separate generator and critic | keep alternatives, then inspect | a critic that rejects novelty for being uncertain | V (A08, small) |
 
 ## 4. Diagnose a batch before you trust it
-1. Group the batch by **action**, **information**, **resource**, **relationship** and **consequence** (N1 §3 O).
+1. Group the batch by **action**, **information**, **resource**, **relationship** and **consequence** (N1 §3 O). Add the hook-source column: a batch whose hooks all come from other games is derivative even when its actions differ.
 2. Groups nearly identical → ask if the fantasy, role or social meaning still gives the audience a different reason to care. Cosmetic change proves neither value nor worthlessness.
 3. Likely causes of sameness (O, not shown for current models): the same familiar references in the prompt; rewarding polished averages; critique before alternatives; novelty defined only by vocabulary; typicality bias in the model (A12 V attributes part of convergence to it).
 4. Fixes that have some evidence: contrasting player perspectives or personas when generating (A04 V, one model; A10 V, older model, raised idea coverage); refining a human seed rather than accepting the first AI idea (A05 V, older model: first AI ideas compressed group diversity). Re-test locally before adopting any method (§6).

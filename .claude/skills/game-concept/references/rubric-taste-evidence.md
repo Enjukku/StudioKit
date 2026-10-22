@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §9 (rubric), §6 (taste), §4 (AI evidence A01-A13), §7 (borrowing), N2 §5.4 (do-not list); FI (fact-check of the AI numbers). Tags as in SKILL.md.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Part of `game-concept`. Sources: N1 §9 (rubric), §6 (taste), §4 (AI evidence A01-A13), §7 (borrowing), N2 §5.4 (do-not list); FI (fact-check of the AI numbers). Tags as in SKILL.md. Revised by J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (RB1, RB4, goal questions, closed directions).
 
 # Rubric, taste log, AI evidence, borrowing
 
@@ -14,10 +14,10 @@ Anchors (J003 G2 lesson):
 
 | # | Criterion | State | Raises the rating | Reject or investigate when |
 | --- | --- | --- | --- | --- |
-| RB1 | Fantasy | the role and the consequential verb | players say in their own words what they want to do | the pitch is a genre label or a list of references |
+| RB1 | Fantasy | the role, the consequential verb and the target experience | players say in their own words what they want to do | the pitch is a genre label, a list of references, or "fun" with no named experience |
 | RB2 | Distinctiveness | what the twist changes: mechanism, fantasy, relationship or audience meaning | comparison with named alternatives; an independent review | no clear reason the audience would value the new fantasy or twist |
 | RB3 | Hook delivery | the action the title and first image promise | a playable encounter produces it without scripted tricks | marketing shows an action the loop does not support |
-| RB4 | Agency and repeatability | which choices change outcomes; what changes on repeat | observed choices, retries, strategies, reasons to return | the intended agency, expression, anticipation, comfort or social value is missing |
+| RB4 | Agency and repeatability | which choices change outcomes; what changes on repeat | observed choices, retries, strategies, reasons to return | the intended agency, expression, anticipation, comfort or social value is missing; the loop has a goal but no opposition or no real decision |
 | RB5 | Feasibility | the cheapest build that keeps the decisive action | device and network risk probes; art production estimates | the small version removes the reason the concept is interesting |
 | RB6 | Taste fit | the owner's relevant preferences and the deliberate novelty | the owner's explicit reasoning about this concept | an inferred preference is treated as a permanent veto |
 | RB7 | Social and safety fit | how players affect each other; how abuse is handled | tests with the intended party and stranger setups | the fun needs harassment, exploitation or prohibited content; competition lacks counterplay and recovery |
@@ -34,7 +34,8 @@ Reason class (T4 O): **fantasy** (does not want this experience) · **scope** (t
 
 Rules (T3-T7 O):
 - Keep close-fit, adjacent and wildcard ideas in each batch; no fixed proportions.
-- Ask about contrasting experiences ("tense or cosy? alone or with friends?") rather than repeating the owner's favourite words.
+- Ask about contrasting experiences ("tense or cosy? alone or with friends?") rather than repeating the owner's favourite words. Every question names the goal ("which feels most like breaking the sun?"), never "do you like it?".
+- A closed direction (owner reason class fantasy) is logged for the job and not re-pitched without new owner words; a scope, pitch, risk or market rejection may return with the change stated.
 - When the owner prefers a concept that current audience evidence does not support, show the mismatch plainly. The owner still decides.
 - A proven loop with a new theme can be a strong concept when the theme changes the role, the emotional meaning, the social context or the first-image appeal (T8 O). Judge it for the owner's audience, not by how unfamiliar its rules are (T9 O).
 

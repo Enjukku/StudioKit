@@ -3,40 +3,40 @@ name: preproduction
 description: Grow a concept the owner picked into a full game design and write it as documents every agent can build from - pillars, lead reviews, feature specs, tuning tables, per-craft briefs. Use after the owner picks a concept, for "let's build this one", "plan the game", "write the GDD", "brief the team", "spec this feature", or when a decided change must reach every craft.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J003. Evidence: owner research paper Part 1 §3-§7 (notes `knowledge/reference/game-design/02-preproduction-docs.md` = **N2**); `rules/messages.md`; owner 2026-10-20 (J003). Tags: **V** VERIFIED, **E** EXPERIENCE, **O** OPINION; **Owner** = the owner's words.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J003. Evidence: owner research paper Part 1 §3-§7 (notes `knowledge/reference/game-design/02-preproduction-docs.md` = **N2**); `rules/messages.md`; owner 2026-10-20 (J003). Tags: **V** VERIFIED, **E** EXPERIENCE, **O** OPINION; **Owner** = the owner's words. Rebuilt by J018 maker game-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (options and closed doors per step, parameters first, behaviour and grey-box verdict before production art, feedback stack, threat and hazard sheets, role cards, read rank, what each craft needs).
 
 # Pre-production: from a picked concept to a design everyone can build
 
 ## 1. When this skill starts
-The owner picked one concept (`game-concept`), or a decided game needs its design written down or changed. It answers: in what order the design grows, who joins when, what the owner decides at each step, which documents hold the truth, and what each craft gets as exact contract vs open craft. Output: the design baseline in `knowledge/design/` and one brief per craft. Production starts only after the owner approves the baseline.
+The owner picked one concept (`game-concept`), or a decided game needs its design written down or changed. It answers: in what order the design grows, who joins when, what the owner decides at each step, which documents hold the truth, and what each craft gets as exact contract vs open craft. Output: the design baseline in `knowledge/design/` and one brief per craft. Production starts only after the owner approves the baseline. The core principles in `game-design` §7 apply to every step.
 
 ## 2. Read this file when
 | You need | Open |
 | --- | --- |
 | The growth steps one by one, the seven lead reviews, what the owner decides at each, the readiness checks | `references/growth-order.md` |
-| Document set and paths, states, the vision record, pillar sheet, feature spec, tuning table, decision record, uncertainty register | `references/documents.md` |
-| A brief to each lead (art director, architect, marketing, trend scout, UI, VFX, sound, animation, levels): what is exact, what is open, full examples | `references/handoffs.md` |
-| Loops, systems, economy, social, review checklists for the design you are writing | `game-design` skill |
-| World, levels, routes, encounters | `level-design` skill |
+| Document set and paths, states, the vision record, pillar sheet, feature spec, tuning table, decision record, uncertainty register, feedback stack, threat and hazard sheets, role card, read rank and information list | `references/documents.md` |
+| A brief to each lead (art director, architect, marketing, trend scout, UI, VFX, sound, animation, levels, progression): what is exact, what is open, full examples | `references/handoffs.md` |
+| Loops, systems, economy, social, review checklists, feedback and threat rules, cosmetics, spaces for the design you are writing | `game-design` skill |
+| World, levels, routes, encounters | `level-design` skill, `game-design/references/spaces.md` |
 | Brief and hand-back format (binding) | `rules/messages.md` |
 
 ## 3. Steps
-1. **Open the job.** L job folder `knowledge/jobs/<job-id>/` (lead's `orchestration` skill). Move the picked concept record from `knowledge/design/concepts/` into the vision record (`documents.md` §2). *Check:* the fantasy line and title are copied word for word from the approved pitch.
-2. **Grow in order, one owner decision per step** (`growth-order.md` §1): fantasy and promise → pillars → style direction → key characters and moments → world → core loop → features → content. Each step adds the documents its next step needs, nothing more; untested detail stays open (N2 3.3 O).
-3. **Bring leads in early** (`growth-order.md` §2): trend scout and marketing at step 1, architect from step 1 for risky claims, art director at step 3, craft leads at the first playable moment. Each early review ends with: the decision, its owner, affected files, open questions, next evidence (N2 2.3 O).
-4. **Write contracts, not prose.** Exact what another craft cannot safely reinterpret (rules, states, permissions, timing relations, units, resource changes, persistence, failure recovery); leave expression, art treatment and code structure to the craft lead (N2 5.4 O). Unknown value → `TBD`, who decides, the test. *Check:* `rules/messages.md` §6 checks pass on every brief.
-5. **Brief each craft** (`handoffs.md`) with the same fantasy, pillar, feature ids, state names and data revision in every brief.
-6. **Readiness review** (`growth-order.md` §4): receivers restate the behaviour, compare readings, review one integrated moment, check device, network, social and policy assumptions. The owner approves the next commitment, not a promise that the game will be fun.
-7. **Keep it alive.** A change goes through the change review: impact map, versioned decision, every affected brief updated in the same pass.
+1. **Open the job.** L job folder `knowledge/jobs/<job-id>/` (lead's `orchestration` skill). Move the picked concept record from `knowledge/design/concepts/` into the vision record (`documents.md` §2). Write the game's parameters into the vision record before anything else: camera, device mix (phone first), player count per server, input, session shape, and the target experience (one or two kinds of fun). *Check:* the fantasy line and title are copied word for word from the approved pitch; the parameters and target experience are filled.
+2. **Grow in order, one owner decision per step** (`growth-order.md` §1): fantasy and promise → pillars → style direction → key characters and moments → world → core loop → features → content. Each step adds the documents its next step needs, nothing more; untested detail stays open as a marked placeholder (N2 3.3 O). At each step: make 2-3 distinct rough options at equal finish, recommend one with reasons tied to the target experience, ask the owner a goal question ("which makes the sun feel most breakable?", never "which do you like?"), and record the pick. The decision freezes the step: rejected directions go to the job's closed-doors list and are not re-proposed without new owner words. *Check:* each step has its options, the pick with its reason and the owner's words, and the closed-doors list is current.
+3. **Bring leads in early** (`growth-order.md` §2): trend scout and marketing at step 1, architect from step 1 for risky claims, art director at step 3, craft leads at the first playable moment. Before I brief a craft, I ask what it needs from me (`handoffs.md` §2 lists the usual needs). Each early review ends with: the decision, its owner, affected files, open questions, next evidence (N2 2.3 O). Rough states go to partner crafts while anything can still change; no grand reveals.
+4. **Write contracts, not prose.** Exact what another craft cannot safely reinterpret (rules, states, permissions, timing relations, units, resource changes, persistence, failure recovery); leave expression, art treatment and code structure to the craft lead (N2 5.4 O). Each action gets its feedback stack (`documents.md` §6); each threat and hazard its sheet (§7); each character, unit or pet its role card (§8); each scene and screen its read rank and information list (§9). Behaviour is written before looks: what a thing does must already say what it is. Unknown value → `TBD`, who decides, the test. *Check:* `rules/messages.md` §6 checks pass on every brief.
+5. **Brief each craft** (`handoffs.md`) with the same shared header in every brief: target experience, fantasy, pillar, game parameters, feature ids, state names, read rank, data revision; plus the problem, the constraints and the success test. Production art briefs for a mechanic (models, final effects, final UI, final sound) cite its grey-box verdict; before the verdict exists, visual and audio briefs for it ask only for reference images, key frames, target images or the prototype (feasibility, trend and promise briefs are not affected).
+6. **Readiness review** (`growth-order.md` §4): receivers restate the behaviour, compare readings, review one integrated moment in one capture with all crafts, check device, network, social and policy assumptions. The owner approves the next commitment, not a promise that the game will be fun.
+7. **Keep it alive.** A change goes through the change review: impact map, versioned decision, every affected brief updated in the same pass. A "make it cooler" idea after a gate is a ticket with its cost or an owner decision, never silent scope.
 
 ## 4. Craft core
 | ID | Practice | Evidence |
 | --- | --- | --- |
 | P-01 | **Stage purposes, not a waterfall.** Concept clarifies the experience; a pitch asks for a decision; prototypes attack risky assumptions; pre-production joins the experience to a way of making it; a slice shows the quality can be made repeatably. Bad evidence can send work back without killing the fantasy | N2 3.2 O |
 | P-02 | **Prototype whether, then how.** A prototype tests whether to make the game; pre-production also tests how. Throwaway code is fine for learning; it does not prove production architecture | S09 E (Riot, P02-P03) |
-| P-03 | **Art early, cheap.** Art direction can shape the concept while prototype art stays cheap. Concept art answers 6 questions: silhouette and role, scale, readability in the real camera, key materials, character relationships, the signature moment. A paper concept that failed to read in first-person 3D changed (Blizzard) | S10 E (P04, P12); N2 3.6 O |
+| P-03 | **Art early, cheap.** Art direction can shape the concept while prototype art stays cheap. Concept art answers 6 questions: silhouette and role, scale, readability in the real camera, key materials, character relationships, the signature moment. A paper concept that failed to read in first-person 3D changed (Blizzard). The fantasy must survive the views players really get: tiny on a phone, from behind or above, in fast motion | S10 E (P04, P12); N2 3.6 O; E |
 | P-04 | **Pillars are decisions.** Each pillar: what the player experiences, which decisions it favours, which tempting feature it rejects, and the observable sign. No optimal pillar count exists | S12 O; N2 T1 |
-| P-05 | **Contracts exact, expression open.** Exact: rules, states, permissions, timing relations, units, resource changes, persistence, failure recovery. Open: art treatment, animation expression, sound character, engineering architecture | S13 O; N2 5.4 |
+| P-05 | **Contracts exact, expression open.** Exact: rules, states, permissions, timing relations, units, resource changes, persistence, failure recovery. Open: art treatment, animation expression, sound character, engineering architecture. Motion and effect ideas in my documents are intent ("this should feel like a slam"), never timing curves or techniques | S13 O; N2 5.4; E |
 | P-06 | **One source for every number.** Tuning values live in one versioned data source with units, rationale, uncertainty and a test; briefs cite the key and the data revision, never a hand-copied number | S14 O; AGENTS.md §2 (content is data) |
 | P-07 | **Promise ledger.** Every title, image and trailer claim maps to a playable feature or an explicitly unbuilt concept | N2 §2 marketing O |
 | P-08 | **One state vocabulary for all crafts.** Agree which signals mean anticipation, commitment, success, failure, danger, recovery; review one representative interaction with all crafts together, not each craft alone | N2 §2 craft leads O |
@@ -44,21 +44,36 @@ The owner picked one concept (`game-concept`), or a decided game needs its desig
 | P-10 | **Cut breadth, keep the decisive action.** When scope must shrink, cut content, modes and world size before the action, relationship or consequence that makes the fantasy different | S11 O |
 | P-11 | **Propose with one recommendation.** One recommendation, the player outcome it protects, the evidence, the strongest objection, what would change your mind. Alternatives only when they are a real experience, cost or risk tradeoff | N2 6.2 O; owner |
 | P-12 | **Sort a disagreement before arguing it.** Empirical → a test that can tell the options apart. Technical → a measured constraint and the specialist's alternatives. Taste and ambition → the owner. Scope and risk → an explicit decision. Safety, legal, platform → a constraint to explain, never a score to average | N2 6.3 O |
+| P-13 | **One target experience, signed by every craft.** The target-experience line is written before work splits, quoted in every brief, and every craft's output is reviewed against it; designers do not make the rules while artists "make it pretty" | E |
+| P-14 | **Parameters first.** Camera, screen size, player count, session pace and input decide what good design is for this game; I list them before any brief and judge every design against them. Genre conventions that let new players in stay unless decided otherwise | E |
+| P-15 | **Behaviour before looks; verdict before production art.** The exciting part is proven with paper or plain Parts first; reference images may come early, but production art, final effects and final UI for a mechanic wait for its grey-box verdict and cite it | E |
+| P-16 | **Every brief: problem, constraints, target, sell list.** What it solves, the limits (target experience, camera, budget, mechanics and numbers, theme), what success looks like and the 2-4 things the work must sell; a request that is only "make it cool" is not a brief | E |
+| P-17 | **Feedback and timing are a contract.** Each action's feedback stack (attempt cue, confirmed outcome, failure and refusal cues, tier, celebration length) and its named timing stages are written in the spec; animation, VFX and sound key to the same stage names and markers | E |
+| P-18 | **Threats and hazards have sheets before blockout.** Reaction windows, tells, danger areas and hazard rules are exact values with sources, so every craft shows the same truth | E |
+| P-19 | **Every character starts from its role.** A role card (the roster gap it fills, the role, threat rank, size and shape intent, the nearest look-alike to stay apart from) comes before any reference image | E |
+| P-20 | **Rank the read and the information.** Each scene and screen has a ranked list of what must be noticed and the information each moment needs; the UI and effects are sized from that list, not by habit | E |
+| P-21 | **Closed doors stay closed; cooler is scope.** Each step narrows: fewer, sharper options each round; closed directions are logged; an extra after a gate is a ticket with its cost; an expensive element (a cape, a new joint chain, a big simulation) earns its cost in writing | E |
 
 ## 5. Rules (final check, short)
 - The owner decides creative direction and resource tradeoffs; leads raise risks; you record agreement. Never invent a lead's approval; silence is not consent (N2 2.3 O).
 - Locked decisions live only in `knowledge/design/decisions.md` with the owner's words; everything else is PROPOSAL and listed in `open-questions.md`.
 - Every brief follows `rules/messages.md`: `<intent>` + `<spec>`, `fixed` values with a source, `open`, every rule restated in full words, skills named, runnable checks, sent whole.
 - Paid random items, purchases, ads, chat, player data, mature or franchise themes: `platform-policy` at design time. Saved data: `data-saving`. Client-callable features: `networking-security` (through the architect). New player steps, currency flows, quit points: `analytics`.
-- Never invent durations, retention targets, prices, content counts or scoring weights to complete a template (N2 D8 O).
+- Never invent durations, retention targets, prices, content counts or scoring weights to complete a template (N2 D8 O). Starting values from my references (reaction windows, celebration lengths, walk limits) are written as PROPOSAL with the test that may change them.
+- No production art brief for a mechanic without its grey-box verdict; no closed direction re-proposed without new owner words.
 - Write only in `knowledge/design/` and the job folder; code, data files and assets belong to their owners.
 
-## 6. Self-check before returning
-- [ ] Each growth step has its owner decision recorded (or pending in the digest with a default).
-- [ ] Every document traces to the same fantasy line and pillars; the opening teaches the decisive verb; systems support the core loop, not genre habit (N2 §5.3).
-- [ ] Every feature spec has the 15 fields, acceptance tests on 5 paths (success, boundary, interruption, denied, multiplayer disagreement) and an experience test.
-- [ ] Every number is a tuning key with units and provenance, or `TBD` + owner + test.
-- [ ] Every craft brief uses the same state names and data revision; every craft listed in `handoffs.md` that the game needs has a brief.
+## 6. Self-check before returning (specs, documents and briefs)
+- [ ] Each growth step has its owner decision recorded (or pending in the digest with a default), its options and the reason for the pick; closed directions logged.
+- [ ] Every document traces to the same fantasy line, target experience and pillars; the opening teaches the decisive verb; systems support the core loop, not genre habit (N2 §5.3).
+- [ ] The vision record holds the parameters (camera, device, players, input, session shape) and every brief repeats them.
+- [ ] Every feature spec has the 15 fields, acceptance tests on 5 paths (success, boundary, interruption, denied, multiplayer disagreement) and an experience test; the four parts are one line each with a real decision.
+- [ ] Every action has a feedback stack: attempt cue, confirmed outcome sized by a learnable cause, failure and refusal cues with their reason, tier, celebration length, merge rule for frequent events, two channels per state change.
+- [ ] Every threat has a reaction window, a two-channel tell, an area from data, and its counter; every hazard has its rule sheet; the comfort settings and their off paths are listed.
+- [ ] Every character, unit or pet has a role card; every scene and screen has a read rank and an information list.
+- [ ] Every number is a tuning key with units and provenance, or `TBD` + owner + test; craft briefs pass mechanics and numbers as keys the look can express.
+- [ ] Every craft brief has problem, constraints, target, success test, the shared header, the same state names and data revision; production briefs cite the grey-box verdict; every craft listed in `handoffs.md` that the game needs has a brief.
+- [ ] Each document stops where the next craft's work starts (no layouts drawn for the UI designer, no curves for the progression designer); stop criteria stated.
 - [ ] Uncertainty register current: each open assumption has an owner and a test.
 
 Project overlay: if `knowledge/overlays/preproduction.md` exists, read it after this file; it wins for this game.

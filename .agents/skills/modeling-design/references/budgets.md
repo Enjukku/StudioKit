@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-design`. Facts: `knowledge/reference/modeling/fact-check-roblox.md` (MR ids, read 2026-10-21). Paper notes: `knowledge/reference/modeling/02-*.md` (BG, TX, CK ids). Owner: J007-D5.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `modeling-design`. Facts: `knowledge/reference/modeling/fact-check-roblox.md` (MR ids, read 2026-10-21). Paper notes: `knowledge/reference/modeling/02-*.md` (BG, TX, CK ids). Owner: J007-D5. Revised by J018 maker modeler · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): the detail budget by display size (§8).
 
 # Budgets: ceilings, project budgets and measurement
 
@@ -58,6 +58,7 @@ Name the asset category first: avatar limits apply only to platform avatar items
 - An atlas cuts texture count; it does not merge different meshes into one draw call (DNT10 [O]).
 - A Blender linked duplicate is not a shared Roblox asset after import (ENV07 [O]).
 - Build kits from a few canonical pieces with planned variants; a variant must change silhouette, function or story, otherwise it is a tint (ENV19 [O]).
+- Reuse before making new: search the game's asset library and approved asset ids (Studio MCP `search_game_tree`, the asset records) for a mesh, material or trim that already does the job; reuse, recolour, then make new. The hand-back names what was reused and what is new.
 
 ## 6. Collision and distance
 - CollisionFidelity has five options: Default, Hull, Box, PreciseConvexDecomposition, Tunable (Tunable adds CollisionPrecision 0-1, set in Studio). Tunable did not replace the others [V] MR25.
@@ -70,3 +71,16 @@ Name the asset category first: avatar limits apply only to platform avatar items
 
 ## 7. Turning a PROPOSAL into a measured budget (when the owner asks, or a scene is slow)
 Follow the `performance` skill. Minimum record (MP:647-657 [O]): asset kind and revision; scene, camera and visible count; named device; the ceiling and its source; proposed limits; before and after captures of the same scene; frame time and memory result; the accepted envelope and its conditions; who approved. Scene Analysis shows triangles and draw calls by render pass on the local machine only [V] MR32; MicroProfiler splits frame time (33.33 ms = 30 FPS, 16.67 ms = 60 FPS) [V] MR34. No phone, no phone verdict: write `not verified`.
+
+## 8. Detail budget by display size (set with the triangle budget, step 6)
+Triangles and texture pixels are spent where the player sees them, at the size they see them.
+| Rule | How |
+| --- | --- |
+| Name the display sizes | on-screen height in px at the game camera on the smallest phone (from a Studio capture or from distance and FOV), plus the icon or shop-card size; in the read plan |
+| Tier per size | in-game model: macro forms, the identity anchors and 1-3 detail spots; icon and shop close-up: the anchors bigger and cleaner; marketing renders may carry more detail than the game model, never the reverse |
+| Sides | finish every side an orbiting or player-controlled camera reaches; skip a side only when the camera is locked and the record says which |
+| Small features | a feature under about 4 px at phone size does not read (starting value, PROPOSAL): remove it, merge it into a larger shape, or paint it into the texture at low contrast |
+| Detail in texture, not polygons | fur tufts, carvings, seams and small bolts are painted or baked (normal and colour) unless they change the silhouette, a bend or a material edge |
+| Even texel density in a set | assets seen together share one pixel density on purpose; one sharper or blurrier asset looks out of place; the focal zone (face, hands, emblem) may carry more on purpose |
+| Bigger is not better | a 1024² map uses four times the memory of a 512² map; the smallest size that holds at the game camera wins |
+Check: `review.md` §5 DT2 (small features), DT9 (texel density); texture sizes against §4 and the record.
