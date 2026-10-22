@@ -54,6 +54,7 @@ contrast, masks and components: tools/art/look_check.py (see its docstring for t
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -344,7 +345,11 @@ def run(a) -> dict:
     rec["measurements"] = meas
     rec["sources"] = SRC
 
-    shp = lc.out_path(path, a.out_dir, f"thumbcheck-{a.check}{size[0]}x{size[1]}-sheet")
+    # the run's parameters are in the name, so a run with another mask, box, filter or title never overwrites this
+    # sheet; the same command again replaces its own (J018 marketing review)
+    run_id = hashlib.sha1(json.dumps({k: str(v) for k, v in p.items() if k != "key_estimate"}, sort_keys=True)
+                          .encode("utf-8")).hexdigest()[:8]
+    shp = lc.out_path(path, a.out_dir, f"thumbcheck-{a.check}{size[0]}x{size[1]}-{run_id}-sheet")
     contact_sheet(img, small, smask, a.title).save(shp)
     rec["images"] = {"sheet": str(shp), "sheet_layout": "master | small 1:1 with title under | small WCAG luminance | "
                                                         "small subject mask (black on white; grey = not measured)"}

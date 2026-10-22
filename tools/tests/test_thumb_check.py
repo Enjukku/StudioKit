@@ -124,6 +124,17 @@ class SmallSizeTest(Cli):
         self.assertGreater(comp["w"] / comp["h"], 1.25)  # disc widened by the 16:9 stretch (4/3)
 
 
+class SheetNameTest(Cli):  # J018: another run never overwrites a sheet
+    def test_runs_with_other_parameters_keep_their_sheets(self):
+        p = self.save(discs_on(512, 512, [(256, 256)], 150))
+        a = self.run_cli(["icon", p, "--title", "One"])["images"]["sheet"]
+        b = self.run_cli(["icon", p, "--title", "Two"])["images"]["sheet"]
+        again = self.run_cli(["icon", p, "--title", "One"])["images"]["sheet"]
+        self.assertNotEqual(a, b)
+        self.assertEqual(a, again)
+        self.assertTrue(Path(a).exists() and Path(b).exists())
+
+
 class MomentTest(Cli):
     def test_one_vs_three_subjects(self):
         one = self.run_cli(["icon", self.save(discs_on(512, 512, [(256, 256)], 150), "one.png")])
