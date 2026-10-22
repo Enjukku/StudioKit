@@ -32,6 +32,14 @@ ROOT = Path(__file__).resolve().parents[2]
 LEAD_MARKS = "*_#> " + chr(9)  # markdown bold, heading or quote marks before the first line's STATUS
 COVERAGE_RE = re.compile(r'^[\s>*#{-]*["*_]*coverage["*_]*\s*:', re.IGNORECASE | re.MULTILINE)  # a field, not the word in prose
 REASON = "Hand-back must start with 'STATUS: done | blocked | needs-decision | failed.' and include coverage (rules/messages.md §3)."
+FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?^[ \t]*\1[ \t]*$", re.MULTILINE | re.DOTALL)
+
+
+def without_example_blocks(message: str) -> str:
+    """The message without fenced code blocks that hold no <spec>: a `coverage:` line inside an example is not the
+    hand-back's coverage (J018 orchestration review). A fenced <spec> block is the hand-back format of
+    rules/messages.md section 3 and is kept."""
+    return FENCE_RE.sub(lambda m: m.group(0) if "<spec>" in m.group(0) else "", message)
 
 
 def decision_for(payload: dict, root: Path) -> dict | None:
@@ -47,7 +55,7 @@ def decision_for(payload: dict, root: Path) -> dict | None:
     if not isinstance(message, str) or not message.strip():
         return None
     first = next(line.strip() for line in message.splitlines() if line.strip())
-    if first.lstrip(LEAD_MARKS).startswith("STATUS:") and COVERAGE_RE.search(message):
+    if first.lstrip(LEAD_MARKS).startswith("STATUS:") and COVERAGE_RE.search(without_example_blocks(message)):
         return None
     return {"decision": "block", "reason": REASON}
 

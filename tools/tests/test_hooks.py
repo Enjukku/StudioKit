@@ -223,6 +223,13 @@ class HandbackCheckTests(HookCase):
             with self.subTest(field=field):
                 self.assert_silent_success("handback_check.py", stop("feature-builder", "STATUS: done. x\n<spec>\n" + field + "\n</spec>\n"))
 
+    def test_coverage_only_in_an_example_block_blocked(self):
+        # J018: a coverage line inside a code example is not the hand-back's coverage; a fenced <spec> block is.
+        example = "STATUS: done. Built it.\n```text\ncoverage:\n  - a: done\n```\n"
+        self.blocked(stop("feature-builder", example))
+        spec_block = "STATUS: done. Built it.\n```text\n<spec>\ncoverage:\n  - a: done\n</spec>\n```\n"
+        self.assert_silent_success("handback_check.py", stop("feature-builder", spec_block))
+
     def test_missing_coverage_blocked(self):
         self.blocked(stop("feature-builder", "STATUS: done. Built it.\nfiles: [a.py]\n"))
 
