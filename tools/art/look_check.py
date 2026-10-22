@@ -1201,17 +1201,120 @@ def build_parser() -> argparse.ArgumentParser:
     t.add_argument("--size", required=True, help="target WxH in px, e.g. 150x150 or 1170x2532")
     t.add_argument("--filter", choices=sorted(FILTERS), default="lanczos")
     t.add_argument("--ring", type=int, default=2, help="ring width in px for the value re-run")
+    r = sub.add_parser("reserved", help="share of pixels within a CIEDE2000 distance of reserved colour swatches (J018 G3-P8)")
+    r.add_argument("image")
+    r.add_argument("--swatch", action="append", required=True, help="reserved colour #RRGGBB (repeatable; add the colour as rendered too)")
+    r.add_argument("--max-de", type=float, required=True, help="CIEDE2000 distance that counts as the reserved colour (the art bible's value)")
+    r.add_argument("--exclude", action="append", metavar="MASK", help="mask image (dark = excluded): gameplay objects that may wear the colour")
+    r.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", help="measure only inside this box")
+    r.add_argument("--out-dir", type=Path)
+    r.add_argument("--out", type=Path, help="also write the JSON here")
+    h = sub.add_parser("hue-spread", help="spread of the CIELAB hue angle over 4x4 blocks inside one material box (J018 G3-P8)")
+    h.add_argument("image")
+    h.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", required=True,
+                   help="one box fully inside one material on its lit side")
+    h.add_argument("--out", type=Path, help="also write the JSON here")
     return ap
 
 
-RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb}
+RESERVED_IMAGE_SUFFIX = "reserved"
+HUE_BLOCK = 4  # px: hue-spread block size
+HUE_MIN_CHROMA = 5.0  # CIELAB chroma under which a block has no usable hue angle
+HUE_VALID_CHROMA = 15.0  # hue-spread is valid only with a median chroma about this or more
+HUE_VALID_BLOCKS = 0.9  # ... and this share of blocks with a usable hue
+
+
+def run_reserved(a) -> dict:
+    """Pixels within --max-de (CIEDE2000) of any reserved swatch, outside the exclusions: share and count.
+
+    The kit form of the art-review look-check recipe CL1 (a k-means palette merged a 0.072 % reserved accent into a
+    brown cluster, J018). A screening aid: a frame that still holds characters, effects or the HUD counts their
+    reserved colours as decoration, and the lit colour drifts from the authored swatch (add it as rendered)."""
+    path = Path(a.image)
+    img = load(path)
+    rgb = np.asarray(img.convert("RGB"))
+    lab = srgb_to_lab(rgb)
+    region = np.ones(rgb.shape[:2], dtype=bool)
+    if a.boxes:
+        region[:] = False
+        for b in a.boxes:
+            check_box(b["box"], rgb.shape)
+            x0, y0, x1, y1 = b["box"]
+            region[y0:y1, x0:x1] = True
+    for e in a.exclude or []:
+        m = np.asarray(Image.open(e).convert("L"))
+        if m.shape != region.shape:
+            raise SystemExit(f"--exclude {e}: size {m.shape[::-1]} differs from the image {rgb.shape[1::-1]}")
+        region &= m >= 128
+    n = int(region.sum())
+    if n == 0:
+        raise SystemExit("nothing left to measure: the box and exclusions cover the whole image")
+    hit_any = np.zeros(region.shape, dtype=bool)
+    per = []
+    for sw in a.swatch:
+        sl = srgb_to_lab(np.array(hex_to_rgb(sw)))
+        hit = (ciede2000(lab, sl) <= a.max_de) & region
+        hit_any |= hit
+        per.append({"swatch": rgb_to_hex(hex_to_rgb(sw)), "px": int(hit.sum()), "share": round(float(hit.sum()) / n, 6)})
+    rec = base_record("reserved", path, img, {"swatches": [p["swatch"] for p in per], "max_de": a.max_de,
+                                             "metric": "CIEDE2000", "exclude": a.exclude, "boxes": a.boxes})
+    rec["measurements"] = {"measured_px": n, "per_swatch": per, "px": int(hit_any.sum()),
+                           "share": round(float(hit_any.sum()) / n, 6)}
+    marked = np.where(hit_any, 0, 255).astype(np.uint8)
+    out = out_path(path, a.out_dir, RESERVED_IMAGE_SUFFIX)
+    Image.fromarray(marked).save(out)
+    rec["images"]["marked"] = str(out)
+    return rec
+
+
+def run_hue_spread(a) -> dict:
+    """Standard deviation of the CIELAB hue angle over 4x4 blocks inside one box (a flat or one-hue material reads low).
+
+    The kit's one flat-fill measure (J018: a linear-RGB chromaticity spread passed one-hue materials on renders with
+    a studio highlight, 19.7 and 36.3 against a limit of 8). Valid only when valid is true (median chroma about 15 or
+    more, nearly all blocks with a hue); a coloured light pool or bounce in the box reads as a hue change."""
+    path = Path(a.image)
+    img = load(path)
+    rgb = np.asarray(img.convert("RGB")).astype(np.float64)
+    if len(a.boxes) != 1:
+        raise SystemExit("hue-spread takes exactly one --box")
+    check_box(a.boxes[0]["box"], rgb.shape)
+    x0, y0, x1, y1 = a.boxes[0]["box"]
+    lin = srgb_to_linear(rgb[y0:y1, x0:x1] / 255)
+    hb, wb = lin.shape[0] // HUE_BLOCK, lin.shape[1] // HUE_BLOCK
+    if hb == 0 or wb == 0:
+        raise SystemExit(f"the box is smaller than one {HUE_BLOCK}x{HUE_BLOCK} block")
+    blocks = lin[:hb * HUE_BLOCK, :wb * HUE_BLOCK].reshape(hb, HUE_BLOCK, wb, HUE_BLOCK, 3).mean((1, 3))
+    lab = srgb_to_lab(linear_to_srgb(blocks) * 255).reshape(-1, 3)
+    chroma = np.hypot(lab[:, 1], lab[:, 2])
+    use = chroma > HUE_MIN_CHROMA
+    rec = base_record("hue-spread", path, img, {"box": [x0, y0, x1, y1], "block_px": HUE_BLOCK, "min_chroma": HUE_MIN_CHROMA})
+    med = float(np.median(chroma))
+    share = float(use.mean())
+    if use.any():
+        z = np.exp(1j * np.arctan2(lab[use, 2], lab[use, 1]))
+        sd = float(np.degrees(np.angle(z / z.mean())).std())
+    else:
+        sd = None
+    rec["measurements"] = {"hue_sd_deg": None if sd is None else round(sd, 2), "median_chroma": round(med, 1),
+                           "blocks_used": round(share, 3), "blocks": int(len(chroma)),
+                           "valid": bool(sd is not None and med >= HUE_VALID_CHROMA and share >= HUE_VALID_BLOCKS)}
+    if not rec["measurements"]["valid"]:
+        rec["verdict"] = "not-measured"
+        rec["not_measured_reason"] = ("near-neutral or low-chroma material: the hue angle swings with noise; judge by eye "
+                                      f"(median chroma {med:.1f}, blocks with a hue {share:.0%})")
+    return rec
+
+
+RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb,
+           "reserved": run_reserved, "hue-spread": run_hue_spread}
 
 
 def main(argv: list[str]) -> int:
     a = build_parser().parse_args(argv)
     for flag in ("min_ratio", "min_iou", "max_delta_e"):
-        tolerance(getattr(a, flag, None), a.tolerance_source, "--" + flag.replace("_", "-"))
-    if getattr(a, "boxes", None) and a.mask:
+        tolerance(getattr(a, flag, None), getattr(a, "tolerance_source", None), "--" + flag.replace("_", "-"))
+    if getattr(a, "boxes", None) and getattr(a, "mask", None):
         raise SystemExit("--box and --mask are two ways to give the subject; use one")
     if getattr(a, "box_key", False) and not getattr(a, "boxes", None):
         raise SystemExit("--box-key needs --box")

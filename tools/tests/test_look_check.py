@@ -305,6 +305,51 @@ class ShadowOnKeyTest(unittest.TestCase):  # J018: a cast shadow on the key is c
         self.assertNotIn("shadow_warning", info)
 
 
+class ReservedAndHueSpreadTest(unittest.TestCase):  # J018 G3-P8: the two colour checks as look_check modes
+    def run_mode(self, args):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            lc.main([str(x) for x in args])
+        return json.loads(buf.getvalue())
+
+    def test_reserved_finds_a_small_accent_a_palette_merges(self):
+        with tempfile.TemporaryDirectory() as d:
+            img = np.full((100, 200, 3), (120, 90, 60), dtype=np.uint8)
+            img[10:13, 10:15] = (220, 30, 30)                    # a 15 px reserved red accent (0.075 %)
+            p = Path(d) / "env.png"
+            Image.fromarray(img).save(p)
+            r = self.run_mode(["reserved", p, "--swatch", "#DC1E1E", "--max-de", "10", "--out-dir", d])
+            self.assertEqual(r["measurements"]["px"], 15)
+            ex = np.full((100, 200), 255, dtype=np.uint8)
+            ex[10:13, 10:15] = 0                                 # the accent is a gameplay object: excluded
+            Image.fromarray(ex).save(Path(d) / "ex.png")
+            r2 = self.run_mode(["reserved", p, "--swatch", "#DC1E1E", "--max-de", "10", "--exclude", Path(d) / "ex.png",
+                                "--out-dir", d])
+            self.assertEqual(r2["measurements"]["px"], 0)
+
+    def test_hue_spread_one_hue_low_hue_patches_high(self):
+        with tempfile.TemporaryDirectory() as d:
+            rng = np.random.default_rng(1)
+            base = np.array([180, 90, 50], dtype=np.float64)
+            one = np.clip(base * rng.uniform(0.6, 1.0, (80, 80, 1)), 0, 255).astype(np.uint8)  # value texture, one hue
+            patch = one.copy()
+            patch[::8, :] = (80, 140, 60)
+            patch[4::8, :] = (60, 90, 170)                                                    # hue changes
+            for name, arr in (("one.png", one), ("patch.png", patch)):
+                Image.fromarray(arr).save(Path(d) / name)
+            a = self.run_mode(["hue-spread", Path(d) / "one.png", "--box", "0,0,80,80"])["measurements"]
+            b = self.run_mode(["hue-spread", Path(d) / "patch.png", "--box", "0,0,80,80"])["measurements"]
+            self.assertTrue(a["valid"])
+            self.assertLess(a["hue_sd_deg"], 3)
+            self.assertGreater(b["hue_sd_deg"], 10)
+
+    def test_hue_spread_grey_is_not_measured(self):
+        with tempfile.TemporaryDirectory() as d:
+            Image.fromarray(np.full((40, 40, 3), 128, dtype=np.uint8)).save(Path(d) / "g.png")
+            r = self.run_mode(["hue-spread", Path(d) / "g.png", "--box", "0,0,40,40"])
+            self.assertEqual(r["verdict"], "not-measured")
+
+
 class HolesAndComponentsTest(unittest.TestCase):  # push 2: hole fill, components, --component
     GREY = (211, 211, 211)
 
