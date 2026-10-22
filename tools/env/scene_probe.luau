@@ -40,6 +40,9 @@ APIs used (docs mirror knowledge/external/roblox-creator-docs/_api-reference/):
                                       datatypes/OverlapParams.yaml:28, :154, :140
   BasePart.CFrame/.Size/.Position/.Anchored/.Transparency/.CastShadow
                                       classes/BasePart.yaml:704, :1828, :1509, :64, :2085, :653
+  BasePart.CanCollide/.Material       classes/BasePart.yaml:550, :1375
+  MeshPart.MeshId                     classes/MeshPart.yaml:156
+  TriangleMeshPart.CollisionFidelity  classes/TriangleMeshPart.yaml:29
   Light.Shadows                       classes/Light.yaml:80 (PointLight, SpotLight, SurfaceLight inherit Light)
   Attachment.WorldPosition            classes/Attachment.yaml:303
   PVInstance:GetPivot                 classes/PVInstance.yaml:97 (used for Model parents)
@@ -252,6 +255,13 @@ for i, part in ipairs(stageParts) do
 	rec.anchored = read(part, "Anchored")
 	rec.transparency = read(part, "Transparency")
 	rec.cast_shadow = read(part, "CastShadow")
+	-- J018 G3-P8: collision, material and mesh id for the blockout diff and the footstep table
+	rec.can_collide = read(part, "CanCollide")
+	local mat = read(part, "Material")
+	rec.material = if mat ~= nil then mat.Name else nil
+	rec.mesh_id = read(part, "MeshId")
+	local fid = read(part, "CollisionFidelity")
+	rec.collision_fidelity = if fid ~= nil then fid.Name else nil
 	local filter = table.clone(markers)
 	table.insert(filter, part)
 	local hy = halfY(cf, size)

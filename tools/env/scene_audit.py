@@ -444,6 +444,40 @@ def to_markdown(report: dict) -> str:
 
 # ---------------------------------------------------------------- CLI
 
+def diff_probes(base: dict, current: dict, move_step: float = 0.5) -> dict:
+    """Compare the current place's probe with a saved probe of the approved blockout (J018 G3-P8): parts added and
+    removed (by path), parts whose box centre moved more than move_step studs, and collision changes (can_collide or
+    collision_fidelity). Collision that is unknown in either probe (an older probe) is listed as unknown, never as
+    equal. A measurement: the stage contract decides which changes are allowed."""
+    def by_path(probe):
+        return {p["path"]: p for p in probe.get("parts", []) if isinstance(p, dict) and "path" in p}
+    a, b = by_path(base), by_path(current)
+    moved, collision, unknown = [], [], []
+    for path in sorted(set(a) & set(b)):
+        fa, fb = _frame(a[path]), _frame(b[path])
+        if fa and fb:
+            d = math.dist(fa[0], fb[0])
+            size_change = max(abs(x - y) for x, y in zip(fa[2], fb[2]))
+            if d > move_step or size_change > move_step:
+                moved.append({"path": path, "moved": round(d, 3), "size_change": round(size_change, 3)})
+        for key in ("can_collide", "collision_fidelity"):
+            va, vb = a[path].get(key), b[path].get(key)
+            if va is None or vb is None:
+                if key == "can_collide":
+                    unknown.append(path)
+            elif va != vb:
+                collision.append({"path": path, "field": key, "base": va, "current": vb})
+    added = sorted(set(b) - set(a))
+    removed = sorted(set(a) - set(b))
+    collide_added = [p for p in added if b[p].get("can_collide") is True]
+    collide_removed = [p for p in removed if a[p].get("can_collide") is True]
+    return {"move_step_studs": move_step, "added": added, "removed": removed, "moved": moved,
+            "collision_changed": collision, "colliding_added": collide_added, "colliding_removed": collide_removed,
+            "collision_unknown": unknown,
+            "verdict": "MEASURED",
+            "note": "parts are matched by full path; a renamed part reads as removed plus added"}
+
+
 def main(argv: list[str]) -> int:
     import argparse  # noqa: PLC0415
 
@@ -462,9 +496,23 @@ def main(argv: list[str]) -> int:
     au.add_argument("--buried-tol", type=float, help="max depth below terrain, studs")
     au.add_argument("--oob-tol", type=float, help="max overshoot outside PlayArea, studs")
     au.add_argument("--out", required=True, help="audit JSON path; Markdown is written beside it (.md)")
+    df = sub.add_parser("diff", help="compare the current probe with a saved probe of the approved blockout")
+    df.add_argument("--base", nargs="+", required=True, help="file(s) holding the approved blockout's probe output")
+    df.add_argument("--current", nargs="+", required=True, help="file(s) holding the current place's probe output")
+    df.add_argument("--move-step", type=float, default=0.5, help="studs a part may move or resize before it is listed")
+    df.add_argument("--out", help="also write the JSON here")
     a = p.parse_args(argv)
     if a.cmd == "probe":
         sys.stdout.write(probe_source(a.root, a.ray_length, a.chunk_size, a.chunk))
+        return 0
+    if a.cmd == "diff":
+        rep = diff_probes(load_probe([Path(f).read_text(encoding="utf-8") for f in a.base]),
+                          load_probe([Path(f).read_text(encoding="utf-8") for f in a.current]), a.move_step)
+        text = json.dumps(rep, indent=2)
+        if a.out:
+            Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+            Path(a.out).write_text(text, encoding="utf-8")
+        print(text)
         return 0
     probe = load_probe([Path(f).read_text(encoding="utf-8") for f in a.probe])
     amap = parse_ambience_map(Path(a.map).read_text(encoding="utf-8")) if a.map else None

@@ -221,3 +221,25 @@ class CliTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DiffProbesTest(unittest.TestCase):
+    """J018 G3-P8: the current place against the approved blockout's probe."""
+
+    def p(self, path, x, collide=True, size=(4, 1, 4)):
+        return {"path": path, "cf": [x, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1], "size": list(size), "can_collide": collide}
+
+    def test_added_removed_moved_and_collision(self):
+        base = {"parts": [self.p("W.Wall", 0), self.p("W.Cover", 10), self.p("W.Old", 20)]}
+        cur = {"parts": [self.p("W.Wall", 0.2), self.p("W.Cover", 12, collide=False), self.p("W.New", 30)]}
+        d = sa.diff_probes(base, cur, 0.5)
+        self.assertEqual(d["added"], ["W.New"])
+        self.assertEqual(d["removed"], ["W.Old"])
+        self.assertEqual([m["path"] for m in d["moved"]], ["W.Cover"])      # 0.2 studs stays under the step
+        self.assertEqual(d["collision_changed"][0]["path"], "W.Cover")
+        self.assertEqual(d["colliding_added"], ["W.New"])
+
+    def test_old_probe_without_collision_is_unknown(self):
+        old = {"parts": [{"path": "W.Wall", "cf": [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1], "size": [4, 1, 4]}]}
+        d = sa.diff_probes(old, {"parts": [self.p("W.Wall", 0)]})
+        self.assertEqual(d["collision_unknown"], ["W.Wall"])
