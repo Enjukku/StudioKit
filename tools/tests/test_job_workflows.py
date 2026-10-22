@@ -165,6 +165,14 @@ class JobWorkflowTests(unittest.TestCase):
         self.assertEqual(props[-2:], ["status", "outcome"], "evidence fields come before the answer fields")
         # The harness fails any agent() call whose schema differs from the template; the clean-run test covers every call.
 
+    def test_a_blocked_step_stops_the_stage(self):
+        # Smoke run 2026-10-21: every direction lead returned blocked and the stage still reported the direction sheet ready.
+        for script in self.scripts():
+            with self.subTest(script=script.name):
+                out = run(script, full(script.name, stage="direction"), {"statusLabel": r": D1-", "status": "blocked"})
+                self.assertNotEqual(out["status"], "done", "a blocked proposal never yields a direction sheet")
+                self.assertEqual(index(out["labels"], r"D3-synthesis"), -1, "no synthesis on missing proposals")
+
     def test_harness_studio_check_matches_the_workflow_wording(self):
         # The harness's Studio exclusivity check keys on the driver sentence in each workflow's studioRule();
         # if either side drifts, the overlap check would go silent (J016 follow-up review F3).
@@ -192,6 +200,10 @@ class JobWorkflowTests(unittest.TestCase):
                 self.assertEqual(out["status"], "done", out["outcome"])
                 self.assertEqual(len(out["result"]["lessons"]), out["agents"], "every lesson draft is in the stage result (TT-10)")
                 self.assertIn("cause", out["result"]["lessons"][0])
+                empty = run(script, full(script.name, stage="direction"), {"lesson": "none"})
+                self.assertEqual(empty["result"]["lessons"], [], "a lesson of type none is never filed")
+                smoke = run(script, full(script.name, stage="direction", smoke=True), {"lesson": True})
+                self.assertEqual(smoke["result"]["lessons"], [], "a smoke run files no lessons")
 
     # ------------------------------------------------------------------ bounded repairs and dead agents (LD5, R1)
     def test_repair_rounds_are_bounded(self):

@@ -136,11 +136,12 @@
         "what_happened",
         "proposed_change"
       ],
-      "description": "Optional lesson draft (knowledge/inbox/README.md fields); the lead files it in knowledge/inbox/ at the next gate.",
+      "description": "Optional lesson draft (knowledge/inbox/README.md fields); the lead files it in knowledge/inbox/ at the next gate. Type none = nothing to keep (the runtime may require the field); the lead skips it.",
       "properties": {
         "type": {
           "type": "string",
           "enum": [
+            "none",
             "win",
             "failure",
             "owner-correction"
@@ -149,6 +150,7 @@
         "cause": {
           "type": "string",
           "enum": [
+            "none",
             "context missed",
             "context missing",
             "brief gap",

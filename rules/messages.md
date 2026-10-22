@@ -107,6 +107,7 @@ lesson: {type: failure, cause: brief gap, layer: "rules/messages.md §2", what_h
 </spec>
 ```
 - **`coverage` lists every item in scope** with done, not done or skipped. Agents that skip work usually report it as complete (80 % of incomplete runs in one test, M-31). The asker checks the files against `coverage`, not the summary.
+- **`lesson`** is optional; when the schema runtime makes it required and there is nothing to keep, set its type and cause to `none` (never invent a lesson to fill it); the lead skips it.
 - **`built_on`** names the input revisions used, so a later contract change shows which outputs are stale.
 - Every `pass` names its evidence (a file, a log line, a capture). No evidence → `not verified` (M-08).
 - Length: what the reader needs, no padding. Long logs, tables and specs go in files (M-07, M-09).

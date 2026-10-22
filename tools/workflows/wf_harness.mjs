@@ -98,7 +98,10 @@ function fake(sch, label) {
   if ('timing_changed' in out) out.timing_changed = !!scenario.timing
   if ('conflicts' in out && scenario.conflicts && /-r1-/.test(label)) out.conflicts = [{ about: 'B1', why: 'w', needs: 'n' }]
   if (out.images && scenario.images) out.images.state = scenario.images
-  if (scenario.lesson && sch.properties && sch.properties.lesson) out.lesson = fakeValue(sch.properties.lesson, 'lesson')
+  if (scenario.lesson && sch.properties && sch.properties.lesson) {
+    out.lesson = fakeValue(sch.properties.lesson, 'lesson')
+    out.lesson.type = scenario.lesson === 'none' ? 'none' : 'failure'   // 'none' = nothing to keep, the workflow skips it
+  }
   for (const [k, v] of Object.entries(scenario.set || {})) if (k in out) out[k] = v
   if (scenario.statusLabel && new RegExp(scenario.statusLabel).test(label)) out.status = scenario.status || 'blocked'
   return out

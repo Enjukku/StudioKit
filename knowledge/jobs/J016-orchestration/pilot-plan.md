@@ -66,3 +66,12 @@ Gate after the fixes: PASS, 641 tests. A fresh rechecker (J016-A6, `reviews/repa
 | 1 | Add `SendMessage` to the 11 working roles that lack it | yes (J016-D6) |
 | 2 | Give the image roles the built-in browser | yes (J016-D7): art-director, vfx-designer, marketing; the owner's yes per download batch still applies |
 | 3 | Run the cutscene pilot now | no (J016-D8): the first real cutscene job in a game is the pilot; the comparison runs (§3) are optional then |
+
+## 6. Smoke runs in the real Workflow runtime (2026-10-21, after the close; mechanics only, not quality, nothing filed)
+| Run | Agents | Result | Found and fixed |
+| --- | --- | --- | --- |
+| job-effect direction, by name | 7 (Opus: the session's stale copy) | every agent blocked (no job folder) and refused to invent; the stage still said "direction sheet ready" | a step that does not finish now stops the stage (all 7 workflows, test `test_a_blocked_step_stops_the_stage`); edited workflows need `scriptPath` or a restart (C25); 3 memory notes from the run removed |
+| job-effect direction, by path | 10 Haiku | done | smoke note asked for an image state the schema lacks; the runtime required the optional `lesson`: `lesson.type` and `cause` gain `none`, skipped by the lead and never collected in a smoke run |
+| direction: cutscene, character, stage, UI, feature, marketing | 74 Haiku | done, 0 errors | UI, feature and marketing ran before the stop fix and showed it (a blocked and a needs-decision step went through) |
+| job-cutscene build, M (proof inside) | 50 Haiku, 3.5 M tokens | done, 0 errors, through the review chain | none; fixed context cost about 30-70 k tokens per agent before any work |
+

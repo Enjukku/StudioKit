@@ -56,6 +56,9 @@ Every workflow takes `job` (the job folder id) and `stage`. "Stages" says where 
 
 A stage result carries `status`, `outcome`, `steps`, `images_pending` (batches for the lead), `lessons` (every agent's lesson draft, for the lead to file in `knowledge/inbox/`), and the stage's own fields (`g1`, `beat_sheet`, `blocking`, `new_requests`, `required` when blocked).
 
+## Smoke run (mechanics only)
+`args.smoke: true` puts every agent on Haiku at low effort with a note: no Studio, Blender or browser, no files, placeholder hand-backs, no lessons collected. It tests the real Workflow runtime, never quality; the lead files nothing from it. Call the workflow by `scriptPath` after an edit in the same session (capability check C25).
+
 ## Test
 `python -m unittest tools.tests.test_job_workflows` runs every script here under `tools/workflows/wf_harness.mjs` with fake agents (no tokens). The harness fails a run on: an `agent()` call without role, model, effort or schema; a schema that differs from the hand-back template; a role file missing or a model off its tier; a phase not in `meta.phases`; more than 5 agents at once; two agents holding the Studio, Blender or the browser at once; a brief that names peer messages. The tests check: bad and missing args are refused before any agent; every stage ends `done`; repair rounds are bounded; a dead agent is never a pass; pending images are listed; the cutscene recaptures after repairs, runs scripts first every round, runs VFX before sound, reviews the combined pass before polish and stops for a new cast before the animatic; code review runs wherever code is in the candidate. It is part of the gate (skipped where Node.js is not installed).
 
