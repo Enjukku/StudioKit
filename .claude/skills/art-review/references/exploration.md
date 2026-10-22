@@ -69,7 +69,7 @@ The board and the keyword table follow `reference-images/references/rounds.md` �
 - **A new theme's library** (shorthand motifs, iconography, a name and a logo idea: `art-direction/references/identity-variants.md` §2) is built from the board and recorded in the Theme libraries row of `art-bible.md` §7.
 
 ## 8. The image budget for a direction round
-Under the light-check rule (owner J005-D8: numbers for every case, images only for a failing number plus a few key cases). A brief's own cap always wins. A style-direction round is its own round type, not the rough round of one subject (`reference-images` R1, at most 6 images): it shows the same cast of 2-3 subjects in each of 3-4 directions (§3 item 3), so a style is judged apart from any one subject, and it has the cap below; each image keeps `reference-images`'s rules (one per chat, at most 2 regenerations, medium quality while exploring).
+Under the light-check rule (owner J005-D8: numbers for every case, images only for a failing number plus a few key cases). A brief's own cap always wins. A style-direction round is its own round type, not the rough round of one subject (`reference-images` R1, at most 6 images): it shows the same cast of 2-3 subjects in each of 3-4 directions (§3 item 3), so a style is judged apart from any one subject, and it has the cap below; each image keeps `reference-images`'s rules (one per chat, at most 2 regenerations, highest quality, `reference-images` I-13).
 | Item | Starting budget (PROPOSAL) |
 | --- | --- |
 | Hooks | 6-12 written lines; no images |
