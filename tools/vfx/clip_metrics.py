@@ -12,6 +12,8 @@ moves (`_follow`) are measured anyway and flagged `moving_camera` in the summary
 Usage:
   python tools/vfx/clip_metrics.py <capture_dir> [<capture_dir> ...]
   python tools/vfx/clip_metrics.py --all output/vfx/training-captures
+  python tools/vfx/clip_metrics.py [--background-first] --press-ms <press ms> <press folder>   (the UI lag line)
+  python tools/vfx/clip_metrics.py diff <folder A> <folder B> X0,Y0,X1,Y1   (per-frame difference in one box)
   python tools/vfx/clip_metrics.py --background-first <capture_dir>   (an idle first frame as the background: use it
       when the effect stays on screen in more than half the frames, where the median background inverts every number)
 """
@@ -122,20 +124,58 @@ def measure(folder: Path, background_from: str = "median") -> dict:
     return result
 
 
+def press_lag(rows: list[dict], press_ms: int) -> dict:
+    """The UI lag line (ui-design S-33): the highest coverage before the press, the first frame from the press on
+    whose coverage rises above it, and the lag. summary.onset_ms is never the lag (a bigger later change hides a
+    small press cue). The pre-press maximum must be 0; cue None is UNVERIFIED, not a pass."""
+    base = max([r["coverage_pct"] for r in rows if r["ms"] < press_ms] + [0])
+    cue = next((r["ms"] for r in rows if r["ms"] >= press_ms and r["coverage_pct"] > base), None)
+    return {"press_ms": press_ms, "pre_press_max_pct": base, "cue_ms": cue, "lag_ms": None if cue is None else cue - press_ms,
+            "valid": base == 0 and cue is not None}
+
+
+def frame_diff(folder_a: Path, folder_b: Path, box: tuple[int, int, int, int], level: int = DIFF_THRESHOLD) -> list[dict]:
+    """The reveal difference (ui-design S-44): per frame pair, in one box, the mean difference and the count of pixels
+    that differ by more than `level` in a channel. Folders are paired in frame-number order; both start on the press."""
+    def frames_of(folder):
+        return sorted((p for p in folder.iterdir() if FRAME_RE.match(p.name)), key=lambda p: int(FRAME_RE.match(p.name).group(1)))
+    fa, fb = frames_of(folder_a), frames_of(folder_b)
+    if not fa or not fb:
+        raise ValueError("both folders need f###_<ms>ms.jpg frames")
+    out = []
+    for pa, pb in zip(fa, fb):
+        a = np.asarray(Image.open(pa).convert("RGB").crop(box), float)
+        b = np.asarray(Image.open(pb).convert("RGB").crop(box), float)
+        d = np.abs(a - b)
+        out.append({"a": pa.name, "b": pb.name, "mean_diff": round(float(d.mean()), 2), "changed_px": int((d.max(-1) > level).sum())})
+    return out
+
+
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
         return 2
-    bg = "median"
+    if argv[0] == "diff":  # diff <folder A> <folder B> X0,Y0,X1,Y1
+        box = tuple(int(v) for v in argv[3].split(","))
+        for row in frame_diff(Path(argv[1]), Path(argv[2]), box):
+            print(json.dumps(row))
+        return 0
+    bg, press = "median", None
     if argv[0] == "--background-first":  # the first frame is an idle frame before the effect
         bg, argv = "first", argv[1:]
+    if argv[0] == "--press-ms":  # the UI lag line on one press folder
+        press, argv = int(argv[1]), argv[2:]
     if argv[0] == "--all":
         root = Path(argv[1])
         folders = sorted(p for p in root.iterdir() if p.is_dir() and any(FRAME_RE.match(x.name) for x in p.iterdir()))
     else:
         folders = [Path(a) for a in argv]
     for f in folders:
-        s = measure(f, bg)["summary"]
+        res = measure(f, bg)
+        if press is not None:
+            print(json.dumps({"clip": f.name, **press_lag(res["frames"], press)}))
+            continue
+        s = res["summary"]
         print(f"{f.name}: peak {s['peak_coverage_pct']}% at {s['peak_ms']} ms, visible {s['visible_ms']} ms")
     return 0
 

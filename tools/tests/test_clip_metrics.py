@@ -82,3 +82,24 @@ class BackgroundFirstTest(unittest.TestCase):
             first = cm.measure(folder, "first")["frames"]
             self.assertLess(med[5]["coverage_pct"], 1)   # the median took the effect as background
             self.assertGreater(first[5]["coverage_pct"], 5)
+
+
+class PressLagAndDiffTest(unittest.TestCase):
+    """J018 G3-P8: the UI lag line and the reveal difference."""
+
+    def test_press_lag_ignores_a_bigger_later_change(self):
+        rows = [{"ms": m, "coverage_pct": c} for m, c in
+                [(0, 0), (33, 0), (67, 0), (100, 2.0), (133, 2.0), (167, 40.0), (200, 40.0)]]
+        lag = cm.press_lag(rows, 67)
+        self.assertEqual((lag["cue_ms"], lag["lag_ms"], lag["valid"]), (100, 33, True))
+
+    def test_diff_finds_a_small_tell_in_its_box(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d) / "a", Path(d) / "b"
+            a.mkdir()
+            b.mkdir()
+            write_clip(a, [0, 0, 0])
+            write_clip(b, [0, 10, 0])
+            rows = cm.frame_diff(a, b, (100, 50, 156, 94))
+            self.assertEqual(rows[0]["changed_px"], 0)
+            self.assertGreater(rows[1]["changed_px"], 50)
