@@ -235,6 +235,158 @@ def audit_scene(mesh: str, armature: str, root: str | None = None, protect: str 
     return report
 
 
+# ---------------------------------------------------------------- caps, overlap, orient (Blender layer, J018 G3-P1)
+# The rigger's measuring recipes, moved here from rigging-craft/references/blender-mcp.md section 6 so no book
+# carries the code. Every one is a screening aid (its known false readings are in that section): a failing or
+# borderline number is checked by eye on the still of that pose and camera before any fix note. Call them through
+# the Blender MCP after adding tools/rig to sys.path. They read a fresh depsgraph on every call, so a pose or
+# group change is always seen.
+
+TRI_WEIGHTS = [(.6, .2, .2), (.2, .6, .2), (.2, .2, .6), (1 / 3, 1 / 3, 1 / 3), (.45, .45, .1), (.1, .45, .45), (.45, .1, .45)]
+
+
+def _tri_points(me, tri):
+    """7 points inside one triangle, 3 of them near its edges (a face is sampled through all its triangles)."""
+    a, b, c = (me.vertices[i].co for i in tri.vertices)
+    return [a * u + b * v + c * w for u, v, w in TRI_WEIGHTS]
+
+
+def _ray_origin(cam, w):
+    from mathutils import Vector  # noqa: PLC0415
+    if cam.data.type == "ORTHO":  # parallel rays along the view axis, starting on the camera plane
+        ax = (cam.matrix_world.to_3x3() @ Vector((0, 0, -1))).normalized()
+        return w - ax * ax.dot(w - cam.matrix_world.translation)
+    return cam.matrix_world.translation
+
+
+def _cap_vertices(me, group_index: int) -> set[int]:
+    return {v.index for v in me.vertices if any(x.group == group_index and x.weight > 0.99 for x in v.groups)}
+
+
+def cap_count(ob, cam, cut: str) -> tuple[int, int]:
+    """(visible, sampled) points of one cut's cap or socket faces (group `cap_<cut>` at weight 1), posed.
+
+    Points come from the evaluated mesh (an Armature-moved part reads correctly), sampled over every triangle of
+    every cap face. Pass per cut and camera: visible 0 with sampled above 0. Stops on a missing group or a hidden
+    part (a hidden part reads 0 with no error)."""
+    import bpy  # noqa: PLC0415
+    g = ob.vertex_groups.get(f"cap_{cut}")
+    if g is None:
+        raise KeyError(f"{ob.name}: no 'cap_{cut}' vertex group")
+    if not ob.visible_get():
+        raise RuntimeError(f"{ob.name} is hidden: its caps would read 0")
+    dg = bpy.context.evaluated_depsgraph_get()
+    sc = bpy.context.scene
+    ev = ob.evaluated_get(dg)
+    me = ev.to_mesh()
+    try:
+        me.calc_loop_triangles()
+        caps = _cap_vertices(me, g.index)
+        pts = [(t.polygon_index, p) for t in me.loop_triangles
+               if set(me.polygons[t.polygon_index].vertices) <= caps for p in _tri_points(me, t)]
+        seen = 0
+        for face, p in pts:
+            w = ob.matrix_world @ p
+            o = _ray_origin(cam, w)
+            d = w - o
+            hit, loc, _, idx, hob, _ = sc.ray_cast(dg, o, d.normalized(), distance=d.length + 1e-3)
+            seen += bool(hit and hob.original == ob and idx == face and (loc - w).length < 1e-3 * d.length)
+        return seen, len(pts)
+    finally:
+        ev.to_mesh_clear()
+
+
+def _in_tris(tris, w, eps: float) -> bool:
+    for p, q, r in tris:
+        n = (q - p).cross(r - p)
+        if n.length > 1e-9 and all(n.normalized().dot((b - a).cross(w - a)) >= -eps * (b - a).length
+                                   for a, b in ((p, q), (q, r), (r, p))):
+            return True
+    return False
+
+
+def mark_plane_caps(ob, cut: str, co, no, child=None, eps: float = 0.005) -> int:
+    """Put the faces on a flat cut plane (world space, rest pose) into `cap_<cut>` at weight 1; returns the faces found.
+
+    With child= (ob is the parent) only faces whose corners all lie inside the child's cap outline are kept: the
+    socket is the area the child covers, never the parent's whole face. Deletes an existing group first (REPLACE
+    keeps old vertices). 0 found on a closed parent face: cut the outline in, or record the socket n/a."""
+    old = ob.vertex_groups.get(f"cap_{cut}")
+    if old is not None:
+        ob.vertex_groups.remove(old)
+    mw, no = ob.matrix_world, no.normalized()
+    tris = None
+    if child is not None:
+        cg = child.vertex_groups[f"cap_{cut}"]
+        cm = child.data
+        cm.calc_loop_triangles()
+        cv = _cap_vertices(cm, cg.index)
+        tris = [[child.matrix_world @ cm.vertices[i].co for i in t.vertices] for t in cm.loop_triangles
+                if set(cm.polygons[t.polygon_index].vertices) <= cv]
+
+    def keep(i):
+        w = mw @ ob.data.vertices[i].co
+        return abs(no.dot(w - co)) < eps and (tris is None or _in_tris(tris, w, eps))
+
+    vs = {i for p in ob.data.polygons if all(keep(i) for i in p.vertices) for i in p.vertices}
+    g = ob.vertex_groups.new(name=f"cap_{cut}")
+    g.add(sorted(vs), 1.0, "REPLACE")
+    return sum(set(p.vertices) <= vs for p in ob.data.polygons)
+
+
+def overlap_pairs(a, b) -> int:
+    """Overlapping face pairs between two parts (world space, evaluated meshes); compare with the rest count.
+    Never use it on a parent and child (they touch by design); split one skinned mesh by region first."""
+    import bpy  # noqa: PLC0415
+    from mathutils.bvhtree import BVHTree  # noqa: PLC0415
+    dg = bpy.context.evaluated_depsgraph_get()
+
+    def tree(ob):
+        ev = ob.evaluated_get(dg)
+        m = ev.to_mesh()
+        try:
+            return BVHTree.FromPolygons([ob.matrix_world @ v.co for v in m.vertices], [list(p.vertices) for p in m.polygons])
+        finally:
+            ev.to_mesh_clear()
+
+    return len(tree(a).overlap(tree(b)))
+
+
+def head_drift(arm_obj, bone: str, frames: list[int]) -> list[float]:
+    """Rotation difference (degrees) of the bone's world orientation from the first frame, per frame.
+    Never read a bone matrix's Euler z as yaw: the rest frame is rotated, so the Euler parts mix axes."""
+    import bpy  # noqa: PLC0415
+    sc = bpy.context.scene
+    q1, out = None, []
+    for f in frames:
+        sc.frame_set(f)
+        q = (arm_obj.matrix_world @ arm_obj.pose.bones[bone].matrix).to_quaternion()
+        q1 = q1 or q
+        out.append(round(math.degrees(q.rotation_difference(q1).angle), 2))
+    return out
+
+
+def swing(arm_obj, bone: str, frames: list[int]) -> list[float]:
+    """Angle (degrees) between the bone's own axis at rest and in the pose, from its own channels; for a range on a
+    control that turns about two axes in one clip (the pass: the largest swing <= the rig sheet's tilt range)."""
+    import bpy  # noqa: PLC0415
+    from mathutils import Vector  # noqa: PLC0415
+    sc = bpy.context.scene
+    out = []
+    for f in frames:
+        sc.frame_set(f)
+        y = arm_obj.pose.bones[bone].matrix_basis.to_3x3() @ Vector((0, 1, 0))
+        out.append(round(math.degrees(Vector((0, 1, 0)).angle(y)), 2))
+    return out
+
+
+def scaled_channels(action, eps: float = 1e-4) -> list[str]:
+    """Scale F-curves with a value other than 1 (Blender 5.x layered Actions); a Roblox pose stores only a CFrame."""
+    return [fc.data_path for lay in action.layers for st in lay.strips for cb in st.channelbags
+            for fc in cb.fcurves if fc.data_path.endswith("scale")
+            and any(abs(k.co[1] - 1.0) > eps for k in fc.keyframe_points)]
+
+
 def main(argv: list[str]) -> int:
     import argparse  # noqa: PLC0415
 
