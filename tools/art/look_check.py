@@ -615,6 +615,10 @@ def value_stats(rgb: np.ndarray, mask: np.ndarray | None, ring_px: int, valid: n
         out["subject"], out["ring"] = distribution(lum[m]), distribution(lum[ring])
         if out["subject"] and out["ring"]:
             out["subject_ring_ratio"] = contrast_ratio(out["subject"]["p50"], out["ring"]["p50"])
+            # the ratio is symmetric: say which side is brighter (J018 reviews: a dark subject on a light ring and
+            # a light subject on a dark ring gave the same number)
+            s50, r50 = out["subject"]["p50"], out["ring"]["p50"]
+            out["brighter_side"] = "subject" if s50 > r50 else "ring" if r50 > s50 else "equal"
     return out
 
 

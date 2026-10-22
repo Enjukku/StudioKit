@@ -276,6 +276,19 @@ class InvertedMaskTest(unittest.TestCase):  # J018: a white-subject-on-black mas
         self.assertIn("mask_warning", info2)
 
 
+class BrighterSideTest(unittest.TestCase):  # J018: the symmetric ratio now names the brighter side
+    def test_brighter_side(self):
+        m = np.zeros((60, 60), dtype=bool)
+        m[20:40, 20:40] = True
+        dark_on_light = np.full((60, 60, 3), 230, dtype=np.uint8)
+        dark_on_light[m] = 30
+        light_on_dark = 255 - dark_on_light
+        a = lc.value_stats(dark_on_light, m, 6)
+        b = lc.value_stats(light_on_dark, m, 6)
+        self.assertEqual(a["brighter_side"], "ring")
+        self.assertEqual(b["brighter_side"], "subject")
+
+
 class HolesAndComponentsTest(unittest.TestCase):  # push 2: hole fill, components, --component
     GREY = (211, 211, 211)
 
