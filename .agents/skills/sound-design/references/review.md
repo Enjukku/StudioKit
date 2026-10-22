@@ -111,10 +111,7 @@ Run every line that fits the cue type; mark each passed, failed, MEASURED or not
 
 ## 4. Measuring a file (input F)
 
-No kit tool measures audio yet (a tested tool is proposed in J018). Until one exists, read the delivered file with a few lines of
-Python (`soundfile` with `always_2d=True`, `numpy`, `scipy`, `pyloudnorm` for F-13) and report MEASURED. First
-subtract the mean of each channel (generated audio often carries a DC offset: it hides a leading silence in F-01,
-fills the low band in F-06 and keeps F-04's flag on); mono = the mean of the channels. A missing package: that F line is NOT RUN.
+Run the kit tool `tools/audio/cue_check.py` (tested; it replaced the hand-written recipes): `python tools/audio/cue_check.py measure <file> [--low-cut HZ] [--high-pitch] --json` for F-01 to F-12, and `python tools/audio/cue_check.py parity <files> --mode integrated|momentary --json` for F-13 (integrated for options and siblings, momentary for paid random results). It reads the delivered file with `soundfile`, subtracts each channel's mean first (generated audio often carries a DC offset: it hides a leading silence in F-01, fills the low band in F-06 and keeps F-04's flag on), and takes mono as the mean of the channels; the table below defines every measure it computes. A missing package (`soundfile`, `scipy` for the F-03 true peak, `pyloudnorm` for F-13): that F line is NOT RUN.
 
 **These recipes are screening aids.** The last column lists every false reading found so far. A FAIL, or a reading
 within about 20 % of its limit (0.5 dB or LU on level lines) (P), is looked at on a waveform and spectrogram plot of
