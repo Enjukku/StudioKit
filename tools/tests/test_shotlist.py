@@ -470,6 +470,21 @@ class DiffTest(unittest.TestCase):
         self.assertEqual(len(changed), 2)
 
 
+class CadenceTest(unittest.TestCase):
+    """J018 G3-P8: a metronomic edit is reported (warning only, never a verdict)."""
+
+    def test_even_run_warns(self):
+        rep, tl = sl.validate(plan([45, 45, 45, 45, 45]))
+        self.assertEqual(tl["cadence"]["same_length_runs"][0]["count"], 5)
+        self.assertTrue(any("consecutive shots of 45 frames" in w["msg"] for w in rep.warnings))
+        self.assertFalse(rep.errors)
+
+    def test_uneven_edit_is_quiet(self):
+        rep, tl = sl.validate(plan([30, 54, 45, 81, 30]))
+        self.assertEqual(tl["cadence"]["same_length_runs"], [])
+        self.assertEqual((tl["cadence"]["shortest"], tl["cadence"]["longest"], tl["cadence"]["median"]), (30, 81, 45))
+
+
 class LogDiffTest(unittest.TestCase):
     def setUp(self):
         _, self.tl = sl.validate(DRILL)

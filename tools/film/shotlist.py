@@ -448,7 +448,33 @@ def validate(data, fov_tol: float | None = None) -> tuple[Report, dict]:
         tl["cues"].append({"id": cid, "index": i, "shot": c.get("shot"), "offset": abs_at, "end_offset": abs_end,
                            "start_frame": None if abs_at is None else start + abs_at})
     tl["start_frame"] = start
+    tl["cadence"] = cadence(tl["shots"])
+    for run in tl["cadence"].get("same_length_runs", []):
+        rep.warn("shots", f"{run['count']} consecutive shots of {run['frames']} frames ({', '.join(run['ids'])}): "
+                          "an even cadence reads as a metronome; a reason in the shot notes, or vary the lengths")
     return rep, tl
+
+
+def cadence(shots: list[dict], run_min: int = 3) -> dict:
+    """Shortest, longest and median shot length, and runs of run_min or more consecutive shots of one length
+    (J018: a metronomic edit passed check with no warning). A report, never a verdict."""
+    lengths = [s["frames"] for s in shots if s.get("frames") is not None]
+    if not lengths:
+        return {}
+    srt = sorted(lengths)
+    mid = len(srt) // 2
+    out = {"shortest": srt[0], "longest": srt[-1],
+           "median": srt[mid] if len(srt) % 2 else (srt[mid - 1] + srt[mid]) / 2, "same_length_runs": []}
+    i = 0
+    while i < len(shots):
+        j = i
+        while j + 1 < len(shots) and shots[j + 1].get("frames") is not None and shots[j + 1]["frames"] == shots[i].get("frames"):
+            j += 1
+        if shots[i].get("frames") is not None and j - i + 1 >= run_min:
+            out["same_length_runs"].append({"frames": shots[i]["frames"], "count": j - i + 1,
+                                            "ids": [str(shots[k].get("id")) for k in range(i, j + 1)]})
+        i = j + 1
+    return out
 
 
 def require_valid(path, data=None):
@@ -464,7 +490,8 @@ def require_valid(path, data=None):
 def check_result(path, data, rep, tl) -> dict:
     r = tl["rate"]
     out = {"tool": "shotlist", "version": VERSION, "command": "check", "file": str(path),
-           "ok": not rep.errors, "errors": rep.errors, "warnings": rep.warnings, "open_items": rep.open}
+           "ok": not rep.errors, "errors": rep.errors, "warnings": rep.warnings, "open_items": rep.open,
+           "cadence": tl.get("cadence", {})}
     if r is None:
         return out
     tot = tl["total_frames"]
