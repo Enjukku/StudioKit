@@ -43,3 +43,25 @@ Method: the J016 smoke runs (Haiku, one-step placeholder hand-backs, at most 2 t
 | A `tools:` list per role naming only the MCP servers it uses (wildcards such as `mcp__Roblox_Studio__*`) | about 45-55 k for the 10 all-tools roles | owner (tool lists are permissions) |
 | Remove the duplicate Blender server | about 5-10 k for all-tools agents and the lead (estimate) | owner (MCP config) |
 | Preload only the design skill; the craft skill loads when the step needs it | about 3-8 k for the heavy roles | lead proposal, test first |
+
+## After the J017 changes (measured 2026-10-21, commit e74719f, after a Claude Code restart)
+Method: one Haiku probe per role, started by the lead (Agent tool, not a workflow), at most one tool call, nothing written. The number is the **first request's prompt** (input + cache read + cache write) from each agent's journal; "before" is the same number from the J016 smoke-run journals (median of n agents), so both sides are measured the same way. Both Blender servers were still connected (the owner keeps the second copy because of a second account; it no longer reaches the trimmed roles).
+
+| Role | Servers now | Before (k, n) | After (k) | Saved (k) | Target ≥ 25 k |
+| --- | --- | --- | --- | --- | --- |
+| character-rigger | blender, Studio | 96.3 (3) | 63.8 | 32.5 | met |
+| qa-lead | Studio | 84.1 (2) | 51.7 | 32.4 | met |
+| environment-designer | blender, Studio | 94.4 (9) | 62.5 | 31.9 | met |
+| feature-builder | Studio | 81.4 (5) | 52.5 | 28.9 | met |
+| performance-engineer | Studio | 83.7 (4) | 54.8 | 28.9 | met |
+| architect | Studio | 81.5 (11) | 52.7 | 28.8 | met |
+| film-director | blender, Studio, browser | 93.7 (14) | 71.8 | 21.9 | missed |
+| ui-ux-designer | browser, Figma connector | 96.0 (6) | 80.2 | 15.8 | missed |
+| modeler | blender, Studio, browser | not measured | 71.5 | — | — |
+| quick-builder | Studio | not measured | 48.5 | — | — |
+| sound-designer (control, unchanged tools) | none | 30.2 (10) | 29.8 | 0.4 | — |
+| reviewer (control; Agent removed) | none | 30.6 (1) | 28.3 | 2.3 | — |
+
+Checks in the same probes: every role lists exactly the servers its `tools:` line names; SendMessage present in all 12; the Agent tool absent where removed (reviewer, the 10 trimmed roles), present in sound-designer; an on-demand skill read worked in 11 of 11 that tried (performance-engineer made no call).
+
+**What is left (estimated from the differences, not measured per server):** the Studio server (28 tools) is about 20 k by itself (Studio-only roles about 52 k vs about 30 k with no server); Blender about 10 k; the built-in browser about 8 k; the Figma connector about 45 k: it carries 42 tools, including Weave and Code Connect tools the UI designer's books do not use. Next lever (owner decision, permissions): list the UI designer's Figma tools by name instead of the whole connector.

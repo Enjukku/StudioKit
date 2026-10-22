@@ -15,7 +15,7 @@ supersedes: []
 | Job id | J017-context-and-prompting |
 | Size | M (measure and research, one proposal at G1, then changes across roles, skills and workflow briefs) |
 | Job owner (agent) | lead (orchestrator) |
-| Status | working: G1 approved (J017-D1); changes made; after-measurement needs a Claude Code restart |
+| Status | waiting on G3: changes made (e74719f); after-measurement done (`startup-cost.md` "After"): 6 of 8 measured roles saved 29-33 k, film-director 22 k, ui-ux-designer 16 k |
 
 ## Owner's words (2026-10-21)
 "So how do we improve this further? You said we use a lot of usage just booting up skills, right? So how do we fix that?"
