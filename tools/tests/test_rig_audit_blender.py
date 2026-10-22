@@ -117,5 +117,44 @@ class RigAuditBlenderTest(unittest.TestCase):
         self.assertEqual(self.r["overlap_inside"], 0)      # known false reading: a part wholly inside reads 0
 
 
+
+FRAMES = textwrap.dedent(r"""
+    import bpy, json, sys
+    sys.path.insert(0, MODEL)
+    import review_renders as rr
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    sc = bpy.context.scene
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0, 0, 0))
+    cam = bpy.data.objects.new("GameCam", bpy.data.cameras.new("GameCam")); sc.collection.objects.link(cam)
+    cam.location = (0, -6, 0); cam.rotation_euler = (1.5708, 0, 0)
+    before = (sc.display.shading.light, sc.render.engine, sc.camera)
+    rep = rr.render_frames("GameCam", [1, 3], OUT, (200, 120))
+    after = (sc.display.shading.light, sc.render.engine, sc.camera)
+    print("RESULT" + json.dumps({"files": [f["file"] for f in rep["files"]], "restored": before == after}))
+""")
+
+
+@unittest.skipUnless(blender_exe(), "no Blender executable (set BLENDER)")
+class RenderFramesBlenderTest(unittest.TestCase):
+    def test_shaded_and_blackfill_and_settings_restored(self):
+        import sys
+        sys.path.insert(0, str(RIG.parents[0] / "art"))
+        import look_check as lc
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as d:
+            script = Path(d) / "frames.py"
+            script.write_text(f"MODEL = {str(RIG.parent / 'model')!r}\nOUT = {d!r}\n" + FRAMES, encoding="utf-8")
+            p = subprocess.run([blender_exe(), "-b", "--factory-startup", "--python", str(script)],
+                               capture_output=True, text=True, timeout=300)
+            line = next((ln for ln in p.stdout.splitlines() if ln.startswith("RESULT")), None)
+            self.assertIsNotNone(line, p.stdout[-1500:] + p.stderr[-1500:])
+            r = json.loads(line[len("RESULT"):])
+            self.assertEqual(len(r["files"]), 4)
+            self.assertTrue(r["restored"])
+            mask, src, _ = lc.subject_mask(Image.open(Path(d) / "frame_0001.blackfill.png").convert("RGB"))
+            self.assertEqual(src, "key-auto")          # the magenta backdrop keys automatically
+            self.assertTrue(mask.any())
+
+
 if __name__ == "__main__":
     unittest.main()

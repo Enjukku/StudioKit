@@ -233,6 +233,72 @@ def render_set(collection: str, out_dir: str, resolution=(1024, 1024), player_he
     return report
 
 
+MAGENTA = (1.0, 0.0, 1.0)  # black-fill backdrop: displays as #FF00FF under Standard, keyed by look_check
+
+
+def render_frames(camera: str, frames: list[int], out_dir: str, resolution=(1170, 540), blackfill: bool = True,
+                  shaded: bool = True, prefix: str = "frame") -> dict:
+    """Render chosen frames from a named scene camera (the game camera), shaded and black-fill (J018 G3-P8).
+
+    The shared recipe of animation-craft blender-keying section 7 (animator, rigger, film director, modeler): Workbench,
+    Standard view; shaded = STUDIO light and TEXTURE colour; black-fill = FLAT light, SINGLE colour black on a
+    magenta world. Every setting, the scene camera, the world and the current frame are restored in `finally`.
+    Writes <prefix>_<frame>.png and <prefix>_<frame>.blackfill.png into out_dir."""
+    import bpy  # noqa: PLC0415
+
+    scene = bpy.context.scene
+    cam = bpy.data.objects.get(camera)
+    if cam is None or cam.type != "CAMERA":
+        raise KeyError(f"camera {camera!r} not found")
+    if not frames:
+        raise ValueError("give at least one frame")
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    r, sh, vs = scene.render, scene.display.shading, scene.view_settings
+    saved = [(r, "engine"), (r, "resolution_x"), (r, "resolution_y"), (r, "resolution_percentage"), (r, "filepath"),
+             (r, "film_transparent"), (r.image_settings, "file_format"), (r.image_settings, "color_mode"),
+             (scene, "camera"), (scene, "world"), (scene, "frame_current"), (vs, "view_transform"), (vs, "look"),
+             (vs, "exposure"), (vs, "gamma"), (sh, "light"), (sh, "color_type"), (sh, "single_color"),
+             (sh, "show_cavity"), (sh, "show_object_outline"), (sh, "show_shadows")]
+    saved = [(o, a, tuple(getattr(o, a)) if a == "single_color" else getattr(o, a)) for o, a in saved]
+    world = bpy.data.worlds.new("_frames_world")
+    world.color = MAGENTA
+    files = []
+    try:
+        r.engine = "BLENDER_WORKBENCH"
+        r.resolution_x, r.resolution_y = resolution
+        r.resolution_percentage = 100
+        r.film_transparent = False
+        r.image_settings.file_format, r.image_settings.color_mode = "PNG", "RGB"
+        vs.view_transform, vs.look, vs.exposure, vs.gamma = "Standard", "None", 0.0, 1.0
+        sh.show_cavity = sh.show_object_outline = sh.show_shadows = False
+        scene.camera = cam
+        for f in frames:
+            scene.frame_set(int(f))
+            if shaded:
+                sh.light, sh.color_type = "STUDIO", "TEXTURE"
+                scene.world = saved[9][2] if saved[9][2] is not None else world
+                p = out / f"{prefix}_{int(f):04d}.png"
+                r.filepath = str(p)
+                bpy.ops.render.render(write_still=True)
+                files.append({"frame": int(f), "kind": "shaded", "file": p.name})
+            if blackfill:
+                sh.light, sh.color_type, sh.single_color = "FLAT", "SINGLE", (0.0, 0.0, 0.0)
+                scene.world = world
+                p = out / f"{prefix}_{int(f):04d}.blackfill.png"
+                r.filepath = str(p)
+                bpy.ops.render.render(write_still=True)
+                files.append({"frame": int(f), "kind": "blackfill", "file": p.name})
+    finally:
+        for o, a, val in saved:
+            setattr(o, a, val)
+        bpy.data.worlds.remove(world)
+    report = {"tool": "tools/model/review_renders.py render_frames", "blender": bpy.app.version_string,
+              "camera": camera, "resolution": list(resolution), "files": files}
+    (out / f"{prefix}_frames.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    return report
+
+
 def main(argv: list[str]) -> int:
     import argparse  # noqa: PLC0415
 
