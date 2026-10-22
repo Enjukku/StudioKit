@@ -77,6 +77,16 @@ class Prompts(unittest.TestCase):
         self.assertNotIn("WORLD STYLE LOCK", p)
         self.assertIn("ICON LOCK", p)
 
+    def test_lock_clash_and_root_relative_inputs(self):
+        # J018: an identity that names a view its lock also fixes is warned; relative inputs resolve from the root
+        self.assertEqual(art_refs.lock_clash("a fox knight, side view", "Side view, flat light"), ["side view"])
+        self.assertEqual(art_refs.lock_clash("a fox knight", "Side view, flat light"), [])
+        rel = Path("knowledge") / "design" / "no-such-image.png"
+        with self.assertRaises(SystemExit) as cm:
+            art_refs.build({"id": "hero", "family": "character", "identity": "x", "inputs": str(rel)},
+                           self.fams, self.lks, self.root)
+        self.assertIn(str(art_refs.ROOT / rel), str(cm.exception))
+
     def test_anchors_owner_first_then_newest_generated(self):
         folder = self.root / "character"
         folder.mkdir()

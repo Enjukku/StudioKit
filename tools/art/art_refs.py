@@ -143,13 +143,29 @@ def read_manifest(path: Path, fams: dict[str, Family]) -> list[dict[str, str]]:
     return rows
 
 
+VIEW_WORDS = ("front view", "side view", "back view", "top view", "top-down", "three-quarter", "close-up",
+              "wide shot", "full body", "profile view")
+
+
+def lock_clash(identity: str, lock: str) -> list[str]:
+    """View or framing words the identity names that the family's lock also fixes (case-insensitive)."""
+    i, lk = identity.lower(), lock.lower()
+    return [w for w in VIEW_WORDS if w in i and w in lk]
+
+
 def build(row: dict[str, str], fams: dict[str, Family], lks: dict[str, str], anchor_root: Path = ANCHORS) -> tuple[str, list[Path]]:
     fam = fams[row["family"]]
     world = lks[WORLD] if fam.world else ""
-    inputs = [Path(p) for p in row.get("inputs", "").split(";") if p]
+    # relative inputs resolve against the repo root, not the shell's current folder (J018 reference-images review)
+    inputs = [Path(p) if Path(p).is_absolute() else ROOT / p
+              for p in (x.strip() for x in row.get("inputs", "").split(";")) if p]
     for p in inputs:
         if not p.is_file():
             sys.exit(f"{row['id']}: input image not found: {p}")
+    clash = lock_clash(row.get("identity", ""), lks.get(fam.lock, ""))
+    if clash:
+        print(f"[{row['id']}] warning: the identity names {', '.join(clash)}, which the {fam.lock} lock also sets; "
+              "the lock wins in the prompt, so say what you need in the lock or change the family", file=sys.stderr)
     images = inputs + anchors_for(fam, row["id"], row.get("anchors", ""), anchor_root)
     note = ""
     if images:
