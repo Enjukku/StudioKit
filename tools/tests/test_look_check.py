@@ -357,6 +357,39 @@ class ReservedAndHueSpreadTest(unittest.TestCase):  # J018 G3-P8: the two colour
             self.assertEqual(m["near_black_px"], 900)
             self.assertEqual(m["clipped_px"], 0)
 
+    def model(self, d):
+        img = np.full((720, 1600, 3), 200, dtype=np.uint8)
+        img[300:500, 760:840] = (40, 40, 40)                       # dark lower body
+        img[220:300, 770:830] = (200, 60, 60)                      # red torso (the focal colour)
+        img[200:220, 790:810] = (240, 230, 220)                    # bright head
+        img[300:320, 765:835] = (20, 10, 5)                         # near-black tinted boots line
+        mask = np.full((720, 1600), 255, dtype=np.uint8)
+        mask[200:500, 760:840] = 0
+        Image.fromarray(img).save(Path(d) / "m.png")
+        Image.fromarray(mask).save(Path(d) / "k.png")
+        return Path(d) / "m.png", Path(d) / "k.png"
+
+    def test_peaks_chroma_marks_the_torso_not_the_dark_boots(self):
+        with tempfile.TemporaryDirectory() as d:
+            img, k = self.model(d)
+            m = self.run_mode(["peaks", img, "--mask", k, "--channel", "chroma", "--out-dir", d])["measurements"]
+            bb = m["marked_bbox_px"]
+            self.assertGreaterEqual(bb["y0"], 220)
+            self.assertLessEqual(bb["y1"], 300)
+
+    def test_detail_is_measured_at_phone_size(self):
+        with tempfile.TemporaryDirectory() as d:
+            img, k = self.model(d)
+            r = self.run_mode(["detail", img, "--mask", k, "--phone-height", "360", "--out-dir", d])
+            self.assertEqual(r["measurements"]["model_px_at_phone"], [40, 150])
+            self.assertTrue(Path(r["images"]["cells"]).exists())
+
+    def test_mask_box_cuts_the_mask_to_a_region(self):
+        with tempfile.TemporaryDirectory() as d:
+            img, k = self.model(d)
+            r = self.run_mode(["value", img, "--mask", k, "--mask-box", "700,300,900,500", "--out-dir", d])
+            self.assertEqual(r["params"]["key_estimate"]["mask_box"], [700, 300, 900, 500])
+
     def test_hue_spread_grey_is_not_measured(self):
         with tempfile.TemporaryDirectory() as d:
             Image.fromarray(np.full((40, 40, 3), 128, dtype=np.uint8)).save(Path(d) / "g.png")

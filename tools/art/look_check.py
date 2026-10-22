@@ -832,7 +832,16 @@ def resolve_mask(a, img: Image.Image):
         if problem:
             return None, "box", {**info, "box_problem": problem}
         return np.logical_or.reduce(masks), "box", info
-    return subject_mask(img, a.key, a.key_tol, load(Path(a.mask)) if a.mask else None, not a.keep_holes)
+    m, src, info = subject_mask(img, a.key, a.key_tol, load(Path(a.mask)) if a.mask else None, not a.keep_holes)
+    mb = getattr(a, "mask_box", None)
+    if mb and m is not None:  # a region of the subject: the mask cut to a box, so background pixels never count
+        check_box(mb, np.asarray(img).shape)
+        x0, y0, x1, y1 = mb
+        cut = np.zeros(m.shape, dtype=bool)
+        cut[y0:y1, x0:x1] = True
+        m = m & cut
+        info = {**info, "mask_box": list(mb)}
+    return m, src, info
 
 
 def resolve_exclude(a, img: Image.Image) -> np.ndarray | None:
@@ -1156,6 +1165,9 @@ def build_parser() -> argparse.ArgumentParser:
             sp.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1",
                             help="subject = union of these boxes (repeatable; pixels, x1/y1 exclusive); mask_source 'box'; "
                             "for flat UI screenshots where no background can be keyed; not with --mask")
+            sp.add_argument("--mask-box", type=parse_box, metavar="X0,Y0,X1,Y1",
+                            help="keep only the subject mask inside this box (a region of the model: upper or lower body, the focal "
+                            "zone), so background pixels in the box never count; not with --box")
             sp.add_argument("--name", action=NameAction, help="name for the --box just before it (value --compare-subjects groups by name)")
             sp.add_argument("--box-key", action="store_true",
                             help="inside each --box drop pixels matching that box's own border colour (auto-key limited to the "
@@ -1218,6 +1230,18 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--clipped", type=float, default=0.98, help="relative luminance at or above this counts as clipped white")
     x.add_argument("--out-dir", type=Path)
     x.add_argument("--out", type=Path, help="also write the JSON here")
+    pk = sub.add_parser("peaks", help="where the top 5 %% of a subject's luminance or chroma sit (J018 G3-P8)")
+    pk.add_argument("image")
+    pk.add_argument("--mask", required=True, help="the subject's mask image (dark = subject), same size")
+    pk.add_argument("--channel", choices=("luminance", "chroma"), default="luminance")
+    pk.add_argument("--out-dir", type=Path)
+    pk.add_argument("--out", type=Path, help="also write the JSON here")
+    dt = sub.add_parser("detail", help="detail density at the size a phone shows the model (J018 G3-P8)")
+    dt.add_argument("image", help="a game-camera render or capture, taller than the phone viewport")
+    dt.add_argument("--mask", required=True, help="its black-fill or mask capture (dark = model), same size")
+    dt.add_argument("--phone-height", type=int, required=True, help="the smallest phone viewport height in px (game profile)")
+    dt.add_argument("--out-dir", type=Path)
+    dt.add_argument("--out", type=Path, help="also write the JSON here")
     h = sub.add_parser("hue-spread", help="spread of the CIELAB hue angle over 4x4 blocks inside one material box (J018 G3-P8)")
     h.add_argument("image")
     h.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", required=True,
@@ -1314,6 +1338,100 @@ def run_extremes(a) -> dict:
     return rec
 
 
+PEAK_PERCENT = 95  # peaks: the top (100 - this) % of the subject
+PEAK_TIE_SHARE = 0.10  # peaks: a tie that would mark more than this share of the subject marks only pixels above the level
+PEAK_TIE_MIN = 0.001  # ... unless those are fewer than this share (a few edge pixels): then the tied level stays
+DETAIL_EDGE = 24  # detail: FIND_EDGES level that counts as an edge (PROPOSAL)
+
+
+def _mask_image(path: str, shape) -> np.ndarray:
+    m = mask_from_mask_image(load(Path(path)))
+    if m.shape != shape:
+        raise SystemExit(f"mask size {m.shape[::-1]} differs from the image {shape[::-1]}")
+    return m
+
+
+def run_peaks(a) -> dict:
+    """Where the brightest (luminance) or most colourful (chroma = max - min of R, G, B) top 5 % of a subject sit.
+
+    The kit form of the modeler's read command 2 (J018): chroma, not HSV saturation (which peaks on tinted
+    near-black boots and shadows); the mask shrunk by 2 px so edge pixels mixed with the sky or ground never count;
+    a tie that would mark a whole flat region marks only the pixels above it. Parts under about 5 px wide drop out
+    with the shrink: run a closer view for a thin item."""
+    from PIL import ImageFilter  # noqa: PLC0415
+    path = Path(a.image)
+    img = load(path)
+    rgb = np.asarray(img.convert("RGB")).astype(int)
+    level = (rgb.max(2) - rgb.min(2)) if a.channel == "chroma" else relative_luminance(rgb.astype(np.uint8))
+    m0 = _mask_image(a.mask, level.shape)
+    shrunk = np.asarray(Image.fromarray(np.where(m0, 0, 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) < 128
+    if not shrunk.any():
+        raise SystemExit("the mask is empty after the 2 px shrink (a part under about 5 px wide): use a closer view")
+    t = float(np.percentile(level[shrunk], PEAK_PERCENT))
+    tied, above = shrunk & (level >= t), shrunk & (level > t)
+    share = float(tied.sum() / shrunk.sum())
+    marked = above if share > PEAK_TIE_SHARE and above.sum() >= PEAK_TIE_MIN * shrunk.sum() else tied
+    rec = base_record("peaks", path, img, {"channel": a.channel, "mask": a.mask, "percentile": PEAK_PERCENT,
+                                          "mask_shrink_px": 2, "chroma": "max - min of R, G, B (0-255)"})
+    ys, xs = np.nonzero(marked)
+    rec["measurements"] = {"threshold": round(t, 4), "p_share": round(share, 4),
+                           "marked_share": round(float(marked.sum() / shrunk.sum()), 4), "marked_px": int(marked.sum()),
+                           "marked_bbox_px": None if not len(xs) else {"x0": int(xs.min()), "y0": int(ys.min()),
+                                                                        "x1": int(xs.max()) + 1, "y1": int(ys.max()) + 1}}
+    out = out_path(path, a.out_dir, f"peaks-{a.channel}")
+    Image.fromarray(np.where(marked, 0, 255).astype(np.uint8)).save(out)
+    rec["images"]["marked"] = str(out)
+    return rec
+
+
+def run_detail(a) -> dict:
+    """Detail density at the size a phone shows the model: edges per cell inside the outline, busy cells marked.
+
+    The kit form of the modeler's read command 3 (DT10, J018): crops to the model's box and box-averages it by
+    phone height / frame height (FieldOfView is vertical), so the background and detail that vanishes on a phone
+    never count; edges only 2 px or more inside the outline. Not for orthographic or close views; a model under about
+    30 px tall on the phone gives too few cells (not-measured)."""
+    from PIL import ImageFilter, ImageOps  # noqa: PLC0415
+    path = Path(a.image)
+    img = load(path)
+    g = img.convert("L")
+    m0 = _mask_image(a.mask, (g.height, g.width))
+    if not m0.any():
+        raise SystemExit("the mask is empty")
+    s = a.phone_height / g.height
+    ys, xs = np.nonzero(m0)
+    b = (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
+    w, h = max(1, round((b[2] - b[0]) * s)), max(1, round((b[3] - b[1]) * s))
+    k = Image.fromarray(np.where(m0, 0, 255).astype(np.uint8))
+    shrink = lambda i, fill: ImageOps.expand(i.crop(b).resize((w, h), Image.BOX), 2, fill=fill)
+    gs, ks = shrink(g, 0), shrink(k, 255)
+    inside = np.asarray(ks.filter(ImageFilter.MaxFilter(5))) < 128
+    edges = (np.asarray(gs.filter(ImageFilter.FIND_EDGES)) > DETAIL_EDGE) & inside
+    c = max(2, h // 10)
+    cells = [(y, x, edges[y:y + c, x:x + c].sum() / inside[y:y + c, x:x + c].sum())
+             for y in range(2, h + 2, c) for x in range(2, w + 2, c) if inside[y:y + c, x:x + c].mean() >= 0.3]
+    rec = base_record("detail", path, img, {"mask": a.mask, "phone_height_px": a.phone_height, "edge_level": DETAIL_EDGE,
+                                           "cell_px": c, "scale": s})
+    vals = [float(v) for _, _, v in cells]
+    med = float(np.median(vals)) if vals else 0.0
+    t = 2 * max(med, 1e-3)
+    busy = [(y, x, v) for y, x, v in cells if v > t]
+    rec["measurements"] = {"model_px_at_phone": [w, h], "cells": len(cells), "median_edge_share": round(med, 4),
+                           "busy_share": round(len(busy) / max(len(cells), 1), 3),
+                           "busy_rows_pct_of_height": sorted({round(100 * (y - 2 + c / 2) / h) for y, _, _ in busy})}
+    if h < 30 or len(cells) < 4:
+        rec["verdict"] = "not-measured"
+        rec["not_measured_reason"] = f"the model is {h} px tall on the phone: too few cells; judge detail by eye"
+    heat = np.full(inside.shape, 255, np.uint8)
+    top = max(vals) if vals else 1e-3
+    for y, x, v in cells:
+        heat[y:y + c, x:x + c] = 0 if v > t else int(235 - 150 * v / max(top, 1e-3))
+    out = out_path(path, a.out_dir, "detail")
+    Image.fromarray(heat).resize((heat.shape[1] * 8, heat.shape[0] * 8), Image.NEAREST).save(out)
+    rec["images"]["cells"] = str(out)
+    return rec
+
+
 def run_hue_spread(a) -> dict:
     """Standard deviation of the CIELAB hue angle over 4x4 blocks inside one box (a flat or one-hue material reads low).
 
@@ -1354,7 +1472,8 @@ def run_hue_spread(a) -> dict:
 
 
 RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb,
-           "reserved": run_reserved, "hue-spread": run_hue_spread, "extremes": run_extremes}
+           "reserved": run_reserved, "hue-spread": run_hue_spread, "extremes": run_extremes,
+           "peaks": run_peaks, "detail": run_detail}
 
 
 def main(argv: list[str]) -> int:
