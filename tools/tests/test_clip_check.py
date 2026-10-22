@@ -221,3 +221,22 @@ class JudgeAndInputTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChannelValueTest(unittest.TestCase):
+    """J018: quaternion components follow Blender's (w, x, y, z) order; degrees on a quaternion are refused."""
+
+    class _PB:
+        rotation_quaternion = (0.9, 0.1, 0.2, 0.3)
+        rotation_euler = (0.5, 0.25, 0.0)
+
+    def test_quaternion_order(self):
+        self.assertEqual(cc._channel_value(self._PB, "rotation_quaternion.w", "blender_units"), 0.9)
+        self.assertEqual(cc._channel_value(self._PB, "rotation_quaternion.z", "blender_units"), 0.3)
+
+    def test_euler_unchanged(self):
+        self.assertAlmostEqual(cc._channel_value(self._PB, "rotation_euler.y", "deg"), math.degrees(0.25))
+
+    def test_degrees_on_quaternion_refused(self):
+        with self.assertRaises(ValueError):
+            cc._channel_value(self._PB, "rotation_quaternion.x", "deg")

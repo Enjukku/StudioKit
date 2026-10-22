@@ -57,3 +57,15 @@ class ClipMetricsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FrameOrderTest(unittest.TestCase):
+    """J018: frames are read in numeric order (a name sort put f1000 before f101)."""
+
+    def test_numeric_order(self):
+        with tempfile.TemporaryDirectory() as d:
+            folder = Path(d)
+            for i in (99, 100, 101, 1000):
+                Image.fromarray(np.zeros((8, 8, 3), np.uint8)).save(folder / f"f{i}_{i * 33}ms.jpg")
+            times, _ = cm.load_frames(folder)
+            self.assertEqual(times, [99 * 33, 100 * 33, 101 * 33, 1000 * 33])

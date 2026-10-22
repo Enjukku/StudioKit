@@ -32,9 +32,11 @@ FRAME_RE = re.compile(r"^f(\d+)_(\d+)ms\.jpg$")
 
 
 def load_frames(folder: Path) -> tuple[list[int], np.ndarray]:
-    names = sorted((p for p in folder.iterdir() if FRAME_RE.match(p.name)), key=lambda p: p.name)
+    # numeric order: a name sort puts f1000 before f101 (J018 vfx repair round 3)
+    names = sorted((p for p in folder.iterdir() if FRAME_RE.match(p.name)),
+                   key=lambda p: int(FRAME_RE.match(p.name).group(1)))
     if not names:
-        raise ValueError(f"no f###_<ms>.jpg frames in {folder}")
+        raise ValueError(f"no f###_<ms>ms.jpg frames in {folder}")
     times, frames = [], []
     for p in names:
         m = FRAME_RE.match(p.name)

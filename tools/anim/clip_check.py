@@ -372,11 +372,20 @@ def scene_fps(scene) -> list[int]:
 
 
 def _channel_value(pb, channel: str, units: str) -> float:
-    """'rotation_euler.y' -> pb.rotation_euler[1]; radians become degrees when the manifest unit is deg."""
+    """'rotation_euler.y' -> pb.rotation_euler[1]; radians become degrees when the manifest unit is deg.
+
+    Quaternion components follow Blender's order (w, x, y, z): 'rotation_quaternion.w' is index 0. A degree unit on a
+    quaternion channel is refused: a quaternion component is not an angle (J018 rigger review F2: a 30 degree tilt
+    against +/-15 degrees read 0 and passed).
+    """
     attr, _, comp = channel.partition(".")
     v = getattr(pb, attr)
+    if attr.startswith("rotation_quaternion") and str(units).startswith("deg"):
+        raise ValueError(f"{channel}: degrees on a quaternion channel; give the range in quaternion units "
+                         "or key the control in Euler")
     if comp:
-        v = v["xyzw".index(comp)] if comp in "xyzw" else v[int(comp)]
+        order = "wxyz" if attr.startswith("rotation_quaternion") else "xyzw"
+        v = v[order.index(comp)] if comp in order else v[int(comp)]
     v = float(v)
     return math.degrees(v) if attr.startswith("rotation_euler") and str(units).startswith("deg") else v
 
