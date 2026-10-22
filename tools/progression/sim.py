@@ -2036,9 +2036,14 @@ def _summary_runs(sims, model):
         if g.get("window") is not None:
             verdicts = [next(r["verdict"] for r in tl if r["goal"] == g["id"]) for tl in timelines]
             n_pass = verdicts.count("pass")
-            lo, hi = wilson_interval(n_pass, len(sims))
+            n_tested = len(verdicts) - verdicts.count("not testable")
             rec["window_verdicts"] = {v: verdicts.count(v) for v in ("pass", "fail", "not testable")}
-            rec["window_pass_proportion"], rec["window_pass_wilson_95"] = n_pass / len(sims), [lo, hi]
+            if n_tested == 0:  # J018: all-not-testable runs showed a 0-4 % pass band; there is no band to give
+                rec["window_pass_proportion"], rec["window_pass_wilson_95"] = None, None
+            else:
+                lo, hi = wilson_interval(n_pass, n_tested)
+                rec["window_pass_proportion"], rec["window_pass_wilson_95"] = n_pass / n_tested, [lo, hi]
+                rec["window_tested_runs"] = n_tested
         goals.append(rec)
     stops = {}
     for s in sims:
@@ -2178,6 +2183,8 @@ def simulate(model_source, policy: str, *, mode: str = "exact", target=None, tar
         "stop": {"reason": s.stop[0], "detail": s.stop[1], "active_s": s.t, "active_s_approx": float(s.t),
                  "calendar_s": s.cal, "calendar_s_approx": _approx(s.cal)},
         "timeline": timeline,
+        "timeline_scope": "run 1 only (seed run 1 of the runs); the multi-run summary has the result across runs"
+                          if len(sims) > 1 else "the only run",
         "walls": {"soft": _soft_walls(s, thresholds, top),
                   "hard": [{**w, "start_s_approx": float(w["start_s"]), "duration_s_approx": _approx(w["duration_s"])}
                            for w in s.hard_walls]},

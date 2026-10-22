@@ -469,9 +469,12 @@ def findings_tables(reports) -> str:
             for g in rs["goals"]:
                 txt = (f"reached in {g['reached_runs']}/{g['runs']} runs, Wilson 95 % "
                        f"[{g['wilson_95'][0]:.3f}, {g['wilson_95'][1]:.3f}]")
-                if "window_pass_proportion" in g:
-                    txt += (f"; window pass {g['window_verdicts']['pass']}/{g['runs']}, Wilson 95 % "
+                if g.get("window_pass_wilson_95") is not None:
+                    tested = g.get("window_tested_runs", g["runs"])
+                    txt += (f"; window pass {g['window_verdicts']['pass']}/{tested} tested runs, Wilson 95 % "
                             f"[{g['window_pass_wilson_95'][0]:.3f}, {g['window_pass_wilson_95'][1]:.3f}]")
+                elif "window_verdicts" in g:
+                    txt += "; window not testable in any run"
                 if "active_s_median" in g:
                     txt += f"; active time min {fmt_t(g['active_s_min'])}, median {fmt_t(g['active_s_median'])}, max {fmt_t(g['active_s_max'])}"
                 rows.append(f"<tr><td>runs</td><td>{esc(g['goal'])}</td><td>-</td><td>{esc(txt)}</td></tr>")

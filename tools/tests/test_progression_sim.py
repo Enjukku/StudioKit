@@ -277,6 +277,7 @@ class Randomness(unittest.TestCase):
         self.assertLessEqual(lo, g["window_pass_proportion"])
         self.assertGreaterEqual(hi, g["window_pass_proportion"])
         self.assertEqual(sum(g["window_verdicts"].values()), 50)
+        self.assertIn("run 1 only", rep["timeline_scope"])  # J018: the top-level timeline is one run
 
     def test_deterministic_model_rejects_repetition(self):
         with self.assertRaisesRegex(ValueError, "no random inputs"):
