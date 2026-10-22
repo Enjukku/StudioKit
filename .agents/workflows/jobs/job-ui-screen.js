@@ -425,7 +425,7 @@ async function proof() {
   phase('Proof')
   let proto = keep('P1 prototype', await call(ROLE.ui, {
     id: 'P1-prototype', task: `clickable Figma prototype of every state: ${SCREEN}`, visual: true,
-    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events, in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5) before anyone sees it.',
+    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events, in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5-§6) before anyone sees it.',
     skills: ['ui-design', 'ui-figma', STYLE_BOOK],
     inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image chosen at G1`],
     refs: ['.agents/skills/ui-figma/references/figma-mcp.md   # take: load the Figma server skills first; inspect, then write; node ids from every write'],
@@ -516,7 +516,7 @@ async function production() {
     intent: 'Build stage. Build the screen in Figma to the target image the owner chose: tokens, then components with state variants, then every state of the spec as screens made from instances. Effects come from the VFX texture library before anything is drawn or generated. Review it yourself at phone, tablet and PC size, in grayscale, with the longest text, every state, side by side with the target image; close the gaps you list. Then write the Roblox handoff: layer table (native, baked or tiled), exports, 9-slice insets, live text fields with their data source, motion records with PROPOSAL values and their tests.',
     skills: ['ui-design', 'ui-figma', STYLE_BOOK],
     inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image`].concat(SIZE === 'L' ? [`${UI}/figma-ids.json   # the approved prototype`] : []),
-    refs: ['.agents/skills/ui-figma/references/figma-mcp.md', '.agents/skills/ui-figma/references/roblox-handoff.md §4   # take: the handoff package', '.agents/skills/ui-figma/references/effect-assets.md   # take: library shortlist', '.agents/skills/ui-design/references/review.md §5   # take: self-review captures'],
+    refs: ['.agents/skills/ui-figma/references/figma-mcp.md', '.agents/skills/ui-figma/references/roblox-handoff.md §4   # take: the handoff package', '.agents/skills/ui-figma/references/effect-assets.md   # take: library shortlist', '.agents/skills/ui-design/references/review.md §5-§6   # take: self-review captures (§5) and the self-review by stage (§6)'],
     owns: [`${UI}/`, 'the Figma file the job card names'],
     consumers: ['feature-builder', 'sound-designer', 'vfx-designer'],
     visual: true, images: `${UI}/image-prompts.md`,

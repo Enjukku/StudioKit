@@ -287,7 +287,7 @@ async function direction() {
       `${DIR}/job-card.md   # take: the owner's words, the piece, the destinations, the launch build; avoid: nothing`,
       'knowledge/design/promise-ledger.md   # take: claim ids and their status (playable / planned / cut)',
       'knowledge/design/art-bible.md   # take: the thumbnail and game-icon families, locks, the anchor register',
-      'knowledge/jobs/J016-orchestration/riot-extracts.md §4 (row marketing)   # take: 3-5 rough thumbnails; green light then the big shapes stop moving; the brief\'s strategy names the hero; layered delivery; plan the crops; same face and posture in every product',
+      '.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: 3-5 rough thumbnails; green light then the big shapes stop moving; the brief\'s strategy names the hero; layered delivery; plan the crops; same face and posture in every product',
     ],
     open: ['your proposal\'s content and options'],
     avoid: [leads.filter(o => o !== L).map(o => propPath(o.r)).join(', ') + ' (other leads\' proposals)', 'polished final images', 'competitor art or names as material to reuse'],
@@ -386,7 +386,7 @@ async function reviewLoop(L) {
       // Scripts first: a format FAIL is fixed before anyone looks (image-pipeline.md §2).
       const s = keep(`RV ${tag} scripts`, await call(ROLE.mkt, {
         id: `RV-${tag}-scripts`, task: `freeze and measure the marketing art candidate: ${PIECE}`,
-        intent: `Review chain, scripts. Freeze the candidate: name its revision, every file of the family and the protected list in ${DIR}/evidence.md. Then run the scripts on the frozen files: the size_check command in \`fixed\` for every crop at its real size (contact sheet and JSON next to each image) and python tools/art/look_check.py value on every master. Report each format FAIL (a master.*.meets false), each missing sheet, each crop outside its planned format and each hero that leaves its safe area as a blocking finding with maker marketing. Numbers you only read (contrast, component count, bottom band) are kept as evidence for the reviewers, not graded.`,
+        intent: `Review chain, scripts. Freeze the candidate: name its revision, every file of the family and the protected list in ${DIR}/evidence.md. Then run the scripts on the frozen files: the size_check command in \`fixed\` for every crop at its real size (contact sheet and JSON next to each image) and python tools/art/look_check.py value <master> --mask <hero mask> on every master (a full-scene master has no flat border to key; thumb_check.py counts use --mask, never --box). Report each format FAIL (a master.*.meets false), each missing sheet, each crop outside its planned format and each hero that leaves its safe area as a blocking finding with maker marketing. Numbers you only read (contrast, component count, bottom band) are kept as evidence for the reviewers, not graded.`,
         inputs: [`${DIR}/direction.md`, `${MK}/`, `${DIR}/evidence.md`],
         owns: [`${DIR}/evidence.md`, `${MK}/checks/`],
         deliver: `${DIR}/evidence.md (candidate revision, protected list, one check row per file) and ${MK}/checks/ (sheets and JSON)`,

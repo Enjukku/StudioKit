@@ -588,7 +588,7 @@ async function proof() {
 
   phase('Proof review')
   const order = [
-    { r: ROLE.design, q: 'play: measured route times against the intended times, the first view, landmark read at every decision point in both directions, teaching and pacing, falls and recovery, groups (the level-design 14 checks, Pass / Fail / Unproven)', skills: ['level-design', 'game-design'] },
+    { r: ROLE.design, q: 'play: measured route times against the intended times, the first view, landmark read at every decision point in both directions, teaching and pacing, falls and recovery, groups (the level-design fixed checks C1-C19 in `level-design/references/review-artifact.md`, every check re-rated each round, Pass / Fail / Unproven)', skills: ['level-design', 'game-design'] },
     { r: ROLE.art, q: 'composition and value in the blockout: does the first view frame the goal, do the landmark silhouettes read at play distance, does the value band of the chosen look fit these spaces', skills: ['art-direction', 'art-review'] },
     { r: ROLE.perf, q: 'cost: the scene audit counts per zone against the budget, and what the full art, light and ambience will add in the stress scene; write the budget file the build is measured against', skills: ['performance'] },
   ]
