@@ -82,6 +82,7 @@ from PIL import Image
 VERSION = "1.1.0"
 DEFAULT_KEY = "#FF00FF"  # reference-images I-09: magenta cut-out background
 DEFAULT_KEY_TOL = 40  # max per-channel difference (0-255) that still counts as the key colour
+NEAR_KEY_MIN_FRAC = 0.001  # near_key_check: warn when at least this share of the image (and 50 px) sits near the key
 ALPHA_CUT = 128  # alpha >= this is subject
 MASK_CUT = 128  # mask image grey < this is subject (black-on-white)
 BORDER_STRIP = 0.02  # --key auto: border strip width as a fraction of the shorter side (min 1 px)
@@ -338,6 +339,34 @@ def key_subject(rgb: np.ndarray, key, tol: int, fill_holes: bool) -> tuple[np.nd
     return m, {"hole_fill": False, "filled_holes": 0, "filled_area_px": 0}
 
 
+def near_key_check(rgb: np.ndarray, key, key_tol: int) -> dict:
+    """Warn when pixels counted as background differ from a very flat border by more than the border's own spread.
+
+    On a flat render background (one exact colour) the default --key-tol 40 also removes subject pixels close to the
+    key, such as a lit head on a grey backdrop, with no error (J018 modeler review: the box was 768 px high, the
+    true height 932 px). Reports the count and a suggested tighter --key-tol; never changes the mask.
+    """
+    h, w = rgb.shape[:2]
+    s = max(1, round(BORDER_STRIP * min(h, w)))
+    border = np.concatenate(
+        [rgb[:s].reshape(-1, 3), rgb[-s:].reshape(-1, 3), rgb[s:-s, :s].reshape(-1, 3), rgb[s:-s, -s:].reshape(-1, 3)]
+    ).astype(np.int16)
+    kk = np.array(key, dtype=np.int16)
+    spread = int(np.percentile(np.abs(border - kk).max(axis=1), 99))
+    tight = spread + 2
+    if tight >= key_tol:
+        return {"border_spread_p99": spread}
+    diff = np.abs(rgb[..., :3].astype(np.int16) - kk).max(axis=-1)
+    near = int(((diff > tight) & (diff <= key_tol)).sum())
+    out = {"border_spread_p99": spread, "near_key_px": near}
+    if near >= max(50, int(NEAR_KEY_MIN_FRAC * h * w)):
+        out["near_key_warning"] = (f"{near} px differ from the flat key by {tight + 1}-{key_tol}: they are counted as "
+                                   f"background, but the border itself varies by only {spread}; a subject near the key "
+                                   f"colour may be cut. Re-run with --key-tol {spread + 4} and compare the mask")
+        out["suggested_key_tol"] = spread + 4
+    return out
+
+
 def subject_mask(img: Image.Image, key: str = "auto", key_tol: int = DEFAULT_KEY_TOL, mask_img=None, fill_holes: bool = True):
     """(mask or None, source, info): --mask image > alpha channel (if any pixel is not opaque) > key colour > none.
     key "auto" estimates a flat background from the border (estimate_border_key); a hex key is used as given.
@@ -357,7 +386,7 @@ def subject_mask(img: Image.Image, key: str = "auto", key_tol: int = DEFAULT_KEY
         if not info["flat"]:
             return None, "none", info
         m, holes = key_subject(rgb, hex_to_rgb(info["estimated_key"]), key_tol, fill_holes)
-        return m, "key-auto", {**info, **holes}
+        return m, "key-auto", {**info, **holes, **near_key_check(rgb, hex_to_rgb(info["estimated_key"]), key_tol)}
     m, holes = key_subject(rgb, hex_to_rgb(key), key_tol, fill_holes)
     if not m.all():
         return m, "key-colour", {"key": rgb_to_hex(hex_to_rgb(key)), **holes}

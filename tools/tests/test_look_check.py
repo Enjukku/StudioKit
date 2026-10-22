@@ -240,6 +240,30 @@ class AutoKeyTest(unittest.TestCase):  # push 1: flat light-grey background and 
                 self.assertEqual(run_cli([check, p, "--mask", m])["verdict"], "invalid-mask", check)
 
 
+class NearKeyTest(unittest.TestCase):  # J018: a lit head on a flat grey render backdrop is cut by --key-tol 40
+    def render(self):
+        img = np.full((160, 200, 3), 128, dtype=np.uint8)  # flat render backdrop, one exact grey
+        img[100:150, 80:120] = (40, 40, 60)                 # dark body
+        img[60:100, 85:115] = (150, 145, 140)               # lit head, 22 levels from the backdrop
+        return img
+
+    def test_warns_and_suggests_a_tight_tolerance(self):
+        mask, src, info = lc.subject_mask(Image.fromarray(self.render()))
+        self.assertEqual(src, "key-auto")
+        self.assertFalse(mask[80, 100])                     # the head is cut at the default tolerance
+        self.assertIn("near_key_warning", info)
+        self.assertLessEqual(info["suggested_key_tol"], 6)
+        tight, _, info2 = lc.subject_mask(Image.fromarray(self.render()), key_tol=info["suggested_key_tol"])
+        self.assertTrue(tight[80, 100])                     # the suggested tolerance keeps it
+        self.assertNotIn("near_key_warning", info2)
+
+    def test_no_warning_on_a_clear_subject(self):
+        img = np.full((160, 200, 3), 128, dtype=np.uint8)
+        img[60:150, 80:120] = (40, 40, 60)
+        _, _, info = lc.subject_mask(Image.fromarray(img))
+        self.assertNotIn("near_key_warning", info)
+
+
 class HolesAndComponentsTest(unittest.TestCase):  # push 2: hole fill, components, --component
     GREY = (211, 211, 211)
 
