@@ -60,27 +60,7 @@ No cap-upgrade items (a cap below cost is a blocked path); no currency conversio
 ## 6. Measures I compute from reports
 Short scripts I keep in my working folder; each reads one report or table of this model revision and prints numbers. Each was run once on the example models: what makes it give a wrong number without an error is written under it.
 
-**a. Reward rates (for the tier table).** Input: a full single-run report (no `--lean`, `--runs 1`) per named policy and session pattern. Steps are the state changes a player works toward (purchases, level-ups, first defeats, first completions, drops, prestiges); repeated wins and repeated activity completions (obby runs, tycoon tasks) are not steps, so the script counts them from the report's event trace (inline, or the `--trace-out` file). Per session = per active hour × the session's active hours.
-```python
-import json, sys, statistics as st
-from fractions import Fraction as F
-r = json.load(open(sys.argv[1], encoding="utf-8"))
-if r["lean"]["on"] or r["runs"] != 1: sys.exit("need a full single-run report (no --lean, --runs 1)")
-tr = r["trace"]  # a --trace-out report holds {"path", "events"}: the path is relative to where sim.py ran
-if isinstance(tr, dict): tr = json.load(open(tr["path"], encoding="utf-8"))
-end, steps, rep = float(F(r["stop"]["active_s"])), {}, {}
-for s in r["steps"]:
-    k = s["kind"] if s["kind"] in ("prestige", "level") else s["kind"] + ":" + s["id"]
-    steps.setdefault(k, []).append(float(F(s["t_active_s"])))
-for e in tr:
-    k = "completions:" if e["event"] == "activity_end" and e["success"] else "wins:" if e["event"] == "fight_end" and e["outcome"] == "win" else None
-    if k: rep.setdefault(k + e["id"], []).append(float(F(e["t_active_s"])))
-for k, ts in sorted({**steps, **rep}.items(), key=lambda kv: -len(kv[1])):
-    gaps = [b - a for a, b in zip(ts, ts[1:])]
-    print(k, len(ts), "per h", round(len(ts) * 3600 / end, 1), "first", round(ts[0]), "median gap", round(st.median(gaps)) if gaps else "-", "longest", round(max(gaps)) if gaps else "-")
-def stretch(d): t = [0.0] + sorted(x for ts in d.values() for x in ts) + [end]; return round(max(b - a for a, b in zip(t, t[1:])))
-print("longest stretch with no step", stretch(steps), "; with no step, completion or win", stretch({**steps, **rep}), "; of", round(end), "(stop:", r["stop"]["reason"] + ")")
-```
+**a. Reward rates (for the tier table).** Read the report's `reward_rates` block (`sim.py` since J019 G3-P8): per step kind and id, fight win and successful activity completion (repeats included: obby runs, tycoon tasks), the count, rate per active hour, first time, median and longest gap, plus the longest stretch with no step and with no reward at all. It is kept under `--lean`. Per session = per active hour × the session's active hours. In a multi-run report it is run 1's (see `timeline_scope`).
 Wrong without an error: a `--lean` report (it keeps only resets, goals, walls and spikes: 11 greenhouse purchases instead of 265 in the incremental example), hence the guard; a run stopped early by the horizon or "all goals reached" (rates are per active time actually played: the last line prints the stop reason); "no step" is not "no reward" where repeated kills or activity completions pay: read the `wins:` and `completions:` lines and the second stretch (an obby example: 1 step-completion and a 570-second stretch with no step, but 20 completions, 120 per hour, never more than 30 s apart); income ticks are not events, so in an idle game read the stretches against what the screen shows during them.
 
 **b. The decision check.** Input: two full single-run reports of the same model revision from policies with different objectives (`greedy-roi` and `cheapest-eligible`, or `save-for`); never `buy-next-in-order`, which follows the scripted order. The purchase lists are split at each reset, so each run between resets is compared from its start.

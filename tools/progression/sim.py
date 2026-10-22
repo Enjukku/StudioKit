@@ -698,6 +698,7 @@ class Sim:
         self.skill = M.skills[opts["skill"]] if opts.get("skill") else {}
         self.trace: list = []
         self.steps: list = []
+        self.reward_log: list = []  # (t_active_s, category, kind, id): kept under --lean too (J018 G3-P8)
         self.goal_hits: dict = {}
         self.hard_walls: list = []
         self.prestige_log: list = []
@@ -1030,6 +1031,7 @@ class Sim:
         step = {"kind": kind, "id": i, "label": label, "t_active_s": self.t, "t_calendar_s": self.cal,
                 "wait_s": self.t - start, "start_calendar_s": start_cal}
         self.steps.append(step)
+        self.reward_log.append((self.t, "step", kind, i))
         self._soft_wall_check(step)
         self._record_metrics(label)
 
@@ -1161,6 +1163,7 @@ class Sim:
                         player_hits=res["player_hits"], enemy_hits=res["enemy_hits"])
             if res["outcome"] != "win":
                 return
+            self.reward_log.append((self.t, "win", "fight", eid))
             for c, amt in self.M.enemies[eid].get("rewards", {}).items():
                 self._credit(c, amt, f"reward:{eid}")
             for dr in self.M.enemies[eid].get("drops", []):
@@ -1180,6 +1183,7 @@ class Sim:
             self._event("activity_end", id=aid, success=ok)
             if not ok:
                 return
+            self.reward_log.append((self.t, "completion", "activity", aid))
             for c, amt in act.get("rewards", {}).items():
                 self._credit(c, amt, f"reward:{aid}")
             self.completions[aid] = self.completions.get(aid, 0) + 1
@@ -2183,6 +2187,7 @@ def simulate(model_source, policy: str, *, mode: str = "exact", target=None, tar
         "stop": {"reason": s.stop[0], "detail": s.stop[1], "active_s": s.t, "active_s_approx": float(s.t),
                  "calendar_s": s.cal, "calendar_s_approx": _approx(s.cal)},
         "timeline": timeline,
+        "reward_rates": _reward_rates(s),
         "timeline_scope": "run 1 only (seed run 1 of the runs); the multi-run summary has the result across runs"
                           if len(sims) > 1 else "the only run",
         "walls": {"soft": _soft_walls(s, thresholds, top),
@@ -2241,6 +2246,35 @@ def _pred_args(p, key):
             yield from _pred_args(q, key)
     elif k == "not":
         yield from _pred_args(a, key)
+
+
+def _reward_rates(sim) -> dict:
+    """How often each reward moment comes, and the longest stretches with none (J018 G3-P8).
+
+    Steps book only an activity's first completion and --lean drops steps, so rates read from steps alone are wrong
+    with no error; this summary reads every step, win and successful completion, under --lean too."""
+    end = float(sim.t) or 0.0
+    rows = {}
+    for t, cat, kind, i in sim.reward_log:
+        rows.setdefault((cat, kind, str(i)), []).append(float(t))
+    out = []
+    for (cat, kind, i), ts in sorted(rows.items()):
+        gaps = [b - a for a, b in zip(ts, ts[1:])]
+        out.append({"category": cat, "kind": kind, "id": i, "count": len(ts),
+                    "per_active_hour": round(len(ts) * 3600 / end, 3) if end else None,
+                    "first_active_s": round(ts[0], 3), "median_gap_s": round(statistics.median(gaps), 3) if gaps else None,
+                    "longest_gap_s": round(max(gaps), 3) if gaps else None})
+
+    def longest_without(cats):
+        ts = sorted(float(t) for t, c, _, _ in sim.reward_log if c in cats)
+        marks = [0.0] + ts + [end]
+        gaps = [(b - a, a) for a, b in zip(marks, marks[1:])]
+        g, at = max(gaps) if gaps else (end, 0.0)
+        return {"seconds": round(g, 3), "from_active_s": round(at, 3)}
+    return {"per_moment": out, "longest_without_step": longest_without({"step"}),
+            "longest_without_any_reward": longest_without({"step", "win", "completion"}),
+            "active_s": round(end, 3),
+            "note": "every step, fight win and successful completion (repeats included); kept under --lean"}
 
 
 def _lean_steps(sim, timeline, first=0):

@@ -266,6 +266,19 @@ class Combat(unittest.TestCase):
         self.assertEqual([p[1] for p in cum["points"]], ["0", "1000", "3000", "6000", "10000", "15000"])
 
 
+class RewardRates(unittest.TestCase):
+    """J018 G3-P8: the reward-rate summary counts every repeat and stays under --lean."""
+
+    def test_rates_count_repeats_and_survive_lean(self):
+        full = run("obby_random", "buy-next-in-order", seed=7, runs=1)
+        lean = run("obby_random", "buy-next-in-order", seed=7, runs=1, lean=True)
+        self.assertIn("reward_rates", full)
+        self.assertEqual(full["reward_rates"]["per_moment"], lean["reward_rates"]["per_moment"])
+        total = sum(r["count"] for r in full["reward_rates"]["per_moment"])
+        self.assertGreaterEqual(total, len(full["steps"]))
+        self.assertGreater(full["reward_rates"]["longest_without_any_reward"]["seconds"], 0)
+
+
 class Randomness(unittest.TestCase):
     def test_random_model_needs_seed_and_runs_and_reports_wilson(self):
         with self.assertRaisesRegex(ValueError, "--seed and --runs"):
