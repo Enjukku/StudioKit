@@ -245,3 +245,29 @@ class ExampleFile(Base):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class J018FixesTest(Base):
+    """J018 live-ops review: a date-only --end dropped the last day; several loud authors raised no flag."""
+
+    def test_date_only_end_includes_that_day(self):
+        rows = [item(1, "a", when="2026-10-07T18:00:00Z")]
+        code, out, _ = self.run_cli("count", self.write(rows), "--start", "2026-10-01", "--end", "2026-10-07", "--json")
+        self.assertEqual(code, 0)
+        res = json.loads(out)
+        self.assertTrue(res["window"]["end_utc"].startswith("2026-10-08"))
+        self.assertEqual(sum(t["distinct_authors"] for t in res["themes"]), 1)
+
+    def test_a_few_loud_authors_flag(self):
+        rows, n = [], 0
+        for a in ("l1", "l2", "l3", "l4"):
+            for _ in range(6):
+                n += 1
+                rows.append(item(n, a))
+        for a in ("q1", "q2", "q3", "q4"):
+            n += 1
+            rows.append(item(n, a))
+        code, out, _ = self.run_cli("count", self.write(rows), "--start", START, "--end", END, "--json")
+        flags = json.loads(out)["themes"][0]["flags"]
+        self.assertTrue(any("a few loud authors" in f for f in flags), flags)
+        self.assertFalse(any("one loud author" in f for f in flags))

@@ -38,7 +38,7 @@ import os
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -50,6 +50,7 @@ EXCERPT_MAX = 280
 # PROPOSAL (J014-T06 open choice): flag a theme in a source when one author wrote at least this many of its
 # messages and at least half of them. Intensity warning only; it never changes a count.
 LOUD_MIN_MESSAGES = 5
+LOUD_FEW = 3  # 'a few loud authors': the top this-many authors hold half the messages, each with LOUD_MIN_MESSAGES
 
 
 def data_dir() -> Path:
@@ -199,6 +200,10 @@ def count(loaded: Loaded, start: datetime, end: datetime, same_key_scheme: tuple
         flags = []
         if top >= LOUD_MIN_MESSAGES and 2 * top >= msgs:
             flags.append(f"one loud author: {top} of {msgs} messages from one author")
+        else:  # J018 live-ops review: four loud authors, none with half the messages, raised no flag
+            top3 = sorted(theme_author_msgs[(t, s)].values(), reverse=True)[:LOUD_FEW]
+            if n_auth > LOUD_FEW and top3[-1] >= LOUD_MIN_MESSAGES and 2 * sum(top3) >= msgs:
+                flags.append(f"a few loud authors: {sum(top3)} of {msgs} messages from {LOUD_FEW} authors")
         themes.append({"theme": t, "source": s, "distinct_authors": n_auth, "sampled_authors": sampled,
                        "share": n_auth / sampled, "messages": msgs, "flags": flags})
 
@@ -337,6 +342,8 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         start, end = parse_utc(args.start), parse_utc(args.end)
+        if len(args.end) == 10:  # a date-only --end means "through that day" (J018: it dropped the whole last day)
+            end += timedelta(days=1)
     except ValueError as err:
         print(f"ERROR: --start/--end: {err}", file=sys.stderr)
         return 2
