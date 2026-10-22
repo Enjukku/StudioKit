@@ -578,6 +578,73 @@ def _floats(text: str) -> list[float]:
     return [float(x) for x in text.split(",")]
 
 
+# ---------------------------------------------------------------- projected size and texel density (J018 G3-P8)
+
+def texel_density(tex_w: int, tex_h: int, uv_area: float, world_area: float) -> float | None:
+    """Texture pixels per stud: sqrt(texture pixels x UV area share / world area). Pure (DT9)."""
+    if world_area <= 0 or uv_area <= 0:
+        return None
+    return math.sqrt(tex_w * tex_h * uv_area / world_area)
+
+
+def mesh_texel_density(obj, tex_w: int, tex_h: int) -> dict:
+    """DT9 for one mesh object: its evaluated world face area (scale applied) and its active UV layer's area.
+    Record per asset and compare with the approved neighbours; assets seen together share one density."""
+    import bpy  # noqa: PLC0415
+    dg = bpy.context.evaluated_depsgraph_get()
+    ev = obj.evaluated_get(dg)
+    me = ev.to_mesh()
+    try:
+        uvl = me.uv_layers.active
+        if uvl is None:
+            raise ValueError(f"{obj.name}: no UV layer")
+        mw = obj.matrix_world
+        world = 0.0
+        uv = 0.0
+        for p in me.polygons:
+            vs = [mw @ me.vertices[i].co for i in p.vertices]
+            uvs = [uvl.data[li].uv for li in p.loop_indices]
+            for k in range(1, len(vs) - 1):
+                world += (vs[k] - vs[0]).cross(vs[k + 1] - vs[0]).length / 2
+                a, b, c = uvs[0], uvs[k], uvs[k + 1]
+                uv += abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)) / 2
+    finally:
+        ev.to_mesh_clear()
+    return {"object": obj.name, "texture_px": [tex_w, tex_h], "uv_area": round(uv, 6), "world_area": round(world, 6),
+            "px_per_stud": None if texel_density(tex_w, tex_h, uv, world) is None
+            else round(texel_density(tex_w, tex_h, uv, world), 2)}
+
+
+def projected_size(objects: list[str], camera: str, phone_height: int, render_size=None) -> list[dict]:
+    """Each named object's height in px on the phone at the game camera (evaluated bounding box corners through
+    world_to_camera_view), its box in a render's pixels when render_size is given, and whether it is in front of the
+    camera. A part behind the body is not detected here: check the black-fill."""
+    import bpy  # noqa: PLC0415
+    from bpy_extras.object_utils import world_to_camera_view  # noqa: PLC0415
+    from mathutils import Vector  # noqa: PLC0415
+    scene = bpy.context.scene
+    cam = bpy.data.objects.get(camera)
+    if cam is None or cam.type != "CAMERA":
+        raise KeyError(f"camera {camera!r} not found")
+    dg = bpy.context.evaluated_depsgraph_get()
+    rows = []
+    for name in objects:
+        ob = bpy.data.objects.get(name)
+        if ob is None:
+            raise KeyError(f"object {name!r} not found")
+        ev = ob.evaluated_get(dg)
+        pts = [world_to_camera_view(scene, cam, ev.matrix_world @ Vector(c)) for c in ev.bound_box]
+        xs, ys, zs = [p.x for p in pts], [p.y for p in pts], [p.z for p in pts]
+        row = {"object": name, "height_px_on_phone": round((max(ys) - min(ys)) * phone_height, 1),
+               "in_front": min(zs) > 0}
+        if render_size:
+            w, h = render_size
+            row["box_px"] = {"x0": round(min(xs) * w), "y0": round((1 - max(ys)) * h),
+                             "x1": round(max(xs) * w), "y1": round((1 - min(ys)) * h)}
+        rows.append(row)
+    return rows
+
+
 def main(argv: list[str]) -> int:
     import argparse  # noqa: PLC0415
 

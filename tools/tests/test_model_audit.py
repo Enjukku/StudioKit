@@ -224,3 +224,12 @@ class ReuseTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TexelDensityTest(unittest.TestCase):
+    """J018 G3-P8: DT9 px per stud from areas."""
+
+    def test_formula(self):
+        # a 1024 x 1024 texture whose UVs fill a quarter of the map, on 4 square studs: 256 px per stud
+        self.assertAlmostEqual(ma.texel_density(1024, 1024, 0.25, 4.0), 256.0)
+        self.assertIsNone(ma.texel_density(1024, 1024, 0.0, 4.0))

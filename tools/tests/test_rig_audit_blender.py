@@ -156,5 +156,46 @@ class RenderFramesBlenderTest(unittest.TestCase):
             self.assertTrue(mask.any())
 
 
+
+
+AUDIT = textwrap.dedent(r"""
+    import bpy, json, sys
+    sys.path.insert(0, MODEL)
+    sys.path.insert(0, RIGDIR)
+    import model_audit as ma
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    sc = bpy.context.scene
+    sc.render.resolution_x, sc.render.resolution_y = 1600, 720
+    bpy.ops.mesh.primitive_cube_add(size=2.0, location=(0, 0, 0))   # 2 studs tall, 24 square studs of surface
+    cube = bpy.context.active_object
+    cam = bpy.data.objects.new("GameCam", bpy.data.cameras.new("GameCam")); sc.collection.objects.link(cam)
+    cam.location = (0, -10, 0); cam.rotation_euler = (1.5708, 0, 0)
+    cam.data.sensor_fit = "VERTICAL"
+    bpy.context.view_layer.update()
+    ps = ma.projected_size(["Cube"], "GameCam", 360, (1600, 720))
+    td = ma.mesh_texel_density(cube, 1024, 1024)
+    print("RESULT" + json.dumps({"projected": ps, "texel": td}))
+""")
+
+
+@unittest.skipUnless(blender_exe(), "no Blender executable (set BLENDER)")
+class ModelAuditBlenderTest(unittest.TestCase):
+    def test_projected_size_and_texel_density(self):
+        with tempfile.TemporaryDirectory() as d:
+            script = Path(d) / "audit.py"
+            script.write_text(f"MODEL = {str(RIG.parent / 'model')!r}\nRIGDIR = {str(RIG)!r}\n" + AUDIT, encoding="utf-8")
+            p = subprocess.run([blender_exe(), "-b", "--factory-startup", "--python", str(script)],
+                               capture_output=True, text=True, timeout=300)
+            line = next((ln for ln in p.stdout.splitlines() if ln.startswith("RESULT")), None)
+            self.assertIsNotNone(line, p.stdout[-1500:] + p.stderr[-1500:])
+            r = json.loads(line[len("RESULT"):])
+            row = r["projected"][0]
+            self.assertTrue(row["in_front"])
+            self.assertGreater(row["height_px_on_phone"], 20)
+            self.assertLess(row["box_px"]["y0"], row["box_px"]["y1"])
+            self.assertAlmostEqual(r["texel"]["world_area"], 24.0, places=3)
+            self.assertIsNotNone(r["texel"]["px_per_stud"])
+
+
 if __name__ == "__main__":
     unittest.main()
