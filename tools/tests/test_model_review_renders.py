@@ -106,3 +106,16 @@ class DummyTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GameBackTest(unittest.TestCase):
+    """J018 G3-P8: with a game camera, the set also has the third-person view from behind and above."""
+
+    def test_game_back_mirrors_game(self):
+        v = rr.plan_views(BMIN, BMAX, (1600, 720), game_cam=(12.0, 6.0, 70.0))
+        self.assertIn("game_back", v)
+        front, back = v["game"]["eye"], v["game_back"]["eye"]
+        self.assertAlmostEqual(front[0], back[0])
+        self.assertAlmostEqual(front[2], back[2])
+        self.assertAlmostEqual(front[1] + back[1], 2 * v["game"]["target"][1])
+        self.assertNotIn("game_back", rr.plan_views(BMIN, BMAX))

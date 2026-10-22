@@ -127,6 +127,9 @@ def plan_views(bmin, bmax, res=(1024, 1024), margin: float = 1.1, player_height:
         distance, height, fov = game_cam
         eye = (center[0], center[1] - distance, bmin[2] + height)
         views["game"] = _persp(eye, center, fov, radius, res)
+        # third person behind and above: the view players see most of their own character (J018 G3-P8)
+        back = (center[0], center[1] + distance, bmin[2] + height)
+        views["game_back"] = _persp(back, center, fov, radius, res)
     return views
 
 
