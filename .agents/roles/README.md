@@ -11,7 +11,7 @@ Canonical format: see tools/sync_harness.py header. Models per tier come from `k
 | progression-designer (feeling timeline → curves, data tables, simulation, live tuning; replaces economy-designer, J011-D3) | craft → Opus | high (owner J011-D1); its tools and scripts Opus medium or higher | in kit (J011, G3 approved 2026-10-21) |
 | art-director | craft → Opus | high (owner J009-D1) | in kit (J009 closed 2026-10-21) |
 | film-director (every cinematic moment: beat sheet, shot list + `tools/film/shotlist.py`, ChatGPT storyboards, Blender animatic, craft briefs, Roblox playback checks, capture review; replaces cutscene-director, J015-D2) | craft → Opus | high (owner J015-D1) | in kit (J015, owner 2026-10-21: done; tested in real game work) |
-| animator | craft → Opus | high | planned (J006, after J005) |
+| animator (everything that moves: characters, creatures, held items, props and mechanisms, vehicles, buildings, ambient loops; rig-pipeline S1, K2, S6, S7; timing list; motion specs for builders) | craft → Opus | high (owner 2026-10-20) | in kit (J006, 2026-10-21; skills animation-design, animation-craft) |
 | vfx-designer | craft → Opus | high for new or important effects; medium for small effects and fixes (trial, compare after 3 effects) | in kit |
 | character-rigger | craft → Opus | high | in kit (J005, closed 2026-10-21; Studio import untested) |
 | modeler | craft → Opus | high for hero models and new kinds of models; medium for simple models (J007-D1) | building (J007; G2 pending) |
@@ -33,7 +33,7 @@ Canonical format: see tools/sync_harness.py header. Models per tier come from `k
 | doc-keeper | mechanical → Haiku | medium | in kit |
 | explore | mechanical → Haiku | low | in kit |
 
-**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). The animator runs as a stand-in until J006 builds it. A role's `tools:` line is its permission list and the owner's decision: a role whose list has no SendMessage does its sideways work through exchange notes, and a role without the built-in browser writes image prompts and returns `images: pending`.
+**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). A role's `tools:` line is its permission list and the owner's decision: a role whose list has no SendMessage does its sideways work through exchange notes, and a role without the built-in browser writes image prompts and returns `images: pending`.
 
 xhigh and max: nobody by default; only after a measured gain. Owner decisions 2026-10-20 ("Opus for animating ... on high. For UI ... Opus on medium. For sound, Opus on medium"; modeler "for simple things, medium is fine ... models that we want to look really good ... high").
 

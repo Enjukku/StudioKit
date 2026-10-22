@@ -30,7 +30,6 @@ Every recipe follows `rules/company.md` §4. Stages per saved workflow `.agents/
 | Integrator | film-director (scene data via `shotlist.py luau`); feature-builder builds or extends the player against the contract |
 | Review order | scripts (`shotlist.py check`, `log-diff`, gate) → qa-lead (skip, every ending, control and camera restored, repeat trigger, multiplayer, streaming) ∥ performance-engineer (phone) ∥ reviewer (the player code) → **film-director** (staging, timing, camera, clarity, with the sound cue times from the Output log) → **art-director** (integrated look) → sound sync check |
 | Return paths | a look problem in one shot → its maker (modeler, light, VFX); timing unchanged → sound only confirms. A visual peak moves → beat-list revision → animator, VFX and sound acknowledge and recheck. A skeleton change → animation and VFX attachments stale |
-| Gap | the animator role is planned (J006): run a stand-in with the animator brief and `rig-pipeline` |
 
 ## 2. Character or creature
 | Item | Recipe |
@@ -44,7 +43,7 @@ Every recipe follows `rules/company.md` §4. Stages per saved workflow `.agents/
 | Production order | modeler (cuts, geometry, textures) → rigger (rig + tests) → animator (clips + timing list) → VFX and sound for its actions on the timing list → UI icon renders of the shipped model |
 | Check-ins | art-director reviews the model at the game camera on the real background before texture polish (paint-overs); each hand-off is checked by the receiver (K-checks) |
 | Integrator | animator for the imported revision (`rig-pipeline` S7); feature-builder when it is wired into gameplay |
-| Review order | scripts (`model_audit.py`, `rig_audit.py`) → consumer K-checks → **art-director** (identity, silhouette, value at the game camera) → **game-designer** (role reads in play) → performance-engineer (on-screen count, phone); reviewer beside them when it is wired into gameplay |
+| Review order | scripts (`model_audit.py`, `rig_audit.py`, `clip_check.py`) → consumer K-checks → **art-director** (identity, silhouette, value at the game camera) → **game-designer** (role reads in play) → performance-engineer (on-screen count, phone); reviewer beside them when it is wired into gameplay |
 | Return paths | a costume part blocks motion → rig note → modeler (one exact note); a look change forced by a limit → owner with both options rendered |
 | Variant mode (skin, recolour, themed version) | fixed: base rig, clips, identity anchors; open: costume, palette. Skip S1 unless there are new moving parts. No geometry change (palette only): the model step is texture-only and S4-S6 are skipped on the released base rig. Selling it is a second job (feature, with money: `orchestration` §2). Review adds: the base is recognisable in every view; no disadvantage for players who own it |
 

@@ -32,7 +32,7 @@ description: The lead's playbook for running the AI studio. Use at the start of 
 | Mixed request | one job per type, linked in `knowledge/jobs/active.md` ("a gold skin to sell in the shop" = a character variant job + a shop-listing feature job with money); never a "closest type" that drops part of the request. For each interface the jobs share (saved fields, ids, who grants, who checks) the lead names one owner job, writes it in both job cards' "Linked jobs" row and in `active.md`, and runs the owner job's contract first; the other job cites that contract revision | — | — |
 | Unclear (no type fits) | the closest type that covers the whole request, with the reason in the job card; none covers it → one question in the owner digest | — | — |
 
-A role that is still planned (the animator, J006) runs as a stand-in: a general subagent on Opus high with that role's brief and the skills it would load (same pattern as J005-D2).
+A role that is still planned runs as a stand-in: a general subagent on Opus high with that role's brief and the skills it would load (same pattern as J005-D2).
 
 ## 3. Opening a job (M and L)
 1. **Prerequisites first:** check the recipe's prerequisites for this game (`knowledge/design/game-profile.md` filled; `art-bible.md` and approved anchors for visual work; released rigs for existing cast; a test place and its `studio_id`). Run a missing one as its own job or gate before this job opens.

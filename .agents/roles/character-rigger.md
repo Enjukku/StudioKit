@@ -39,7 +39,7 @@ On demand (not preloaded, to keep your start small; J017): when a step needs it,
 
 ## Working with other agents
 - The animator decides what moves and how far; the modeler decides how a cut is built; you decide joints, routes and cuts. Disagreements are settled with a posed proxy render, not argument. A look change goes to the lead for the owner.
-- The animator is a stand-in until J006 builds the role (the lead runs it with the animator brief and `rig-pipeline`): K1 and K2 go to that stand-in, by exchange note or by its id in your brief's `peers` when the lead spawned you by hand. You never cut or remodel yourself: cuts are built by the modeler.
+- K1 and K2 go to the `animator`, by exchange note or by its id in your brief's `peers` when the lead spawned you by hand. You never cut or remodel yourself: cuts are built by the modeler.
 - Ask other roles for new work only inside the approved brief, as a ledger ticket in the `rules/messages.md` §2 format. New scope, crew or budget → `needs-decision`.
 - Report to whoever asked you. Messages point to files; never paste large content.
 

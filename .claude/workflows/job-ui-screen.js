@@ -165,12 +165,9 @@ function studioRule(write) {
     : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
-  const who = r.standIn
-    ? `You are the studio's ${r.name} (a stand-in until the role exists, J006). Load the skills rig-pipeline, reference-images and studio-mcp and work as the animator described in rig-pipeline §1 and §5: what moves, how far, timing inside gameplay windows, the timing list.\n`
-    : ''
-  const role = r.standIn ? r.name : r.type
+  const role = r.type
   const lines = []
-  lines.push(who + '<intent>')
+  lines.push('<intent>')
   lines.push(o.intent)
   if (GATE) lines.push(`The owner's words at the last gate: "${GATE}"`)
   lines.push('</intent>')
@@ -180,7 +177,7 @@ function brief(r, o) {
   lines.push(`to: ${role}`)
   lines.push(`model: ${r.model}`)
   lines.push(`effort: ${r.effort}`)
-  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.standIn ? 'character-rigger' : r.type} --job ${JOB}`)
+  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.type} --job ${JOB}`)
   if (o.skills) lines.push(`skills: [${o.skills.join(', ')}]`)
   if (GATE || CHANGE) lines.push(`owner_words: [${[GATE, CHANGE].filter(Boolean).map(x => JSON.stringify(x)).join(', ')}]`)
   const refs = (o.visual ? IMAGES.map(p => `${p}   # owner-approved reference image (args.images)`).concat([BIBLE]) : []).concat(o.refs || [])
@@ -205,7 +202,7 @@ function brief(r, o) {
   return lines.join('\n')
 }
 function call(r, o, sch, phaseName) {
-  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.standIn ? r.name : r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
+  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
     agentType: r.type, model: SMOKE ? 'haiku' : r.model, effort: SMOKE ? 'low' : r.effort })
 }
 function roleOf(name) {

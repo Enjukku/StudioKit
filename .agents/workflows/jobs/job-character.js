@@ -84,12 +84,11 @@ const ROLE = {
   arch: { type: 'architect', model: 'opus', effort: 'high' },
   // Wiring touches remotes (and, for a variant, ownership saves): the reviewer runs high (roles README).
   code: { type: 'reviewer', model: 'opus', effort: 'high' },
-  // The animator role is planned (J006): a stand-in runs with the animator brief (orchestration skill §2).
-  anim: { type: 'general-purpose', model: 'opus', effort: 'high', name: 'animator', standIn: true },
+  anim: { type: 'animator', model: 'opus', effort: 'high' },
 }
 // Wiring a character touches remotes (and, for a variant, ownership saves): feature-builder runs high (roles README).
 const BUILD_HIGH = Object.assign({}, ROLE.build, { effort: 'high' })
-function nm(r) { return r.standIn ? r.name : r.type }
+function nm(r) { return r.type }
 
 // ---------------------------------------------------------------- schemas (rules/messages.md §3; evidence before status)
 const STR = { type: 'string' }
@@ -179,12 +178,9 @@ function studioRule(write) {
     : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
-  const who = r.standIn
-    ? `You are the studio's ${r.name} (a stand-in until the role exists, J006). Load the skills rig-pipeline and studio-mcp and work as the animator described in rig-pipeline §1 and §5: what moves, how far, timing inside gameplay windows, the timing list. Ignore the rigger role text the packet shows: its docs rows are shared, its role is not yours.\n`
-    : ''
-  const role = r.standIn ? r.name : r.type
+  const role = r.type
   const lines = []
-  lines.push(who + '<intent>')
+  lines.push('<intent>')
   lines.push(o.intent)
   if (GATE) lines.push(`The owner's words at the last gate: "${GATE}"`)
   lines.push('</intent>')
@@ -194,7 +190,7 @@ function brief(r, o) {
   lines.push(`to: ${role}`)
   lines.push(`model: ${r.model}`)
   lines.push(`effort: ${r.effort}`)
-  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.standIn ? 'character-rigger' : r.type} --job ${JOB}`)
+  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.type} --job ${JOB}`)
   if (o.skills) lines.push(`skills: [${o.skills.join(', ')}]`)
   if (GATE || CHANGE) lines.push(`owner_words: [${[GATE, CHANGE].filter(Boolean).map(x => JSON.stringify(x)).join(', ')}]`)
   const refs = (o.visual ? IMAGES.map(p => `${p}   # owner-approved reference image (args.images)`).concat([BIBLE]) : []).concat(o.refs || [])
@@ -219,7 +215,7 @@ function brief(r, o) {
   return lines.join('\n')
 }
 function call(r, o, sch, phaseName) {
-  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.standIn ? r.name : r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
+  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
     agentType: r.type, model: SMOKE ? 'haiku' : r.model, effort: SMOKE ? 'low' : r.effort })
 }
 function roleOf(name) {
@@ -280,13 +276,14 @@ function ownsOf(name) {
   }
   return m[name] || []
 }
-// Craft skills a maker loads for a repair (role files preload their own; the animator stand-in's come from its who-line).
+// Craft skills a maker loads for a repair (role files preload their own).
 function skillsOf(name) {
   const m = {
     'art-director': ['art-review', 'reference-images'],
     'game-designer': ['game-design', 'platform-policy'],
     modeler: ['modeling-craft', 'rig-pipeline', 'studio-mcp'],
     'character-rigger': ['rig-pipeline', 'rigging-craft', 'studio-mcp'],
+    animator: ['rig-pipeline', 'animation-craft', 'studio-mcp'],
     'vfx-designer': ['vfx-design', 'vfx-craft'],
     'sound-designer': ['sound-design'],
     architect: ['architecture', 'networking-security'],

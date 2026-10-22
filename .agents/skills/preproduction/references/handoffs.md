@@ -17,7 +17,7 @@ Creative briefs start `refs` with the approved reference image when one exists (
 | ui-ux-designer (in kit) | ui-design, ui-figma, platform-policy | inputs, state transitions, priority, strings that carry rules, number displays, accessibility needs, failure paths, purchase states | layout, hierarchy, interaction treatment, style execution |
 | vfx-designer (in kit) | vfx-design, vfx-craft | trigger event, affected space, timing dependency, gameplay meaning, visibility rules, information priority | shape, rhythm, material, technique |
 | sound-designer (in kit) | sound-design | trigger and cancel, source location, priority, gameplay information, repetition conditions, caption needs | timbre, motif, mix, processing |
-| animator (planned) | (animation skill when built) | gameplay states, actionable timing windows, movement limits, interruption, contact, readable anticipation | pose, motion style, exaggeration, transitions that keep the mechanics |
+| animator | animation-design, animation-craft | gameplay states, actionable timing windows, movement limits, interruption, contact, readable anticipation | pose, motion style, exaggeration, transitions that keep the mechanics |
 | environment-designer (stages, levels, worlds) | level-design, environment-design | intended choices, mechanics taught, route connections, encounter conditions, boundaries, navigation, reset rules | composition, sightlines, landmarks, pacing hypotheses to test |
 | progression-designer | progression-design, progression-craft | the feeling timeline (first minute to first month: target feelings, walls, spikes, what each milestone unlocks), sources, sinks, caps, what may be bought, policy limits | curves, values, model-player simulations and charts inside the tuning table |
 

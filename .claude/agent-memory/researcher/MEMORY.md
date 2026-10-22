@@ -2,3 +2,4 @@
 - [Reading limits for PDF sources](reference_reading-limits.md) — WebFetch fails on compressed PDFs; use ar5iv for arXiv; no Bash, hand-compute checks
 - [Anthropic docs access](reference_anthropic_docs_access.md) — prompting/Claude Code pages: verbatim prompt, offset for tails (J017)
 - [Roblox live pages](reference_roblox_live_pages.md) — live page reads for analytics facts (J013)
+- [Mirror search tips](reference_mirror_search_tips.md) — Glob/Grep quirks, animation/physics fact locations, RT id clash (J006)

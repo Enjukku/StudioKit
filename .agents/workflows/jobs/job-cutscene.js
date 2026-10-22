@@ -72,10 +72,9 @@ const ROLE = {
   perf: { type: 'performance-engineer', model: 'opus', effort: 'high' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },
   rig: { type: 'character-rigger', model: 'opus', effort: 'high' },
-  // The animator role is planned (J006): a stand-in runs with the animator brief (orchestration skill §2).
-  anim: { type: 'general-purpose', model: 'opus', effort: 'high', name: 'animator', standIn: true },
+  anim: { type: 'animator', model: 'opus', effort: 'high' },
 }
-function nm(r) { return r.standIn ? r.name : r.type }
+function nm(r) { return r.type }
 // Money, saves and remotes run the builder and the reviewer at high (roles README). The architect's player contract (build stage) says which apply;
 // a call that did not read it (stage repair) assumes both, so nothing drops to medium or loses data-saving silently.
 let RISK = null
@@ -173,11 +172,8 @@ function studioRule(write) {
     : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
-  const who = r.standIn
-    ? `You are the studio's ${r.name} (a stand-in until the role exists, J006). Load the skills rig-pipeline and studio-mcp and work as the animator described in rig-pipeline §1 and §5: what moves, how far, timing inside gameplay windows, the timing list. Ignore the rigger role text the packet shows: its docs rows are shared, its role is not yours.\n`
-    : ''
   const lines = []
-  lines.push(who + '<intent>')
+  lines.push('<intent>')
   lines.push(o.intent)
   if (GATE) lines.push(`The owner's words at the last gate: "${GATE}"`)
   lines.push('</intent>')
@@ -187,7 +183,7 @@ function brief(r, o) {
   lines.push(`to: ${nm(r)}`)
   lines.push(`model: ${r.model}`)
   lines.push(`effort: ${r.effort}`)
-  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.standIn ? 'character-rigger' : r.type} --job ${JOB}`)
+  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.type} --job ${JOB}`)
   if (o.skills) lines.push(`skills: [${o.skills.join(', ')}]`)
   if (GATE || CHANGE) lines.push(`owner_words: [${[GATE, CHANGE].filter(Boolean).map(x => JSON.stringify(x)).join(', ')}]`)
   const refs = (o.visual ? IMAGES.map(p => `${p}   # owner-approved reference image (args.images)`).concat([BIBLE]) : []).concat(o.refs || [])

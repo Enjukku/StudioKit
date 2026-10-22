@@ -20,7 +20,7 @@ One saved Claude Code workflow per job type. `tools/sync_harness.py` copies each
 | At most 5 agents at once; one Studio driver (`studioId` from the lead), one Blender user and one built-in browser user at a time | `rules/company.md` §9 |
 | Studio MCP captures stills only: sync is judged from the Output log (event, VFX and cue start on one clock); listening is an owner-confirmed G3 line. Capture briefs carry the check budget: numbers for every case, images at key frames and where a number fails, and report captures made and looked at | owner J005-D8; Studio MCP `screen_capture` |
 | M jobs run the proof inside `build` (`proof` refuses size M); a look change is sized L | `rules/company.md` §2 |
-| A planned role (animator) runs as a stand-in on `general-purpose` with its brief | `orchestration` skill §2 |
+| The animator runs as its own role (`animator`, J006) | `.agents/roles/animator.md` |
 | The script never reads or writes files and never uses `Date.now()` or `Math.random()` | workflow runtime limits |
 
 ## Args per workflow

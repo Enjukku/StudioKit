@@ -76,8 +76,7 @@ const ROLE = {
   build: { type: 'feature-builder', model: 'opus', effort: 'medium' },
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
   code: { type: 'reviewer', model: 'opus', effort: 'medium' },
-  // The animator role is planned (J006): a stand-in runs with the animator brief (orchestration skill §2).
-  anim: { type: 'general-purpose', model: 'opus', effort: 'high', name: 'animator', standIn: true },
+  anim: { type: 'animator', model: 'opus', effort: 'high' },
 }
 const WIRE = SMALL ? ROLE.quick : ROLE.build
 // Roles a blocking finding or an owner change may be routed to; anything else goes back to the lead.
@@ -163,12 +162,9 @@ function studioRule(write) {
     : 'Studio: do not use Studio MCP in this step, not even to read or capture (one Studio driver per instance, read or write: rules/company.md §9); a capture you need comes from the step that drives Studio.'
 }
 function brief(r, o) {
-  const who = r.standIn
-    ? `You are the studio's ${r.name} (a stand-in until the role exists, J006). Load the skills rig-pipeline, reference-images and studio-mcp and work as the animator described in rig-pipeline §1 and §5: what moves, how far, timing inside gameplay windows, the timing list. Ignore the rigger role text the packet shows: its docs rows are shared, its role is not yours.\n`
-    : ''
-  const role = r.standIn ? r.name : r.type
+  const role = r.type
   const lines = []
-  lines.push(who + '<intent>')
+  lines.push('<intent>')
   lines.push(o.intent)
   if (GATE) lines.push(`The owner's words at the last gate: "${GATE}"`)
   lines.push('</intent>')
@@ -178,7 +174,7 @@ function brief(r, o) {
   lines.push(`to: ${role}`)
   lines.push(`model: ${r.model}`)
   lines.push(`effort: ${r.effort}`)
-  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.standIn ? 'character-rigger' : r.type} --job ${JOB}`)
+  lines.push(`packet: python tools/context_packet.py packet "${o.task}" --role ${r.type} --job ${JOB}`)
   if (o.skills) lines.push(`skills: [${o.skills.join(', ')}]`)
   if (GATE || CHANGE) lines.push(`owner_words: [${[GATE, CHANGE].filter(Boolean).map(x => JSON.stringify(x)).join(', ')}]`)
   const refs = (o.visual ? IMAGES.map(p => `${p}   # owner-approved reference image (args.images)`).concat(['knowledge/design/art-bible.md   # take: locks, value ladder, colour roles']) : []).concat(o.refs || [])
@@ -205,7 +201,7 @@ function brief(r, o) {
   return lines.join('\n')
 }
 function call(r, o, sch, phaseName) {
-  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.standIn ? r.name : r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
+  return agent((SMOKE ? SMOKE_NOTE : '') + brief(r, o), { label: `${r.type}: ${o.id}`, phase: phaseName, schema: sch || S_HANDBACK,
     agentType: r.type, model: SMOKE ? 'haiku' : r.model, effort: SMOKE ? 'low' : r.effort })
 }
 function roleOf(name) {
@@ -491,21 +487,21 @@ async function proof() {
     const peers = [{ r: ROLE.sound, ask: 'Key the sound to the picture events: for each event id, the sound envelope (transient onset against the first lit frame, body, tail, length) and the sound\'s job; agree, conflict or missing evidence per event.' }]
       .concat(ANIMATED ? [{ r: ROLE.anim, ask: 'Check that every envelope fits the beats in your timing list and that the event ids match; agree, conflict or missing evidence per event. Do not retime here.' }] : [])
     const notes = await parallel(peers.map(p => () => call(p.r, {
-      id: `E-r${round}-${p.r.standIn ? p.r.name : p.r.type}`, task: `effect envelope response: ${EFFECT}`,
+      id: `E-r${round}-${p.r.type}`, task: `effect envelope response: ${EFFECT}`,
       intent: `Envelope round ${round}. ${p.ask}`,
       skills: p.r === ROLE.sound ? ['sound-design'] : undefined,
       inputs: [tl(rev), `${DIR}/exchange/env-r${round}-vfx-designer.md`],
       rules: [IDS_RULE, NO_IMAGES_RULE],
-      owns: [`${DIR}/exchange/env-r${round}-${p.r.standIn ? p.r.name : p.r.type}.md`],
-      deliver: `${DIR}/exchange/env-r${round}-${p.r.standIn ? p.r.name : p.r.type}.md in the exchange-note format, against ${tl(rev)}`,
+      owns: [`${DIR}/exchange/env-r${round}-${p.r.type}.md`],
+      deliver: `${DIR}/exchange/env-r${round}-${p.r.type}.md in the exchange-note format, against ${tl(rev)}`,
       checks: ['every conflict names the event id, what breaks and who decides or which test settles it'],
     }, S_EXCHANGE, 'Envelope')))
-    notes.forEach((n, i) => keep(`E r${round} ${peers[i].r.standIn ? peers[i].r.name : peers[i].r.type}`, n))
+    notes.forEach((n, i) => keep(`E r${round} ${peers[i].r.type}`, n))
     const open = [v].concat(notes).filter(Boolean).reduce((s, n) => s + n.conflicts.length + n.missing.length, 0)
     const merged = keep(`E r${round} merge`, await call(ROLE.vfx, {
       id: `E-merge-r${round}`, task: `merge envelope into timeline: ${EFFECT}`,
       intent: `Envelope merge, round ${round}. Write the agreed envelope per event id into the next timeline revision and decide what is inside your authority. You may not move a gameplay time (the game-designer's) or an animation beat (the animator's): a move you need is a question naming its decision owner. Ask for a small test where words cannot settle a conflict. ${round === 2 ? 'This is the last round: what stays open becomes an owner question for the next gate.' : ''} Add a change table row naming the consumers to recheck.`,
-      inputs: [tl(rev), `${DIR}/exchange/env-r${round}-vfx-designer.md`].concat(peers.map(p => `${DIR}/exchange/env-r${round}-${p.r.standIn ? p.r.name : p.r.type}.md`)),
+      inputs: [tl(rev), `${DIR}/exchange/env-r${round}-vfx-designer.md`].concat(peers.map(p => `${DIR}/exchange/env-r${round}-${p.r.type}.md`)),
       rules: [IDS_RULE, NO_CODE_RULE, NO_IMAGES_RULE],
       owns: [TIMELINE],
       deliver: `${TIMELINE} (next revision)`,

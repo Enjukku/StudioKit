@@ -71,7 +71,7 @@ S0 lead intake ─► S1 animator: motion needs ─► S2 rigger: rig plan ─�
 - Report in every hand-back how many renders were made and how many images were looked at.
 
 ## 5. Timing list (animator → VFX, sound, UI)
-One list per action revision, owned by the animator: named events with time in seconds (exact, plus the source frame and frame rate), meaning, owner, consumers, interruption rule. Gameplay windows come from the gameplay owner; the animator never retimes gameplay to fit a clip. A marker is presentation, never damage authority. VFX frame scripts and sound cue cards use the same event ids. Format: `animation-design` skill (J006).
+One list per action revision, owned by the animator: named events with time in seconds (exact, plus the source frame and frame rate), meaning, owner, consumers, interruption rule. Gameplay windows come from the gameplay owner; the animator never retimes gameplay to fit a clip. A marker is presentation, never damage authority. VFX frame scripts and sound cue cards use the same event ids. Format: `templates/anim/timing-list.md`; rules in `animation-design` → `references/game-timing.md` §4.
 
 ## 6. Change control and platform limits
 - The sheet has a `revision`. After S5 releases a rig, any change to §B, §C or §D bumps the revision, names the retests and keeps the old rig and clips.
