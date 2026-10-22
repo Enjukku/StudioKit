@@ -289,6 +289,22 @@ class BrighterSideTest(unittest.TestCase):  # J018: the symmetric ratio now name
         self.assertEqual(b["brighter_side"], "subject")
 
 
+class ShadowOnKeyTest(unittest.TestCase):  # J018: a cast shadow on the key is counted as subject
+    def test_shadow_warns(self):
+        img = np.full((160, 200, 3), (200, 190, 170), dtype=np.uint8)   # warm flat backdrop
+        img[40:110, 80:120] = (40, 90, 160)                            # blue subject
+        img[110:140, 70:150] = (100, 95, 85)                           # its shadow: the backdrop, half as bright
+        _, src, info = lc.subject_mask(Image.fromarray(img))
+        self.assertEqual(src, "key-auto")
+        self.assertIn("shadow_warning", info)
+
+    def test_no_shadow_no_warning(self):
+        img = np.full((160, 200, 3), (200, 190, 170), dtype=np.uint8)
+        img[40:140, 80:120] = (40, 90, 160)
+        _, _, info = lc.subject_mask(Image.fromarray(img))
+        self.assertNotIn("shadow_warning", info)
+
+
 class HolesAndComponentsTest(unittest.TestCase):  # push 2: hole fill, components, --component
     GREY = (211, 211, 211)
 

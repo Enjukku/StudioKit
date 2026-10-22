@@ -82,6 +82,9 @@ from PIL import Image
 VERSION = "1.1.0"
 DEFAULT_KEY = "#FF00FF"  # reference-images I-09: magenta cut-out background
 DEFAULT_KEY_TOL = 40  # max per-channel difference (0-255) that still counts as the key colour
+SHADOW_CHROMA_TOL = 0.02  # shadow_on_key_check: max chromaticity difference from the key (r, g, b shares)
+SHADOW_LUM_RANGE = (0.15, 0.85)  # shadow_on_key_check: shadow luminance as a share of the key's luminance
+SHADOW_WARN_SHARE = 0.05  # shadow_on_key_check: warn when at least this share of the subject is shadow-like
 NEAR_KEY_MIN_FRAC = 0.001  # near_key_check: warn when at least this share of the image (and 50 px) sits near the key
 ALPHA_CUT = 128  # alpha >= this is subject
 MASK_CUT = 128  # mask image grey < this is subject (black-on-white)
@@ -357,6 +360,35 @@ def inverted_mask_check(m: np.ndarray) -> dict:
     return out
 
 
+def shadow_on_key_check(rgb: np.ndarray, m: np.ndarray, key) -> dict:
+    """Warn when part of the subject looks like a shadow on the backdrop: the key's own colour, only darker.
+
+    A cast shadow on a flat key falls outside --key-tol and is counted as subject with no error (J018 game-designer
+    and level-design reviews: a valid mask with the wrong area). Shadow-like = chromaticity within SHADOW_CHROMA_TOL
+    of the key and luminance SHADOW_LUM_RANGE of the key's. A grey subject on a grey key also matches, so this is a
+    warning to check on an overlay, never a mask change.
+    """
+    if not m.any():
+        return {}
+    px = rgb[..., :3][m].astype(np.float64)
+    kk = np.array(key, dtype=np.float64)
+    if kk.sum() < 30:  # a near-black key has no darker shadow to find
+        return {}
+    chroma = px / np.maximum(px.sum(axis=1, keepdims=True), 1.0)
+    kchroma = kk / kk.sum()
+    lum = relative_luminance(px.reshape(-1, 1, 3)).ravel()
+    klum = float(relative_luminance(kk.reshape(1, 1, 3)).ravel()[0])
+    lo, hi = SHADOW_LUM_RANGE
+    like = (np.abs(chroma - kchroma).max(axis=1) <= SHADOW_CHROMA_TOL) & (lum >= lo * klum) & (lum <= hi * klum)
+    share = float(like.mean())
+    out = {"shadow_like_share_of_subject": round(share, 4)}
+    if share >= SHADOW_WARN_SHARE:
+        out["shadow_warning"] = (f"{share:.0%} of the subject has the key's colour, only darker: a cast shadow or "
+                                 "ambient occlusion on the backdrop may be counted as subject; check the mask on an "
+                                 "overlay, or render without the shadow (shadow catcher off) or mask the subject")
+    return out
+
+
 def near_key_check(rgb: np.ndarray, key, key_tol: int) -> dict:
     """Warn when pixels counted as background differ from a very flat border by more than the border's own spread.
 
@@ -404,7 +436,8 @@ def subject_mask(img: Image.Image, key: str = "auto", key_tol: int = DEFAULT_KEY
         if not info["flat"]:
             return None, "none", info
         m, holes = key_subject(rgb, hex_to_rgb(info["estimated_key"]), key_tol, fill_holes)
-        return m, "key-auto", {**info, **holes, **near_key_check(rgb, hex_to_rgb(info["estimated_key"]), key_tol)}
+        k = hex_to_rgb(info["estimated_key"])
+        return m, "key-auto", {**info, **holes, **near_key_check(rgb, k, key_tol), **shadow_on_key_check(rgb, m, k)}
     m, holes = key_subject(rgb, hex_to_rgb(key), key_tol, fill_holes)
     if not m.all():
         return m, "key-colour", {"key": rgb_to_hex(hex_to_rgb(key)), **holes}
