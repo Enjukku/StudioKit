@@ -15,7 +15,7 @@ Usage:
   python tools/film/shotlist.py blender-export --out export.py      # script: writes the animatic's timing JSON
   python tools/film/shotlist.py diff      <file> <blender.json> [--write] [--json]
   python tools/film/shotlist.py luau      <file> --out Name.luau    # generated --!strict ModuleScript
-  python tools/film/shotlist.py log-diff  <file> <log.json> [--tol-ms MS --tol-source S] [--json]
+  python tools/film/shotlist.py log-diff  <file> <log.json> [--tol-ms MS --tol-source S [--early-ms MS]] [--json]
   Run the emitted scripts headless:
     blender -b scene.blend --python push.py            (the script does not save the .blend; save it yourself)
     blender -b scene.blend --python export.py -- out.json
@@ -1141,8 +1141,12 @@ def cmd_luau(args) -> int:
 
 # ---------------------------------------------------------------- log-diff
 
-def log_diff(data, tl, log, tol_ms: Fraction | None = None) -> dict:
-    """Compare a Roblox playback log [{id, t}] (t parsed as exact Fractions) with the planned times. Pure."""
+def log_diff(data, tl, log, tol_ms: Fraction | None = None, early_ms: Fraction | None = None) -> dict:
+    """Compare a Roblox playback log [{id, t}] (t parsed as exact Fractions) with the planned times. Pure.
+
+    With early_ms the window is one-sided: pass when -early_ms <= diff <= tol_ms (the studio sync rule: a sound
+    may land up to about 40 ms late but never more than one frame early). Without it the window stays symmetric.
+    """
     if not isinstance(log, list):
         raise ShotlistError("log must be a JSON list of {id, t}")
     r = tl["rate"]
@@ -1171,7 +1175,8 @@ def log_diff(data, tl, log, tol_ms: Fraction | None = None) -> dict:
             row["diff_ms"] = dec(d * 1000, 3)
             row["diff_frames"] = dec(d * r, 3)
             if tol_ms is not None:
-                row["verdict"] = "pass" if abs(d * 1000) <= tol_ms else "fail"
+                lo = -tol_ms if early_ms is None else -early_ms
+                row["verdict"] = "pass" if lo <= d * 1000 <= tol_ms else "fail"
         elif tol_ms is not None:
             row["verdict"] = "not-measured"
         rows.append(row)
@@ -1196,10 +1201,22 @@ def cmd_log_diff(args) -> int:
             raise ShotlistError(f"--tol-ms must be a number, got {args.tol_ms!r}") from None
         if tol < 0:
             raise ShotlistError("--tol-ms must be >= 0")
+    early = None
+    if args.early_ms is not None:
+        if tol is None:
+            raise ShotlistError("--early-ms needs --tol-ms and --tol-source")
+        try:
+            early = Fraction(args.early_ms)
+        except ValueError:
+            raise ShotlistError(f"--early-ms must be a number, got {args.early_ms!r}") from None
+        if early < 0:
+            raise ShotlistError("--early-ms must be >= 0")
     data, _, tl = require_valid(args.file)
-    res = log_diff(data, tl, load_json(args.log_json, exact=True), tol)
+    res = log_diff(data, tl, load_json(args.log_json, exact=True), tol, early)
     if tol is not None:
         res["tolerance"] = {"ms": args.tol_ms, "source": args.tol_source}
+        if early is not None:
+            res["tolerance"]["early_ms"] = args.early_ms
     if args.json:
         print(json.dumps(res, indent=2, ensure_ascii=False))
     else:
@@ -1256,6 +1273,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("log_json")
     p.add_argument("--tol-ms", type=str, help="tolerance in ms (needs --tol-source)")
     p.add_argument("--tol-source")
+    p.add_argument("--early-ms", type=str,
+                   help="one-sided window: at most this many ms early, --tol-ms late (the sync rule: one frame early)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_log_diff)
     return ap

@@ -499,6 +499,23 @@ class LogDiffTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertEqual(json.loads(out)["tolerance"], {"ms": "20", "source": "test value"})
 
+    def test_one_sided_window(self):
+        """J018: a sound 12 ms early fails a 40 ms late / 16.7 ms early window that a symmetric check would pass."""
+        early_log = [dict(e, t=e["t"] - Fraction(24, 1000)) if e["id"] == "sfx.test.one" else e for e in self.log]
+        sym = sl.log_diff(DRILL, self.tl, early_log, Fraction(40))
+        one = sl.log_diff(DRILL, self.tl, early_log, Fraction(40), Fraction(167, 10))
+        late = sl.log_diff(DRILL, self.tl, self.log, Fraction(40), Fraction(167, 10))
+        verdict = lambda res: {r["id"]: r.get("verdict") for r in res["rows"]}["sfx.test.one"]
+        self.assertEqual(verdict(sym), "pass")    # -12 ms, symmetric 40 ms
+        self.assertEqual(verdict(one), "pass")    # -12 ms is within one frame early
+        early_log2 = [dict(e, t=e["t"] - Fraction(42, 1000)) if e["id"] == "sfx.test.one" else e for e in self.log]
+        self.assertEqual(verdict(sl.log_diff(DRILL, self.tl, early_log2, Fraction(40))), "pass")  # -30 ms symmetric
+        self.assertEqual(verdict(sl.log_diff(DRILL, self.tl, early_log2, Fraction(40), Fraction(167, 10))), "fail")
+        self.assertEqual(verdict(late), "pass")   # +12 ms late
+        code, _, err = run_main(["log-diff", FIX / "drill.shots.json", FIX / "drill.log.json", "--early-ms", "16.7"])
+        self.assertEqual(code, 1)
+        self.assertIn("--early-ms", err)
+
     def test_bad_log_entry(self):
         with self.assertRaises(sl.ShotlistError):
             sl.log_diff(DRILL, self.tl, [{"id": "S010", "t": "soon"}])
