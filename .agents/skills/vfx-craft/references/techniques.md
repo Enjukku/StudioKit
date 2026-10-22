@@ -1,11 +1,13 @@
-> Author: orchestrator · claude-opus-5-5 · default · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · default · 2026-10-20. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (one root, the toolbox before code, no mesh rain).
 
 # Build techniques per tool (what the vfx-design chooser picked → how to build it in Roblox)
 
 Values: `pro-defaults.md`. Exact properties and limits: `knowledge/reference/vfx/roblox-vfx-api-card.md`. Meshes in depth: `knowledge/reference/vfx/mesh-vfx.md`. Tutorial recipes: `knowledge/reference/vfx/tutorials.md`.
+Every technique: all layers under one root Attachment or Part, sizes and offsets from one scale factor (C-27). Use an emitter setting before writing code: a held image is Rate 0 and one `Emit` (or a long Lifetime with Speed 0); gravity is Acceleration plus Drag; a swirl or ring can be a simple mesh with a moving texture.
 
 ## T1. Particles (many small, soft or chaotic bits)
 - One emitter per job; all burst at 0 ms with `EmitCount`; order by Lifetime and ZOffset (C-06). Streams only for flight, loops and auras.
+- Particles are 2D images only. Many 3D meshes spawned like particles (falling candy, rubble rain) cost real Parts each: keep them to a few pooled hero pieces and make the many from flat sprites.
 - Bodies (fire, smoke) are flipbooks; billboards (flare, impact, ring, glow) have Speed 0.
 - Every emitter: LightInfluence 0, Brightness set, LightEmission 1 (glow, core) or 0 (smoke, sparks, dark).
 - Clone, wait one frame, then `Emit` (ZO-04). Clean up with Debris after the longest lifetime.

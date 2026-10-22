@@ -1,6 +1,6 @@
 # Phones and Roblox rendering, evolving a style, marketing art, don'ts
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `art-direction`. Sources: `knowledge/reference/art-direction/03` §1.4, `04` §1-3, §4.6; fact-check `fact-check-a11y-ai-roblox.md` (FC-A). Roblox facts are dated snapshots: re-check the local docs mirror (`knowledge/external/roblox-creator-docs/`) before relying on one.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `art-direction`. Sources: `knowledge/reference/art-direction/03` §1.4, `04` §1-3, §4.6; fact-check `fact-check-a11y-ai-roblox.md` (FC-A). Roblox facts are dated snapshots: re-check the local docs mirror (`knowledge/external/roblox-creator-docs/`) before relying on one. Revised by J018 maker art-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): updates keep the kernel, tone push and pull, theme niches (§2 items 6-8), the art director's marketing review duties (§3; the image standards are marketing's), don'ts 11-14; studio cases moved to `precedents.md`.
 
 ## 1. Stylization on Roblox phones
 ### 1.1 Who plays and on what
@@ -37,9 +37,12 @@ Pick the baseline phone from the game's analytics when they exist; otherwise wri
 ## 2. Evolving a visual style
 1. Name the problem the change solves (inconsistency, unreadability, dated proportions, new camera or audience, stronger fantasy, production limit). Separate the identity players recognize from the implementation that may change (04:EV1).
 2. Write a transition packet and test old and new assets in one scene (`art-review/references/art-bible.md` §6) (04:EV2-EV3).
-3. Version identity locks apart from implementation; review a representative family, not one new asset; a rig or pose change can break an approved costume, so revisit motion and gameplay views (04:TS2; Riot's 2024 Teemo update reconciled inconsistent costume parts while keeping chosen older charm, S 04:TS1).
-4. Across platforms the fantasy and recognition locks stay; controls, framing, feedback scale and density may be redesigned for the real interaction (Riot's Wild Rift adaptation kept a champion's fantasy and changed a hard-to-use mobile interaction, S 04:WR1; transfer P 04:WR2).
+3. Version identity locks apart from implementation; review a representative family, not one new asset; a rig or pose change can break an approved costume, so revisit motion and gameplay views (04:TS2; a studio update that reconciled inconsistent costume parts while keeping chosen older charm: `precedents.md` §2, S 04:TS1).
+4. Across platforms the fantasy and recognition locks stay; controls, framing, feedback scale and density may be redesigned for the real interaction (a mobile adaptation that kept a character's fantasy and changed a hard-to-use interaction: `precedents.md` §2, S 04:WR1; transfer P 04:WR2).
 5. Dated style descriptions go stale: a 2014 description of a map's look does not describe its 2026 variants (04:TS3).
+6. **An update keeps the kernel and trims what is dated.** Before a remake, list what players love (brought to the front) and what feels dated (trimmed, or kept with a reason); anchors come from the strongest canon; the result must never read as a parody of the original (`identity-variants.md` §4).
+7. **Refresh a tone by pushing to the extreme, then pulling back to the brand.** For an event or a recurring line, make one extreme pass and one brand-aligned pass; the owner picks; each iteration's brief names its tone shift against the last; the final still passes the brand checks (palette, shapes, fonts).
+8. **Each theme or new world needs its own niche.** State in one line how it differs from the nearest existing theme, and what "escape" a new world offers; captures of the new world and the last one differ clearly in palette, shapes and theme cues.
 
 ## 3. Marketing art that matches the game
 | Surface | Job | Check |
@@ -48,8 +51,9 @@ Pick the baseline phone from the game's analytics when they exist; otherwise wri
 | Thumbnail | an activity or situation the game really has | 16:9, ideally 1920×1080; essential content clear of the bottom area metadata may cover; video thumbnails must show real in-game content (FR29) |
 | Key art | composition and story of the fantasy | composed camera and light allowed; same identity and promise as the game |
 - Marketing may compress and dramatize the fantasy but never invents another product; review it against the current game, not only the bible, and link each approved marketing anchor to the game version it shows (04:MK1-MK3).
-- Name the recognition anchors that must survive any refresh (title word, shape, character, color). Review icon, thumbnail, title treatment, loading screen and in-game UI as one family at real sizes (Supercell's 2025 logo evolution, S 01:SC-BS; no conversion data was published).
+- Name the recognition anchors that must survive any refresh (title word, shape, character, color). Review icon, thumbnail, title treatment, loading screen and in-game UI as one family at real sizes (a studio's 2025 logo evolution kept its emblem, colours and lettering: `precedents.md` §4; no conversion data was published).
 - Click-through is not proof of better art direction; never borrow a competitor's image because it tested well (04:MK6).
+- **The image standards are marketing's** (one rule, one place): the launched thing as the hero, the premise and the signature key pose, the crop composed first with the platform overlay, one layered master feeding the kit, finals at final resolution, one brand change per event, colour checked on a phone: `marketing-design` §4 M-15..M-23 and `marketing-craft` K-14. You review against them and against the game (self-review MK1-MK8), and you hold what only you can: the likeness to the anchors (ID2), the colour roles and reserved colours kept, the game's motif still reading as a one-colour icon (SH10), and the signature pose taken from the animator's key frame, never a new pose (MK8).
 - Marketing icons and thumbnails made with the image tool may ship as final images, as may a touched-up version or a Blender render with the game's models (owner J012-D7); the owner reviews every one before it ships (owner J009-D8). Game assets stay built, never shipped as images.
 
 ## 4. Don't
@@ -61,6 +65,10 @@ Pick the baseline phone from the game's analytics when they exist; otherwise wri
 6. Read a still as evidence of sound, motion, transitions or performance.
 7. Use one attractive capture to claim support for all phones.
 8. Silently replace an approved anchor or let a rejected concept become a reference.
-9. Label a fan or paper reading as Valve's or Riot's production rule.
+9. Label a fan or paper reading as a studio's production rule.
 10. Market a different fantasy from the game players will get.
 Source: paper do-not list (04:DN01-DN10, OPINION).
+11. Polish one option before the pick, or show options at uneven finish: the polished one wins for the wrong reason.
+12. Approve from a turnaround, an editor viewport or a close-up; judge at the game camera, at phone size, in the real place.
+13. Fix a weak read by adding detail; find the missing contrast.
+14. Let a reserved gameplay colour, fast motion or the brightest value sit on decoration.

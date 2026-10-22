@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `rigging-design`. Sources: rigging paper RP:166-211 (notes `knowledge/reference/rigging/01-*.md` §6), owner J005-D2, first-game FG01-FG13.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `rigging-design`. Sources: rigging paper RP:166-211 (notes `knowledge/reference/rigging/01-*.md` §6), owner J005-D2, first-game FG01-FG13. Revised by J018 maker character-rigger · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (material and style decide the route, separable parts, numbers at S4; repair round 2: cap sampling pointed to recipe 1; repair round 3: one cap group per cut).
 
 # Region routes: cut, skin, mix or reject
 
@@ -22,6 +22,9 @@ Neither method is the default for a whole character; most characters use both (R
 | neither works in scope | **R-reject** → owner | — |
 - First-game lesson [E]: skinned merged limbs webbed (FG01) and wrinkled (FG04) because the generated topology could not bend. R-skin works only when the bend zone is rebuilt with edge rings and the weights are tuned (teddy S3b/S4b: 0 visible folds in 77 poses after that).
 - Elongated cut rings (one side much longer than the other, e.g. 1.8:1 shoulders) cannot be hidden by a rigid ball root at big moves: prefer R-skin there, or render both and let the owner pick.
+- **What looks rigid moves rigidly; what looks soft bends** [O]: a gold plate, a spike or a gun body rides one bone; cloth, fur and skin bend. The material line written at S2 (`SKILL.md` §3 step 3) decides; when the reference leaves it open (shiny cloth or metal?), ask the art director before choosing.
+- **The style decides how visible a break may be** [O]: a toy look in the art bible allows ball joints and gaps; a stylised organic character does not, so the same shoulder is R-cut on one game and R-skin on another.
+- **Separable stays separable** [O]: every part that may be changed, recoloured, removed or swapped on its own (a helmet, a weapon, a pauldron, a variant piece) stays its own named object or MeshPart, joined to its bone, and is judged with the whole character.
 - Paper conflict: the paper prefers skinning for plush or furry pets (DT03 below) [O]; the per-joint rule above decides. When unsure, render both as posed proxies at the worst §B pose from the gameplay camera; if both pass, pick the cheaper; if the choice changes the look, ask the owner.
 
 ## 3. Decision table (RP:198-211, [O] proposed studio rule)
@@ -61,3 +64,4 @@ Neither method is the default for a whole character; most characters use both (R
 - Each rigid piece keeps its shape with its parent held still; unrelated pieces stay still; the seam stays covered from the required cameras (RP:182).
 - No fused bridge left in a moving zone: connected-part count per piece matches the plan (`tools/rig/rig_audit.py`).
 - Caps: normals out, 0 boundary edges, real thickness, no visible backfaces, texture continues across (RP:176).
+- At every §B extreme, as numbers before any image (`rigging-craft/references/tests.md` §3, §6 G-lines): cap exposure 0 from every review camera, per cut, sampled over the whole of each face in that cut's `cap_<cut id>` group, a socket only where the child covers it (`rigging-craft/references/blender-mcp.md` §6 recipe 1; a failing number is checked on the still first); no new overlap between parts that are not parent and child; the game-camera black-fill keeps the rest component count.

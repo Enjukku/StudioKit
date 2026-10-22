@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Genre presets
 
@@ -16,7 +16,7 @@ where the brief departs from it.
 | Obby | 100-125 BPM steady, major | Checkpoint chime, always the same (S-64); stage complete riser, hit, gap, tail (S-54) | Fall or death: short honest falling cue, low tier, varied (S-134, S-88) | UI and checkpoint > own feedback > music | 5-10 LU | J-cut into the next section (S-116); small ladder on consecutive jumps (S-60) | Loud fail sound replayed hundreds of times (S-98, S-101); long death jingles |
 | Tycoon | 85-110 BPM calm; beds that do not repeat within 10 min (S-100) | Coin and register runs (S-67); build-complete snap with pre-click (Q-05); purchase confirm about 1.3 s tier (S-68) | None | UI > reward > music > ambience | 5-10 LU | Income ladder with a cap (S-61); quiet idle textures (S-31) | One sound per dropper item (group, S-79); arousal ramps in shops; pricier = louder (S-171) |
 | Disaster survival | Calm lobby → warning → survival 140-175 BPM; 4-5 states | Survival relief: decrescendo, width opens | Warning IOI 300 then 100 ms (S-135); auditory icon per disaster (S-137); approach ramps on pitched tones (S-10); distant bed (S-43); show-then-delay far impacts (S-85); ground-sourced giants (S-45) | Warnings > own feedback > disaster world > music > ambience | 15-20 LU | Every warning has an action (S-136); angle curves for facing hazards (S-145) | Warnings with no action; sub-only rumbles phones cannot play (S-156, S-157) |
-| Destruction | Blasting 120-140 BPM; shop 85-110; major | Collect stream + counter smack (S-66); sell run (S-67); rare-drop chill (S-28) | Minimal | Own blast and impact > collect > reward > UI > world > music | 8-12 LU (S-105) | (material, size, event) keys (S-75); count-based layers (S-78); one burst sound scaled by N (S-79); debris cap (S-80); hitstop 2-6 frames (S-73); dry assets + engine reverb (S-84); sub for hero blasts only (S-117) | N copies for N pieces (S-79); sustained 2-5 kHz scrape (S-22); bass-only weight (S-157) |
+| Destruction | Blasting 120-140 BPM; shop 85-110; major | Collect stream + counter smack (S-66); sell run (S-67); rare-drop chill (S-28) | Minimal | Own blast and impact > collect > reward > UI > world > music | 8-12 LU (S-105) | (material, size, event) keys (S-75); count-based layers (S-78); one burst sound scaled by N (S-79); debris cap (S-80); hit sound on the first hit-stop frame, lengths from the game designer (S-73); designed tail baked, room from the zone reverb (S-84, SC-08); sub for hero blasts only (S-117) | N copies for N pieces (S-79); sustained 2-5 kHz scrape (S-22); bass-only weight (S-157) |
 
 ## B. Budgets and the failure case to test (pack presets, all P)
 

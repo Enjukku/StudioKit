@@ -6,7 +6,7 @@ updated: 2026-10-20
 source: "J002; Roblox docs mirror (knowledge/external/roblox-creator-docs, upstream 7400643); ui-basics facts; research paper RP (R05-R07, R20)"
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (translucent panels and the player's transparency setting; motion-table rows in the package).
 
 # Figma → Roblox handoff: what Roblox draws, what must be an image
 
@@ -23,7 +23,7 @@ Every Figma layer ends as one of three things in Roblox. Decide per layer **befo
 
 | Figma | Roblox | Mark | Note / evidence |
 | --- | --- | --- | --- |
-| Solid fill + opacity | `BackgroundColor3` + `BackgroundTransparency` (= 1 − opacity) | N | |
+| Solid fill + opacity | `BackgroundColor3` + `BackgroundTransparency` (= 1 − opacity) | N | translucent panels and scrims multiply their transparency by `GuiService.PreferredTransparency` (the player's Background Transparency setting; `production/publishing/accessibility.md:104-129`): spec the default value; contrast is measured at it (ui-design screen-contract §5) |
 | Corner radius | `UICorner.CornerRadius` (UDim; per-corner live) | N | ui-basics U-08 |
 | Linear gradient (any angle) | `UIGradient` Color + Transparency sequences, `Rotation` (Figma top→bottom = Rotation 90) | N | Radial, conical and elliptical gradients and the Scale / TileMode properties are **beta, not publishable** (DF 4846594; D ui/appearance-modifiers.md:79-201). Bake them |
 | Stroke inside / center / outside | `UIStroke` `ApplyStrokeMode = Border`, `BorderStrokePosition` Inner / Center / Outer (+ `BorderOffset`) | N | Y/UIStroke.yaml:100-120; ui-basics facts says live, the class page still mentions the Improved UIStrokes beta for some properties: confirm in Studio before relying on Inner/Outer, fallback = nested Frame |
@@ -73,7 +73,7 @@ Built-in Roblox families (D `rbxasset://fonts/families/*.json`, mirror 7400643) 
 | Via MCP | `get_screenshot(fileKey, nodeId, maxDimension)` returns a PNG url (curl it to `content/ui/<screen-id>/export/`; check alpha after download); for exact scale, ask the owner to export from Figma | MCP renders at the requested longest edge; check pixel size after download |
 
 ## 4. Handoff package (per screen, `content/ui/<screen-id>/`)
-- `spec.md`: purpose, decision record, states, layer table (name, size, position, N/B/T, colours as hex, stroke, radius, font + size, ZIndex order), spacing, 9-slice insets, motion records, open questions, PROPOSAL list.
+- `spec.md`: purpose, decision record, flow sheet, states, layer table (name, size, position, N/B/T/L, colours as hex, stroke, radius, font + size, ZIndex order), spacing, 9-slice insets, motion records naming their motion-table rows (`content/ui/_system/motion-table.md`), open questions, PROPOSAL list.
 - Figma link (file + node ids) and a screenshot per state and per device class.
 - `export/` PNGs named `<screen-id>_<part>[_state].png`; `refs/` (generated images + `prompts.md`); `figma-ids.json` (node and variable id ledger).
 - Changeable text, numbers and prices listed as live text fields with their data source, never in art.

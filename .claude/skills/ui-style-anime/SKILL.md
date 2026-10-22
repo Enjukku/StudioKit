@@ -3,7 +3,7 @@ name: ui-style-anime
 description: Roblox game UI in the anime style in Figma - sharp angular headers, glow and shine, crystalline buttons, gradient-stroke cards, oversized art, rarity tiers. Use when the UI style is anime, gacha, tower-defense, fighting or RPG, or the owner says "make it look like an anime game", "flashy". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TA (UI Genesis anime TD inventory, Photoshop, experimental, few numbers, file lost mid-video; `knowledge/reference/ui/03-anime-photoshop.md`). Figma steps here are mapped from TA's Photoshop moves and rebuilt on the TC / TS Figma fundamentals, so most values are **PROPOSAL**. Tune per game; owner confirms.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TA (UI Genesis anime TD inventory, Photoshop, experimental, few numbers, file lost mid-video; `knowledge/reference/ui/03-anime-photoshop.md`). Figma steps here are mapped from TA's Photoshop moves and rebuilt on the TC / TS Figma fundamentals, so most values are **PROPOSAL**. Tune per game; owner confirms. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (one glow per region, honest summon reveals by pointer, measured self-check).
 
 # Anime UI
 
@@ -31,7 +31,7 @@ Sharp, warped header silhouette overlapping the panel below · glow and shine on
 | Panel | deep saturated base (e.g. navy / violet), angled or chamfered corners via pen tool; stripes or shine at 5-15 % | TA@0:48, @16:11 |
 | Header | pen-tool silhouette with sharp points, 1-2 accent colours, clipped texture + reflection + shadow; overlaps panel top by ⅓-½ of its height | TA@4:43-8:15 |
 | Glow (inner) | **optional, off by default**: Inner shadow X 0 Y 0, blur 8-16, spread 0-2, light tint at 40-60 %. It is bake-only (UIShadow Inset is beta) and multiplies the bake per state and colour; use it only on the hero part | TA@1:30 → F-08; J002-T09 |
-| Glow (outer) | Drop shadow X 0 Y 0, blur 12-24, the button's hue at 40-60 % | TA@19:37 |
+| Glow (outer) | Drop shadow X 0 Y 0, blur 12-24, the button's hue at 40-60 %; one glowing element per screen region (the primary action or the hero), the rest calm | TA@19:37; ui-design style-choice §6 |
 | Shine / stripes / carved cuts | cross the whole shape edge to edge, never stop in a hard line inside it (ui-figma F-07, owner J002-D9). Carved light cuts (facets) count as shine: each facet touches the face edge (corner triangles, edge bands); free-floating cuts inside the face are not allowed | J002-D9; J002-T09 |
 | Card | solid (no transparency), gradient fill + gradient stroke 4 px; **chamfered corners** by default (the sharp signature, §3); a radius ladder 8 (cards) / 6 (wells) only when the game wants a softer anime look; one choice per game | TA@21:42-22:16; J002-T09 |
 | Focus ring | white 4-6 px outside the card | TA@24:54 |
@@ -52,7 +52,7 @@ Sharp, warped header silhouette overlapping the panel below · glow and shine on
 11. **Summon banner and reveal (gacha)**: tested in J002-T09 (`content/ui/anime-summon/`). Rules first: `platform-policy` (paid random items) and ui-design `shops-rewards-onboarding.md` §2-§5.
     - **Banner screen**: info column (banner name, end time, chance per tier **in numbers**, pity meter with "n / max" and "sure X in n summons") + hero banner card (oversized render breaking out of the card, rate-up tag, rarity tag, name, % per summon, one-line role) + a labelled "Odds" control (opens the full unit list; totals 100 %) + Summon ×1 / ×10 as equal crystal buttons with the live cost.
     - **Review popup**: cost, balance before → after, chance per summon, pity effect, "cannot be undone", Confirm (focus) / Cancel. Pending: no magic effects, "waiting for the server", nothing spent yet.
-    - **Reveal**: library rune circle + sunburst behind the hero (sunburst only after the server confirms), rarity tag at ≈ 1.4× size, name, "Added to your units", balance change, pity line. Anticipation looks and lasts **the same for every rarity**; no fake-out.
+    - **Reveal**: library rune circle + sunburst behind the hero (sunburst only after the server confirms), rarity tag at ≈ 1.4× size, name, "Added to your units", balance change, pity line. Anticipation looks and lasts **the same for every rarity**; no fake-out; the tier ladder (rays, crescendo, motif) starts only after the result frame (ui-design shops-rewards-onboarding §5). A luck boost shows its numeric effect before purchase and the boosted odds while it runs; its sparkles never suggest more than the numbers.
     - **×10 summary**: all 10 cards (sorted top rarity first), a count line ("1 Mythic · 1 Legendary · …"), NEW only on first copies; after a reveal, Done is primary and Again goes through Review (never a direct spend).
 
 ## 6. States in anime
@@ -90,17 +90,18 @@ Expect more baked art than cartoon or stud: budget texture memory (≤ 512² unl
 
 ## 9. Pitfalls (TA gaps fixed here)
 - **Copied art.** TA used a character render from another game found on Google: never. Use own or generated originals (image-generation rules) and log the source.
-- Glow everywhere = no hierarchy: glow the primary action and the hero only.
+- Glow everywhere = no hierarchy: glow the primary action and the hero only; check that they rank first in `--compare-subjects` (ui-design review §6 S-17).
 - Header covering taps: ZIndex and input sinking must be specified.
 - Rarity by colour only: tier label always.
 - Long names: test the longest; fewer columns, wrap to 2 lines.
 - Dark-fill text on a dark panel: use the surface rule in §4 (dark face → white fill); measure contrast on the real panel.
 
 ## 10. Self-check
-- [ ] Hero (character / rarity) and primary button are the loudest; secondary controls calm.
+- [ ] Hero (character / rarity) and primary button rank first in `--compare-subjects` on the styled screenshot; secondary controls calm (S-16, S-17).
 - [ ] All art original, logged; no franchise characters or logos (`platform-policy`).
-- [ ] Every card has selected ≠ equipped, rarity label, locked and new states.
-- [ ] Contrast measured for dark-fill text; longest name tested.
+- [ ] Every card has selected ≠ equipped, rarity label, locked and new states; tiers distinct in the luminance image (S-29).
+- [ ] Contrast measured for dark-fill and white-fill text on their real panels (S-18); longest name tested; tap targets, the angular close button included, pass the hit-target check (S-49).
+- [ ] Summon screens: the lowest tier's windup against every tier that adds a layer, frame by frame (S-44).
 - [ ] Baked parts listed with sizes; texture budget stated.
 
 Project overlay: if `knowledge/overlays/ui-style-anime.md` exists, read it after this file; it wins for this game.

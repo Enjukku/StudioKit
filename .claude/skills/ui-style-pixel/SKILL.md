@@ -3,7 +3,7 @@ name: ui-style-pixel
 description: Roblox game UI in the pixel / retro rogue-like style in Figma - dark translucent panels, hard 1 px lines, corner ornaments, pixel font, integer scaling. Use when the UI style is pixel, retro, 8-bit, 16-bit, dungeon or rogue-like, or the owner says "pixel UI", "retro HUD", "old-school". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TP (Kakuza pixel rogue-like HUD, Photoshop, narrated to ~1:02:35; `knowledge/reference/ui/04-pixel-photoshop.md`). Owner decision J002-D5: pixel UI is made in Figma with the pixel grid. TP says Figma is weak for pixel art (no pencil, TP@5:51); this book covers the gap. Values are TP's by-eye picks or PROPOSALs.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TP (Kakuza pixel rogue-like HUD, Photoshop, narrated to ~1:02:35; `knowledge/reference/ui/04-pixel-photoshop.md`). Owner decision J002-D5: pixel UI is made in Figma with the pixel grid. TP says Figma is weak for pixel art (no pencil, TP@5:51); this book covers the gap. Values are TP's by-eye picks or PROPOSALs. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (pulse rates, the transparency setting, measured self-check).
 
 # Pixel UI
 
@@ -33,7 +33,7 @@ A 1920 × 1080 design shrinks to ≈ 0.33-0.35 × on a small phone (ui-design sc
 | --- | --- | --- |
 | Light line | 1 art px, white or a pale tint | TP@5:46, @18:00 |
 | Outline | 2 art px black around every drawn line, box and text | TP@7:36 |
-| Panel | black at 60 % (frames), 50 % (containers, search, wells) | TP@17:41, @26:48, @31:29 |
+| Panel | black at 60 % (frames), 50 % (containers, search, wells); players who set Background Transparency get more opaque panels (ui-figma handoff §1), so contrast is measured at these default values, the weakest case | TP@17:41, @26:48, @31:29 |
 | Slot | white at 12 % (10-20 %); offset from the container edge: TP 14 canvas px → use 5 art px (15 canvas px at S 3) | TP@33:02-34:24 |
 | Title bar | white 20 % with a 1 art px light outline; capitals | TP@22:01 |
 | Shine | rotated white rectangles at 7 %, one masked to fade | TP@1:00:15 |
@@ -61,7 +61,7 @@ A 1920 × 1080 design shrinks to ≈ 0.33-0.35 × on a small phone (ui-design sc
 | Pressed | fill +10 %, content moves down 1 art px |
 | Selected / active slot | 20 % white fill + bright line; equipped = small corner mark |
 | Disabled / empty | lines at 40 %, no fill; empty slot keeps its frame |
-| Low health | bar pulses slowly (PROPOSAL ≤ 2 per second, small area only) **and** shows a number / icon (not colour only); players can turn the pulse off (RB-18); no pulse in reduced motion; flashing is checked over time, not from a still (ui-design review #16) |
+| Low health | bar edge pulses at about 1 Hz with a small brightness swing, small area only (ui-design motion.md §8 pulse classes), **and** shows a number / icon (not colour only); players can turn the pulse off (RB-18); no pulse in reduced motion; flashing is checked over time, not from a still (ui-design review #16) |
 
 ## 7. Borrowed fundamentals
 | From | Technique | Why |
@@ -95,8 +95,8 @@ A 1920 × 1080 design shrinks to ≈ 0.33-0.35 × on a small phone (ui-design sc
 ## 10. Self-check
 - [ ] Art scale S declared; every pixel part is an integer-placed component scaled by S.
 - [ ] Exports at 1 art px with Pixelated noted; smooth parts not Pixelated.
-- [ ] Phone screenshot: lines crisp, text readable, contrast passes.
-- [ ] HUD clear of Roblox top-right buttons and default touch controls.
+- [ ] Phone-fit view (`look_check.py thumb`, S-23): lines crisp, text readable; contrast measured over the most textured backdrop at the default panel transparency (S-18).
+- [ ] HUD clear of Roblox top-right buttons and default touch controls; tap targets pass the hit-target check (S-49).
 - [ ] States in §6 for slots, rows and buttons.
 
 Project overlay: if `knowledge/overlays/ui-style-pixel.md` exists, read it after this file; it wins for this game.

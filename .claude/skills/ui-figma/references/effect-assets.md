@@ -6,7 +6,7 @@ updated: 2026-10-21
 source: "J002; owner 2026-10-20 (J002-D7); content/vfx/library/catalog.json (7,906 tagged Roblox image ids from the VFX Studio plugin's public library); tools/vfx/vfxlib_catalog.py; vfx-craft references/plan-and-spec.md §E"
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§3: effects stay on the focal element and its tier).
 
 # Effect textures for UI: use the shared VFX library before drawing
 
@@ -43,6 +43,6 @@ Groups `Text` (glyphs) and `Impact` are VFX-only: never use library text glyphs 
 
 ## 3. Rules
 - Library first; generate (image-generation.md) or draw only when no library texture fits, and say why in the spec.
-- Effects stay behind content and never cover text, prices or the primary button; motion of these layers follows ui-design motion records (reduced motion: static or off).
+- Effects stay behind content and never cover text, prices or the primary button; they sit on the focal element only (a sunburst behind the featured item, not behind every card) and follow the reward's real tier (a rarer result adds a layer, a lower one never shows it); a spinning or pulsing texture is the screen's one attention motion; motion of these layers follows the game's motion table (reduced motion: static or off).
 - Many layers on always-on HUD cost (ui-basics U-11): ≤ 2 effect layers per HUD element, more only on short-lived reward screens.
 - Licence: the library is the VFX Studio plugin's public community list (source data has a credits field; the catalog does not track licences). The VFX agent already uses it. Before a game ships, the owner confirms the library may be used there (one decision per game).

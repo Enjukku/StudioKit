@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: `knowledge/reference/progression/01-cases-shapes-curves.md` (01:), `02-incremental-rpg-rewards.md` (02:), `03-economy-tools-data-process.md` (03:), fact-check FC-M. Tags V / E / O as in SKILL.md.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: `knowledge/reference/progression/01-cases-shapes-curves.md` (01:), `02-incremental-rpg-rewards.md` (02:), `03-economy-tools-data-process.md` (03:), fact-check FC-M. Tags V / E / O as in SKILL.md. Revised by J018 maker progression-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (row fields experience, visible progress and tier; placing items 7-9 on decisions, rhythm and the capstone).
 
 # Feeling timeline, vocabulary, shape placement, genre patterns
 
@@ -22,13 +22,16 @@ Written with the game designer, approved by the owner, then turned into goals th
 | checkpoint | first minute · first session · first day · first week · first month · named moment |
 | clock | active play (seconds of play) or calendar age (days since first play); calendar needs a session model (D-14) |
 | feeling | the owner's words, or `PROPOSAL: <wording>` |
+| experience | the named target experience this row serves (mastery, collection, expression, fellowship, discovery, competition), from the game profile; never "fun" |
 | observable sign | what a tester or the data would show if the feeling is there ("player names the next upgrade without help") |
 | intended state | what the player owns, has unlocked or can do at that point |
+| visible progress | what on screen shows the distance to the next goal (bar, counter, "need level 12", a gate getting closer); a goal longer than a session gets a midpoint event (PROPOSAL default: at least at the halfway mark) |
 | shape | fast start · slowdown · soft wall · hard wall · spike · plateau · reset · catch-up · none |
 | purpose | why this shape is here (what the player learns, chooses or optimizes) |
 | window | target time range with its clock: owner decision id, or `PROPOSAL`, or `EXAMPLE ASSUMPTION` |
 | model check | the goal predicate and metric the simulator reports (`progression-craft`) |
 | player check | playtest question or telemetry signal that tests the feeling |
+| tier | the celebration tier of the moment the row is reached (`reward-tiers.md`) |
 
 Rules: a "day/week/month" target is defined as calendar age or active play before it gets a number (01:S5); a window is never presented as a forecast until real reachable state, play time and measured distributions are entered (01:S4); the owner may move or delete any checkpoint.
 
@@ -53,6 +56,9 @@ Kit addition (O): a **skill gate** is a hard wall that the player passes by lear
 4. **Plateaus:** name what the player learns, chooses or optimizes meanwhile, and the exit. If the only reason is length, show the owner alternatives: varied goals, a different content gate, an optional challenge, a shorter progression (01:PL1, O).
 5. **Resets and catch-up:** write removed, kept, merged and granted state and what the next run offers before any formula (01:R08, VC9, O). Decide how the reset requirement grows with the reset count: a fixed requirement makes every later run shorter as kept power grows, and the reward per reset collapses (J011-T08 example: 119 → 8 seeds per reset by day 22). Decide whether offline income counts toward the reset basis; if it does, returns can trigger resets by themselves.
 6. **Early waits can fall even with exponential prices** when output grows faster at first; in the paper's idle example (1.07 price growth, linear output) waits fall until about 15 owned and rise after, before the next milestone multiplier (02:L9, L13, V arithmetic). Check where the turn lands; do not assume it.
+7. **Decisions, not only waits.** Each stretch names the choice the player makes in it (what to buy first, which route, when to reset). Where an efficient and a cheapest-first policy buy the same things in the same order (`progression-craft/references/tools.md` §6b), the stretch has no decision: fine for a tutorial, a finding elsewhere. Each obstacle names the tool or skill that beats it, so a loss can be learned from.
+8. **Rhythm.** Vary the gaps between usable rewards: a quick early beat, a breath, a spike; a reward on a fixed clock flattens. Read the gaps in the measured rates (`progression-craft/references/tools.md` §6a: steps, repeated completions and wins), not the average.
+9. **Each finite track ends on its capstone.** Tension rises toward a track's planned finish (bigger rewards, a boss, the reset) and the step there holds its highest tier; each run of a repeating track ends the same way; an infinite voluntary sink has no capstone (rule and check: `reward-tiers.md` §5, §8). A track that just stops, or ends on a routine gain, has a flat finish.
 
 ## 4. Genre patterns (O unless marked; each is a starting hypothesis, not a template)
 | Genre | What progresses | Usual math (craft) | Spikes and walls | Watch for |

@@ -1,6 +1,8 @@
-> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the read card is the planning sheet; CD-08 follows "shake is occasional").
 
 # Effect card and genre presets
+
+The planning sheet for every effect is the read card (`read-card.md`) in `brief.md`, then the frame script and `spec.json` (`vfx-craft`). This long card is the older, fuller form: use its fields (and the worked example in §C) as a checklist for a complex effect or a review, not as a second deliverable.
 
 Sources: `knowledge/reference/vfx/06-mistakes-08-card-09-review.md` (Output 8 card, worked example, T-xx tests),
 `10-genre-presets.md`, `12-gaps.md` (G-xx), `contradictions.md` (PD start values, X rows). R-ids resolve in `00-sources.md`.
@@ -18,7 +20,7 @@ Tunable shape: default | range | move up when | move down when | hard cap | evid
 | CD-05 | Drawn area = server area at cast, contact and expiry, in every quality tier, viewer variant and reduced mode. | Debug sphere of `area_size_studs` overlaid at contact: ring edge, flash edge and dust stop line sit on it in each variant (Output 9 R2). | [practice] R-060, R-080, R-033 |
 | CD-06 | One distinct job per layer; delete a layer with no job (M-41). Layer count follows the type recipe (vfx-craft/references/pro-defaults.md §B; v2). [superseded v2: no emitter cap; budget = textures + live particles, SKILL.md §4; Low drops decoration layers.] ≤4 full-detail blasts per client; extras play primary layers only. | Count emitters + beams per tier; count live blasts in T-10. | [P] PD-10; R-351 (≈1 draw call per emitter, single tier C) |
 | CD-07 | Over budget: merge layers that share sheet, blend (LightEmission), LightInfluence and phase; never merge a truth layer (area edge, contact, outcome) into a decorative one. Say which layers merged and why. | Merged layer keeps both jobs in its `job` text; truth layers untouched. | [inference] from CD-05, CD-06 |
-| CD-08 | Rate importance 1-10 per viewer (player, ally, threatened). Only rating ≥8 gets 100% white core, FOV kick, post-effect flash, slow motion, camera moves. Trauma shake allowed from 3. | Channel list per layer vs rating. | [practice] R-368 single tier C; mapping [P] PD-06 (X-27: no source maps rating to parameters) |
+| CD-08 | Rate importance 1-10 per viewer (player, ally, threatened). Only rating ≥8 gets 100% white core, FOV kick, post-effect flash, slow motion, camera moves. Trauma shake is occasional: rare heavy moments of the local player at ≥8, below 8 only when the owner allows it (`vfx-design` §4). | Channel list per layer vs rating. | [practice] R-368 single tier C; mapping [P] PD-06 (X-27: no source maps rating to parameters) |
 | CD-09 | Big feedback only on a confirmed outcome (`success_dependent: true`): punch layers wait for the server result; the action cue stays small and never covers the impact point. | Rejected request: no punch layer plays. | [study] R-043 |
 | CD-10 | Phase times in ms from the trigger. Source frame counts stay frames, "fps not stated"; own conversions use 60 FPS (1 f = 16.7 ms) and say so. | Every frame value has a fps note. | [spec] R-198; 06 keys |
 | CD-11 | One sound event per visual landmark. Main sound locks to the punch frame: measured 0 to 40 ms late, never more than 1 frame early. | Phone screen + audio capture (T-07). | [P] PD-14; R-070, R-169, R-170 |

@@ -60,3 +60,21 @@ J018-D3: no blind test; the lead reads wave 1 and fixes the brief before the oth
 | 3 | level-design (shared) | `level-design` |
 
 Not in scope (proposals only, shown at G3): `platform-policy`, `ste-writing`, `studio-mcp`, `performance`, `data-saving`, `networking-security`, `analytics`, the analyst and trend-scout books, templates, tools, `.agents/workflows/jobs/`, `rules/`, job recipes.
+
+## v3 (from wave 2, 2026-10-22)
+Wave 2 result: art-director, ui-ux-designer and progression-designer passed; character-rigger, environment-designer, film-director, vfx-designer, sound-designer and marketing each ended round 3 with one blocking finding of one class: a measuring recipe written into the books gave a wrong number with no error in a common real case (cap faces read from a shared vertex group; palette roles compared under the wrong light; a flash counter that misses flicker after an eased rise and lets a lasting dim cancel later flashes, copied into three books; a loudness window stretched by trailing silence). The lead ran one focused repair round with the reviewers' tested fixes and moved the flash counter into one place (`vfx-craft/references/measure.md` §6).
+
+| Rule | Text |
+| --- | --- |
+| V12 | Run each command on the exact input form the book names in the same step (how parts are attached, the rotation mode it recommends, the frame size of the render recipe it points to, the light the capture is taken under, files as delivered with padding or silence). Write each tool's silent thresholds next to the command. |
+| V13 | A measure that needs more than a few lines of code is not written into a book: it becomes a manual or visual check plus a proposal row for a tested kit tool. A measure another role's book already carries is used by pointing to it, never copied. |
+
+G3 proposal to carry: move the hand-written measures (flash count, chroma peak, detail density, cap exposure, trimmed loudness compare, palette-as-rendered) into tested kit tools, with fixtures from the review runs.
+
+## v3 addendum (lead decision after wave 2 round 4, 2026-10-22)
+Round 4 showed a loop: each adversarial review round finds a rarer edge case in a hand-written measuring heuristic (two lights flashing in turn, a reverb tail under the noise floor, a socket on a blocky parent). Each case is real; the right home for these measures is a tested kit tool (G3 proposal; `tools/` changes only with the owner's yes). Decision: the vfx-designer, character-rigger and sound-designer get one last repair with the round-4 tested fixes and no further review round; the lead verifies the repair. Film-director needs no new text (its finding is fixed in the vfx-owned shared counter).
+
+| Rule | Text |
+| --- | --- |
+| V14 | Every measuring recipe in a book is a labelled screening aid: next to it, its known false readings, and the rule that a failing or borderline reading is checked by eye on the stills (or by ear) before any fix note goes out. |
+| Review severity | A rare edge case in a labelled screening aid that lists its known limits is a recommendation (add it to the known limits). It is blocking only when the recipe gives a wrong number with no error in a common case the book itself prescribes, or when the book trusts the number without the eye check. |

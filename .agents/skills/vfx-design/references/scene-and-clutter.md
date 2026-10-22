@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (SC-69 information areas and height, SC-70 ambient effects).
 
 # Scene, hierarchy and clutter
 
@@ -36,7 +36,7 @@ post); [spec] standard or Roblox docs; [inference] reasoning; [P] PROPOSAL start
 | Full-detail blasts per client | ≤4; [superseded v2: budget = textures + live particles, SKILL.md §4] [P] | test T-10 | — | GPU time rises | — | PD-10 start value; inference |
 | Active Highlights per client | 20 [P] | test 10/20/50 | GPU headroom at 50 | RenderGPUFrameTime rises | 255 shown, extras silently ignored; disabled keeps its slot [spec] | first Highlight up to 1 ms GPU on mobile, cost grows with coverage [spec]; R-196, R-461; PD-09; 03 V-20 |
 | Other players' non-threat effects | LocalTransparencyModifier 0.5 (50% opacity); no shake, flash or post effect from others [P] | A/B 100/70/40/0% alpha, threats pinned | comfort OK and players miss allies' actions | own threat/pickup find time rises | threats and pickups always full | no % in any shipped setting [practice]; WoW 3 levels; R-028, R-250, R-008; PD-08, X-72; 03 V-58 |
-| Readable danger edge vs true radius | ±5%, never inside the hitbox [P] | test -10/-5/0/+5/+10% | — | stand-or-move errors | edge never inside hitbox | Riot: must match, no tolerance stated [practice]; R-060, R-080; 03 V-43, V-44 |
+| Readable danger edge vs true radius | ±5%, never inside the hitbox [P] | test -10/-5/0/+5/+10% | — | stand-or-move errors | edge never inside hitbox | studio practice: must match, no tolerance stated [practice]; R-060, R-080; 03 V-43, V-44 |
 | Focus onset lead over look-alike debris | ≥150 ms [P] | timed spot-the-spark test at phone size | focus still crowded | punch feels late | — | crowding drops at ≈150 ms separation in time [study]; R-138; 03 V-11 |
 | Telegraph lead, avoidable hazard, phones | 600 ms one known direction; 1000 ms for 2-4 safe spots [P] | harness 400/600/800/1200 ms | hit rate below target | dodges trivial | floor 0.25 s rule of thumb [practice] | simple RT 230.8 ms, SD 26.8, n=1469 [study]; 4-choice 727-865 ms [study]; R-130, R-108, R-373; PD-07; 03 V-51 |
 | Main action done by fraction of lifetime | 25% [P] | — | read test fails (action unclear) | "which hit was it" errors | — | "first quarter" [practice, single tier C]; R-355; X-32; 03 V-24 |
@@ -54,8 +54,8 @@ No source maps a rating to size, brightness, duration or count (X-27); this map 
 | rating | blend and value | screen-level channels | other |
 | --- | --- | --- | --- |
 | 8-10 | additive core; 100% white core allowed | FOV kick, post-effect flash, slow motion, camera moves; trauma shake | 9-10 gets the largest area |
-| 6-8 (below 8) | additive core, peak below pure white | trauma shake | Highlight allowed |
-| 3-5 | normal blend, small additive accents, mid value | trauma shake (t³ keeps +0.2 trauma at 0.8% of max) | — |
+| 6-8 (below 8) | additive core, peak below pure white | none by default; trauma shake only on a rare heavy hit when the owner allows (shake is occasional) | Highlight allowed |
+| 3-5 | normal blend, small additive accents, mid value | none by default; owner-allowed shake as above (t³ keeps +0.2 trauma at 0.8% of max) | — |
 | 1-2 ambient | low saturation, value ≤ stage diffuse white, no onset flash | none | fade in, never pop |
 
 ## D. Rules
@@ -122,6 +122,7 @@ No source maps a rating to size, brightness, duration or count (X-27); this map 
 | SC-41 [V-55] | Count flashes on the full composite against the strictest standard (WCAG); never merge standards; a toggle is not the fix. | Full-screen capture of worst overlap. | [spec] R-165, R-167, R-168; X-43, X-44, X-45 |
 | SC-42 [V-56] | More players on screen = fewer, quieter effects each; PvP/crowded effects smaller, dimmer or more transparent than solo/PvE; no cinematic zooms with many players. | N = 1/8/16/max: local threat and pickup find time flat. | [practice] R-041, R-071; no-zoom [tier D lead + inference] R-443 |
 | SC-43 [V-71, V-72] | Depth: background calm, midground carries contrast, foreground sparse. Depth of field off in active play (shops, menus, paused beats only) unless a test shows no find-time loss. | Mask effects; DoF on/off distant-pickup find time. | [preprint] R-063; [practice] R-114; [spec] R-190 (low-end may render differently) |
+| SC-69 | Effects never cover what players use: other players and units, targets, the HUD, shop and placement areas, the smallest gameplay object on the floor. List those areas for the game camera and give each effect a maximum height: no tall columns over characters (a third-person or top-down camera looks down, so anything above a character hides it from others). One player's effect hiding what another needs is unfair, not only noisy. | Worst-count capture: effect pixels against the marked areas (`review.md` BL-09, IG-02). | [practice] |
 
 ### 5. Ally, enemy and other players
 
@@ -144,6 +145,7 @@ No source maps a rating to size, brightness, duration or count (X-27); this map 
 | SC-53 [V-68] | Adapt brightness per stage with one environment multiplier (or ExposureCompensation) in content data, not per-emitter edits. Brightness scales light only when LightInfluence = 0. | Scattered overrides = fail. | [practice tier C] R-378, R-356; [spec] R-211 |
 | SC-54 [V-69, V-73] | Bloom only on focus pixels: set BloomEffect.Threshold so ambient does not glow (1 = only pure white blooms, 0 = all). Additive (LightEmission 1) for focus and sparks, normal (0) for smoke and dust. | Bloom-on screenshot; blend audit. | [spec] R-180, R-211; gameplay Threshold value: no number found |
 | SC-55 [V-70, V-74] | Faint, wispy, desaturated effects fail on busy stages: use broad, crisp, bold shapes. The composition reads with bloom, lights and camera effects off. | Busy-stage first-glance ID; polish-off test. | [practice, single tier C] R-355; [inference] R-340 |
+| SC-70 | Ambient stage effects (smoke, torches, embers, motes) stay tiny, slow and partly hidden: a little smoke, flames slowed, the base tucked behind a pillar or ledge, lowered until they only suggest; never the brightest or fastest thing near a sightline, and never in a reserved gameplay colour. A map mechanic's effect (teleporter, jump pad, hazard idle) stays in the background except at the moments the game-designer planned for it. | Capture near each sightline: the ambient layer is visible but not the brightest or fastest thing there (`review.md` CP-12). | [practice] |
 
 ### 7. Pacing over time
 
@@ -172,7 +174,7 @@ No source maps a rating to size, brightness, duration or count (X-27); this map 
 
 | Studio | Method | Source |
 | --- | --- | --- |
-| Riot (LoL/VALORANT) | Goal order hitbox > readability > theme; 1-10 rating × 3 viewers over 750 abilities; 2-colour cut; white for ultimates; one colour per ability category; ornament above player height | R-060, R-368, R-374, R-372, R-033, R-100 |
+| A large competitive studio (MOBA and shooter) | Goal order hitbox > readability > theme; 1-10 rating × 3 viewers over 750 abilities; 2-colour cut; white for ultimates; one colour per ability category; ornament above player height | R-060, R-368, R-374, R-372, R-033, R-100 |
 | Blizzard WoW 11.2 | Spell Density: reduce only other party members' visuals (Everything / Reduced / Essential), no % stated | R-028 |
 | NetEase Marvel Rivals | VFX dialled in, then local-only Team-Up VFX toggle (global or per hero) | R-007, R-008 |
 | Bungie Destiny | Opacity/size by screen coverage; jittered near fade; "perf hammer" thins costliest systems | R-114 |

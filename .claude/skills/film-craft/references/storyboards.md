@@ -1,16 +1,16 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Source: N2 SB-01..08, IG-01..06; N3 PM-04, SB-00..15, CL-01..07; N4 B-01..B-14; `reference-images` skill (I-01..I-10); owner decisions J015-D4 (ChatGPT boards through reference-images), J015-D7 (ChatGPT boards for intent and composition; Blender previs stills become the spatial truth once models exist). Image-model facts: `knowledge/reference/film/fact-check-blender-images.md`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Source: N2 SB-01..08, IG-01..06; N3 PM-04, SB-00..15, CL-01..07; N4 B-01..B-14; `reference-images` skill (I-01..I-10); owner decisions J015-D4 (ChatGPT boards through reference-images), J015-D7 (ChatGPT boards for intent and composition; Blender previs stills become the spatial truth once models exist). Image-model facts: `knowledge/reference/film/fact-check-blender-images.md`. Revised by J018 maker film-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (boards after the options pick and on the blocking stills; first-second read and read order in the panel review).
 
 # Storyboards: ChatGPT panels as staging proposals
 
 A board is a communication panel, not concept art: it proposes what the shot shows, where things are and what moment it catches (N2 SB-04). A generated image proves nothing about geometry, lens, camera path or continuity (N2 SB-06, IG-06; N3 DN-06). The shot list and the continuity ledger stay the authority where an image is ambiguous (N3 PM-04).
 
 ## 1. Before the first panel
-1. **Shot list exists** (ids, size, angle, action, purpose, continuity) at stage `plan`. Boards follow the shot list, never the reverse (N3 PM-03).
+1. **Shot list exists** (ids, size, angle, action, purpose, continuity) at stage `plan`, with its picture plan (first-second read, read order, value key per shot), after the options pick. Boards follow the shot list, never the reverse (N3 PM-03).
 2. **Approved references exist** for every character, place and key prop in the sequence (`reference-images` families `character`, `environment`, `prop`). The first game could not start boards because most of the cast and set were missing (N4 X-01): check readiness against the shot list on day one; missing items become tickets.
 3. **Overhead blocking map** for any sequence where space matters: a simple top-down drawing (Blender orthographic top view of proxies, or a plain diagram) with entrances, exits, threats, character positions per beat, the action axis and each camera's side (N1 ST-03; N2 SB-04). It goes into each panel's `inputs` when position matters.
 4. **Board policy** declared in the shot list (`board_policy`): `constraint` (boards fix staging and acting; layout follows them) or `layout-may-propose` (previs may change them through review) (N3 BP-01).
 5. **Art bible** has the `storyboard` family and lock (`templates/skill/art-bible.md`). No art bible yet (a kit test): copy the template into the job folder, replace the WORLD STYLE LOCK placeholder with a neutral test style, and pass that copy with `--bible`; the template's placeholder text would otherwise be sent to the model word for word.
-6. **No cast or set models yet:** block a Blender greybox first (`references/blender-previs.md`) and attach each shot's greybox still as image 1 ("keep camera and positions"); the first accepted panel then serves as the identity source for the rest. Boards propose intent, mood and acting on true geometry (J015 G2 gaps G2: every panel kept the planned geography this way).
+6. **Blocking stills are the layout input.** Each shot's blocking still from the blocking pass (`references/blender-previs.md` §7) goes in as image 1 ("keep camera and positions"); with no cast or set models yet it is a greybox, and the first accepted panel then serves as the identity source for the rest. Boards propose intent, mood and acting on true geometry (J015 G2 gaps G2: every panel kept the planned geography this way).
 
 ## 2. Making panels
 - **One panel per request** when continuity matters; assemble and label outside the image model (N2 IG-04).
@@ -36,6 +36,9 @@ Per panel, against its brief and the continuity ledger (N2 IG-05; N3 SB-15):
 | Positions and landmarks | a landmark changes side or disappears; the exit is not where the ledger says |
 | Light direction | the key light side flips |
 | Focal subject | the subject the shot is about is not the first thing seen at small size |
+| First-second read | the panel's planned first-second read is not what a small view shows first |
+| Read order | a secondary element (a bright sky, a stray light, a busy background) out-reads the primary |
+| Clean picture | smoke, sparks or glow carry a read the blocking and value should carry |
 | Story purpose | the panel does not show the new information its brief names |
 
 Then lay all panels side by side as a contact sheet in shot order and read the sequence: does each panel prepare the next; does geography hold across cuts? Max 2 regenerations per panel, then revise the plan openly or report. Store the accepted image with its full brief, the shot-list revision and the ledger; old panels stop being "approved" when the sequence changes (N3 SB-15).

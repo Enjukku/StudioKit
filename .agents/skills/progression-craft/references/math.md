@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Sources: notes 01 (curve library, CV/CD rows), 02 (FM, L, G, RP rows), 03 (EA, RC10, NP, SM, FM rows); fact-check FC-M (formulas and sources checked, 2026-10-21). Every formula here is implemented and tested in `tools/progression/curves.py`; use the tool, not mental arithmetic. Coefficients are design inputs, never suggested constants (01:CD).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Sources: notes 01 (curve library, CV/CD rows), 02 (FM, L, G, RP rows), 03 (EA, RC10, NP, SM, FM rows); fact-check FC-M (formulas and sources checked, 2026-10-21). Every formula here is implemented and tested in `tools/progression/curves.py`; use the tool, not mental arithmetic. Coefficients are design inputs, never suggested constants (01:CD). Revised by J018 maker progression-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§6 display rounding points to the hand-off rule).
 
 # The math: curves, incremental, RPG, probability, ledger, precision
 
@@ -71,4 +71,4 @@ Roblox's own policy example: a 10-Robux draw at 5 % next to a 200-Robux guarante
 ## 6. Precision and rounding in Luau (03:NP1-NP4; FC-R)
 - Luau numbers are IEEE 754 doubles: integers exact up to 2^53 = 9,007,199,254,740,992; decimals below that are not all exact. An API "int64" label does not add an exact integer type.
 - Choose together: smallest meaningful unit, maximum planned balance, representation. Test that adding one unit still changes the balance at the maximum. Display suffixes ("Qa") change text, not precision; past the safe range, a big-number type with defined arithmetic, comparison, saving and rounding (an engineering decision: `architecture`, `data-saving`).
-- ⌊x·y⌋ ≠ ⌊x⌋·⌊y⌋ in general: fix the order of modifiers, taxes, discounts, caps and rounding, and whether bulk cost = sum of rounded unit prices or the rounded closed form. Display rounding never changes balances.
+- ⌊x·y⌋ ≠ ⌊x⌋·⌊y⌋ in general: fix the order of modifiers, taxes, discounts, caps and rounding, and whether bulk cost = sum of rounded unit prices or the rounded closed form. Display rounding never changes balances; its direction (balances down, prices up) and fixtures: `data-handoff.md` §5.

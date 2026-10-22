@@ -1,10 +1,10 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Emotion recipes
 
-Use: pick the row for the target feeling, set every cue in that row the same way (S-01, core). Table A gives the
+Use: pick the row for the target feeling, set every cue in that row the same way (S-01, §C). Table A gives the
 direction and sourced examples; Table B gives first-draft numbers (all (P), from pack rows EM01-EM25), then A/B in
-Studio. Mode cues hold for Western-trained listeners only (S-02, core). "st" = semitone.
+Studio. Mode cues hold for Western-trained listeners only (S-02, §C). "st" = semitone.
 
 ## A. Recipe directions (25)
 
@@ -13,7 +13,7 @@ Studio. Mode cues hold for Western-trained listeners only (S-02, core). "st" = s
 | Joy | Fast; music 120-140 BPM (P); major pieces 29% faster | High; about 2 st above the sad twin | Bright mids; no sustained 2-5 kHz | Major; steps ≥200 cents; M2, M3, M6 | Clean, harmonic | Moderate-loud, short notes | Medium-dry | None needed | Candy Crush clears; house 120-130 BPM | study + practice |
 | Reward | Locked to the music beat when music plays | Rising 2-note (4th or 5th) or next ladder step | Tick 4-8 kHz + body 150-400 Hz (P) | In the music key | Bell, coin, register | Attack <5 ms (P) | Dry, close; tail <0.3 s (P) | Lands in a gap between transients | The Finals cash-register kill; Peggle | study + practice + inference |
 | Triumph | Riser 2-4 s; pulse 1-2-4-8 per beat, then the hit | Wide: low octave stack + high melody | Full band; +3 dB <80 Hz on hero moments | Unresolved build (5th or leading tone) → tonic | Brass or orchestral; new instrument enters | Crescendo 2-4 s, +3 to +6 dB (P); hit about 1.5 s; tail about 5 s | Narrow → full width + sub | 1 beat gap before the hit (P) | Trailer riser-hit-tail; stage clear | practice + study |
-| Power | Combat 120-150 BPM, or slow heavy single hits | Low; pitched down for mass | Sub 30-60 Hz falling 200-400 ms (P) + body 60-250 Hz + crack >2 kHz; harmonics >300 Hz | Low octaves; braam register C1-C2 | Dense, distorted; roughness reads as energy | Hard attack; hitstop | Short dry tail + engine reverb | Hitstop acts as a micro-pause | Inception braam; Dune worms; Street Fighter V hitstop | practice + study |
+| Power | Combat 120-150 BPM, or slow heavy single hits | Low; pitched down for mass | Sub 30-60 Hz falling 200-400 ms (P) + body 60-250 Hz + crack >2 kHz; harmonics >300 Hz | Low octaves; braam register C1-C2 | Dense, distorted; roughness reads as energy | Hard attack; hitstop | Short baked tail; room from the zone reverb (SC-08) | Hitstop acts as a micro-pause | Inception braam; Dune worms; Street Fighter V hitstop | practice + study |
 | Satisfaction | ≤4 textured events/s (P) | Mid-low body; bigger = lower | Transient 2-8 kHz 2-8 ms + body 60-250 Hz 40-150 ms (P) | Consonant 4th or 5th when pitched | Crisp, clean decay, no ring | Attack <5 ms; to −40 dB within about 300 ms (P) | Dry, close | Clean end marks "done" | LEGO click; chip crunch; keyboard thock; Teardown breaks | study + inference |
 | Anticipation | Pulse doubles per bar; riser LFO speeds up | Rising pitch and filter | Filtered noise sweep, band-pass opening | Unresolved | Noise sweep + triangle riser | Riser attack about 50 ms, release about 1 s | Narrows toward mono | Gap before payoff (1 beat) | EDM build; trailer riser | practice + study |
 | Suspense | Slow or no pulse; ticking clock | Sustained; ratcheting Shepard-like rise | Low drone + sparse high detail | Unresolved; small intervals | Sparse | Quiet baseline; small located events | Distant persistent bed | Long quiet stretches | Dunkirk ticking; Alien: Isolation; RE4 "close but unaware" | practice |
@@ -71,8 +71,16 @@ competing content ducked 3-6 dB. A/D/R in ms.
 
 ## C. Emotion rules
 
+S-01, S-02, S-18, S-25, S-183 and S-186 moved here from SKILL.md §3 in J018; this table is their one home. Name the emotion on every card, not only the object (SKILL.md SC-02).
+
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-01 | Move several cues the same way (mode, tempo, register, dynamics, articulation, timbre); they are mostly additive. Confirm at a check-in before locking. | study |
+| S-02 | For a global audience lead with tempo, register, dynamics and roughness; major/minor is an extra cue only (no mode effect in non-Western listeners). | study |
+| S-183 | Each cue names one primary player outcome and records perceived and induced emotion separately. Reject cards that swap in arousal, liking, spending or playtime. | inference |
+| S-25 | Payoff = expectation, then a twist: a learned pattern broken once, or a vague build resolved by the expected sound. | study |
+| S-186 | Every sustained tension cue has a start condition, a release condition and a max duration in s. Never loop a riser forever. | inference |
+| S-18 | Loudness-match every A/B (`review.md` F-13 a), or loudness decides the result. | study, method |
 | S-26 | Aim for middle predictability and middle uncertainty (inverted U). | study |
 | S-27 | Tension build: raise loudness, pitch height, onset rate, tempo and harmonic distance together; weights unknown. | inference (lead) |
 | S-28 | Chill moment: hold one layer back 8-16 bars, enter a new voice with +3 to +6 dB, 2-4 s crescendo and one unexpected harmony change. Only a minority feel chills. (P) | study (correlational) + inference |

@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the importance gate follows the "shake is occasional" rule; the animator's contact pose is the freeze frame).
 
 # Camera and screen effects
 
@@ -15,7 +15,7 @@ Tags: [study] [preprint] [practice] [spec] [inference] [P] = PROPOSAL start valu
 | Rating | Allowed camera/screen channels | Evidence |
 | --- | --- | --- |
 | 1-2 | none (local target flash only) | [P] PD-06; R-124 "salt" (01 camera) |
-| 3-7 | + trauma shake (t³ keeps +0.2 at 0.8% of max), + camera kick on heavy weapons, + hit-stop on melee contact | [P] PD-06; R-124 |
+| 3-7 | + hit-stop on melee contact, + camera kick on heavy weapons; trauma shake (t³ keeps +0.2 at 0.8% of max) only on a rare heavy hit of the local player and only when the owner allows it (shake is occasional: `vfx-design` §4); never on a frequent effect | [P] PD-06; R-124; owner rule (v2) |
 | 8-10 | + FOV punch, post-effect flash or grade pulse, slow motion, camera moves, 100% white core, impact card | [P] PD-06; R-372 white for top tier (02a E-IMP) |
 
 No source maps a 1-10 rating to any parameter (X-27; R-368 rates, does not map). The bands are [P]; test T-RANK.
@@ -48,6 +48,8 @@ final blow +0.4 · huge explosion +0.5 (start from RbxCameraShaker "Explosion", 
 | --- | --- | --- | --- | --- | --- | --- |
 | Melee contact | 50 ms light / 100 ms heavy / 150 ms critical or finisher [P] | test 0/50/100/150/250/400 ms [P]; Celeste 0.05 s dash, 0.1 s explosion launch [practice]; fighters 7-16 f, fps n.s. [preprint][practice] | light and heavy blur together | "laggy on repeat" in a 20× test | below 0.54 s: enjoyable/stressful boundary 0.537/0.55 s, one VR game, n=15-16 [study] | PD-02; R-154; R-073; R-156; R-035; T-HS |
 | Explosions, charges | 0 ms [P] | test levels only | owner A/B asks for it | n/a | as above | PD-02 (no explosion hit-stop evidence) |
+| Freeze frame | the animator's contact pose from the timing list (the source of power and the hook shapes facing the camera); the hit sound plays on the first freeze frame | n/a | n/a | n/a | never a weak in-between pose | `animation-design/references/game-timing.md` §5 |
+| Who sets the length | the gameplay owner with you, as a game value; bracket 0 / 50 / 100 / 150 / 250 ms on a playable build over 20 repeats at 30 and 60 fps; the owner picks | n/a | n/a | n/a | as above | T-HS |
 | Projectile (thrower) | 0 ms [practice] | n/a | never | n/a | 0 | R-156 |
 | Blocked hit | 0.67× unblocked (≈35 / 67 ms) [P] | n/a | n/a | n/a | as above | R-442 (tier D lead; 02a blocked row) |
 | Multi-hit, rapid fire, crowds, chain secondaries | shorter / none [practice] | n/a | n/a | many players or hits on screen | 0 in crowds | R-156; R-134; P-01 |

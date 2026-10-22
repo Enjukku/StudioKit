@@ -289,3 +289,8 @@ The blocking finding and all seven recommendations fixed; none declined. Keep li
 | R5 (G-11, G-14 hooks have no supplier) | Role file partner table, feature-builder row: in the test place a hit-reject hook, a rate trigger for frequent clips that logs the playing-track count, and a debug overlay of the hit area. `review.md` G-11 and G-14 now name the builder's rate trigger and debug overlay |
 | R6 (eval A6 would count plan-stage images against the cap) | `proposals/animator.md` evals row: A6 counts plan-stage images (one contact sheet per key clip, previews) separately, as `review.md` §5 says |
 | R7 (RI-15 rejection reason unsound) | RI-15 now landed: `body-and-species.md` §6 new bullet (a new motion style: structural study of 2-3 successful clips in numbers, then changed toward our feel words and anchors; never copy a clip). Header count of rejections corrected to 2 |
+
+## Lead integration fix (2026-10-22, after wave 2)
+| Change | Where | Why |
+| --- | --- | --- |
+| Removed the "until sound-design's window is aligned" clauses | animation-design references/game-timing.md §sync rule, review.md G-04 | The sound-designer rebuild aligned S-133 to the same window (sound 0 to about 40 ms after the contact frame, never more than one frame early); sound-designer rev3 R3 asked the lead to remove the stale clause. |

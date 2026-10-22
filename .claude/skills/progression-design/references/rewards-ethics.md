@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: 02:H01-H12, W1-W9, E1-E6 (studies checked in FC-M: designs, populations and sample sizes confirmed); 03:EA1, EI1-EI3, RP1-RP4, RC1-RC20 (Roblox rules checked in FC-R against the docs mirror rev 7400643 and live pages, 2026-10-21). Roblox rules move: `platform-policy` is the current rule book; recheck before launch. Not legal advice.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: 02:H01-H12, W1-W9, E1-E6 (studies checked in FC-M: designs, populations and sample sizes confirmed); 03:EA1, EI1-EI3, RP1-RP4, RC1-RC20 (Roblox rules checked in FC-R against the docs mirror rev 7400643 and live pages, 2026-10-21). Roblox rules move: `platform-policy` is the current rule book; recheck before launch. Not legal advice. Revised by J018 maker progression-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (clocks mapped to tiers, luck placed on purpose, odds updates after a once-only win, long-list display, paid results honest).
 
 # Rewards, randomness, ethics, premium fairness, Roblox rules
 
@@ -19,13 +19,15 @@
 Use (O): report the disagreement, not a slogan; test timing and usefulness locally (02:W1, E6).
 
 ## 2. Four reward clocks (02:W2-W4, O)
-Keep apart and test each on its own: (1) **feedback** right after an action, (2) **completion** of a small objective, (3) a **consequential upgrade**, (4) **new content or mastery**. Make feedback readable, but not every feedback event pays currency or unlocks a system. Neither "a reward every 30 seconds" nor "always delay rewards" is supported as a universal rule.
+Keep apart and test each on its own: (1) **feedback** right after an action, (2) **completion** of a small objective, (3) a **consequential upgrade**, (4) **new content or mastery**. Make feedback readable, but not every feedback event pays currency or unlocks a system. Neither "a reward every 30 seconds" nor "always delay rewards" is supported as a universal rule. The clocks map onto the celebration tiers (`reward-tiers.md`): feedback is T1, a completed small objective T2, a consequential upgrade T3, new content or mastery T3 or a track's T4 capstone; each tier is checked against its measured rate.
 
 Spacing (01:K7, D-08): judge a track by the gaps between usable rewards and the tail of long unrewarded stretches, not by its total; the simulator reports the gaps.
 
 ## 3. Randomness (02:W5-W8, O)
 - Use surprise for routes, combinations, presentation and optional discoveries; keep cost and basic entitlement understandable. Randomness does not replace authored interesting results.
 - Essential progress: a deterministic path or a visible bounded fallback (pity) instead of unbounded luck. A guarantee states what advances its counter, whether it persists, and what resets it. Test the unlucky tail, not only the mean (`progression-craft` math §4).
+- **Place luck on purpose.** Per track, write where randomness sits (start, drops, crafting, matchmaking) and where skill decides, for the target audience. Luck keeps outcomes open; skill makes wins feel earned. Check with skill profiles over many seeds (`progression-craft/references/tools.md` §6c): a skilled profile recovers from an unlucky start; a struggling one sometimes reaches what the row meant for everyone. Randomness placed by accident is a finding.
+- A random amount never decides how big a reward feels; size follows rarity or difficulty the player can learn (`reward-tiers.md` §5).
 - Transparency and pity are safeguards, not proof a paid random system is harmless.
 
 ## 4. Ethical pacing (02:W7, W9, O; owner-approvable studio policy)
@@ -44,6 +46,9 @@ Always: natural finish points, reliable saves, a clear next goal, leaving withou
 | Mixed earned + bought currency | no page decides it; the studio treats it as paid (stricter reading, ours) (FB09) |
 | Odds display | before purchase, every possible outcome with its numeric probability, percentages totalling 100 %; long decimals may round to 4 or more places below the first non-zero digit, with a disclaimer that displayed odds are rounded and may not total 100 % (FB07b) |
 | Luck boosts | explain the numeric effect and show updated odds while active (FB08) |
+| Once-only outcomes | when an outcome can be won only once, the shown odds update for that player after it is won (`platform-policy` rules A) |
+| Long lists | may open in a pop-up from a visible worded "Info" or "Details" label, never a bare icon; equal odds may share one line (`platform-policy` rules A) |
+| How the result is revealed | one windup for every result, no near-miss, no celebration of a result worth less than its price: `game-design/references/systems-economy.md` §9; my side is the tier and value-vs-price columns of `reward-tiers.md` |
 | Every outcome | must give the buyer some benefit (Community Standards; DF 4654622) (FB06) |
 | Eligibility | `PolicyService:GetPolicyInfoForPlayerAsync` → `ArePaidRandomItemsRestricted`, `IsPaidItemTradingAllowed` (the trading flag covers all paid items, random or not) per player; never guess from age or country; fail closed (FB10-FB11; `platform-policy` P-02) |
 | Restricted players | six documented treatments: (1) an unpaid earnable path, (2) a predetermined order disclosed before purchase, (3) a guaranteed direct purchase priced on expected value, (4) remove or hide the item, (5) block the purchase with an error message, (6) move the player out of those areas. Hiding is best; a buy button that refuses is "technically compliant" but confusing (FB12) |

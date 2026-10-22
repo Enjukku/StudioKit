@@ -1,15 +1,16 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Mix, loudness, music system and player options
 
-Core rules used here (in SKILL.md): S-102/S-207/S-104 loudness target and peaks, S-107/S-108 priority and level
-slots, S-109/S-211 ducking, S-18 loudness-matched A/B. Roblox objects for buses, compressors and emitters:
+S-102/S-207/S-104 live in §A, S-107/S-108 and S-109/S-211 in §B (moved from SKILL.md in J018); S-18 in
+`emotion-recipes.md` §C. Carry distance (SC-07) and space (SC-08): SKILL.md §3. Roblox objects for buses, compressors and emitters:
 `roblox-audio.md`.
 
 ## A. Loudness and measurement
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-102/S-207/S-104 | Loudness (ITU-T H.872): phone-speaker-first games −18 LUFS ±2 LU with a headphone mode about 5 dB quieter; PC or console-first −23 LUFS ±2 LU; 30-min integrated window of real play (10 min for quick checks). True peak ≤ −1 dBTP on the master; assets peak ≤ −1 dBFS. | practice, standard |
 | S-103 | Measure loudness on a whole play capture with all buses, never on single sounds. | practice (Sony) |
 | S-105 | Loudness range (LRA): casual 5-10 LU, action 15-20 LU, >20 excessive; mixed action-casual games (e.g. destruction) 8-12 LU. (P) | practice + inference |
 | S-106 | Mix at the lower target in a quiet room, then raise per output route. | practice (Crytek) |
@@ -26,13 +27,17 @@ Standards context (M-46, M-70): Sony −24 LUFS home, −18 portable, ±2 LU; Me
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-107/S-108 | Priority: 1 critical warnings and dialogue (0 dB), 2 own feedback, 3 rewards (−3), 4 UI (−6), 5 enemy and world SFX (−6 to −9), 6 music (−12), 7 ambience (−18, droppable). When a genre preset or the scene's read rank gives a slot order, it wins; levels stay −3/−6/−9/−12/−18 by rank. For a blast, lower the lower tiers instead of adding level. | inference; P levels |
+| S-109/S-211 | Duck only for major events; no constant pumping. Routine ducks: music −3 to −6 dB, ambience −2 to −4 dB, attack 10-30 ms, release 150-400 ms. Critical warnings and dialogue duck 6-9 dB (S-110). One token per duck request. | practice; P numbers |
 | S-110 | Critical warning or dialogue ducks music and ambience 6-9 dB; an open menu ducks gameplay 3-6 dB. (P) | lead |
 | S-111 | Duck attack 10-50 ms; release 300-700 ms for music, 500-1500 ms for speech-heavy music. (P) | lead |
 | S-212 | Keep two rankings: information priority (must be heard now) and voice-survival priority (must not be cut); both may change with context (music can rank high in rhythm games). | inference |
-| S-113 | Each layer owns a band: high-pass every non-sub layer near 100 Hz so one layer carries the sub; align transients to the same sample, offset only tails. | lead |
+| S-113 | Bands and the low-end owner: SKILL.md SC-06 (non-sub layers high-passed near 100 Hz at least; bright layers higher, about 200-300 Hz (P)). Align layer transients to the same sample; offset only tails. | lead |
 | S-117 | Sub-bass (below about 120 Hz) is reserved for hero events. | lead |
 | S-118 | World-event distance curve: full level near, then −6 dB per doubling from 4 m (about 13 studs at 3.33 studs per metre). Custom AudioEmitter curve. (P) | practice + inference |
 | S-225 | Short interactions: full level within 4-8 studs, silent by 30-60 studs. (P) | inference |
+| — | Far version (SC-07): split a far-carrying cue into a high-detail layer on a short distance curve and a low-body layer on a long one, so at range it is a low boom, up close sharp. Must-act cues (threats, warnings, objectives) get the long curves; footsteps, breathing and own UI the short ones. | inference |
+| — | Per viewer: the player a threat targets hears it at full tier; bystanders hear other players' effects one tier lower and shorter. | inference |
 | S-122 | Crowd or ambient reactions start within about 200 ms of the visible event and scale with it; never a standing cover for dull moments. | practice + inference |
 | — | Readable busy scenes: one foreground clue + one bed + ≤2 intermittent details; duck ambience 3-6 dB with a 100-200 ms lead-in for a clue (M-91, P). | lead |
 
@@ -40,6 +45,8 @@ Standards context (M-46, M-70): Sony −24 LUFS home, −18 portable, ±2 LU; Me
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| — | Music and SFX are designed together: at each key beat (release, reveal, last kill) the two agree which leads; the other ducks or rests. Each feature's cues enter the game mix when built, never only at a final mix (SC-13). | practice |
+| — | Climax: a round, boss fight or event builds toward its end (boss at low health, last point, last kill): music changes state and the final events take the top tier; plot the intensity plan over time and check it rises, not flat. | practice |
 | S-115 | Start with 2 layers (calm, intense); layer fade-in 2 s; state debounce 1-3 s; 2, 4 or 8-bar segments; stingers 2-5 s. (P) | inference (tutorial) |
 | S-213 | Adaptive contract: equal-length, sample-aligned stems (foundation, pulse, texture, accent); state changes queue to the next bar, urgent cues bypass; fades 0.5-2 s; hysteresis 1-3 s; keep a logical playhead and rejoin it, never restart at 0. Verify engine scheduling before phase-locked stems. (P) | lead |
 | S-116 | Next-area audio starts 0.5-2 s before a teleport or screen change (J-cut); test 0, 0.5, 1, 2 s. | lead |

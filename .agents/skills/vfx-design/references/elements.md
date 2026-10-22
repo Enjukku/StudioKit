@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the tertiary read in EL-13, additive stacking in EL-24).
 
 # Elements: what each visual element does
 
@@ -16,7 +16,7 @@ Most numbers are practice, not studies. Most studies use static images or lab ta
 
 | Heading | Feeling lever | Energy lever | Strongest evidence |
 | --- | --- | --- | --- |
-| Gameplay | Trust and fairness: the effect tells the truth about hit shape, outcome and importance | Importance sets loudness | Riot first-hand practice, corr 3-5 (R-060, R-080, R-368) |
+| Gameplay | Trust and fairness: the effect tells the truth about hit shape, outcome and importance | Importance sets loudness | First-hand studio practice, corr 3-5 (R-060, R-080, R-368) |
 | Shape | Sharp/downward = threat, round = safe; silhouette = identity | Sharper, bigger, stretched = louder | Shape studies (R-143, R-129, R-081), small effect in real scenes |
 | Value | Focus vs rest; white = climax | Peak contrast on one spot; extremes are scarce tokens | Practice, mostly tier C (R-367, R-372, R-120) |
 | Colour | Meaning by convention (heal green, enemy red); palette sets tone | Saturation contrast vs the stage, not absolute | Practice corr 3-4; CVD prevalence [study] |
@@ -42,7 +42,7 @@ Most numbers are practice, not studies. Most studies use static images or lab ta
 
 | Dial | Default | Range | Move up when | Move down when | Hard cap | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| Importance bands | 1-3 low, 4-7 mid, 8-10 high [P] | per game | n/a | n/a | 100% white core, FOV kick, post flash, slow motion, camera moves only at rating ≥8 [P]; trauma shake allowed from 3 [P] | R-368 scale; R-372; PD-06 |
+| Importance bands | 1-3 low, 4-7 mid, 8-10 high [P] | per game | n/a | n/a | 100% white core, FOV kick, post flash, slow motion, camera moves only at rating ≥8 [P]; trauma shake occasional: rare heavy moments at ≥8, below 8 only when the owner allows (`vfx-design` §4) | R-368 scale; R-372; PD-06 |
 | Others' non-threat effects (LocalTransparencyModifier) | 0.5 = Reduced [P] | 0 / 0.3 / 0.6 / 1 (test 100/70/40/0% opacity) [P] | crowded servers, clutter complaints | co-op where allies' effects carry info | own, threat, pickup never toned; discrete levels, not a slider | R-028 (3 levels) [practice]; R-008; PD-08 |
 | Telegraph-to-hitbox edge tolerance | no number found | n/a | n/a | n/a | indicator = hitbox [practice] | R-060 |
 
@@ -50,7 +50,7 @@ Most numbers are practice, not studies. Most studies use static images or lab ta
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
-| EL-13 | One primary shape carries the purpose (missile front = damage); secondaries carry theme at lower value and saturation. No stacked or contradictory shapes. | [practice] R-367, R-120, R-360 |
+| EL-13 | One primary shape carries the purpose (missile front = damage); secondaries carry theme at lower value and saturation; a few tertiary bits (sparks, specs) support and are never brighter or larger than the secondaries, or they steal the focus. No stacked or contradictory shapes. | [practice] R-367, R-120, R-360 |
 | EL-14 | Sharpness tracks threat: damage = angular, downward spikes; heal, friendly, safe = rounded blooms. Expect a small effect in busy scenes (photo regression R²=.04). | [study] R-143, R-129, R-081; [practice] R-368 |
 | EL-15 | Outward event = radial burst; aimed event = streak or beam; gathering or countdown = inward pull or vortex. | [practice] R-336 single C + [inference] |
 | EL-16 | Ground area: circle for a radius, cone for a line. Low camera turns flat circles into ovals: add a thick vertical border ring or camera-facing element. Decals follow slopes. Lift = vertical shape; hold = floor ring. | [practice] R-336 single C; R-368 |
@@ -73,7 +73,7 @@ Most numbers are practice, not studies. Most studies use static images or lab ta
 | ID | Rule | Evidence |
 | --- | --- | --- |
 | EL-23 | The focus owns the peak contrast (highest and lowest value), highest saturation and most detail; the rest is a rest area. If everything is important, nothing is. | [practice] R-367, R-358, both C |
-| EL-24 | Supporting layers stay mid-value; 90-100% value and pure white only on the focus of rating ≥8 events. | [practice] R-120, R-372, R-360; band [P]; X-29 |
+| EL-24 | Supporting layers stay mid-value; 90-100% value and pure white only on the focus of rating ≥8 events. Additive layers stacked at one spot sum toward white: count them and cut to the fewest that read; a darker, saturated halo behind an additive core keeps it coloured. | [practice] R-120, R-372, R-360; band [P]; X-29 |
 | EL-25 | Check value twice: greyscale screenshot on the brightest and darkest stage, plus a timed find test (X-30: value-first order is unresolved). | [inference] X-30 |
 | EL-26 | At any moment the brightest pixel belongs to the top-priority gameplay element. Effects sit above characters and slightly below UI in value and saturation. | [practice] R-355 single C, R-060; [inference] R-080, R-367 |
 | EL-27 | Additive (`LightEmission` 1) for hot cores; normal blend (0) for smoke so dark silhouettes survive. With LightEmission >0 dark colours turn transparent. `Brightness` scales only when `LightInfluence` = 0. | [spec] R-211, R-209 |

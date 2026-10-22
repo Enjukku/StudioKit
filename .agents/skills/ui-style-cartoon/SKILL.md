@@ -3,7 +3,7 @@ name: ui-style-cartoon
 description: Roblox game UI in the cartoon style in Figma - chunky rounded controls, thick black outline with white halo, bright gradients, 3D lip, bubbly outlined text. Use when the UI style is cartoon, bubbly, cute, simulator, pet or tycoon, or the owner says "make it cartoony", "chunky buttons". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TC (UI Genesis cartoon pet inventory in Figma, `knowledge/reference/ui/01a`, `01b`); borrowed: TS (stud), TA (anime), TP (pixel). Every value is one tutor's by-eye pick or a PROPOSAL: tune per game, owner confirms.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TC (UI Genesis cartoon pet inventory in Figma, `knowledge/reference/ui/01a`, `01b`); borrowed: TS (stud), TA (anime), TP (pixel). Every value is one tutor's by-eye pick or a PROPOSAL: tune per game, owner confirms. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (hue-shifted gradients, counters and refusals, measured self-check).
 
 # Cartoon UI
 
@@ -35,7 +35,7 @@ Rounded rectangles only, one radius per size step · thick black outline around 
 | Input well | white, inner shadow X 0 Y 0 30 %, radius 10, grey Outside stroke | TC@5:45-6:48, @19:02 |
 | Font | Fredoka One (Roblox `FredokaOne`; in Figma check the name: it may be listed as "Fredoka", then use Bold, handoff §2) | TC@7:26 |
 | Text ladder | title 64-72 / button 44-48 / body 36-40 / essential minimum 38 / non-essential minimum 31 (phone-checked PROPOSAL, ui-design screen-contract §5); stroke ladder 5 (≥ 64) · 4 (44-48) · 3 (≤ 40) black Outside, Round join; depth = black copy or drop shadow blur 0, Y = stroke | TC@16:27, @24:48; TS@13:29 |
-| Face gradient | 2 stops, top light / bottom saturated mid-tone, ≥ 20 L\* apart (pale cards too: deepen the bottom, do not lighten the top) | F-03; G2 review |
+| Face gradient | 2 stops, top light / bottom saturated mid-tone, ≥ 20 L\* apart (pale cards too: deepen the bottom, do not lighten the top); the bottom stop shifts toward a darker neighbouring hue (green → teal, blue → violet, gold → orange-brown), never toward grey | F-03; G2 review; ui-design style-choice §6 |
 | Highlights | 2 white bars, slanted, crossing the whole face edge to edge (only the face edge cuts them), Soft light (cards, headers) or Overlay (buttons) | TC@13:25-14:51, @22:07; G2 review |
 | Half-tone | dot image, corners only, Soft light | TC@14:51 |
 | Role colours | positive green · danger red · utility grey-white · header blue · currency gold (PROPOSAL from TC buttons) | TC@19:48, @25:11, @27:42 |
@@ -52,7 +52,7 @@ Rounded rectangles only, one radius per size step · thick black outline around 
 6. **Search / input well** (TC §3.2): F-12 well; placeholder Fredoka One grey, 9 px inset all round (Alt-check); add a magnifier icon and a clear (×) button (TC gap).
 7. **Item card** (TC §3.3): tall depth block in the rarity colour → outline + halo with soft shadow → rim 4 → mask: highlights Soft light + half-tone → item icon centred, may break the top edge (TA) → name (white, stroke) and level/qty line → **rarity label or icon** (colour is never alone, ui-design D-09) → state badges: `equipped` check, `new` dot, `locked` padlock. Grid: auto layout wrap, equal gaps; long names: fewer columns or smaller text, never clip (TA@28:18).
 8. **Rarity variants** (TC §3.4): one variant property `Rarity`; each variant's face gradient stops come from the rarity token table (gradients cannot bind variables, F-14); lip and rim are solid, so they can bind rarity variables.
-9. **Currency counter** (borrowed TS §3.11): icon + number in the currency colour with white stroke 3, Round join, hard shadow Y 3; a small `+` depth button to its right; stress-test with 9 digits and abbreviate (1.2M).
+9. **Currency counter** (borrowed TS §3.11): icon + number in the currency colour with white stroke 3, Round join, hard shadow Y 3; a small `+` depth button to its right; stress-test with 9 digits and abbreviate (1.2M). The "+N" gain label is signed in the reward colour, a spend stays neutral, never red (ui-design motion.md §8).
 10. **HUD side button** (borrowed TS §3.10): square depth block per role colour, icon over a sunburst (from the VFX library, `ui-figma/references/effect-assets.md`), label under the icon. Size by the phone rubric, not by eye.
 11. **Popup / toast** (PROPOSAL): mini panel (recipe 1) + header tab; toasts: white pill with the outline token, icon + one line, no highlights.
 12. **Rewards and rare items**: sparkles, glows and sunbursts from the VFX library, behind the item, never over text.
@@ -66,6 +66,7 @@ Rounded rectangles only, one radius per size step · thick black outline around 
 | Selected | brighter face + gold ring (persistent; never the white focus ring) |
 | Equipped / owned | check badge in a corner (separate from selected) |
 | Loading / pending | label replaced by "..." or a spinner; button not pressable |
+| Refused | only this control shakes; the cause and fix ("Need 40 more coins") with an icon beside it (ui-design motion.md §8) |
 
 ## 7. Borrowed from the other styles (cross-pollination)
 | From | Technique | Why it helps cartoon |
@@ -94,15 +95,16 @@ Native share is high in this style: rarity recolours are just colour changes.
 ## 9. Pitfalls (TC gaps fixed here)
 - No states in the video: every control here has §6 states.
 - Rarity by colour only: add the label or icon.
-- Equal loudness: everything glossy competes; keep highlights off secondary controls if the primary does not stand out in grayscale.
+- Equal loudness: everything glossy competes; keep highlights and glow off secondary controls until the primary ranks first in `look_check.py value --compare-subjects` (ui-design review §6 S-16, S-17).
 - Flattened outlines break on resize: use the backing-rectangle outline (F-04).
 - Text sizes not checked for phones: convert with screen-contract §5.
 
 ## 10. Self-check
-- [ ] Outline and halo identical everywhere; radius, lip and text from the ladders (one step per control size).
-- [ ] Primary action brightest in grayscale; rarity readable without colour.
+- [ ] Outline and halo identical everywhere; radius, lip and text from the ladders (one step per control size) (input: token table).
+- [ ] Primary action ranks first in `--compare-subjects` on the styled screenshot; rarity readable in the luminance image without colour (S-16, S-29).
+- [ ] Outlined text passes both contrast pairs over the brightest backdrop (S-18).
 - [ ] Every component has §6 states; destructive actions confirm.
-- [ ] Layer table marks N / B; gloss overlays exported per size; text live.
-- [ ] Screenshots at phone and PC size next to the TC reference look.
+- [ ] Layer table marks N / B / L; gloss overlays exported per size; text live.
+- [ ] Tap targets pass the hit-target check (S-49); phone-fit view and the side by side with the target image checked (S-23, S-25); images only for failures and key screens.
 
 Project overlay: if `knowledge/overlays/ui-style-cartoon.md` exists, read it after this file; it wins for this game.

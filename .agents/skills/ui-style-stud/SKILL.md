@@ -3,7 +3,7 @@ name: ui-style-stud
 description: Roblox game UI in the stud (classic Roblox toy-brick) style in Figma - chunky two-layer 3D blocks, thick outline, tiled stud texture, color by button role. Use when the UI style is stud, brick, block, toy, classic Roblox, obby or tycoon, or the owner says "Roblox bricks", "stud UI". Gives tokens, component recipes and the Roblox build. Read ui-design and ui-figma first.
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TS (UI Genesis stud shop + HUD in Figma, `knowledge/reference/ui/02a`, `02b`), the most exact of the four tutorials; borrowed: TC, TA, TP. Values are one tutor's by-eye picks or PROPOSALs: tune per game, owner confirms.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Kit skill: universal. J002. Main source: TS (UI Genesis stud shop + HUD in Figma, `knowledge/reference/ui/02a`, `02b`), the most exact of the four tutorials; borrowed: TC, TA, TP. Values are one tutor's by-eye picks or PROPOSALs: tune per game, owner confirms. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the transparency setting, one spinning sunburst, measured self-check).
 
 # Stud UI
 
@@ -31,7 +31,7 @@ Stud tile texture over every coloured top face (soft, Overlay) · two-layer bloc
 | Lip | 7 px on small buttons, equal everywhere | TS@1:00:59 |
 | Face gradient | top light, bottom saturated, ≥ 20 L\* apart; any shine bars cross the whole face (ui-figma F-03, F-07) | G2 review |
 | Radius | small, 4-8 px (PROPOSAL; TS never states one: blocks read near-square) | — |
-| Panel | black fill at reduced opacity (PROPOSAL 55-65 %), 5 px stroke Outside | TS@3:05 |
+| Panel | black fill at reduced opacity (PROPOSAL 55-65 %), 5 px stroke Outside; contrast measured at this default, since the player's Background Transparency setting only makes it more opaque (ui-figma handoff §1) | TS@3:05 |
 | Stud tile | image fill Tile, Overlay; a square tile = 4 × 4 studs; size blocks in whole studs ("three studs long") | TS@9:50, @10:20, @57:17 |
 | Title text | 64, stroke 4, drop shadow Y 4, blur 0, 100 % | TS@12:47-13:55 |
 | Button text | TS uses 25 on side buttons (≈ 7 pt on a small phone: too small); phone-checked PROPOSAL ≥ 38 essential, stroke 3, shadow Y 3 | TS@42:06, @59:54 |
@@ -79,7 +79,7 @@ Stud tile texture over every coloured top face (soft, Overlay) · two-layer bloc
 | --- | --- |
 | Faces, lips, outlines, inner strokes, radius | **N**: Frames + UIGradient + UIStroke Inner (3 / 4 / 5 ladder) + backing Frame with UIStroke Outer 5. Confirm Inner / Outer is live in Studio (handoff §1); fallback nested Frames |
 | Stud texture | **T**: ImageLabel `ScaleType = Tile`, `TileSize` = one stud tile scaled to the stud size, `ImageTransparency` ~0.6-0.8 Normal (PROPOSAL; Overlay is not available), or **B** bake the overlaid face per colour |
-| Sunburst | **L**: a `Flare / burst-rays` id from the VFX library (`ui-figma/references/effect-assets.md`), ImageLabel at high `ImageTransparency` (Normal blend replaces Overlay); optional slow spin ≤ 1 rev / 8 s, off in reduced motion (PROPOSAL) |
+| Sunburst | **L**: a `Flare / burst-rays` id from the VFX library (`ui-figma/references/effect-assets.md`), ImageLabel at high `ImageTransparency` (Normal blend replaces Overlay); optional slow spin ≤ 1 rev / 8 s on one button at a time (it is the screen's one attention motion), off in reduced motion (PROPOSAL) |
 | Hard-shadow text | **N**: dark TextLabel duplicate offset Y by the shadow value (UIShadow text mode is beta) |
 | Translucent panel | **N**: BackgroundTransparency ≈ 0.4 |
 | Blurred game background | not UI: it is the live world behind the menu |
@@ -96,7 +96,8 @@ Stud tile texture over every coloured top face (soft, Overlay) · two-layer bloc
 - [ ] Outline 5 everywhere; inner stroke from the 3 / 4 / 5 ladder; lip 7 on every block of a size; lengths in whole studs.
 - [ ] Every button has role colour **and** icon or label; toggles show their current state.
 - [ ] Prices live; purchase pending / owned / failed states present.
-- [ ] Phone-size check passed for HUD buttons; nothing under the jump button or Roblox top-bar buttons.
+- [ ] HUD buttons pass the hit-target check on the phone layout frame (S-49: size, gap, nothing under the jump button or Roblox top-bar buttons) and still read at phone fit (S-23).
+- [ ] Role colours checked with `look_check.py palette --roles` against the rule sheet (S-19); white text with stroke passes both contrast pairs over the stud face (S-18).
 - [ ] Layer table N / B / T; stud tile exported once and reused.
 
 Project overlay: if `knowledge/overlays/ui-style-stud.md` exists, read it after this file; it wins for this game.

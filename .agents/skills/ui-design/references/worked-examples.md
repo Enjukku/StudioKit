@@ -1,0 +1,35 @@
+---
+type: reference
+scope: universal
+status: active
+updated: 2026-10-22
+source: "J018 maker ui-ux-designer: worked examples of the ui-design steps; every value is illustrative or PROPOSAL, not a decision"
+supersedes: []
+---
+> Author: J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
+
+# Worked examples: two screens from moment to hand-off
+
+Both follow SKILL §3 step by step. Numbers are illustrative; in a real job they come from the brief, the game profile and the measurements.
+
+## 1. Egg shop popup (cartoon pet simulator, kids, phones first)
+1. **Moment.** A player at the egg stand with 2,450 coins wants the next pet; smallest phone: small iPhone landscape (f 0.294). Coins can be bought with Robux, so the egg is a paid random item (`platform-policy` § A). Pain point from the old screen (studio-operator play-test capture 14): players tapped the egg art three times before finding Buy, because the price sat in the card's corner.
+2. **Inputs.** Game designer's information list: coins (critical, about 1 s), egg price, every pet with its odds, owned count, storage 34/50. Read rank: 1 Hatch, 2 odds row, 3 pets. Feedback stack: attempt cue = press sink + click; outcome = reveal on the server's confirmation; refusals = not enough coins, storage full.
+3. **Decision, flow, states.** Goal: pick and hatch the next egg. Flow: HUD Eggs → popup → Hatch = 2 taps (the odds row on the popup is the review step, visible before Hatch). States: inspect · not enough coins (refusal at Hatch: "Need 150 more coins") · storage full ("Pets full 50/50: delete or upgrade") · pending "Hatching…" · confirmed (reveal) · failed (quiet return) · restricted player (egg hidden, the fixed-price pet stand offered instead).
+4. **Structure study.** Three working pet simulators: pets with their % in a row above the egg, Hatch ×1 / ×3 / Auto below, close X top-right. Kept as the convention; no departure.
+5. **Wireframes** (one contact sheet at phone fit). A: odds row on top, three buttons bottom centre. B: odds column left, hero egg centre, buttons right. C (atypical): no popup, a bottom sheet under the world stand with the pets as a billboard. Pick A: the odds read before the buttons and the buttons sit in thumb reach outside the jump zone. B lost: the odds column falls to 8 pt at phone fit. C lost: in a full server other players' pets stand in front of the billboard.
+6. **Grey pass.** First `value --compare-subjects` run (boxes: hatch1, hatch3, auto, close): ratios to the ring 3.1 / 3.0 / 3.0 / 2.4, so nothing is rank 1. Fix: Auto smaller and darker (1.6), Hatch ×3 secondary (2.2), Hatch ×1 primary and 15 % larger (4.0). The coin counter stays in its fixed top-centre zone while the popup is open; the price "250" sits on the Hatch button, not on the egg.
+7. **Rule sheet rows used.** Currency = gold + coin icon + number; danger red is reserved (no red in the egg frame); rarity = label + frame shape (common round, rare notched, legendary crown) + colour; motion material: bouncy jelly.
+8. **Target images** (3 inside the brief's budget of 4): hooks "candy-shop counter", "hatchery incubator", "carnival prize booth"; the owner picked the incubator.
+9. **Motion and sound.** Popup grows from the stand's billboard (source); press row from the motion table; reveal windup 1.2 s, identical for every rarity; after the result frame rare adds rays, legendary adds the crown burst; the pet flies to the Pets button (destination), which bumps with "+1"; coins drop to the true value at once, spends neutral; reduced motion: windup becomes a short fade, same for every rarity. The sound designer's cue list gives the click (on the press), the crack (on the result frame) and one chime per tier.
+10. **Checks run.** S-49 (Figma bounds of the phone layout frame): Hatch ×1 420 × 170 (the biggest), Hatch ×3 300 × 150, close 150 × 150 (frequent: used on most visits), Auto 180 × 110 (minor: a switch set once a session); every gap ≥ 40 px; none in the thumbstick or jump zone. S-18: BUY label fill vs outline 21:1, outline vs green face 6.2:1. S-33: a Studio frame folder cropped to Hatch over the still stand backdrop, 13 idle frames, the press at 400 ms, the sink and "Hatching…" from 433 ms, then the reveal replacing the popup from 567 ms (the server answered inside the capture): the lag line gives pre-press maximum 0, cue 433, lag 33 ms. `summary.onset_ms` reads 567: the reveal's big change hides the small sink under the tool's 10 %-of-peak rule, which is why the lag never comes from it. S-44: in the egg's box, two common captures give a floor of mean 2.2 and 0 changed pixels; common vs rare and common vs legendary windup frames stay at mean ≤ 2.2 and 0 changed pixels up to the result frame, so the windups match. Could not check: sound sync on a phone; whether kids read the odds row (play-test).
+11. **Hand-off.** Layer table 85 % native; live text: price (data), coins (server), odds (the odds table, never typed); motion rows named; open question: storage-full upgrade price (progression designer).
+
+## 2. Mining simulator HUD (core play, phones first)
+1. **Moment and load.** Players mine ore, fill a backpack, sell, buy pickaxes, rebirth. The information list holds six needs in core play: backpack fill, coins, quest progress, rebirth ready, pickaxe level, menu. The old HUD showed seven elements; the daily-streak banner served no need in core play, so it moved on demand (a dot on the menu rail).
+2. **Read rank and zones.** 1 backpack full (it decides "go sell"), 2 coins, 3 quest progress, 4 rebirth ready. Zones from the rule sheet: coins top centre under Roblox's top bar; backpack bar bottom centre above the thumbstick and jump zones; quest tracker right edge; menu rail left edge. The capacity "34/50" sits on the backpack bar (proximity), the Sell shortcut right beside it.
+3. **Grey pass.** With the backpack full, `--compare-subjects` (sell, coins, rebirth, quest): Sell 3.8, coins 2.5, rebirth 1.9, quest 1.5. Rebirth glow is off while Sell pulses: one attention motion at a time.
+4. **Frequent events.** Fast mining gives about 20 ore per second: one "+N" label and one tick per merge window (about 100 ms), the coin counter updates to the true value each time, never a label per ore.
+5. **Pulses.** Backpack full: Sell pulses at 1 Hz (lasting state); daily reward claimable: 0.5 Hz on the menu dot; event countdown: 1 Hz, then 2 Hz in the last 2 s and 3 Hz in the last 1 s; nothing faster.
+6. **Refusal.** Tapping Rebirth too early shakes only the Rebirth button and shows "Need 1.2M coins to rebirth" with the coin icon beside it; a disabled Rebirth already says "Rebirth at 1.2M".
+7. **Checks.** S-05: six HUD elements, each mapped to a need. S-13: coins in the same zone on the HUD, the shop and the rebirth screen. S-30: on the studio-operator's busiest capture (12 players mining), no ore burst covers the backpack bar. S-41: every loop in its rate class. Could not check: the 1-second read of "backpack full" by a new player (owner at the G2 preview).

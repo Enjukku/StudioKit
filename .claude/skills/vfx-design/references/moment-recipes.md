@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · low · 2026-10-13. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (MO-02 follows "shake is occasional"; §D split into what the effect owes and what `platform-policy` owns).
 
 # Moment recipes
 
@@ -9,7 +9,7 @@ Evidence base: `knowledge/reference/vfx/02a-moments-action.md` (02a), `02b-momen
 Tags: [study] [preprint] [practice] [spec] [inference] [P] (PROPOSAL start value, untested, owner may change).
 "lead D" = tier D source, a lead only. "single C" = one tier C publication. Phases: W windup · C crescendo ·
 P punch · F follow-through · D dissipation · HS hit-stop. f@60 = 16.7 ms frame (R-217 [spec]). P = 0 ms.
-Importance = Riot 1-10 scale per viewer (R-368 [practice], single C). No source maps the rating to size,
+Importance = a studio's 1-10 scale per viewer (R-368 [practice], single C). No source maps the rating to size,
 brightness or duration (X-27), so every rating below is [P]; test T-RANK.
 
 ## A. Rules
@@ -17,7 +17,7 @@ brightness or duration (X-27), so every rating below is [P]; test T-RANK.
 | ID | Rule (testable) | Evidence |
 | --- | --- | --- |
 | MO-01 | Rate every moment 1-10 for player (who causes or receives it), ally and enemy before picking layers. Coverage, peak value and lifetime must rise with the rating across the set (T-RANK). | R-368 [practice]; R-080 [practice]; X-27 |
-| MO-02 | Screen-level channels (100% white core, FOV kick, post-effect flash, slow motion, camera moves) only at importance ≥8. Trauma shake allowed from 3 (t³ keeps +0.2 at 0.8% of max). [P] | PD-06; R-372 [practice] single C; R-124 [practice] |
+| MO-02 | Screen-level channels (100% white core, FOV kick, post-effect flash, slow motion, camera moves) only at importance ≥8. Trauma shake (t³ keeps +0.2 at 0.8% of max) is occasional: rare heavy moments of the local player at ≥8, or below 8 only when the owner allows it; the "trauma" values in the recipes below apply only then. [P] | PD-06; R-372 [practice] single C; R-124 [practice] |
 | MO-03 | Final blow of a match or a boss = importance 8: FOV kick allowed (≤4° in ≤0.15 s), slow motion allowed. An ordinary kill or finishing a prop or hero-mover part stays 7: no FOV kick, no slow motion, shake only. [P] | settles 02a final-blow row (7) vs PD-04; R-443 lead D; R-073 [preprint] |
 | MO-04 | Gameplay information first, theme last: a live threat or telegraph is never out-ranked by reward, movement or ambient. The brightest, most saturated pixel on screen belongs to the top-priority element. | R-060, R-080 [practice]; 02b G10 [inference] |
 | MO-05 | P fires on the server-confirmed state change (credit, sale, purchase, roll, break). No celebration before confirm; show a pending state if confirm takes >100 ms. | R-005 [preprint]; R-043 [study]; R-153 [practice]; 02b G1 |
@@ -195,16 +195,17 @@ Moved to `ui-basics/references/ui-effects.md`: button press, purchase success, e
 
 ## D. Paid random items (eggs, chests, wheels)
 
-Applies to anything bought with Robux or with currency bought with Robux, directly or indirectly (keys, tickets,
-re-roll tokens). Pass all before release (T17). Source R-208 [spec]; Apple 3.1.1 (R-172 [spec]).
+Applies to anything bought with Robux or with currency that can be bought with Robux, directly or indirectly (keys, tickets,
+re-roll tokens, luck boosts). **What must be disclosed, to whom and when is `platform-policy`'s (`platform-policy/references/rules.md` §A): load it; where this list and the policy differ, the policy wins.** Pass all before release (T17). Source R-208 [spec]; Apple 3.1.1 (R-172 [spec]).
 
-1. Every possible outcome and its exact % visible before purchase; % sum to 100 (rounding with a disclaimer allowed).
-2. A visible "Details" or "Info" control with a word; a bare (i) icon is not enough.
-3. Luck boosts, pity and rate-ups explained with numbers; shown odds update while active. Luck VFX never suggest more than the numbers.
-4. One-per-user outcomes update the remaining odds.
-5. Users with ArePaidRandomItemsRestricted (PolicyService) get an earnable, fixed-order, direct-purchase, hidden, blocked or removed path.
-6. Odds panel static (no shimmer); entry ≤200 ms [P]; no VFX covers odds or the Details control; no near-miss, no urgency.
-7. Rewards earned without paid currency need no disclosure. Open owner questions for a game that uses these rules: a hidden-outcome item ("???") vs rule 1; whether earned-currency eggs count as indirect purchases; how a luck gamepass shows its odds.
+What the effect owes (the reveal is honest):
+1. One identical windup for every result, frame by frame up to the result frame (MO-16); escalation and rarity colour start only after the result is shown.
+2. No near-miss: a lower result never shows a higher tier's layer or an "almost" beat (MO-17); no urgency effects.
+3. No celebration of a result worth less than its cost; the tier ladder adds layers by rarity and names the tier in text and frame shape, not by colour alone.
+4. Luck and boost effects never suggest better odds than the shown numbers.
+5. Odds are shown as numbers before the buy button; no effect covers, shimmers over or animates the odds or their "Info"/"Details" label; the numbers themselves change while a modifier is active and after a once-only outcome is won (policy). Odds panel entry ≤200 ms [P].
+6. Players for whom paid random items are restricted (PolicyService) get one of the policy's permitted treatments; the reveal effect never plays on a path they cannot use.
+7. Open owner questions for a game that uses these rules: a hidden-outcome item ("???") against the disclosure rule; how a luck gamepass shows its odds.
 
 ## E. Unsettled evidence (use both readings with tiers, or run the test)
 

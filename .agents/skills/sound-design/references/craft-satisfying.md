@@ -1,9 +1,10 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Craft: satisfying sounds and layering recipes
 
-Core rules used here (in SKILL.md): S-76 impact layers, S-75 material keys, S-78 layer count, S-79/S-202 burst
-scaling, S-203 semantic triggers, S-73/S-74 hitstop, S-133 AV sync, S-131/S-132 haptics. All ms, Hz and dB below
+Core rules used here (in SKILL.md): S-76 impact layers, S-79/S-202 burst
+scaling, S-203 semantic triggers, S-73/S-74 hitstop, S-133 AV sync, S-131/S-132 haptics; SC-05 five layer jobs,
+SC-06 bands, SC-08 baked vs live space; S-75 and S-78 live in §B. Layer jobs and the processing order: `craft-process.md` §3, §6. All ms, Hz and dB below
 are (P) unless tagged.
 
 ## A. Satisfying qualities
@@ -50,6 +51,8 @@ are (P) unless tagged.
 | S-130 | UI lengths | Taps 30-150 ms; most cues <300 ms; notifications ≤500 ms. Rising = success, falling = error. | lead |
 | S-220 | UI families | Design semantic families first (accepted, reversible navigation, invalid, completion, urgent), timbres second. Confirms 40-100 ms, completions 150-400 ms, invalid-repeat cooldown 200-500 ms (new attempt only), 3-10 ms edge ramps. | lead |
 | S-196 | Success vs failure | Differ in ≥2 attributes (e.g. rhythm and timbre), not pitch alone. | inference |
+| S-75 | Material keys | Key destruction and impact sounds on (material, size tier, event); at least 3 size tiers, stepped by S-82 (R-33). | practice |
+| S-78 | Layer count | Layer count follows event size: 1 layer (end), 2 (start + end), 3+ (start + middle + end). | practice |
 | S-77 | Sweetener test | Mute the thump layer; if the hit does not get thinner, delete the layer. | practice |
 | S-81 | Bigger break | Body lengthens to about 300 ms and drops 4-5 st. | inference |
 | S-82 | Size-pitch | Each size class up = 3-5 st lower. | lead |
@@ -57,7 +60,7 @@ are (P) unless tagged.
 | S-200 | Destruction budget | 6-12 fracture variants; 4 concurrent transients + 2 longer bodies locally; secondary contacts coalesced in 50-100 ms; debris spread over 200-1,200 ms; repeat-contact cooldown 80-150 ms; hero impact 0.2-0.6 s. | inference |
 | S-80 | Debris cap | ≤8 debris voices per 100 ms. | inference |
 | S-83 | Burst length | Cap each destruction burst so chaos comes in bursts and rewards stay audible. | practice |
-| S-84 | Dry assets | Short dry tails; space from one engine reverb per space. | practice |
+| S-84 | Space | The sound's own designed tail and glue are baked into the file; the room comes from one live reverb per space (SKILL.md SC-08). Keep tails short so the room reverb is not doubled. | practice |
 | S-85 | Distant blasts | Show first; delay sound by distance ÷ a dramatic in-game speed of sound (design value). | inference |
 | S-201 | After a collapse | Update obstruction, occlusion and room reverb; nearby collapse outranks distant debris. | lead |
 | S-86 | Vehicles, movers | Loop pitch +0.8% or more per speed unit; ≥3 dB per speed or power tier; mono-sum before upload; idle loop 10-20 s, drive loop 10-40 s. | practice (UN R138, FMVSS 141) |

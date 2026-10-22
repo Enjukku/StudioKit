@@ -1,15 +1,16 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-direction`. Source rows: N1 GC-01..07, SK-01..07, MM-00..10; N2 TC-01..07; N4 (first game, 2026-10-10..13). Everything in §3 is a proposed studio contract (O), not a report of another studio's architecture (N1 MM-00). Engine facts and the build: `film-craft`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-direction`. Source rows: N1 GC-01..07, SK-01..07, MM-00..10; N2 TC-01..07; N4 (first game, 2026-10-10..13). Everything in §3 is a proposed studio contract (O), not a report of another studio's architecture (N1 MM-00). Engine facts and the build: `film-craft`. Revised by J018 maker film-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 outcome sequences, §2 handoff frame and access; the pitch now sits in `film-direction` D-29).
 
 # Game cinematics: control, exits, shared scenes, phones
 
 ## 1. Which kind of moment
 | Kind | Use when | Cost and risk |
 | --- | --- | --- |
-| Player-directed staging (no camera takeover) | Discovering or acting is the emotional point; a landmark can be offered with sound and a safe viewing spot | Players may miss it: design the order of opportunities (N1 SC8-4) |
+| Player-directed staging (no camera takeover) | Discovering or acting is the emotional point; a landmark can be offered with sound and a safe viewing spot | Players may miss it: design the order of opportunities (N1 SC8-4). "No cuts" does not mean freedom: a long uncut camera the player cannot steer is still a takeover |
 | Short in-game camera moment (a few shots, then control back) | A reveal, a door opening, a boss arrival that must be seen | Every ending must restore control cleanly |
 | Live authored cutscene (in engine, real avatars) | The scene must include the player's own avatar or end in play without a cut | Avatar variety, streaming, phones, all exits (N1 GC-07) |
 | Pre-rendered video (rendered in Blender, played in a video frame) | Scenes that do not need the player, heavy effects or cloth simulation | Upload cost and rules, phone playback, audio, a seam into live play; see `film-craft` for the current facts (N4 V-01..V-08, proposals and open questions) |
 | Hybrid (play, then a few authored shots) | The establishing or choice beat is better played than shown; only the surprise or deception needs the camera | The play beat's information becomes a level-design requirement (the goal calls by light and sound, the threat stands on the approach line, the exit is visible from the entry): list it in the beat sheet and brief the environment designer (J015 G2 gaps G15) |
+| Outcome sequence (victory, reward, defeat, unlock) | A confirmed result deserves a moment | Starts only on the server-confirmed result, sized to it, skippable; a frequent one (every round) stays short and is judged over many repeats, not one view |
 | Hybrid (video, then a live part that lands on the player) | A past or a prologue, then play starts | The seam: separate clocks, so the join must not need beat alignment (N4 S-10, proposal) |
 
 Real-time vs pre-rendered vs marketing are different labels; "in-engine" does not prove it ran live on a phone (N1 GC-04..06). No rendering method is more emotional by itself (N1 GC-07).
@@ -23,9 +24,13 @@ Real-time vs pre-rendered vs marketing are different labels; "in-engine" does no
 | Comfort | A calmer camera (less shake, sway, roll) that keeps the information the move carried | Reduced-motion run reads the same |
 | Handoff | View, movement, UI and audio restored, with a clear first playable action | Each ending lands on the same play state |
 
+**The handoff frame** is the first view of play: it tells where the player is and what to do next (the goal or the threat framed, the first safe action visible), with the HUD players will have, at phone size.
+
+**Access and comfort.** The beat play depends on reads with sound off and in grayscale. Flashes and strobes keep the `vfx-design` flash rule, counted on the whole frame with every effect on (the count: the studio's flash counter, `vfx-craft/references/measure.md` §6, on the animatic frames exported as `film-craft/references/blender-previs.md` §7 says). Shake, field-of-view punches and whip pans are rare and local, rotate rather than move a third-person camera, are never caused by another player's effect, and each has a reduced version that keeps the information (`vfx-design` camera rules; the player's Reduced Motion setting, `film-craft` C-16).
+
 Plus the endings the paper's runtime contract adds (N2 TC-04..07): **failure** (missing asset, removed actor, camera taken over, death or respawn, interrupted teleport, a newer scene) and **disconnect** (the server releases everything even if the client never reports completion). No player is ever left immobile behind a black overlay.
 
-- Essential objective information also exists outside the skippable part, in a short readable form (N1 SK-05).
+- Essential objective information also exists outside the skippable part, in a short readable form; progression never hangs on a visual cue (N1 SK-05).
 - Repeatable boss entrances: the return after failure is tested as seriously as the first entrance; the reveal's value on attempt three is not the same as on attempt one (N1 SK-06). Offer a shorter repeat or skip where the owner agrees.
 - No source gives a skip rate, a best wait-before-skip or a best length (N1 U-12, SU-06). If the owner wants data: events for start, skip offered, skip pressed, finished, interrupted, returned to play, split by first view vs replay and device (N3 MD-01..09), through the `analytics` skill.
 - First game: skipping from second 1 of a forced first-time film was proposed and never ruled on (N4 P-04): ask the owner.

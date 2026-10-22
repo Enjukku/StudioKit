@@ -1,9 +1,9 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Horror, tension and warnings
 
-Core rules used here (in SKILL.md): S-07 roughness 40-80 Hz, S-11 threats behind, S-186 tension has start, release
-and max duration, S-136/S-99 actionable warnings and budget, S-137 auditory icons. Recipes for dread, anxiety, fear,
+S-07 and S-11 live in `elements.md` §B, S-186 in `emotion-recipes.md` §C, S-136/S-99 and S-137 in §B here (moved
+from SKILL.md in J018). Tells for enemy attacks and hazards: `craft-process.md` §2 and SKILL.md SC-12. Recipes for dread, anxiety, fear,
 shock, suspense, tension, urgency: `emotion-recipes.md`.
 
 ## A. Scare and dread rules
@@ -38,10 +38,16 @@ shock, suspense, tension, urgency: `emotion-recipes.md`.
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-136/S-99 | Every warning comes with an action the player can take; nonactionable warnings under 10%. Budget: ≤1 loudest-tier cue per 10 s; a cue that fires more often moves down a tier. | study basis; P numbers |
+| S-137 | Critical warnings are auditory icons (sound resembles meaning); more accurate and faster than tonal alarms under load. | study |
 | S-135 | Urgency ladder by pulse spacing: danger IOI 100 ms, caution IOI 300 ms (20 ms pulses, 920 ms bursts) + timing jitter. The reaction gain is small (about 10 ms); the job is to signal priority. | study |
 | — | Warnings rise ≥3 dB per priority step (FMVSS 141's "audibly louder" step, M-62). | practice |
 
 Warning lengths, repeat spacing and reserved voices: `genre-presets.md` §B (disaster survival row).
+
+Tells: the sound tell starts on the VFX tell's event, is the same asset every time (no jitter), lasts the reaction window
+from the game designer's threat sheet and stops on the damage event. A state with a timer or breaking point (a shield,
+a fuse) gets a warning keyed to its end-of-state event whose intensity rises toward the end (`review.md` R-08, R-09).
 
 ## C. Methods behind these rules
 

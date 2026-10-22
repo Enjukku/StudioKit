@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Elements: what each acoustic element does
 
@@ -86,8 +86,15 @@ music or lab stimuli, not game SFX. Arousal = activation; valence = pleasant vs 
 
 ## B. Element rules
 
+S-07, S-08, S-11, S-15 and S-22 moved here from SKILL.md §3 in J018; this table is their one home.
+
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-07 | Roughness = amplitude modulation 30-150 Hz. For alarms and scares use 40-80 Hz (peak unease near 40 Hz); above about 130 Hz it fuses into pitch. | study |
+| S-08 | No roughness (AM 30-150 Hz, fast tremolo, ring-mod) on reward, UI, collect or pickup cues. | study |
+| S-22 | Keep sustained noise in 2-5 kHz low; the most aversive sounds sit there (band is a press figure). | study; band lead |
+| S-15 | Bass boost only for hero moments, up to +3 dB below 80 Hz; small gain (arousal η² about 1.4%). Never rely on bass alone for impact. | study |
+| S-11 | Threat voices (growls, not pure tones) behind the player raise arousal. Never place rewards behind. | study |
 | S-03 | Tempo is the second dial: up for energy, down for calm; take BPM from genre presets (no slope exists). | study + practice |
 | S-04 | Never build a feature that needs the heart to lock to the beat. | study |
 | S-05 | Good-vs-bad jingle pair: good one about 2 st higher and 29% faster, then listen-test. | study |

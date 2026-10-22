@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-audio.md` (**AU** rows, "Streaming-safe ambience"), `fact-check-lighting.md` (LF32-LF39 wind and particles). Design rules: `environment-design/references/ambience.md`. Docs paths are relative to `knowledge/external/roblox-creator-docs/`. The sound designer builds the sound; this file is how the environment designer puts the ambience map into the place so the sound and VFX designers can build on it.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-audio.md` (**AU** rows, "Streaming-safe ambience"), `fact-check-lighting.md` (LF32-LF39 wind and particles). Design rules: `environment-design/references/ambience.md`. Docs paths are relative to `knowledge/external/roblox-creator-docs/`. The sound designer builds the sound; this file is how the environment designer puts the ambience map into the place so the sound and VFX designers can build on it. Revised by J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (step 6: the footstep material list).
 
 # Putting the ambience map into the place
 
@@ -37,5 +37,5 @@
 3. Set any acoustic choice the map records (SoundService gate) and the listener location; note what scripts cannot set.
 4. Run the scene audit (`environment-craft` §audit): every map id in the place, nothing unlisted, no duplicates.
 5. Capture the source close-up and the player's view for each source (cause visible).
-6. Hand off: brief the sound designer and the VFX designer from the map (`rules/messages.md` format); their keys in the map are theirs.
+6. Hand off: brief the sound designer and the VFX designer from the map (`rules/messages.md` format); their keys in the map are theirs. Send the sound designer the list of walkable materials in the place (`measure-captures.md` M8) so every floor has a footstep entry, and the VFX designer the sight lines and the route that ambient motion must stay away from.
 7. When their work is in: walk the borders in play mode (approach, cross, walk back, stand still, teleport, respawn, stream out and in) and record each state. The listening judgment is theirs or the owner's.

@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Engine facts: `knowledge/reference/film/fact-check-roblox-runtime.md` (FR, 33 rows checked 2026-10-21 against the docs mirror and live pages; row ids FC-nn). Studio contract (O): the owner's paper, N2 RT, TC, CP rows. Facts marked "status as of 2026-10-21" change: re-check before use. The film director writes the scene data and this contract; engineering builds the player (J015-D7).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Engine facts: `knowledge/reference/film/fact-check-roblox-runtime.md` (FR, 33 rows checked 2026-10-21 against the docs mirror and live pages; row ids FC-nn). Studio contract (O): the owner's paper, N2 RT, TC, CP rows. Facts marked "status as of 2026-10-21" change: re-check before use. The film director writes the scene data and this contract; engineering builds the player (J015-D7). Revised by J018 maker film-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§3 one trigger and the playback log; §7 outcome sequences).
 
 # Roblox assembly: camera, cues, readiness, UI, exits
 
@@ -32,6 +32,7 @@
 - `AudioPlayer:Play(atTime)` / `:Stop(atTime)`: optional `atTime: double?` on the mixer clock, "sample-accurate, framerate-independent"; with `atTime` they return an `int64?` action id; `AudioPlayer:Cancel(actionId)` cancels a pending action. `IsReady` is read-only and can go false under extreme memory pressure; `TimePosition` is read/write seconds (FC-32, FC-34). Schedule from the client (the mixer clock is per machine). Cross-client accuracy is not documented: no sample-perfect multiplayer claim.
 - Shared start (studio method, N2 RT-31, proposal): map the remaining time to the server-time start onto the local mixer clock; never send one client's mixer time to another; a late arrival takes a defined catch-up, wait or fallback path.
 - Every cue has a stable id and a policy for pause, seek, skip and replay: a skip does not replay missed explosions or award skipped outcomes (N2 RT-24).
+- **One trigger, one log.** A picture punch and its sound start from one trigger event (the marker or the timeline entry), never from two clocks. The test build logs shot starts, cue starts and the animation markers that cues pair with on one clock, as `[{id, t}]` seconds from sequence start, for `shotlist.py log-diff`. Log ids are the shot ids as in the file (`A`, `B`, never the Blender marker form `shot:A`), the cue ids as in `cues[].id`, and animation markers by the animator's names. The pairing rule is the sync rule in `film-direction/references/beats-and-timing.md` §4.
 - Animation Graphs run in live experiences since the 2026-07-15 full release; State Machine and Expression nodes were announced as Studio beta on 2026-10-08 and, per that thread's FAQ, work only in Studio. For a shipping cutscene use base graph nodes or plain `AnimationTrack` (FC-29, FC-30; status as of 2026-10-21).
 
 ## 4. Effects and light (facts)
@@ -65,7 +66,7 @@ Every run has one terminal reason and one idempotent teardown:
 
 | Ending | Must happen |
 | --- | --- |
-| Finish | Final pose evaluated; control back at an authored safe view; only the permitted server transition requested |
+| Finish | Final pose evaluated; control back at an authored safe view; only the permitted server transition requested; an outcome sequence (victory, reward, defeat) starts only on the server-confirmed result |
 | Skip | Same authorised story outcome where designed, no transient cues replayed; shared scenes follow the stated skip policy; repeated presses = one result |
 | Failure | Missing asset, removed actor, camera taken over, death or respawn, interrupted teleport or a newer scene → the defined fallback + teardown; never a frozen player behind a black overlay |
 | Disconnect | The server releases participants and foci even without a client completion event; rejoin follows the replay / resume / skip rule; no reward inferred from a broken presentation |

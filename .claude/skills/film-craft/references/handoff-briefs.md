@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Source: N3 HO-01..09 (hand-off table, OPINION, 2026-10-21), N1 AC-04, SN-06, `rules/messages.md`. Format of every brief: `rules/messages.md` §2 (intent + spec, sent whole, every rule restated, skills named).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Source: N3 HO-01..09 (hand-off table, OPINION, 2026-10-21), N1 AC-04, SN-06, `rules/messages.md`. Format of every brief: `rules/messages.md` §2 (intent + spec, sent whole, every rule restated, skills named). Revised by J018 maker film-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the performance sheet and pushed moments for the animator, the value plan for the environment designer, the marker list and sync rule for VFX and sound, stills for marketing, the outcome trigger for engineering).
 
 # Hand-offs: what each craft gets from the film director
 
@@ -9,13 +9,14 @@ The director delegates execution, not accountability: animation the camera hides
 | --- | --- | --- | --- | --- |
 | game-designer | beat contract, proposed interruption, gameplay state sheet | gameplay requirements and progression consequences | player purpose and exit state | `game-design` |
 | art-director | mood references, contrast intent, colour strip | approved style and visual language | consistency of the sequence with the game | `art-direction` |
-| animator | per shot: acting brief (belief, stimulus, tactic, decision, end pose), action beats, eyelines, framing and occlusion limits, frame window from the shot list | poses, motion, implementation | readable performance in the final framing | `film-direction` (acting), `animation-design`, `animation-craft` |
+| animator | per shot: acting brief (belief, stimulus, tactic, decision, subtext, end pose) and the performance sheet (per beat motion, driver, time, sound word); 2-4 adjectives with their pose change; the one or two moments to push; action beats, eyelines, framing and occlusion limits, frame window from the shot list; for a still or key frame, the premise and the still's camera (you supply the signature key pose from the set) | poses, motion, implementation | readable performance in the final framing; the blocking reviewed at the shot cameras before polish | `film-direction` (acting), `animation-design`, `animation-craft` |
 | character-rigger | what must move and how far for the planned acting (face kit, eye target, mouth shapes, limb range) | rig method | the rig can show the beat (render test) | `rigging-design` |
-| environment-designer | visible geography, staging lanes, landmarks per shot and their side of frame, light intent per beat (source, brightest area, what stays hidden), sets the shot list needs | set construction, lighting execution | attention, silhouettes, spatial continuity from the shot cameras | `environment-design` |
-| vfx-designer | cue id and time, narrative function, attention priority, occlusion limits ("must not hide the route or the boss silhouette"), the shot camera | effect construction, runtime behaviour | the effect clarifies the beat | `vfx-design`, `vfx-craft` |
-| sound-designer | cue sheet (`shotlist.py cues`), each cue's role, perspective, sync type, silence intent, dialogue priority | recording, synthesis, mix, playback | timing, intelligibility, relationship to picture | `sound-design` |
+| environment-designer | visible geography, staging lanes, landmarks per shot and their side of frame, the value and light plan per beat (contrast key, motivated source, brightest area, separation, depth groups, what stays hidden), the approved value strip, story facts the place must show, sets the shot list needs | set construction, lighting execution | attention, silhouettes, spatial continuity and the value lines (B-06, B-07) from the shot cameras | `environment-design` |
+| vfx-designer | cue id and time, narrative function, attention priority (the effect is never the primary read unless the beat is the effect), the peak marker it shares with sound and picture, occlusion limits ("must not hide the route or the boss silhouette"), the shot camera, the clean frame it is added to | effect construction, runtime behaviour, camera punches in play | the effect clarifies the beat; the subject still ranks first (B-08) | `vfx-design`, `vfx-craft` |
+| sound-designer | cue sheet (`shotlist.py cues`), each cue's job and the emotion it carries, perspective, sync type, the stage names of staged actions, silence intent, dialogue priority, the sync rule (`film-direction/references/beats-and-timing.md` §4); temp sound from the first animatic | recording, synthesis, mix, playback | timing, intelligibility, relationship to picture; the key event solo, then in the full mix (owner listen at the gate) | `sound-design` |
 | ui-ux-designer | letterbox, subtitle and skip requirements, protected areas per shot, speaker identity, reduced-motion and large-text cases | layout, interaction, accessible presentation | readability, nothing essential covered | `ui-design` |
-| engineering (architect → feature-builder) | the `.luau` scene data, input and audience policy, every ending with its resulting state, readiness list, server transitions allowed | camera system, authority, cleanup, instrumentation | captured behaviour and reproducible defects | `architecture`, `engineering-craft` |
+| engineering (architect → feature-builder) | the `.luau` scene data, input and audience policy, every ending with its resulting state, readiness list, server transitions allowed, the server-confirmed event that starts any outcome sequence; for the test build: a playback log of shot, cue and animation-marker times on one clock (ids exactly as in the shot list: `A`, not `shot:A`; `roblox-assembly.md` §3), and a hook that rejects the result | camera system, authority, cleanup, instrumentation | captured behaviour and reproducible defects (R-04, R-14) | `architecture`, `engineering-craft` |
+| marketing (stills from a cinematic) | the key frame with its premise, crop-safe composition and layers (foreground, midground, background, lights, effects) as named switchable groups; the clean frame | crops, title, the promise | the featured thing is the hero in every crop | `marketing-design` |
 | owner | alternatives, evidence, the captured sequence, unresolved risks | creative approval and priority | approval recorded with the owner's words | `ste-writing` |
 
 ## 2. Fixed vs open (precision rule, `rules/messages.md` §1)
@@ -50,7 +51,7 @@ fixed:
   camera: static medium close, eye level   # shot list
 open: [beats of the realisation, holds, secondary motion, hand action]
 avoid: [a facial-only reaction (lost at phone size), looking at the camera]
-acting: {belief: "the beacon is a prize", stimulus: "it went dark and something moved behind it", tactic: none, decision: "stop reaching, move away"}
+acting: {belief: "the beacon is a prize", stimulus: "it went dark and something moved behind it", tactic: none, decision: "stop reaching, move away", subtext: "she still wants the prize", adjectives: [curious (leans in), wary (weight back)], pushed: "the recoil, stronger than real; balance kept over the back foot"}
 owns: [content/film/<sequence>/anim/C/]
 not_in_scope: [shot D, the statue, camera changes]
 rules: [Body and head angle must read at phone size. Avatars vary in height: keep the gesture readable for the supported range. No change to frame window without a ticket.]
@@ -58,6 +59,7 @@ deliver: content/film/<sequence>/anim/C/
 checks:
   - C1: in a 30 fps capture from the shot camera, the stop and the weight shift both read before frame 101
   - C2: end pose matches the fixed end_pose (side-by-side with shot D's first frame)
+  - C3: blocking (key poses as black-fill from the shot camera) shown to film-director before splines; the recoil reads at phone size
 return: hand-back to film-director (rules/messages.md §3); key poses first (G2 sample)
 </spec>
 ```

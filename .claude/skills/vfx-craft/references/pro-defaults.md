@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · default · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · default · 2026-10-20. Revised by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the ring size curve eases in fast).
 
 # Pro defaults: values per layer job, recipes per effect type, budget
 
@@ -13,7 +13,7 @@ All rows: **LightInfluence 0**. Size = peak size in studs at a normal character-
 | impact burst (shape) | **0.12** (0.07-0.2) | 0 / 0 | 3-4 | 0.1-1 | **+2.8** (1.8-3.7) | 1-2 | 7.7-8.3 (4-27) | solid shape, no holes; 25% flat (perpendicular) | linear shrink (start big) | opaque hold |
 | white flash | **0.03-0.05** | 0 | high | 1 | highest | 1 (+1 slightly longer) | ≥ impact | TU-12/13; "if you can see its shape it lasts too long" | grow or shrink | opaque hold |
 | glow / halo | 0.7 (0.04-2) | 0 / 0 | 1.5-2 | 1 | +2 to +3 | 1 | **13-15** | FaceCamera, soft-edged texture | constant size | opaque hold or V (fade in, hold, out) |
-| ring / shockwave | **0.2** (0.2-0.5) | 0 / 0 | 5-6 | 0 | 0 (−0.3-0.2) | 1-2 | 5.7-9 | flat VelocityPerpendicular (63%) or FaceCamera; starts at ~0.56 of max | constant size or grow from 38% | fade in, hold, fade out |
+| ring / shockwave | **0.2** (0.2-0.5) | 0 / 0 | 5-6 | 0 | 0 (−0.3-0.2) | 1-2 | 5.7-9 | flat VelocityPerpendicular (63%) or FaceCamera; starts at ~0.56 of max | constant size, `ease-out grow`, or grow from 38% with a key at about t 0.25 at ≥0.7 of max (fast in, ease out: `measure.md` §5) | fade in, hold, fade out |
 | spark | 0.85 (0.5-1.3) | **25 (15-50) / 5.5 (3.6-9)** | 5 | 0 | +1.5 | **15** (5-25) | 1.3 (0.4-3) | Spread 360; 20% VelocityParallel | linear shrink | opaque hold |
 | ember / spec | 0.8 (0.4-1.6) | 1-7 / 0-4 | 3-5 | 0-0.2 | 0 | 2-8 | 1-1.5 | off-centre spec textures rotate; may rise (Accel +) | linear shrink | fade in |
 | streak / speedline | 0.5 (0.2-0.75) | 8-24 / 3.6 | 6 | 0 | 0 | 6 | 1.4 | **VelocityParallel + Squash** (65%) | linear shrink | opaque hold |

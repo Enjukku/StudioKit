@@ -1,25 +1,32 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Repetition and fatigue
 
-Core rules used here (in SKILL.md): S-88/S-89 variant pools and shuffle-bag, S-90/S-91 pitch and volume jitter,
-S-94 retrigger floor, S-100 long-stay zones, S-101 misophonia, S-79/S-202 burst scaling, S-152 voice caps.
+Rules S-88/S-89, S-90/S-91, S-94, S-100 and S-101 live in §B (moved from SKILL.md in J018); S-79/S-202 burst scaling
+and S-152 voice caps stay in SKILL.md §3. Vary samples, never the meaning: tells, warnings and countdowns get no
+jitter (SKILL.md SC-12).
 
 ## A. Repetition plan procedure
 
 1. Estimate plays per minute and max burst per second for the cue (cue-card field 34).
 2. Variant count from the rate (S-88). Shuffle-bag with exclusion (S-89); simulate it (S-204).
-3. Jitter by cue type (S-90/S-91); random pitch at one level only (S-92).
+3. Jitter by cue type (S-90/S-91); random pitch at one level only (S-92); none on tells, warnings, countdowns; never jitter the timing of a meaningful cue.
 4. Retrigger floor (S-94); above about 8 plays/s switch to start + loop + tail (S-95); above 15 events/s aggregate
    into one grouped sound per window (S-66, S-194).
 5. Voice cap and steal policy (S-152).
-6. Machine-gun test (S-96), then a real-loop test (S-205).
+6. Machine-gun test (S-96), then a real-loop test (S-205). I cannot listen: the 10 s storm and the real loop are check-in C listens (`review.md` §2); the 1,000-selection fixture (S-204) and the debug cue log at the burst rate (`review.md` R-41) are mine.
 7. If the cue is heard 1,000+ times a session, keep it short, quiet relative to rare cues, and meaningful (S-97, S-98).
+8. Beds and long loops: splice several takes with crossfades and a short fade on every splice (`craft-process.md` §6); seam ratio and length measured (`review.md` R-26).
 
 ## B. Rules
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
+| S-88/S-89 | Variants: over 2 plays/s → 4-10 (start 6); moderate → 3-5; under 1/min → 1-3; scares 3+. Shuffle-bag, never the same clip twice in a row, exclude the last 2-3. | inference; P |
+| S-90/S-91 | Jitter: non-tonal hits ±50 to ±100 cents (test to ±150, cap ±200); ladder, reward, warning and speech ±0-30 cents; tells and countdowns none (SC-12). Volume ±1-1.5 dB, never over ±3 dB on informative cues. Randomise pitch at one level only; vary samples, never the timing of a meaningful cue. | inference; P |
+| S-94 | Retrigger floor per sound ID: 40-80 ms for UI and coins; drop identical repeats inside 40 ms. | inference; P |
+| S-100 | Long-stay zones (lobby, hub, shop, queue) must not audibly repeat within 10 min: resequence 15-20 s segments or stack unequal-length stems. Hook in the first 3 s. | practice |
+| S-101 | Mouth-like sounds (chew, slurp, smack, sniff, breath) never loop or repeat in frequent events and play at most 4 times per second; tonal pickups follow S-194 and S-94 instead; offer a "reduce repetitive sounds" option. | study prevalence; P limit |
 | S-92 | Combine variant, pitch and volume randomisation; apply random pitch at one level only (offsets at two levels add). | practice (Unity docs) |
 | S-93 | Repeated attacks get a new EQ or pitch offset on every repeat. | practice (God of War Ragnarok) |
 | S-95 | Fire rates above about 8/s use start + loop + tail assets, not one sample per shot. (P) | inference |

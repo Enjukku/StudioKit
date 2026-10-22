@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Sources: 03:HO1-HO5, HT1-HT3, PS9, TL3, TL9 (paper, O contract; W01 GDC 2025 spreadsheet-to-game practice, E); `architecture` R-07 (definitions vs runtime vs saved); `rules/messages.md` (brief format).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-craft`. Sources: 03:HO1-HO5, HT1-HT3, PS9, TL3, TL9 (paper, O contract; W01 GDC 2025 spreadsheet-to-game practice, E); `architecture` R-07 (definitions vs runtime vs saved); `rules/messages.md` (brief format). Revised by J018 maker progression-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (readable requirements, tier ids on rewards, the tier table in the briefs, new §5 number display).
 
 # Data tables, the engineering contract, and the hand-offs
 
@@ -18,8 +18,8 @@
 | 6 | Domain | valid index range (levels 1-60, owned 0-500) |
 | 7 | Caps | balance caps, owned caps, level caps |
 | 8 | Rounding + modifier order | where rounding happens, additive vs multiplicative groups, bulk = sum of rounded units or rounded closed form |
-| 9 | Prerequisites | unlock predicates |
-| 10 | Costs and rewards | per row, with currency |
+| 9 | Prerequisites | unlock predicates, each with a player-readable requirement ("need level 12", "beat the Crypt Guard") the UI shows on the locked thing |
+| 10 | Costs and rewards | per row, with currency; each reward with its tier id from the reward tier table |
 | 11 | Reset behaviour | what a prestige/rebirth removes, keeps, merges, grants |
 | 12 | Expected fixture outputs | rows engineering's tests must reproduce exactly (cost at n, cumulative XP at l, hits-to-kill per build × enemy, prestige award at L) |
 | 13 | Rationale for exceptions | per deliberate spike or irregular value: why, and its source label, so nobody smooths it away |
@@ -33,11 +33,20 @@ Example row shape (03:HO4, illustrative; an RPG table has other fields): `upgrad
 ## 4. Hand-off briefs (`rules/messages.md` §2: `<intent>` prose + `<spec>`; every rule restated; skills named)
 | To | You send | They decide | `fixed` usually holds | Typical checks |
 | --- | --- | --- | --- | --- |
-| game-designer (goals in, curves out) | the feeling timeline draft, options with trade-offs, the simulator charts | loop and content changes; with the owner, which experience | owner decision ids, timeline rows | each option shows what the player feels differently and when |
+| game-designer (goals in, curves out) | the feeling timeline draft, options with trade-offs, the simulator charts, the reward tier table (tier, trigger, rate per event) for the feedback stack's Celebration and Frequency fields; luck vs skill runs when asked | loop and content changes; the feedback stack; with the owner, which experience | owner decision ids, timeline rows, tier ids | each option shows what the player feels differently and when; the feedback stack quotes the table's tiers |
 | engineering (architect, feature-builder, quick-builder) | the model revision, the exported definition tables, the data contract, fixtures, the change report | file layout, runtime format, code structure, save migration with the owner | ids, values, units, rounding order, caps, fixtures (source: model revision + owner decision) | engineering's tests reproduce every fixture exactly; server is the authority for currency (`networking-security`) |
-| ui-ux-designer (how progress is shown) | what the player must see at each timeline point: current value, next goal and its cost/requirement, time or attempts to it, what a milestone unlocks, odds for any random reward, what a reset keeps | layout, style, motion | numbers shown, rounding for display (display only), odds tables from the same data (`platform-policy` P-01) | the next goal and its benefit are readable on a phone in the first minute |
+| ui-ux-designer (how progress is shown) | what the player must see at each timeline point: current value, next goal and its cost/requirement, time or attempts to it, what a milestone unlocks, odds for any random reward, what a reset keeps; the readable requirement of every locked thing; the tier, text name and counter of each reward; the number display rule and its fixtures (§5) | layout, style, motion | numbers shown, rounding for display (display only, §5), odds tables from the same data (`platform-policy` P-01); logic and affordability use the true value at once, count-ups are decoration ending on the exact number | the next goal and its benefit are readable on a phone in the first minute; I ask for a phone-size frame of the shop or progress screen at two timeline points and compare every shown number with the fixtures |
 | analyst (`analysis-design`) | the events each timeline target needs (milestone reached, attempt/fail, economy source/sink with balance), the denominators and cohorts, the predicted values per policy | event code and dashboards | event names, fields, revision tags (`analytics`) | each target can be measured with its denominator; non-completers kept |
 | live-ops designer | sinks and sources an event may add, caps, what must never be bought, the model to re-simulate event changes | event content and calendar | economy limits from the model, owner decisions | event changes re-simulated; normal route never balanced around events (01:K7.O) |
-| vfx / sound designer (when a milestone needs celebration) | which milestones are spikes the player must feel, and their importance rank | the effect and the sound | milestone ids, rank | — |
+| vfx-designer, sound-designer (every reward moment) | the reward tier table: event name, tier (first / repeat), measured rate, confirmed trigger, text name | the effect and the sound, caps per tier, merge windows | event names, tiers, triggers | each restates the tiers and rates it built to in its exchange note; no reward moment plays before its trigger |
+| art-director (item families and rarity ladders) | families with rank 1-N per item, the rows allowed a style break (top tier, by owner decision), premium rows | how rank shows (size, complexity, finish, secondary motion) | family and rank ids | the art director restates the rank order it drew to; a stronger or rarer item never looks lower |
 
 Live-ops side of this hand-off: `live-ops-craft/references/handoffs.md` §3.
+
+## 5. Number display (what the UI shows; the true value never changes)
+- Logic, affordability and saves use the exact value. A displayed number is rounded for reading only.
+- **Balances round down, prices and requirements round up,** at the shown digits, so a shown balance never looks affordable when it is not. Same suffix table everywhere (K, M, B, T; one place in the data), the same significant digits for a balance and the price next to it.
+- Count-ups and flying coins are decoration over the true value: they end on the exact number; the buy button checks the true balance at once.
+- Gains read as gains; spending is neutral (danger colours stay for danger).
+- Fixtures I send with the rule (3 significant digits): balance 1,049,999 shows 1.04M next to a price of 1,050,000 shown as 1.05M (half-up would show both as 1.05M); balance 999.5 shows 999 next to a price of 1,000 shown as 1.00K (half-up would show 1000); price 12,350,000 shows 12.4M.
+- Odds have their own display rule (rounding digits and disclaimer): `platform-policy`.

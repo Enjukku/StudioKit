@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-performance-import.md` (**PI**, **PX**), `fact-check-lighting.md` (LF, LX). Measurement method: `environment-design/references/review.md` §5. Docs paths relative to `knowledge/external/roblox-creator-docs/`. **CAP** = engine limit; **START** = recommended starting value; neither is a budget.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-performance-import.md` (**PI**, **PX**), `fact-check-lighting.md` (LF, LX). Measurement method: `environment-design/references/review.md` §5. Docs paths relative to `knowledge/external/roblox-creator-docs/`. **CAP** = engine limit; **START** = recommended starting value; neither is a budget. Revised by J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (two cheap defaults in §2).
 
 # Performance: cheap by default, budgets by measurement
 
@@ -26,6 +26,8 @@ Before a screenshot or a walk test, move the character or camera into the conten
 | Light Range is clamped to 120 studs, so a big area is not lit by one huge light | LX01 |
 | Particles: cost follows screen area and overlapping layers; caps 400/s per emitter (100/s mobile), lifetime 20 s | LF35-LF37 |
 | Do not pay detail for parts nobody sees or uses | FS-T09 |
+| Rest areas are cheap: the calm floors and plain walls the read needs also save parts, triangles and texture memory; spend unique assets by the read plan's ranked work list | J018 |
+| Alpha cards (grass, reeds, hanging moss) are few: overlapping transparent cards are overdraw on phones | PI21; J018 |
 
 ## 3. What degrades on phones
 | Behavior | Source |

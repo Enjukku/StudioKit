@@ -1,14 +1,17 @@
 # Hand-offs: marketing and the roles it works with
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `marketing-craft`. Format: `rules/messages.md` §2 (brief) and §3 (hand-back). Owner J012 brief 2026-10-21: marketing works from the start with the game designer, trend scout, art director and analyst; hand-offs also to the live-ops designer. The other sides: `preproduction/references/handoffs.md` §3.2 (game designer → marketing), `trend-scan/references/handoffs.md` §2 (trend scout → marketing), `art-review/references/feedback-briefs.md` (art director → marketing).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `marketing-craft`. Format: `rules/messages.md` §2 (brief) and §3 (hand-back). Owner J012 brief 2026-10-21: marketing works from the start with the game designer, trend scout, art director and analyst; hand-offs also to the live-ops designer. The other sides: `preproduction/references/handoffs.md` §3.2 (game designer → marketing), `trend-scan/references/handoffs.md` §2 (trend scout → marketing), `art-review/references/feedback-briefs.md` (art director → marketing). Revised by J018 maker marketing · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018): asks to the animator (§7) and to the staged-render maker (§8), the study grid from the trend scout, the anchors and value plan from the art director, and when to ask.
 
 Marketing sends **files, not chat**. Asks to another role are tickets in the job ledger, inside the approved brief. A role marked *planned* does not exist yet: the brief goes to the lead, who holds it (J012-D6).
 
 | To | When | Marketing asks for | Marketing never asks for |
 | --- | --- | --- | --- |
-| game-designer | concept and preproduction step 1; each new feature that marketing will show | the promise ledger (which claims are playable now), the signature moment and when a new player reaches it, the audience, what is not built yet | a feature added only so an ad can show it |
-| trend-scout | before title and thumbnail work; weekly | dated, labelled signals on audience words, title and thumbnail patterns, timing, rights flags | creative wording; a number without its label |
-| art-director | before any image; for every image before the owner | the art bible with the `thumbnail` and `game-icon` families, approved anchors, a review of each candidate at real size | the message or the title (marketing owns them) |
+| game-designer | concept and preproduction step 1; each new feature that marketing will show; at the image brief | the promise ledger (which claims are playable now), the signature moment and when a new player reaches it, the audience, what is not built yet; for an update, which thing is launched and the one-sentence premise it supports | a feature added only so an ad can show it |
+| trend-scout | before title and thumbnail work; weekly | dated, labelled signals on audience words, title and thumbnail patterns, timing, rights flags; what fans of the genre say they want; a dated study grid of the genre's current top tiles and icons (study only, never material to reuse) | creative wording; a number without its label |
+| art-director | before any image (the brief stage); at the green light; for every image before the owner | the art bible with the `thumbnail` and `game-icon` families, approved anchors, the 2-3 identity anchors per hero that every crop must keep, the brand pattern (name pattern, fonts, lock-up, the property an event may change), the value and colour roles that separate the image from the Roblox page; a cold read of each rough at tile size before the brief; a paint-over on a capture when a note is visual; a review of each candidate at real size | the message or the title (marketing owns them) |
+| animator | at the brief, whenever a character is the hero of a still | the signature move's key pose from the set, set on the rig at the still's camera, shaded and in black-fill (§7) | a new pose made only for the still |
+| environment-designer or modeler | after green light, when the route is a staged render (route c) | the render with the game's real models and set, in named foreground, midground and background groups, the green-lit camera and key light, a hero-only pass on magenta (§8) | a new design of the model or the set |
+| ui-ux-designer | after the owner approves title wording | the title text layer in the brand font and lock-up over the master, at full and tile size | a change to the image |
 | analyst | before every test and launch; weekly | the test spec (decision, metric label, denominator, cohort, window, guardrails), readings of results | a "winner" without counts |
 | live-ops-designer | update and event planning; week 3 after launch | the calendar of real playable changes, event ids, dates, what is new for returning players | a hype message for a change that is not live |
 
@@ -97,7 +100,8 @@ refs:
 fixed:
   small_sizes: icon 150x150 (Roblox icons doc); thumbnail <WxH> (capture <id>)
   art_bible_revision: <rev>
-open: [direction notes, which candidates to keep, lock or anchor proposals for marketing art]
+  hero_and_premise: <the launched thing; the one-sentence premise>   # image brief
+open: [direction notes, which candidates to keep, lock or anchor proposals for marketing art, the identity anchors each crop must keep, the value and colour plan that separates the hero]
 avoid: [rewriting the message or the title; approving anything for the owner]
 owns: [your review file in knowledge/jobs/<job>/art/]
 not_in_scope: [making the final images]
@@ -107,6 +111,8 @@ rules:
 deliver: ranked findings per candidate, with acceptance evidence
 checks:
   - C1: each candidate reviewed at its real small size next to its capture, or marked NOT REVIEWED
+  - C2: the tile is read cold (what it shows, in one line) before the brief is opened, and that line is in the review
+  - C3: a visual note comes as a paint-over on the capture or the sheet
 return: hand-back to marketing (rules/messages.md §3)
 </spec>
 ```
@@ -173,3 +179,67 @@ return: hand-back to marketing, copy to lead
 
 ## 6. What marketing hands back
 To whoever asked (usually the lead or the game designer), in `rules/messages.md` §3: STATUS, coverage of every item in scope, evidence (sheets, JSON, captures, decision ids), decisions made, owner actions needed (upload, activate, publish, spend: the owner does them), and the next decision with its default.
+
+## 7. Marketing → animator (signature pose for a still; its side: `animation-design/references/game-timing.md` §6)
+```text
+<intent>
+The key art for <game / update> shows <character> at <the moment>. Players must meet the character they will really play, so the still uses the signature move's key pose from the game, staged for one premise.
+</intent>
+<spec>
+id: <job>-T<nn>
+from: marketing
+to: animator
+model: opus
+effort: high                                  # animator roster (owner 2026-10-20)
+skills: [animation-design, animation-craft]
+refs:
+  - knowledge/jobs/<job>/marketing/briefs/<brief>.md   # take: the premise, the hero, the crop plan
+fixed:
+  premise: "<one sentence>"
+  still_camera: <position, angle, lens or FOV; the green-lit rough's camera>
+open: [which key frame of the signature move carries the premise best, small offsets inside the key pose for the still's camera]
+avoid: [a new pose made only for the still]
+owns: [the pose render files]
+not_in_scope: [the image's composition, light and colour]
+rules:
+  - The pose is the clip's key frame, set on the rig; any offset for the still's camera is recorded with its reason.
+deliver: the key pose rendered at the still's camera, shaded and in black-fill, with the clip name and frame
+checks:
+  - C1: the black-fill matches the clip's key frame (look_check.py silhouette --compare), or the difference is listed with its reason
+return: hand-back to marketing (rules/messages.md §3)
+</spec>
+```
+
+## 8. Marketing → environment-designer or modeler (staged render, route c)
+```text
+<intent>
+The green-lit key art for <game> is rendered with the game's real models and set, so the image shows the game players will get. It feeds the whole asset kit, so the file must let anyone switch layers without asking again.
+</intent>
+<spec>
+id: <job>-T<nn>
+from: marketing
+to: environment-designer            # or modeler, when the hero is a model on a simple set
+model: opus
+effort: high                        # roster: high for key art (environment designer J008-D1, modeler J007-D1)
+skills: [environment-craft]         # or modeling-craft
+refs:
+  - <green-lit image path>          # take: composition, camera, value and light plan; avoid: its invented details
+  - knowledge/jobs/<job>/marketing/briefs/<brief>.md   # take: the crop plan and safe squares
+fixed:
+  camera: <from the green light>
+  key_light: <direction and motivation from the green light>
+  master_size: 1920x1080 (thumbnail) or <size large enough for every crop>
+  groups: FG, MG (hero), BG, FX, LIGHT_EXTRA as named, toggleable collections
+open: [set dressing inside the composition, material and light tuning that keeps the value plan]
+avoid: [moving the big shapes of the green-lit composition; new designs of models or set]
+owns: [the .blend and its renders]
+not_in_scope: [title text, colour grading of the final]
+rules:
+  - Final renders at the final size, never upscaled.
+deliver: the render at master size, one render per named variant (classic, extra effects), a hero-only pass on magenta #FF00FF, the .blend with camera and collections
+checks:
+  - C1: the hero-only pass keys with --key FF00FF and its mask's frame IoU against the green-lit mask is recorded
+  - C2: toggling FG off still gives a complete image
+return: hand-back to marketing (rules/messages.md §3)
+</spec>
+```

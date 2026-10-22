@@ -6,7 +6,7 @@ updated: 2026-10-20
 source: "J002; Figma MCP server skills read 2026-10-20: figma-use (SKILL.md, gotchas.md, plugin-api-patterns.md, component-patterns.md, validation-and-recovery.md), figma-generate-design, figma-generate-library, figma-create-new-file, figma-use-motion; owner decisions J002-D3, J002-D6"
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20. Revised by J018 maker ui-ux-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§6 frames from a motion prototype for the timing checks).
 
 # Building in the owner's Figma through the Figma MCP
 
@@ -83,7 +83,7 @@ If `create_session` exists, call it first with the fileKey and pass its `session
 - Share the file link and node ids in the hand-back.
 
 ## 6. Motion prototypes (optional; figma-use-motion)
-Figma can keyframe a node (`applyManualKeyframeTrack`, easing objects such as `{type:'EASE_OUT'}`, `EASE_IN_AND_OUT`, springs; durations in **seconds**) and apply animation styles. The API may not be enabled for the account: on `"… is not a supported API"` stop and say so. Never animate the top-level frame itself. Screenshots show only the resting state; to check motion use `export_video` (slow, costly: small width, low fps, 4-6 frames you need) and extract frames with ffmpeg. Values stay PROPOSAL (`ui-design/references/motion.md`).
+Figma can keyframe a node (`applyManualKeyframeTrack`, easing objects such as `{type:'EASE_OUT'}`, `EASE_IN_AND_OUT`, springs; durations in **seconds**) and apply animation styles. The API may not be enabled for the account: on `"… is not a supported API"` stop and say so. Never animate the top-level frame itself. Screenshots show only the resting state; to check motion use `export_video` (slow, costly: small width, only the stretch you need) and extract frames with ffmpeg, named `f###_<ms>ms.jpg` with ms from the export's start, so the timing checks can read them. For a press, start the keyframe track after a hold of about 400 ms so the folder has idle frames before the trigger (at 30 fps about 13 idle and 7 changed frames); capture rules and crops: `ui-design/references/review.md` §6 notes on S-33 and S-44. Values come from the game's motion table and stay PROPOSAL (`ui-design/references/motion.md` §7). The owner judges feel on the prototype at normal speed.
 
 ## 7. Limits
 - View settings (pixel grid, pixel preview, snap to pixel grid) are the owner's app settings; the API cannot switch them. For pixel work keep every x, y, width, height and stroke an integer and ask the owner to switch them on.

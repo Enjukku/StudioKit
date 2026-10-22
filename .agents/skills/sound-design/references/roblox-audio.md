@@ -1,9 +1,10 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
 
 # Roblox audio: objects, limits, uploads, policy, phones
 
 Core rules used here (in SKILL.md): S-140 audio graph, S-150/S-219 client playback and server confirmation,
-S-152 voice caps, S-156/S-157 phone-first bands, S-159/S-160 mono and device approval. Re-check API facts and quotas
+S-152 voice caps, S-156/S-157 phone-first bands, S-159/S-160 mono and device approval; SC-08 baked vs live, SC-10
+movement and Doppler, SC-12 footsteps. Re-check API facts and quotas
 at each milestone; the engine changes.
 
 ## A. Graph objects and documented ranges (O, Creator Docs mirror read 2026-10-10)
@@ -47,6 +48,11 @@ their pages before use. Legacy `Sound`, `SoundGroup`, `SoundEffect` are discoura
 | S-223 | Preload essentials asynchronously and inspect per-asset results; 5 s watchdog then a visual fallback; drop routine one-shots that miss their window by 150-250 ms instead of playing stale hits. (P) | docs + inference |
 | S-228 | One response per authorised event per listener; event IDs block duplicate prediction and confirmation. Clients never send asset IDs or gain values to the server. | inference |
 | S-217 | Agents allowlist event names, asset IDs, API fields, routes and numeric bounds (rest of S-217 is a SKILL.md guardrail). | inference |
+| — | Baked vs live (SC-08): per-sound processing is baked into the file; live effects only for context: one AudioReverb per space type, an AudioFilter or AudioEqualizer for underwater or occlusion, an AudioCompressor for ducks. The order of live effects in a chain changes the result (`audio/effects.md:27`). Roblox has no live transient shaper: bake transients. | docs + inference |
+| — | Doppler: `SoundService.DopplerScale` applies to legacy `Sound` only; the docs say it does not affect AudioPlayer or AudioEmitter (`_api-reference/classes/SoundService.yaml:178-195`), and the graph classes have no Doppler property. Assume no engine Doppler on graph emitters: a travel sound that needs a pitch pass-by gets it from a scripted PlaybackSpeed change (S-144) or a one-shot whoosh, or has none (SC-10); a Studio probe only confirms. | docs |
+| — | Footsteps: `Humanoid.FloorMaterial` is the `Enum.Material` under the character, `Air` when airborne (`_api-reference/classes/Humanoid.yaml:365-372`); the footstep table maps it to a set (SC-12). | docs |
+| — | Stage sounds keyed to animation markers fire through `AnimationTrack:GetMarkerReachedSignal` (`animation/events.md:12, 47-72`); the cue card names the timing list's event id, the integrator wires it from the same client event as the VFX. | docs |
+| — | Cue ids map to asset ids and parts in one data table (content as data); no asset id in logic (`review.md` R-44). | inference |
 
 ## C. Uploads, rights and moderation
 
@@ -63,10 +69,10 @@ their pages before use. Legacy `Sound`, `SoundGroup`, `SoundEffect` are discoura
 | ID | Rule | Evidence |
 | --- | --- | --- |
 | S-165 | Gate every Robux-paid random item (or one bought with Robux-bought currency) behind `PolicyService:GetPolicyInfoForPlayerAsync().ArePaidRandomItemsRestricted`; restricted players get one of the allowed treatments. | docs |
-| S-166 | Before purchase show every outcome's odds as percentages summing to 100% behind a labelled "Odds" or "Details" button (a bare (i) is not enough); include indirect purchases (keys, tickets, bought currency); update live under luck boosts. | docs |
+| S-166 | Odds disclosure, rounding, modifiers and restricted players: `platform-policy` `references/rules.md` §A is the rule and wins (odds as numbers before purchase; only a long list may move behind a visible worded "Info" or "Details" label; a bare (i) is not enough; odds update under luck boosts and once-only outcomes). The sound side is D-03 and S-164. | docs (via platform-policy) |
 | S-167 | Every paid random outcome gives real benefit; no empty outcomes. | docs |
 | S-169 | No simulated or real gambling for Robux or valuable items. | docs |
-| S-172 | Brazil: under-18 players are ineligible for paid random items (help-centre snippet; verify before launch). | lead |
+| S-172 | Regions and ages: never hard-code them; Roblox sets eligibility through `ArePaidRandomItemsRestricted` per player (`platform-policy`). | docs (via platform-policy) |
 
 Sound rules for reveals: S-164, S-168 in `reward-and-juice.md`.
 
@@ -90,3 +96,21 @@ Sound rules for reveals: S-164, S-168 in `reward-and-juice.md`.
 | G-18 | Engine latency and AV sync on phones | High-speed video of tap-to-sound and break-to-sound |
 | G-19 | 2026 audio privacy and moderation turnaround | Test uploads under the group; read the current Creator Dashboard audio page |
 | G-20 | Paid-random-item age rules outside Brazil | Read the help centre and DevForum announcements before shipping |
+
+## G. Studio checks (read-only; skill `studio-mcp`, every call names its `studio_id`)
+
+When your tools line has no Studio MCP, ask the studio operator or the lead to run these and return the output.
+
+Each check is a screening aid: its last column lists the false readings found so far. A failing or borderline reading
+is checked by eye on the listed instances, the code line or the log lines before any fix note goes out.
+
+| Check | How | Self-review line | Known false readings |
+| --- | --- | --- | --- |
+| Graph matches the card | `execute_luau` (Edit or Client data model): list AudioPlayer, AudioFader, AudioEmitter, AudioListener, AudioReverb and Wire instances with their key properties and wire ends; no edits | R-40 | lists only instances alive at the call: players a pool creates on first play are missing (the pooling row counts them) |
+| Pooling (creation counter) | in a play-test, on the Client data model: count only new instances. Before the warm-up, put every AudioPlayer and Sound in the data model into a weak-keyed set (`setmetatable({}, {__mode = "k"})`) and connect to `game.DescendantAdded` to add every one it sees; warm-up = one 10 s burst at the real top rate (a pool that grows on demand reaches the burst's overlap here); then count during a second 10 s burst at the same rate each AudioPlayer or Sound the event brings that is not in the set (add it after counting), and print its full name: pooled = 0. No character spawns or respawns during the counted burst (the engine creates default character Sounds at spawn): if one does, run the burst again. The event fires on every re-parent, so a raw event count fails a pool that parks idle players at nil (S-224 resets `parent`). A count before and after the burst reads flat for create-and-destroy code too, so never use it. First use is a probe: confirm the connection outlives the `execute_luau` call, else run the burst inside the same call through the integrator's test hook | R-40 | false PASS: a player never parented into the data model (run the R-40 grep too); a template `:Clone()` escapes the grep (the counter sees it). False FAIL: a character spawn in the counted burst; a pool still growing because the second burst overlaps more than the first; a Sound another system creates during the burst: read each counted full name before a fix note |
+| Distance curves | read each emitter's `DistanceAttenuationMode`: if `Custom`, its `GetDistanceAttenuation()` keys (an empty table = the default curve); otherwise `DistanceAttenuationBounds` and the mode (the custom curve is ignored, yet `GetDistanceAttenuation()` still returns it: `AudioEmitter.yaml:135-185, 349-365`); also the AudioListener's `GetDistanceAttenuation()`, which multiplies with the emitter's; compare with the card's studs | R-16 | `GetDistanceAttenuation()` returns a custom curve even when the mode ignores it: read the mode first; the heard level is emitter × listener curve |
+| Floor materials in the place | list the `Material` of walkable, collidable parts and the terrain materials used; compare with the footstep table | R-14 | none found yet: first use is a probe |
+| Cue counts and order | in a play-test, `get_console_output` after the integrator's debug cue log (`cue <id> <event> <time>`): one cue per event, one per merge window at the burst rate, no outcome cue after a rejected request | R-41, R-42 | script time, not output time; a cue played on a path that does not log is missing from the log, not from the game: read the trigger code before a fix note |
+
+MCP captures are stills without sound: these checks prove wiring and trigger counts (script time), never what the
+player hears or the output latency. Not yet run in a game job: treat the first use as a probe and record the result.

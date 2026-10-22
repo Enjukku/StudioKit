@@ -136,7 +136,7 @@ Run the lines of the pass you are at before its hand-off or check-in; write each
 | G-01 | At the game camera on the phone viewport, in the real place, moving, with effects, other players and HUD on: the action, its direction and its landing frame are named | C |
 | G-02 | Effects hidden, colour removed (grayscale of the capture), shake and flashes off: every tell, contact and outcome still reads from the pose | C |
 | G-03 | Marker times from the Output log match the timing list (`clip_check.py` events tolerance, else MEASURED) | log |
-| G-04 | Sync: the sound onset lands 0 to about 40 ms after the first lit contact frame and never more than one frame early, measured on the target device; otherwise not verified. Until `sound-design`'s window is aligned, report the offset as MEASURED | device capture |
+| G-04 | Sync: the sound onset lands 0 to about 40 ms after the first lit contact frame and never more than one frame early, measured on the target device; otherwise not verified (`sound-design` uses the same window) | device capture |
 | G-05 | Attempt vs outcome: a hit the server rejects (test place) plays no confirmed-hit reaction, hit-stop pose or celebration | C, log |
 | G-06 | The hit-stop freeze frame is the contact pose with the source of power and hook shapes facing the camera | C |
 | G-07 | Every listed transition, captured: no pop, foot slide or stuck grip; clean-up clears trails and loops | C |

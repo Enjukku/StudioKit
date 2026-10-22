@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Tool: `tools/film/shotlist.py` (J015-T08, 47 offline tests; Blender 5.1.2 round trip run 2026-10-21 with no drift). Field guide for people: `templates/film/shot-list.md`. Owner decision J015-D5 / D7: one machine-readable shot list keeps timings the same in the plan, the previs and Roblox.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Reference for `film-craft`. Tool: `tools/film/shotlist.py` (J015-T08, 47 offline tests; Blender 5.1.2 round trip run 2026-10-21 with no drift). Field guide for people: `templates/film/shot-list.md`. Owner decision J015-D5 / D7: one machine-readable shot list keeps timings the same in the plan, the previs and Roblox. Revised by J018 maker film-director · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§2 what the commands do not judge, from runs on sample files).
 
 # The shot list file: one timing truth for plan, previs and Roblox
 
@@ -34,6 +34,12 @@ One `<sequence>.shots.json` per sequence (format `film-shotlist/1`), kept at `co
 | `diff <file> <blender.json> [--write]` | drift between plan and animatic: rate, range, missing / extra / out-of-order markers, per-shot start and length drift and per-cue drift in frames and ms. A shot or cue with UNKNOWN plan timing is "not compared"; exit 0 means everything was compared and nothing differs. `--write` takes shot lengths and cue `at` from Blender (revision + 1); it first prints the Blender range and the length the last shot will get (from the scene's end frame): read it before you accept; it refuses when a cue marker lies outside its shot, on extra or duplicate markers, or when the end frame is before the last shot marker. Cue `end` is not round-tripped: edit it by hand |
 | `luau <file> --out <Name>.luau` | generated `--!strict` ModuleScript for the Roblox player (shots and cues with frames and seconds). Refuses UNKNOWN lengths or cue offsets. Never edit the output |
 | `log-diff <file> <log.json> [--tol-ms MS --tol-source S]` | compare a Roblox playback log (`[{id, t}]`, seconds from sequence start) with the plan: per id planned vs measured, ms and frames; no default tolerance |
+
+**What the commands do not judge** (found by running them on sample files):
+- `check` passes a shot list whose shots all have the same length: rhythm is read by you from its per-shot output (review line B-10).
+- `log-diff` without `--tol-ms` reports `measured` and exits 0 even when planned ids are missing from the log: read the "planned, not logged" line; with a tolerance, a missing id fails.
+- `log-diff` compares each id with its planned time and its tolerance is symmetric (a cue 33 ms early passes `--tol-ms 40`): the sync rule is one-sided, so pair each `sync: locked` sound cue with its picture event from the same log and read the sign; a planned lead or delay keeps its offset in the cue's `note` (review line R-04).
+- `log-diff` matches ids exactly: a log that writes `shot:A` instead of `A` lists every shot as "planned, not logged" and "logged, not planned", still with verdict `measured` and exit 0. Log ids are the shot ids and `cues[].id` as in the file (`references/roblox-assembly.md` §3).
 
 Pushing does not save the `.blend`: save it after the push (in the MCP session, or add a save call when running headless). The push writes the rate exactly as `fps = num`, `fps_base = den` (29.97 → 30000 / 1001.0); Blender's own 30 / 1.001 is stored as a 32-bit float and is off by about 1.4e-6 fps (FB FC-08). `diff` still accepts that older form.
 

@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: 03:DB1-DB5, DR1-DR6, DI1-DI9, DM1-DM7, DX1-DX3 (paper; Roblox definitions checked in FC-R against the docs mirror rev 7400643, 2026-10-21). Event code, dashboards and limits: `analytics` (it owns them); the analyst's own method: `analysis-design`. This file is how the progression designer reads the analyst's data.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Part of `progression-design`. Sources: 03:DB1-DB5, DR1-DR6, DI1-DI9, DM1-DM7, DX1-DX3 (paper; Roblox definitions checked in FC-R against the docs mirror rev 7400643, 2026-10-21). Event code, dashboards and limits: `analytics` (it owns them); the analyst's own method: `analysis-design`. This file is how the progression designer reads the analyst's data. Revised by J018 maker progression-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (the problem behind a requested fix; one lever per change).
 
 # After launch: reading progression data
 
@@ -34,7 +34,7 @@ Thresholds come from the game's own timeline and its uncertainty, never from a u
 | One reward route dominates | reward per hour and selection share per route and stage, plus failure and enjoyment feedback | the best route may also be the most fun; class or device bias | improve alternatives; do not punish competence |
 | Retention fell after an update | mature first-play cohorts by device, region, acquisition, version | weekends, holidays, ad bursts, crashes, changed eligibility | verify operations first, then isolate the progression change |
 
-Before proposing a change, list the competing explanations: unaffordable cost, confusing objective, uninteresting activity, combat failure, too little session time left (DB4). Change the smallest justified lever; compare an identified cohort and revision; inspect distributions and individual paths. Separate resource bottlenecks: currency but no material; material but no unlock; power but unclear objective (DB2).
+A request that names its own fix ("lower the price", "more rewards", "make it faster") is a pointer to a problem: restate the problem first ("players cannot see the next goal"), then choose the fix from the explanations below; after the change, re-check the problem, not only that the requested number moved. Before proposing a change, list the competing explanations: unaffordable cost, confusing objective, uninteresting activity, combat failure, too little session time left (DB4). Change the smallest justified lever; compare an identified cohort and revision; inspect distributions and individual paths. Separate resource bottlenecks: currency but no material; material but no unlock; power but unclear objective (DB2).
 
 ## 4. Experiments (03:DX1-DX3; FC-R FB39-FB41)
 - Roblox in-game Experiments test config values: planned 14-60 days, up to 2 variants + control, one active experiment per config key (locked while it runs).
@@ -44,4 +44,4 @@ Before proposing a change, list the competing explanations: unaffordable cost, c
 - Predeclare the win criterion and guardrails (e.g. more eligible players reach the next interesting decision without hurting later return, competitive fairness or non-payer progress); the effect size comes from the owner's goals and the feasible sample. Non-significance is not equivalence. Small games: instrumented playtests, player explanations and longer observation instead of a confident fake A/B result (DX3).
 
 ## 5. The proposal you return (O)
-Observation (with denominator and revision) → competing explanations → the one you test first and why → the smallest lever → re-simulated outcome under the same named policies (`progression-craft`) → what the analyst must measure to confirm → owner decision with a default.
+Observation (with denominator and revision) → the problem behind any requested fix → competing explanations → the one you test first and why → the smallest lever → re-simulated outcome under the same named policies (`progression-craft`) → what the analyst must measure to confirm → owner decision with a default.

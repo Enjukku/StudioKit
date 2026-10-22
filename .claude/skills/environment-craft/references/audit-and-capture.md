@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Tool: `tools/env/scene_audit.py` + `tools/env/scene_probe.luau` (J008-T08; offline tests `tools/tests/test_scene_audit.py`). MCP facts: `knowledge/reference/environment/fact-check-performance-import.md` (PI59-PI67, tool-name table). Review rules: `environment-design/references/review.md`. Packet: `templates/environment/review-packet.md`.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Tool: `tools/env/scene_audit.py` + `tools/env/scene_probe.luau` (J008-T08; offline tests `tools/tests/test_scene_audit.py`). MCP facts: `knowledge/reference/environment/fact-check-performance-import.md` (PI59-PI67, tool-name table). Review rules: `environment-design/references/review.md`. Packet: `templates/environment/review-packet.md`. Revised by J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (key views, dummies in avatar colours, quality setting, the §7 checklist in the packet).
 
 # Scene audit, captures and the review packet
 
@@ -19,9 +19,11 @@ Verdicts: `MEASURED` unless a tolerance or budget is passed; `PASS` / `FAIL` aga
 
 ## 2. The camera set in Studio
 - `mcp__Roblox_Studio__screen_capture` takes `studio_id`, a `capture_id` (for example `"ScreenCapture_1"`) and optional `camera_position` and `look_at_position` as `[x, y, z]` (PI63). It captures the edit-time screen.
-- Write the camera list first (packet §B): id, kind, position, target, FOV. Use the same list for every round so before / after compare.
+- Write the camera list first (packet §B): id, kind, position, target, FOV. Use the same list for every round so before / after compare. Mark the key views (first view after spawn, one decision view per zone, top-down, one per hazard); routine passes capture only these, plus an image where a number fails (`environment-design/references/review.md` §3).
+- Put player dummies in typical avatar colours (one light, one dark, one saturated) and the smallest gameplay object on each floor type into the views that measure separation; remove them afterwards.
+- The busiest moment (players, effects, HUD, phone viewport) is a play capture: ask the studio operator for it (`handoffs.md` §6).
 - Player-eye views: camera at the avatar's eye height on the route (from the scale sheet), looking at the next cue. Top-down: high above the stage centre looking straight down. Scale shots: the player dummy in frame.
-- Low and high quality: Studio's Editor Quality Level changes what post effects show (LD159); the quality level itself is not scriptable (LD131), so set it by hand or ask the owner, and record which level each capture used.
+- Lowest and highest quality: Studio's Editor Quality Level changes what post effects show (LD159); scripts cannot set it, but a plugin may: probe the `execute_luau` route first (`measure-captures.md` M9), else set it by hand or ask the owner, and record which level each capture used.
 - Streaming: move the camera or character into the content before capturing (FS-V09). Restore the owner's edit camera afterwards (FS-V03).
 - Play-mode checks (walks, borders, streaming): `start_stop_play`, then `character_navigation` / `user_keyboard_input` (datamodel_type Client); `get_console_output` for errors. One Studio driver at a time.
 
@@ -29,4 +31,4 @@ Verdicts: `MEASURED` unless a tolerance or budget is passed; `PASS` / `FAIL` aga
 `render_viewport_to_path` or `render_thumbnail_to_path` from named cameras that match the reference image angles; place each render beside its reference on one labelled sheet (FS-V02). Renders prove look and silhouette of Blender-built pieces only; Studio decides the final look. Preview lighting can shift colours (white reads grey, pastel reads olive). Check the render set-up first, ambient fill and exposure before anything else: put a white / grey / palette test card in the render scene, store the render recipe (lights, ambient, exposure, colour management) with the renders, and judge final colour in Studio under the game's lighting before touching any palette value.
 
 ## 4. Packet assembly
-Fill `review-packet.md`: build record, camera table with both quality levels, look checks, ambience checks (listening stays pending until someone listens), audit numbers with their limits, budgets with sources, open issues with the responsible craft, the 3 weakest points. Then hand to the owner (or the art director / studio operator first, as the brief says).
+Fill `review-packet.md`: build record, camera table with both quality levels, look checks, ambience checks (listening stays pending until someone listens), audit numbers with their limits, budgets with sources, open issues with the responsible craft, the 3 weakest points. Add to your copy a table with every line of `environment-design/references/review.md` §7: result, input (capture names and boxes, or the partner and check-in), label; then the could-not-check list and the captures used against the image budget. Then hand to the owner (or the art director / studio operator first, as the brief says).

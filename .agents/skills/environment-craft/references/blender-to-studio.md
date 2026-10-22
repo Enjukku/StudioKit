@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-performance-import.md` (**PI**, **PX** rows) and the rigging fact-checks it reuses; method from the environment paper notes `03-pipeline-performance-review.md` (§2, §8: H, BW rows). Docs paths are relative to `knowledge/external/roblox-creator-docs/`. Method rows marked **method** are the studio's procedure, not Roblox or Blender guidance (PI49, PI51, PI65).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit reference: universal. J008. Facts: `knowledge/reference/environment/fact-check-performance-import.md` (**PI**, **PX** rows) and the rigging fact-checks it reuses; method from the environment paper notes `03-pipeline-performance-review.md` (§2, §8: H, BW rows). Docs paths are relative to `knowledge/external/roblox-creator-docs/`. Method rows marked **method** are the studio's procedure, not Roblox or Blender guidance (PI49, PI51, PI65). Revised by J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§7, snapping art to the blockout; kit packages).
 
 # Blender ↔ Studio: what is built where, and moving it across
 
@@ -7,9 +7,10 @@
 | --- | --- | --- | --- |
 | Route blockout | Studio | iterate against the real avatar, camera and collision | keep named anchors and route sizes through the art pass (BW02, BW25) |
 | Broad landform, ground, water | Studio Terrain | native sculpting, smooth material blends, water | see `terrain-and-water.md` |
-| Sculpted cliff, hero rock, cave shell, overhang, stylized strata (one-off for this place) | Blender, then Studio | silhouette, topology, UVs, baked detail | the environment designer builds these one-off pieces (J008-D4); seams to terrain checked in Studio |
+| Sculpted cliff, hero rock, cave shell, overhang, stylized strata (one-off for this place) | Blender, then Studio | silhouette, topology, UVs, baked detail | the environment designer builds these one-off pieces (J008-D4); their form, texture and finish follow the modeler's standards (`modeling-design`: planes and edges, baked AO and curvature, wear with a reason, texel density matching the kit, detail in textures); seams to terrain checked in Studio |
 | Reusable kit pieces, props, vegetation meshes, hero buildings, anything rigged | modeler (Blender) | reuse and asset craft | request in the `rules/messages.md` brief format; place them in Studio |
-| Assembling kit pieces into streets and buildings | Studio (or a Blender layout that exports positions only) | game context, instancing | import each asset once, duplicate in Studio (§4) |
+| Assembling kit pieces into streets and buildings | Studio (or a Blender layout that exports positions only) | game context, instancing | import each asset once, duplicate in Studio (§4); kit pieces as packages so a fix updates every copy |
+| Bespoke shells for an irregular layout (no kit fits) | Blender, then Studio | the layout is gameplay-driven, so a forced kit would bend it | unique shells sharing one trim sheet; built on the imported greybox (§7) |
 | Lighting, atmosphere, sky, post effects | Studio | Studio is the final renderer and owns the quality tiers; the importer brings no lights or cameras (PI49) | Blender lighting is only for renders of Blender-built parts |
 | Ambience zones and source anchors | Studio | real listener, scale and streaming | `ambience-in-place.md` |
 | Distant skyline | either | silhouette and depth, not near detail | check level of detail and streaming behavior (§5) |
@@ -58,3 +59,9 @@
 
 ## 6. After every import (**method**, BW11)
 Dimensions, orientation, pivot, hierarchy, material resources, normals, collision, and asset permissions, against the calibration object and a known route fixture. A clean import only proves the importer took the file.
+
+## 7. Snapping art to the approved blockout (**method**)
+1. Export the approved greybox (or its route-critical parts) from Studio and import it into Blender at the same origin and scale (§2 scale chain); keep it as the locked reference collection.
+2. Build one-off shells on the same snap grid; bespoke shells export at their world position (importer: "Set Pivot to Scene Origin" off, as the modeler uses it; whether "Insert Using Scene Position" must also be on is proved once with the calibration object at a known world position, then recorded in the scale record); reusable kit pieces export at their snap origin and are placed in Studio. Use the same grid the modeler uses for the kit (its interface contract).
+3. After import, compare art and greybox bounding boxes part by part (`measure-captures.md` M8): differences stay under one snap step on every route edge, opening, cover piece and sight-line blocker, or go to the game designer as a proposal.
+4. Shared trim-sheet SurfaceAppearances and kit pieces live as packages, so a material fix or a placeholder upgrade reaches every copy (`projects/assets/packages.md:14-19`; `tutorials/curriculums/environmental-art/assemble-an-asset-library.md:93`).
