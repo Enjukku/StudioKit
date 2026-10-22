@@ -390,6 +390,18 @@ class ReservedAndHueSpreadTest(unittest.TestCase):  # J018 G3-P8: the two colour
             r = self.run_mode(["value", img, "--mask", k, "--mask-box", "700,300,900,500", "--out-dir", d])
             self.assertEqual(r["params"]["key_estimate"]["mask_box"], [700, 300, 900, 500])
 
+    def test_bands_and_sheet(self):
+        with tempfile.TemporaryDirectory() as d:
+            img = np.full((200, 300, 3), (100, 100, 100), dtype=np.uint8)
+            img[0:80] = (200, 40, 40)                                # saturated decoration above
+            p = Path(d) / "env.png"
+            Image.fromarray(img).save(p)
+            b = self.run_mode(["bands", p, "--band", "above=0,0,300,80", "--band", "player=0,80,300,200"])["measurements"]["bands"]
+            self.assertGreater(b["above"]["chroma_mean"], b["player"]["chroma_mean"])
+            r = self.run_mode(["sheet", Path(d) / "sheet.png", p, p, "--height", "100"])
+            with Image.open(r["images"]["sheet"]) as s:
+                self.assertEqual(s.size, (2 * 150, 200))
+
     def test_hue_spread_grey_is_not_measured(self):
         with tempfile.TemporaryDirectory() as d:
             Image.fromarray(np.full((40, 40, 3), 128, dtype=np.uint8)).save(Path(d) / "g.png")

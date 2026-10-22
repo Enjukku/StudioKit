@@ -1230,6 +1230,15 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--clipped", type=float, default=0.98, help="relative luminance at or above this counts as clipped white")
     x.add_argument("--out-dir", type=Path)
     x.add_argument("--out", type=Path, help="also write the JSON here")
+    bd = sub.add_parser("bands", help="mean chroma per named band box, to compare bands with each other (J018 G3-P8)")
+    bd.add_argument("image")
+    bd.add_argument("--band", action="append", required=True, metavar="NAME=X0,Y0,X1,Y1", help="a named box (repeatable)")
+    bd.add_argument("--out", type=Path, help="also write the JSON here")
+    sh = sub.add_parser("sheet", help="one contact sheet: colour row over grey row at one height (viewing aid, J018 G3-P8)")
+    sh.add_argument("image", help="the sheet file to write")
+    sh.add_argument("inputs", nargs="+", help="the option images, in order")
+    sh.add_argument("--height", type=int, default=360, help="row height in px (the phone height)")
+    sh.add_argument("--out", type=Path, help="also write the JSON here")
     pk = sub.add_parser("peaks", help="where the top 5 %% of a subject's luminance or chroma sit (J018 G3-P8)")
     pk.add_argument("image")
     pk.add_argument("--mask", required=True, help="the subject's mask image (dark = subject), same size")
@@ -1349,6 +1358,48 @@ def _mask_image(path: str, shape) -> np.ndarray:
     if m.shape != shape:
         raise SystemExit(f"mask size {m.shape[::-1]} differs from the image {shape[::-1]}")
     return m
+
+
+def run_bands(a) -> dict:
+    """Mean chroma (max - min of R, G, B, 0-255) per named box: is the player band calmer than the band above it?
+
+    Compare the bands with each other, never with an absolute limit. A screening aid: characters, effects or the
+    HUD in a band, or an upper box that reaches into the sky, move it with no error (J018 art review)."""
+    path = Path(a.image)
+    img = load(path)
+    rgb = np.asarray(img.convert("RGB")).astype(int)
+    chroma = rgb.max(2) - rgb.min(2)
+    bands = {}
+    for spec in a.band:
+        name, _, box = spec.partition("=")
+        b = parse_box(box)
+        check_box(b, rgb.shape)
+        x0, y0, x1, y1 = b
+        bands[name] = {"box": list(b), "chroma_mean": round(float(chroma[y0:y1, x0:x1].mean()), 1)}
+    rec = base_record("bands", path, img, {"chroma": "max - min of R, G, B (0-255)", "bands": a.band})
+    rec["measurements"] = {"bands": bands}
+    return rec
+
+
+def run_sheet(a) -> dict:
+    """Option images side by side at one height, a colour row over a grey row. A viewing aid: the grey row is not the
+    measured luminance (that is value's luminance image)."""
+    from PIL import ImageOps  # noqa: PLC0415
+    h = a.height
+    ims = [Image.open(f).convert("RGB") for f in a.inputs]
+    ims = [i.resize((max(1, round(i.width * h / i.height)), h), Image.LANCZOS) for i in ims]
+    w = max(i.width for i in ims)
+    sheet = Image.new("RGB", (w * len(ims), h * 2), (128, 128, 128))
+    for k, i in enumerate(ims):
+        sheet.paste(i, (k * w, 0))
+        sheet.paste(ImageOps.grayscale(i).convert("RGB"), (k * w, h))
+    out = Path(a.image)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if any(out.resolve() == Path(f).resolve() for f in a.inputs):
+        raise SystemExit("the sheet would overwrite an input")
+    sheet.save(out)
+    return {"tool": "look_check", "version": VERSION, "check": "sheet", "inputs": [str(f) for f in a.inputs],
+            "params": {"height_px": h}, "images": {"sheet": str(out)}, "verdict": "viewing aid (no measurement)"}
 
 
 def run_peaks(a) -> dict:
@@ -1473,7 +1524,7 @@ def run_hue_spread(a) -> dict:
 
 RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb,
            "reserved": run_reserved, "hue-spread": run_hue_spread, "extremes": run_extremes,
-           "peaks": run_peaks, "detail": run_detail}
+           "peaks": run_peaks, "detail": run_detail, "bands": run_bands, "sheet": run_sheet}
 
 
 def main(argv: list[str]) -> int:
