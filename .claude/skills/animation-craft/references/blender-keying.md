@@ -76,17 +76,17 @@ assert len(fc.modifiers) == 1
 - **Playable preview:** for a timing or feel pick by the owner at a gate, render the clip's frame range at the game camera as a video: Workbench, `render.image_settings.media_type = 'VIDEO'` (Blender 5.x; codec under `render.ffmpeg`), the clip's fps, then `bpy.ops.render.render(animation=True)`; restore the settings in `finally`. It is for the owner to watch at normal speed; you do not inspect its frames. Until the owner picks, the take with the better recorded reasons is used as a PROPOSAL.
 
 ## 8. Reading the samples (the curve lines of `animation-design/references/review.md` §8b)
-`clip_check.py` measures length, loop seam, contact slide, events, ROM and pops. The other curve lines read the same samples file (`landmarks` and `controls` per frame) with a few lines of Python until the tool has a mode for them; report them as MEASURED unless the brief gives a tolerance.
+`clip_check.py` measures length, loop seam, contact slide, events, ROM and pops; with `--curves --root <root landmark> [--twin <left control>,<right control>]` it also gives gravity spacing (S-07), arcs (S-08, the longest straight run), hang time (S-09), overshoot (S-12), twinning (S-14) and the opening hold (B-10), all MEASURED (J019 G3-P8; a straight-run tolerance of 1 % of the path length; twinning reads turning frames in common, so check a high share on the stills). The lines marked (by hand) below still read the samples file (`landmarks` and `controls` per frame) with a few lines of Python; report them as MEASURED unless the brief gives a tolerance.
 | Line | Compute |
 | --- | --- |
 | Gravity spacing (S-07) | per-frame step length of the landmark; compare the mean step in the frames around the apex (height maximum) with the mean step near the ground |
 | Arcs (S-08) | for each landmark, the longest run of frames whose points stay within a small distance of the straight chord between the run's ends |
-| Stalled travel (S-06) | in the flight frames (no planted contact), runs where the root's horizontal step is near zero |
-| Driver leads (S-04) | the first frame each of two landmarks or controls moves more than a small threshold from its start value; the driver's frame comes first |
-| Push-off (S-05) | frames between the root's first rise and each foot's last contact frame |
+| Stalled travel (S-06) (by hand) | in the flight frames (no planted contact), runs where the root's horizontal step is near zero |
+| Driver leads (S-04) (by hand) | the first frame each of two landmarks or controls moves more than a small threshold from its start value; the driver's frame comes first |
+| Push-off (S-05) (by hand) | frames between the root's first rise and each foot's last contact frame |
 | Hang time (S-09) | frames from launch to apex vs apex to landing on the root height |
-| Landing depth (S-11) | the root height minimum after contact vs standing height and the stance limit in the rig sheet |
+| Landing depth (S-11) (by hand) | the root height minimum after contact vs standing height and the stance limit in the rig sheet |
 | Overshoot (S-12) | how many times the curve crosses its final value before settling, and by how much |
 | Twinning (S-14) | the share of key frames the left and right controls have in common; the difference of their mirrored angles at key frames |
-| Head lag (S-15) | the head's world yaw vs the chest's per frame; the lag in frames |
+| Head lag (S-15) (by hand) | the head's world yaw vs the chest's per frame; the lag in frames |
 | Hold (B-10) | the largest pose change over the first frames of the clip |

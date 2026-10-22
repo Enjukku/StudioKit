@@ -240,3 +240,40 @@ class ChannelValueTest(unittest.TestCase):
     def test_degrees_on_quaternion_refused(self):
         with self.assertRaises(ValueError):
             cc._channel_value(self._PB, "rotation_quaternion.x", "deg")
+
+
+class CurvesTest(unittest.TestCase):
+    """J018 G3-P8: the curve lines the animator computed by hand."""
+
+    def jump(self, gravity=True):
+        n = 21
+        hs = [(1 - ((i - 10) / 10) ** 2) * 2 for i in range(n)] if gravity else [2 - abs(i - 10) / 5 for i in range(n)]
+        root = [[i * 0.1, h, 0.0] for i, h in enumerate(hs)]
+        return {"clip": "jump", "fps": [30, 1], "frame_start": 1, "frame_end": n, "units": "studs",
+                "landmarks": {"root": root},
+                "controls": {"arm_L": [0.0] * 5 + [0.5, 1.2, 0.9, 1.05, 1.0] + [1.0] * 11,
+                             "arm_R": [0.0] * 5 + [-0.5, -1.2, -0.9, -1.05, -1.0] + [-1.0] * 11}}
+
+    def by(self, recs, check):
+        return [r for r in recs if r["check"] == check]
+
+    def test_gravity_spacing_and_hang_time(self):
+        g = self.by(cc.check_curves(self.jump(True), "root"), "gravity_spacing")[0]["measured"]
+        lin = self.by(cc.check_curves(self.jump(False), "root"), "gravity_spacing")[0]["measured"]
+        self.assertLess(g, 0.6)          # slow at the top, fast near the ground
+        self.assertGreater(lin, 0.9)     # even spacing
+        h = self.by(cc.check_curves(self.jump(True), "root"), "hang_time")[0]["measured"]
+        self.assertEqual(h["launch_to_apex_frames"], h["apex_to_landing_frames"])
+
+    def test_arc_and_overshoot_and_twins(self):
+        recs = cc.check_curves(self.jump(False), "root", twins=[("arm_L", "arm_R")])
+        self.assertGreaterEqual(self.by(recs, "arc_straight_run")[0]["measured"], 8)   # a linear jump has straight runs
+        ov = {r["item"]: r["measured"] for r in self.by(recs, "overshoot")}
+        self.assertGreater(ov["arm_L"]["crossings"], 0)
+        tw = self.by(recs, "twinning")[0]
+        self.assertEqual(tw["measured"], 1.0)
+        self.assertAlmostEqual(tw["where"]["mean_mirrored_difference"], 0.0)
+
+    def test_root_must_exist(self):
+        with self.assertRaises(ValueError):
+            cc.check_curves(self.jump(), "hips")

@@ -24,6 +24,8 @@ What each check means for an animator (every record: check, item, measured, unit
                   the contract), extra (reported, MEASURED), and the time offset in seconds and frames.
   rom             Per manifest control present in the samples: min/max reached vs the manifest min/max;
                   measured = the over-range amount in the manifest's units (0 = inside the range).
+  curves          With --curves --root <landmark> [--twin L,R]: hang time, gravity spacing, arcs (longest straight
+                  run), overshoot, twinning and the opening hold, all MEASURED (J018 G3-P8).
   pops            Per landmark: the largest frame-to-frame acceleration divided by the clip's median
                   acceleration (all landmarks, all inner frames). A report for finding hitches.
 
@@ -343,6 +345,93 @@ def check_pops(samples: dict, tol_ratio: float | None = None) -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------- curve lines (J018 G3-P8; always MEASURED)
+# The curve lines of animation-design references/review.md section 8b that animators computed by hand from the
+# samples file. Every record is MEASURED: the brief or the rig sheet gives a tolerance, this tool gives none.
+
+def check_curves(samples: dict, root: str, up: str = "y", twins: list[tuple[str, str]] | None = None,
+                 hold_frames: int = 4) -> list[dict]:
+    lm = samples.get("landmarks", {})
+    if root not in lm:
+        raise ValueError(f"--root {root!r} is not a landmark in the samples")
+    f0, ax = samples["frame_start"], AXES[up]
+    unit = samples.get("units", "units")
+    p = lm[root]
+    h = [q[ax] for q in p]
+    out = []
+    # hang time (S-09) and gravity spacing (S-07) on the root's height
+    apex = max(range(len(h)), key=h.__getitem__)
+    base = min(h[0], h[-1])
+    rise = next((i - 1 for i in range(1, apex + 1) if h[i] > base + 1e-6), apex)  # the last frame on the ground
+    land = next((i for i in range(apex, len(h)) if h[i] <= base + 1e-6), len(h) - 1)
+    out.append(_rec("hang_time", root, {"launch_to_apex_frames": apex - rise, "apex_to_landing_frames": land - apex},
+                    "frames", None, "MEASURED", [f0 + rise, f0 + apex, f0 + land]))
+    step = [_norm([p[i + 1][k] - p[i][k] for k in range(3)]) for i in range(len(p) - 1)]
+    near_apex = [step[i] for i in range(max(0, apex - 2), min(len(step), apex + 2))]
+    near_ground = step[max(0, rise - 1):rise + 2] + step[max(0, land - 3):land]
+    if near_apex and near_ground:
+        a_, g_ = statistics.mean(near_apex), statistics.mean(near_ground)
+        out.append(_rec("gravity_spacing", root, None if g_ == 0 else a_ / g_, "apex step / ground step", None, "MEASURED",
+                        [f0 + apex], apex_step=a_, ground_step=g_, step_unit=f"{unit}/frame",
+                        note="well under 1 = slow at the top, fast near the ground (gravity); about 1 = even spacing"))
+    # arcs (S-08): per landmark, the longest run of frames that stays on the straight chord between its ends
+    for name, q in lm.items():
+        path_len = sum(_norm([q[i + 1][k] - q[i][k] for k in range(3)]) for i in range(len(q) - 1))
+        tol = max(path_len * 0.01, 1e-6)
+        best = (0, 0)
+        i = 0
+        while i < len(q) - 2:
+            j = i + 2
+            while j < len(q):
+                a, b = q[i], q[j]
+                d = [b[k] - a[k] for k in range(3)]
+                dl = _norm(d)
+                if dl == 0:
+                    break
+                ok = all(_norm([(q[m][1] - a[1]) * d[2] - (q[m][2] - a[2]) * d[1], (q[m][2] - a[2]) * d[0] - (q[m][0] - a[0]) * d[2],
+                                (q[m][0] - a[0]) * d[1] - (q[m][1] - a[1]) * d[0]]) / dl <= tol for m in range(i + 1, j))
+                if not ok:
+                    break
+                j += 1
+            if j - 1 - i > best[1] - best[0]:
+                best = (i, j - 1)
+            i += 1
+        if path_len > 0:
+            out.append(_rec("arc_straight_run", name, best[1] - best[0], "frames", None, "MEASURED",
+                            [f0 + best[0], f0 + best[1]], note="frames moving on a straight line (a long run = a missing arc)"))
+    # overshoot (S-12): per control, crossings of the final value before settling and the largest excess
+    for cid, seq in samples.get("controls", {}).items():
+        if len(seq) < 3:
+            continue
+        fin, start = seq[-1], seq[0]
+        sign = 1 if fin >= start else -1
+        crossings = sum(1 for i in range(len(seq) - 1) if (seq[i] - fin) * (seq[i + 1] - fin) < 0)
+        excess = max(0.0, max(sign * (v - fin) for v in seq))
+        out.append(_rec("overshoot", cid, {"crossings": crossings, "largest_excess": excess}, "control units", None,
+                        "MEASURED", [f0 + max(range(len(seq)), key=lambda i: sign * (seq[i] - fin))]))
+    # twinning (S-14): left and right turning points on the same frames, and their mirrored difference
+    for left, right in twins or []:
+        ctl = samples.get("controls", {})
+        if left not in ctl or right not in ctl:
+            raise ValueError(f"--twin {left},{right}: both must be controls in the samples")
+        L, R = ctl[left], ctl[right]
+        turns = lambda s: {i for i in range(1, len(s) - 1) if (s[i] - s[i - 1]) * (s[i + 1] - s[i]) < 0}
+        tl, tr = turns(L), turns(R)
+        shared = len(tl & tr) / max(len(tl | tr), 1)
+        mirror = statistics.mean(abs(a + b) for a, b in zip(L, R))
+        out.append(_rec("twinning", f"{left}|{right}", round(shared, 3), "share of turning frames in common", None,
+                        "MEASURED", [f0 + i for i in sorted(tl & tr)], mean_mirrored_difference=mirror,
+                        note="near 1 with a small mirrored difference = twinned limbs (the same pose on both sides)"))
+    # opening hold (B-10): the largest pose change over the first frames
+    n = min(hold_frames, len(p) - 1)
+    if n > 0:
+        moves = {name: max(_norm([q[i][k] - q[0][k] for k in range(3)]) for i in range(1, n + 1)) for name, q in lm.items()}
+        worst = max(moves, key=moves.get)
+        out.append(_rec("opening_hold", worst, moves[worst], unit, None, "MEASURED", [f0, f0 + n],
+                        frames_checked=n, note="the largest landmark move over the first frames (a held start reads near 0)"))
+    return out
+
+
 def run_all(samples: dict, timing=None, manifest=None, tolerances: dict | None = None, up: str = "y") -> dict:
     """Every check. Summary counts, failing records, and the frames worth rendering."""
     validate(samples, up)
@@ -465,9 +554,21 @@ def main(argv: list[str]) -> int:
     p.add_argument("--tol", help="tolerances JSON (from the rig sheet / game profile / owner)")
     p.add_argument("--up", default="y", choices=sorted(AXES))
     p.add_argument("--out", help="write the full report JSON here")
+    p.add_argument("--curves", action="store_true", help="also the curve lines (hang time, gravity spacing, arcs, overshoot, "
+                   "twinning, opening hold), all MEASURED; needs --root")
+    p.add_argument("--root", help="the root (centre of mass) landmark for --curves")
+    p.add_argument("--twin", action="append", default=[], metavar="LEFT,RIGHT", help="a left and right control pair for twinning")
     args = p.parse_args(argv)
     try:
         report = run_all(_load(args.samples), _load(args.timing), _load(args.manifest), _load(args.tol), args.up)
+        if args.curves:
+            if not args.root:
+                raise ValueError("--curves needs --root")
+            extra = check_curves(_load(args.samples), args.root, args.up, [tuple(t.split(",", 1)) for t in args.twin])
+            report["results"] += extra
+            report["summary"]["MEASURED"] += len(extra)
+            if report["verdict"] == "PASS":
+                report["verdict"] = "MEASURED"
     except (OSError, ValueError, KeyError, TypeError, IndexError) as e:
         print(f"BAD INPUT: {type(e).__name__}: {e}")
         return 2
