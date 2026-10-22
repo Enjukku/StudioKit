@@ -38,6 +38,7 @@ One `<sequence>.shots.json` per sequence (format `film-shotlist/1`), kept at `co
 **What the commands do not judge** (found by running them on sample files):
 - `check` passes a shot list whose shots all have the same length: rhythm is read by you from its per-shot output (review line B-10).
 - `log-diff` without `--tol-ms` reports `measured` and exits 0 even when planned ids are missing from the log: read the "planned, not logged" line; with a tolerance, a missing id fails.
+- Optional shot fields `read` (the first-second read of the shot) and `value_key` (calm / rising / climax) keep the picture plan next to the timings; `table` prints both (J019 G3-P8).
 - `log-diff` compares each id with its planned time. `--tol-ms` alone is symmetric (a cue 33 ms early passes `--tol-ms 40`); add `--early-ms 16.7` for the one-sided sync window (−16.7 ms to +40 ms). It still judges against the plan, not against the picture event, so pair each `sync: locked` sound cue with its picture event from the same log and read the sign; a planned lead or delay keeps its offset in the cue's `note` (review line R-04).
 - `log-diff` matches ids exactly, except that a `shot:` or `cue:` prefix on a planned id is read as that id; any other spelling lists the shot as "planned, not logged" and "logged, not planned", still with verdict `measured` and exit 0. Log ids are the shot ids and `cues[].id` as in the file (`references/roblox-assembly.md` §3).
 

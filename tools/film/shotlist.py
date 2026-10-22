@@ -101,7 +101,8 @@ TOP_REQUIRED = ("format", "sequence", "title", "revision", "stage", "fps", "aspe
 TOP_OPTIONAL = ("start_frame", "fov_mode")
 SHOT_REQUIRED = ("id", "frames", "size", "angle", "lens", "movement", "action", "sound", "emotion", "transition")
 SHOT_TEXT = ("size", "angle", "movement", "action", "sound", "emotion", "transition")
-SHOT_OPTIONAL = ("rev", "purpose", "continuity", "approval", "evidence", "fov_deg", "camera", "notes")
+SHOT_OPTIONAL = ("rev", "purpose", "continuity", "approval", "evidence", "fov_deg", "camera", "notes",
+                 "read", "value_key")  # read: the first-second read; value_key: calm / rising / climax (J018 G3-P8)
 CUE_REQUIRED = ("id", "shot", "at", "kind", "sync")
 CUE_OPTIONAL = ("end", "note")
 LENS_KEYS = ("focal_mm", "sensor_mm", "sensor_fit")
@@ -586,7 +587,7 @@ def cmd_table(args) -> int:
     r = tl["rate"]
     out = header(data, tl)
     cols = ["id", "start-end (s)", "length (frames / s)", "size", "angle", "lens", "movement", "action",
-            "sound", "emotion", "transition", "purpose"]
+            "sound", "emotion", "transition", "purpose", "read", "value key"]
     out += ["| " + " | ".join(cols) + " |", "|" + "---|" * len(cols)]
     for s, t in zip(data["shots"], tl["shots"]):
         if t["offset"] is not None and t["frames"] is not None:
@@ -597,7 +598,8 @@ def cmd_table(args) -> int:
             span = UNKNOWN
         length = f"{t['frames']} / {dec(frame_time(t['frames'], r))}" if t["frames"] is not None else UNKNOWN
         cells = [s["id"], span, length, s["size"], s["angle"], lens_text(s["lens"], t["lens_fov_v_deg"]),
-                 s["movement"], s["action"], s["sound"], s["emotion"], s["transition"], s.get("purpose", "")]
+                 s["movement"], s["action"], s["sound"], s["emotion"], s["transition"], s.get("purpose", ""),
+                 s.get("read", ""), s.get("value_key", "")]
         out.append("| " + " | ".join(md(c) for c in cells) + " |")
     if rep.open:
         out += ["", "Open items:"] + [f"- {md(o['where'])}: {md(o['msg'])}" for o in rep.open]

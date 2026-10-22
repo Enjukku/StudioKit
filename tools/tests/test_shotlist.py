@@ -479,6 +479,13 @@ class CadenceTest(unittest.TestCase):
         self.assertTrue(any("consecutive shots of 45 frames" in w["msg"] for w in rep.warnings))
         self.assertFalse(rep.errors)
 
+    def test_read_and_value_key_are_known_fields(self):
+        d = plan([30, 54])
+        d["shots"][0]["read"] = "the gate is open"
+        d["shots"][0]["value_key"] = "rising"
+        rep, _ = sl.validate(d)
+        self.assertFalse([w for w in rep.warnings if "unknown field" in w["msg"]])
+
     def test_uneven_edit_is_quiet(self):
         rep, tl = sl.validate(plan([30, 54, 45, 81, 30]))
         self.assertEqual(tl["cadence"]["same_length_runs"], [])
