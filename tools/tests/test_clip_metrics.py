@@ -69,3 +69,16 @@ class FrameOrderTest(unittest.TestCase):
                 Image.fromarray(np.zeros((8, 8, 3), np.uint8)).save(folder / f"f{i}_{i * 33}ms.jpg")
             times, _ = cm.load_frames(folder)
             self.assertEqual(times, [99 * 33, 100 * 33, 101 * 33, 1000 * 33])
+
+
+class BackgroundFirstTest(unittest.TestCase):
+    """J018: an effect on screen in most frames becomes the median background and inverts the numbers."""
+
+    def test_idle_first_frame_background(self):
+        with tempfile.TemporaryDirectory() as d:
+            folder = Path(d)
+            write_clip(folder, [0] + [60] * 9)          # idle first frame, then the effect stays on in 90 % of frames
+            med = cm.measure(folder)["frames"]
+            first = cm.measure(folder, "first")["frames"]
+            self.assertLess(med[5]["coverage_pct"], 1)   # the median took the effect as background
+            self.assertGreater(first[5]["coverage_pct"], 5)

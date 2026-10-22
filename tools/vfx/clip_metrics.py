@@ -12,6 +12,8 @@ moves (`_follow`) are measured anyway and flagged `moving_camera` in the summary
 Usage:
   python tools/vfx/clip_metrics.py <capture_dir> [<capture_dir> ...]
   python tools/vfx/clip_metrics.py --all output/vfx/training-captures
+  python tools/vfx/clip_metrics.py --background-first <capture_dir>   (an idle first frame as the background: use it
+      when the effect stays on screen in more than half the frames, where the median background inverts every number)
 """
 
 from __future__ import annotations
@@ -97,15 +99,24 @@ def summarise(times: list[int], rows: list[dict], moving_camera: bool) -> dict:
     }
 
 
-def measure(folder: Path) -> dict:
+def measure(folder: Path, background_from: str = "median") -> dict:
+    """background_from: "median" (per-pixel median of all frames, the default) or "first" (the first frame, an idle
+    frame before the effect). The median inverts every number when the effect stays in more than half the frames
+    (J018 vfx review: an effect in 70 % of the frames); record an idle frame first and use "first" then."""
     times, frames = load_frames(folder)
-    background = np.median(frames, axis=0).astype(np.int16)
+    if background_from == "first":
+        background = frames[0].astype(np.int16)
+    elif background_from == "median":
+        background = np.median(frames, axis=0).astype(np.int16)
+    else:
+        raise ValueError(f"background_from must be median or first, got {background_from!r}")
     rows = [{"ms": t, **frame_metrics(f, background)} for t, f in zip(times, frames)]
     result = {
         "clip": folder.name,
         "summary": summarise(times, rows, "_follow" in folder.name),
         "frames": rows,
-        "settings": {"work_width": WORK_WIDTH, "diff_threshold": DIFF_THRESHOLD, "bright_luma": BRIGHT_LUMA},
+        "settings": {"work_width": WORK_WIDTH, "diff_threshold": DIFF_THRESHOLD, "bright_luma": BRIGHT_LUMA,
+                     "background": "first frame (idle)" if background_from == "first" else "median of all frames"},
     }
     (folder / "metrics.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
     return result
@@ -115,13 +126,16 @@ def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
         return 2
+    bg = "median"
+    if argv[0] == "--background-first":  # the first frame is an idle frame before the effect
+        bg, argv = "first", argv[1:]
     if argv[0] == "--all":
         root = Path(argv[1])
         folders = sorted(p for p in root.iterdir() if p.is_dir() and any(FRAME_RE.match(x.name) for x in p.iterdir()))
     else:
         folders = [Path(a) for a in argv]
     for f in folders:
-        s = measure(f)["summary"]
+        s = measure(f, bg)["summary"]
         print(f"{f.name}: peak {s['peak_coverage_pct']}% at {s['peak_ms']} ms, visible {s['visible_ms']} ms")
     return 0
 
