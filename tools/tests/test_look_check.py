@@ -343,6 +343,20 @@ class ReservedAndHueSpreadTest(unittest.TestCase):  # J018 G3-P8: the two colour
             self.assertLess(a["hue_sd_deg"], 3)
             self.assertGreater(b["hue_sd_deg"], 10)
 
+    def test_extremes_see_a_small_patch_p5_misses(self):
+        with tempfile.TemporaryDirectory() as d:
+            img = np.full((200, 300, 3), 70, dtype=np.uint8)
+            img[50:80, 50:80] = 0                                  # a 30x30 pure-black patch
+            img[150:160, 200:220] = 255                            # a white accent, excluded below
+            p = Path(d) / "env.png"
+            Image.fromarray(img).save(p)
+            ex = np.full((200, 300), 255, dtype=np.uint8)
+            ex[150:160, 200:220] = 0
+            Image.fromarray(ex).save(Path(d) / "ex.png")
+            m = self.run_mode(["extremes", p, "--box", "0,0,300,200", "--exclude", Path(d) / "ex.png", "--out-dir", d])["measurements"]
+            self.assertEqual(m["near_black_px"], 900)
+            self.assertEqual(m["clipped_px"], 0)
+
     def test_hue_spread_grey_is_not_measured(self):
         with tempfile.TemporaryDirectory() as d:
             Image.fromarray(np.full((40, 40, 3), 128, dtype=np.uint8)).save(Path(d) / "g.png")

@@ -1209,6 +1209,15 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", help="measure only inside this box")
     r.add_argument("--out-dir", type=Path)
     r.add_argument("--out", type=Path, help="also write the JSON here")
+    x = sub.add_parser("extremes", help="near-black and clipped-white pixel counts in a box (J018 G3-P8)")
+    x.add_argument("image")
+    x.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", required=True,
+                   help="the play-area box (repeatable: union)")
+    x.add_argument("--exclude", action="append", metavar="MASK", help="mask image (dark = excluded): named accents allowed to be white")
+    x.add_argument("--near-black", type=float, default=0.004, help="relative luminance below this counts as near-black")
+    x.add_argument("--clipped", type=float, default=0.98, help="relative luminance at or above this counts as clipped white")
+    x.add_argument("--out-dir", type=Path)
+    x.add_argument("--out", type=Path, help="also write the JSON here")
     h = sub.add_parser("hue-spread", help="spread of the CIELAB hue angle over 4x4 blocks inside one material box (J018 G3-P8)")
     h.add_argument("image")
     h.add_argument("--box", dest="boxes", action=BoxAction, type=parse_box, metavar="X0,Y0,X1,Y1", required=True,
@@ -1267,6 +1276,44 @@ def run_reserved(a) -> dict:
     return rec
 
 
+def run_extremes(a) -> dict:
+    """Near-black (luminance < --near-black) and clipped-white (>= --clipped) counts inside the box, outside the
+    exclusions. p5 and p95 cannot see a small black or white patch (J018: a 30x30 pure-black patch left p5 at 0.069).
+    A screening aid: a JPEG capture lifts or crushes the extremes (use PNG); the HUD, sky or characters in the box count."""
+    path = Path(a.image)
+    img = load(path)
+    rgb = np.asarray(img.convert("RGB"))
+    lum = relative_luminance(rgb)
+    region = np.zeros(lum.shape, dtype=bool)
+    for b in a.boxes:
+        check_box(b["box"], rgb.shape)
+        x0, y0, x1, y1 = b["box"]
+        region[y0:y1, x0:x1] = True
+    for e in a.exclude or []:
+        m = np.asarray(Image.open(e).convert("L"))
+        if m.shape != region.shape:
+            raise SystemExit(f"--exclude {e}: size {m.shape[::-1]} differs from the image {rgb.shape[1::-1]}")
+        region &= m >= 128
+    n = int(region.sum())
+    if n == 0:
+        raise SystemExit("nothing left to measure: the exclusions cover the whole box")
+    black = region & (lum < a.near_black)
+    white = region & (lum >= a.clipped)
+    rec = base_record("extremes", path, img, {"boxes": a.boxes, "exclude": a.exclude, "near_black_below": a.near_black,
+                                             "clipped_at_or_above": a.clipped, "metric": "WCAG relative luminance"})
+    rec["measurements"] = {"measured_px": n, "near_black_px": int(black.sum()), "near_black_share": round(float(black.sum()) / n, 6),
+                           "clipped_px": int(white.sum()), "clipped_share": round(float(white.sum()) / n, 6)}
+    if path.suffix.lower() in (".jpg", ".jpeg"):
+        rec["input_warning"] = "JPEG: compression lifts or crushes the extremes; measure a PNG capture"
+    marked = np.full(rgb.shape, 255, dtype=np.uint8)
+    marked[black] = (0, 0, 255)
+    marked[white] = (255, 0, 0)
+    out = out_path(path, a.out_dir, "extremes")
+    Image.fromarray(marked).save(out)
+    rec["images"]["marked"] = str(out)
+    return rec
+
+
 def run_hue_spread(a) -> dict:
     """Standard deviation of the CIELAB hue angle over 4x4 blocks inside one box (a flat or one-hue material reads low).
 
@@ -1307,7 +1354,7 @@ def run_hue_spread(a) -> dict:
 
 
 RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb,
-           "reserved": run_reserved, "hue-spread": run_hue_spread}
+           "reserved": run_reserved, "hue-spread": run_hue_spread, "extremes": run_extremes}
 
 
 def main(argv: list[str]) -> int:
