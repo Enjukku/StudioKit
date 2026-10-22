@@ -131,6 +131,8 @@ const S_SCOPE = schema({ affected_roles: STRS, timeline_revision: { type: 'integ
 
 // ---------------------------------------------------------------- briefs (rules/messages.md §2, built per call)
 const BASE_RULES = [
+  'Your turn ends only with the hand-back object, or with status blocked or needs-decision and the reason. Do not stop to give a progress summary, to offer to continue, or to list decisions for the lead.',
+  'Skills your role file preloads are already in your context; read only the other skills this brief names.',
   `Read ${DIR}/job-card.md first: the owner's words there are binding; this job's decisions are in ${DIR}/decisions.md.`,
   'Run the context packet named in `packet` and open only what it and this brief cite. Read your role\'s Roblox docs rows (knowledge/reference/roblox/docs-map.md) before you design or build; list every docs page and docs-map row you read in docs_read.',
   'Every file you build on is named with its revision in built_on (path@revN, or a git short hash). An input without @rev means its current revision: name the revision you used.',
@@ -169,7 +171,6 @@ function brief(r, o) {
   lines.push(who + '<intent>')
   lines.push(o.intent)
   if (GATE) lines.push(`The owner's words at the last gate: "${GATE}"`)
-  if (r.model === 'sonnet') lines.push('Think the problem through before you answer.')   // rules/messages.md §2 (M-18)
   lines.push('</intent>')
   lines.push('<spec>')
   lines.push(`id: ${JOB}-${o.id}`)

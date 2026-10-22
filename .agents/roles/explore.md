@@ -5,6 +5,7 @@ tier: mechanical
 effort: low
 tools: Read, Glob, Grep, Bash
 color: yellow
+memory: none
 ---
 
 <!-- Kit role (universal), 2026-10-20, orchestrator · claude-opus-5-5 · high. Built from rules/knowledge.md; DestructionSimulator's Explore read as a source (read-only). Revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (place in the job flow, sideways by tools, lessons in the hand-back). -->

@@ -39,3 +39,5 @@ In the `rules/messages.md` §3 format: `STATUS` first, `coverage` of every recor
 - Add `docs_read` (the docs pages and skill references you opened) and, when you have one, a `lesson` (type win / failure / owner-correction, cause, layer, what happened with the owner's corrections word for word, proposed change; fields in `templates/jobs/status-block.md`). The lead writes the inbox draft from it at the gate or at close; you do not write to `knowledge/inbox/`.
 
 Keep working until every record is written or you are blocked; report at the end.
+
+After writing, open each file again and check its frontmatter keys and every quoted owner sentence against the brief, word for word.

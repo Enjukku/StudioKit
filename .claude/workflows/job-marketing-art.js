@@ -154,6 +154,8 @@ const S_SCOPE = schema({ affected_roles: STRS, affected_files: STRS, revision: {
 
 // ---------------------------------------------------------------- briefs (rules/messages.md §2, built per call)
 const BASE_RULES = [
+  'Your turn ends only with the hand-back object, or with status blocked or needs-decision and the reason. Do not stop to give a progress summary, to offer to continue, or to list decisions for the lead.',
+  'Skills your role file preloads are already in your context; read only the other skills this brief names.',
   `Read ${DIR}/job-card.md first: the owner's words there are binding; this job's decisions are in ${DIR}/decisions.md.`,
   'Run the context packet named in `packet` and open only what it and this brief cite. Read your role\'s Roblox docs rows (knowledge/reference/roblox/docs-map.md) before you design or build; list every docs page and docs-map row you read in docs_read.',
   'Every file you build on is named with its revision in built_on (path@revN, or a git short hash). An input without @rev means its current revision: name the revision you used.',
@@ -226,7 +228,6 @@ function brief(r, o) {
   if (o.notInScope) lines.push(`not_in_scope: [${o.notInScope.join(', ')}]`)
   lines.push('rules:')
   BASE_RULES.concat(JOB_RULES).concat([imageRule(o.images === 'edit' ? 'edit' : !!o.images)]).concat(o.images && STAGE !== 'direction' ? [NO_REF_RULE] : []).concat(o.rules || [])
-    .concat(r.model === 'opus' ? [] : ['Think the problem through before you answer.'])   // rules/messages.md §2: Sonnet and Haiku agents
     .forEach(x => lines.push(`  - ${x}`))
   lines.push(`deliver: ${o.deliver}`)
   lines.push('checks:')

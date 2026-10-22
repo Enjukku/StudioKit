@@ -84,7 +84,7 @@ return: hand-back to vfx-designer
 - Write `fixed`, `rules`, `not_in_scope` and the checks **in full words** (M-20).
 - **Loose brief** (much in `open`): tell the receiver to look through `refs` and nearby files before it acts (M-14).
 - **`time_budget`** (optional, seconds): advice, not a stop; not on money, saves or security work (M-15).
-- **Workflows:** an `agent()` call that returns a hand-back uses `templates/jobs/handback.schema.json` as its `schema` (M-16), with evidence fields **before** answer fields (M-29). For a Sonnet or Haiku agent, add "Think the problem through before you answer." (M-18).
+- **Workflows:** an `agent()` call that returns a hand-back uses `templates/jobs/handback.schema.json` as its `schema` (M-16), with evidence fields **before** answer fields (M-29). Sonnet roles carry "Think the problem through before you answer." at the end of their role file (Anthropic: end of the system prompt, for JSON answers); briefs do not repeat it, and Haiku does not get it (prompt text does not steer its thinking; effort does).
 - **Deliverable names:** never `report*`, `summary*`, `findings*` or `analysis*` `.md` (M-30). Name the file by its content.
 - **Independent first work:** a direction proposal brief never includes another lead's proposal; a review brief points to the artifact and its acceptance criteria first and the maker's hand-back second (J016 K1).
 
