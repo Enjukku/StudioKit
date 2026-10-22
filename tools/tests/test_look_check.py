@@ -402,6 +402,27 @@ class ReservedAndHueSpreadTest(unittest.TestCase):  # J018 G3-P8: the two colour
             with Image.open(r["images"]["sheet"]) as s:
                 self.assertEqual(s.size, (2 * 150, 200))
 
+    def test_values3_iou_and_crop(self):
+        with tempfile.TemporaryDirectory() as d:
+            img = np.zeros((80, 120, 3), dtype=np.uint8)
+            img[:, 40:80] = 128
+            img[:, 80:] = 230
+            p = Path(d) / "m.png"
+            Image.fromarray(img).save(p)
+            v = self.run_mode(["values3", p, "--out-dir", d])["measurements"]["dark_mid_light_share"]
+            self.assertEqual([round(x, 2) for x in v], [0.33, 0.33, 0.33])
+            a = np.full((80, 120), 255, np.uint8)
+            a[:, :60] = 0
+            b = np.full((80, 120), 255, np.uint8)
+            b[:, 30:90] = 0
+            Image.fromarray(a).save(Path(d) / "a.png")
+            Image.fromarray(b).save(Path(d) / "b.png")
+            self.assertEqual(self.run_mode(["iou", Path(d) / "a.png", Path(d) / "b.png"])["measurements"]["frame_iou"], 0.333)
+            ok = self.run_mode(["crop", p, Path(d) / "c.png", "--box", "0,0,80,80", "--size", "40x40"])
+            self.assertTrue(Path(ok["images"]["crop"]).exists())
+            with self.assertRaises(SystemExit):
+                lc.main(["crop", str(p), str(Path(d) / "c2.png"), "--box", "0,0,100,80", "--size", "40x40"])
+
     def test_hue_spread_grey_is_not_measured(self):
         with tempfile.TemporaryDirectory() as d:
             Image.fromarray(np.full((40, 40, 3), 128, dtype=np.uint8)).save(Path(d) / "g.png")

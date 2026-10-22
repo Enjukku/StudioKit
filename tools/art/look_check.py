@@ -1239,6 +1239,21 @@ def build_parser() -> argparse.ArgumentParser:
     sh.add_argument("inputs", nargs="+", help="the option images, in order")
     sh.add_argument("--height", type=int, default=360, help="row height in px (the phone height)")
     sh.add_argument("--out", type=Path, help="also write the JSON here")
+    v3 = sub.add_parser("values3", help="3-value study: squint, two grey cuts, group shares (J018 G3-P8)")
+    v3.add_argument("image")
+    v3.add_argument("--cuts", type=int, nargs=2, metavar=("CUT1", "CUT2"), help="two grey levels (default 85 170)")
+    v3.add_argument("--out-dir", type=Path)
+    v3.add_argument("--out", type=Path, help="also write the JSON here")
+    io_ = sub.add_parser("iou", help="frame IoU of two masks of the same frame (J018 G3-P8)")
+    io_.add_argument("mask_a")
+    io_.add_argument("mask_b")
+    io_.add_argument("--out", type=Path, help="also write the JSON here")
+    cr = sub.add_parser("crop", help="a planned crop, resized to the destination; stops on a wrong aspect (J018 G3-P8)")
+    cr.add_argument("image")
+    cr.add_argument("output")
+    cr.add_argument("--box", type=parse_box, required=True, metavar="X0,Y0,X1,Y1", help="the crop box in master pixels")
+    cr.add_argument("--size", type=lambda s: tuple(int(v) for v in s.lower().split("x")), required=True, metavar="WxH")
+    cr.add_argument("--out", type=Path, help="also write the JSON here")
     pk = sub.add_parser("peaks", help="where the top 5 %% of a subject's luminance or chroma sit (J018 G3-P8)")
     pk.add_argument("image")
     pk.add_argument("--mask", required=True, help="the subject's mask image (dark = subject), same size")
@@ -1402,6 +1417,59 @@ def run_sheet(a) -> dict:
             "params": {"height_px": h}, "images": {"sheet": str(out)}, "verdict": "viewing aid (no measurement)"}
 
 
+def run_values3(a) -> dict:
+    """A 3-value study: the image squinted (shrunk 4x, box filter), grey levels split at two cuts (default 85 and 170)
+    into dark, mid and light; each group's share and the share within 6 levels of a cut (a muddy read sits there).
+    Use the art bible's cut points when it names them; its value bands are per-layer ranges, not cuts."""
+    cuts = sorted(a.cuts) if a.cuts else [85, 170]
+    if len(cuts) != 2 or not 0 < cuts[0] < cuts[1] < 255:
+        raise SystemExit("--cuts takes two different grey levels between 0 and 255")
+    path = Path(a.image)
+    img = load(path)
+    g0 = img.convert("L")
+    g = np.asarray(g0.resize((max(1, g0.width // 4), max(1, g0.height // 4)), Image.BOX)).astype(int)
+    groups = np.digitize(g, cuts)
+    near = float((np.abs(g[..., None] - np.array(cuts)) <= 6).any(-1).mean())
+    rec = base_record("values3", path, img, {"cuts": cuts, "squint": "shrunk 4x, box filter", "near_cut_levels": 6})
+    rec["measurements"] = {"dark_mid_light_share": [round(float((groups == k).mean()), 3) for k in range(3)],
+                           "near_a_cut_share": round(near, 3)}
+    out = out_path(path, a.out_dir, "3value")
+    Image.fromarray(np.array([40, 128, 220], np.uint8)[groups]).save(out)
+    rec["images"]["study"] = str(out)
+    return rec
+
+
+def run_iou(a) -> dict:
+    """Frame IoU of two masks of the same frame (no alignment): how much two options' hero areas overlap."""
+    m1, m2 = (mask_from_mask_image(load(Path(p))) for p in (a.mask_a, a.mask_b))
+    if m1.shape != m2.shape:
+        raise SystemExit(f"the masks differ in size: {m1.shape[::-1]} vs {m2.shape[::-1]} (frame IoU needs one frame)")
+    union = int(np.logical_or(m1, m2).sum())
+    return {"tool": "look_check", "version": VERSION, "check": "iou", "inputs": [a.mask_a, a.mask_b],
+            "measurements": {"frame_iou": round(float((m1 & m2).sum()) / max(1, union), 3), "union_px": union},
+            "verdict": "measured"}
+
+
+def run_crop(a) -> dict:
+    """A planned crop: the box (master pixels) resized to the destination size. Stops when the box's aspect is not the
+    destination's (never stretch) or the box leaves the image (it would pad with black). Run it on the hero mask too,
+    with the same box and size: a crop needs a mask of its own size."""
+    img = Image.open(a.image)
+    x0, y0, x1, y1 = a.box
+    w, h = a.size
+    if not (0 <= x0 < x1 <= img.width and 0 <= y0 < y1 <= img.height):
+        raise SystemExit("the box leaves the image")
+    if abs((x1 - x0) * h - (y1 - y0) * w) > max(w, h):
+        raise SystemExit(f"box {x1 - x0}x{y1 - y0} is not {w}:{h}: never stretch; fix the box")
+    out = Path(a.output)
+    if out.resolve() == Path(a.image).resolve():
+        raise SystemExit("the crop would overwrite the input")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.crop((x0, y0, x1, y1)).resize((w, h), Image.LANCZOS).save(out)
+    return {"tool": "look_check", "version": VERSION, "check": "crop", "input": a.image, "box": list(a.box),
+            "size_px": [w, h], "images": {"crop": str(out)}, "verdict": "written"}
+
+
 def run_peaks(a) -> dict:
     """Where the brightest (luminance) or most colourful (chroma = max - min of R, G, B) top 5 % of a subject sit.
 
@@ -1524,7 +1592,8 @@ def run_hue_spread(a) -> dict:
 
 RUNNERS = {"value": run_value, "contrast": run_contrast, "silhouette": run_silhouette, "palette": run_palette, "thumb": run_thumb,
            "reserved": run_reserved, "hue-spread": run_hue_spread, "extremes": run_extremes,
-           "peaks": run_peaks, "detail": run_detail, "bands": run_bands, "sheet": run_sheet}
+           "peaks": run_peaks, "detail": run_detail, "bands": run_bands, "sheet": run_sheet,
+           "values3": run_values3, "iou": run_iou, "crop": run_crop}
 
 
 def main(argv: list[str]) -> int:
