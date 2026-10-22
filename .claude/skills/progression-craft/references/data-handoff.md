@@ -48,5 +48,6 @@ Live-ops side of this hand-off: `live-ops-craft/references/handoffs.md` §3.
 - **Balances round down, prices and requirements round up,** at the shown digits, so a shown balance never looks affordable when it is not. Same suffix table everywhere (K, M, B, T; one place in the data), the same significant digits for a balance and the price next to it.
 - Count-ups and flying coins are decoration over the true value: they end on the exact number; the buy button checks the true balance at once.
 - Gains read as gains; spending is neutral (danger colours stay for danger).
+- The fixtures come from the tool, never by hand: `curves.display_round(x, sig, "floor" | "ceil")` in `tools/progression/curves.py` (the suffix table is `DISPLAY_SUFFIXES`, one place).
 - Fixtures I send with the rule (3 significant digits): balance 1,049,999 shows 1.04M next to a price of 1,050,000 shown as 1.05M (half-up would show both as 1.05M); balance 999.5 shows 999 next to a price of 1,000 shown as 1.00K (half-up would show 1000); price 12,350,000 shows 12.4M.
 - Odds have their own display rule (rounding digits and disclaimer): `platform-policy`.

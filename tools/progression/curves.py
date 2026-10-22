@@ -109,6 +109,37 @@ def round_price(x, rule: str):
     return round(x)  # Python's round() on int, Fraction and float is round-half-to-even
 
 
+DISPLAY_SUFFIXES = ("", "K", "M", "B", "T")  # one place: the suffix table every UI number uses (data-handoff §5)
+
+
+def display_round(x, sig: int = 3, way: str = "floor") -> str:
+    """What the UI shows for x (data-handoff §5): `sig` significant digits with the suffix table, rounded `floor`
+    for balances and `ceil` for prices and requirements, so a shown balance never looks affordable when it is not.
+    Display only: logic, affordability and saves use the exact value. Exact (Fraction), never half-up.
+
+    >>> display_round(1_049_999, 3, "floor"), display_round(1_050_000, 3, "ceil")
+    ('1.04M', '1.05M')
+    """
+    _req(way in ("floor", "ceil"), f"way must be floor or ceil, got {way!r}")
+    _req(_is_int(sig) and sig >= 1, "sig must be a whole number >= 1")
+    v = Fraction(x) if isinstance(x, Rational) else Fraction(str(x))
+    _req(v >= 0, "display_round takes a value >= 0 (show the sign outside)")
+    k = 0
+    while k < len(DISPLAY_SUFFIXES) - 1 and v >= Fraction(1000) ** (k + 1):
+        k += 1
+    while True:
+        scaled = v / Fraction(1000) ** k
+        int_digits = len(str(math.floor(scaled))) if scaled >= 1 else 1
+        dec = max(0, sig - int_digits) if k > 0 else 0  # whole units below 1000 never show decimals
+        q = Fraction(10) ** dec
+        r = (math.floor(scaled * q) if way == "floor" else math.ceil(scaled * q))
+        shown = Fraction(r) / q
+        if shown >= 1000 and k < len(DISPLAY_SUFFIXES) - 1:  # a ceil crossed into the next suffix: 1000K -> 1.00M
+            k += 1
+            continue
+        return f"{float(shown):.{dec}f}{DISPLAY_SUFFIXES[k]}"
+
+
 # ---------------------------------------------------------------- curves (paper section 3 table)
 
 def affine(a, b, n):

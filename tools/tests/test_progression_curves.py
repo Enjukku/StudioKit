@@ -238,3 +238,21 @@ class PaidRandom(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DisplayRound(unittest.TestCase):
+    """J018 G3-P8: the UI number display rule (data-handoff section 5) from the tool."""
+
+    def test_fixtures(self):
+        from curves import display_round as d
+        self.assertEqual(d(1_049_999, 3, "floor"), "1.04M")   # balance rounds down
+        self.assertEqual(d(1_050_000, 3, "ceil"), "1.05M")    # price rounds up
+        self.assertEqual(d(999.5, 3, "floor"), "999")
+        self.assertEqual(d(1000, 3, "ceil"), "1.00K")
+        self.assertEqual(d(12_350_000, 3, "ceil"), "12.4M")
+        self.assertEqual(d(999_999, 3, "ceil"), "1.00M")      # a ceil that crosses into the next suffix
+
+    def test_bad_input(self):
+        from curves import display_round as d
+        with self.assertRaises(ValueError):
+            d(5, 3, "half_up")
