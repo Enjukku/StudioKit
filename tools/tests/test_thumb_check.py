@@ -135,6 +135,17 @@ class SheetNameTest(Cli):  # J018: another run never overwrites a sheet
         self.assertTrue(Path(a).exists() and Path(b).exists())
 
 
+class BoxCountTest(Cli):  # J018: --box counts boxes, not pieces
+    def test_box_count_is_not_a_piece_count(self):
+        p = self.save(discs_on(512, 512, [(256, 256)], 150))
+        rec = self.run_cli(["icon", p, "--box", "10,10,100,100", "--box", "300,300,400,400",
+                            "--max-components", "1", "--tolerance-source", "test"])
+        mo = rec["measurements"]["one_clear_moment"]["small"]
+        self.assertEqual(mo["boxes_given"], 2)
+        self.assertNotIn("component_count", mo)
+        self.assertEqual(rec["verdict"], "not-measured")
+
+
 class MomentTest(Cli):
     def test_one_vs_three_subjects(self):
         one = self.run_cli(["icon", self.save(discs_on(512, 512, [(256, 256)], 150), "one.png")])

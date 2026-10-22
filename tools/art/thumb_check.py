@@ -282,7 +282,7 @@ def apply_tolerances(rec: dict, rules: list[dict], source: str) -> None:
     rec["rule"] = {"rules": results, "source": source}
     if any(r["pass"] is None for r in results):
         rec["verdict"] = "not-measured"
-        rec["not_measured_reason"] = m["subject_reason"]
+        rec["not_measured_reason"] = m["subject_reason"] or m["one_clear_moment"]["small"].get("component_count_note")
     else:
         rec["verdict"] = "pass" if all(r["pass"] for r in results) else "fail"
 
@@ -339,6 +339,15 @@ def run(a) -> dict:
     for k in ("master", "small"):
         if meas["contrast"][k]["subject"] is None:
             meas["contrast"][k]["subject_status"] = not_measured(reason or "no subject")
+    if src == "box" and not getattr(a, "box_key", False):
+        # J018: without --box-key every box is one solid piece, so the count is the number of boxes given
+        for k in ("master", "small"):
+            mo = meas["one_clear_moment"][k]
+            if mo.get("status") == "measured":
+                mo["boxes_given"] = len(a.boxes)
+                mo["component_count_from_boxes"] = mo.pop("component_count")
+                mo["component_count_note"] = ("--box without --box-key: each box is one solid piece, so this counts "
+                                              "the boxes given, not the subject's pieces; use --mask or --box-key")
     if getattr(a, "bottom_band", None) is not None:
         meas["bottom_band"] = bottom_band(mask, a.bottom_band) if mask is not None else {
             **not_measured(reason), "band_percent": a.bottom_band, "source": SRC["thumb_bottom_metadata"]}
