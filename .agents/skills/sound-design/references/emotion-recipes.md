@@ -75,7 +75,7 @@ S-01, S-02, S-18, S-25, S-183 and S-186 moved here from SKILL.md §3 in J018; th
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
-| S-01 | Move several cues the same way (mode, tempo, register, dynamics, articulation, timbre); they are mostly additive. Confirm at a check-in before locking. | study |
+| S-01 | Move several cues the same way (mode, tempo, register, dynamics, articulation, timbre); they are mostly additive. The owner's play-test confirms or flags it; a flag becomes a lesson. | study |
 | S-02 | For a global audience lead with tempo, register, dynamics and roughness; major/minor is an extra cue only (no mode effect in non-Western listeners). | study |
 | S-183 | Each cue names one primary player outcome and records perceived and induced emotion separately. Reject cards that swap in arousal, liking, spending or playtime. | inference |
 | S-25 | Payoff = expectation, then a twist: a learned pattern broken once, or a vague build resolved by the expected sound. | study |

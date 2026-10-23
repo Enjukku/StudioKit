@@ -1,19 +1,35 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by J020 step 8 sound-designer · claude-opus-5-5 · high · 2026-10-23: takes per round (J020-D9), regenerate rounds (J020-D7), ElevenLabs facts (2026-10-23).
 
 # AI sound generation prompts
 
-Vendor facts (M-48, ElevenLabs docs read 2026-10-10; re-check before use): text-to-sound-effects endpoint, model
-`eleven_text_to_sound_v2`, duration 0.5-30 s (the endpoint minimum 0.5 s beats the overview's 0.1 s),
-prompt_influence 0-1 (default 0.3), `loop` on v2 only. Describe events in order.
+**Note (J020):** the prompt rules below will be rebuilt from a sound-prompting source the owner approves; until then only the takes rule, the vendor facts and the page's prompt rules below changed. (The owner's conversational-agents prompting guide covers LLM system prompts, not sound prompts.)
+
+Vendor facts (ElevenLabs; re-check before use; `soundbench generate` (being built) logs the real values from each
+response):
+- Sound-effects API (`/v1/sound-generation`, API reference read 2026-10-23, `editor-design.md` §8): models `eleven_text_to_sound_v2` (default) and `eleven_text_to_sound_v3` (which gives better game sounds is tested on the first real cue set); `prompt_influence` 0-1 (default 0.3); `loop`; `output_format` defaults to `mp3_44100_128`; "MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM and WAV formats with 44.1kHz sample rate requires you to be subscribed to Pro tier or above". `generate` asks for WAV 44.1 kHz first, then falls back to `mp3_44100_192`, then `mp3_44100_128`, and logs the format it got. Billing is in the `character-cost` response header.
+- Capabilities page "Sound effects" (read 2026-10-23, https://elevenlabs.io/docs/overview/capabilities/sound-effects): `prompt_influence` high gives a literal reading, low a creative reading with more variety; `loop` gives seamless repeat playback.
+- **Conflicting facts, unchecked: step 7 measures them from the response** (the `character-cost` header and the returned file):
+
+| Fact | API reference / GreatWallSim (`editor-design.md` §8) | Capabilities page (2026-10-23) |
+| --- | --- | --- |
+| Duration | `duration_seconds` 0.5-30 s | 0.1-30 s |
+| Cost | about 11 credits per generated second (GreatWallSim audio plan §11, measured) | 40 credits per second when the duration is set |
+| Output | PCM or WAV at 44.1 kHz needs the Pro tier; default MP3 44.1 kHz 128 kbps | WAV at 48 kHz for effects that do not loop |
+
+**Prompt rules from the capabilities page** (kept short; no template is built on them until the source is approved):
+- A simple effect gets a clear, short description: "Glass shattering on concrete".
+- A sequence is described in order: "Footsteps on gravel, then a metallic door opens".
+- Musical parts give tempo and key: "90s hip-hop drum loop, 90 BPM", "Vintage brass stabs in F minor".
+- Audio terms the model understands: impact, whoosh, ambience, one-shot, loop, stem, braam, glitch, drone.
 
 ## A. Rules
 
 | ID | Rule | Evidence |
 | --- | --- | --- |
-| S-123 | One-shots 0.5-2 s; prompt_influence 0.5-0.7; 2-3 texture descriptions per layer, 4 takes each, at least 3 candidates per layer before a pick, keep 1-2; one odd variant per layer (reversed, extreme pitch, unrelated texture) (SC-14); `loop` only for beds of 10-30 s. (P settings) | practice + inference |
+| S-123 | One-shots 0.5-2 s; prompt_influence 0.5-0.7; 2-3 texture descriptions per layer. **Takes per round by the card's tier (J020-D9, replaces "4 takes per texture"):** minor 3, frequent 4 (kept as the variant set), important 6, spread across the texture descriptions; the layers of an important sound generated separately, one prompt each; one take of the round an odd variant (reversed, extreme pitch, unrelated texture) (SC-14). Rank against the card's targets (`craft-process.md` §5); no take passes after its fixable steps → change the prompt and regenerate, never pile on edits; at most 3 rounds per cue, then the cue goes to the owner with its numbers (J020-D7). Good unpicked takes go to the game library. `loop` only for beds of 10-30 s. (P settings) | practice + inference + J020 |
 | S-124 | Prompt anatomy: sound type + source and material + action + size and weight + shape ("sharp transient, fast decay") + space ("dry, close-up") + style + isolation ("single one-shot, no music, no background noise") + pitch hint. One event per prompt; sequences in order. Describe the texture, not only the object ("dry palm leaves crunching slowly" for ice); add motion words ("spinning", "swirling", "passing") for magic, travel and loop layers (SC-10). | practice + inference |
-| S-125 | Ask for dry, isolated sound: the designed tail and glue are added and baked in the design pass, the room comes from the zone's live reverb (SC-08). | inference |
-| S-126 | Clean every clip: trim silence to the transient, fade the last 10-30 ms, remove hiss, hum and rumble, peak to −1 dBFS, loudness-match to its family, check clipping; this is step 1 of the design-pass order (`craft-process.md` §6); measure with `review.md` §4. | inference |
+| S-125 | Ask for dry, isolated sound: the designed tail and glue are added and baked in the design pass (`soundbench`), the room comes from the zone reverb in Roblox (SC-08, J020-D10). | inference |
+| S-126 | Clean every clip: trim silence to the transient, fade the last 10-30 ms, remove hiss, hum and rumble, peak to −1 dBFS, loudness-match to its family, check clipping; this is the clean step of the recipe's design pass and its edit pass (`craft-process.md` §6), rendered by `soundbench render`; measure with `review.md` §4. | inference |
 | S-127 | Detune-check pitched clips against the music key; shift to the nearest scale note (±50 cents or less). | inference |
 | S-128 | Other tools (leads only): Stable Audio Open guidance about 7.0, about 100 steps; AudioGen about 10 s at 16 kHz (upsample). Read model cards first. | lead |
 | S-216 | Every AI clip carries a rights manifest: provider, model, date, plan or contract evidence, input provenance, allowed use, attribution. Check commercial eligibility at generation time (free plans may be non-commercial). | lead |
@@ -23,11 +39,11 @@ prompt_influence 0-1 (default 0.3), `loop` on v2 only. Describe events in order.
 ```
 [sound type], [source and material] [action], [size and weight], [shape: attack, decay, length],
 [space: dry, close-up], [style], [pitch hint], single isolated one-shot, no music, no background noise
-duration: <s>   prompt_influence: <0-1>   candidates: 4   loop: false
+duration: <s>   prompt_influence: <0-1>   takes this round: 3 | 4 | 6 (minor | frequent | important)   loop: false
 ```
 
-Variants: re-roll with one word changed (material adjective, size, action verb), not by raising influence.
-Layers: generate each layer job (body, tick, crunch, report, signature; SC-05) or transient, body and tail (S-76) as its own prompt when the mix needs control of each.
+Variants: a frequent cue's round of 4 is its variant set; a new round changes one word (material adjective, size, action verb), not the influence alone.
+Layers: an important sound's layer jobs (body, tick, crunch, report, signature; SC-05, or transient, body and tail, S-76) are always generated separately, one prompt each (J020-D9), then mixed with `layers` and `align`.
 Texture-first: for one layer, write 2-3 texture descriptions that might sound like it, not only its name (ice: "dry palm leaves crunching slowly", "foil crumpling slowly", "glass bottle tink").
 
 ## C. Examples (all settings P)
@@ -41,9 +57,9 @@ Texture-first: for one layer, write 2-3 texture descriptions that might sound li
 | Honest no-gain cue | "Soft low muted descending synth tone, one smooth downward glide about an octave, warm, not harsh, short, dry, isolated, no music" | 1.5 s, 0.5 |
 | Dread bed (loop) | "Distant low industrial hum with slow uneven metallic groans far away, dark empty concrete building, no melody, no music, seamless" | 20 s, 0.4, loop: true |
 | Scare stab | "Sudden harsh unrecognisable metallic screech with a deep boom underneath, very fast attack, chaotic noisy texture, 3 second decaying tail, isolated, no music" | 3 s, 0.6 |
-| Ice slow tail (texture, not noun) | "Dry palm leaves crunching slowly, then settling, crisp brittle texture, slowing down, dry, close-up, isolated one-shot, no music" (×4; also "foil crumpling slowly") | 1.5 s, 0.6 |
+| Ice slow tail (texture, not noun) | "Dry palm leaves crunching slowly, then settling, crisp brittle texture, slowing down, dry, close-up, isolated one-shot, no music" (important layer: 6 takes across this and "foil crumpling slowly") | 1.5 s, 0.6 |
 | Magic travel loop (motion inside) | "Bright glassy shimmer spinning and swirling, slow wobble, airy, no impact, dry, seamless, no music" | 10 s, 0.5, loop: true |
-| Footstep set | "Single heavy boot step on wet gravel, crunchy, close-up, dry, isolated one-shot, no music" (×4 re-rolls: gravel → dirt, wood, metal) | 0.5 s, 0.6 |
+| Footstep set | "Single heavy boot step on wet gravel, crunchy, close-up, dry, isolated one-shot, no music" (frequent: 4 takes per material, kept as its variant set; one prompt per material: gravel, dirt, wood, metal) | 0.5 s, 0.6 |
 
 Never prompt for a named film, game, brand or famous logo sound (S-197). Tag every generated asset's status as not
-auditioned until the owner has heard it at a check-in on the device matrix (an agent cannot listen; S-217).
+auditioned until the owner has played it in a play-test (an agent cannot listen; S-217; J020-D3).

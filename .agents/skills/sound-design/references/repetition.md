@@ -14,7 +14,7 @@ jitter (SKILL.md SC-12).
 4. Retrigger floor (S-94); above about 8 plays/s switch to start + loop + tail (S-95); above 15 events/s aggregate
    into one grouped sound per window (S-66, S-194).
 5. Voice cap and steal policy (S-152).
-6. Machine-gun test (S-96), then a real-loop test (S-205). I cannot listen: the 10 s storm and the real loop are check-in C listens (`review.md` §2); the 1,000-selection fixture (S-204) and the debug cue log at the burst rate (`review.md` R-41) are mine.
+6. Machine-gun test (S-96), then a real-loop test (S-205). I cannot listen: how the 10 s storm and the real loop sound is the owner's play-test (`review.md` §2), never a listening session I ask for; the 1,000-selection fixture (S-204), the variant files' level spread (R-31) and the debug cue log at the burst rate (`review.md` R-41) are mine.
 7. If the cue is heard 1,000+ times a session, keep it short, quiet relative to rare cues, and meaningful (S-97, S-98).
 8. Beds and long loops: splice several takes with crossfades and a short fade on every splice (`craft-process.md` §6); seam ratio and length measured (`review.md` R-26).
 

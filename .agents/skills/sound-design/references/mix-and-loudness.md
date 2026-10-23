@@ -3,8 +3,8 @@
 # Mix, loudness, music system and player options
 
 S-102/S-207/S-104 live in §A, S-107/S-108 and S-109/S-211 in §B (moved from SKILL.md in J018); S-18 in
-`emotion-recipes.md` §C. Carry distance (SC-07) and space (SC-08): SKILL.md §3. Roblox objects for buses, compressors and emitters:
-`roblox-audio.md`.
+`emotion-recipes.md` §C. Carry distance (SC-07) and space (SC-08): SKILL.md §3. Roblox objects for buses, faders and emitters, 2D or 3D and the four duck questions:
+`roblox-audio.md` §B, §H. No compressor or limiter in Roblox (J020-D1).
 
 ## A. Loudness and measurement
 
@@ -18,7 +18,7 @@ S-102/S-207/S-104 live in §A, S-107/S-108 and S-109/S-211 in §B (moved from SK
 | S-209 | dBFS (sample peak), dBTP (true peak), LUFS (programme loudness), dB SPL (at the ear) differ. Roblox Volume is an amplitude multiplier: Volume = 10^(dB/20). Never label Volume or AudioAnalyzer RMS as LUFS or SPL. | = + practice |
 | S-210 | Normalise within a cue family, not every asset to one LUFS number. Keep original, edited master and runtime export; listen to the platform transcode. | inference |
 | S-121 | One project reference level; waiting areas never exceed it and stay quiet enough for speech. | practice (Disney) |
-| S-112 | Compress heavy sounds at the source; keep a limiter on the master always. | practice (Crytek) |
+| S-112 | Compress heavy sounds at the source (baked, `soundbench compress`). A master limiter is an open question under J020-D1 (`roblox-audio.md` S-142): none until the owner answers. | practice (Crytek) + J020 |
 
 Standards context (M-46, M-70): Sony −24 LUFS home, −18 portable, ±2 LU; Meta Quest −16 LUFS (2026); ITU-T H.872
 (2024) also asks for a headphone switch −3 dB (S-231), a mid/high-cut EQ preset and subtitles on by default.
@@ -28,13 +28,13 @@ Standards context (M-46, M-70): Sony −24 LUFS home, −18 portable, ±2 LU; Me
 | ID | Rule | Evidence |
 | --- | --- | --- |
 | S-107/S-108 | Priority: 1 critical warnings and dialogue (0 dB), 2 own feedback, 3 rewards (−3), 4 UI (−6), 5 enemy and world SFX (−6 to −9), 6 music (−12), 7 ambience (−18, droppable). When a genre preset or the scene's read rank gives a slot order, it wins; levels stay −3/−6/−9/−12/−18 by rank. For a blast, lower the lower tiers instead of adding level. | inference; P levels |
-| S-109/S-211 | Duck only for major events; no constant pumping. Routine ducks: music −3 to −6 dB, ambience −2 to −4 dB, attack 10-30 ms, release 150-400 ms. Critical warnings and dialogue duck 6-9 dB (S-110). One token per duck request. | practice; P numbers |
+| S-109/S-211 | Duck only for major events, decided per moment with the four questions (would the player miss something, what goes down, how much and how fast, why; J020-D11, `roblox-audio.md` §H4), by AudioFader volume from a script (J020-LD4); no constant pumping. Routine ducks: music −3 to −6 dB, ambience −2 to −4 dB, attack 10-30 ms, release 150-400 ms. Critical warnings and dialogue duck 6-9 dB (S-110). One token per duck request. | practice; P numbers |
 | S-110 | Critical warning or dialogue ducks music and ambience 6-9 dB; an open menu ducks gameplay 3-6 dB. (P) | lead |
 | S-111 | Duck attack 10-50 ms; release 300-700 ms for music, 500-1500 ms for speech-heavy music. (P) | lead |
 | S-212 | Keep two rankings: information priority (must be heard now) and voice-survival priority (must not be cut); both may change with context (music can rank high in rhythm games). | inference |
 | S-113 | Bands and the low-end owner: SKILL.md SC-06 (non-sub layers high-passed near 100 Hz at least; bright layers higher, about 200-300 Hz (P)). Align layer transients to the same sample; offset only tails. | lead |
 | S-117 | Sub-bass (below about 120 Hz) is reserved for hero events. | lead |
-| S-118 | World-event distance curve: full level near, then −6 dB per doubling from 4 m (about 13 studs at 3.33 studs per metre). Custom AudioEmitter curve. (P) | practice + inference |
+| S-118 | World-event distance curve: full level near, then −6 dB per doubling from 4 m (about 13 studs at 3.33 studs per metre). Custom AudioEmitter curve, or `Inverse`/`InverseTapered` from 13 studs (`roblox-audio.md` §H2). (P) | practice + inference |
 | S-225 | Short interactions: full level within 4-8 studs, silent by 30-60 studs. (P) | inference |
 | — | Far version (SC-07): split a far-carrying cue into a high-detail layer on a short distance curve and a low-body layer on a long one, so at range it is a low boom, up close sharp. Must-act cues (threats, warnings, objectives) get the long curves; footsteps, breathing and own UI the short ones. | inference |
 | — | Per viewer: the player a threat targets hears it at full tier; bystanders hear other players' effects one tier lower and shorter. | inference |

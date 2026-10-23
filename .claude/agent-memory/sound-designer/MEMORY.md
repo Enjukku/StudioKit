@@ -1,0 +1,1 @@
+- [No listening sessions](feedback_no_listening_sessions.md) — feel = owner's play-test; done = render pass + debug cue log; no reference sounds (J020, 2026-10-23)

@@ -27,7 +27,14 @@ Roblox classes: see `roblox-audio.md` §A. Number tags (M) (X) (O) (=) (P): SKIL
 | Building block (part) | A processed piece in the library (tonal, mechanical, crunch, low body, tail, tick) used to build cues |
 | Bus | Group channel with shared volume and effects |
 | Cents | 1/100 semitone; PlaybackSpeed = 2^(cents/1200) |
-| Check-in A / B / C | Owner listening points: temp pass on the markers / hero options / playable preview solo then full mix |
+| Check-in A / B / C | Retired (J020-D3, LD3): the old owner listening points. Replaced by the owner's play-test; "done" = measured and proven on its event |
+| 2D / 3D sound | 2D: same volume wherever the player is (AudioPlayer → output); 3D: from a place, louder or quieter by distance and facing (through an AudioEmitter and AudioListener). Rule: `roblox-audio.md` §H1 |
+| Actor rule | The player who acts hears his own sounds 2D; every other player hears them 3D from him |
+| Distance attenuation | How a 3D sound's volume falls with distance: `DistanceAttenuationMode` (InverseTapered, Linear, LinearSquared, Inverse, Custom) between `DistanceAttenuationBounds` |
+| Play-test (owner's) | The owner playing the game; the owner's flags are the only judgement of feel; each becomes a lesson |
+| Regenerate round | One batch of takes from one prompt version: minor 3, frequent 4, important 6 takes; at most 3 rounds per cue |
+| soundbench | The kit's audio editor for the agent: `python -m tools.audio.soundbench` (measure, rank, render, generate, compare, parity) |
+| Zone reverb | One AudioReverb per space type on the SFX bus, switched by a script; the only audio effect used in Roblox |
 | Chills (frisson) | Shivers at an emotional peak |
 | Cluster, suspension, resolution | Close pitches together; held tone expecting resolution; release of tension |
 | Comb filtering | Thin, phasey sound from identical copies a few ms apart |
@@ -102,7 +109,7 @@ Roblox classes: see `roblox-audio.md` §A. Number tags (M) (X) (O) (=) (P): SKIL
 | Safe listening | Limiting level × time dose (adults 80 dB(A), children 75 dB(A), 40 h/week, ITU-T H.872) |
 | Semitone (st) | 1/12 octave; ratio 1.0595 |
 | Shepard-Risset glissando | Pitch that seems to rise or fall forever |
-| Sidechain | One signal controlling a compressor on another (ducking) |
+| Sidechain | One signal controlling a compressor on another; not used in Roblox (ducks are fader volume from a script, J020-LD4) |
 | Signature element | The one recognisable element (usually tonal) of a weapon, ability or character, in every stage |
 | Sonic logo | Short brand melody or sound |
 | Spectral centroid, flux | Brightness; how fast the spectrum changes |

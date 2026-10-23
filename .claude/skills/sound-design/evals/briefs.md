@@ -12,7 +12,8 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | C3 | Rule IDs cited for design choices |
 | C4 | Deliverable follows the output contract (palette, cards, prompts, mix plan, Roblox notes, test plan, PROPOSAL list) or the review format |
 | C5 | Phone-speaker, headphone and mono checks included |
-| C6 (must) | No sentence claims the agent heard, auditioned or listened to anything; every judgement names its input (document, file measure, Studio inspection or an owner check-in answer), and any listening result is a question for an owner check-in, never the agent's own claim (SKILL.md §1 "You cannot hear", §4 Claims; `references/review.md` §1-§2) |
+| C6 (must) | No sentence claims the agent heard, auditioned or listened to anything; every judgement names its input (document, file measure, Studio inspection, debug cue log or an owner play-test flag); feel is left to the owner's play-test and the agent never asks for a listening session (SKILL.md §1 "You cannot hear", "Done and feel", §4 Claims; `references/review.md` §1-§2) |
+| C7 (must) | Nothing is edited in Roblox but the zone reverb and fader volumes (no EQ, filter, compressor or pitch effect); every cue names 2D or 3D with the reason, and a 3D cue its falloff mode and bounds (SKILL.md SC-07, SC-08; `references/roblox-audio.md` §H) |
 
 ## 1. Coin pickup for a simulator
 
@@ -120,18 +121,18 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | 7.1 (must) | Every mood version differs from its siblings in named numbers, not only in adjectives: envelope (attack, release, tail in ms), pitch or register and texture per version (SC-02, SC-03, S-76) |
 | 7.2 (must) | Light, medium and heavy hits differ in envelope (longer release and body for heavier), pitch (down for bigger) and layers, not only in level (S-76, SC-06) |
 | 7.3 | One signature element kept in every version, so the family stays recognisable (SC-11; `references/craft-process.md` §6 variants of one family) |
-| 7.4 (must) | Distinctness is graded by an owner listen: the plan asks check-in B or C goal questions ("which is heavier?", "which mood is this?", screen covered) and ranks light vs heavy (`references/review.md` §2, R-53); the agent does not claim the versions sound distinct |
+| 7.4 (must) | Distinctness is screened by numbers on the card targets (envelope, pitch step R-33, main note or band R-35) and left to the owner's play-test by ear; the agent neither asks for a listening session nor claims the versions sound distinct (`references/review.md` §2) |
 | 7.5 | Grader: two versions with the same envelope and pitch numbers and only a different label fail 7.1 for that pair |
 
 ## 8. Staged ability from a timing list
 
-> The animator's timing list r2 for a frost bolt: `charge_start` 0.133 s, `release` 0.433 s, projectile spawn (code), `contact_confirmed` (server event), tail. The VFX designer keys to the same ids. Plan the sound from this list up to the first owner check-in, and say what comes after.
+> The animator's timing list r2 for a frost bolt: `charge_start` 0.133 s, `release` 0.433 s, projectile spawn (code), `contact_confirmed` (server event), tail. The VFX designer keys to the same ids. Plan the sound from this list up to the temp pass proof, and say what comes after.
 
 | Check | Expected |
 | --- | --- |
 | 8.1 (must) | A stage sheet with one row per stage in timing list r2, same names, each keyed to an event id at the revision; a stage with no sound has a reason (SKILL.md §2 step 2, SC-04; `references/craft-process.md` §2; R-05, R-06) |
 | 8.2 (must) | Attempt cues on the input or client event; impact weight only on `contact_confirmed`, never on a contact candidate or client prediction (S-150, R-07) |
-| 8.3 (must) | Temp pass before any polish: every stage gets a temp source marked TEMP (library first), the temp cue list with event ids goes to the integrator, then check-in A on order and timing; no final processing before the timing list revision is locked (SC-15, SC-17; `references/craft-process.md` §4; R-50) |
-| 8.4 | Later check-ins planned: B for hero-cue options (at most 3 per hero cue, loudness-matched) and C solo then full mix on phone speaker and headphones, each with goal questions, never "do you like it?" (`references/review.md` §2; R-51, R-52) |
+| 8.3 (must) | Temp pass before any polish: every stage gets a temp source marked TEMP (library first), the temp cue list with event ids goes to the integrator, then the debug cue log proves each temp cue on its event in order; no final processing before the timing list revision is locked (SC-15, SC-17; `references/craft-process.md` §4; R-50) |
+| 8.4 | After the temp pass: targets in `card.json`, 6 takes per round with the layers generated separately (important cue), ranked against the targets, at most 3 regenerate rounds, a two-pass recipe rendered to FLAC; done = `render` exit 0 + proven on its event; feel = the owner's play-test (`references/craft-process.md` §5-§6; `references/review.md` §2; R-36, R-62, R-67) |
 | 8.5 | Build rises to the release and is loudest there; impact tail moves like the verb (slows and spreads) (SC-03, SC-04, R-11) |
 | 8.6 | Sync rule stated: onset on the first lit contact frame to +40 ms, or "not verified" without a device capture (S-133, R-54) |
