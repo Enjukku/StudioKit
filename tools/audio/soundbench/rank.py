@@ -65,6 +65,7 @@ from pathlib import Path
 import numpy as np
 
 from . import card as cardmod
+from . import export as exportmod
 from . import measures, ops, render
 from .core import SoundbenchError, versions
 
@@ -74,14 +75,21 @@ NEAR: dict = cardmod.TABLES["near"]
 
 # PROPOSAL values (start points a check may change)
 NEAR_SILENT_DBFS = -60.0  # a take peaking under -60 dBFS is near-silent (62 real takes: the quietest peaks -43.9)
-# Clipped at the source (review-rank F1): 10 ms or more in total at or above -1 dBFS, on the decoded take. Measured on
-# the 62 real takes and on the same takes hard-clipped at full scale, MP3-encoded (libmp3lame 128k and 192k) and decoded:
-# clean takes read at most 7.23 ms (128k, swish-2.t1) and 5.78 ms (normalised to -0.1 dBFS, re-encoded at 192k): the
-# margin is 2.8 ms (38 %). Caught at 128k / 192k: +12 dB 37 / 39 of 62, +6 dB 24 / 24, +3 dB 15 / 15, +1 dB 2 / 2. Not
-# caught: short cracks whose clipped tips last under a millisecond (the MP3 smears them; no feature tried separated them
-# from clean full-scale takes with a margin).
+# Clipped at the source (review-rank F1, R2-2): 10 ms or more at or above -1 dBFS (full scale) inside any 300 ms
+# window of the decoded take. The window keeps the reading from growing with the take's length (R2-2: a total grew
+# past the limit on clean 2 s takes); 300 ms holds a whole clipped swell, 500 ms let two clean peaks add up (11.5 ms).
+# Calibrated on MP3-decoded copies (libmp3lame 128k and 192k). Clean: the 62 real takes as delivered read at most
+# 7.23 ms (swish-2.t1); normalised to -0.1 dBFS at most 5.78 ms; 97 long fixtures built from them (each take x4,
+# whooshes/swishes/notes slowed x4, beds of 10 crossfaded takes of one family, chord pads of 2 s and 5 s) at most
+# 6.6 ms, except slowed full-scale rumble (86-99.97 % of the energy under 120 Hz: 2 of 97 at 128k, 3 at 192k, up to
+# 20 ms; a steady tone at full scale spends 30 % of its time within 1 dB of its peak, which no amplitude reading
+# tells from clipping). Margin: 2.8 ms over the delivered takes. Clipped (hard clip at full scale, then MP3), caught at
+# 128k / 192k: short takes +12 dB 37 / 38 of 62, +6 dB 24 / 24, +3 dB 15 / 15; long takes +12 dB 24 / 25 of 26,
+# +6 dB 21 / 22, +3 dB 14 / 16. Not caught: short cracks whose clipped tips last under a millisecond (the MP3 smears
+# them). No real ElevenLabs take of 2 s or more was available: the long fixtures are built from 480-800 ms real takes.
 CLIP_FULL_SCALE_DBFS = -1.0
 CLIP_MS = 10.0
+CLIP_WINDOW_MS = 300.0
 NO_BAND_FRACTION = 0.1  # a must band holding under a tenth of the card's minimum share has no sound there
 FIX_FADE_OUT_MS = 10.0  # the fade-out rank adds with a cut, and for a click at the end edge
 CUT_INSIDE_MS = 1.0  # a cut for sound_ms ends 1 ms inside the card's maximum
@@ -114,25 +122,31 @@ def find_takes(cue_dir: Path, cue: str, round_no: int | None) -> tuple[int, list
 
 
 def clip_reading(x: np.ndarray, rate: int) -> dict:
-    """Clipped at the source: the decoded take spends 10 ms or more in total at or above -1 dBFS (full scale, never the
-    take's own peak: the MP3 decoder overshoots above a clipped plateau, and that overshoot would become the reference).
+    """Clipped at the source: 10 ms or more at or above -1 dBFS inside some 300 ms window of the decoded take. Full
+    scale, never the take's own peak (the MP3 decoder overshoots above a clipped plateau, review-rank F1); inside a
+    window, never in total (a total grows with the take's length, R2-2).
 
-    Known false readings: a sustained tone or a long low note normalised to full scale sits near full scale for long
+    Known false readings: a steady tone or a slow low rumble normalised to full scale sits near full scale for long
     and reads clipped; clipping scaled down after it happened is not seen; short clipped cracks (the clipped tips
     under a millisecond each) are not seen after MP3 (a short crack clipped by 6 dB reads about 2 ms)."""
     a = np.abs(np.asarray(x, dtype=np.float64))
     peak = float(a.max())
     pk_db = measures.db(peak)
-    ms = 1000 * float(np.sum(np.any(a >= 10 ** (CLIP_FULL_SCALE_DBFS / 20), axis=1))) / rate
-    return {"sample_peak_dbfs": None if pk_db is None else round(pk_db, 2), "ms_at_or_above_-1dbfs": round(ms, 3),
-            "clipped": ms >= CLIP_MS}
+    hot = np.any(a >= 10 ** (CLIP_FULL_SCALE_DBFS / 20), axis=1).astype(np.float64)
+    c = np.concatenate([[0.0], np.cumsum(hot)])
+    w = int(round(CLIP_WINDOW_MS * rate / 1000))
+    most = float((c[w:] - c[:-w]).max()) if len(hot) > w else float(c[-1])
+    ms = 1000 * most / rate
+    return {"sample_peak_dbfs": None if pk_db is None else round(pk_db, 2),
+            "ms_at_or_above_-1dbfs_in_window": round(ms, 3), "clipped": ms >= CLIP_MS}
 
 
 def rejections(card: dict, flat: dict, clip: dict) -> list[str]:
     out = []
     if clip["clipped"]:
-        out.append(f"clipped at the source: {clip['ms_at_or_above_-1dbfs']} ms at or above {CLIP_FULL_SCALE_DBFS} dBFS "
-                   f"(>= {CLIP_MS} ms; sample peak {clip['sample_peak_dbfs']} dBFS)")
+        out.append(f"clipped at the source: {clip['ms_at_or_above_-1dbfs_in_window']} ms at or above "
+                   f"{CLIP_FULL_SCALE_DBFS} dBFS inside {CLIP_WINDOW_MS:g} ms (>= {CLIP_MS} ms; sample peak "
+                   f"{clip['sample_peak_dbfs']} dBFS)")
     pk = clip["sample_peak_dbfs"]
     if pk is None or pk < NEAR_SILENT_DBFS:
         out.append(f"near-silent: sample peak {pk} dBFS (under {NEAR_SILENT_DBFS})")
@@ -243,8 +257,20 @@ def plan_for(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: d
     y_trim, _ = render.apply_steps((("edit", planned_head),), card, render.context(card, planned_head), x, rate)
     rec_t = measures.measure_audio(y_trim, rate)
     rows_t = score(render.evaluate(card, rec_t, y_trim, rate))
-    return fix_plan(card, rows, flat, (rows_t if mode == "all" else _only_must(rows_t), render._flat(rec_t), y_trim,
-                                       rate))
+    steps = fix_plan(card, rows, flat, (rows_t if mode == "all" else _only_must(rows_t), render._flat(rec_t), y_trim,
+                                        rate))
+    if not any(s["op"] == "peak" for s in steps) and not _exportable(x, rate):
+        # export would refuse the master as it is (a decode over full scale): the edit pass must set the level (R2-1)
+        steps += [{"op": "loudness"}, {"op": "peak", "ceiling_dbtp": peak_ceiling(card)}]
+    return steps
+
+
+def _exportable(x: np.ndarray, rate: int) -> bool:
+    try:
+        exportmod.check_exportable(x, rate, rate)
+        return True
+    except SoundbenchError:
+        return False
 
 
 def applied_gain_db(before: np.ndarray, after: np.ndarray) -> float:
@@ -306,11 +332,16 @@ def best_fix(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: d
             if steps in seen:
                 continue
             seen.append(steps)
-            tried.append((mode, simulate(card, x, rate, steps, raw_rows)))
+            fix = simulate(card, x, rate, steps, raw_rows)
+            exportmod.check_exportable(fix["audio"], rate, rate)  # render must be able to deliver it (review-rank R2-1)
+            tried.append((mode, fix))
         except SoundbenchError as err:
             if "soundbench bug" in str(err):
                 raise
             refused.append({"plan": mode, "error": str(err)})
+    if not tried:  # every plan refused (a take render cannot export whatever the steps): the raw rows, not passing
+        return {"steps": [], "rows": raw_rows, "level": None, "log": [], "audio": None, "plan": None,
+                "dropped_aim_fixes": [], "refused_plans": refused}
     count = lambda f, must: sum(r["must"] == must and r["result"] != "pass" for r in f["rows"])  # noqa: E731
     mode, fix = min(tried, key=lambda t: (count(t[1], True), count(t[1], False), PLAN_MODES.index(t[0])))
     first = tried[0][1] if tried[0][0] == "all" else None
@@ -382,7 +413,7 @@ def take_entry(card: dict, cue_dir: Path, n: int, rel: str) -> dict:
     aim_after = [r["target"] for r in after if not r["must"] and r["result"] != "pass"]
     fixed = [m_["target"] for m_ in misses if m_["fix"] == "fixed"]
     near_after = [r["target"] for r in after if r["score"] == "near"]
-    passes = not rej and not must_after
+    passes = not rej and fix["plan"] is not None and not must_after
     return {"take": take["take"], "n": n, "rate": rate, "channels": int(x.shape[1]),
             "take_sha256": take["take_sha256"], "clip": clip, "rejected": rej, "raw": raw_rows,
             "fix": None if fix is None else {"steps": fix["steps"], "plan": fix["plan"], "level": fix["level"],
@@ -430,6 +461,12 @@ def prompt_misses(entries: list[dict]) -> list[dict]:
                     d["closest"] = {"take": e["take"], "value": v, "miss_by": r["miss_by"],
                                     "direction": "too low" if r["min"] is not None and v < r["min"] else "too high"}
     return sorted(by.values(), key=lambda d: (not d["must"], -d["takes_missing"], d["target"]))
+
+
+def needs_proof(top: dict) -> bool:
+    """Only a take rank says to use is proven by a real render (review-rank R2-1: a failing top take may be one render
+    cannot export; that round is regenerate, exit 1, never a refusal)."""
+    return top["passes_after_fix"]
 
 
 def prove(card: dict, cue_dir: Path, top: dict) -> dict:
@@ -487,7 +524,7 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
         warnings.append(f"round {k} has {len(takes)} takes; a {card['tier']} cue gets {want} per round (J020-D9)")
     entries = order([take_entry(card, cue_dir, n, rel) for n, rel in takes])
     top = entries[0]
-    proof = prove(card, cue_dir, top) if not top["rejected"] and top["fix"] is not None else None
+    proof = prove(card, cue_dir, top) if needs_proof(top) else None
     cue = card["cue"]
     if top["passes_after_fix"]:
         code = 0
@@ -564,7 +601,8 @@ def markdown(doc: dict) -> str:
             lines.append(f"| {r['target']} | {r['measure']} | {_fmt(r['value'])} | {_fmt(r['min'])} | {_fmt(r['max'])} | "
                          f"{'must' if r['must'] else 'aim'} | {r['score']} | {fix} | {_fmt(a['value'])} ({a['score']}) |")
         if e["fix"]:
-            lines.append(f"\nFix steps ({e['fix']['plan']} plan): `{json.dumps(e['fix']['steps'])}`")
+            plan = f"{e['fix']['plan']} plan" if e["fix"]["plan"] else "every plan refused"
+            lines.append(f"\nFix steps ({plan}): `{json.dumps(e['fix']['steps'])}`")
             if e["fix"]["dropped_aim_fixes"]:
                 lines.append(f"Aim fixes left out (they broke a must-target): {e['fix']['dropped_aim_fixes']}")
             if e["fix"]["level"]:

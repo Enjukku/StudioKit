@@ -14,6 +14,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -286,7 +287,7 @@ class RankTest(unittest.TestCase):
     def test_clipped_broadband_takes_after_mp3_are_rejected_at_128k_and_192k(self):
         """F1 (review-rank): clipping happens at full scale; the MP3 decoder's overshoot must not hide it. Broadband
         real-like takes hard-clipped at full scale, encoded at ElevenLabs' two MP3 rates and decoded at intake."""
-        cases = (("quiet_whoosh", 12, True), ("soft_note", 6, True), ("soft_note", 12, True), ("quiet_hit", 12, True),
+        cases = (("quiet_whoosh", 12, True), ("quiet_whoosh", 8, True), ("soft_note", 6, True), ("soft_note", 12, True), ("quiet_hit", 12, True),
                  ("quiet_whoosh", 0, False), ("soft_note", 0, False), ("quiet_hit", 0, False),
                  ("quiet_hit", 6, False))  # known false reading: a short crack clipped by 6 dB reads ~2 ms, not caught
         for name, gain, want in cases:
@@ -300,6 +301,32 @@ class RankTest(unittest.TestCase):
                     subprocess.run([str(FOUND.path), "-hide_banner", "-nostdin", "-y", "-loglevel", "error", "-i",
                                     str(wav), "-c:a", "libmp3lame", "-b:a", f"{kbps}k", str(mp3)], check=True)
                     intake.decode_take(mp3, sidecar=self.d / f"{name}{gain}{kbps}.side.json")
+                    z = read_float32(intake.master_path(mp3))[0].astype(np.float64)
+                    self.assertEqual(rank.clip_reading(z, R)["clipped"], want, rank.clip_reading(z, R))
+
+    @unittest.skipUnless(HAS_LAME, "ffmpeg with libmp3lame not found: the long-take clip test skipped")
+    def test_the_clip_reading_does_not_grow_with_the_take_length(self):
+        """R2-2 (review-rank round 2): clean long takes near full scale are not rejected, and long clipped takes still
+        are, after MP3 at 128k and 192k. The pad is the reviewer's e7 case (it read 12.83 ms in total and was
+        rejected); the note loop is 20 repeats of the realistic soft note (9.6 s)."""
+        t = np.arange(int(2.0 * R)) / R
+        env = np.minimum(1, t / 0.2) * np.minimum(1, (2.0 - t) / 0.3)
+        chord = env * (np.sin(2 * np.pi * 220 * t) + 0.5 * np.sin(2 * np.pi * 277.2 * t) + 0.3 * np.sin(2 * np.pi * 329.6 * t))
+        pad = np.stack([chord, chord], axis=1)
+        loop = np.vstack([fx.make_real("soft_note", R)] * 20)
+        whoosh = np.vstack([fx.make_real("quiet_whoosh", R)] * 4)
+        full = lambda y: y / np.max(np.abs(y)) * 10 ** (-0.1 / 20)  # noqa: E731
+        clip = lambda y, g: np.clip(y / np.max(np.abs(y)) * 10 ** (g / 20), -1.0, 1.0)  # noqa: E731
+        for name, y, want in (("pad 2 s", full(pad), False), ("note loop 9.6 s", full(loop), False),
+                              ("whoosh x4 clean", full(whoosh), False), ("whoosh x4 +12 dB", clip(whoosh, 12), True)):
+            for kbps in (128, 192):
+                with self.subTest(case=name, kbps=kbps):
+                    tag = f"{name.replace(' ', '_').replace('+', 'p')}{kbps}"
+                    wav = fx.write_wav(self.d / f"{tag}.wav", y, R)
+                    mp3 = self.d / f"{tag}.mp3"
+                    subprocess.run([str(FOUND.path), "-hide_banner", "-nostdin", "-y", "-loglevel", "error", "-i",
+                                    str(wav), "-c:a", "libmp3lame", "-b:a", f"{kbps}k", str(mp3)], check=True)
+                    intake.decode_take(mp3, sidecar=self.d / f"{tag}.side.json")
                     z = read_float32(intake.master_path(mp3))[0].astype(np.float64)
                     self.assertEqual(rank.clip_reading(z, R)["clipped"], want, rank.clip_reading(z, R))
 
@@ -369,6 +396,43 @@ class RankTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("0.4 s", miss(e, "level")["why"])
         self.assertIn("refused", miss(e, "level")["why"])
+
+    def test_a_take_over_full_scale_keeps_a_plan_render_can_export(self):
+        """R2-1 (review-rank round 2, e6 case c): a master whose sample peak reaches full scale passes every must
+        untouched, but render cannot export it with no step. The no-step plan is refused with export's own reason
+        and the take keeps loudness + peak; its proof render agrees."""
+        x = fx.make_real("soft_note", R)
+        x = x / np.max(np.abs(x)) * 1.02  # an MP3 decode over full scale (11 of 62 real masters reach 0 dBTP)
+        c = card_for("SFX-R-OVERFS", targets={})
+        # the level passes untouched (1.2 dB off, tolerance 1.5); after loudness the peak cut to -1.5 dBTP is about
+        # 0.5 dB, so loudness + peak also lands inside
+        c["level"] = {**c["level"], "target": round(m.level_db(x, R, "F-09") - 1.2, 3), "tolerance": 1.5}
+        doc, code = rank.rank(make_round(self.d, c, [x]))
+        e = entry(doc, 1)
+        self.assertEqual(code, 0, e["fix_error"])
+        self.assertEqual([s_["op"] for s_ in e["fix"]["steps"]], ["loudness", "peak"])
+        self.assertTrue(any(p_["plan"] == "none" and "reaches full scale" in p_["error"]
+                            for p_ in e["fix"]["refused_plans"]))
+        self.assertTrue(doc["proof"]["agrees"])
+
+    def test_a_round_where_no_take_passes_exits_1_without_a_proof(self):
+        """R2-1: the proof render runs only for a top take that passes; a failing round is regenerate (exit 1)."""
+        c = card_for("SFX-R-NOPASS")
+        doc, code = rank.rank(make_round(self.d, c, [quiet_bass()]))  # a phone cue: no step fixes the phone loss
+        self.assertEqual((code, doc["verdict"]["action"]), (1, "regenerate"))
+        self.assertIsNone(doc["proof"])
+
+    def test_a_take_render_cannot_export_is_refused_with_renders_reason(self):
+        """R2-1: every kept plan either renders or is refused by rank with the reason render would give. A 96 kHz
+        take: render refuses it whatever the steps (Roblox takes up to 48 kHz), so every plan is refused, the take
+        does not pass and its misses carry the reason; the round exits 1, never 2."""
+        x = fx.make_real("soft_note", 96000)
+        doc, code = rank.rank(make_round(self.d, card_for("SFX-R-96K"), [x], rate=96000))
+        e = entry(doc, 1)
+        self.assertEqual(code, 1)
+        self.assertFalse(e["passes_after_fix"])
+        self.assertIn("over Roblox's 48000 Hz", miss(e, "level")["why"])
+        self.assertIsNone(doc["proof"])
 
     def test_regenerate_lists_what_the_prompt_must_change_and_round_3_goes_to_the_owner(self):
         c = card_for("SFX-R-REGEN")
@@ -558,6 +622,20 @@ FAULTS = {
         (lambda: mock.patch.object(rank, "_why", lambda card, r, fix, a: rank._why_kept(card, r, fix, a)
                                    if fix else "rejected"),
          ["test_a_refused_fix_names_its_reason"]),
+    "R2-1: plans kept without the export check":
+        (lambda: mock.patch.object(rank, "exportmod", types.SimpleNamespace(check_exportable=lambda *a: None)),
+         ["test_a_take_over_full_scale_keeps_a_plan_render_can_export",
+          "test_a_take_render_cannot_export_is_refused_with_renders_reason"]),
+    "R2-1: the proof run for a top take that does not pass":
+        (lambda: mock.patch.object(rank, "needs_proof", lambda top: not top["rejected"]),
+         ["test_a_round_where_no_take_passes_exits_1_without_a_proof"]),
+    "R2-2: the clip reading in total (a window longer than any take)":
+        (lambda: mock.patch.object(rank, "CLIP_WINDOW_MS", 1e9),
+         ["test_the_clip_reading_does_not_grow_with_the_take_length"]),
+    "R2-2: a window too short for a clipped swell (50 ms)":
+        (lambda: mock.patch.object(rank, "CLIP_WINDOW_MS", 50.0),
+         ["test_the_clip_reading_does_not_grow_with_the_take_length",
+          "test_clipped_broadband_takes_after_mp3_are_rejected_at_128k_and_192k"]),
     "near-silent set at -20 dBFS (rejects real quiet takes)":
         (lambda: mock.patch.object(rank, "NEAR_SILENT_DBFS", -20.0),
          ["test_a_realistic_round_is_ranked_with_its_fixes"]),

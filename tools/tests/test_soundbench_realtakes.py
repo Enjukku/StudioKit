@@ -11,7 +11,9 @@ What every real take must survive (the repair-round findings, 2026-10-23):
   - rank (J020 step 5, review-rank round 1): each sound's takes t1..tN ranked as one round with every level measure
     (F-09, F-13a, LUFS-I): exit 0 or 1 (never a refusal), the order equals the documented key recomputed from the
     table, no clean take reads clipped, a miss called fixed passes after the fix, the derived level matches the
-    simulated one, the top take's proof render agrees, and nothing is written to out/.
+    simulated one, the top take's proof render agrees (and runs only when it passes), every kept plan of every take
+    renders and agrees or was refused by rank with render's own reason (review-rank R2-1, the reviewer's e5), and
+    nothing is written to out/.
 """
 
 import json
@@ -166,6 +168,17 @@ class RealTakeTest(unittest.TestCase):
                     self.assertEqual(after["level"]["result"] == "pass", lv["fits"])
         if doc["proof"] is not None:
             self.assertTrue(doc["proof"]["agrees"])
+        self.assertEqual(doc["proof"] is not None, doc["takes"][0]["passes_after_fix"])  # only a "use" is proven
+        for e in doc["takes"]:  # e5 (review-rank R2-1): every kept plan renders, or rank refused it as render would
+            if e["rejected"]:
+                continue
+            if e["fix"]["plan"] is not None:
+                self.assertTrue(rank.prove(card, folder, e)["agrees"])
+                continue
+            reasons = [p["error"] for p in e["fix"]["refused_plans"]]
+            with self.assertRaises(SoundbenchError) as raised:
+                rank.prove(card, folder, {**e, "fix": {**e["fix"], "steps": []}})
+            self.assertTrue(any(str(raised.exception) in r for r in reasons), (str(raised.exception), reasons))
         self.assertFalse((folder / "out").exists())
 
 if __name__ == "__main__":

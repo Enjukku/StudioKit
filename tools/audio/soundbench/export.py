@@ -34,8 +34,10 @@ SUBTYPE = "PCM_24"
 STEP = 2.0 ** -23  # one 24-bit step
 
 
-def export_flac(x: np.ndarray, rate: int, out: Path, *, source_rate: int | None = None, log: Path | None = None) -> dict:
-    out = Path(out)
+def check_exportable(x: np.ndarray, rate: int, source_rate: int | None = None) -> tuple[np.ndarray, int, float]:
+    """Every refusal export makes before it writes (rate, channels, length, full scale), as (float32 audio, rate, sample
+    peak). `rank` calls this same function on each plan's result, so a plan it keeps is one `render` can export (the
+    20 MB size check needs the encoded file and is left to export)."""
     audio = as_2d(np.asarray(x), "export input").astype(np.float32)
     rate = check_rate(rate)
     if source_rate is not None and check_rate(source_rate) != rate:
@@ -49,6 +51,12 @@ def export_flac(x: np.ndarray, rate: int, out: Path, *, source_rate: int | None 
     peak = float(np.max(np.abs(audio)))
     if peak > 1.0 - STEP:
         raise SoundbenchError(f"sample peak {peak:.6f} reaches full scale: the 24-bit file would clip; set the level first")
+    return audio, rate, peak
+
+
+def export_flac(x: np.ndarray, rate: int, out: Path, *, source_rate: int | None = None, log: Path | None = None) -> dict:
+    out = Path(out)
+    audio, rate, peak = check_exportable(x, rate, source_rate)
     import soundfile as sf
 
     pre_hash = audio_sha256(audio)
