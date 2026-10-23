@@ -49,7 +49,7 @@ supersedes: []
 | 5 | Fit edits from a written recipe, in the book's order, baked into the file (not the room: J020-D10) | workbench | **new editor**: edit |
 | 6 | Re-measure, plus a spectrogram picture; a take that still misses → change the prompt and regenerate (at most 3 rounds), never pile on edits | sound designer | workbench |
 | 7 | Layer the important sounds (click + body + tail, each generated alone) and make variant sets for frequent sounds | workbench | workbench: layer, variants |
-| 8 | Export Ogg with a log of every edit (redo from the original take at any time) | workbench | workbench |
+| 8 | Export FLAC (lossless: Roblox transcodes every import, `editor-design.md` G-8) with a log of every edit (redo from the original take at any time) | workbench | workbench |
 | 9 | Upload (your approval rule per game) | lead | a new kit upload step (GreatWallSim's `upload_roblox.py` only as reference) |
 | 10 | Play in Roblox (J020-D8): 2D or 3D by the §6 rule, falloff per sound, the space reverb per area (J020-D10), ducking where the card says (J020-D11); no other effects | feature-builder | Roblox audio graph (§6) |
 | 11 | Prove each sound plays on its event (debug cue log) | studio operator | Studio |

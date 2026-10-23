@@ -34,7 +34,7 @@ supersedes: []
 | Code file owners | set when the tool design is approved |
 | Linked jobs | J019 G3-P11 (sound designer tools), J018-D7 |
 | Risks (review slots) | none of the game tokens; tool risk: wrong numbers that look right (J018 lesson) |
-| Status | stage 0: understanding pass, then the workflow map for the owner's review |
+| Status | G1 passed 2026-10-23 (J020-D13, `b7f85f5`); stage 2: editor design |
 
 ## Four lines (goal)
 | Line | Value |
@@ -54,3 +54,8 @@ supersedes: []
 
 ## Decisions
 `decisions.md` in this folder.
+
+## Gates
+| Gate | Date | Revision approved | Owner's words |
+| --- | --- | --- | --- |
+| G1 workflow | 2026-10-23 | `workflow-map.md`, `research-2d-3d.md` at `b7f85f5` | "Yes, you understand it. G1 passes; begin the editor design. I'll send the ElevenLabs guide." |
