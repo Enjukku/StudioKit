@@ -28,6 +28,13 @@
       "path": "",
       "used_by": "reference-images skill (optional; owner decides)",
       "note": ""
+    },
+    {
+      "env": "ELEVENLABS_API_KEY",
+      "service": "ElevenLabs API: sound effects, music, text to speech",
+      "path": "C:\\Users\\Firew\\Downloads\\elevenr.txt",
+      "used_by": "tools/audio/soundbench (generate)",
+      "note": "Kit test key given by the owner 2026-10-23 for J020 testing (J020-D14); it expires about one month later. In a new game, replace this path with the game's own key file."
     }
   ]
 }
