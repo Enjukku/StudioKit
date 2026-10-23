@@ -1,9 +1,15 @@
-<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J015). Kit template: one brief per storyboard panel. Fields from the owner's research paper (N3 SB-01..15, OPINION, 2026-10-21). The `identity` line goes into the reference-images manifest (family `storyboard`); everything else stays in this file, next to the image, as the authority where the image is ambiguous. Copy to `content/film/<sequence>/boards/<shot-id>.brief.md`. -->
+<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J015). Kit template: one brief per storyboard panel. Fields from the owner's research paper (N3 SB-01..15, OPINION, 2026-10-21). The `identity` line goes into the reference-images manifest (family `storyboard`); everything else stays in this file, next to the image, as the authority where the image is ambiguous. Copy to `content/film/<sequence>/boards/<shot-id>.brief.md`. Revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): read and blocking-still fields, read review rows, step number. -->
 # Storyboard brief: <sequence> shot <id> rev <n>
+
+The read fields copy this shot's line of the picture plan (`shot-table.md`); the blocking still is the layout input (`film-craft/references/storyboards.md` §1 item 6).
 
 | Field | Fill in |
 | --- | --- |
 | Project and revision | <game>, <sequence>, shot <id>, shot-list revision <n>, panel revision <n> |
+| Blocking still (image 1) | <path of this shot's blocking still from the blocking pass; "keep camera and positions"> |
+| First-second read | <from the picture plan> |
+| Read order | <primary, secondary, at most a third; from the picture plan> |
+| Value key and brightest area | <from the picture plan> |
 | Approved visual references | <`inputs`: approved character / environment / prop images (attach them; name each by order: "image 1 is ..."), the previous approved panel>. Reference ≠ exact geometry |
 | Story purpose | <the new information this panel must communicate> |
 | Character intention | <what the character wants and what visibly changes> |
@@ -21,10 +27,13 @@
 ## Manifest row (`reference-images`, family `storyboard`)
 `<sequence>-<shot-id lowercase>-r<n>,storyboard,"<identity: Storyboard panel, shot <id> of <N>: size, angle; image 1 is ...; positions; action moment; landmarks; light side; no ...>",<inputs>,<anchors>`
 
-## Review (fill after generation; `film-craft` §3 step 3)
+## Review (fill after generation; `film-craft` §3 step 7; checks: `film-craft/references/storyboards.md` §3)
 | Check | Pass / fail and note |
 | --- | --- |
 | Story purpose readable | |
+| First-second read | |
+| Read order | |
+| Clean picture | |
 | Identity matches the approved references | |
 | Screen direction and eyeline match the ledger | |
 | Prop hand, costume, landmarks, light direction match | |

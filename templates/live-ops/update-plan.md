@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J014; owner's live-ops paper §5 ranked update plan + §11 method (knowledge/reference/live-ops/01 §ranking, 02 §process); owner brief 2026-10-21
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Ranked update plan: <game> · decision period <start> to <end>
 
@@ -20,6 +20,8 @@ Workflow: `live-ops-craft` §3 steps 1-8. For the owner. Copy to `knowledge/jobs
 | studio objective this period | owner's words + decision id |
 | evidence cutoff | date and time; analyst report id; feedback sort id; trend page date |
 | capacity | who estimated (role), available builder time after maintenance and release support, already committed work |
+| constraints (capacity, policy, age label) | written before any option (`live-ops-design` §7 row 13) |
+| success test | how we will know the update worked (`live-ops-design` §7 row 13) |
 | missing inputs | what is not available (write it; never fill it) |
 | recommendation in one line | rank 1 + why, in player words |
 
@@ -32,7 +34,7 @@ Workflow: `live-ops-craft` §3 steps 1-8. For the owner. Copy to `knowledge/jobs
 | release state / incidents | | | | | |
 
 ## C. Ranked candidates
-| Rank / status | Candidate and player problem (cohort) | Hypothesis: for <cohort>, <problem> prevents <behaviour>; changing <cause> should improve <metric> through <mechanism>, without harming <guardrails> | Evidence and uncertainty (sources, dates, counter-evidence) | Impact (reach, effect range or `unknown`, durability) and primary metric | Effort / dependencies (builder estimate: active effort, elapsed time; maintenance; risks) | Who builds (roles) | Policy flags | Decision requested |
+| Rank / status | Candidate and player problem (cohort) | Hypothesis: for <cohort>, <problem> prevents <behaviour>; changing <cause> should improve <metric> through <mechanism>, giving <target experience>, without harming <guardrails> | Evidence and uncertainty (sources, dates, counter-evidence) | Impact (reach, effect range or `unknown`, durability) and primary metric | Effort / dependencies (builder estimate: active effort, elapsed time; maintenance; risks) | Who builds (roles) | Policy flags | Decision requested |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 urgent (if any) | specific harm + affected players | — | measurement, reproducibility | harm stopped | estimate + safe mitigation | | | fix / mitigate now under agreed authority |
 | 1 recommended | | | | | | | | approve scope and trade-off |
@@ -52,6 +54,7 @@ Workflow: `live-ops-craft` §3 steps 1-8. For the owner. Copy to `knowledge/jobs
 | communication commitments | what may be announced, when, by whom (marketing writes the voice) |
 | explicit exclusions | what is not in this update |
 | opportunity cost | what maintenance, fix or event beat this displaces |
+| atypical option considered | one line (`live-ops-craft/references/process.md` §2 item 9) |
 
 ## E. Owner decision record
 | Field | Value |

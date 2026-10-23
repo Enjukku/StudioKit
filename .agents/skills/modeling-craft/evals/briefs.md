@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): M8-M11, 1.4 rewritten, 2.7-2.8, 3.6-3.7
 
 # Eval briefs for the modeler (modeling-design + modeling-craft + rig-pipeline S3)
 
@@ -13,6 +13,10 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | M5 | Asset record filled (route and reason, budget source, invariants, results with labels, lineage) |
 | M6 (must, when exporting) | Export through `tools/rig/roblox_fbx.py` (or every option named); one scale recipe; import measured in a test place, never the live place; nothing uploaded without the owner's yes |
 | M7 | Hand-back in `rules/messages.md` §3 shape: STATUS first, coverage per item, evidence labels |
+| M8 (briefs 1-3) | Read plan in the asset record before the blockout: every row, or the four rows of a simple model; on-screen height in px from the game profile (`modeling-design/SKILL.md` §3 step 1; `references/read-and-form.md` §1; RP1) |
+| M9 (briefs 1-3) | Silhouette gate measured before detail: black-fill of the front and back game-camera views and their phone-size versions (`modeling-design/SKILL.md` §3 step 7; `references/review.md` §5 SL1-SL3) |
+| M10 (briefs 1-3) | Value gate before texture polish: grey view at the game camera checked, results in the asset record (`modeling-design/SKILL.md` §3 step 8; `references/review.md` §5 VL1, VL4, VL5) |
+| M11 | Hand-back names at least one honest weakness with its next step (`modeling-design/SKILL.md` §3 step 9; `references/review.md` §5 IM3) |
 
 ## 1. Simple held weapon, hand-built (medium effort; G2 test A)
 > A one-handed sword for a stylized adventure game, held by the player and seen in third person at ~15 studs; also shown as an inventory icon. Trail effect from the blade tip during swings. Art bible: `templates/skill/art-bible.md` starter locks. Build it.
@@ -22,7 +26,7 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 1.1 (must) | Route = hand modeling, with a reason; reference made in the `prop` family (single clean view) and checked |
 | 1.2 | Triangles within a sourced budget (≤ 2,000 PROPOSAL or the brief's); evaluated count from the audit |
 | 1.3 (must) | Grip pivot and a `BladeTip` / `BladeBase` attach-point record (name, parent, position, look and up axes, revision) for VFX |
-| 1.4 | Size checked against the player dummy; the blade reads from the front at the game camera |
+| 1.4 | Size checked against the player dummy; the sword captured in the default avatar's hand at the game camera on the real ground, back and front, with its mask capture, and measured at phone size; or the in-hand read listed `not verified` with the reason. A capture of the sword lying on the floor does not pass (rewritten J019 P6: `modeling-craft/SKILL.md` §3 step 9; `modeling-design/references/review.md` §5 IM1) |
 | 1.5 | Icon render set for UI from the shipped model: fixed camera, light, magenta or alpha background as briefed |
 | 1.6 | One material, one UV map; texture size on plan (≤ 512 PROPOSAL) |
 
@@ -37,6 +41,8 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 2.4 (must) | C1-C5 of the modeler hand-off reported with numbers; whole model under about 7,000 triangles |
 | 2.5 | Each cut part has its own UVs and a re-bake from the raw model (no shared atlas across cut parts) |
 | 2.6 | Raw folder untouched (file hashes unchanged) |
+| 2.7 | The detail-density image of the game-camera view puts the busy cells on the read plan's detail spots (`modeling-design/references/review.md` §5 DT10) |
+| 2.8 | At hand-off the game-camera render sits next to the approved image at the same size: every iconic quality in the record is present and at least as strong (IM4) |
 
 ## 3. Modular building kit for the environment designer
 > The environment designer needs a small timber house kit: straight wall, corner, door wall, window wall, floor, roof piece, roof end, for a village hub; players walk inside; third-person camera. Brief from the environment designer attached (`environment-craft/references/handoffs.md` §3 format). Build the kit.
@@ -48,6 +54,8 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 3.3 | Door opening at real player size; collision keeps the doorway open; walkable floor keeps Default collision |
 | 3.4 | Reuse: pieces uploaded once; variants change shape only where needed, else tint |
 | 3.5 | Hand-off packet to the environment designer with pivots, sizes in studs, collision roles, import notes |
+| 3.6 | The detail-density image of the game-camera view puts the busy cells on the read plan's detail spots (`modeling-design/references/review.md` §5 DT10) |
+| 3.7 | At hand-off the game-camera render sits next to the approved image at the same size: every iconic quality in the record is present and at least as strong (IM4) |
 
 ## 4. Fix a model that "looks wrong in Studio"
 > The owner says the imported lantern is huge, faces backwards and its glass is invisible from outside. Files: `content/models/lantern/`. Fix it.

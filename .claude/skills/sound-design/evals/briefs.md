@@ -1,9 +1,9 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Eval briefs for the sound-design skill
 
 Give the agent the brief text only. Grade each check pass/fail; a brief passes at ≥80% of its checks with no
-"must" check failed. Checks common to all briefs (C1-C5) apply to every run.
+"must" check failed. Checks common to all briefs (C1-C6) apply to every run.
 
 | ID | Common check |
 | --- | --- |
@@ -12,6 +12,7 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | C3 | Rule IDs cited for design choices |
 | C4 | Deliverable follows the output contract (palette, cards, prompts, mix plan, Roblox notes, test plan, PROPOSAL list) or the review format |
 | C5 | Phone-speaker, headphone and mono checks included |
+| C6 (must) | No sentence claims the agent heard, auditioned or listened to anything; every judgement names its input (document, file measure, Studio inspection or an owner check-in answer), and any listening result is a question for an owner check-in, never the agent's own claim (SKILL.md §1 "You cannot hear", §4 Claims; `references/review.md` §1-§2) |
 
 ## 1. Coin pickup for a simulator
 
@@ -54,7 +55,7 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | 3.2 | Staged break model: fracture → structural body → debris → settling, severity-driven (S-199) |
 | 3.3 (must) | One scaled sound per burst, not one per piece; +3 dB per doubling; debris voice cap; triggers from semantic events not physics contacts (S-79, S-202, S-80, S-203) |
 | 3.4 | Material, size tier, event keys; layer count by size (S-75, S-78) |
-| 3.5 | Dry assets + one engine reverb per space; update obstruction after collapse (S-84, S-201) |
+| 3.5 | The designed tail and glue are baked into the file; the room is not baked, it comes from one live AudioReverb per space type; update obstruction after collapse (SC-08, S-84, S-201) |
 | 3.6 | Mix: music ducked 3-6 dB briefly for hero collapse; lower tiers lowered rather than adding level; true peak ≤ −1 dBTP; summed headroom (S-211, S-108, S-104, S-202) |
 | 3.7 | Mono check (≤3 dB drop) and real-phone approval; 180-250 Hz high-pass preview (S-159, S-160, S-229) |
 | 3.8 | Loudness target −18 LUFS ±2 LU for phone-first with headphone mode about 5 dB quieter (S-102, S-207) |
@@ -66,8 +67,8 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | Check | Expected |
 | --- | --- |
 | 4.1 (must) | Build-up identical in length for every outcome; no near-miss, fake-out or extra hype on paid pulls (S-164, D-02, D-03) |
-| 4.2 (must) | No countdown tension or jackpot siren for under-13 or restricted players (D-07) |
-| 4.3 (must) | Cites Roblox paid-random-item policy: PolicyService `ArePaidRandomItemsRestricted` gate and odds shown before purchase summing to 100% behind a labelled button (S-165, S-166) |
+| 4.2 (must) | No countdown tension or siren on any paid roll; restricted players never reach one (`ArePaidRandomItemsRestricted`); no sound sorted by age or region (D-07) |
+| 4.3 (must) | Cites Roblox paid-random-item policy: PolicyService `ArePaidRandomItemsRestricted` gate and odds as numbers before purchase summing to 100% per `platform-policy` `references/rules.md` §A; only a long list goes behind a visible worded "Info" or "Details" label, a bare (i) is not enough (S-165, S-166) |
 | 4.4 | Result sound honest and proportional to real value; celebration only on genuine gain; common outcome not celebrated as a win if below cost, with a no-gain cue tested as not positive (S-161, S-162, S-232) |
 | 4.5 | Every outcome gives real benefit (S-167); win sound next to the plain result (S-163) |
 | 4.6 | Shop and purchase flow calm, same tone at every price (S-171, D-04) |
@@ -109,3 +110,28 @@ Give the agent the brief text only. Grade each check pass/fail; a brief passes a
 | 6.8 | Migrates to audio graph with pooled AudioPlayers (S-140, S-149) |
 | 6.9 | Lobby loop repeats within 10 min; fix with resequenced segments or unequal stems (S-100) |
 | 6.10 | Output is a findings table (problem → rule ID → fix → severity) plus fixed cards |
+
+## 7. Calibration: one chime and one hit in five moods and three weights
+
+> A Roblox adventure game needs a family of two cues: a UI chime (quest step done) and a melee hit. Give each in five moods (happy, sad, tense, magical, menacing) and, for the hit, three weights (light, medium, heavy). Specify them so a builder can make them; there are no source files yet.
+
+| Check | Expected |
+| --- | --- |
+| 7.1 (must) | Every mood version differs from its siblings in named numbers, not only in adjectives: envelope (attack, release, tail in ms), pitch or register and texture per version (SC-02, SC-03, S-76) |
+| 7.2 (must) | Light, medium and heavy hits differ in envelope (longer release and body for heavier), pitch (down for bigger) and layers, not only in level (S-76, SC-06) |
+| 7.3 | One signature element kept in every version, so the family stays recognisable (SC-11; `references/craft-process.md` §6 variants of one family) |
+| 7.4 (must) | Distinctness is graded by an owner listen: the plan asks check-in B or C goal questions ("which is heavier?", "which mood is this?", screen covered) and ranks light vs heavy (`references/review.md` §2, R-53); the agent does not claim the versions sound distinct |
+| 7.5 | Grader: two versions with the same envelope and pitch numbers and only a different label fail 7.1 for that pair |
+
+## 8. Staged ability from a timing list
+
+> The animator's timing list r2 for a frost bolt: `charge_start` 0.133 s, `release` 0.433 s, projectile spawn (code), `contact_confirmed` (server event), tail. The VFX designer keys to the same ids. Plan the sound from this list up to the first owner check-in, and say what comes after.
+
+| Check | Expected |
+| --- | --- |
+| 8.1 (must) | A stage sheet with one row per stage in timing list r2, same names, each keyed to an event id at the revision; a stage with no sound has a reason (SKILL.md §2 step 2, SC-04; `references/craft-process.md` §2; R-05, R-06) |
+| 8.2 (must) | Attempt cues on the input or client event; impact weight only on `contact_confirmed`, never on a contact candidate or client prediction (S-150, R-07) |
+| 8.3 (must) | Temp pass before any polish: every stage gets a temp source marked TEMP (library first), the temp cue list with event ids goes to the integrator, then check-in A on order and timing; no final processing before the timing list revision is locked (SC-15, SC-17; `references/craft-process.md` §4; R-50) |
+| 8.4 | Later check-ins planned: B for hero-cue options (at most 3 per hero cue, loudness-matched) and C solo then full mix on phone speaker and headphones, each with goal questions, never "do you like it?" (`references/review.md` §2; R-51, R-52) |
+| 8.5 | Build rises to the release and is loudest there; impact tail moves like the verb (slows and spreads) (SC-03, SC-04, R-11) |
+| 8.6 | Sync rule stated: onset on the first lit contact frame to +40 ms, or "not verified" without a device capture (S-133, R-54) |

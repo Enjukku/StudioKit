@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6: A6 rewritten, A9-A14 added)
 
 # Eval briefs for the animator (animation-design + animation-craft + rig-pipeline)
 
@@ -11,9 +11,15 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | A3 (must) | Technique chosen per moving part (keyed clip / code / physics / texture) with the reason and a docs path; no rigger step for a rigid one-axis prop; a rig need goes through `rig-pipeline` |
 | A4 (must) | Gameplay windows are inputs, never changed; markers are presentation; the server owns outcomes |
 | A5 | Timing list in `templates/anim/timing-list.md` form: one meaning per event, seconds + source frame + fps, owner, consumers, interruption rule |
-| A6 | Light checks: clip_check numbers for every clip; images only for failing numbers plus ≤ 8 key frames; render and image counts reported |
+| A6 | Light checks: clip_check numbers for every clip; check images only for failing numbers plus ≤ 8 key frames per action; plan-stage images (one black-fill contact sheet per key clip, timing-take frames that decide, playable previews for the owner) counted separately, outside the ≤ 8 cap; render and image counts reported for both (`animation-design/references/review.md` §5) |
 | A7 | Hand-back in `rules/messages.md` §3 shape: STATUS first, coverage per item, evidence labels, docs_read |
 | A8 (must, when exporting) | FBX through `tools/rig/roblox_fbx.py` (`kind="clip"`), export copy baked with visual keying; in-place locomotion unless a tested root-motion policy is chosen |
+| A9 (key clips) | A beat sheet per key clip, dated before the first key: per beat body action and driver, time, sound word, subtext; the mechanic verb for an ability (`animation-design/SKILL.md` §3 step 5) |
+| A10 (key clips) | 2-3 key-pose options at equal finish as black-fill at the game camera on one contact sheet; the pick and why each other option lost recorded (`animation-design/SKILL.md` §3 step 6; `review.md` §8a B-12) |
+| A11 (keyed clips) | Blocking check-in recorded before any spline (with no named reviewer: the self check-in with §8a lines, black-fills and root-only preview in the job folder) (`animation-craft/SKILL.md` §3 step 4) |
+| A12 (when an enemy or hazard threatens the player) | The tell is a distinct pose held at least the designer's reaction window (frames vs window), or the window is asked for as UNKNOWN; the player's own tell stays short (`animation-design/references/game-timing.md` §2; `review.md` §8a B-06) |
+| A13 (when VFX or sound key from the clip) | The timing list names the sync trigger event and, for a hit with hit-stop, a `freeze_frame` event; sound sync labelled not verified without a device capture (`game-timing.md` §4 "Sync rule", §5) |
+| A14 (actions with a tell, contact or outcome) | The read holds with effects hidden: a capture or frame with VFX off for the tell and the contact (`game-timing.md` §5, §8) |
 
 ## 1. Heavy two-handed sword swing (held item)
 > A knight swings a two-handed greatsword in a third-person melee game. The feature contract gives: startup 0.5 s, active 0.15 s, recovery 0.6 s, cancel into dodge allowed after 0.35 s of recovery. The rig is released (rig sheet + control manifest given; the sword is on a right-hand grip socket, left hand solved to the handle). Plan the clip, block it, and hand VFX and sound what they need.

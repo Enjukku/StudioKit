@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J012; owner's marketing paper, short video plan (knowledge/reference/marketing/03-launch-measurement-policy-process-templates.md §6.4 TP-VIDEO; 02-video-creators-ads-updates-community.md §1)
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Short video plan: <game> · <video id> · <platform> · <date>
 
@@ -58,3 +58,19 @@ Workflow: `marketing-craft` (video). One plan per edit. A native Roblox gameplay
 | watch metric, attribution window, plays, arriving-player quality | |
 | stop or revise when | owner-approved conditions: policy problem, negative feedback, cost, poor-fit players |
 | owner decision id to publish | |
+
+## E. Edit checks (on the edit file)
+Inputs, commands and pass rules: `marketing-craft/references/channel-kits.md` §3 (opening beat, readable for everyone, sound in sync); flash counter: `vfx-craft/references/measure.md` §6. A line without its input is "not verified".
+| Field | Value |
+| --- | --- |
+| frames folder, fps, frame count | from the frame command |
+| opening action: start time (ms) of tell / build / beat / peak / result | |
+| hero on the peak frame is the launched thing | still name |
+| muted read | what the captions say, read with sound off |
+| flash onsets over 10 % of the frame, most in any 1 s (also the 3 % count where §6 says) | count + the onset times looked at |
+| WAV source | cutter, timeline, length (ms) vs video length; or "not verified" |
+
+Per checked hit
+| Hit | Contact frame time (ms) | Onset time, WAV without music (ms) | Offset (ms) | Onset in full mix (ms) | Status |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | |

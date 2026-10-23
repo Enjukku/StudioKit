@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6: checks for the J018 stages; 1.8 and 3.4 rewritten to the book's lowest / highest setting and image budget)
 
 # Eval briefs for the environment-designer (environment-design + environment-craft)
 
@@ -25,8 +25,16 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 1.5 (must) | Look sheet: sky chosen before Atmosphere, values per zone with sources, at least 3 look-lab questions answered with captures |
 | 1.6 (must) | Ambience map for all four zones: feeling, causes, point sources with anchors, blends with edge cases, streaming rule, fallback; numbers `UNKNOWN` where unmeasured |
 | 1.7 | Zone volumes and anchors in the place with the exact conventions; scene audit shows no missing, unlisted or duplicate ids |
-| 1.8 (must) | Review packet: camera set at low and high quality incl. eye-level route, reverse route, top-down, scale-with-player; audit 0 floating, 0 buried; budgets measured or `UNKNOWN` |
+| 1.8 (must) | Review packet: key views at the lowest and highest graphics setting, and the full camera set (incl. eye-level route, reverse route, top-down, scale-with-player) once at both settings for the release candidate (`environment-design/references/review.md` §3); audit 0 floating, 0 buried; budgets measured or `UNKNOWN` |
 | 1.9 | Briefs to the sound and VFX designers in the `rules/messages.md` format, from the map |
+| 1.10 (must) | Read plan (`environment-design/references/read-plan.md` §1) written and dated before the first reference image; every field sourced or `PROPOSAL` (`environment-design/SKILL.md` §3 step 2; `review.md` §7 RD1) |
+| 1.11 | One option round: 3 distinct directions, one unexpected, warm-up labelled; a pick with its reason tied to the read plan and one line per rejected option (`read-plan.md` §3; `review.md` §7 PS1) |
+| 1.12 | Grey value pass on the greybox: 2-3 sun positions measured and the key light chosen by the numbers, recorded in the look sheet (`environment-design/SKILL.md` §3 step 5; `light-and-air.md` LA-15; `review.md` §7 VB8) |
+| 1.13 | Smallest gameplay object checked on each floor type at the smallest phone viewport, with the value ratio against the marker target (`review.md` §7 FL1; `measure-captures.md` M5) |
+| 1.14 | Environment band numbers: p5 and p95 of the environment-only boxes in each key view against the band, near-black share (`review.md` §7 VB1; M1, M2) |
+| 1.15 | Key views measured at the lowest setting and the RD, VB and FL numbers hold there (`review.md` §3, §7 QV1, VB10) |
+| 1.16 | The default camera passes the cave mouth without clipping or being pushed in, shown by a play-mode capture as the character passes (`review.md` §7 FL7) |
+| 1.17 | With the final Atmosphere on, the falls haze leaves each route cue in its decision view at its separation target (`review.md` §7 VB7; M6, M5 for small cues) |
 
 ## 2. Fix: "players miss the cave entrance" (medium effort)
 > Play-testers walk past the cave on the swamp boardwalk. Fix it. Stage files and captures from brief 1.
@@ -36,6 +44,7 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 2.1 (must) | Cause found before changing anything (off-camera, hidden, blends with background, contradicted cue, shown late, read as inaccessible), with the camera evidence |
 | 2.2 (must) | Least disruptive fix (framing, contrast, light, a sound cue with a visible cause) before arrows or signs; route length or timing changes go to the game designer as a proposal |
 | 2.3 | Retest of everything the change touches (sightlines, collision, ambience border), before / after captures from the same cameras |
+| 2.4 (must) | Cause traced with the contrast list for the cave entrance (value, hue, saturation, size, shape, position, motion: wins, ties or loses) before anything is added; the fix changes one that loses, surroundings lowered before the subject is raised (`environment-design/references/review.md` §6 "Contrast before detail") |
 
 ## 3. Look change: dusk hub, dark cave, night sky (medium or high effort)
 > The owner wants the hub to feel like a warm dusk, the cave dark with a single glowing crystal that guides you, and a starry night sky after a story event. Phones must still read the path.
@@ -45,8 +54,9 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 3.1 (must) | Sky handled honestly: no blend feature claimed; swap hidden behind a fade / event moment, or mood moved with tweens of Atmosphere, ambients, ColorCorrection, orientation |
 | 3.2 (must) | The crystal glows with Neon or emissive **plus** a light object; Range within the 120 cap; it is the brightest point in the cave |
 | 3.3 | Dusk from ClockTime and latitude, sky, warm ambients with Ambient ≤ OutdoorAmbient, exposure rather than Brightness; Atmosphere with Haze before Glare / Decay |
-| 3.4 (must) | Path readable at low quality: no reliance on shadows, bloom or SunRays for the route; captures at low and high quality |
+| 3.4 (must) | Path readable at the lowest setting: no reliance on shadows, bloom or SunRays for the route; numbers at the lowest and highest setting, key-view images per the image budget (`environment-design/references/review.md` §3, §7 VB10, QV1) |
 | 3.5 | Runtime change specified for a code role (what changes, when, how long); no game code written |
+| 3.6 | The crystal is the region that wins the focus of the cave view by the numbers: lightest by median or by its own contrast against its ring, by the RD2 rule (`review.md` §7 RD2, VB3; `measure-captures.md` M1) |
 
 ## 4. Import and interior problems
 > The cliff imported from Blender is 100 times too small, and the hut interior is lit like outdoors through its walls.

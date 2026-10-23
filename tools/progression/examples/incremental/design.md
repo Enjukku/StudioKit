@@ -1,6 +1,6 @@
 # Bloom Valley: worked example of an incremental game
 
-> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed). Model `example-incremental-r2`, SHA-256 `fc64e5d6c02f3eb0…` (the full hash is in every run file).
+> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6: reward tier table and display fixtures in §10). Model `example-incremental-r2`, SHA-256 `fc64e5d6c02f3eb0…` (the full hash is in every run file).
 
 **For learning, not tuning.** This is a teaching example. Only the flower pot uses published numbers (source M01, a 2016 article about an idle game, as re-checked in the owner's research paper). Every other number is an `EXAMPLE ASSUMPTION`. No number here is a target or a value for a real game. A "pass" below means that the simulator measured a time inside a window that I chose. It does not show that the game is fun.
 
@@ -114,11 +114,27 @@ Uncertainty: each option is one strategy on assumed numbers. Whether players pre
 
 ## 10. Hand-off, playtest, limits
 
-- **UI**: from the first minute, show the next pot price, the greenhouse button, and the bridge with "opens after your first Replant". Before a Replant, show what it keeps and removes.
+- **UI**: from the first minute, show the next pot price, the greenhouse button, and the bridge with "opens after your first Replant". Before a Replant, show what it keeps and removes. Tiers and text names: the reward tier table below. Number display fixtures (rule: `progression-craft/references/data-handoff.md` §5; made with `curves.display_round`, 3 significant digits; balances floor, prices and requirements ceil): balance 286,678 shows 286K next to the 73rd greenhouse's price 286,679 shown as 287K (half-up would show 287K for both); balance 59,999 shows 59.9K next to the second Sky Orchard's 60,000 shown as 60.0K; run petals 6,999,999 show 6.99M against the Replant requirement 7,000,000 shown as 7.00M.
 - **Analyst**: one event per purchase step, per Replant (seeds, run length) and per offline reward.
 - **Engineering**: nothing is exported; an example never becomes definition tables.
 - **A playtest must check**: does the player connect the jump to the purchase (TL-01)? Does the slowdown lead to the Replant or out of the game (TL-03)? Is the locked bridge exciting or annoying (TL-05)? In week 3, why do players still Replant?
 - **Limits**: one strategy per run; Replants are automatic; no randomness; no measured player data. Every result depends on all 65 `EXAMPLE ASSUMPTION` inputs (listed in each chart's assumptions panel).
+
+### Reward tier table (option A, model `example-incremental-r2`)
+
+Built as `progression-design/references/reward-tiers.md` §4 says; tiers are PROPOSAL, every rate comes from the `reward_rates` block (`progression-craft/references/tools.md` §6a) of full reruns of `runs/efficient.json` and `runs/daily.json` (the README commands without `--lean`, written to a scratch folder; not committed). The pot milestones come from the run's `spikes`. Efficient: 3,600 active s (the horizon). Daily: 31,201 active s, stopped at "all goals reached" on day 26 (26 sessions of 20 min).
+
+| Event | Benefit | Tier | Efficient, per active hour | Daily, per active hour | Note |
+| --- | --- | --- | --- | --- | --- |
+| pot, greenhouse, Sky Orchard bought (repeats) | number only | T1 | about 456 | about 549 | merged by the crafts |
+| pots 25 and 50 (x2), watering can | capability: TL-01 spikes | T2 | 3, all in the first 33 s | 0.35 | |
+| bee hive (x2 greenhouses, re-bought each run) | number only, but the run's one item | T2 | 4 | 6.0 | |
+| first greenhouse | choice: a second track (TL-02) | T3 | 1 (43 s) | 0.12 | once |
+| first Sky Orchard | access: the area across the bridge (TL-05) | T3 | 1 (1,589 s) | 0.12 | once |
+| first Replant (and the bridge pass bought 1 s later) | reset with seeds; the bridge opens | T4 | 1 (1,539 s) | 0.12 (1,201 s) | the first-time rule (`reward-tiers.md` §2) |
+| later Replants | reset with seeds | T3 | 2 | 5.9 = about 2 per daily session (51 in 26 sessions) | the capstone of every run |
+
+Tier sums, daily: T2 6.35 per hour (ceiling 60); T3 6.12 per hour (ceiling 12); T4 0.12 per hour (ceiling 3 at 20-minute sessions). Efficient: T2 7, T3 4, T4 1. Each sum is below the one under it, but in the daily run T3 is only 0.23 per hour below T2: finding 1's crowded Replants make the milestone tier almost as frequent as the small-goal tier. Option B (about one Replant per session) widens the gap. Every run ends on a Replant (capstone rule, `reward-tiers.md` §5); the pot track is an infinite sink and has no capstone.
 
 Files: `model.json`, `runs/*.json`, `chart.html`, `options/model-B.json`, `options/model-C.json`, `options/runs/*.json`, `options/chart.html`. Re-run commands: `../README.md`.
 

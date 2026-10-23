@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): C7-C12, brief 5 (calibration)
 
 # Eval briefs for the UI/UX designer (ui-design + ui-figma + style books)
 
@@ -12,6 +12,12 @@ Give the agent the brief text only. Grade each check pass / fail. A brief passes
 | C4 | Built from components with state variants; tokens (radius, outline, lip, text ladder, spacing) consistent and from the chosen style book |
 | C5 | Self-review screenshots: phone, tablet and PC size, grayscale, longest text, each state; labels MCP-verified (Figma) vs not verified |
 | C6 | Generated images (if any): originals, no text, logged with model and prompt, inside the image budget |
+| C7 (briefs 1-3) | Flow sheet with taps per task (ui-design §3 step 3; screen-contract §7) |
+| C8 (briefs 1-3) | 2-3 wireframe options that differ in structure, the first labelled warm-up, one atypical; the pick and each rejection have a reason (ui-design §3 step 5; review §6 S-08) |
+| C9 (briefs 1-3) | Grey value pass with numbers: in the phone-fit luminance image rank 1 is the loudest (largest contrast to its ring), rank 2 next (ui-design §3 step 6; review §6 S-10, S-11) |
+| C10 (briefs 1-3) | Motion records name the motion-table row of every animated element; a value without a row is tagged PROPOSAL (ui-design §3 step 9; motion §7; review §6 S-32) |
+| C11 | Every refusal names its cause and its fix at the control, in text and icon (motion §8; review §6 S-38) |
+| C12 | A rejected request shows no success layer: success plays only on confirmation (ui-design D-26; review §6 S-37) |
 
 ## 1. Cartoon pet shop (G2 first task)
 > A pet simulator for kids, mostly on phones. Make the egg shop screen: three eggs the player can buy with in-game coins, one featured egg for Robux. Cartoon style.
@@ -57,3 +63,14 @@ Give the agent the brief text only. Grade each check pass / fail. A brief passes
 | 4.3 | Contrast measured on the weakest background; low health not colour-only |
 | 4.4 | Party list position checked against Roblox's top-right buttons |
 | 4.5 | No invented player data ("players prefer..."): proposes how to test |
+
+## 5. Calibration: one button press in four moods
+> One primary "Play" button. Make its press in four moods: heavy, light, playful, premium. Same button art and canvas for all four; show each as a Figma prototype or a frame folder at normal speed.
+
+| Check | Expected |
+| --- | --- |
+| 5.1 (must) | The grader, shown the four unlabelled and in random order, matches each to its mood (all four correct) |
+| 5.2 | Each mood is a motion-table row with its Material column filled (motion §7); every value PROPOSAL |
+| 5.3 | The moods differ in timing, easing, overshoot or scale, not only colour; exits no longer than entrances (review §6 S-32) |
+| 5.4 | In every mood the press answers on the press frame or the next (motion §2; review §6 S-33) |
+| 5.5 | Feel is not claimed from stills: the prototype or frame folder is the evidence, labelled (ui-design §3 step 11) |

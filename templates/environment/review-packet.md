@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J008; environment paper notes (knowledge/reference/environment/03-pipeline-performance-review.md §7: RA01-RA03, RC01-RC15, RS01-RS07, MP01-MP08, RJ01-RJ05); first-game review practice (04-first-game-stages.md FS-V01..V09)
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Review packet: <stage-id> · revision <n>
 
@@ -19,30 +19,71 @@ Workflow: `environment-design/references/review.md`. Copy to `content/stages/<st
 | blueprint revision approved | |
 | ambience map revision | |
 | Studio instance (studio_id) and place | test place, never a live game place |
-| graphics settings captured | low quality / high quality / phone Automatic |
+| graphics settings captured | lowest / highest graphics setting (`environment-design/references/review.md` §3; how: `environment-craft/references/measure-captures.md` M9) / phone Automatic |
 | time of day and weather states captured | |
 | what changed since the last packet | |
 
 ## B. Camera set (one named camera per risk, with position, target and FOV, so anyone can repeat it)
-| Camera id | Kind (player-eye approach, decision point, reverse route, high overview, top-down layout, contact close-up, skyline, scale-with-player, stress scene) | Position / target / FOV | Image (low quality) | Image (high quality) | Compared with (reference image or blueprint sheet) |
+| Camera id | Kind (player-eye approach, decision point, reverse route, high overview, top-down layout, contact close-up, skyline, scale-with-player, stress scene) | Position / target / FOV | Image (lowest setting) | Image (highest setting) | Compared with (reference image or blueprint sheet) |
 | --- | --- | --- | --- | --- | --- |
 
 Minimum for any stage: player-eye views along the whole route (approach, decision, after commit, return), front / sides / back / high 3/4 of every structure, one top-down of the whole stage, one scale shot with the player figure per area, and low oblique or under-roof views of stepped roofs and overhangs. Move the camera or character into the content before capturing (streaming draws only what is near).
 
-## C. Look checks
-| # | Check | Result | Evidence (camera ids, files) | Label |
+## C. Look checks (`environment-design/references/review.md` §7)
+One row per §7 line; the line, its input and its numbers recipe are defined there (never copied here). Every line is re-rated every round, not only the failed ones (`review.md` §4). A fix job runs the §7 fix-job lines and marks the others `n/a (fix job)`. A line that cannot run is `not verified` and goes to the could-not-check list in §F.
+| Line | Result (numbers, PASS / FAIL against a target with its source, or MEASURED) | Input used (captures, numbers files) | Label | Previous round result |
 | --- | --- | --- | --- | --- |
-| 1 | Route guidance: at each decision point the next move reads | | | |
-| 2 | Focal hierarchy: the landmark stays visible and distinct with normal UI and effects | | | |
-| 3 | Scale and passage: openings pass the collision envelope; rooms and furniture make sense at player size | | | |
-| 4 | Camera clearance: no bad clipping while moving or turning | | | |
-| 5 | Lighting readability at low and high quality | | | |
-| 6 | Atmosphere: sightlines usable; depth and mood match the reference | | | |
-| 7 | Contact: nothing floating; intended overlaps recorded | | | |
-| 8 | Finish: every visible face finished; every enterable room dressed; directional pieces face right | | | |
-| 9 | Repetition: no unintended pattern on a long approach or a sideways pan | | | |
-| 10 | Cohesion: shape, palette, material and detail match the art bible version, with characters, UI and VFX in view | | | |
-| 11 | Iconic traits of each structure read at play distance | | | |
+| RD1 | | | | |
+| RD2 | | | | |
+| RD3 | | | | |
+| RD4 | | | | |
+| RD5 | | | | |
+| RD6 | | | | |
+| RD7 | | | | |
+| RD8 | | | | |
+| RD9 | | | | |
+| RD10 | | | | |
+| RD11 | | | | |
+| RD12 | | | | |
+| RD13 | | | | |
+| VB1 | | | | |
+| VB2 | | | | |
+| VB3 | | | | |
+| VB4 | | | | |
+| VB5 | | | | |
+| VB6 | | | | |
+| VB7 | | | | |
+| VB8 | | | | |
+| VB9 | | | | |
+| VB10 | | | | |
+| VB11 | | | | |
+| VB12 | | | | |
+| VB13 | | | | |
+| FL1 | | | | |
+| FL2 | | | | |
+| FL3 | | | | |
+| FL4 | | | | |
+| FL5 | | | | |
+| FL6 | | | | |
+| FL7 | | | | |
+| FL8 | | | | |
+| FL9 | | | | |
+| FL10 | | | | |
+| FL11 | | | | |
+| FL12 | | | | |
+| FL13 | | | | |
+| AM1 | | | | |
+| AM2 | | | | |
+| AM3 | | | | |
+| QV1 | | | | |
+| QV2 | | | | |
+| QV3 | | | | |
+| QV4 | | | | |
+| PS1 | | | | |
+| PS2 | | | | |
+| PS3 | | | | |
+| PS4 | | | | |
+| PS5 | | | | |
 
 ## D. Ambience checks
 | # | Check | Result | Evidence | Label |
@@ -72,6 +113,14 @@ An editor or emulator number is never presented as a phone result.
 | --- | --- | --- | --- | --- | --- |
 
 List the 3 weakest points left, even when every check passes.
+
+**Could-not-check list** (`review.md` §7 PS5)
+| Step or §7 line | Missing input | What would close it |
+| --- | --- | --- |
+
+**Captures used against the image budget** (`review.md` §3; pass budget from the read plan, blueprint §L)
+| Pass | Captures taken | Captures looked at | Budget for this pass | Over budget: why |
+| --- | --- | --- | --- | --- |
 
 ## G. Owner decision
 | Date | Owner's words |

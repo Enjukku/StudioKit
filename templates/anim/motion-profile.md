@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
-source: J006; animation paper AP:266-282 (motion profile TP01-TP12), AP:584 (fields for the rigger); rig-pipeline S1
+updated: 2026-10-22
+source: J006; animation paper AP:266-282 (motion profile TP01-TP12), AP:584 (fields for the rigger); rig-pipeline S1; J019 P6 (G3-P6): TP01 slots for `animation-design/references/body-and-species.md` §5
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Motion profile: <asset-id> · rig sheet revision <n> (or "no rig")
 
@@ -23,7 +23,10 @@ Animator's own file at S1 (`rig-pipeline`), next to the rig sheet: `content/rigs
 | Key | Value |
 | --- | --- |
 | Subject | |
-| Feel words (2-4) | |
+| Feel words (2-4), each with its visible change (`animation-design/references/body-and-species.md` §5) | |
+| Identity anchors and hook shapes (2-5) that stay visible at key poses, each with the side the camera sees (`body-and-species.md` §5) | |
+| Body shape agrees with the motion? (black-fill read vs brief; a disagreement is asked before keying: `body-and-species.md` §1, §5) | yes / no + question id |
+| Costly parts, each with its cheap fallback (`body-and-species.md` §5; `rig-pipeline` §8) | |
 | Kind | character / creature / pet / held item / prop or mechanism / vehicle or mount / building / ambient |
 | Camera and size on the phone screen | |
 | Gameplay role and windows (owner, id) | |

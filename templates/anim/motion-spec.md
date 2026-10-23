@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
-source: J006 owner brief ("Code-driven motion: the animator writes the motion spec (curves, timings, events); a builder writes the code"); animation paper AP:446-454 (props), AP:771, AP:831 (tweens, cosmetic motion local); fact-check-techniques.md
+updated: 2026-10-22
+source: J006 owner brief ("Code-driven motion: the animator writes the motion spec (curves, timings, events); a builder writes the code"); animation paper AP:446-454 (props), AP:771, AP:831 (tweens, cosmetic motion local); fact-check-techniques.md; J019 P6 (G3-P6): slots for `animation-craft/references/motion-specs.md` §2 items 10-12
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Motion spec: <object-id> · revision <n>
 
@@ -15,6 +15,7 @@ For motion driven by code (TweenService, CFrame / PivotTo) or physics constraint
 ## Intent
 - **Read:** what the player must understand (it is unlocked, it is about to drop, it is safe to step on).
 - **Feel words:** (heavy, old, grinding / light, snappy, magical).
+- **Personality in 3-5 words and the curve that shows it** (`animation-craft/references/motion-specs.md` §2 item 10):
 - **Interaction:** what starts it (player input, trigger, timer, state change), who owns that state (server, client).
 
 ## Mechanism
@@ -47,6 +48,14 @@ Lengths in seconds; source = gameplay window id, owner decision, measured refere
 | Off-screen / far behaviour (stop, slow, skip) | |
 | Streaming: what happens when the object streams in or out mid-motion | |
 
+## Reduced motion, pulses, truth (`animation-craft/references/motion-specs.md` §2 items 11-12)
+| Key | Value |
+| --- | --- |
+| Reduced-motion behaviour (stop / slow / snap to the end state; the state change stays visible) | |
+| Pulse rate class of a looping bob or pulse (safe = slow / urgent = faster), cycles per second | n/a or <class>, <rate> |
+| Truth: danger pose length vs the danger window (data path) | n/a or <s> = <window id> |
+| Truth: visible reach vs the gameplay area (data path) | n/a or <studs> = <data path> |
+
 ## Interruptions and states
 | Case | Behaviour |
 | --- | --- |
@@ -60,3 +69,4 @@ Lengths in seconds; source = gameplay window id, owner decision, measured refere
 - [ ] Each phase length and curve as listed; events fire at the listed times (Output log times).
 - [ ] Cosmetic motion runs on the client; authoritative state on the server.
 - [ ] Copies are out of step; off-screen behaviour as listed.
+- [ ] Reduced motion, pulse rate and truth rows hold as listed.

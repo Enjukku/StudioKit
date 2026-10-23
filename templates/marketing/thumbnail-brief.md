@@ -2,17 +2,48 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J012; owner's marketing paper, image brief (knowledge/reference/marketing/03-launch-measurement-policy-process-templates.md §6.3 TP-BRIEF); reference-images skill (manifest, families thumbnail and game-icon); rules/messages.md
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Image brief: <game> · <brief id> · <icon | thumbnail> · <date>
 
 Workflow: `marketing-craft` (image route), `reference-images` (manifest and `art_refs.py`). The marketing agent owns the message; the art director owns the look (art bible); the owner approves the chosen concept. Copy to `knowledge/jobs/<job>/marketing/briefs/`. One brief per concept; variants of one concept share a brief.
 
 **Rule.** Never ask the image model for a feature, reward, item or scene the game does not have, to raise click appeal. Title text is never drawn by the image model: approved wording is added afterwards in an editor and checked.
+
+## Image brief lines (stage 1)
+What each line must hold: `marketing-craft/references/image-pipeline.md` §1 stage 1; checked by `image-review.md` MR-01. Fill each or write `n/a: <reason>`.
+| Field | Value |
+| --- | --- |
+| launched thing (the hero) | |
+| sell list (2-4, numbered) | |
+| premise (one sentence) | |
+| single message and its one symbol | |
+| audience: "fans want" line | the line + its dated source (trend scout, Discord, analyst) |
+| hook line | |
+| target experience | as the game names it |
+| new world: its escape | from the last world |
+| tone | dramatic / calm |
+| character variant | new version (own palette and anchors) / base character in a new scene / n/a |
+| art bible | revision + the §7 rows used (`art-review/references/art-bible.md` §7) |
+
+Keyword table
+| Keyword | Colour key | Setting | Pose or expression | Prop |
+| --- | --- | --- | --- | --- |
+| | | | | |
+
+Crop plan (the icon of a new game is its own brief and its own roughs)
+| Destination | Format | Real size and its source (`surfaces.md` row or doc) | Safe square |
+| --- | --- | --- | --- |
+| | | | |
+
+Layer plan (layered master, `image-pipeline.md` §1 stage 10)
+| Layer | Holds |
+| --- | --- |
+| foreground / midground / background / effects / extra light / title | |
 
 ## A. Message (marketing)
 | Field | Value |

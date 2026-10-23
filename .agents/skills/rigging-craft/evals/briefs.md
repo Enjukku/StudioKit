@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6: check 1.4 rewritten)
 
 # Eval briefs for the character-rigger (rig-pipeline + rigging-design + rigging-craft)
 
@@ -22,7 +22,7 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 1.1 (must) | S2 inventory names connected parts, open edges and triangles per mesh from a script run, with the evidence file |
 | 1.2 (must) | Head, arms, legs routed per region with reasons; stylized-merged default (R-cut first where a cover can hide it) applied or a stated reason to skin |
 | 1.3 | Head pivot at the neck base, not the head centre; no bridge neck mesh |
-| 1.4 (must) | S4 proxy sweep through every §B extreme with 6-view renders; ≥ 1 real fix note round sent or an explicit "all passed" with evidence |
+| 1.4 (must) | S4 proxy sweep through every §B extreme with numbers per pose (overlaps, cap exposure, black-fill count); images for failing poses plus ≤ 8 key poses; ≥ 1 real fix note round sent or an explicit "all passed" with evidence (`rigging-craft/references/tests.md` §3 step 2; `rig-pipeline` §4a) |
 | 1.5 (must) | `rig_audit.py` report: weights and geometry PASS; head-only sweep with a protected body group; body move reported against the sheet's tolerance |
 | 1.6 | Control manifest covers every §B ROM |
 | 1.7 (must) | Studio import with Rig Type Custom and Keep Zero Influence Bones decided on purpose; test clips played on an Animator; MCP-verified evidence |

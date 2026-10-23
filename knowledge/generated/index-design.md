@@ -5,9 +5,9 @@
 | note | type | scope | status | updated | summary |
 | --- | --- | --- | --- | --- | --- |
 | [Decisions ledger](../design/decisions.md) | decision | game | active | 2026-10-21 | The only list of locked design decisions. |
-| [Game profile](../design/game-profile.md) | profile | game | active | 2026-10-20 | Fill in at project start. |
+| [Game profile](../design/game-profile.md) | profile | game | active | 2026-10-22 | Fill in at project start. |
 | [Open questions](../design/open-questions.md) | reference | game | active | 2026-10-20 | Unanswered design questions and PROPOSAL items. |
 | [Precedents: accepted work that shows what this game is](../design/precedents.md) | reference | game | active | 2026-10-21 | Filed at every job close (`orchestration` skill §9). |
 | [Taste log: the owner's corrections, word for word](../design/taste-log.md) | profile | game | active | 2026-10-21 | Every owner correction or praise about look, feel, sound, motion or play, unchanged. |
 | [Tried and failed](../design/tried-and-failed.md) | failed | game | active | 2026-10-20 | Approaches that were reverted, switched off after a test, or rejected. |
-| [Vocabulary: one name per thing](../design/vocabulary.md) | reference | game | active | 2026-10-21 | Filed at every job close. |
+| [Vocabulary: one name per thing](../design/vocabulary.md) | reference | game | active | 2026-10-22 | Filed at every job close. |

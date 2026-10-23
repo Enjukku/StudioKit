@@ -1,0 +1,24 @@
+{
+  "_example": "Illustration only (the harbour hub of level-design/references/plan-and-blockout.md §1 and §6): positions are not measured and jump is the starting value until the Studio measurement lands. Keys and the command that reads them: level-design/references/review-artifact.md §6.2.",
+  "walk_speed": 16,
+  "jump": 6.4,
+  "margin": 1,
+  "nodes": {
+    "spawn": [0, 4, 0],
+    "fork": [0, 4, 96],
+    "bridge_w": [60, 4, 180],
+    "bridge_e": [124, 4, 180],
+    "lookout": [124, 10, 292]
+  },
+  "edges": [
+    {"from": "spawn", "to": "fork", "limit_s": 8, "sees": "the gate tower ahead, the market to the left"},
+    {"from": "fork", "to": "bridge_w", "via": [[0, 4, 140]], "limit_s": 10, "sees": "gulls dive at the path"},
+    {"from": "bridge_w", "to": "bridge_e", "limit_s": 5, "sees": "the swinging bridge section"},
+    {"from": "bridge_e", "to": "lookout", "limit_s": 9, "sees": "the next sea's gate behind the lighthouse"}
+  ],
+  "ledges": [
+    {"name": "pier step", "height": 2, "meant": "climb"},
+    {"name": "lookout wall", "height": 9, "meant": "block"},
+    {"name": "market crate", "height": 6, "meant": "climb"}
+  ]
+}

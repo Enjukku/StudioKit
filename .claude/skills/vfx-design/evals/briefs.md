@@ -1,9 +1,9 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-13
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-13; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Eval briefs for the vfx-design skill
 
 Give the agent the brief text only. Grade each check pass/fail (v2 2026-10-20: C4, C6 and 1.6 rewritten for the craft-first skill; other checks citing old caps follow SKILL.md §6 overrides); a brief passes at ≥80% of its checks with no
-"must" check failed. Checks common to all briefs (C1-C5) apply to every run.
+"must" check failed. Checks common to all briefs (C1-C6) apply to every run; C7-C12 (v3 2026-10-22, the J018 stages) apply to every brief that plans a new effect (all except brief 5). v3 also rewrites 1.4 and 3.3 to match the rebuilt book and `platform-policy`; old and new scores do not compare.
 
 | ID | Common check |
 | --- | --- |
@@ -13,6 +13,12 @@ Give the agent the brief text only. Grade each check pass/fail (v2 2026-10-20: C
 | C4 | Deliverable follows the v2 output (brief, frame script, layer plan, spec.json, sound brief, self-check, capture request, PROPOSAL list) or the review format (ranked findings, fixed values, "could not check" list) |
 | C6 (must, v2) | Frame script uses the screen-size math at the game camera and is compared with ≥1 pro frame script of the same type; layer values start from vfx-craft/references/pro-defaults.md with reasons for departures; curves are named library curves; LightInfluence 0 everywhere |
 | C5 | Composite flash count, colour backup (shape/icon/label), reduced-motion/reduced-flash variant that keeps the information, and a per-tier budget line with a static flipbook fallback (CA-13, EL-37, CA-22, RB-28, FB-30) |
+| C7 (must, v3) | A filled read card (job, verb, the three read lines, importance per viewer, tier caps) comes before the first layer or frame-script value (SKILL.md §2 step 1; `references/read-card.md` §1; `references/review.md` PL-01, PL-02) |
+| C8 (v3) | 2-3 options at equal finish, each with a hook from a different source, one deliberately atypical; the pick is made by a goal question and each losing option has a recorded reason (SKILL.md §2 step 4; PL-09) |
+| C9 (must, v3) | The plan puts a blocking pass (placeholder sprites, real sizes and timing) and its check-in before any texture pick; a run that names a texture or flipbook before that check-in fails (SKILL.md §1 order; `references/review.md` BL-13) |
+| C10 (v3) | The grey (VS-01) and black-fill (VS-05) gates run on the blocking stills before colour, or are planned for them when the run does not build (`references/review.md` §I3) |
+| C11 (must, v3) | Each self-review line written is PASS, FAIL, MEASURED, not verified or n/a and names its input (spec, clip rows, still, capture, owner); a line without its input is "not verified", never PASS (`references/review.md` §I, §I7) |
+| C12 (v3) | The hand-back reports image counts (renders, captures and stills made and looked at, 0 when none) against the image budget (`references/review.md` §I image budget, §I7; SKILL.md §2 step 7) |
 
 ## 1. Heavy rocket hit on a wall (mobile-first)
 
@@ -23,7 +29,7 @@ Give the agent the brief text only. Grade each check pass/fail (v2 2026-10-20: C
 | 1.1 (must) | Rated per viewer at about 5 for the shooter (medium blast; destruction preset), lower for others; no FOV punch, slow motion or 100% white at this band (MO-01, MO-02, CD-16) |
 | 1.2 (must) | Weight comes from outcome link, timing and truth, not more intensity; drawn blast and dust edge = server radius (JU-02, RV-08, EL-04, MO-11) |
 | 1.3 | Punch: brightest layer 2 f@60 inside a flash Lifetime 0.05-0.1 s; intact blocks swap to broken at the flash peak; front-loaded, staggered exits (EL-41, JU-30, EL-44, EL-43) |
-| 1.4 | Hit-stop 0 on explosions; shake by trauma (rotation only, t³, delayed to the shockwave, distance falloff), none per block (CA-08, CA-02, CA-03, CA-05, CA-04) |
+| 1.4 | Hit-stop 0 on explosions; no screen shake at importance about 5: shake is only for a rare heavy moment of the local player (rating ≥8) or when the owner allows it, and then by trauma (rotation only, t³, delayed to the shockwave, distance falloff), none per block, off under reduced motion (v3; SKILL.md §4 camera bullet, §7 "Shake from rating 3" row; `references/camera-and-screen.md` importance 3-7 row, CA-02, CA-03, CA-05) |
 | 1.5 | Toy vocabulary: chunky toy-piece chips in the toy palette, no realistic smoke, debris fades never pops; dust see-through by 2 s (MO-21, MO-14, MO-13) |
 | 1.6 (must) | Budget v2: impact recipe layers (flash 0.03-0.05 s, impact shape 0.1-0.2 s, sparks with drag, dark twin, glow, ring, ground mark); est. live particles ≤~1000 and unique textures listed; Emit(n) bursts; blast PointLight Shadows false, fade ≤0.3 s (SKILL §4, pro-defaults §B, RB-03, RB-23) |
 | 1.7 | LightEmission 1 on core and sparks, 0 on dust; LightInfluence set on every emitter (RB-05, RB-06) |
@@ -53,7 +59,7 @@ Give the agent the brief text only. Grade each check pass/fail (v2 2026-10-20: C
 | --- | --- |
 | 3.1 (must) | Windup identical in build and length for every outcome; no rarity tint before the punch; escalation only after it (MO-16) |
 | 3.2 (must) | No near-miss: no higher-tier layer on a lower result; no celebration on a result worth less than its cost (MO-17, MO-06, JU-01) |
-| 3.3 (must) | Odds for every outcome shown before purchase, summing to 100%, behind a worded Details control; PolicyService `ArePaidRandomItemsRestricted` path; no VFX over the odds panel, no urgency (MO-18, moment §D) |
+| 3.3 (must) | Odds for every outcome shown as numbers before the buy button, summing to 100%, and updated while a modifier (luck boost, pity) is active and after a once-only outcome is won; only a long list may go in a pop-up behind a visible worded "Info" or "Details" label (a bare (i) fails); PolicyService `ArePaidRandomItemsRestricted` path; no effect covers, shimmers over or animates the odds or their label; no urgency (v3; MO-18; `references/moment-recipes.md` §D item 5; SKILL.md §7 odds-panel row; `platform-policy` `references/rules.md` §A rows 2-5) |
 | 3.4 | Legendary at importance 8 for the hatcher, toast only for others; 1-2 frames pure white on the item frame; post-punch length about 2.9 s + hold; skip and quick-open (C7 Legendary row, MO-02, CD-16) |
 | 3.5 | Tier nameable without colour (name, frame shape, layer count); greyscale passes (MO-12, EL-37) |
 | 3.6 | Push-in and shake off under reduced motion; flash count in the cap (MO-20, MO-08) |
@@ -100,3 +106,15 @@ Give the agent the brief text only. Grade each check pass/fail (v2 2026-10-20: C
 | 6.5 | Stage palette read from the art bible or stage brief, not invented; effects tested on the stage's extreme surfaces; fog or motes never hide hazards or pickups (SC-50, SC-52, C9 Fog row) |
 | 6.6 | Continuous emitters ≤40 live on phones; LightEmission 0 and LightInfluence 1 on dust (RB-04, SC-27, RB-06) |
 | 6.7 | Test on the real stage with gameplay effects on top: pickup and threat still found (RV-13, SC-26) |
+
+## 7. Calibration: one simple hit in four moods (v3)
+
+> A third-person action game, camera about 14 studs behind and above the player. Plan one simple melee hit effect in four moods: light, heavy, heal and frost. Same camera, same contact event for all four.
+
+| Check | Expected |
+| --- | --- |
+| 7.1 (must) | Pass when a reviewer, given only the four frame scripts and (when the run builds) the blocking stills with the labels removed, names which is light, heavy, heal and frost; a pair the reviewer cannot tell apart fails the brief |
+| 7.2 | The four differ in named numbers, not adjectives: peak coverage, peak ms, tail ms, hold and release per version; heavy has a longer release and settle than light (`references/review.md` BL-12, PL-10) |
+| 7.3 | Shape code and verb carry the mood: heal rises with plus or round shapes, frost spreads and decelerates, a damage hit bursts in spikes; each reads in black-fill (SKILL.md §4 shape code, §9 principle 10; VS-05) |
+| 7.4 | Colour roles from the game's list, not decoration; heal never uses the damage hue; colour is never the only difference between versions (PL-12, SKILL.md §4 colour bullet) |
+| 7.5 | No shake on any of the four unless the brief or owner makes one a rare heavy moment; hit-stop rises with hit strength, longest on heavy, none on heal (SKILL.md §4 camera bullet; CA-08) |

@@ -1,4 +1,4 @@
-<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit template (J007): copy to content/models/<asset-id>/asset-record.md. Owner of the file: the modeler. How to fill it: `modeling-design` skill. Write UNKNOWN for a missing fact, never a guess. -->
+<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit template (J007): copy to content/models/<asset-id>/asset-record.md. Owner of the file: the modeler. How to fill it: `modeling-design` skill. Write UNKNOWN for a missing fact, never a guess. revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): read plan, iconic qualities, self-review results. -->
 # Asset record: <asset-id>
 
 | Field | Value | Source |
@@ -24,6 +24,49 @@
 | Shown / inferred / left out / awaiting decision | <per feature> | |
 | Deviations from the image | <what, why, who approved> | |
 | Open questions | <list> | |
+
+## Read plan (before the reference check and the blockout)
+What each row holds, and which rows a simple model fills: `modeling-design/references/read-and-form.md` §1. One line per row; UNKNOWN when a fact is missing.
+
+| Row | Value | Source |
+| --- | --- | --- |
+| Job in play | | |
+| Sell list | | |
+| Character (tension words) or personality words | | |
+| Identity anchors (ranked; the 1-2 that survive the icon crop) | | art director |
+| Read order | | |
+| Viewing conditions (game camera; on-screen height in px on the smallest phone; sides; other sizes) | | game profile |
+| Detail spots | | |
+| Shape language | | art bible rev <n> |
+| Value plan | | |
+| Palette roles (and reserved colours it must not use) | | art bible rev <n> |
+| Motion facts | | animator, rigger |
+| Neighbours | | |
+| Stop criteria and pass budget | | |
+
+## Iconic qualities, gaps, material intent
+From the reference check (`modeling-design/references/reference-check.md` §7).
+
+| Item | Value |
+| --- | --- |
+| Iconic qualities to keep | <list> |
+| Gaps and the choice made (inside the art bible, or asked) | <gap: choice, who decided> |
+| Material intent per region (unlit local colour) | <region: material, colour> |
+
+## Self-review results (each hand-off)
+Lines and pass values: `modeling-design/references/review.md` §5. Result: pass, fail, MEASURED (no tolerance) or not verified.
+
+| Group | Lines run | Result | Evidence | Label |
+| --- | --- | --- | --- | --- |
+| RP read plan | | | | |
+| SL silhouette | | | | |
+| VL value | | | | |
+| CL colour and light | | | | |
+| DT detail and surface | | | | |
+| MO motion | | | | |
+| VA variants, tiers, families | | | | |
+| GR grounding and place | | | | |
+| IM in game and honest close | | | | |
 
 ## Results (filled at each hand-off)
 | Check | Value | Evidence | Label |

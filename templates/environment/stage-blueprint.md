@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J008; first-game stage practice (knowledge/reference/environment/04-first-game-stages.md FS-P01..P14, FS-S, FS-T, FS-B); environment paper notes (route contract G01, scale sheet SC02/SC08, built-where BW01-BW08, annotated reference CO02)
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Stage blueprint: <stage-id> · revision <n>
 
@@ -20,6 +20,8 @@ Workflow: `environment-design` §3 steps 1-6. Copy to `content/stages/<stage-id>
 | feeling along the route | one line per area, in route order |
 | layout source | game designer's route graph: path + revision (the route is theirs; changes are proposals in §J) |
 | art bible version | path + version; this stage's dominant, secondary and accent colour |
+| environment value band | p5 and p95 grey value with source (art bible §7 value-band row, or `PROPOSAL`): `environment-design/references/read-plan.md` §1 "Value band and reserved colours"; checked by `review.md` §7 VB1 |
+| reserved colours | each reserved hue, its gameplay meaning and allowed share (art bible §7 reserved-colours row, or `PROPOSAL`): same read-plan row; checked by `review.md` §7 VB4 |
 | key-place reference images | approved image paths (reference-images skill, concept and environment families) |
 | camera and player | camera mode, avatar envelope, walk speed, jump, other abilities, held items (source: game designer / runtime config) |
 | scale convention | 1 stud = 28 cm unless the game profile says otherwise; any exaggeration listed in §D |
@@ -27,8 +29,8 @@ Workflow: `environment-design` §3 steps 1-6. Copy to `content/stages/<stage-id>
 | players at once | |
 
 ## B. Set list (what players expect to find here)
-| Item | Role in the stage (landmark / route cue / encounter / dressing / ambience cause) | Iconic traits that must read at play distance (2-3) | Source (modeler asset id, new request, or built here) |
-| --- | --- | --- | --- |
+| Item | Role in the stage (landmark / route cue / encounter / dressing / ambience cause) | Iconic traits that must read at play distance (2-3) | Story fact carried (§L story facts, or `none`; `review.md` §7 FL5) | Source (modeler asset id, new request, or built here) |
+| --- | --- | --- | --- | --- |
 
 Iconic, expected things before trivia. Plan every decoration, furniture type and outdoor prop here, so the layout and budget already know them.
 
@@ -56,6 +58,7 @@ Before approval, compare **each elevation with the reference silhouette**: a box
 ## F. Guidance per decision point
 | Node | Approach | Intended next move | Cue (landmark, framed opening, light, material, sound) | Views to capture (approach, decision, after commit, return) |
 | --- | --- | --- | --- | --- |
+| spawn: first view after spawn | default camera at spawn | §L key view "first view": its rank-1 read | the focal point and the contrast it must win (§L) | the first frame after spawn (`review.md` §3; checked by §7 RD2) |
 
 ## G. Built where
 | Element | Blender / Studio / split | Why | How it moves between them | Owner (environment designer or modeler request) |
@@ -83,3 +86,23 @@ Plan checks (script where possible, never by eye only): no overlaps; one connect
 | Gate | Date | Owner's words |
 | --- | --- | --- |
 | blueprint approved | | |
+
+## L. Read plan (`environment-design/references/read-plan.md` §1; written before the first image, `review.md` §7 RD1)
+Fill each field as that section defines it; each value has a source (layout, art bible, owner D-id, game profile) or is `PROPOSAL`. The option round (`read-plan.md` §3) goes in the option sheet (`review.md` §7 PS1).
+| Field | Value | Source |
+| --- | --- | --- |
+| date written (before the first image) | | |
+| job and conflict (with the game designer's revision) | | |
+| personality (3-5 words) | | |
+| story facts (3; each with its carriers, also in §B) | | |
+| theme cues (2-3) | | |
+| key views (first view, each decision view, busiest moment, main return trip) | | |
+| ranked reads per key view (1, 2, 3) | | |
+| critical facts per key view | | |
+| focal point per view, and the contrast it must win | | |
+| smallest gameplay object, and each floor type it can lie on | | |
+| value band and reserved colours | see §A | |
+| key light per area (chosen in the grey pass, `light-and-air.md` LA-15) | | |
+| detail spots (1-3 per area) | | |
+| ranked work list (agreed with the game designer) | | |
+| stop criteria and pass budget (passes, option rounds) | | |

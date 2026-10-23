@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J012; owner's marketing paper, thumbnail and icon checklist (knowledge/reference/marketing/03-launch-measurement-policy-process-templates.md §6.2 TP-THUMB); Roblox icon and thumbnail docs (mirror production/publishing/experience-icons.md, thumbnails.md); tools/art/thumb_check.py
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Thumbnail and icon checklist: <game> · <asset id> · <date>
 
@@ -20,13 +20,17 @@ Workflow: `marketing-craft` (images and checks). One copy per candidate image, n
 | surface | icon / thumbnail |
 | file, size px, file size | |
 | master check (icon: square, ≥ 512×512; thumbnail: 16:9, size vs 1920×1080, file size for personalization) | tool JSON field + docs line |
-| small size used, and its source | icon: the size the icons doc names; thumbnail: tile width measured from a phone capture (file) |
-| subject given by | mask / box / key (none = one-moment and contrast fields "not measured") |
+| small size used, and its source | icon: the size the icons doc names; thumbnail: tile width measured from a phone capture (file; row in `knowledge/design/marketing/surfaces.md`) |
+| subject given by | mask / key / alpha; `--box` is no subject (`image-pipeline.md` §2) (none = one-moment and contrast fields "not measured") |
 | subject vs surround value contrast at small size | |
 | separate subjects at small size (count, largest share) | |
 | subject near the lower edge (thumbnail) | |
 | contact sheet | path |
 | tolerance used, with decision id | or "none: diagnostics only" |
+| mask source | traced in parts and overlay-checked / magenta hero pass / key / alpha; never a coarse polygon (`marketing-craft/references/image-pipeline.md` §2 subject row) |
+| `subject_share_of_frame` | |
+| frame IoU against the green-lit mask | value + command (`image-review.md` MR-28) |
+| route and upscale | route a / b / c; master px vs the destination's ideal; any upscale (`image-review.md` MR-29) |
 
 ## B. Pass or fail
 | # | Pass when | Evidence | Result |
@@ -45,6 +49,7 @@ Workflow: `marketing-craft` (images and checks). One copy per candidate image, n
 | I12 | It tests one clear hypothesis | one line: which player expectation this image changes | |
 | I13 | Traceable and reversible | route (ChatGPT / touched up / Blender render, J012-D7), brief id, art_refs record (prompt, inputs), edit file or .blend + camera, owner approval, the image it replaces | |
 | I14 | Generated key art is not called gameplay | label on the asset record: key art / gameplay capture | |
+| I15 | Self-review attached: `marketing-craft/references/image-review.md` MR-01..MR-33, every line labelled by what proved it | the self-review file and its could-not-check list | |
 
 ## C. Result
 | Key | Value |

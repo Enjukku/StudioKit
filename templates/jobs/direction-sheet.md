@@ -8,7 +8,7 @@ supersedes: []
 revision: 1
 ---
 > Author: <job lead role> · <model id> · <effort> · <date>
-<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016). Written by the job lead in the direction stage (orchestration skill §4); the other direction leads sign. -->
+<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016). Written by the job lead in the direction stage (orchestration skill §4); the other direction leads sign. Revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): G1 goal question, dropped options as closed doors, stop criteria and budget. -->
 
 # Direction sheet: <job-id> <title>
 
@@ -23,11 +23,17 @@ revision: 1
 | --- | --- | --- | --- | --- |
 | A | | | | yes / no |
 
+G1 goal question: <one decision, carrying the job card's goal word "<goal word>"> (`orchestration/references/gates-and-feedback.md` §1)
+
+Dropped options: closed doors CD-<n>, CD-<n> in `decisions.md` (`orchestration/references/gates-and-feedback.md` §4; no second table here)
+
 ## Non-negotiables
 <per lead: what must hold, with the reason>
 
 ## Known limits (stated before design)
 <rig cost, sound time, tech risk, budget, platform rules>
+
+Stop criteria and budget: <per stage, from the job card; changes here go back to the card> (`orchestration/references/gates-and-feedback.md` §7)
 
 ## Decision records
 | ID | Question | Options | Decision owner | Evidence | Assets affected | Selected | Dissent | Revisit when |

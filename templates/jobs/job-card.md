@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots) -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate -->
 
 # Job card: <job-id> <title>
 
@@ -26,11 +26,18 @@ supersedes: []
 | Studio place (`studio_id`) | <the test place the Studio driver uses; none = Blender or files only> |
 | Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect at the interfaces step |
 | Linked jobs | <job-id: which shared interface it owns (saved fields, ids, who grants, who checks)>; none = a single job |
-| Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): money, saves, remotes, trades, paid random items, a server-confirmed result, rewards, a frequent effect, a danger area, a sold variant, a new enemy with behaviour, a shop, odds or progress screen; none = "none" |
+| Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): tokens (the saved workflow's `risks` arg: `.agents/workflows/jobs/README.md`): `money`, `saves`, `remotes`, `trades`, `paid-random` (paid random items), `server-result` (the server confirms the result), `rewards`, `frequent-effect`, `danger-area`, `sold-variant`, `new-enemy` (with gameplay behaviour), `shop-screen` (shop, odds or progress screen), `event` (from a live-ops update brief); none = "none" |
 | Status | proposed |
 
-## Goal and feeling
-<what the player must see and feel; the type of fun, not "fun">
+## Four lines (goal)
+What each line holds: `orchestration` SKILL §1 step 1; written before the first brief (SKILL §3 step 3).
+| Line | Value |
+| --- | --- |
+| Problem | |
+| Constraints | |
+| Target experience | |
+| Success test | |
+| Goal word | <the word every goal question carries (`orchestration/references/gates-and-feedback.md` §1)> |
 
 ## References
 <owner-approved links and files>
@@ -50,22 +57,23 @@ Agent ids: `crew.md`.
 ## Mechanism
 <saved workflow `job-<type>` stage by stage / subagents by hand / production chat, and why>
 
-## Budget (tokens)
-| Stage | Estimate | Actual |
-| --- | --- | --- |
-| direction | | |
-| proof | | |
-| build | | |
+## Stop criteria and budget per stage
+What they hold: `orchestration` SKILL §3 step 3 (token estimate source) and `orchestration/references/gates-and-feedback.md` §7.
+| Stage | Stop criteria | Passes | Image cap | Tokens estimate | Tokens actual |
+| --- | --- | --- | --- | --- | --- |
+| direction | | | | | |
+| proof | | | | | |
+| build | | | | | |
 
 ## Acceptance checks
 - [ ] <measurable pass rule>
 
 ## Gates
-| Gate | Date | Revision approved | Owner's words |
-| --- | --- | --- | --- |
-| G1 direction | | | |
-| G2 proof (L) | | | |
-| G3 final | | | |
+| Gate | Date | Revision approved | Owner's words | Doors closed (CD ids in `decisions.md`) |
+| --- | --- | --- | --- | --- |
+| G1 direction | | | | |
+| G2 proof (L) | | | | |
+| G3 final | | | | |
 
 ## Close-out
 Metrics in `evidence.md` §4. Filed into the vault (`orchestration` skill §9): [ ] decisions [ ] precedents [ ] vocabulary [ ] systems [ ] tried-and-failed [ ] taste log [ ] catalogs [ ] lesson drafts [ ] removed from `knowledge/jobs/active.md`

@@ -1,6 +1,6 @@
 # Lantern Woods: worked example of an RPG
 
-> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed). Model `example-rpg-r2`, SHA-256 `f839924ee5e5b2ad…` (the full hash is in every run file).
+> Author: progression-designer · claude-opus-5-5 · high · 2026-10-21 (J011-T08, refreshed in J011-T12 on sim and chart 1.1.0; runs regenerated on 1.2.0 in J011-T13 with no value changed); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6: reward tier table and display fixtures in §10). Model `example-rpg-r2`, SHA-256 `f839924ee5e5b2ad…` (the full hash is in every run file).
 
 **For learning, not tuning.** This is a teaching example. Only the XP table uses a published rule (source M04, a 2010 article that reports 1,000 x level XP per level for its first levels and "continuing"; this model continues it to level 15). Every other number is an `EXAMPLE ASSUMPTION`, and none of it is data from any real game. A "pass" below means that the simulator measured a time inside a window that I chose. It does not show that the game is fun.
 
@@ -115,10 +115,28 @@ Uncertainty: how many real players fight like the struggling profile is unknown;
 
 ## 10. Hand-off, playtest, limits
 
-- **UI**: show damage numbers so the sword spike is visible; show "needs the crypt key" on the king's door; show what the next level changes.
+- **UI**: show damage numbers so the sword spike is visible; show "needs the crypt key" on the king's door; show what the next level changes. Tiers and text names: the reward tier table below. Number display fixtures (rule: `progression-craft/references/data-handoff.md` §5; made with `curves.display_round`, 3 significant digits; balances floor, prices ceil): gold 7,999 shows 7.99K next to the dragonscale's 8,000 shown as 8.00K (half-up would show 8.00K for both); gold 1,199 shows 1.19K next to the sunsteel edge's 1,200 shown as 1.20K; below 1,000 gold shows whole numbers (iron sword 60, leather armour 150).
 - **Analyst**: one event per fight (enemy, win or loss, time), per level-up and per purchase; for the king, attempts per player. Keep players who never finish in the denominator.
 - **A playtest must check**: does the player feel the sword (TL-03)? How many attempts do real players need for the king (TL-05)? Does the marsh feel like preparation or like grind (TL-07)? Do players want more after the drake?
 - **Limits**: one strategy per run; the model player attempts a boss only by its preview rule; every attack lands; no measured player data. Every result depends on all 94 `EXAMPLE ASSUMPTION` inputs (listed in each chart's assumptions panel).
+
+### Reward tier table (option A, model `example-rpg-r2`)
+
+Built as `progression-design/references/reward-tiers.md` §4 says; tiers are PROPOSAL, every rate comes from the `reward_rates` block (`progression-craft/references/tools.md` §6a) of full reruns of `runs/efficient.json` and `runs/struggling.json` (the README commands without `--lean`, written to a scratch folder; not committed). Efficient: 11,213 active s (3.11 h), stopped at "all goals reached"; the daily run plays the same 11,213 active s over 6 days, so its rates are the same. Struggling: 21,600 active s (the horizon).
+
+| Event | Benefit | Tier | Efficient, per active hour | Struggling, per active hour | Note |
+| --- | --- | --- | --- | --- | --- |
+| slime, wolf, troll wins (repeats) | number only (XP, gold) | T1 | about 358 | about 323 | merged by the crafts |
+| level-up | capability: +10 HP, +1 damage | T2 | 4.2 (13 levels) = about 2 per 30-minute session | 2.3 (14 levels) | the levels with a breakpoint (2, 5, 10) are the felt ones (finding 2) |
+| first win over slime, wolf, troll | understanding: a new enemy | T2 | 3 in the run | 3 in the run | once each |
+| sunsteel edge | capability: +6 damage | T2 | once (2,979 s) | once | |
+| iron sword, leather armour | planned spikes (TL-03; wolves need 7 hits to down the player) | T3 | once each (240 s, 588 s) | once each | |
+| dragonscale | capability: the drake's savings goal (TL-07) | T3 | once (11,163 s) | once (18,382 s) | |
+| crypt guard win (key drops) | access: the key to the king | T4 | once (1,317 s) | once (1,823 s) | first boss win |
+| Hollow King win (the marsh opens) | access: a new area (TL-05, TL-06) | T4 | once (2,979 s) | once (12,771.5 s) | |
+| Ember Drake win | accomplishment: the capstone (TL-08) | T4 | once (11,213 s) | never (finding 1) | |
+
+Tier sums, efficient: T2 5.5 per hour (17 events; ceiling 60); T3 0.96 per hour (3); T4 0.96 per hour (3; ceiling 2 at 30-minute sessions). **Finding:** T4 is not below T3 (3 events each), so the boss wins do not stand out from the gear moments (`reward-tiers.md` §5 "Rarer is bigger"). Two fixes for the owner (`reward-tiers.md` §4 step 4): (a) the crypt guard win moves to T3, because it is a gate on the way to the king, not a track's end: T3 1.28, T4 0.64 per hour; (b) the breakpoint level-ups (2, 5, 10) move to T3: T3 1.93, T2 4.5, T4 0.96 per hour. Recommendation: (a), one move and no change to how levels feel. Struggling after (a): T2 3.0, T3 0.67, T4 0.17 per hour, in order. The main track ends on the drake win (capstone rule, `reward-tiers.md` §5); for the struggling player it never comes, which is finding 1 again.
 
 Files: `model.json`, `runs/*.json`, `chart.html`, `options/model-B.json`, `options/model-C.json`, `options/runs/*.json`, `options/chart.html`. Re-run commands: `../README.md`.
 

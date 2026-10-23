@@ -2,11 +2,11 @@
 type: template
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: J008 (owner 2026-10-21 "zones, what you hear, what moves, point sources, how zones blend"); environment paper fields AF01-AF32 (knowledge/reference/environment/02-ambience-life-dressing-terrain.md §6)
 supersedes: []
 ---
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21; revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6)
 
 # Ambience map: <stage-id> · revision <n>
 
@@ -25,12 +25,19 @@ Workflow: `environment-design` §ambience (what and why), `environment-craft` (p
 | acoustic approach per enclosed space | authored reverb / acoustic simulation / none; one choice per space, recorded (never both by accident) |
 | shared environment state | the state every craft reads: time of day, weather, wind, water, event, current zone (§D) |
 | muted play | supported? If yes, every gameplay-critical sound also has a visual cue |
+| signature element | the stage's one recognisable sound element and its visible or believable cause (`environment-design/references/ambience.md` AB-14) |
+| floor materials | every walkable material in the place, in §A.1 (`ambience.md` AB-15) |
+
+### A.1 Floor materials (filled before the materials are built; footstep column owned by the sound designer)
+| Material (as in the place) | Where it is walkable (zones) | Decorative only? (yes: kept small, `ambience.md` AB-15) | Footstep set (sound designer), or refusal + existing material to use instead (`environment-craft/references/handoffs.md` §4 C3) |
+| --- | --- | --- | --- |
 
 ## B. Zones (one record per zone; zone IDs never change)
 ```yaml
 - zone: Z-FALLS                  # stable id, used by sound, VFX, code and review
   env:                           # environment designer
     feeling: loud water landmark; the reward for the climb   # what the player should feel or work out here
+    emotion: awe, calm           # the zone's emotion, not only its causes (ambience.md AB-13)
     bounds: {shape: box, center: UNKNOWN, half_extents: UNKNOWN, y_range: UNKNOWN, units: studs, source: blockout rev 3}
     priority: 2                  # wins over lower numbers where zones overlap
     neighbors: [Z-SWAMP, Z-CAVE]
@@ -62,6 +69,7 @@ Workflow: `environment-design` §ambience (what and why), `environment-craft` (p
     directional: yes             # should the player be able to point at it?
     streaming: keep              # keep (persistent anchor) / rebuild once on return / may stop; and why
     degrade_rank: 1              # 1 = last to drop
+    sight_lines_clear: [ridge → falls overlook, boardwalk route lane]   # moving things and effects: the sight lines and route it stays away from (ambience.md AB-11; review.md §7 AM1)
   sound:
     range_and_curve: UNKNOWN     # set by the sound designer from the checkpoints; end of curve at gain 0
     gain: UNKNOWN
@@ -99,6 +107,7 @@ Never switch the whole mix at once at a border. Width and time of a blend are `U
 - [ ] Gameplay-critical cues are never masked by ambience and never depend on sound alone when muted play is supported.
 - [ ] No number without a unit and a source; nothing invented; `UNKNOWN` where not measured.
 - [ ] Listening is not judged from screenshots: the sound check stays "auditory acceptance pending" until someone listens.
+- [ ] Every zone has its `emotion`, the stage its signature element, every walkable material a §A.1 row, every moving thing its `sight_lines_clear` (`ambience.md` §5).
 
 ## H. Comments and changes
 | Date | Who | Section / id | Comment or change request | Status |
