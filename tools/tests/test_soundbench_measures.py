@@ -220,6 +220,16 @@ class NewMeasuresTest(unittest.TestCase):
                 self.assertEqual(r["count"], 1)
                 self.assertAlmostEqual(r["first_ms"][0], 150.0, delta=0.1)
 
+    def test_clicks_reports_edges_that_start_or_stop_mid_waveform(self):
+        rate = 44100
+        x = loaded("clean_hit", rate, 2)
+        self.assertEqual(m.clicks(x, rate)["edges"], [])  # starts and ends in silence
+        t = np.arange(int(0.2 * rate)) / rate
+        y = col(0.5 * np.sin(2 * np.pi * 440 * t + 1.0), 2)  # starts at 0.42 and ends mid-cycle
+        r = m.clicks(y, rate)
+        self.assertEqual((r["edges"], r["edge_count"]), (["start", "end"], 2))
+        self.assertEqual(r["count"], 0)  # edges are reported apart from interior clicks
+
     def test_clicks_false_reading_hidden_in_noise(self):
         x = loaded("hiss_lock", 48000, 1)
         x[4800, 0] += 0.3

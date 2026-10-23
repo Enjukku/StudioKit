@@ -67,7 +67,7 @@ class IntakeTest(TempDir):
         for rate, ch in CONFIGS:
             with self.subTest(rate=rate, ch=ch):
                 x, mp3 = self.take("clean_hit", rate, ch)
-                info = intake.decode_take(mp3, expected_ms=1000 * len(x) / rate)
+                info = intake.decode_take(mp3, requested_ms=1000 * len(x) / rate)
                 master = intake.master_path(mp3)
                 y, r = sf.read(str(master), always_2d=True, dtype="float32")
                 self.assertEqual(sf.info(str(master)).subtype, "FLOAT")
@@ -80,45 +80,66 @@ class IntakeTest(TempDir):
                 self.assertEqual(info["take_sha256"], file_sha256(mp3))
 
     def test_untagged_mp3_decodes_late_and_is_refused(self):
-        """review-1 #13: without the encoder-delay tag the take decodes about 25 ms late and 27 ms long."""
+        """review-1 #13: without the encoder-delay tag the take decodes about 25 ms late, and it states its wrong
+        length (probe 7: 522 ms stated and decoded for 480 ms of audio), so the stream's missing delay refuses it."""
         x, mp3 = self.take("clean_hit", 44100, 2, tagged=False)
-        with self.assertRaisesRegex(SoundbenchError, "encoder-delay"):
-            intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
+        with self.assertRaisesRegex(SoundbenchError, "encoder delay"):
+            intake.decode_take(mp3, requested_ms=1000 * len(x) / 44100)
         self.assertFalse(intake.master_path(mp3).exists())  # no half-made master left behind
 
-    def test_length_tolerance_just_inside_and_just_outside(self):
-        """The 10 ms limit: a take 9 ms longer than asked passes, 11 ms longer is refused (tagged MP3 decodes exact)."""
-        for rate in fx.RATES:
-            x = fx.make("clean_hit", rate, 2).astype(np.float32)
-            asked = 1000 * len(x) / rate
-            for extra_ms, ok in ((9, True), (11, False)):
-                with self.subTest(rate=rate, extra_ms=extra_ms):
-                    y = np.vstack([x, np.zeros((int(rate * extra_ms / 1000), 2), np.float32)])
-                    wav = fx.write_wav(self.d / f"pad{rate}{extra_ms}.wav", y, rate)
-                    mp3 = encode_mp3(wav, self.d / f"pad.r1.t{rate}{extra_ms}.mp3")
+    def test_decoded_length_against_the_stated_one_just_inside_and_outside(self):
+        """The 10 ms limit on decoded vs stated length (the file's own duration, LD-b)."""
+        real = intake.stream_info
+        for off_ms, ok in ((9.0, True), (11.0, False), (-11.0, False)):
+            with self.subTest(off_ms=off_ms):
+                x, mp3 = self.take("clean_hit", 44100, 2)
+                mp3 = mp3.rename(mp3.with_name(f"st{off_ms}.r1.t1.mp3"))
+
+                def stated(take, exe, off=off_ms):
+                    st = real(take, exe)
+                    return {**st, "duration_ms": st["duration_ms"] + off}
+
+                with mock.patch.object(intake, "stream_info", stated):
                     if ok:
-                        info = intake.decode_take(mp3, expected_ms=asked)
-                        self.assertAlmostEqual(info["delta_ms"], extra_ms, delta=0.05)
+                        self.assertAlmostEqual(intake.decode_take(mp3)["stated_ms"] - 1000 * len(x) / 44100, off_ms,
+                                               delta=0.01)
                     else:
                         with self.assertRaisesRegex(SoundbenchError, "limit 10.0 ms"):
-                            intake.decode_take(mp3, expected_ms=asked)
+                            intake.decode_take(mp3)
+                        self.assertFalse(intake.master_path(mp3).exists())
+
+    def test_requested_length_is_a_warning_never_a_refusal(self):
+        """LD-b: every real 0.5 s request came back 480 ms; the service decides the length. 9 ms off: no warning;
+        11 ms off: a warning, still decoded."""
+        for rate in fx.RATES:
+            x = fx.make("clean_hit", rate, 2).astype(np.float32)
+            got = 1000 * len(x) / rate
+            for extra_ms, warns in ((9, False), (11, True)):
+                with self.subTest(rate=rate, extra_ms=extra_ms):
+                    wav = fx.write_wav(self.d / f"rq{rate}{extra_ms}.wav", x, rate)
+                    mp3 = encode_mp3(wav, self.d / f"rq.r1.t{rate}{extra_ms}.mp3")
+                    info = intake.decode_take(mp3, requested_ms=got + extra_ms)
+                    self.assertEqual(bool(info["warnings"]), warns)
+                    self.assertAlmostEqual(info["decoded_ms"], got, delta=0.01)
+                    self.assertEqual(info["requested_ms"], got + extra_ms)
+                    self.assertGreater(info["encoder_delay_s"], 0)
 
     def test_master_is_never_overwritten_and_sidecar_keeps_its_fields(self):
         x, mp3 = self.take("wrong_chime", 44100, 2)
         side = mp3.with_suffix(".json")
         side.write_text(json.dumps({"prompt": "a chime", "credits": 12}), encoding="utf-8")
-        intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
+        intake.decode_take(mp3, requested_ms=1000 * len(x) / 44100)
         doc = json.loads(side.read_text(encoding="utf-8"))
         self.assertEqual((doc["prompt"], doc["credits"]), ("a chime", 12))
         self.assertIn("intake", doc)
         before = file_sha256(intake.master_path(mp3))
         with self.assertRaisesRegex(SoundbenchError, "never overwritten"):
-            intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
+            intake.decode_take(mp3, requested_ms=1000 * len(x) / 44100)
         self.assertEqual(file_sha256(intake.master_path(mp3)), before)
 
     def test_the_mp3_round_trip_master_goes_through_afftdn_in_time(self):
         x, mp3 = self.take("clean_hit", 44100, 2)
-        intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
+        intake.decode_take(mp3, requested_ms=1000 * len(x) / 44100)
         y, rate = sf.read(str(intake.master_path(mp3)), always_2d=True, dtype="float32")
         y = y + (0.003 * np.random.RandomState(1).standard_normal(y.shape)).astype(np.float32)
         res = sbf.run_filter(y, rate, "afftdn", latency_samples=sbf.known_latency("afftdn", rate))

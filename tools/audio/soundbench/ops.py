@@ -39,6 +39,8 @@ LIMIT_TRANSIENT_DB = 0.5  # sfx/ui: limiting a transient by more than 0.5 dB nee
 TRANSIENT_REGION_MS = 10.0  # ... the transient region runs from the F-01 onset to 10 ms after the main transient
 SPACE_MAX_DECAY_S = 1.5  # `space` is the sound's own tail, never a room (J020-D10): longer decays are refused
 TRIM_PREROLL_MS = 1.0  # trim keeps 1 ms before the binding onset (a fade over it when it is not silent)
+EDGE_SILENT_DB = -60.0  # a first sample above peak - 60 dB is not silent: it would click when playback starts ...
+EDGE_FADE_MS = 0.5  # ... so trim fades the first 0.5 ms (7 of 10 real takes started above -20 dB re peak)
 CUT_FADE_MIN_MS = 5.0  # a cut through sound needs a fade-out of at least 5 ms
 CUT_SILENT_DB = -60.0  # ... "through sound" = the last 1 ms before the cut above peak - 60 dB
 FADE_IN_KEEP_SHARE = 0.9  # a fade-in that leaves under 90 % of the attack share needs a `why`
@@ -62,7 +64,7 @@ SPEC: dict[str, dict] = {
              "hold_ms": _num(0, 500, 20.0), "release_ms": _num(1, 2000, 80.0)},
     "varispeed": {"semitones": _num(-24, 24)},
     "to_key": {"method": {"type": "choice", "options": ("varispeed", "pitch"), "default": "varispeed"}},
-    "compress": {"threshold_db": _num(-80, 0), "ratio": _num(1, 50), "knee_db": _num(0, 24, 6.0),
+    "compress": {"threshold_db": _num(-60, 0), "ratio": _num(1, 50), "knee_db": _num(0, 24, 6.0),
                  "attack_ms": _num(0.05, 500, 5.0), "release_ms": _num(1, 5000, 100.0), "makeup_db": _num(-24, 24, 0.0)},
     "limit": {"ceiling_dbtp": _num(-24, 0, -1.0), "lookahead_ms": _num(0.5, 20, 5.0), "release_ms": _num(1, 2000, 80.0)},
     "space": {"decay_s": _num(0.05, SPACE_MAX_DECAY_S), "predelay_ms": _num(0, 100, 10.0), "damping": _num(0, 1, 0.5),
@@ -377,13 +379,19 @@ def static_curve_db(level_db: np.ndarray, threshold: float, ratio: float, knee: 
 
 
 def op_compress(x, rate, p, ctx):
+    """Feed-forward compressor, channels linked, soft knee. `threshold_db` is dB below the input's own sample peak
+    (0 = the peak), so a quiet take is compressed exactly as a loud one; the edit pass sets the absolute level."""
     level = np.max(np.abs(x), axis=1)
+    peak = float(level.max())
+    if peak <= 0:
+        return x.copy(), {"deepest_gain_reduction_db": 0.0, "threshold_dbfs": None}
+    thr = p["threshold_db"] + 20 * math.log10(peak)
     env = _onepole_env(level, rate, p["attack_ms"], p["release_ms"])
     env_db = 20 * np.log10(np.maximum(env, 1e-12))
-    gain_db = static_curve_db(env_db, p["threshold_db"], p["ratio"], p["knee_db"]) - env_db
+    gain_db = static_curve_db(env_db, thr, p["ratio"], p["knee_db"]) - env_db
     deepest = float(-gain_db.min())
     g = 10 ** ((gain_db + p["makeup_db"]) / 20)
-    return x * g[:, None], {"deepest_gain_reduction_db": round(deepest, 2),
+    return x * g[:, None], {"threshold_dbfs": round(thr, 2), "deepest_gain_reduction_db": round(deepest, 2),
                             "deepest_at_ms": round(1000 * int(np.argmin(gain_db)) / rate, 2)}
 
 
@@ -500,13 +508,30 @@ def op_transient(x, rate, p, ctx):
                                                  "min_gain_db": round(float(gain_db.min()), 2)}
 
 
+def nonlinear_residual_db(x: np.ndarray, y: np.ndarray) -> float | None:
+    """How much of y is not a scaled copy of x: the RMS of y minus its best linear fit c*x, in dB re y's RMS."""
+    xx = float(np.sum(x * x))
+    yy = float(np.sum(y * y))
+    if xx <= 0 or yy <= 0:
+        return None
+    c = float(np.sum(x * y)) / xx
+    r = float(np.sum((y - c * x) ** 2))
+    return None if r <= 0 else round(10 * math.log10(r / yy), 2)
+
+
 def op_saturate(x, rate, p, ctx):
-    """Soft clip: tanh(g x) / tanh(g) (full scale stays full scale), mixed with the dry sound."""
+    """Soft clip relative to the input's own peak: pk * tanh(g x / pk) / tanh(g), so a quiet take is driven exactly as
+    hard as a loud one (the peak stays the peak), mixed with the dry sound. Logs the nonlinear residual (what the
+    saturation added, dB re the output) and the phone-speaker loss before and after (S-156)."""
     g = 10 ** (p["drive_db"] / 20)
-    if g == 1:
-        return x.copy(), {}
-    wet = np.tanh(g * x) / math.tanh(g)
-    return (1 - p["mix"]) * x + p["mix"] * wet, {}
+    pk = float(np.max(np.abs(x)))
+    if g == 1 or pk <= 0:
+        return x.copy(), {"residual_db": None}
+    wet = pk * np.tanh(g * x / pk) / math.tanh(g)
+    y = (1 - p["mix"]) * x + p["mix"] * wet
+    return y, {"residual_db": nonlinear_residual_db(x, y),
+               "phone_loss_db": [measures.phone_loss_db(x - x.mean(axis=0), rate),
+                                 measures.phone_loss_db(y - y.mean(axis=0), rate)]}
 
 
 # --------------------------------------------------------------------------------------------- edit pass
@@ -531,11 +556,25 @@ def op_trim(x, rate, p, ctx):
     if start > 0 and pre > 0 and np.any(np.abs(y[:pre]) > 0):
         y[:pre] *= np.linspace(0, 1, pre, endpoint=False)[:, None]
         faded = True
+    first_before = _edge_db(y[0], x)
+    edge_faded = False
+    if first_before is not None and first_before > EDGE_SILENT_DB:  # starts mid-waveform: it would click
+        k = min(len(y), max(1, int(round(EDGE_FADE_MS * rate / 1000))))
+        y[:k] *= np.linspace(0, 1, k, endpoint=False)[:, None]
+        edge_faded = True
     a = y - y.mean(axis=0)
     f01 = 1000 * measures.onset_index(a.mean(axis=1)) / rate
     mt = measures.main_transient_ms(a, rate)
     return y, {"binding": binding, "trimmed_ms": round(1000 * start / rate, 3), "preroll_faded": faded,
+               "first_sample_db_re_peak": [first_before, _edge_db(y[0], x)], "edge_faded": edge_faded,
                "lead_in_ms": None if mt is None else round(max(0.0, mt - f01), 2)}
+
+
+def _edge_db(sample: np.ndarray, x: np.ndarray) -> float | None:
+    """A sample's level in dB re the file's sample peak (None for digital silence)."""
+    peak = float(np.max(np.abs(x)))
+    v = float(np.max(np.abs(sample)))
+    return None if peak <= 0 or v <= 0 else round(20 * math.log10(v / peak), 2)
 
 
 def op_cut(x, rate, p, ctx):

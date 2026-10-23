@@ -13,6 +13,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 try:
     import matplotlib  # noqa: F401
@@ -229,46 +230,110 @@ class RenderTest(unittest.TestCase):
         doc, code = render.render(cue)
         self.assertEqual({t["target"]: t for t in doc["targets"]}["form.mono"]["result"], "pass")
 
-    def test_paid_reveal_family_check(self):
+    def _members(self, root: Path, specs: dict) -> dict:
+        """Declare every member first (cards and takes), render nothing. specs: cue -> (family or None, audio, target)."""
         base = copy.deepcopy(CARD)
         base["level"] = {"measure": "F-09", "target": -20.0, "tolerance": 0.5, "must": True}
-        cues = {}
-        for name, gain in (("SFX-EGG-COMMON", 1.0), ("SFX-EGG-RARE", 1.0)):
-            c, r = named(base, RECIPE, name)
-            c["family"] = {"id": "egg", "paid_reveal": True,
-                           "siblings": [n for n in ("SFX-EGG-COMMON", "SFX-EGG-RARE") if n != name]}
-            cues[name] = (c, r)
-        c, r = cues["SFX-EGG-COMMON"]
-        common = make_cue(self.d, fx.make("wrong_chime", 44100, 2) * 0.3, 44100, c, r)
-        doc, code = render.render(common)
-        self.assertEqual(doc["family"]["result"], "fail")  # the sibling is not rendered yet: not a pass
-        self.assertIn("not rendered", doc["family"]["reason"])
-        self.assertEqual(code, 1)
-        c, r = cues["SFX-EGG-RARE"]
-        rare = make_cue(self.d, fx.make("wrong_chime", 44100, 2) * 0.3, 44100, c, r)
-        doc, code = render.render(rare)
-        self.assertEqual(doc["family"]["result"], "pass", doc["family"])
-        self.assertEqual(code, 0)
-        # a louder rare result: its level target is raised, so the family check must fail (D-03)
-        c["level"]["target"] = -15.0
-        (rare / "card.json").write_text(json.dumps(c), encoding="utf-8")
-        doc, code = render.render(rare)
-        self.assertEqual(doc["family"]["result"], "fail")
-        self.assertGreater(doc["family"]["spread_lu"], 1.0)
-        self.assertEqual(code, 1)
-
-    def _family(self, rare_target: float, rare_audio=None) -> dict:
-        base = copy.deepcopy(CARD)
-        base["level"] = {"measure": "F-09", "target": -20.0, "tolerance": 0.5, "must": True}
-        out = None
-        for name, target in (("SFX-FAM-A", -20.0), ("SFX-FAM-B", rare_target)):
+        out = {}
+        for name, (family, audio, target) in specs.items():
             c, r = named(base, RECIPE, name)
             c["level"]["target"] = target
-            c["family"] = {"id": "fam", "paid_reveal": True, "siblings": [n for n in ("SFX-FAM-A", "SFX-FAM-B") if n != name]}
-            audio = fx.make("wrong_chime", 44100, 2) * 0.3 if name == "SFX-FAM-A" or rare_audio is None else rare_audio
-            cue = make_cue(self.d / f"t{rare_target}{rare_audio is None}", audio, 44100, c, r)
-            out = render.render(cue)[0]
-        return out["family"]
+            if family is not None:
+                c["family"] = family
+            out[name] = make_cue(root, audio, 44100, c, r)
+        return out
+
+    def test_paid_reveal_family_check(self):
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        fam = lambda me: {"id": "egg", "paid_reveal": True,  # noqa: E731
+                          "siblings": [n for n in ("SFX-EGG-COMMON", "SFX-EGG-RARE") if n != me]}
+        cues = self._members(self.d, {n: (fam(n), chime, -20.0) for n in ("SFX-EGG-COMMON", "SFX-EGG-RARE")})
+        doc, code = render.render(cues["SFX-EGG-COMMON"])
+        self.assertEqual((doc["family"]["result"], code), ("incomplete", 3))  # LD-a: never a pass
+        self.assertIn("re-render after the siblings", doc["family"]["reason"])
+        doc, code = render.render(cues["SFX-EGG-RARE"])
+        self.assertEqual((doc["family"]["result"], code), ("pass", 0), doc["family"])
+        state = json.loads((self.d / "egg.family.json").read_text(encoding="utf-8"))
+        self.assertEqual(sorted(state["file_sha256"]), ["SFX-EGG-COMMON", "SFX-EGG-RARE"])
+        # the re-render-louder sequence (F2): any member's render re-checks the whole family on the current files
+        card = json.loads((cues["SFX-EGG-RARE"] / "card.json").read_text(encoding="utf-8"))
+        card["level"]["target"] = -15.0
+        (cues["SFX-EGG-RARE"] / "card.json").write_text(json.dumps(card), encoding="utf-8")
+        doc, code = render.render(cues["SFX-EGG-RARE"])
+        self.assertEqual((doc["family"]["result"], code), ("fail", 1))
+        self.assertGreater(doc["family"]["spread_lu"], 1.0)
+        self.assertEqual(json.loads((self.d / "egg.family.json").read_text(encoding="utf-8"))["result"], "fail")
+        doc, code = render.render(cues["SFX-EGG-COMMON"])  # the other member sees the same failure
+        self.assertEqual((doc["family"]["result"], code), ("fail", 1))
+
+    def test_a_one_sided_family_is_refused_from_both_sides(self):
+        """F2: A lists B, B declares no family. Before: B rendered (0), A passed, then B re-rendered 8 dB louder went
+        unseen. Now both renders refuse (exit 2) until both cards declare the family."""
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        cues = self._members(self.d, {"SFX-A": ({"id": "pair", "paid_reveal": True, "siblings": ["SFX-B"]}, chime, -20.0),
+                                      "SFX-B": (None, chime, -12.0)})
+        with self.assertRaisesRegex(SoundbenchError, "declares no family"):
+            render.render(cues["SFX-B"])
+        with self.assertRaisesRegex(SoundbenchError, "declares no family"):
+            render.render(cues["SFX-A"])
+        self.assertFalse((cues["SFX-A"] / "out").exists())  # refused before any audio
+
+    def test_a_family_declared_differently_is_refused(self):
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        cases = (("paid", {"id": "f", "paid_reveal": False, "siblings": ["SFX-P1"]}, "paid_reveal False"),
+                 ("id", {"id": "g", "paid_reveal": True, "siblings": ["SFX-P1"]}, "id 'g'"),
+                 ("members", {"id": "f", "paid_reveal": True, "siblings": ["SFX-P1", "SFX-P3"]}, "declares members"))
+        for label, second, why in cases:
+            with self.subTest(label=label):
+                root = self.d / label
+                root.mkdir()
+                specs = {"SFX-P1": ({"id": "f", "paid_reveal": True, "siblings": ["SFX-P2"]}, chime, -20.0),
+                         "SFX-P2": (second, chime, -20.0)}
+                cues = self._members(root, specs)
+                with self.assertRaisesRegex(SoundbenchError, why):
+                    render.render(cues["SFX-P1"])
+
+    def test_a_card_listing_a_stranger_is_refused(self):
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        fam = lambda me: {"id": "f", "paid_reveal": True, "siblings": [n for n in ("SFX-Q1", "SFX-Q2") if n != me]}  # noqa: E731
+        cues = self._members(self.d, {"SFX-Q1": (fam("SFX-Q1"), chime, -20.0), "SFX-Q2": (fam("SFX-Q2"), chime, -20.0),
+                                      "SFX-Q3": ({"id": "h", "paid_reveal": True, "siblings": ["SFX-Q1"]}, chime, -20.0)})
+        with self.assertRaisesRegex(SoundbenchError, "not members"):
+            render.render(cues["SFX-Q1"])
+
+    def test_a_malformed_card_is_exit_2_with_the_reason(self):
+        """F6: "targets" as a list crashed with AttributeError and exit 1 (= a must-target failed)."""
+        c, r = named(CARD, RECIPE, "SFX-T-BAD")
+        cue = make_cue(self.d, fx.make("late_hit", 44100, 2) * 0.4, 44100, c, r)
+        env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+        for bad, why in (({"targets": [{"max": 3}]}, "card.targets"), ({"family": {"id": 7, "paid_reveal": True,
+                                                                                     "siblings": []}}, "card.family.id")):
+            with self.subTest(why=why):
+                (cue / "card.json").write_text(json.dumps({**c, **bad}), encoding="utf-8")
+                p_ = subprocess.run([sys.executable, "-m", "tools.audio.soundbench", "render", str(cue)], cwd=str(ROOT),
+                                    capture_output=True, text=True, env=env)
+                self.assertEqual(p_.returncode, 2, p_.stderr)
+                self.assertIn(why, p_.stderr)
+        self.assertFalse((cue / "out").exists())
+
+    def test_an_unexpected_error_is_exit_2(self):
+        from tools.audio.soundbench import __main__ as cli
+
+        with mock.patch.object(render, "render", side_effect=KeyError("boom")):
+            with mock.patch("sys.stderr"):
+                self.assertEqual(cli.main(["render", str(self.d)]), 2)
+
+    def _family(self, rare_target: float, rare_audio=None) -> dict:
+        root = self.d / f"t{rare_target}{rare_audio is None}"
+        root.mkdir(parents=True, exist_ok=True)
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        fam = lambda me: {"id": "fam", "paid_reveal": True,  # noqa: E731
+                          "siblings": [n for n in ("SFX-FAM-A", "SFX-FAM-B") if n != me]}
+        cues = self._members(root, {"SFX-FAM-A": (fam("SFX-FAM-A"), chime, -20.0),
+                                    "SFX-FAM-B": (fam("SFX-FAM-B"), chime if rare_audio is None else rare_audio,
+                                                  rare_target)})
+        render.render(cues["SFX-FAM-A"])
+        return render.render(cues["SFX-FAM-B"])[0]["family"]
 
     def test_family_limits_just_inside_and_just_outside(self):
         inside = self._family(-19.6)  # the same sound 0.4 dB louder
@@ -335,7 +400,7 @@ class RenderTest(unittest.TestCase):
         mp3 = cue / r["take"]
         subprocess.run([str(FOUND.path), "-hide_banner", "-nostdin", "-y", "-loglevel", "error", "-i", str(wav), "-c:a",
                         "libmp3lame", "-b:a", "192k", str(mp3)], check=True)
-        intake.decode_take(mp3, expected_ms=1000 * len(x) / rate)
+        intake.decode_take(mp3, requested_ms=1000 * len(x) / rate)
         (cue / "card.json").write_text(json.dumps(c), encoding="utf-8")
         (cue / "recipe.json").write_text(json.dumps(r), encoding="utf-8")
         doc, code = render.render(cue)

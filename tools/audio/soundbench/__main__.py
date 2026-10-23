@@ -3,7 +3,8 @@
 Kit tool (universal). Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 step 1-2)
 
 Every number is a screening aid, never a taste verdict (design G-4). Exit codes: 0 done, 1 doctor found a missing
-item, 2 refused or failed (the reason on stderr).
+item or a render target failed, 2 refused or failed (the reason on stderr; any unexpected error is 2), 3 a paid-reveal
+family is incomplete (render).
 
 Usage:
   python -m tools.audio.soundbench doctor [--root DIR] [--json]
@@ -12,7 +13,7 @@ Usage:
   python -m tools.audio.soundbench parity <file> <file> [...] --mode integrated|momentary [--json]
   python -m tools.audio.soundbench render <cue-folder> [--picture] [--json]
 Exit codes for render: 0 every must-target and the family check passed; 1 one failed (file written, report says
-why); 2 refused.
+why); 2 refused; 3 a paid-reveal family is incomplete (re-render after the siblings).
 """
 
 from __future__ import annotations
@@ -131,6 +132,9 @@ def main(argv: list[str] | None = None) -> int:
             rec = measures.parity(a.files, a.mode)
     except SoundbenchError as err:
         print(f"ERROR: {err}", file=sys.stderr)
+        return 2
+    except Exception as err:  # noqa: BLE001 - an unexpected failure is a refusal (2), never "a target failed" (1)
+        print(f"ERROR (unexpected, a soundbench bug or a malformed input): {type(err).__name__}: {err}", file=sys.stderr)
         return 2
     if a.json:
         print(json.dumps(rec, indent=2))

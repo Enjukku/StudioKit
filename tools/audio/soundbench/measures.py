@@ -361,13 +361,18 @@ def clicks(x: np.ndarray, rate: int) -> dict:
     """Clicks: sample-to-sample steps over 8 x the RMS of the steps around them (a centred 4 ms window, the step
     itself included) and at least 1 % of the file's sample peak, on every channel; nearby hits within 1 ms count once.
 
-    Known false readings: a real hard transient that starts from silence on a square edge reads as a click; a click
-    inside a loud noisy passage hides under its large normal steps; a click under 1 % of the peak is not counted."""
+    `edges` lists "start" and/or "end" when the first or last sample is at 1 % of the peak or more: playback starts or
+    stops from silence there, so the file clicks at its edge (7 of 10 real takes started mid-waveform); they are not
+    in `count`. Known false readings: a real hard transient that starts from silence on a square edge reads as a
+    click; a click inside a loud noisy passage hides under its large normal steps; a click under 1 % of the peak is
+    not counted; a loop's end edge is its seam (read F-08 there, not `edges`)."""
     steps = np.abs(np.diff(x, axis=0))
     peak = float(np.max(np.abs(x)))
     w = 2 * max(1, int(round(CLICK_LOCAL_S * rate))) + 1
+    edges = [] if peak <= 0 else [name for name, s in (("start", x[0]), ("end", x[-1]))
+                                  if float(np.max(np.abs(s))) >= CLICK_MIN_OF_PEAK * peak]
     if peak <= 0 or len(steps) < w:
-        return {"count": 0, "first_ms": []}
+        return {"count": 0, "first_ms": [], "edges": edges, "edge_count": len(edges)}
     kernel = np.ones(w) / w
     local = np.sqrt(np.stack([np.convolve(steps[:, c] ** 2, kernel, "same") for c in range(x.shape[1])], axis=1))
     big = (steps > CLICK_FACTOR * local) & (steps >= CLICK_MIN_OF_PEAK * peak)
@@ -376,7 +381,8 @@ def clicks(x: np.ndarray, rate: int) -> dict:
     for i in idx:
         if not merged or i - merged[-1] > int(0.001 * rate):
             merged.append(int(i))
-    return {"count": len(merged), "first_ms": [round(1000 * (i + 1) / rate, 2) for i in merged[:10]]}
+    return {"count": len(merged), "first_ms": [round(1000 * (i + 1) / rate, 2) for i in merged[:10]], "edges": edges,
+            "edge_count": len(edges)}
 
 
 def tonality(x: np.ndarray, rate: int) -> dict:

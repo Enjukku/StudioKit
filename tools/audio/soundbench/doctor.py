@@ -3,8 +3,8 @@
 Kit tool (universal). Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 step 1-2)
 
 Checks: Python 3.11+; numpy, scipy, soundfile (with FLAC), pyloudnorm, matplotlib (Agg); ffmpeg found (and how),
-its version (tested on 9.0.2: another version is a warning), the filters design section 4 uses, the MP3 decoder for
-intake; a live G-7 self-test (afftdn's lag measured and compensated to 0 on a fixture); the `ELEVENLABS_API_KEY`
+its version (tested on 9.0.2: another version is a warning), the filters design section 4 uses, ffprobe and the
+MP3 decoder for intake; a live G-7 self-test (afftdn's lag measured and compensated to 0 on a fixture); the `ELEVENLABS_API_KEY`
 entry in `knowledge/design/keys.json` with a path set and a file at that path. The key file is only checked to
 exist (a stat call): it is never opened, read, printed or logged (AGENTS.md section 3 item 4).
 
@@ -73,6 +73,12 @@ def checks(root: Path = ROOT) -> list[dict]:
             missing = [f for f in FILTERS if f not in have]
             add("ffmpeg filters", "FAIL" if missing else "PASS",
                 ("missing: " + ", ".join(missing)) if missing else ", ".join(FILTERS))
+            from .intake import ffprobe_path
+
+            try:
+                add("ffprobe (intake)", "PASS", str(ffprobe_path(loc.path)))
+            except SoundbenchError as err:
+                add("ffprobe (intake)", "FAIL", str(err))
             dec = ffmpeg.decoders(loc.path)
             add("ffmpeg mp3 decoder", "PASS" if {"mp3float", "mp3"} & dec else "FAIL",
                 "mp3float" if "mp3float" in dec else ("mp3" if "mp3" in dec else "missing"))

@@ -68,6 +68,7 @@ TARGETS = {
     "mono_drop_db": "F-07_mono_drop_db",
     "loop_seam": "F-08_loop_seam",
     "clicks": "clicks.count",
+    "edge_clicks": "clicks.edge_count",
     "tail_snr_db": "tail_noise.snr_db",
     "roughness": "roughness",
     "flatness": "tonality.flatness",
@@ -125,6 +126,8 @@ def check_card(doc: dict) -> dict:
     if _num(lv["tolerance"], "card.level.tolerance") < 0:
         raise SoundbenchError("card.level.tolerance: must be 0 or more")
     _bool(lv["must"], "card.level.must")
+    if not isinstance(doc.get("targets", {}), dict):
+        raise SoundbenchError("card.targets: needs an object of target name -> {min, max, must}")
     for name, spec in doc.get("targets", {}).items():
         where = f"card.targets.{name}"
         if name not in TARGETS:
@@ -158,6 +161,7 @@ def check_card(doc: dict) -> dict:
                                   "has the same tell)")
     if "family" in doc:
         fam = _keys(doc["family"], {"id", "paid_reveal", "siblings"}, {"id", "paid_reveal", "siblings"}, "card.family")
+        _cue_id(fam["id"], "card.family.id")
         _bool(fam["paid_reveal"], "card.family.paid_reveal")
         if not isinstance(fam["siblings"], list) or not all(isinstance(s, str) for s in fam["siblings"]):
             raise SoundbenchError("card.family.siblings: needs a list of cue ids")

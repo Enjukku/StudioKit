@@ -114,6 +114,51 @@ def make(name: str, rate: int, channels: int = 1, seed: int = 7) -> np.ndarray:
     return np.stack([left, right], axis=1)
 
 
+# Realistic takes (LD-c), modelled on 10 real ElevenLabs takes measured 2026-10-23: 480 ms for a 0.5 s request, 6
+# of 10 peaking at -24 dBFS or lower, 7 of 10 starting mid-waveform (the first sample -4 to -12 dB re the peak), a
+# tail floor 40-50 dB under the peak, stereo with channels about 1 dB apart. Kept apart from NAMES (the golden JSON
+# covers NAMES only).
+REAL_NAMES = ("quiet_hit", "soft_note", "quiet_whoosh")
+REAL_LENGTH_MS = 480.0
+REAL_PEAKS_DBFS = {"quiet_hit": -36.0, "soft_note": -24.0, "quiet_whoosh": -30.0}
+REAL_FIRST_DB_RE_PEAK = {"quiet_hit": -5.0, "soft_note": -12.0, "quiet_whoosh": -8.0}
+REAL_FLOOR_DB_RE_PEAK = -45.0
+REAL_RIGHT_DB = -1.1
+
+
+def _real_mono(name: str, rate: int, rs: np.random.RandomState) -> np.ndarray:
+    n = int(round(rate * REAL_LENGTH_MS / 1000))
+    t = np.arange(n) / rate
+    if name == "quiet_hit":  # a crack and a 210 Hz body, already sounding at sample 0
+        y = 0.5 * rs.standard_normal(n) * np.exp(-t * 45) + 0.6 * np.sin(2 * np.pi * 210 * t + 1.2) * np.exp(-t * 9)
+    elif name == "soft_note":  # a 523 Hz note with two partials, decaying
+        y = sum(a * np.sin(2 * np.pi * 523.25 * k * t + 0.9) for k, a in ((1, 1.0), (2, 0.35), (3, 0.12)))
+        y = y * np.exp(-t * 6)
+    elif name == "quiet_whoosh":  # band-limited noise swelling then falling
+        from scipy.signal import butter, sosfilt
+
+        y = sosfilt(butter(2, (300, 4000), "bandpass", fs=rate, output="sos"), rs.standard_normal(n))
+        y = y * np.sin(np.pi * np.clip(t / (REAL_LENGTH_MS / 1000), 0, 1)) ** 2 + 0.3 * y * np.exp(-t * 30)
+    else:
+        raise KeyError(f"unknown realistic fixture {name!r}")
+    y = y / np.max(np.abs(y))
+    want0 = 10 ** (REAL_FIRST_DB_RE_PEAK[name] / 20)  # the first sample sits at its stated level re the peak
+    y[0] = want0 * (1 if y[0] >= 0 else -1)
+    floor = 10 ** (REAL_FLOOR_DB_RE_PEAK / 20) * rs.standard_normal(n)
+    return (y + floor) / np.max(np.abs(y + floor)) * 10 ** (REAL_PEAKS_DBFS[name] / 20)
+
+
+def make_real(name: str, rate: int, channels: int = 2, seed: int = 11) -> np.ndarray:
+    """A realistic quiet take as float64 (n, channels): the right channel 1.1 dB lower with its own floor noise."""
+    rs = np.random.RandomState(seed + REAL_NAMES.index(name))
+    left = _real_mono(name, rate, rs)
+    if channels == 1:
+        return left[:, None]
+    floor = 10 ** ((REAL_PEAKS_DBFS[name] + REAL_FLOOR_DB_RE_PEAK) / 20) * rs.standard_normal(len(left))
+    right = 10 ** (REAL_RIGHT_DB / 20) * left + 0.5 * floor
+    return np.stack([left, right], axis=1)
+
+
 def write_wav(path: Path, x: np.ndarray, rate: int) -> Path:
     """Float32 WAV (no quantisation beyond float32), the format every measure test reads."""
     import soundfile as sf

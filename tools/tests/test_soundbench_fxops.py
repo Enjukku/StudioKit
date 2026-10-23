@@ -9,6 +9,7 @@ import math
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 try:
     import numpy as np
@@ -177,7 +178,8 @@ class RubberbandTest(unittest.TestCase):
                     y, info = run("stretch", x, rate, "loop_bed", ratio=ratio)
                     self.assertEqual(len(y), int(round(len(x) * ratio)))
                     self.assertAlmostEqual(peak_hz(y[len(y) // 4:3 * len(y) // 4], rate), 440.0, delta=1.0)
-                    self.assertLessEqual(info["timing"]["worst_event_shift_ms"], fxops.STRETCH_EVENT_TOL_MS)
+                    self.assertLessEqual(info["timing"]["worst_event_shift_ms"],
+                                         fxops.STRETCH_EVENT_BASE_MS + fxops.STRETCH_EVENT_PER_UNIT_MS * abs(ratio - 1))
 
     def test_percussive_kinds_are_refused(self):
         for op, given in (("pitch", {"semitones": 2}), ("stretch", {"ratio": 1.2})):
@@ -214,27 +216,49 @@ class ChorusTest(unittest.TestCase):
                 self.assertGreater(len(y), len(x))
                 self.assertLessEqual(len(y) - len(x), int(0.05 * rate))  # delay + depth, at most
                 self.assertEqual(snap(y, rate)["onset"], snap(x, rate)["onset"])
-                self.assertLessEqual(abs(info["guard"]["transient_moved_ms"]), fxops.TRANSIENT_MOVE_MS)
+                self.assertEqual(info["timing"]["dry_path_timing"]["channel_lags_samples"], [0, 0])  # F5: dry path
+                self.assertTrue(info["timing"]["timing_source"].startswith("probe and"))  # the full graph: probe
+                self.assertEqual(info["guard"]["attack_checks"], "not for chorus")
                 late = slice(int(0.065 * rate), int(0.1 * rate))  # the delayed copy arrives after 40 ms
                 self.assertGreater(np.sum((y[late] - 0.7 * x[late]) ** 2), 1e-4)
 
 
 @needs_ffmpeg
 class GuardTest(unittest.TestCase):
-    def test_guard_limits(self):
-        before = {"attack_share": 0.2, "main_transient_ms": 20.0, "attack_rise_ms": 1.0}
-        fxops._guard("x", before, {"attack_share": 0.17, "main_transient_ms": 20.9, "attack_rise_ms": 2.9}, 6.0)
-        for after, why in (({"attack_share": 0.15, "main_transient_ms": 20.0, "attack_rise_ms": 1.0}, "attack share"),
-                           ({"attack_share": 0.2, "main_transient_ms": 21.2, "attack_rise_ms": 1.0}, "main transient"),
-                           ({"attack_share": 0.2, "main_transient_ms": 20.0, "attack_rise_ms": 3.2}, "attack rise")):
-            with self.subTest(why=why):
+    @staticmethod
+    def snapd(share=0.2, mt=20.0, rise=1.0, f09=-20.0, ch=(-20.0, -21.0), floor=-70.0):
+        return {"attack_share": share, "main_transient_ms": mt, "attack_rise_ms": rise, "f09_db": f09,
+                "channel_db": list(ch), "floor_dbfs": floor}
+
+    def test_guard_limits_in_both_directions(self):
+        s_ = self.snapd
+        fxops._guard("x", s_(), s_(share=0.17, mt=20.9, rise=2.9, f09=-21.4, ch=(-21.0, -22.9)), 6.0)
+        for after, why in ((s_(share=0.15), "attack share"), (s_(share=0.26), "attack share"),  # down and up
+                           (s_(mt=21.2), "main transient"), (s_(mt=18.8), "main transient"),
+                           (s_(rise=3.2), "attack rise"), (s_(rise=-1.2), "attack rise"),  # smeared and eaten
+                           (s_(f09=-21.6), "F-09"), (s_(f09=-18.4), "F-09"),
+                           (s_(ch=(-20.0, -22.2)), "balance"), (s_(ch=(-20.0, -19.8)), "balance")):
+            with self.subTest(why=why, after=after):
                 with self.assertRaisesRegex(SoundbenchError, why):
-                    fxops._guard("x", before, after, 6.0)
-        calm = {"attack_share": 0.005, "main_transient_ms": 0.5, "attack_rise_ms": 100.0}  # no attack to protect
-        fxops._guard("x", calm, {"attack_share": 0.001, "main_transient_ms": 5.5, "attack_rise_ms": 150.0}, 6.0)
+                    fxops._guard("x", s_(), after, 6.0)
+        calm = s_(share=0.005, mt=0.5, rise=100.0)  # no attack to protect: only the filter's own tolerance
+        fxops._guard("x", calm, s_(share=0.001, mt=5.5, rise=150.0), 6.0)
         with self.assertRaisesRegex(SoundbenchError, "main transient"):
-            fxops._guard("x", calm, {"attack_share": 0.001, "main_transient_ms": 7.0, "attack_rise_ms": 100.0}, 6.0)
+            fxops._guard("x", calm, s_(share=0.001, mt=7.0, rise=100.0), 6.0)
+        # chorus: level, attack shape and transient are its job; only the balance (2 dB) is guarded here
+        fxops._guard("chorus", s_(), s_(share=0.4, mt=25.0, rise=9.0, f09=-15.0, ch=(-20.0, -22.5)), 1.0)
+        with self.assertRaisesRegex(SoundbenchError, "balance"):
+            fxops._guard("chorus", s_(), s_(ch=(-20.0, -23.2)), 1.0)
         self.assertTrue(math.isclose(fxops.SHARE_KEEP, 0.8))
+
+    def test_length_guard_catches_an_eaten_tail(self):
+        rate = 44100
+        x = fx.make("wrong_chime", rate, 2)
+        y = x.copy()
+        y[int(0.2 * rate):] *= 0.001  # the tail is gone, the attack untouched
+        with self.assertRaisesRegex(SoundbenchError, "shrank"):
+            fxops._guard("x", fxops._snap(x, rate), fxops._snap(x, rate), 1.0, 1.0, x, y, rate)
+        fxops._guard("x", fxops._snap(x, rate), fxops._snap(x, rate), 1.0, 1.0, x, x.copy(), rate)
 
     def test_roughness_guard(self):
         rate = 48000
@@ -271,6 +295,21 @@ class GuardTest(unittest.TestCase):
         finally:
             fxops.RUBBERBAND_MODE = old
 
+    def test_a_rubberband_loss_over_6_db_is_refused(self):
+        """Smooth rubberband loses 0.4-4.3 dB (restored by gain); more than 6 dB is damage, not a gain to restore."""
+        real = sbf.run_filter_events
+
+        def quieter(*a, **k):
+            res = real(*a, **k)
+            res.audio = res.audio * 0.4  # -8 dB on top of rubberband's own loss
+            return res
+
+        with mock.patch.object(sbf, "run_filter_events", quieter):
+            with self.assertRaisesRegex(SoundbenchError, "lost"):
+                run("pitch", tonal_bed(44100), 44100, "sustained", semitones=1)
+        y, info = run("pitch", tonal_bed(44100), 44100, "sustained", semitones=1)
+        self.assertLess(info["level_restored_db"], fxops.RUBBERBAND_MAX_LOSS_DB)
+
     def test_pitch_events_moved_past_the_tolerance_are_refused(self):
         """A 2-semitone shift may move events 1 + 3 x 2 = 7 ms; 15 ms more delay on top must be refused."""
         rate = 44100
@@ -283,6 +322,128 @@ class GuardTest(unittest.TestCase):
                 run("pitch", x, rate, "sustained", semitones=2)
         finally:
             fxops.RUBBERBAND_MODE = old
+
+
+@needs_ffmpeg
+class RealisticTakeTest(unittest.TestCase):
+    """LD-c: quiet takes modelled on real ElevenLabs takes (peaks -24 to -36 dBFS, a mid-waveform start, 480 ms,
+    uneven channels). F1: the reviewer's settings on a -36 dBFS take must be refused, by the nf check and, with
+    that check off, by the damage guards."""
+
+    def test_f1_denoise_with_nf_over_the_floor_is_refused(self):
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = fx.make_real("quiet_hit", rate)
+                with self.assertRaisesRegex(SoundbenchError, "above the take's measured tail floor"):
+                    run("denoise", x, rate, "hit", nr_db=40, nf_db=-20)
+
+    def test_f1_the_damage_guards_refuse_it_without_the_nf_check(self):
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = fx.make_real("quiet_hit", rate)
+                with mock.patch.object(fxops, "NF_MARGIN_DB", 200.0):
+                    with self.assertRaisesRegex(SoundbenchError, "F-09|shrank|attack share|balance|transient|rise"):
+                        run("denoise", x, rate, "hit", nr_db=40, nf_db=-20)
+
+    def test_denoise_with_nf_at_the_floor_keeps_a_quiet_take(self):
+        """A hit and a note keep their numbers. (A noise-only whoosh is left out: afftdn cannot tell its sound from
+        noise, and on its swell the main transient moved 17.7 ms at 44.1 kHz: refused, as it should be.)"""
+        for rate in fx.RATES:
+            for name, kind in (("quiet_hit", "hit"), ("soft_note", "chime")):
+                with self.subTest(rate=rate, name=name):
+                    x = fx.make_real(name, rate)
+                    y, info = run("denoise", x, rate, kind)
+                    self.assertTrue(info["nf_used"]["auto"])
+                    self.assertAlmostEqual(info["nf_used"]["nf_db"], info["nf_used"]["floor_dbfs"], delta=0.1)
+                    g = info["guard"]
+                    self.assertLessEqual(abs(g["f09_db"][1] - g["f09_db"][0]), fxops.LEVEL_CHANGE_DB)
+                    self.assertLessEqual(abs(g["balance_moved_db"]), fxops.BALANCE_MOVE_DB)
+
+    def test_hiss_removal_on_a_normal_take_still_works(self):
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = noisy(fx.make("clean_hit", rate, 2), 0.003)
+                y, info = run("denoise", x, rate, "hit", nr_db=20, nf_db=-50)
+                tail = slice(len(x) - int(0.06 * rate), None)
+                self.assertLess(np.sqrt(np.mean(y[tail] ** 2)), 0.5 * np.sqrt(np.mean(x[tail] ** 2)))
+
+    def test_denoise_refuses_a_silent_tail_and_a_floor_under_afftdn(self):
+        x = np.repeat(fx.make("clean_hit", 44100, 1), 2, axis=1)  # digital silence after the hit (no fixture noise)
+        with self.assertRaisesRegex(SoundbenchError, "digital silence|under afftdn"):
+            run("denoise", x, 44100, "hit")
+        quiet = noisy(x, 0.00002)  # floor about -94 dBFS
+        with self.assertRaisesRegex(SoundbenchError, "under afftdn"):
+            run("denoise", quiet, 44100, "hit")
+
+    def test_chorus_on_a_low_thump_is_timed_on_its_dry_path(self):
+        """F5: on a 60 Hz thump the wet copy moves the audio's correlation peak 18-30 samples (as on the real whoosh-2:
+        11 samples); timing the audio on the dry path (decay 0) and the full graph on the probe gives the true 0."""
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = fx.make("bass_thump", rate, 2)
+                y, info = run("chorus", x, rate, "impact")
+                self.assertEqual(info["timing"]["dry_path_timing"]["channel_lags_samples"], [0, 0])
+                self.assertGreater(len(y), len(x))
+
+    def test_chorus_on_a_quiet_whoosh(self):
+        """F5: real whooshes were refused (the wet copy moved the correlation peak 11 samples)."""
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = fx.make_real("quiet_whoosh", rate)
+                y, info = run("chorus", x, rate, "whoosh")
+                self.assertGreater(len(y), len(x))
+                self.assertEqual(info["timing"]["dry_path_timing"]["channel_lags_samples"], [0, 0])
+
+
+@needs_ffmpeg
+class StretchRangeTest(unittest.TestCase):
+    """F4: the accepted range stops where the measured shift reaches 10 ms (0.8-1.25); the tolerance is
+    2 ms + 40 ms x |ratio - 1|."""
+
+    def test_the_range_ends_just_inside_and_just_outside(self):
+        for ratio in (0.79, 1.26):
+            with self.assertRaisesRegex(SoundbenchError, "outside"):
+                ops.check_params("stretch", {"ratio": ratio})
+        for rate in fx.RATES:
+            for ratio in (0.8, 1.25):
+                with self.subTest(rate=rate, ratio=ratio):
+                    y, info = run("stretch", tonal_bed(rate), rate, "loop_bed", ratio=ratio)
+                    self.assertLessEqual(info["timing"]["worst_event_shift_ms"], info["timing"]["event_tolerance_ms"])
+                    self.assertAlmostEqual(info["timing"]["event_tolerance_ms"], 2 + 40 * abs(ratio - 1), places=6)
+
+    def test_events_past_the_scaled_tolerance_are_refused(self):
+        for rate in fx.RATES:
+            for ratio, extra_ms in ((0.8, 5), (1.25, 25)):  # 0.8 moves events late, 1.25 early (probe sweep)
+                with self.subTest(rate=rate, ratio=ratio):
+                    x = tonal_bed(rate)
+                    body = len(x) + 2 * int(round(sbf.CONTEXT_MS * rate / 1000))
+                    old = fxops.RUBBERBAND_MODE
+                    try:
+                        fxops.RUBBERBAND_MODE = (f"transients=smooth,adelay={extra_ms}|{extra_ms},"
+                                                 f"atrim=end_sample={int(round(body * ratio))}")
+                        with self.assertRaisesRegex(SoundbenchError, "events moved"):
+                            run("stretch", x, rate, "loop_bed", ratio=ratio)
+                    finally:
+                        fxops.RUBBERBAND_MODE = old
+
+
+@needs_ffmpeg
+class ChannelsAlikeTest(unittest.TestCase):
+    def test_near_mono_channels_are_checked_by_level_only(self):
+        """Real takes are often near-mono: chorus modulation flipped own-vs-cross shape matches on 3 of 62."""
+        rate = 44100
+        base = fx.make_real("quiet_whoosh", rate)
+        x = np.stack([base[:, 0], 0.98 * base[:, 0]], axis=1)
+        y = x.copy()
+        y[:, 1] = 0.9 * x[:, 0] + 0.1 * np.roll(x[:, 0], 50)  # its own channel shifted a little
+        self.assertIn("level only", sbf.check_channels(x, y, "test"))
+        rs = np.random.RandomState(4)
+        x2 = np.stack([base[:, 0], 0.98 * base[:, 0] + 0.33 * np.std(base[:, 0]) * rs.standard_normal(len(base))], axis=1)
+        y2 = np.stack([x2[:, 0], x2[:, 0]], axis=1)  # channel 1 now matches input 0 (0.95) better than its own
+        self.assertIn("level only", sbf.check_channels(x2, y2, "test"))  # shape would refuse it wrongly
+        swapped = np.stack([x[:, 1] * 0.5, x[:, 0]], axis=1)  # unequal levels: the swap still shows
+        with self.assertRaisesRegex(SoundbenchError, "level order"):
+            sbf.check_channels(np.stack([x[:, 0], 0.5 * x[:, 1]], axis=1), swapped, "test")
 
 
 if __name__ == "__main__":

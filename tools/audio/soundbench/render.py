@@ -13,12 +13,14 @@ Order of work, each step refusing instead of guessing:
   4. every step logged with its parameters, its own numbers and a before/after snapshot (G-2);
   5. export FLAC (G-8) at the take's rate; the delivered file is re-measured (F-03: measure the delivered format)
      and compared with the card's targets and level;
-  6. family check for a paid-reveal family (D-03, R-31): F-13 b momentary maxima within 1 LU and F-03 sample peaks
-     within 1 dB across the cue and its rendered siblings; a missing sibling counts as not passed;
+  6. family check for a paid-reveal family (D-03, R-31): every member's card must declare the same family (checked
+     before rendering); F-13 b momentary maxima within 1 LU and F-03 sample peaks within 1 dB across every member's
+     current delivered file; a member not rendered yet gives exit 3, never a pass;
   7. write out/<cue>.flac, out/<cue>.log.json, report/<cue>.render.json and .md; pictures (before and after) when a
      target misses, for important cues, or when asked (light-check rule).
 Exit codes (command line): 0 every must-target and the family check passed; 1 a must-target, the level or the family
-check failed (the file is still written, the report says why); 2 refused before or while rendering.
+check failed (the file is still written, the report says why); 2 refused before or while rendering (an inconsistent
+family declaration included); 3 a paid-reveal family is incomplete: re-render after the siblings (LD-a).
 
 Usage:
   python -m tools.audio.soundbench render content/audio/<cue-id> [--picture] [--json]
@@ -140,36 +142,93 @@ def evaluate(card: dict, final: dict, out_audio: np.ndarray, rate: int) -> list[
     return rows
 
 
-def family_check(card: dict, cue_dir: Path, out_file: Path) -> dict | None:
+def family_members(card: dict, cue_dir: Path) -> dict | None:
+    """Check the family is declared the same way by every member before anything renders (F2, repair round 2).
+
+    Refused (exit 2) unless every sibling's card.json exists and declares the same family id, the same paid_reveal
+    and the same member set, and unless every card in the neighbouring cue folders that lists this cue as a family
+    member is itself in that set. A cue whose own card declares no family is refused when another card lists it (a
+    one-sided family could bypass D-03). None when the cue is in no family."""
+    cue = card["cue"]
     fam = card.get("family")
-    if not fam:
+    listing = {}
+    for other in sorted(cue_dir.parent.iterdir()):
+        cpath = other / "card.json"
+        if other.name == cue or not cpath.is_file():
+            continue
+        try:
+            oc = cardmod.load_card(cpath)
+        except SoundbenchError:
+            continue  # an unreadable neighbour cannot list us; it fails on its own render
+        of = oc.get("family")
+        if of and cue in of["siblings"]:
+            listing[other.name] = of["id"]
+    if fam is None:
+        if listing:
+            raise SoundbenchError(f"{sorted(listing)} list {cue} as a family member, but {cue}'s card declares no family: "
+                                  "every member declares the family (D-03 cannot be checked one-sided), refused")
+        return None
+    members = {cue, *fam["siblings"]}
+    for sib in fam["siblings"]:
+        spath = cue_dir.parent / sib / "card.json"
+        if not spath.is_file():
+            raise SoundbenchError(f"family {fam['id']!r}: sibling {sib} has no card.json at {spath}, refused")
+        sf_ = cardmod.load_card(spath).get("family")
+        if not sf_:
+            raise SoundbenchError(f"family {fam['id']!r}: sibling {sib} declares no family, refused")
+        problems = []
+        if sf_["id"] != fam["id"]:
+            problems.append(f"id {sf_['id']!r}")
+        if sf_["paid_reveal"] != fam["paid_reveal"]:
+            problems.append(f"paid_reveal {sf_['paid_reveal']}")
+        if {sib, *sf_["siblings"]} != members:
+            problems.append(f"members {sorted({sib, *sf_['siblings']})}")
+        if problems:
+            raise SoundbenchError(f"family {fam['id']!r}: sibling {sib} declares {', '.join(problems)}; this card declares "
+                                  f"id {fam['id']!r}, paid_reveal {fam['paid_reveal']}, members {sorted(members)}: refused")
+    strangers = sorted(n for n in listing if n not in members)
+    if strangers:
+        raise SoundbenchError(f"{strangers} list {cue} in a family but are not members of {fam['id']!r}: refused")
+    return {"id": fam["id"], "paid_reveal": fam["paid_reveal"], "members": sorted(members)}
+
+
+def family_check(card: dict, cue_dir: Path, out_file: Path) -> dict | None:
+    """D-03 on the members' current delivered files (whichever member renders re-checks the whole family). Results:
+    pass, fail, incomplete (a member not rendered yet: exit 3, never a pass), or not run for a family that is not a
+    paid reveal. The state is also written beside the cue folders as <family-id>.family.json, with every member's file
+    sha256, so a report from an earlier render can be told stale."""
+    fam = family_members(card, cue_dir)
+    if fam is None:
         return None
     if not fam["paid_reveal"]:
         return {"id": fam["id"], "result": "not run (not a paid-reveal family)"}
-    files = [out_file]
-    missing = []
-    for sib in fam["siblings"]:
-        f = cue_dir.parent / sib / "out" / f"{sib}.flac"
-        (files if f.is_file() else missing).append(f if f.is_file() else sib)
-    rec = {"id": fam["id"], "files": [str(f) for f in files], "limits": {"momentary_lu": FAMILY_LU,
-                                                                         "sample_peak_db": FAMILY_PEAK_DB}}
+    files, missing = [], []
+    for name in fam["members"]:
+        f = out_file if name == card["cue"] else cue_dir.parent / name / "out" / f"{name}.flac"
+        (files if f.is_file() else missing).append(f if f.is_file() else name)
+    rec = {"id": fam["id"], "members": fam["members"], "files": [str(f) for f in files],
+           "file_sha256": {f.parent.parent.name: file_sha256(f) for f in files},
+           "limits": {"momentary_lu": FAMILY_LU, "sample_peak_db": FAMILY_PEAK_DB}, "checked_by": card["cue"]}
     if missing:
-        rec.update({"result": "fail", "reason": f"siblings not rendered yet: {missing} (D-03 cannot be checked)"})
-        return rec
-    try:
-        par = measures.parity(files, "momentary")
-    except SoundbenchError as err:
-        rec.update({"result": "fail", "reason": str(err)})
-        return rec
-    peaks = [measures.measure(f)["F-03_peaks"]["sample_peak_dbfs"] for f in files]
-    peak_spread = round(max(peaks) - min(peaks), 2)
-    rec.update({"momentary_lufs": par["lufs"], "spread_lu": par["spread_lu"], "sample_peaks_dbfs": peaks,
-                "peak_spread_db": peak_spread})
-    ok = par["spread_lu"] is not None and par["spread_lu"] <= FAMILY_LU and peak_spread <= FAMILY_PEAK_DB
-    rec["result"] = "pass" if ok else "fail"
-    if not ok:
-        rec["reason"] = (f"F-13 b spread {par['spread_lu']} LU (limit {FAMILY_LU}) and F-03 peak spread "
-                         f"{peak_spread} dB (limit {FAMILY_PEAK_DB}): D-03, a paid result may not read louder")
+        rec.update({"result": "incomplete", "reason": f"family incomplete: re-render after the siblings ({missing} not "
+                                                      "rendered yet; D-03 cannot be checked)"})
+    else:
+        try:
+            par = measures.parity(files, "momentary")
+        except SoundbenchError as err:
+            par = None
+            rec.update({"result": "fail", "reason": str(err)})
+        if par is not None:
+            peaks = [measures.measure(f)["F-03_peaks"]["sample_peak_dbfs"] for f in files]
+            peak_spread = round(max(peaks) - min(peaks), 2)
+            rec.update({"momentary_lufs": par["lufs"], "spread_lu": par["spread_lu"], "sample_peaks_dbfs": peaks,
+                        "peak_spread_db": peak_spread})
+            ok = par["spread_lu"] is not None and par["spread_lu"] <= FAMILY_LU and peak_spread <= FAMILY_PEAK_DB
+            rec["result"] = "pass" if ok else "fail"
+            if not ok:
+                rec["reason"] = (f"F-13 b spread {par['spread_lu']} LU (limit {FAMILY_LU}) and F-03 peak spread "
+                                 f"{peak_spread} dB (limit {FAMILY_PEAK_DB}): D-03, a paid result may not read louder")
+    (cue_dir.parent / f"{fam['id']}.family.json").write_text(json.dumps(rec, indent=2) + "\n", encoding="utf-8")
     return rec
 
 
@@ -201,6 +260,7 @@ def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
     if recipe["cue"] != card["cue"] or cue_dir.name != card["cue"]:
         raise SoundbenchError(f"cue ids differ: folder {cue_dir.name!r}, card {card['cue']!r}, recipe {recipe['cue']!r}")
     design, edit, reordered = plan(card, recipe)
+    family_members(card, cue_dir)  # refuse an inconsistent family before any audio is touched
     x, rate, take = check_take(cue_dir, recipe)
     cue = card["cue"]
     fade = next((s for s in edit if s["op"] == "fade"), None)
@@ -230,7 +290,8 @@ def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
     fam = family_check(card, cue_dir, out_file)
     must_fail = [r["target"] for r in rows if r["must"] and r["result"] != "pass"]
     fam_fail = fam is not None and fam["result"] == "fail"
-    code = 1 if must_fail or fam_fail else 0
+    fam_incomplete = fam is not None and fam["result"] == "incomplete"
+    code = 1 if must_fail or fam_fail else (3 if fam_incomplete else 0)
     doc = {"tool": "soundbench render", "cue": cue, "card": card, "recipe": recipe, "take": take,
            "edit_order": [s["op"] for s in edit], "edit_reordered": reordered, "start": start, "steps": steps,
            "export": exp, "final": final, "targets": rows, "family": fam, "must_failed": must_fail,

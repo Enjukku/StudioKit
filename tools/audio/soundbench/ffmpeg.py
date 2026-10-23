@@ -245,7 +245,7 @@ def _lags_or_refuse(readings: list, source: str, latency: int, graph: str, rate:
 
 def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0, length_change: bool = False,
                compensate: bool = True, exe: Path | None = None, context: str = "none",
-               standin_kind: str | None = None) -> FilterResult:
+               standin_kind: str | None = None, timing: str = "audio") -> FilterResult:
     """Run one ffmpeg audio filter graph on `x` and return audio that keeps rate, channels, length and timing.
 
     `latency_samples`: the graph's known latency (`known_latency`); every channel must read exactly this lag, and
@@ -254,7 +254,10 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
     `compensate`: False refuses a graph with a latency instead of compensating it (proves the check fires).
     `context`: "reflect" or "wrap" pads both ends with CONTEXT_MS of context (removed afterwards).
     `standin_kind`: when the audio gives no clear reading, the latency is proven on the probe AND on a non-periodic
-    stand-in of this kind (`standins.py`) through the same graph; both must read the declared latency."""
+    stand-in of this kind (`standins.py`) through the same graph; both must read the declared latency.
+    `timing`: "audio" (default: the audio itself, the probe and stand-in when it gives no clear reading) or "probe"
+    (the probe and the stand-in only: for a graph whose wet copies move the audio's correlation peak, such as chorus,
+    whose audio is timed separately on its dry path)."""
     one_d = isinstance(x, np.ndarray) and x.ndim == 1
     src = as_2d(x, "filter input").astype(np.float32)
     rate = check_rate(rate)
@@ -263,6 +266,8 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
     if isinstance(latency_samples, bool) or not isinstance(latency_samples, (int, np.integer)) or latency_samples < 0:
         raise SoundbenchError(f"latency_samples must be a whole number of samples, 0 or more, got {latency_samples!r}")
     latency = int(latency_samples)
+    if timing not in ("audio", "probe") or (timing == "probe" and standin_kind is None):
+        raise SoundbenchError("timing must be \"audio\" or \"probe\" (probe timing needs a stand-in kind)")
     if length_change and (latency or context != "none"):
         raise SoundbenchError("a length-changing call cannot declare a latency or use context (no compensation for it)")
     n, ch = src.shape
@@ -286,7 +291,7 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
 
     search = int(math.ceil(max(2 * latency, LAG_SEARCH_MIN_MS * rate / 1000)))
     readings = channel_lags(feed, raw, rate, search)
-    if all(r is None or r["clear"] for r in readings):
+    if timing == "audio" and all(r is None or r["clear"] for r in readings):
         source = "audio"
         found = _lags_or_refuse([r for r in readings if r is not None], "audio", latency, graph, rate)
     else:
@@ -294,7 +299,8 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
         preads = channel_lags(probe, _ffmpeg_once(probe, rate, graph, exe, length_change), rate, search)
         found = _lags_or_refuse(preads, "probe", latency, graph, rate)
         readings = preads
-        source = ("probe (the audio gave no clear reading: timing proven on a probe signal through the same graph, "
+        why = "the audio gave no clear reading" if timing == "audio" else "probe timing asked"
+        source = (f"probe ({why}: timing proven on a probe signal through the same graph, "
                   "not on the audio)")
         if standin_kind is not None:
             from . import standins
@@ -302,7 +308,7 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
             stand = standins.make(standin_kind, rate, ch, len(feed))
             sreads = channel_lags(stand, _ffmpeg_once(stand, rate, graph, exe, length_change), rate, search)
             _lags_or_refuse(sreads, f"{standin_kind} stand-in", latency, graph, rate)
-            source = (f"probe and {standin_kind} stand-in (the audio gave no clear reading: timing proven on a probe "
+            source = (f"probe and {standin_kind} stand-in ({why}: timing proven on a probe "
                       "signal and a stand-in of this kind through the same graph, not on the audio)")
             log["standin_lags_samples"] = [r["lag_samples"] for r in sreads]
     log.update({"timing_source": source, "channel_lags_samples": [r["lag_samples"] for r in readings if r],
@@ -432,19 +438,24 @@ def run_filter_events(x: np.ndarray, rate: int, graph: str, *, time_scale: float
 
 
 CHANNEL_LEVEL_DB = 1.0  # input channels this far apart in level must keep their order
+CHANNELS_ALIKE = 0.9  # PROPOSAL: input channels correlating this much are told apart by level only (real takes are
+                      # often near-mono: chorus modulation flipped own-vs-cross shape matches on 3 of 62)
 
 
 def check_channels(src: np.ndarray, out: np.ndarray, graph: str) -> str:
     """Refuse a swapped or mixed-up channel order.
 
     Each output channel must correlate at least as well with its own input channel as with any other (within 0.02),
-    and input channels more than 1 dB apart in level must keep their louder-quieter order."""
+    unless the input channels correlate 0.9 or more with each other (then shape cannot tell them apart); and input
+    channels more than 1 dB apart in level must keep their louder-quieter order."""
     ch = src.shape[1]
     if ch == 1:
         return "mono"
     s, o = src.astype(np.float64), out.astype(np.float64)
     es, eo = np.sum(s ** 2, axis=0), np.sum(o ** 2, axis=0)
-    for c in range(ch):
+    alike = all(es[a] > 0 and es[b] > 0 and float(np.dot(s[:, a], s[:, b]) / math.sqrt(es[a] * es[b])) >= CHANNELS_ALIKE
+                for a in range(ch) for b in range(a + 1, ch))
+    for c in range(0 if alike else ch):  # channels this alike cannot be told apart by shape: level order only
         if eo[c] <= 0 or es[c] <= 0:
             continue
         own = float(np.dot(o[:, c], s[:, c]) / math.sqrt(eo[c] * es[c]))
@@ -459,4 +470,4 @@ def check_channels(src: np.ndarray, out: np.ndarray, graph: str) -> str:
             if es[a] > 0 and es[b] > 0 and abs(10 * math.log10(es[a] / es[b])) > CHANNEL_LEVEL_DB:
                 if (es[a] > es[b]) != (eo[a] > eo[b]):
                     raise SoundbenchError(f"{graph!r}: channels {a} and {b} swapped their level order: refused")
-    return "order kept"
+    return "order kept (level only: the channels are too alike to tell by shape)" if alike else "order kept"

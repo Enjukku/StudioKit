@@ -175,16 +175,22 @@ class DynamicsTest(unittest.TestCase):
         rate = 48000
         # threshold -20, ratio 4, knee 6, make-up +2, worked by hand: under the knee y = x; in it
         # y = x + (1/4 - 1)(x + 20 + 3)^2 / 12; over it y = -20 + (x + 20) / 4
+        # the threshold is relative to the input's peak: a one-sample 0 dBFS click at the very end sets the peak,
+        # so threshold -20 dB re peak = -20 dBFS and the hand-worked values hold (the click is not measured)
         for a_db, want in ((-30.0, -28.0), (-23.0, -21.0), (-20.0, -18.5625), (-18.0, -17.5625), (-14.0, -16.5),
                            (-6.0, -14.5)):
             with self.subTest(level=a_db):
                 x = tone(rate, 1000, 1000, 10 ** (a_db / 20))
+                x[-1] = 1.0
                 y, info = run("compress", x, rate, threshold_db=-20, ratio=4, knee_db=6, attack_ms=1, release_ms=200,
                               makeup_db=2)
-                got = 20 * math.log10(float(np.max(np.abs(y[rate // 2:]))))
+                self.assertAlmostEqual(info["threshold_dbfs"], -20.0, places=6)
+                got = 20 * math.log10(float(np.max(np.abs(y[rate // 2:-1000]))))
                 self.assertAlmostEqual(got, want, delta=0.2)
         x = tone(rate, 500, 1000, 10 ** (-40 / 20))  # far under the knee: untouched, makeup only
+        x[-1] = 1.0
         y, info = run("compress", x, rate, threshold_db=-20, ratio=4, knee_db=6, makeup_db=0)
+        y, x = y[:-1000], x[:-1000]
         np.testing.assert_allclose(y, x)
         self.assertEqual(info["deepest_gain_reduction_db"], 0.0)
 
@@ -240,11 +246,53 @@ class DynamicsTest(unittest.TestCase):
 
     def test_saturate_is_its_formula(self):
         x = tone(44100, 300, 1000, 0.5, 2)
-        y, _ = run("saturate", x, 44100, drive_db=12, mix=0.5)
-        g = 10 ** (12 / 20)
-        np.testing.assert_allclose(y, 0.5 * x + 0.5 * np.tanh(g * x) / math.tanh(g))
+        y, info = run("saturate", x, 44100, drive_db=12, mix=0.5)
+        g, pk = 10 ** (12 / 20), float(np.max(np.abs(x)))  # the sampled peak, as the op reads it
+        np.testing.assert_allclose(y, 0.5 * x + 0.5 * pk * np.tanh(g * x / pk) / math.tanh(g), rtol=1e-9)
+        self.assertLess(info["residual_db"], -10)  # it added harmonics, and says how much
         same, _ = run("saturate", x, 44100, drive_db=0)
         np.testing.assert_array_equal(same, x)
+
+
+class QuietTakeTest(unittest.TestCase):
+    """F3 and F7 on takes modelled on real ElevenLabs takes (LD-c): quiet, starting mid-waveform."""
+
+    def test_saturate_and_compress_act_the_same_on_a_quiet_take(self):
+        for rate in fx.RATES:
+            for name in fx.REAL_NAMES:
+                with self.subTest(rate=rate, name=name):
+                    x = fx.make_real(name, rate)
+                    k = 0.9 / float(np.max(np.abs(x)))  # the same take normalised
+                    for op, given in (("saturate", {"drive_db": 12}), ("compress", {"threshold_db": -20, "ratio": 4})):
+                        yq, iq = run(op, x, rate, **given)
+                        yn, i_n = run(op, x * k, rate, **given)
+                        np.testing.assert_allclose(yq * k, yn, rtol=1e-9, atol=1e-12)
+                        if op == "saturate":
+                            self.assertEqual(iq["residual_db"], i_n["residual_db"])
+                            self.assertLess(iq["residual_db"], -20 + 15)  # it really saturated (not -69 dB)
+                        else:
+                            self.assertEqual(iq["deepest_gain_reduction_db"], i_n["deepest_gain_reduction_db"])
+                            self.assertGreater(iq["deepest_gain_reduction_db"], 3)  # it really compressed
+
+    def test_trim_fades_a_mid_waveform_start(self):
+        for rate in fx.RATES:
+            for name in fx.REAL_NAMES:
+                with self.subTest(rate=rate, name=name):
+                    x = fx.make_real(name, rate)
+                    a = x - x.mean(axis=0)
+                    self.assertIn("start", m.clicks(a, rate)["edges"])
+                    y, info = run("trim", x, rate, {**CTX, "binding": "F-01"})
+                    self.assertTrue(info["edge_faded"])
+                    self.assertAlmostEqual(info["first_sample_db_re_peak"][0], fx.REAL_FIRST_DB_RE_PEAK[name], delta=0.6)
+                    self.assertEqual(float(np.max(np.abs(y[0]))), 0.0)
+                    self.assertNotIn("start", m.clicks(y - y.mean(axis=0), rate)["edges"])
+                    k = int(round(ops.EDGE_FADE_MS * rate / 1000))
+                    np.testing.assert_allclose(y[k:], x[len(x) - len(y) + k:])  # only the first 0.5 ms changed
+
+    def test_trim_leaves_a_silent_start_alone(self):
+        x = fx.make("late_hit", 44100, 2)
+        y, info = run("trim", x, 44100)
+        self.assertFalse(info["edge_faded"])
 
 
 class PitchTest(unittest.TestCase):
