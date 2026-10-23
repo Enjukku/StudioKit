@@ -31,7 +31,7 @@ supersedes: []
 | G3-P4 | yes | First fix the 4 stale lines in `.agents/workflows/jobs/` (listed in g3-proposals P4), then align stage text with the accepted recipe rows; run `tools/tests/test_job_workflows.py`. |
 | G3-P5 | yes | `rules/messages.md` §2 and §6 keys, `platform-policy` honest-reveal rows, `networking-security` no-success-on-denial. |
 | G3-P6 | yes | Templates, game-profile and vocabulary templates, eval briefs (several eval checks fail correct work today). |
-| G3-P7 | not now | No Studio probe pass; the books keep "probe in Studio first". Revisit when the owner starts Studio testing. |
+| G3-P7 | no (owner J018-D9, 2026-10-23) | No Studio probe pass; the probes run inside real game jobs, where the books keep "probe in Studio first". |
 | G3-P8 | yes, after P1 | New measuring options in existing tools, starting with those two or more roles asked for. |
 | G3-P9 | changed | Every rough and option image at the highest image quality, never medium. This overrides J009-D17's medium floor for roughs: update `knowledge/jobs/J009-art-director/decisions.md` reference (new decision row, not an edit of D17), `art-review/references/exploration.md` (§8 cap row), `art-review/references/self-review.md`, `art-direction/references/worked-examples.md`, and the `reference-images` lines that say medium (grep "medium"). The art-bible families and background clause follow the recommendation. |
 | G3-P10 | later | Build each new tool when the first real game job needs it. |
