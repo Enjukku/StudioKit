@@ -10,6 +10,9 @@ Usage:
   python -m tools.audio.soundbench measure <file> [--low-cut HZ] [--high-pitch] [--json] [--picture PNG]
   python -m tools.audio.soundbench compare <a> <b> [--low-cut HZ] [--high-pitch] [--json]
   python -m tools.audio.soundbench parity <file> <file> [...] --mode integrated|momentary [--json]
+  python -m tools.audio.soundbench render <cue-folder> [--picture] [--json]
+Exit codes for render: 0 every must-target and the family check passed; 1 one failed (file written, report says
+why); 2 refused.
 """
 
 from __future__ import annotations
@@ -89,10 +92,31 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", choices=("integrated", "momentary"), required=True,
                    help="integrated: options and siblings; momentary: paid random results (trimmed, 100 ms)")
     p.add_argument("--json", action="store_true")
+    r = sub.add_parser("render", help="apply recipe.json to the take, export FLAC, check the card's targets")
+    r.add_argument("cue", type=Path, help="the cue folder (card.json, recipe.json, takes/)")
+    r.add_argument("--picture", action="store_true", help="always write the before and after pictures")
+    r.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     try:
         if a.cmd == "doctor":
             return doctor.main(a.root, a.json)
+        if a.cmd == "render":
+            from . import render as rendermod
+
+            doc, code = rendermod.render(a.cue, a.picture)
+            rep = {"cue": doc["cue"], "file": doc["export"]["file"], "exit_code": code, "must_failed": doc["must_failed"],
+                   "targets": doc["targets"], "family": doc["family"],
+                   "audio_sha256_float32": doc["export"]["audio_sha256_float32"]}
+            if a.json:
+                print(json.dumps(rep, indent=2))
+            else:
+                for t in rep["targets"]:
+                    print(f"{t['result']:<8} {t['target']:<18} {t['measure']:<28} {t['value']} "
+                          f"(min {t['min']}, max {t['max']}, {'must' if t['must'] else 'aim'})")
+                if rep["family"]:
+                    print(f"family {rep['family']['id']}: {rep['family']['result']} {rep['family'].get('reason', '')}")
+                print(f"file: {rep['file']}  exit {code}")
+            return code
         if a.cmd == "measure":
             rec = measures.measure(a.files[0], a.low_cut, a.high_pitch)
             if a.picture:

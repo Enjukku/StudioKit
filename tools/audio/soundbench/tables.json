@@ -1,0 +1,29 @@
+{
+  "_about": "soundbench content tables (kit tool, universal). Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 step 3-4). kinds: what each cue kind means to the editor. binds_to: which onset the card's onset target and `trim` use (editor-design.md section 7, review-1 #8: rising sounds bind to F-01, hits to the main transient). sustained: may use declick, pitch and stretch (section 4). loop: the ffmpeg steps read wrapped context (the loop's end before its start). no_variants: variants refused (SC-12: the same attack always has the same tell). Every value is a PROPOSAL until a play-test confirms it.",
+  "kinds": {
+    "hit":        {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "hit"},
+    "impact":     {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "hit"},
+    "ui_click":   {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "click"},
+    "pickup":     {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "hit"},
+    "chime":      {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "hit"},
+    "stinger":    {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": false, "standin": "hit"},
+    "countdown":  {"binds_to": "main_transient", "sustained": false, "loop": false, "no_variants": true,  "standin": "click"},
+    "tell":       {"binds_to": "F-01",           "sustained": false, "loop": false, "no_variants": true,  "standin": "riser"},
+    "warning":    {"binds_to": "F-01",           "sustained": false, "loop": false, "no_variants": true,  "standin": "riser"},
+    "whoosh":     {"binds_to": "F-01",           "sustained": false, "loop": false, "no_variants": false, "standin": "riser"},
+    "riser":      {"binds_to": "F-01",           "sustained": false, "loop": false, "no_variants": false, "standin": "riser"},
+    "voice":      {"binds_to": "F-01",           "sustained": false, "loop": false, "no_variants": false, "standin": "bed"},
+    "sustained":  {"binds_to": "F-01",           "sustained": true,  "loop": false, "no_variants": false, "standin": "bed"},
+    "ambience":   {"binds_to": "F-01",           "sustained": true,  "loop": true,  "no_variants": false, "standin": "bed"},
+    "loop_bed":   {"binds_to": "F-01",           "sustained": true,  "loop": true,  "no_variants": false, "standin": "bed"},
+    "loop_music": {"binds_to": "F-01",           "sustained": true,  "loop": true,  "no_variants": false, "standin": "bed"}
+  },
+  "scales": {
+    "major": [0, 2, 4, 5, 7, 9, 11],
+    "minor": [0, 2, 3, 5, 7, 8, 10],
+    "major_pentatonic": [0, 2, 4, 7, 9],
+    "minor_pentatonic": [0, 3, 5, 7, 10],
+    "dorian": [0, 2, 3, 5, 7, 9, 10],
+    "chromatic": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  }
+}

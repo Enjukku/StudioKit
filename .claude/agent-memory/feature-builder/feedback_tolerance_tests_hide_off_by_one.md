@@ -11,4 +11,6 @@ Every numeric measure needs at least one fixture whose answer is exact by constr
 
 **Repair round 1 (same job):** the reviewer showed two guards that could not fail: lag measured on the mono sum (one channel shifted 30 ms passed) and compensation by the reading, re-checked with the same estimator (0 by construction). Rule: every compensation verifies against a declared value, every multichannel time check runs per channel, and a re-check that uses the same estimator on its own output is not a guard. Also remove DC before any correlation.
 
+**Steps 3-4 (same job):** a compressor test computed its expected values with the function under test (`static_curve_db`), so a knee-formula fault survived; a family test's "too loud" case also failed a second check (peak spread), hiding the LU limit. Rule: expected values are hand-worked literals or an independent library, and each boundary case must be able to fail on one check only.
+
 **How to apply:** for each measure, list the faults that move the number by less than the test tolerance and add an exact case. Report equivalent mutants by name with the reason, never as a caught fault. Related: [[planted-faults-unequal-parts]], [[bash-heredoc-escapes]] (the heredoc rewrote `\n` in a fault list again).

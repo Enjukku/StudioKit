@@ -180,12 +180,7 @@ def cue_numbers(x: np.ndarray, rate: int, low_cut: float | None = None, high_pit
     p95 = float(np.percentile(steps, 95)) if len(steps) else 0.0
     rec["F-08_loop_seam"] = None if p95 <= 0 else round(abs(float(mono[-1] - mono[0])) / p95, 3)
     snd = mono[on:end]
-    w = int(0.4 * rate)
-    if len(snd) > w:
-        e = np.convolve(snd ** 2, np.ones(w), "valid") / w
-        lvl = float(np.sqrt(e.max()))
-    else:
-        lvl = float(np.sqrt(np.mean(snd ** 2))) if len(snd) else 0.0
+    lvl = f09_rms(snd, rate)
     rec["F-09_loudness_rms_dbfs"] = None if db(lvl) is None else round(db(lvl), 2)
     rec["F-10_pitch"] = pitch(snd if len(snd) > 16 else mono, rate, high_pitch)
     hop = int(0.05 * rate)
@@ -202,6 +197,15 @@ def cue_numbers(x: np.ndarray, rate: int, low_cut: float | None = None, high_pit
     rec["F-11_movement"] = None if len(cents) < 2 else round(float(np.std(cents) / np.mean(cents)), 4)
     rec["F-12_length"] = {"file_ms": ms(n), "sound_ms": ms(end - on)}
     return rec
+
+
+def f09_rms(snd: np.ndarray, rate: int) -> float:
+    """F-09's linear RMS: the loudest 400 ms window of the F-12 sound (mono), or the whole sound if shorter."""
+    w = int(0.4 * rate)
+    if len(snd) > w:
+        e = np.convolve(snd ** 2, np.ones(w), "valid") / w
+        return float(np.sqrt(e.max()))
+    return float(np.sqrt(np.mean(snd ** 2))) if len(snd) else 0.0
 
 
 def parity(paths: list[Path], mode: str, tool: str = "soundbench parity") -> dict:
@@ -490,3 +494,58 @@ def measure(path: Path, low_cut: float | None = None, high_pitch: bool = False) 
     x, rate = load(path)
     rec.update(new_numbers(x, rate))
     return rec
+
+
+def measure_audio(x: np.ndarray, rate: int, low_cut: float | None = None, high_pitch: bool = False) -> dict:
+    """Every measure of a buffer, the same way `measure` reads a file (DC removed per channel, float64)."""
+    a = np.asarray(x, dtype=np.float64)
+    a = a[:, None] if a.ndim == 1 else a
+    a = a - a.mean(axis=0)
+    rec = {"rate": rate, "channels": int(a.shape[1])}
+    rec.update(cue_numbers(a, rate, low_cut, high_pitch))
+    rec.update(new_numbers(a, rate))
+    return rec
+
+
+LUFS_MIN_S = 0.4  # pyloudnorm needs one 400 ms block (S-103: integrated LUFS only for 0.4 s or more)
+
+
+def level_db(x: np.ndarray, rate: int, measure_name: str) -> float:
+    """The card's level measure (editor-design.md section 7), unrounded; `loudness` uses this same function.
+
+    F-09: RMS dBFS of the loudest 400 ms of the F-12 sound (one-shots).
+    F-13a: integrated LUFS of the file padded with 0.4 s of silence (a family's parity value: padding a file further
+    with digital silence cannot change it, because silent blocks fall under the -70 LUFS absolute gate).
+    LUFS-I: integrated LUFS of the file itself, only for files of 0.4 s or more.
+    Known false readings: as F-09 and F-13 in review.md section 4 (F-09 is RMS, never LUFS)."""
+    a = np.asarray(x, dtype=np.float64)
+    a = a[:, None] if a.ndim == 1 else a
+    a = a - a.mean(axis=0)
+    if measure_name == "F-09":
+        mono = a.mean(axis=1)
+        on = onset_index(mono)
+        end, _ = sound_end(mono, rate)
+        v = db(f09_rms(mono[on:end], rate))
+    elif measure_name in ("F-13a", "LUFS-I"):
+        import pyloudnorm as pyln
+
+        if measure_name == "LUFS-I" and len(a) < LUFS_MIN_S * rate:
+            raise CueError(f"LUFS-I needs 0.4 s or more; this sound is {1000 * len(a) / rate:.0f} ms: use F-09")
+        if measure_name == "F-13a":
+            a = np.vstack([a, np.zeros((int(0.4 * rate), a.shape[1]))])
+        v = float(pyln.Meter(rate).integrated_loudness(a))
+        v = v if math.isfinite(v) else None
+    else:
+        raise CueError(f"unknown level measure {measure_name!r}")
+    if v is None:
+        raise CueError(f"{measure_name}: the sound is silent, no level")
+    return float(v)
+
+
+def true_peak_db(x: np.ndarray) -> float | None:
+    """F-03's true peak (x4 oversampling, `resample_poly`), unrounded, dBTP."""
+    from scipy.signal import resample_poly
+
+    a = np.asarray(x, dtype=np.float64)
+    a = a[:, None] if a.ndim == 1 else a
+    return db(float(np.max(np.abs(resample_poly(a, 4, 1, axis=0)))))

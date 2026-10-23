@@ -56,7 +56,9 @@ from .core import SoundbenchError, as_2d, check_rate
 ENV_VAR = "SOUNDBENCH_FFMPEG"
 WINGET_GLOB = "Gyan.FFmpeg*/**/bin/ffmpeg.exe"
 TESTED_VERSION = "9.0.2"
-KNOWN_LATENCY = {"afftdn": {44100: 1102, 48000: 1200}}  # samples, measured per rate (see the module docstring)
+KNOWN_LATENCY = {"afftdn": {44100: 1102, 48000: 1200}, "adeclick": {44100: 0, 48000: 0},
+                 "chorus": {44100: 0, 48000: 0}}  # samples, measured per rate (see the module docstring)
+CONTEXT_MS = 100.0  # context padded at both ends for filters that ramp in and out (adeclick, rubberband)
 LATENCY_TOLERANCE_SAMPLES = 0
 LAG_SEARCH_MIN_MS = 50.0  # the lag is searched over at least +-50 ms (and 2 x the declared latency)
 PROBE_S = 0.4  # length of the probe's noise burst (the probe itself is as long as the padded input)
@@ -209,14 +211,50 @@ def probe_signal(rate: int, channels: int, length: int) -> np.ndarray:
     return out
 
 
+CONTEXTS = ("none", "reflect", "wrap")
+
+
+def with_context(src: np.ndarray, mode: str, rate: int) -> tuple[np.ndarray, int]:
+    """Pad both ends so a filter's start-up and run-out ramps fall outside the real audio. reflect: the audio mirrored
+    at each end; wrap: the loop's own end before its start and its start after its end (the seam's true context).
+    Probe 2026-10-23: without it adeclick dropped a bed's first 10 ms from 0.170 to 0.025 RMS; with it, unchanged."""
+    if mode not in CONTEXTS:
+        raise SoundbenchError(f"context must be one of {CONTEXTS}, got {mode!r}")
+    if mode == "none":
+        return src, 0
+    w = min(int(round(CONTEXT_MS * rate / 1000)), len(src) - 1)
+    if mode == "reflect":
+        return np.vstack([src[1:w + 1][::-1], src, src[-w - 1:-1][::-1]]), w
+    return np.vstack([src[-w:], src, src[:w]]), w
+
+
+def _lags_or_refuse(readings: list, source: str, latency: int, graph: str, rate: int) -> int:
+    """Every channel clear, all channels equal, equal to the declared latency: return it, otherwise refuse."""
+    if not all(r is not None and r["clear"] for r in readings):
+        raise SoundbenchError(f"{graph!r}: timing cannot be proven on the {source} (second peak per channel: "
+                              f"{[None if r is None else r['second_peak_ratio'] for r in readings]})")
+    lags = [r["lag_samples"] for r in readings]
+    if len(set(lags)) != 1:
+        raise SoundbenchError(f"{graph!r}: channels disagree on timing ({lags} samples, read on the {source}): refused")
+    found = lags[0]
+    if abs(found - latency) > LATENCY_TOLERANCE_SAMPLES:
+        raise SoundbenchError(f"{graph!r} delayed the sound by {found} samples ({1000 * found / rate:.3f} ms, read on "
+                              f"the {source}), but {latency} were declared: unknown latency, refused")
+    return found
+
+
 def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0, length_change: bool = False,
-               compensate: bool = True, exe: Path | None = None) -> FilterResult:
+               compensate: bool = True, exe: Path | None = None, context: str = "none",
+               standin_kind: str | None = None) -> FilterResult:
     """Run one ffmpeg audio filter graph on `x` and return audio that keeps rate, channels, length and timing.
 
     `latency_samples`: the graph's known latency (`known_latency`); every channel must read exactly this lag, and
     the output is shifted back by it. 0 (default): any lag is an unknown latency and is refused.
-    `length_change`: the graph changes the length on purpose (no length check; latency must be 0).
-    `compensate`: False refuses a graph with a latency instead of compensating it (proves the check fires)."""
+    `length_change`: the graph changes the length on purpose (no length check; latency must be 0; no context).
+    `compensate`: False refuses a graph with a latency instead of compensating it (proves the check fires).
+    `context`: "reflect" or "wrap" pads both ends with CONTEXT_MS of context (removed afterwards).
+    `standin_kind`: when the audio gives no clear reading, the latency is proven on the probe AND on a non-periodic
+    stand-in of this kind (`standins.py`) through the same graph; both must read the declared latency."""
     one_d = isinstance(x, np.ndarray) and x.ndim == 1
     src = as_2d(x, "filter input").astype(np.float32)
     rate = check_rate(rate)
@@ -225,57 +263,172 @@ def run_filter(x: np.ndarray, rate: int, graph: str, *, latency_samples: int = 0
     if isinstance(latency_samples, bool) or not isinstance(latency_samples, (int, np.integer)) or latency_samples < 0:
         raise SoundbenchError(f"latency_samples must be a whole number of samples, 0 or more, got {latency_samples!r}")
     latency = int(latency_samples)
-    if length_change and latency:
-        raise SoundbenchError("a length-changing call cannot declare a latency (no compensation for it)")
+    if length_change and (latency or context != "none"):
+        raise SoundbenchError("a length-changing call cannot declare a latency or use context (no compensation for it)")
     n, ch = src.shape
-    feed = np.vstack([src, np.zeros((latency, ch), np.float32)]) if latency else src
+    body, w = with_context(src, context, rate)
+    feed = np.vstack([body, np.zeros((latency, ch), np.float32)]) if latency else body
     exe = Path(exe) if exe is not None else require_ffmpeg().path
     raw = _ffmpeg_once(feed, rate, graph, exe, length_change)
     log = {"graph": graph, "ffmpeg": str(exe), "rate": rate, "channels": ch, "samples_in": n,
            "declared_latency_samples": latency, "latency_tolerance_samples": LATENCY_TOLERANCE_SAMPLES,
-           "samples_out_raw": int(len(raw)), "length_change": length_change}
+           "context": context, "context_samples": w, "samples_out_raw": int(len(raw)), "length_change": length_change}
+
+    def strip(r: np.ndarray) -> np.ndarray:
+        return r if length_change else r[latency + w:latency + w + n]
 
     if not np.any(src):  # no timing to measure: the output must stay silent
-        if np.any(raw):
+        if np.any(strip(raw)):
             raise SoundbenchError(f"{graph!r} made sound from a silent input")
         log.update({"timing_source": "silent input and output", "lag_samples": 0})
-        out = raw if length_change else raw[latency:latency + n]
+        out = strip(raw)
         return FilterResult(out[:, 0] if one_d else out, rate, 0, log)
 
     search = int(math.ceil(max(2 * latency, LAG_SEARCH_MIN_MS * rate / 1000)))
     readings = channel_lags(feed, raw, rate, search)
-    source = "audio"
-    if not all(r is None or r["clear"] for r in readings):
+    if all(r is None or r["clear"] for r in readings):
+        source = "audio"
+        found = _lags_or_refuse([r for r in readings if r is not None], "audio", latency, graph, rate)
+    else:
         probe = probe_signal(rate, ch, len(feed))
-        praw = _ffmpeg_once(probe, rate, graph, exe, length_change)
-        readings = channel_lags(probe, praw, rate, search)
-        source = "probe"
-        if not all(r is not None and r["clear"] for r in readings):
-            raise SoundbenchError(f"{graph!r}: timing cannot be proven, neither on the audio nor on a probe signal "
-                                  f"(per channel: {[None if r is None else r['second_peak_ratio'] for r in readings]})")
-    lags = [r["lag_samples"] for r in readings if r is not None]
-    log.update({"timing_source": source if source == "audio" else
-                "probe (the audio gave no clear reading: timing proven on a probe signal through the same graph, "
-                "not on the audio)",
-                "channel_lags_samples": lags,
+        preads = channel_lags(probe, _ffmpeg_once(probe, rate, graph, exe, length_change), rate, search)
+        found = _lags_or_refuse(preads, "probe", latency, graph, rate)
+        readings = preads
+        source = ("probe (the audio gave no clear reading: timing proven on a probe signal through the same graph, "
+                  "not on the audio)")
+        if standin_kind is not None:
+            from . import standins
+
+            stand = standins.make(standin_kind, rate, ch, len(feed))
+            sreads = channel_lags(stand, _ffmpeg_once(stand, rate, graph, exe, length_change), rate, search)
+            _lags_or_refuse(sreads, f"{standin_kind} stand-in", latency, graph, rate)
+            source = (f"probe and {standin_kind} stand-in (the audio gave no clear reading: timing proven on a probe "
+                      "signal and a stand-in of this kind through the same graph, not on the audio)")
+            log["standin_lags_samples"] = [r["lag_samples"] for r in sreads]
+    log.update({"timing_source": source, "channel_lags_samples": [r["lag_samples"] for r in readings if r],
                 "channel_correlation": [None if r is None else r["correlation"] for r in readings],
                 "channel_second_peak_ratio": [None if r is None else r["second_peak_ratio"] for r in readings]})
-    if len(set(lags)) != 1:
-        raise SoundbenchError(f"{graph!r}: channels disagree on timing ({lags} samples, read on the {source}): refused")
-    found = lags[0]
-    if abs(found - latency) > LATENCY_TOLERANCE_SAMPLES:
-        raise SoundbenchError(f"{graph!r} delayed the sound by {found} samples ({1000 * found / rate:.3f} ms), but "
-                              f"{latency} were declared: unknown latency, refused")
     if found and not compensate:
         raise SoundbenchError(f"{graph!r} delays the sound by {found} samples ({1000 * found / rate:.3f} ms): "
                               "compensation is off, refused")
-    out = raw if length_change else raw[latency:latency + n]
+    out = strip(raw)
     if not length_change and len(out) != n:
         raise SoundbenchError(f"{graph!r}: compensated output is {len(out)} samples, expected {n}")
     k = min(n, len(out))
     log["channel_check"] = check_channels(src[:k], out[:k], graph)
     log.update({"lag_samples": found, "compensated": bool(latency)})
     return FilterResult(out[:, 0] if one_d else out, rate, found, log)
+
+
+CLICK_MS = 2.0  # event probe: 2 ms decaying noise clicks ...
+CLICK_SPACING_MS = 150.0  # ... at least 150 ms apart, the first 120 ms in
+CLICK_FIRST_MS = 120.0
+
+
+def click_probe(rate: int, channels: int, length: int) -> tuple[np.ndarray, list[int]]:
+    """Short broadband clicks at known samples (a different seed per channel; the right channel quieter)."""
+    k = max(4, int(CLICK_MS * rate / 1000))
+    # the first click sits past the context mirror (a reflected click 2 x 120 ms away cannot merge with it)
+    first, last = min(int(CLICK_FIRST_MS * rate / 1000), length // 3), length - int(0.06 * rate) - k
+    step = int(CLICK_SPACING_MS * rate / 1000)
+    starts = list(range(first, max(first + 1, last), step))[:6] if last > first else [first]
+    out = np.zeros((length, channels), np.float32)
+    shape = np.exp(-np.arange(k) / (0.0005 * rate))
+    for c in range(channels):
+        for j, s in enumerate(starts):
+            out[s:s + k, c] = (np.random.RandomState(200 + 10 * c + j).standard_normal(k) * shape
+                               * (0.5 if c == 0 else 0.35)).astype(np.float32)
+    return out, starts
+
+
+def _event_ms(y: np.ndarray, rate: int) -> tuple[float | None, float | None]:
+    """F-01 onset and main transient (ms) of one channel, DC removed."""
+    a = y.astype(np.float64)[:, None]
+    a = a - a.mean()
+    if not np.any(a):
+        return None, None
+    return 1000 * measures.onset_index(a[:, 0]) / rate, measures.main_transient_ms(a, rate)
+
+
+def _click_times(y: np.ndarray, rate: int, expected: list[float], window_ms: float) -> list[float]:
+    """Per expected click (ms): the envelope maximum within +-window_ms of it."""
+    env, off = measures.envelope_1ms(y.astype(np.float64), rate)
+    found = []
+    for t in expected:
+        lo = max(0, int((t - window_ms) * rate / 1000))
+        hi = min(len(env), int((t + window_ms) * rate / 1000) + 1)
+        found.append(round(1000 * (lo + int(np.argmax(env[lo:hi])) + off) / rate, 3) if hi > lo else float("nan"))
+    return found
+
+
+def run_filter_events(x: np.ndarray, rate: int, graph: str, *, time_scale: float, tolerance_ms: float,
+                      standin_kind: str, context: str = "reflect", exe: Path | None = None) -> FilterResult:
+    """Run a graph whose output waveform cannot be correlated with its input (rubberband changes pitch or length),
+    and prove its timing by event positions instead, per channel:
+      - the length must be the input's x time_scale (within 2 samples);
+      - on a click probe, every click must come out at its time x time_scale within tolerance_ms;
+      - on the audio and on a non-periodic stand-in of the cue's kind, the F-01 onset and the main transient of
+        each channel must land at their input times x time_scale within tolerance_ms;
+      - channels keep their level order.
+    No latency is compensated: the event positions must already be right (rubberband compensates internally)."""
+    one_d = isinstance(x, np.ndarray) and x.ndim == 1
+    src = as_2d(x, "filter input").astype(np.float32)
+    rate = check_rate(rate)
+    if not (0.25 <= time_scale <= 4.0) or not (0 < tolerance_ms <= 50):
+        raise SoundbenchError("time_scale must be 0.25..4 and tolerance_ms 0..50")
+    n, ch = src.shape
+    exe = Path(exe) if exe is not None else require_ffmpeg().path
+    from . import standins
+
+    def once(sig: np.ndarray) -> tuple[np.ndarray, int]:
+        body, w = with_context(sig, context, rate)
+        raw = _ffmpeg_once(body, rate, graph, exe, True)
+        want = len(body) * time_scale
+        if abs(len(raw) - want) > 2:
+            raise SoundbenchError(f"{graph!r}: output is {len(raw)} samples, expected {want:.0f} (x {time_scale})")
+        start = int(round(w * time_scale))
+        return raw[start:start + int(round(len(sig) * time_scale))], w
+
+    log = {"graph": graph, "ffmpeg": str(exe), "rate": rate, "channels": ch, "samples_in": n, "context": context,
+           "time_scale": time_scale, "event_tolerance_ms": tolerance_ms, "timing_source": "events"}
+    shifts: dict[str, list] = {}
+    # 1. click probe
+    probe, starts = click_probe(rate, ch, n)
+    pout, _ = once(probe)
+    for c in range(ch):
+        want = [_click_times(probe[:, c], rate, [1000 * s / rate], 5.0)[0] for s in starts]
+        window = min(tolerance_ms + 20.0, 0.4 * CLICK_SPACING_MS * time_scale)  # never reaches the next click
+        got = _click_times(pout[:, c], rate, [t * time_scale for t in want], window)
+        shifts[f"probe_ch{c}"] = [round(g - t * time_scale, 3) for g, t in zip(got, want)]
+    # 2. the audio and 3. a stand-in of the kind
+    out, _ = once(src)
+    stand = standins.make(standin_kind, rate, ch, n)
+    sout, _ = once(stand)
+    for name, a, b in (("audio", src, out), (f"{standin_kind}_standin", stand, sout)):
+        for c in range(ch):
+            on_a, mt_a = _event_ms(a[:, c], rate)
+            on_b, mt_b = _event_ms(b[:, c], rate)
+            if on_a is None:
+                continue
+            if on_b is None:
+                raise SoundbenchError(f"{graph!r}: channel {c} of the {name} came out silent")
+            shifts[f"{name}_ch{c}"] = [round(on_b - on_a * time_scale, 3),
+                                       None if mt_a is None or mt_b is None else round(mt_b - mt_a * time_scale, 3)]
+    log["event_shifts_ms"] = shifts
+    finite = [abs(v) for vals in shifts.values() for v in vals if v is not None and math.isfinite(v)]
+    log["worst_event_shift_ms"] = round(max(finite), 3) if finite else None
+    bad = {k: v for k, v in shifts.items() if any((not math.isfinite(v_)) or abs(v_) > tolerance_ms
+                                                  for v_ in v if v_ is not None)}
+    if bad:
+        raise SoundbenchError(f"{graph!r}: events moved past {tolerance_ms} ms: {bad}: refused")
+    es, eo = np.sum(src.astype(np.float64) ** 2, axis=0), np.sum(out.astype(np.float64) ** 2, axis=0)
+    for a_ in range(ch):
+        for b_ in range(a_ + 1, ch):
+            if es[a_] > 0 and es[b_] > 0 and abs(10 * math.log10(es[a_] / es[b_])) > CHANNEL_LEVEL_DB:
+                if (es[a_] > es[b_]) != (eo[a_] > eo[b_]):
+                    raise SoundbenchError(f"{graph!r}: channels {a_} and {b_} swapped their level order: refused")
+    log["channel_check"] = "level order kept" if ch > 1 else "mono"
+    return FilterResult(out[:, 0] if one_d else out, rate, 0, log)
 
 
 CHANNEL_LEVEL_DB = 1.0  # input channels this far apart in level must keep their order
