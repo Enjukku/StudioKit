@@ -1,4 +1,4 @@
-<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; direction-record sections added 2026-10-21 (J009); thumbnail and game-icon families added 2026-10-21 (J012); storyboard family added 2026-10-21 (J015); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): view, rough and paintover families, the exact background clause (G3-P9), the craft standards rows of `art-review/references/art-bible.md` §7. Kit template: copy to knowledge/design/art-bible.md in each game and fill in. Owner: the art director (with the game designer); the owner approves every lock and every anchor. How to write it: `art-review` skill, references/art-bible.md. -->
+<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; direction-record sections added 2026-10-21 (J009); thumbnail and game-icon families added 2026-10-21 (J012); storyboard family added 2026-10-21 (J015); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): view and paintover families, the exact background clause (G3-P9), the craft standards rows of `art-review/references/art-bible.md` §7. Kit template: copy to knowledge/design/art-bible.md in each game and fill in. Owner: the art director (with the game designer); the owner approves every lock and every anchor. How to write it: `art-review` skill, references/art-bible.md. -->
 # Art bible: <game>
 
 > Revision: **rev 0, <date>** (every review, manifest and brief names the revision it used).
@@ -24,10 +24,9 @@ One row per kind of reference image. `world lock: yes` adds the WORLD STYLE LOCK
 | game-icon | GAME ICON LOCK | yes | marketing |
 | storyboard | STORYBOARD LOCK | yes | character |
 | view | VIEW LOCK | yes | character |
-| rough | ROUGH LOCK | no | |
 | paintover | PAINTOVER LOCK | no | |
 
-`view` = one build view of an approved subject (attach it as an input); `rough` = a flat 3-value study for rough rounds (marketing's `thumbnail-rough`); `paintover` = an edit of a review capture (attach it as an input). When each family is used: `reference-images/references/rounds.md` §3, §5 and §6.
+`view` = one build view of an approved subject (attach it as an input); `paintover` = an edit of a review capture (attach it as an input). There is no rough family: roughs are full images in their subject's family at the highest quality, and values and black-fill are measured from them with the tools (owner J018-D8). When each family is used: `reference-images/references/rounds.md` §3, §5 and §6.
 
 ## Locks
 Write each lock as one paragraph of exact visual rules: shapes, proportions, materials, palette, lighting, background, camera, what never appears. Fill the `<...>` parts. The text after each placeholder is a working start, not a rule.
@@ -90,10 +89,6 @@ STORYBOARD LOCK: One storyboard panel for a cutscene: exactly one frame of one s
 
 ```text
 VIEW LOCK: Exactly one orthographic view of the attached approved subject, the view named in the identity (front, left side, back, top, or the game camera's angle); same pose, scale and proportions as the attached image; one subject, no extra views, no text. Soft even lighting. Flat, even light-grey background with no gradient, no vignette and no floor shadow; no part of the subject in the background's grey.
-```
-
-```text
-ROUGH LOCK: A flat 3-value study for judging big shapes only: the named subject or hero group in one dark value, its largest inner shapes in one mid value, on a flat, even light ground with no gradient, no vignette and no floor shadow. No rendering, no texture, no lighting effects, no line detail, no text. Same characters, objects and moment as the game.
 ```
 
 ```text

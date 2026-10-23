@@ -98,7 +98,7 @@ deliver: knowledge/jobs/J0xx/marketing/promise-tests.md
 checks:
   - C1: each variant lists the action a cold reader expects, recorded before any preference question
   - C2: zero claims without a promise-ledger row
-return: hand-back to game-designer; first sample (G2) = 3 title + thumbnail sketches
+return: hand-back to game-designer; first sample (G2) = 3 title + thumbnail roughs (full images)
 </spec>
 ```
 

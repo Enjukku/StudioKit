@@ -80,7 +80,7 @@ One line each. Effects of choices are possibilities in context, never guarantees
 | D-28 | **Label every reference** [O]: shipped interactive, real-time cinematic, pre-rendered or marketing | GC §1 |
 | D-29 | **Alternatives and evidence for the owner** [O]: one recommendation per option set; pitch the moment as the experience the player will have (what they see, hear and feel, in one or two concrete sentences), never as an asset list; approval belongs to one revision | GC §5 |
 | D-30 | **Premise and first-second read** [O]: a one-sentence premise and a hook per moment; per shot, the story beat and the hero read in its first second at phone size | SL §5 |
-| D-31 | **Options before a pick** [O]: research first; 2-3 different approaches for the key beat at equal low finish, each its own hook, one non-obvious; the first idea is a warm-up; two edit takes on key beats, timed by the owner | WE |
+| D-31 | **Options before a pick** [O]: research first; 2-3 different approaches for the key beat at equal finish (full images at the highest quality), each its own hook, one non-obvious; the first idea is a warm-up; two edit takes on key beats, timed by the owner | WE |
 | D-32 | **Big before small** [O]: beats and blocking, camera, value and light, colour, then effects; the clean frame passes before any effect is added | BT §5 |
 | D-33 | **Compose inside the real frame** [O]: bars, subtitles, skip, the narrowest display and the handoff HUD from the first thumbnail; in a small frame the identifying parts fill it | SL §5 |
 | D-34 | **One subject, one read order** [O]: primary, secondary, at most a third; flow lines and converging motion lead to the primary; accents never outshine it; fix a weak read with contrast, not detail | SL §5 |

@@ -132,11 +132,11 @@ Built as `progression-design/references/reward-tiers.md` §4 says; tiers are PRO
 | sunsteel edge | capability: +6 damage | T2 | once (2,979 s) | once | |
 | iron sword, leather armour | planned spikes (TL-03; wolves need 7 hits to down the player) | T3 | once each (240 s, 588 s) | once each | |
 | dragonscale | capability: the drake's savings goal (TL-07) | T3 | once (11,163 s) | once (18,382 s) | |
-| crypt guard win (key drops) | access: the key to the king | T4 | once (1,317 s) | once (1,823 s) | first boss win |
+| crypt guard win (key drops) | access: the key to the king, a gate on the way, not a track's end | T3 | once (1,317 s) | once (1,823 s) | first boss win; moved from T4 (owner J018-D8) |
 | Hollow King win (the marsh opens) | access: a new area (TL-05, TL-06) | T4 | once (2,979 s) | once (12,771.5 s) | |
 | Ember Drake win | accomplishment: the capstone (TL-08) | T4 | once (11,213 s) | never (finding 1) | |
 
-Tier sums, efficient: T2 5.5 per hour (17 events; ceiling 60); T3 0.96 per hour (3); T4 0.96 per hour (3; ceiling 2 at 30-minute sessions). **Finding:** T4 is not below T3 (3 events each), so the boss wins do not stand out from the gear moments (`reward-tiers.md` §5 "Rarer is bigger"). Two fixes for the owner (`reward-tiers.md` §4 step 4): (a) the crypt guard win moves to T3, because it is a gate on the way to the king, not a track's end: T3 1.28, T4 0.64 per hour; (b) the breakpoint level-ups (2, 5, 10) move to T3: T3 1.93, T2 4.5, T4 0.96 per hour. Recommendation: (a), one move and no change to how levels feel. Struggling after (a): T2 3.0, T3 0.67, T4 0.17 per hour, in order. The main track ends on the drake win (capstone rule, `reward-tiers.md` §5); for the struggling player it never comes, which is finding 1 again.
+Tier sums, efficient: T2 5.5 per hour (17 events; ceiling 60); T3 1.28 per hour (4); T4 0.64 per hour (2; ceiling 2 at 30-minute sessions). Struggling: T2 3.0, T3 0.67, T4 0.17 per hour. Rarer is bigger holds in both runs (`reward-tiers.md` §5). Before the owner's fix the crypt guard win was T4, and T4 tied T3 at 0.96 per hour (3 events each), so the boss wins did not stand out from the gear moments. The owner chose fix (a), the crypt guard win to T3, because it is a gate on the way to the king, not a track's end (J018-D8, 2026-10-22); fix (b), the breakpoint level-ups (2, 5, 10) to T3, was not taken: it changes how levels feel. The main track ends on the drake win (capstone rule, `reward-tiers.md` §5); for the struggling player it never comes, which is finding 1 again.
 
 Files: `model.json`, `runs/*.json`, `chart.html`, `options/model-B.json`, `options/model-C.json`, `options/runs/*.json`, `options/chart.html`. Re-run commands: `../README.md`.
 

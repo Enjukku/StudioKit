@@ -2,7 +2,7 @@
 type: decision
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: owner chat 2026-10-21 (J018)
 supersedes: []
 ---
@@ -19,3 +19,4 @@ supersedes: []
 | J018-D5 | 2026-10-22 | **G1 passed:** the Riot craft library (`knowledge/reference/craft/riot/`, 443 findings, UP-01..UP-20, stage 1 commit) is the source for stage 2; wave 1 (animator, modeler, game-designer) starts | "G1 approved: start stage 2 wave 1 (animator, modeler, game-designer)." |
 | J018-D6 | 2026-10-22 | **G3, part 1:** the rebuilt agents at `7876e3d` are accepted. The owner will change some of the 11 proposal decisions in `g3-proposals.md`; which ones is not yet stated, so no proposal is applied and no default is taken yet | "G3: accept the rebuilt agents, but change these decisions:" |
 | J018-D7 | 2026-10-22 | **G3, part 2 (lead's reading, to confirm in J019):** G3-P1 to P6 yes; P7 not now (no Studio testing yet); P8 yes (after P1); P9: every rough and option image at the highest image quality, never medium (this changes J009-D17's medium floor for roughs; the art-bible families part follows the recommendation); P10 later; P11 no change now (sounds are generated), revisit when sounds must be edited in Studio. Work moves to J019 because the owner has about 3 % of weekly usage left | "I'm not sure about doing so I'm fine with I don't know about testing in studio yet. Maybe not 7. Eight. Okay, now this is where 9 gets a little bit confusing. The thing about us we're not making like sketches. We can generate full concepts, so I'm not really sure why we would do medium quality roughs. When we can go ahead and just do the max quality. And then I agree with you on 10. And then studio tools for the sound designer. If we're just going to generate the tools, generate the sounds, then we can keep it how it is. But if we want to go in later and be able to edit sound, then we're going to need to be able to hook it up to something." |
+| J018-D8 | 2026-10-22 | **G3, part 3 (given in J019):** (1) the optional `rough` art-bible family is removed: values and black-fill are measured with the tools from the full highest-quality concepts; never generate a value map, never edit an image to add colour; a failed value check means a new full generation with a changed prompt. (2) RPG example tier tie: the crypt guard win moves to T3 (option a). J018-D7 is otherwise confirmed as the lead read it (J019 card) | "Rough art-bible family: remove it. Values and black-fill are measured from the full highest-quality concepts with the tools; never generate a value map or edit an image to add colour; a failed value check means a new full generation with a changed prompt." … "RPG tier tie: move the crypt guard win to T3." |

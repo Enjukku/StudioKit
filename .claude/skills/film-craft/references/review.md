@@ -57,7 +57,7 @@ The plan and build lines (§6 P and B) run here; the phone proxy is B-03, B-04 a
 | Every shot lit evenly; nothing leads the eye | B-06 ranks and the luminance strip | calm the surround, put the brightest area on the subject |
 | Metronomic cuts (every shot the same length) | B-10 shot lengths | cut on events; let decisions hold and surprises cut short |
 | Smoke, sparks and glow added before the frame worked | B-08 clean frame | remove effects, fix blocking and value, add effects back last |
-| One polished option and two sketches | P-04 finish | bring all options to the same low finish, then pick |
+| One polished option and two sketches | P-04 finish | make all options at the same finish (full images at the highest quality), then pick |
 | Peaks of picture, flash and sound on different frames | B-11 and R-04 | key all three from one marker |
 
 A script can flag missing ids, absent cues and inconsistent records (`shotlist.py check`, `log-diff`). It cannot say whether a performance moves anyone or a cut is right (N3 DF-00).
