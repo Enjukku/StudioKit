@@ -510,7 +510,7 @@ async function proof() {
         rules: o.r === ROLE.art ? [POLICY_RULE] : [],
         checks: ['every finding names where (shot and time), expected, observed, evidence and the smallest fix', 'keep lists what works', CNC],
       }, S_REVIEW, 'Proof review'))
-      if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+      if (missing([rv]).length) return { status: rv ? rv.status : 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
     }
     if (!blocking.length) {
@@ -708,7 +708,7 @@ async function production() {
         inputs: [`content/anim/${SEQ}/`, `content/vfx/${SEQ}/`, `output/sound/${SEQ}/`, beats()], owns: [`${DIR}/reviews/combined-film-director.md`], deliver: `${DIR}/reviews/combined-film-director.md`,
         checks: ['each note names shot, frame, the maker role and the smallest fix', 'keep lists what works'],
       }, S_REVIEW, 'Production'))
-      if (!combo) return null
+      if (missing([combo]).length) return { status: combo ? combo.status : 'failed', outcome: 'the combined check-in returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
       const polish = keep('B3 anim final', await call(ROLE.anim, {
         id: 'B3-polish', task: `cutscene animation polish and timing list: ${SEQ}`, blender: true, visual: true,
         intent: 'Build stage. Polish the clips with the film-director\'s combined notes for the animator, export them, and write the timing list, the job\'s one marker list where animation, VFX and sound meet (event id, time in seconds with source frame and frame rate, meaning, consumers) that VFX and sound finish against. A beat time that moves from the locked beat sheet is named in the timing list\'s change table. Roblox import happens in integration, not now.',

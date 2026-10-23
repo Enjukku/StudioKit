@@ -220,5 +220,16 @@ class CharacterWorkflowTests(unittest.TestCase):
         self.assertIn("g3", repair["result"])
 
 
+    # ------------------------------------------------------------------ J019 lead review: a step that does not finish is never a pass
+    def test_a_dead_lineup_recapture_fails_the_proof(self):
+        out, got = labels(stage="proof", scenario={"blockLabelOnce": r"art-director: RV-proof-r0", "maker": "modeler", "nullLabel": r"RECAP-proof-r0-lineup"})
+        self.assertEqual(out["status"], "failed", out["outcome"])
+        self.assertEqual(index(got, r"RV-proof-r1-"), -1, "the old lineup is never reviewed again")
+
+    def test_a_dead_fix_step_fails_the_proof(self):
+        out, _ = labels(stage="proof", scenario={"blockLabelOnce": r"art-director: RV-proof-r0", "maker": "modeler", "nullLabel": r"FIX-proof-r0-modeler"})
+        self.assertEqual(out["status"], "failed", out["outcome"])
+
+
 if __name__ == "__main__":
     unittest.main()

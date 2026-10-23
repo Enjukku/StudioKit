@@ -31,8 +31,9 @@ Workflow: `live-ops-craft` (event steps). For the owner, then the game designer,
 | reward family | the named theme family and motif |
 | variants | per variant: the anchors-kept list (art director's); new version, or the same subject in a new scene |
 | new world or zone | escape line; how it differs from the last world |
+| craft-ask table and capture set | paths: what each craft is asked for, when, and the capture it is judged on (`live-ops-craft/references/event-review.md` §1-§2) |
 
-The rows from target experience down are the event brief lines of `live-ops-craft/references/process.md` §3 (the one list; what each line must hold is there). Fill each or write `n/a: <reason>`.
+The rows from target experience down are the event brief lines of `live-ops-craft/references/process.md` §3 (the one list; what each line must hold is there); its tier rows are in §C. Fill each or write `n/a: <reason>`.
 
 ## B. Time
 | Field | Value |

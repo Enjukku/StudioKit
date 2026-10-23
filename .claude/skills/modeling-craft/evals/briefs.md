@@ -29,6 +29,7 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 1.4 | Size checked against the player dummy; the sword captured in the default avatar's hand at the game camera on the real ground, back and front, with its mask capture, and measured at phone size; or the in-hand read listed `not verified` with the reason. A capture of the sword lying on the floor does not pass (rewritten J019 P6: `modeling-craft/SKILL.md` §3 step 9; `modeling-design/references/review.md` §5 IM1) |
 | 1.5 | Icon render set for UI from the shipped model: fixed camera, light, magenta or alpha background as briefed |
 | 1.6 | One material, one UV map; texture size on plan (≤ 512 PROPOSAL) |
+| — | No DT10 or IM4 row here: a simple model runs DT2 and IM1-IM3 only (`modeling-design/references/review.md` simple-model list); briefs 2 and 3 carry them (J018 row modeler.md:37) |
 
 ## 2. Hero pet from Tripo, through the rig loop (high effort; G2 test B)
 > A small hero pet (a round fox-like creature) for the same game, follows the player, idles, hops and looks around; 6 on screen; must look especially good. The owner will run Tripo. The character-rigger's rig sheet is at `content/rigs/<pet-id>/rig-sheet.md`. Build it.

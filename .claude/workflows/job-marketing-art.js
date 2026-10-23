@@ -262,7 +262,9 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, piece: PIECE, risks: RISKS, steps: [], captures_needed: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, piece: PIECE, risks: RISKS, steps: [], captures_needed: [], images_pending: [], lessons: [],
+  // Risk-gated slots skipped for no risk are a line for the job card, never a silent gap (cross-type rules).
+  skipped_slots: ['build', 'repair'].includes(STAGE) && !EVENT ? ['live-ops event review: risks has no event'] : [] }
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.captures_needed) x.captures_needed.forEach(c => { if (!results.captures_needed.includes(c)) results.captures_needed.push(c) })
@@ -436,7 +438,7 @@ async function reviewLoop(L) {
         deliver: `${DIR}/evidence.md (candidate revision, protected list, one check row per file) and ${MK}/checks/ (sheets and JSON)`,
         checks: ['every file of the family has a thumb_check.py sheet and JSON from this revision', 'every master has a look_check.py value JSON', 'evidence.md names the candidate revision and the protected list'],
       }, S_SCRIPTS, L.phase))
-      if (!s) return { status: 'failed', outcome: 'the scripts step returned nothing' }
+      if (missing([s]).length) return { status: s ? s.status : 'failed', outcome: 'the scripts step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
       all.push(s)
       scriptBlocking = s.findings.filter(f => f.class === 'blocking')
     }
@@ -453,7 +455,7 @@ async function reviewLoop(L) {
           checks: ['every finding names the file and revision, the place in the image, expected vs observed, evidence and the smallest fix', 'keep lists what works', 'looked_at_first names the sheets and mocks opened before the hand-back'],
           rules: ['Light checks: numbers for every case; images only for a failing number plus a few key cases (owner J005-D8).'].concat(o.rules || []),
         }, S_REVIEW, L.phase))
-        if (!rv) return { status: 'failed', outcome: `the ${o.r.type} review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+        if (missing([rv]).length) return { status: rv ? rv.status : 'failed', outcome: `the ${o.r.type} review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
         all.push(rv)
       }
     }

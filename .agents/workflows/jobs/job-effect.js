@@ -464,15 +464,18 @@ async function applyFixes(work, tag, pass, ph) {
       deliver: 'the fixed revision and an evidence row per item',
       checks: ['each item is fixed with evidence, or answered with evidence that it is not a defect', 'timing_changed is true only when a time moved, and the hand-back names the moved event ids'],
     }, S_FIX, ph))
+    if (!ok(x)) return null   // applyFixes stops the stage: a dead or unfinished fix is never a pass
     changedData.push(name)
     return x
   }
   if (work['game-designer']) {
     const x = await fixOne('game-designer', `You own ${WINDOW}; a changed window is a PROPOSAL until the owner confirms it.`)
+    if (!x) return { status: 'failed', outcome: `${tag}: a repair step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     if (x && x.timing_changed) { moved = true; if (ANIMATED && !work.animator) work.animator = [] }
   }
   if (work.animator) {
     const x = await fixOne('animator', `You own ${ANIM}timing-list.md: write its next revision if a beat moves.`)
+    if (!x) return { status: 'failed', outcome: `${tag}: a repair step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     if (x && x.timing_changed) moved = true
   }
   if (moved && !work['vfx-designer']) work['vfx-designer'] = []
@@ -480,10 +483,14 @@ async function applyFixes(work, tag, pass, ph) {
     const x = await fixOne('vfx-designer', moved
       ? `A timing source moved: first write the next revision of ${TIMELINE} from the changed window or timing list (change table row, consumers to recheck: sound-designer, ${WIRE.type}), then recheck and fix your frame script and spec.json against it.`
       : `You own ${TIMELINE}: if your fix moves an event time, write its next revision with a change table row.`)
+    if (!x) return { status: 'failed', outcome: `${tag}: a repair step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     if (x && x.timeline_revision) rev = x.timeline_revision
     if (x && (x.timing_changed || moved) && !work['sound-designer']) work['sound-designer'] = []
   }
-  if (work['sound-designer']) await fixOne('sound-designer', 'Sound keys to the picture events: recheck every cue against the current timeline revision.')
+  if (work['sound-designer']) {
+    const x = await fixOne('sound-designer', 'Sound keys to the picture events: recheck every cue against the current timeline revision.')
+    if (!x) return { status: 'failed', outcome: `${tag}: a repair step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+  }
   if (changedData.length || work[WIRE.type]) {
     const w = await wire(`${tag}-sync`, ph, pass, rev, work[WIRE.type] || [])
     if (!ok(w)) return { status: w ? w.status : 'failed', outcome: 'wiring after repairs did not finish; see steps' }
@@ -562,7 +569,8 @@ async function proof() {
       checks: ['every conflict names the event id, what breaks and who decides or which test settles it'],
     }, S_EXCHANGE, 'Envelope')))
     notes.forEach((n, i) => keep(`E r${round} ${peers[i].r.type}`, n))
-    const open = [v].concat(notes).filter(Boolean).reduce((s, n) => s + n.conflicts.length + n.missing.length, 0)
+    if (missing([v].concat(notes)).length) return { status: 'failed', outcome: `envelope round ${round}: a note returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    const open = [v].concat(notes).reduce((s, n) => s + n.conflicts.length + n.missing.length, 0)
     const merged = keep(`E r${round} merge`, await call(ROLE.vfx, {
       id: `E-merge-r${round}`, task: `merge envelope into timeline: ${EFFECT}`,
       intent: `Envelope merge, round ${round}. Write the agreed envelope per event id into the next timeline revision and decide what is inside your authority. You may not move a gameplay time (the game-designer's) or an animation beat (the animator's): a move you need is a question naming its decision owner. Ask for a small test where words cannot settle a conflict. ${round === 2 ? 'This is the last round: what stays open becomes an owner question for the next gate.' : ''} Add a change table row naming the consumers to recheck.`,

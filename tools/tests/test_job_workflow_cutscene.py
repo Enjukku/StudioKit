@@ -171,5 +171,12 @@ class CutsceneRecipeTests(unittest.TestCase):
         self.assertIn("one marker list", dump(out, r"B3-polish"), "animation, VFX and sound meet on the timing list")
 
 
+    # ------------------------------------------------------------------ J019 lead review: a step that does not finish is never a pass
+    def test_an_unfinished_combined_check_in_stops_the_build(self):
+        out = run(NAME, cut(stage="build"), {"statusLabel": r"B3-combined-checkin", "status": "failed"})
+        self.assertEqual(out["status"], "failed", out["outcome"])
+        self.assertEqual(index(out["labels"], r"B3-polish"), -1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -47,11 +47,11 @@ const UI = `content/ui/${SCREEN}`
 // The job card's Risks row (README args table): each token switches on the recipe's (risk: …) rows (job-types.md §4, Cross-type rules).
 const RISK_TOKENS = ['paid-random', 'server-result', 'shop-screen', 'event']
 const RISKS = Array.isArray(A.risks) ? A.risks : []
-const PAID = RISKS.includes('paid-random')            // a paid reveal: plan check, one capture per paid-reveal tier
+const PAID = RISKS.includes('paid-random')            // a paid reveal: plan check, one capture per paid-reveal tier, progression review of the odds rows
 const SERVER_RESULT = RISKS.includes('server-result') // the server confirms the result: a rejected-request capture
 const SHOP_SCREEN = RISKS.includes('shop-screen')     // an odds or progress screen that does not sell: progression-designer review
 const EVENT = RISKS.includes('event')                 // a job from a live-ops update brief: live-ops event review before G3
-const PROG = SHOP || SHOP_SCREEN                      // the progression-designer joins (numbers, odds, tiers)
+const PROG = SHOP || SHOP_SCREEN || PAID              // the progression-designer joins (numbers, odds, tiers; a paid reveal's odds rows)
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair}', got: A }
@@ -81,11 +81,11 @@ const ROLE = {
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
   prog: { type: 'progression-designer', model: 'opus', effort: 'high' },
   art: { type: 'art-director', model: 'opus', effort: 'high' },
-  build: { type: 'feature-builder', model: 'opus', effort: SHOP ? 'high' : 'medium' },            // high for money, saves, remotes
+  build: { type: 'feature-builder', model: 'opus', effort: SHOP || PAID ? 'high' : 'medium' },            // high for money, saves, remotes
   arch: { type: 'architect', model: 'opus', effort: 'high' },                                     // writes the code file owners (lead decision LD10)
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
   vfx: { type: 'vfx-designer', model: 'opus', effort: NEW_LOOK ? 'high' : 'medium' },             // UI effects from the library are small effects
-  review: { type: 'reviewer', model: 'opus', effort: SHOP ? 'high' : 'medium' },                  // high for money, saves, remotes
+  review: { type: 'reviewer', model: 'opus', effort: SHOP || PAID ? 'high' : 'medium' },                  // high for money, saves, remotes
   qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
   operator: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },                       // takes the named review captures
   ops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },                            // risk event: the event review before G3
@@ -540,9 +540,10 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   })
   // 1. The ui-ux-designer first: the state map and layout come before everything built on them.
   if (byMaker[ROLE.ui.type]) {
-    keep(`FIX ${tag} ${ROLE.ui.type}`, await call(ROLE.ui, Object.assign(fixBrief(ROLE.ui.type,
+    const fu = keep(`FIX ${tag} ${ROLE.ui.type}`, await call(ROLE.ui, Object.assign(fixBrief(ROLE.ui.type,
       ' A state or readability finding is fixed in the state map or the layout (a new spec revision and the Figma frames), not by restyling; a read-order finding goes back to the grey value pass (new luminance image and look_check.py value --compare-subjects numbers), then layout and styling follow it. Update the handoff if it changed.'),
       { owns: [`${UI}/`, 'the Figma file the job card names'], skills: ['ui-design', 'ui-figma'] }), S_HANDBACK, phaseName))
+    if (!ok(fu)) return { status: fu ? fu.status : 'failed', outcome: `${tag}: the ui-ux-designer fix returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
   }
   // 2. Other non-Studio makers in parallel, against the spec revision the ui-ux-designer may just have written.
   const others = names.filter(m => m !== ROLE.ui.type && m !== ROLE.build.type)
@@ -552,9 +553,10 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   if (missing(done2).length) return { status: 'failed', outcome: `${tag}: a repair step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
   // 3. The feature-builder last: the only Studio driver; it fixes its own findings and implements the other makers' revisions.
   if (mode === 'proof') return null
-  keep(`FIX ${tag} ${ROLE.build.type}`, await call(ROLE.build, Object.assign(fixBrief(ROLE.build.type,
+  const fb = keep(`FIX ${tag} ${ROLE.build.type}`, await call(ROLE.build, Object.assign(fixBrief(ROLE.build.type,
     ` Also implement every revision the other makers wrote in this round (spec, handoff, sound cues, effects), failing case first for logic, and rerun the gate.${mode === 'chain' ? ` Then refreeze: write the new candidate revision in ${DIR}/evidence.md (the studio-operator recaptures it before the next review round).` : ''}`),
     { owns: [FILE_OWNERS, `${DIR}/evidence.md (your rows only)`], skills: BUILDER_SKILLS, studioWrite: true, rules: BUILDER_RULES }), S_HANDBACK, phaseName))
+  if (!ok(fb)) return { status: fb ? fb.status : 'failed', outcome: `${tag}: the feature-builder fix returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
   return null
 }
 
@@ -572,7 +574,7 @@ async function production() {
       rules: [LAYER_RULE],
       checks: ['every finding names the plan section, the rule id it breaks and the smallest fix'],
     }, S_REVIEW, 'Plan check'))
-    if (!pc) return { status: 'failed', outcome: 'plan check returned nothing' }
+    if (!ok(pc)) return { status: pc ? pc.status : 'failed', outcome: 'the plan check returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
     const pf = pc.findings.filter(f => f.class === 'blocking')
     const toUi = pf.filter(f => f.maker_role === ROLE.ui.type || LAYOUT_LAYERS.includes(f.layer))
     const toArch = pf.filter(f => !toUi.includes(f))
@@ -751,8 +753,8 @@ async function codeReview(label) {
       rules: [LAYER_RULE],
       checks: ['the gate output line is quoted as evidence', 'every finding has file:line, the input or sequence, and the wrong outcome for players'],
     }, S_REVIEW, 'Code review'))
-    const blocking = rv ? rv.findings.filter(f => f.class === 'blocking') : []
-    if (!rv) return { status: 'failed', outcome: 'code review returned nothing' }
+    if (!ok(rv)) return { status: rv ? rv.status : 'failed', outcome: 'the code review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
+    const blocking = rv.findings.filter(f => f.class === 'blocking')
     if (!blocking.length) return { status: 'done', outcome: `Code review clean on round ${round}.` }
     if (round === 3) return { status: 'needs-decision', outcome: 'Blocking code findings remain after 3 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
     const fixed = await fixFindings(blocking, tag, round, FIXERS, 'code', [`${DIR}/reviews/${tag}-reviewer.md`])

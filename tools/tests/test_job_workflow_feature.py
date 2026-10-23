@@ -63,7 +63,7 @@ class FeatureWorkflowTests(unittest.TestCase):
                         out = feat(stage, scen, size=size, risks=ALL_RISKS)
                         self.assertDone(out)
                         self.assertLessEqual(out["maxConcurrent"], 5)
-                        self.assertEqual(out["result"]["skipped_for_no_risk"], [])
+                        self.assertEqual(out["result"]["skipped_slots"], [])
 
     # ------------------------------------------------------------------ direction: feedback stack, consults, closed doors
     def test_direction_consults_come_after_the_draft_and_before_signatures(self):
@@ -113,7 +113,7 @@ class FeatureWorkflowTests(unittest.TestCase):
         self.assertIn("tier-table.md", brief(large, r"B4-ui"))
         none = feat("build", size="M")
         self.assertEqual(index(none["labels"], r"P1-tiers"), -1)
-        self.assertTrue(any("tier table" in s for s in none["result"]["skipped_for_no_risk"]))
+        self.assertTrue(any("tier table" in s for s in none["result"]["skipped_slots"]))
 
     def test_trace_table_is_written_at_contract_time(self):
         out = feat("build", {"dump": r"B1-plan$|B1-acceptance"}, size="M")
@@ -183,7 +183,7 @@ class FeatureWorkflowTests(unittest.TestCase):
                 out = feat("build", money=False, risks=risks)
                 self.assertDone(out)
                 self.assertEqual(index(out["labels"], r"B1-plan-check"), -1)
-                self.assertTrue(any("plan check" in s for s in out["result"]["skipped_for_no_risk"]))
+                self.assertTrue(any("plan check" in s for s in out["result"]["skipped_slots"]))
 
     def test_plan_check_findings_get_one_architect_answer(self):
         out = feat("build", {"blockLabel": r"^reviewer: B1-plan-check$", "maker": "architect"})
@@ -231,7 +231,7 @@ class FeatureWorkflowTests(unittest.TestCase):
         self.assertIn("rejected request", brief(server, r"game-designer: RV-"))
         plain = feat("build", {"dump": r"game-designer: RV-"}, money=False)
         self.assertNotIn("rejected request", brief(plain, r"game-designer: RV-"))
-        self.assertTrue(any("rejected-request" in s for s in plain["result"]["skipped_for_no_risk"]))
+        self.assertTrue(any("rejected-request" in s for s in plain["result"]["skipped_slots"]))
 
     def test_event_adds_the_live_ops_review_after_the_creative_reviews(self):
         for stage in ("build", "repair"):
@@ -279,6 +279,17 @@ class FeatureWorkflowTests(unittest.TestCase):
         silent = feat("build", {"set": {"crafts_not_needed": [{"role": "sound-designer", "why": "no sound"}]}})
         self.assertDone(silent)
         self.assertFalse(any("two listens" in x for x in silent["result"]["owner_confirmed"]))
+
+
+    # ------------------------------------------------------------------ J019 lead review: reviewer effort follows the code risks
+    def test_reviewer_and_builder_run_high_for_code_risks_without_money(self):
+        for risk in CODE_RISKS:
+            with self.subTest(risk=risk):
+                out = feat("build", {"dump": r"(reviewer|feature-builder): "}, risks=[risk], money=False)
+                self.assertTrue(out["dumps"])
+                self.assertTrue(all("effort: high" in d["prompt"] for d in out["dumps"]), [d["label"] for d in out["dumps"]])
+        low = feat("build", {"dump": r"reviewer: RV-"}, risks=[], money=False)
+        self.assertTrue(all("effort: medium" in d["prompt"] for d in low["dumps"]))
 
 
 if __name__ == "__main__":

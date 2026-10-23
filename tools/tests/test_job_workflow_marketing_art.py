@@ -142,5 +142,17 @@ class MarketingArtWorkflowTests(unittest.TestCase):
                 self.assertIn("could_not_check", out["result"])
 
 
+    # ------------------------------------------------------------------ J019 lead review: a review that does not finish is never a pass
+    def test_a_review_or_scripts_step_that_does_not_finish_is_not_clean(self):
+        for label in (r"live-ops-designer: RV-", r"RV-candidate-r0-scripts", r"art-director: RV-"):
+            with self.subTest(label=label):
+                out = run(NAME, args(stage="build", risks=["event"]), {"statusLabel": label, "status": "blocked"})
+                self.assertEqual(out["status"], "blocked", out["outcome"])
+
+    def test_a_skipped_event_slot_is_a_line_in_the_result(self):
+        self.assertEqual(run(NAME, args(stage="build", risks=[]))["result"]["skipped_slots"], ["live-ops event review: risks has no event"])
+        self.assertEqual(run(NAME, args(stage="build", risks=["event"]))["result"]["skipped_slots"], [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -253,7 +253,8 @@ const RISK_SLOTS = [
   { slot: 'qa-lead PF-13 variant parity (review chain)', risk: 'sold-variant', runs: SOLD },
   { slot: 'live-ops event review E-01 to E-19 (review chain, before G3)', risk: 'event', runs: EVENT },
 ]
-const results = { job: JOB, stage: STAGE, size: SIZE, asset: ASSET, variant: VARIANT, playable: PLAYABLE, risks: RISKS, risk_slots: RISK_SLOTS, steps: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, asset: ASSET, variant: VARIANT, playable: PLAYABLE, risks: RISKS, risk_slots: RISK_SLOTS,
+  skipped_slots: RISK_SLOTS.filter(x => !x.runs).map(x => `${x.slot}: risks does not name ${x.risk}`), steps: [], images_pending: [], lessons: [] }
 // The owner-confirmed lines every gate packet carries (cross-type rules); Studio MCP captures stills, so feel and listening are the owner's.
 function ownerLines(feel, sound) {
   return [].concat(feel ? [`feel at normal speed: ${feel} (owner-confirmed)`] : [],
@@ -772,6 +773,7 @@ async function production() {
     rules: ['Judge the captures; do not open Studio.'],
     checks: ['each note has a marked-up capture and the smallest fix', 'keep lists what works'],
   }, S_REVIEW, 'Model'))
+  if (missing([checkIn]).length) return { status: checkIn ? checkIn.status : 'failed', outcome: 'the S3 art check-in returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
   const polish = keep('S3 texture polish', await call(ROLE.model, {
     id: 'S3-polish', task: `apply art notes and polish textures: ${ASSET}`, studioWrite: true, visual: true,
     intent: 'Build stage, end of S3. Apply the art-director\'s check-in notes, then polish the textures to the reference set\'s material intent. Keep what the notes list under keep. Rerun your K3 numbers on the result.',
@@ -917,6 +919,7 @@ async function production() {
     ])
     keep('S7 art check-in', ci[0])
     keep('S7 design check-in', ci[1])
+    if (missing(ci).length) return { status: 'failed', outcome: 'an S7 blocking check-in returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
     const clips = keep('S7 clips and timing list', await call(ROLE.anim, {
       id: 'S7-polish', task: `character clips, export and timing list: ${ASSET}`,
       intent: `Build stage, rig-pipeline S7. Apply the check-in notes, polish the clips, export them, and write the timing list (rig-pipeline §5): per event the id, time in seconds with the source frame and frame rate, meaning, owner, consumers and interruption rule. VFX and sound finish against it. Markers are presentation, never damage authority. Roblox import happens in integration, not now.`,
@@ -1133,7 +1136,7 @@ async function repairRound(tag, round, blocking, cfg) {
   const RN = cfg.roundName || `${cfg.ctx === 'proof' ? 'Proof repair' : 'Repair'} round ${round + 1}`
   const done = []
   for (const m of pipeOrder(makers)) {
-    keep(`FIX ${tag} ${m}`, await call(m === 'feature-builder' ? BUILD_HIGH : roleOf(m), {
+    const fx = keep(`FIX ${tag} ${m}`, await call(m === 'feature-builder' ? BUILD_HIGH : roleOf(m), {
       id: `FIX-${tag}-${m}`, task: `fix review findings: ${ASSET}`, studioWrite: true,
       intent: `${RN}. Fix the blocking findings in the findings field in a new revision of your own files; keep the protected list in ${DIR}/evidence.md passing.${done.length ? ` Makers before you in this round changed: ${done.join(', ')}; build on their new revisions.` : ''}${m === 'modeler' ? ' If geometry or textures change, re-render the icons.' : ''} Then tell consumers what changed if the rig sheet, the timing list or a contract moved (rules/messages.md §5; a rig sheet change after release bumps its revision and names the retests, rig-pipeline §6). The items are in the findings field.`,
       findings: byMaker[m],
@@ -1144,12 +1147,13 @@ async function repairRound(tag, round, blocking, cfg) {
       rules: VARIANT_RULE,
       checks: ['each finding is fixed with evidence, or answered with evidence that it is not a defect'],
     }, S_HANDBACK, cfg.phaseName))
+    if (!ok(fx)) return { status: fx ? fx.status : 'failed', outcome: `${tag}: the ${m} fix returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     done.push(m)
   }
   const changed = m => done.indexOf(m) >= 0
   if (cfg.ctx === 'proof') {
     if ((changed('modeler') || changed('animator')) && !changed('character-rigger')) {
-      keep(`RECAP ${tag} character-rigger`, await call(ROLE.rig, {
+      const rc = keep(`RECAP ${tag} character-rigger`, await call(ROLE.rig, {
         id: `RECAP-${tag}`, task: `re-pose and recapture the proof: ${ASSET}`, studioWrite: true,
         intent: `${RN}. The blockout or the motion needs changed (${done.join(', ')}). Update the proxy rig, re-pose the signature pose options and the stress poses with their numbers, and recapture at the game camera on the game's background and in the 6 rest views, as before.`,
         skills: ['rigging-craft', 'studio-mcp'], inputs: [`${MODEL}/export/`, SHEET, GSHEET],
@@ -1157,9 +1161,13 @@ async function repairRound(tag, round, blocking, cfg) {
         deliver: `${RIG}/proof/ new captures and manifest revision`,
         checks: ['the new captures name the changed input revisions (MCP-verified)'],
       }, S_HANDBACK, cfg.phaseName))
+      if (!ok(rc)) return { status: rc ? rc.status : 'failed', outcome: `${tag}: the proof recapture returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     }
     // The lineup shows the proof as built: retaken after any maker change to it.
-    if (done.some(m => m !== 'art-director' && m !== 'game-designer')) await lineup(`RECAP-${tag}-lineup`, cfg.phaseName)
+    if (done.some(m => m !== 'art-director' && m !== 'game-designer')) {
+      const l = await lineup(`RECAP-${tag}-lineup`, cfg.phaseName)
+      if (!ok(l)) return { status: l ? l.status : 'failed', outcome: `${tag}: the lineup recapture returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    }
     return null
   }
   // The receiver runs the check (rig-pipeline §3): geometry → rigger, rig → animator; then the integrator refreezes.

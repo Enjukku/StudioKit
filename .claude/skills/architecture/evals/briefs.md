@@ -29,7 +29,7 @@ Must pass:
 - Attempt cue (swing, trail) on the client at once; the outcome layer (spark, hit sound, hit-stop) only on the server's `HitResolved`, never on a marker or `contact_candidate`; a rejected or missed swing shows no spark (R-19; AR-07; `references/worked-examples.md` A).
 - Per-viewer column filled: the bystander's camera is never shaken or tinted by another player's hit; hit-stop runs only on the attacker's and target's clients, never on the server (R-20; AR-09).
 - Marker and event names taken from the named timing-list revision, referenced by id; no guessed delay (`task.wait`) stands in for a marker (AR-08).
-- Every intense channel (shake, hit-stop, flash) names its reduced variant and the information it keeps, through one local read-only comfort service (R-22; AR-10; `references/presentation-contract.md` §4).
+- Every intense channel the comfort service covers (shake, flash) names its reduced variant and the information it keeps, through one local read-only comfort service (R-22; AR-10; `references/presentation-contract.md` §4).
 
 ## E-06 Coin pickups at 20 per second
 Brief: "A collecting simulator with a magnet upgrade: players pick up coins at up to 20 per second. Plan the pickup feedback and the coin counter."

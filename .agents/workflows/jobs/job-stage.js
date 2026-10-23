@@ -217,7 +217,7 @@ function roleOf(name) {
 function ok(x) { return x && x.status === 'done' }
 const results = { job: JOB, stage: STAGE, size: SIZE, stageId: SID, risks: RISKS, steps: [], images_pending: [], lessons: [],
   // Risk-gated slots skipped for no risk are a line for the job card, not a silent gap (cross-type rules).
-  risk_slots_skipped: ['build', 'repair'].includes(STAGE) && !EVENT ? ['live-ops event review before G3 (risks has no event)'] : [] }
+  skipped_slots: ['build', 'repair'].includes(STAGE) && !EVENT ? ['live-ops event review before G3 (risks has no event)'] : [] }
 // Cross-type rules: every gate packet carries the could-not-check list and these owner-confirmed lines.
 const OWNER_CONFIRMS = ['feel at normal speed: the owner walks the route in the Studio build', 'ambience: two listens, the key event alone then the full mix, each on a phone speaker and on headphones']
 function keep(step, x) {
@@ -285,7 +285,8 @@ async function returnPaths(x, tag, phaseName) {
       deliver: `${DIR}/design/play-change-${tag}.md: one row per change, accept or refuse, with the reason and the route graph revision`,
       checks: ['every listed change has a row with accept or refuse and its evidence (capture or coordinate)', 'signs is true only if you accept every change; incompatibility names each refused change'],
     }, S_SIGN, phaseName))
-    if (d && !d.signs) {
+    if (!ok(d)) return { status: d ? d.status : 'failed', outcome: `${tag}: the game-designer's answer on the play-affecting changes returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    if (!d.signs) {
       const back = keep(`${tag} restore`, await call(ENV_FIX, {
         id: `${tag}-restore`, task: `restore play lines in stage ${SID}`, studioWrite: true,
         intent: `The game-designer refused these art changes: ${d.incompatibility}. Restore the approved greybox lines (route edges, openings, cover, sight lines, blocking surfaces, collision) for each refused change, keeping the art inside them.`,
@@ -311,7 +312,8 @@ async function returnPaths(x, tag, phaseName) {
       deliver: `output/sound/${SID}-ambience/materials-${tag}.md: one row per material, accept or refuse, with the reason`,
       checks: ['every listed material has a row', 'signs is true only if you accept every material; incompatibility names each refused one'],
     }, S_SIGN, phaseName))
-    if (s && !s.signs) {
+    if (!ok(s)) return { status: s ? s.status : 'failed', outcome: `${tag}: the sound-designer's answer on the new materials returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    if (!s.signs) {
       const swap = keep(`${tag} swap materials`, await call(ENV_FIX, {
         id: `${tag}-swap-materials`, task: `replace refused surface materials in stage ${SID}`, studioWrite: true,
         intent: `The sound-designer refused these surface materials: ${s.incompatibility}. Pick another material for each one from those the stage already has sounds for, inside the art bible.`,
@@ -334,7 +336,7 @@ async function repairByMaker(blocking, tag, phaseName, round) {
   const byMaker = {}
   blocking.forEach(f => { (byMaker[f.maker_role] = byMaker[f.maker_role] || []).push(f) })
   const makers = Object.keys(byMaker)
-  const unrouted = makers.filter(m => !roleOf(m))
+  const unrouted = makers.filter(m => !roleOf(m) || !FIX_OWNS[m])   // a role with no write scope here (the live-ops reviewer) is the lead's to assign
   if (unrouted.length) {
     return { status: 'needs-decision', outcome: `Blocking findings name maker roles this workflow cannot route (${unrouted.join(', ')}): the lead assigns them.`, blocking }
   }
@@ -379,7 +381,8 @@ async function repairByMaker(blocking, tag, phaseName, round) {
 async function checkIn(name, phaseName, look, playFocus) {
   for (let round = 0; round <= 2; round++) {
     const tag = `${name}-r${round}`
-    keep(`PT ${tag}`, await playtest(tag, phaseName, playFocus))
+    const pt = keep(`PT ${tag}`, await playtest(tag, phaseName, playFocus))
+    if (!ok(pt)) return { status: pt ? pt.status : 'failed', outcome: `${tag}: the check-in playtest returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const rv = keep(`CI ${tag} game-designer`, await call(ROLE.design, {
       id: `CI-${tag}-game-designer`, task: `game-designer check-in on stage ${SID}: ${name}`,
       intent: `Build stage, check-in "${name}" as the stage grows. Look at the playtest captures and the place captures first, then the hand-backs. Check ${look}. Play wins over art readability. You do not edit the place. Classify each finding: blocking, recommendation or new request, and name the maker role (${MAKERS}).`,
@@ -651,7 +654,7 @@ async function proof() {
         checks: ['every finding names where (capture, coordinate or node id), evidence and the smallest fix', 'keep lists what works'],
         rules: ['Judge the captures and files; do not open Studio. A missing capture is a finding for the studio-operator.', LIGHT],
       }, S_REVIEW, 'Proof review'))
-      if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing; rerun` }
+      if (missing([rv]).length) return { status: rv ? rv.status : 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
       cnc.push(...(rv.could_not_check || []))
     }
@@ -909,13 +912,19 @@ async function reviewChain(label) {
       checks: ['every finding has a location (capture, coordinate or id), evidence and the smallest fix', 'keep lists what works'],
       rules: [LIGHT].concat(studio ? [] : ['Judge the captures; do not open Studio. A missing capture is a finding for the studio-operator.']),
     }, S_REVIEW, 'Review chain')
-    // Technical checks use Studio one after the other (one writer), beside the creative order game → art → sound → VFX, which judges captures only.
-    const techP = (async () => { const out = []; for (const o of tech) out.push(await reviewOne(o, true)); return out })()
+    if (missing([scripts]).length) return { status: scripts ? scripts.status : 'failed', outcome: `review round ${round}: the scripts step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    // A script FAIL stops the other reviews until it is fixed (README review chain): this round repairs it first.
+    const scriptsFail = scripts.findings.some(f => f.class === 'blocking')
     const crea = []
-    for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o, false)))
-    if (EVENT) crea.push(keep(`RV ${tag} ${eventSlot.r.type}`, await reviewOne(eventSlot, false)))
-    const techR = await techP
-    techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
+    let techR = []
+    if (!scriptsFail) {
+      // Technical checks use Studio one after the other (one writer), beside the creative order game → art → sound → VFX, which judges captures only.
+      const techP = (async () => { const out = []; for (const o of tech) out.push(await reviewOne(o, true)); return out })()
+      for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o, false)))
+      if (EVENT) crea.push(keep(`RV ${tag} ${eventSlot.r.type}`, await reviewOne(eventSlot, false)))
+      techR = await techP
+      techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
+    }
     const all = [scripts].concat(crea, techR)
     if (missing(all).length) return { status: 'failed', outcome: `review round ${round}: a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))

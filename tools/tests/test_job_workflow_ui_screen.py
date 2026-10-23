@@ -178,7 +178,8 @@ class UiScreenRecipeTests(unittest.TestCase):
                 self.assertIn(text, prompt)
 
     def test_progression_review_sits_between_ui_and_art_only_with_the_risk(self):
-        cases = [(dict(shop=True, risks=[]), True), (dict(shop=False, risks=["shop-screen"]), True), (dict(shop=False, risks=["paid-random"]), False)]
+        cases = [(dict(shop=True, risks=[]), True), (dict(shop=False, risks=["shop-screen"]), True), (dict(shop=False, risks=["paid-random"]), True),
+                 (dict(shop=False, risks=["server-result"]), False)]   # a paid reveal shows odds rows (J019 lead review)
         for changes, expect in cases:
             with self.subTest(changes=changes):
                 out = run(UI, ui(stage="build", **changes), {"dump": r"progression-designer: RV-"})
@@ -239,6 +240,22 @@ class UiScreenRecipeTests(unittest.TestCase):
         out = run(UI, ui(stage="build"), {"dump": r"art-director: RV-candidate-r0"})
         self.assertIn("returns to the grey value pass", out["dumps"][0]["prompt"])
         self.assertIn("read order", out["dumps"][0]["prompt"])
+
+
+    # ------------------------------------------------------------------ J019 lead review: a review that does not finish is never a pass
+    def test_a_plan_check_that_does_not_finish_stops_the_build(self):
+        out = run(UI, ui(stage="build", risks=["paid-random"]), {"statusLabel": r"B0-plan-check", "status": "blocked"})
+        self.assertEqual(out["status"], "blocked", out["outcome"])
+        self.assertEqual(index(out["labels"], r"B2-implement"), -1, "no build after an unfinished plan check")
+
+    def test_a_code_review_that_does_not_finish_is_not_clean(self):
+        out = run(UI, ui(stage="build"), {"statusLabel": r"CR-candidate-code-r0", "status": "blocked"})
+        self.assertEqual(out["status"], "blocked", out["outcome"])
+
+    def test_a_paid_reveal_gets_the_progression_review_and_a_high_reviewer(self):
+        out = run(UI, ui(stage="build", risks=["paid-random"], shop=False), {"dump": r"reviewer: B0-plan-check"})
+        self.assertGreater(index(out["labels"], r"progression-designer: RV-candidate-r0-"), -1)
+        self.assertIn("effort: high", out["dumps"][0]["prompt"])
 
 
 if __name__ == "__main__":

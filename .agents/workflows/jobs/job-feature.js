@@ -46,6 +46,7 @@ const TRACE = `${DIR}/qa/trace-table.md`                      // the qa-lead's t
 const RISK_TOKENS = ['saves', 'remotes', 'trades', 'paid-random', 'server-result', 'rewards', 'event']
 const RISKS = Array.isArray(A.risks) ? A.risks : null
 const has = t => !!RISKS && RISKS.includes(t)
+const CODE_RISK = MONEY || ['saves', 'remotes', 'trades', 'paid-random'].some(has)   // builder and reviewer at high (reviewer role: money, saves, remotes)
 const PLAN_CHECK = MONEY || ['saves', 'remotes', 'trades', 'paid-random'].some(has)   // reviewer plan check before code
 const REJECTED = MONEY || has('server-result')   // the game-designer judges a rejected-request capture
 // The game-designer's play captures (job-types.md §5 Review order; names from "Named review captures").
@@ -77,8 +78,8 @@ const ROLE = {
   arch: { type: 'architect', model: 'opus', effort: 'high' },
   prog: { type: 'progression-designer', model: 'opus', effort: 'high' },
   // Money, saves and remotes run the builder and the reviewer at high (owner J010).
-  build: { type: 'feature-builder', model: 'opus', effort: MONEY ? 'high' : 'medium' },
-  review: { type: 'reviewer', model: 'opus', effort: MONEY ? 'high' : 'medium' },
+  build: { type: 'feature-builder', model: 'opus', effort: CODE_RISK ? 'high' : 'medium' },
+  review: { type: 'reviewer', model: 'opus', effort: CODE_RISK ? 'high' : 'medium' },
   qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
   perf: { type: 'performance-engineer', model: 'opus', effort: 'high' },
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
@@ -244,7 +245,7 @@ function ok(x) { return x && x.status === 'done' }
 // Risk-gated slots skipped for no risk: a line for the job card, never a silent gap (job-types.md cross-type rules).
 const SKIPPED = [[PLAN_CHECK, 'reviewer plan check (no money, saves, remotes, trades or paid-random)'], [has('rewards'), 'reward and celebration tier table (no rewards)'],
   [REJECTED, 'rejected-request capture for the game-designer (no money or server-result)'], [has('event'), 'live-ops event review (no event)']].filter(x => !x[0]).map(x => x[1])
-const results = { job: JOB, stage: STAGE, size: SIZE, feature: FEATURE, numbers: NUMBERS, money: MONEY, risks: RISKS, skipped_for_no_risk: SKIPPED, steps: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, feature: FEATURE, numbers: NUMBERS, money: MONEY, risks: RISKS, skipped_slots: SKIPPED, steps: [], images_pending: [], lessons: [] }
 function pendingStop(what) {
   return { status: 'blocked', outcome: `${what}: the image batch is pending. The lead runs it with the owner's yes, adds the approved paths to args.images and calls this stage again; steps whose deliverables already match keep them, and every step after the batch builds from the approved images.`, images_pending: results.images_pending }
 }

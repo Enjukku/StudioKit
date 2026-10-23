@@ -4,7 +4,7 @@
 
 ## Common checks (every brief, must pass)
 - C1 Goal questions written before the findings, 2-4, each naming an invariant (SKILL.md §3 step 2; `references/review-method.md` §2).
-- C2 Both reading passes recorded: pass 1 in file order over the whole change, pass 2 in trace order per player path with the failure sweep (V-15; `references/review-method.md` §2).
+- C2 Reading passes recorded at the review's depth: standard and deep record pass 1 in file order over the whole change and pass 2 in trace order per player path with the failure sweep; a quick review (V-13, e.g. E-10) records pass 1 and the tests (V-15; `references/review-method.md` §2).
 - C3 A could-not-check list: per line the step, the missing input, what closes it and who supplies it; empty only when said so (V-16; `references/review-method.md` §5).
 - C4 Every runtime claim (timing, rate, feel, what a player sees) is labelled gate-verified, MCP-verified, owner-confirmed or not verified; nothing is passed that its input cannot show (V-10, V-16; `references/presentation.md` §1).
 

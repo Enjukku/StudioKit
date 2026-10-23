@@ -73,8 +73,8 @@ class StageWorkflowTests(unittest.TestCase):
                 self.assertEqual(event["status"], "done", event["outcome"])
                 self.assertEqual(index(plain["labels"], r"^live-ops-designer:"), -1)
                 self.assertEqual(event["agents"], plain["agents"] + 1, "one live-ops review in a clean round")
-                self.assertTrue(plain["result"]["risk_slots_skipped"], "a skipped risk slot is a line, not a silent gap")
-                self.assertEqual(event["result"]["risk_slots_skipped"], [])
+                self.assertTrue(plain["result"]["skipped_slots"], "a skipped risk slot is a line, not a silent gap")
+                self.assertEqual(event["result"]["skipped_slots"], [])
                 lo = span(event, r"^live-ops-designer: RV-\w+-r0-")
                 for creative in ("game-designer", "art-director", "sound-designer", "vfx-designer"):
                     self.assertGreater(lo["start"], span(event, rf"^{creative}: RV-\w+-r0-{creative}")["end"], f"after the {creative} review")
@@ -208,6 +208,26 @@ class StageWorkflowTests(unittest.TestCase):
         qa = brief(out, r"qa-lead: RV-candidate-r0")
         for item in ("jump height", "scene_audit.py diff", "lowest and highest graphics", "spawn positions and facing"):
             self.assertIn(item, qa)
+
+
+    # ------------------------------------------------------------------ J019 lead review
+    def test_a_script_fail_holds_back_the_other_reviews_that_round(self):
+        out = run(NAME, stage(stage="build", risks=[]), {"blockLabelOnce": r"RV-candidate-r0-scripts", "maker": "environment-designer"})
+        self.assertEqual(out["status"], "done", out["outcome"])
+        self.assertEqual(index(out["labels"], r"game-designer: RV-candidate-r0-"), -1, "no creative review while a script FAIL is open")
+        self.assertGreater(index(out["labels"], r"game-designer: RV-candidate-r1-"), index(out["labels"], r"FIX-candidate-r0-environment-designer"))
+
+    def test_a_live_ops_finding_with_itself_as_maker_goes_to_the_lead(self):
+        out = run(NAME, stage(stage="build", risks=["event"]), {"blockLabelOnce": r"live-ops-designer: RV-candidate-r0", "maker": "live-ops-designer"})
+        self.assertEqual(out["status"], "needs-decision", out["outcome"])
+        self.assertEqual(index(out["labels"], r"FIX-candidate-r0-live-ops-designer"), -1)
+
+    def test_steps_that_do_not_finish_stop_the_stage(self):
+        for label in (r"RV-candidate-r0-scripts", r"PT-candidate-record", r"game-designer: PR-r0-game-designer"):
+            with self.subTest(label=label):
+                st = "proof" if "PR-r0" in label else "build"
+                out = run(NAME, stage(stage=st, risks=[]), {"statusLabel": label, "status": "blocked"})
+                self.assertNotEqual(out["status"], "done", out["outcome"])
 
 
 if __name__ == "__main__":
