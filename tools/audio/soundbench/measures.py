@@ -439,17 +439,20 @@ def roughness(x: np.ndarray, rate: int) -> float | None:
 
 
 def lag(reference: np.ndarray, candidate: np.ndarray, rate: int, search_samples: int) -> dict:
-    """Lag of `candidate` behind `reference` by cross-correlation of their mono sums (samples; positive = late).
+    """Lag of `candidate` behind `reference` by cross-correlation of their mono sums, each with its mean removed
+    (samples; positive = late). Pass one channel of each to time that channel alone (the adapter does, per channel:
+    a mono sum hides one channel moved against the other).
 
     `clear` is True when the normalised correlation at the best lag is 0.5 or more and no other correlation peak in
     the search range reaches 90 % of it (PROPOSAL limits). Searched over -search_samples .. +search_samples.
-    Known false readings: silence or noise-only input has no clear lag (reported as not clear); a periodic sound (a
+    Known false readings: silence has no clear lag (reported as not clear); a periodic sound (a
     steady tone, a loop) correlates equally at every period, so it is not clear by design; an inverted output reads
     as not clear."""
     a = np.asarray(reference, dtype=np.float64)
     b = np.asarray(candidate, dtype=np.float64)
     a = a.mean(axis=1) if a.ndim == 2 else a
     b = b.mean(axis=1) if b.ndim == 2 else b
+    a, b = a - a.mean(), b - b.mean()  # a DC offset correlates at every lag and would hide the true peak
     ea, eb = float(np.sum(a ** 2)), float(np.sum(b ** 2))
     if ea <= 0 or eb <= 0:
         return {"lag_samples": None, "lag_ms": None, "correlation": None, "second_peak_ratio": None, "clear": False}

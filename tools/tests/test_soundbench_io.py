@@ -86,6 +86,23 @@ class IntakeTest(TempDir):
             intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
         self.assertFalse(intake.master_path(mp3).exists())  # no half-made master left behind
 
+    def test_length_tolerance_just_inside_and_just_outside(self):
+        """The 10 ms limit: a take 9 ms longer than asked passes, 11 ms longer is refused (tagged MP3 decodes exact)."""
+        for rate in fx.RATES:
+            x = fx.make("clean_hit", rate, 2).astype(np.float32)
+            asked = 1000 * len(x) / rate
+            for extra_ms, ok in ((9, True), (11, False)):
+                with self.subTest(rate=rate, extra_ms=extra_ms):
+                    y = np.vstack([x, np.zeros((int(rate * extra_ms / 1000), 2), np.float32)])
+                    wav = fx.write_wav(self.d / f"pad{rate}{extra_ms}.wav", y, rate)
+                    mp3 = encode_mp3(wav, self.d / f"pad.r1.t{rate}{extra_ms}.mp3")
+                    if ok:
+                        info = intake.decode_take(mp3, expected_ms=asked)
+                        self.assertAlmostEqual(info["delta_ms"], extra_ms, delta=0.05)
+                    else:
+                        with self.assertRaisesRegex(SoundbenchError, "limit 10.0 ms"):
+                            intake.decode_take(mp3, expected_ms=asked)
+
     def test_master_is_never_overwritten_and_sidecar_keeps_its_fields(self):
         x, mp3 = self.take("wrong_chime", 44100, 2)
         side = mp3.with_suffix(".json")
@@ -104,7 +121,7 @@ class IntakeTest(TempDir):
         intake.decode_take(mp3, expected_ms=1000 * len(x) / 44100)
         y, rate = sf.read(str(intake.master_path(mp3)), always_2d=True, dtype="float32")
         y = y + (0.003 * np.random.RandomState(1).standard_normal(y.shape)).astype(np.float32)
-        res = sbf.run_filter(y, rate, "afftdn", max_lag_ms=50)
+        res = sbf.run_filter(y, rate, "afftdn", latency_samples=sbf.known_latency("afftdn", rate))
         self.assertEqual(m.lag(y, res.audio, rate, 4410)["lag_samples"], 0)
         self.assertEqual(res.audio.shape, y.shape)
 

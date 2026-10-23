@@ -10,7 +10,6 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest import mock
 
 try:
     import numpy as np
@@ -32,7 +31,7 @@ except SoundbenchError:
     FOUND = None
 needs_ffmpeg = unittest.skipUnless(FOUND, "ffmpeg not found (SOUNDBENCH_FFMPEG, PATH, WinGet folder): skipped")
 CONFIGS = [(r, c) for r in fx.RATES for c in fx.CHANNELS]
-AFFTDN_LAG_MS = 25.0  # review-1 and probe 2026-10-23 on ffmpeg 9.0.2: 1,102 samples at 44.1 kHz, 1,200 at 48 kHz
+AFFTDN_LAG = {44100: 1102, 48000: 1200}  # review-1 and probes 2026-10-23 on ffmpeg 9.0.2 (written here, not read)
 
 
 def noisy_hit(rate, ch, seed=3):
@@ -83,20 +82,26 @@ class FindTest(unittest.TestCase):
         self.assertIsNone(sbf.find_ffmpeg({"PATH": str(self.d / "empty"), "LOCALAPPDATA": str(self.d / "none")}))
 
 
+def aligned(x, out):
+    """Normalised correlation of each channel at lag 0 (an oracle that works on periodic audio too)."""
+    return [float(np.dot(x[:, c], out[:, c]) / np.sqrt(np.dot(x[:, c], x[:, c]) * np.dot(out[:, c], out[:, c])))
+            for c in range(x.shape[1])]
+
+
 @needs_ffmpeg
 class RunFilterTest(unittest.TestCase):
     def assert_kept(self, x, out, rate, res):
-        """What every call must keep: rate, channels, length, lag 0, channel order."""
+        """What every call must keep: rate, channels, length, lag 0 on every channel, channel order."""
         self.assertEqual(res.rate, rate)
         self.assertEqual(out.shape, x.shape)
         self.assertEqual(out.dtype, np.float32)
-        lag = m.lag(x, out, rate, int(0.1 * rate))  # measured here, independently of the adapter
-        self.assertTrue(lag["clear"], lag)
-        self.assertEqual(lag["lag_samples"], 0)
-        if x.ndim == 2 and x.shape[1] == 2:
-            for c in range(2):  # each output channel lines up with its own input channel
-                self.assertEqual(m.lag(x[:, c], out[:, c], rate, int(0.1 * rate))["lag_samples"], 0)
-            self.assertGreater(np.sum(out[:, 0] ** 2), np.sum(out[:, 1] ** 2))  # left stays the louder channel
+        x2, o2 = (x[:, None], out[:, None]) if x.ndim == 1 else (x, out)
+        for c in range(x2.shape[1]):  # measured here per channel, independently of the adapter
+            lag = m.lag(x2[:, c], o2[:, c], rate, int(0.1 * rate))
+            self.assertTrue(lag["clear"], lag)
+            self.assertEqual(lag["lag_samples"], 0, f"channel {c}")
+        if x2.shape[1] == 2:
+            self.assertGreater(np.sum(o2[:, 0] ** 2), np.sum(o2[:, 1] ** 2))  # left stays the louder channel
 
     def test_volume_gives_the_exact_answer_and_keeps_everything(self):
         for rate, ch in CONFIGS:
@@ -105,7 +110,7 @@ class RunFilterTest(unittest.TestCase):
                 res = sbf.run_filter(x, rate, "volume=0.5")
                 np.testing.assert_allclose(res.audio, 0.5 * x, atol=1e-6)
                 self.assert_kept(x, res.audio, rate, res)
-                self.assertEqual(res.lag_samples, 0)
+                self.assertEqual((res.lag_samples, res.log["timing_source"]), (0, "audio"))
 
     def test_one_dimensional_input_comes_back_one_dimensional(self):
         x = fx.make("clean_hit", 44100, 1)[:, 0].astype(np.float32)
@@ -113,15 +118,22 @@ class RunFilterTest(unittest.TestCase):
         self.assertEqual(res.audio.shape, x.shape)
         np.testing.assert_array_equal(res.audio, x)
 
+    def test_known_latency_table(self):
+        self.assertEqual({r: sbf.known_latency("afftdn", r) for r in fx.RATES}, AFFTDN_LAG)
+        for args in (("afftdn", 22050), ("afftdn", 32000), ("rubberband", 44100)):
+            with self.subTest(args=args):
+                with self.assertRaisesRegex(SoundbenchError, "never measured"):
+                    sbf.known_latency(*args)
+
     def test_afftdn_lag_is_compensated_to_zero(self):
         """review-1 #1: afftdn delays by 25 ms and cuts the tail. After the adapter: zero lag, full tail."""
         for rate, ch in CONFIGS:
             with self.subTest(rate=rate, ch=ch):
                 x = noisy_hit(rate, ch)
-                res = sbf.run_filter(x, rate, "afftdn", max_lag_ms=50)
+                res = sbf.run_filter(x, rate, "afftdn", latency_samples=AFFTDN_LAG[rate])
                 self.assert_kept(x, res.audio, rate, res)
-                self.assertEqual(res.lag_samples, round(AFFTDN_LAG_MS / 1000 * rate),
-                                 "afftdn's latency changed on this ffmpeg: re-probe (doctor warns on a new version)")
+                self.assertEqual(res.lag_samples, AFFTDN_LAG[rate])
+                self.assertEqual(res.log["channel_lags_samples"], [AFFTDN_LAG[rate]] * ch)
                 self.assertTrue(res.log["compensated"])
                 mono_in, mono_out = x.mean(axis=1), res.audio.mean(axis=1)
                 self.assertEqual(m.onset_index(mono_out), m.onset_index(mono_in))
@@ -134,43 +146,67 @@ class RunFilterTest(unittest.TestCase):
                 ratio = np.sqrt(np.sum(mono_out[body] ** 2) / np.sum(mono_in[body] ** 2))
                 self.assertAlmostEqual(float(ratio), 1.0, delta=0.05)  # the hit itself is kept
 
+    def test_afftdn_on_every_fixture_periodic_ones_proven_on_the_probe(self):
+        """F4: DC-offset audio is timed on the audio; tonal and looped audio on the probe, and the log says so."""
+        probe_names = ("wrong_chime", "rough_tone", "clipped", "bad_seam_bed")
+        for name in fx.NAMES:
+            for rate in fx.RATES:
+                with self.subTest(name=name, rate=rate):
+                    x = fx.make(name, rate, 2).astype(np.float32)
+                    res = sbf.run_filter(x, rate, "afftdn", latency_samples=AFFTDN_LAG[rate])
+                    self.assertEqual(res.audio.shape, x.shape)
+                    self.assertEqual(res.log["channel_lags_samples"], [AFFTDN_LAG[rate]] * 2)
+                    source = res.log["timing_source"]
+                    self.assertTrue(source.startswith("probe") if name in probe_names else source == "audio", source)
+                    if name in probe_names:
+                        self.assertIn("not on the audio", source)
+                    for v in aligned(x, res.audio):
+                        self.assertGreater(v, 0.98)  # in time with the input (a 25 ms shift would read far lower)
+
     def test_afftdn_without_compensation_is_refused(self):
         x = noisy_hit(44100, 2)
         with self.assertRaisesRegex(SoundbenchError, "compensation is off"):
-            sbf.run_filter(x, 44100, "afftdn", max_lag_ms=50, compensate=False)
+            sbf.run_filter(x, 44100, "afftdn", latency_samples=AFFTDN_LAG[44100], compensate=False)
 
-    def test_a_wrong_first_lag_reading_is_caught_by_the_recheck(self):
-        """The safety net: if the first lag reading were one sample off, the re-check after compensation refuses."""
-        real = m.lag
-        calls = []
+    def test_an_undeclared_or_wrongly_declared_latency_is_refused(self):
+        """F2: compensation uses the declared value; any other reading is unknown latency (tolerance 0 samples)."""
+        for rate in fx.RATES:
+            x = noisy_hit(rate, 2)
+            for declared in (0, AFFTDN_LAG[rate] - 1, AFFTDN_LAG[rate] + 1, 2 * AFFTDN_LAG[rate]):
+                with self.subTest(rate=rate, declared=declared):
+                    with self.assertRaisesRegex(SoundbenchError, "unknown latency"):
+                        sbf.run_filter(x, rate, "afftdn", latency_samples=declared)
 
-        def off_by_one(*a, **k):
-            r = dict(real(*a, **k))
-            calls.append(r["lag_samples"])
-            if len(calls) == 1 and r["lag_samples"]:
-                r["lag_samples"] -= 1
-            return r
+    def test_a_graph_that_adds_delay_to_a_known_latency_is_refused(self):
+        """F2 proofs: afftdn,lowpass read 1,105 and afftdn,aphaser 1,110; both were compensated before."""
+        for graph, name in (("afftdn,lowpass=f=3000", "hummed"), ("afftdn,aphaser", "bass_thump")):
+            for rate in fx.RATES:
+                with self.subTest(graph=graph, rate=rate):
+                    x = fx.make(name, rate, 2).astype(np.float32)
+                    with self.assertRaisesRegex(SoundbenchError, "unknown latency"):
+                        sbf.run_filter(x, rate, graph, latency_samples=AFFTDN_LAG[rate])
 
-        x = noisy_hit(44100, 2)
-        with mock.patch.object(sbf.measures, "lag", off_by_one):
-            with self.assertRaisesRegex(SoundbenchError, "after compensation"):
-                sbf.run_filter(x, 44100, "afftdn", max_lag_ms=50)
-
-    def test_an_undeclared_latency_is_refused(self):
-        x = noisy_hit(48000, 1)
-        with self.assertRaisesRegex(SoundbenchError, "unknown latency"):
-            sbf.run_filter(x, 48000, "afftdn")  # max_lag_ms 0: any lag is unknown
-        with self.assertRaisesRegex(SoundbenchError, "unknown latency"):
-            sbf.run_filter(x, 48000, "afftdn", max_lag_ms=10)
+    def test_one_channel_moved_against_the_other_is_refused(self):
+        """F1 proofs: the mono sum hid a 30 ms shift of one channel; each channel is now timed on its own."""
+        for rate in fx.RATES:
+            for name in ("clean_hit", "wrong_chime"):  # timed on the audio, and on the probe
+                x = fx.make(name, rate, 2).astype(np.float32)
+                n, d = len(x), int(0.03 * rate)
+                for graph, declared in ((f"adelay=0|30,atrim=end_sample={n}", 0),
+                                        (f"adelay=30|0,atrim=end_sample={n + d}", d),
+                                        (f"adelay=0|30,atrim=end_sample={n + d}", d)):
+                    with self.subTest(rate=rate, name=name, graph=graph):
+                        with self.assertRaisesRegex(SoundbenchError, "channels disagree"):
+                            sbf.run_filter(x, rate, graph, latency_samples=declared)
 
     def test_a_declared_delay_is_compensated_sample_exactly(self):
         for rate, ch in CONFIGS:
             with self.subTest(rate=rate, ch=ch):
                 x = fx.make("clean_hit", rate, ch).astype(np.float32)
-                pad = int(np.ceil(0.04 * rate))
+                d = int(0.03 * rate)
                 delays = "|".join(["30"] * ch)
-                res = sbf.run_filter(x, rate, f"adelay={delays},atrim=end_sample={len(x) + pad}", max_lag_ms=40)
-                self.assertEqual(res.lag_samples, int(0.03 * rate))
+                res = sbf.run_filter(x, rate, f"adelay={delays},atrim=end_sample={len(x) + d}", latency_samples=d)
+                self.assertEqual(res.lag_samples, d)
                 np.testing.assert_array_equal(res.audio, x)
 
     def test_rate_channel_count_and_length_changes_are_refused(self):
@@ -193,15 +229,20 @@ class RunFilterTest(unittest.TestCase):
         res = sbf.run_filter(x, 44100, "apad=pad_len=441", length_change=True)
         self.assertEqual(len(res.audio), len(x) + 441)
         np.testing.assert_array_equal(res.audio[: len(x)], x)
+        with self.assertRaisesRegex(SoundbenchError, "cannot declare a latency"):
+            sbf.run_filter(x, 44100, "apad=pad_len=441", length_change=True, latency_samples=10)
+
+    def test_periodic_audio_is_timed_on_the_probe(self):
+        t = np.arange(22050) / 44100
+        sine = (0.5 * np.sin(2 * np.pi * 441 * t)).astype(np.float32)
+        res = sbf.run_filter(sine, 44100, "volume=1")  # the sine alone cannot be timed: every period correlates
+        np.testing.assert_array_equal(res.audio, sine)
+        self.assertTrue(res.log["timing_source"].startswith("probe"))
 
     def test_unprovable_timing_is_refused(self):
         x = fx.make("clean_hit", 44100, 1).astype(np.float32)
         with self.assertRaisesRegex(SoundbenchError, "cannot be proven"):
-            sbf.run_filter(x, 44100, "areverse")
-        t = np.arange(22050) / 44100
-        sine = (0.5 * np.sin(2 * np.pi * 441 * t)).astype(np.float32)
-        with self.assertRaisesRegex(SoundbenchError, "cannot be proven"):
-            sbf.run_filter(sine, 44100, "volume=1")  # periodic: the lag cannot be told from one period
+            sbf.run_filter(x, 44100, "areverse")  # neither the audio nor the probe reads a clear lag
 
     def test_silent_input(self):
         x = np.zeros((4410, 2), np.float32)
@@ -219,8 +260,10 @@ class RunFilterTest(unittest.TestCase):
             with self.subTest(why=why):
                 with self.assertRaisesRegex(SoundbenchError, why):
                     sbf.run_filter(*args)
-        with self.assertRaisesRegex(SoundbenchError, "max_lag_ms"):
-            sbf.run_filter(x, 44100, "volume=1", max_lag_ms=float("nan"))
+        for bad_latency in (-1, 2.5, True, float("nan")):
+            with self.subTest(latency=bad_latency):
+                with self.assertRaisesRegex(SoundbenchError, "latency_samples"):
+                    sbf.run_filter(x, 44100, "volume=1", latency_samples=bad_latency)
 
     def test_ffmpeg_failure_is_an_error(self):
         x = fx.make("clean_hit", 44100, 1).astype(np.float32)
@@ -229,14 +272,14 @@ class RunFilterTest(unittest.TestCase):
 
     def test_same_call_twice_gives_the_same_samples(self):
         x = noisy_hit(44100, 2)
-        a = sbf.run_filter(x, 44100, "afftdn", max_lag_ms=50).audio
-        b = sbf.run_filter(x, 44100, "afftdn", max_lag_ms=50).audio
+        a = sbf.run_filter(x, 44100, "afftdn", latency_samples=AFFTDN_LAG[44100]).audio
+        b = sbf.run_filter(x, 44100, "afftdn", latency_samples=AFFTDN_LAG[44100]).audio
         np.testing.assert_array_equal(a, b)
 
     def test_the_input_buffer_is_not_changed(self):
         x = noisy_hit(48000, 2)
         before = x.copy()
-        sbf.run_filter(x, 48000, "afftdn", max_lag_ms=50)
+        sbf.run_filter(x, 48000, "afftdn", latency_samples=AFFTDN_LAG[48000])
         np.testing.assert_array_equal(x, before)
 
 

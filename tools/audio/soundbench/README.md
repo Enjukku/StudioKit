@@ -23,7 +23,7 @@ Needs Python 3.11, numpy, scipy, soundfile, pyloudnorm, matplotlib, and ffmpeg (
 
 | # | Guarantee | Held by |
 | --- | --- | --- |
-| 1 | After every ffmpeg call: same rate, same channels, same length (unless declared), no NaN, **lag 0 by cross-correlation**. A measured lag is compensated only when the correlation is clear and the lag is within the call's declared `max_lag_ms`; otherwise `SoundbenchError`. The input is padded with `max_lag_ms` of silence, so the tail is not cut | `test_soundbench_ffmpeg.py` (afftdn at 44.1/48 kHz, mono/stereo; refused rate, channel, length changes; undeclared latency; unprovable timing) |
+| 1 | After every ffmpeg call: same rate, same channels, same length (unless declared), no NaN, and **every channel's lag, measured against its own input channel, equals the call's declared latency** (`latency_samples`, from `ffmpeg.known_latency`; tolerance 0 samples). Channels that disagree, or a lag other than the declared one, are refused (G-7: a known latency is compensated, an unknown one refused). Compensation shifts by the declared value; the input is padded by it, so the tail is not cut. When the audio gives no clear reading (a tone, a chime, a loop) the latency is proven on a probe signal (a noise burst per channel) through the same graph, and the log says `timing_source: probe` | `test_soundbench_ffmpeg.py` (afftdn on every fixture at 44.1/48 kHz; one channel moved; `afftdn,lowpass` and `afftdn,aphaser` refused; declared value off by one refused; refused rate, channel, length changes; unprovable timing) |
 | 2 | The channel order is kept (a swap is refused: the mono-sum lag check cannot see it) | `test_a_channel_swap_is_refused` |
 | 3 | ffmpeg runs with `-threads 1 -filter_threads 1`, float32 WAV in and out: the same call gives the same samples | `test_same_call_twice_gives_the_same_samples` |
 | 4 | F-01 to F-13 equal the old `cue_check.py` output number for number (golden JSON from git 78c730f, 55 cases) | `test_soundbench_measures.py` `GoldenTest` |
@@ -45,14 +45,15 @@ In `measure` output next to F-01..F-12. Known false readings are in each functio
 | `clicks` | steps over 8x the local step RMS (±2 ms) and 1 % of the peak, every channel | a hard edge from silence reads as a click; a click in loud noise hides |
 | `tonality` | spectral flatness (tonal / mixed / noisy) and the notes present | harmonics are listed as notes |
 | `roughness` | depth of 30-150 Hz envelope movement | two close notes beating read rough |
-| lag (`compare`, the adapter) | cross-correlation of the mono sums | periodic, silent, noise-only or inverted input reads "not clear" |
+| lag (`compare`; the adapter per channel) | cross-correlation, mean removed | periodic, silent or inverted input reads "not clear" |
 
-PROPOSAL values (start points a check may change): the click factor 8, the flatness limits 0.05 / 0.30, the lag limits (correlation 0.5, second peak under 90 %), the intake tolerance 10 ms.
+PROPOSAL values (start points a check may change): the click factor 8, the flatness limits 0.05 / 0.30, the lag limits (correlation 0.5, second peak under 90 %), the intake tolerance 10 ms, the latency tolerance 0 samples.
 
 ## Known limits
 
 - **Speed on long files:** F-09 and F-10 (moved unchanged from cue_check) find their loudest 400 ms and 200 ms windows with `np.convolve`, which grows with file length times window length: a 2-minute music bed takes minutes. The new measures use cumulative sums (120 s stereo: about 2 s). A faster F-09/F-10 needs its own golden check before it replaces the old arithmetic.
-- **Lag on periodic sounds:** a steady tone or a loop correlates equally at every period, so the adapter refuses it ("timing cannot be proven"). Filters for loops are checked on a non-periodic stand-in or get their own guard in step 4.
+- **Lag on periodic sounds:** a steady tone or a loop correlates equally at every period, so its timing is proven on the probe signal, not on the audio itself (the log says so). That proves the graph's latency, not that this audio came out aligned.
+- **Known latencies are measured per rate:** afftdn 1,102 samples at 44.1 kHz, 1,200 at 48 kHz on ffmpeg 9.0.2. Not a formula (22,050 Hz reads 550, not round(0.025 x rate) = 551): other rates and other filters are refused until measured and added to `KNOWN_LATENCY`.
 - **Intake takes MP3 only.** A WAV or PCM take from ElevenLabs (design section 8) needs its own intake path in step 7.
 
 ## Not built yet (design section 10, steps 3-9)
@@ -63,7 +64,7 @@ The numpy operations, recipes and `render` with its log and family checks; the f
 
 ```python
 from tools.audio.soundbench import ffmpeg, measures, intake, export, pictures
-res = ffmpeg.run_filter(x, 44100, "afftdn", max_lag_ms=50)   # res.audio, res.lag_samples, res.log
+res = ffmpeg.run_filter(x, 44100, "afftdn", latency_samples=ffmpeg.known_latency("afftdn", 44100))  # 1102
 rec = measures.measure(path)
 info = intake.decode_take(take_mp3, expected_ms=1500)
 log = export.export_flac(x, 44100, out_flac, source_rate=44100)

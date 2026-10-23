@@ -98,13 +98,14 @@ def _self_test(exe: Path) -> tuple[str, str]:
     x = fixtures.make("clean_hit", rate, 2).astype(np.float32)
     x += (np.random.RandomState(3).standard_normal(x.shape) * 0.003).astype(np.float32)
     try:
-        res = ffmpeg.run_filter(x, rate, "afftdn", max_lag_ms=50, exe=exe)
+        res = ffmpeg.run_filter(x, rate, "afftdn", latency_samples=ffmpeg.known_latency("afftdn", rate), exe=exe)
     except SoundbenchError as err:
         return "FAIL", str(err)
-    after = measures.lag(x, res.audio, rate, rate // 10)["lag_samples"]
-    ok = after == 0 and res.audio.shape == x.shape
+    after = [measures.lag(x[:, c], res.audio[:, c], rate, rate // 10)["lag_samples"] for c in range(x.shape[1])]
+    ok = after == [0] * x.shape[1] and res.audio.shape == x.shape
     return ("PASS" if ok else "FAIL",
-            f"afftdn lag {res.lag_samples} samples ({1000 * res.lag_samples / rate:.1f} ms) compensated to {after}")
+            f"afftdn lag {res.lag_samples} samples ({1000 * res.lag_samples / rate:.1f} ms, the declared value) "
+            f"compensated to {after} per channel")
 
 
 def _key_entry(root: Path) -> tuple[str, str]:

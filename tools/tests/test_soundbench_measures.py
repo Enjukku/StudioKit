@@ -155,6 +155,54 @@ class NewMeasuresTest(unittest.TestCase):
                 self.assertGreater(r["snr_db"], 40)
                 self.assertFalse(r["sound_reaches_end"])
 
+    def test_phone_loss_equals_the_filters_computed_attenuation(self):
+        """Exact answer: a steady tone loses what the two 4th-order Butterworth filters pass at its frequency."""
+        from scipy.signal import butter, sosfreqz
+
+        for rate in fx.RATES:
+            hp = butter(4, 400, "highpass", fs=rate, output="sos")
+            lp = butter(4, 10000, "lowpass", fs=rate, output="sos")
+            for hz in (300.0, 14000.0):
+                with self.subTest(rate=rate, hz=hz):
+                    _, h1 = sosfreqz(hp, worN=[hz], fs=rate)
+                    _, h2 = sosfreqz(lp, worN=[hz], fs=rate)
+                    want = -20 * np.log10(abs(h1[0] * h2[0]))
+                    self.assertAlmostEqual(m.phone_loss_db(col(tone(rate, 2000, hz)), rate), want, delta=0.05)
+
+    def test_tail_noise_reads_exactly_the_last_100ms(self):
+        """The floor window is the last 100 ms after the sound: 50 ms at -55 dBFS then 50 ms at -65 dBFS."""
+        rate = 48000
+        rs = np.random.RandomState(11)
+
+        def noise(ms, dbfs):
+            z = rs.standard_normal(int(rate * ms / 1000))
+            return z / np.sqrt(np.mean(z ** 2)) * 10 ** (dbfs / 20)
+
+        y = np.concatenate([np.zeros(480), tone(rate, 200, 1000, 0.7), noise(200, -75), noise(50, -55), noise(50, -65)])
+        r = m.tail_noise(col(y), rate)
+        want = 10 * np.log10((10 ** (-55 / 10) + 10 ** (-65 / 10)) / 2)  # -57.6 dBFS: the mean power of both halves
+        self.assertEqual(r["window_ms"], 100.0)
+        self.assertAlmostEqual(r["floor_dbfs"], want, delta=0.1)
+
+    def test_lag_second_peak_limit_just_inside_and_just_outside(self):
+        """Exact answer: k copies of one noise block correlate (k-1)/k at one block's shift (limit 0.9)."""
+        block = np.random.RandomState(4).standard_normal(1000)
+        inside, outside = np.tile(block, 9), np.tile(block, 11)  # 8/9 = 0.889 and 10/11 = 0.909
+        r_in, r_out = m.lag(inside, inside, 44100, 2500), m.lag(outside, outside, 44100, 2500)
+        self.assertAlmostEqual(r_in["second_peak_ratio"], 8 / 9, delta=0.003)
+        self.assertAlmostEqual(r_out["second_peak_ratio"], 10 / 11, delta=0.003)
+        self.assertTrue(r_in["clear"])
+        self.assertFalse(r_out["clear"])
+
+    def test_lag_ignores_a_dc_offset(self):
+        """F4: an offset correlates at every lag; the mean is removed first."""
+        for rate in fx.RATES:
+            x = loaded("clean_hit", rate, 1) + 0.2
+            y = np.vstack([np.full((37, 1), 0.2), x[:-37]])
+            r = m.lag(x, y, rate, 2400)
+            self.assertTrue(r["clear"], r)
+            self.assertEqual(r["lag_samples"], 37)
+
     def test_tail_noise_false_reading_sound_still_playing_is_flagged(self):
         r = m.tail_noise(loaded("hiss_lock", 44100, 1), 44100)
         self.assertTrue(r["sound_reaches_end"])  # the "floor" is the sound itself: the flag says so
