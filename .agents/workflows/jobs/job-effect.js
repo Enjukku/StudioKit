@@ -1,24 +1,24 @@
 export const meta = {
   name: 'job-effect',
   description: 'Run one stage (direction, proof, build or repair) of an effect job (hit, slash, explosion, pickup, reveal, telegraph or aura, with its sound) led by the vfx-designer; owner gates sit between calls.',
-  whenToUse: 'An M or L effect job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L; a new look is L), newLook and animated (true or false); studioId and images (owner-approved reference image paths) for proof, build and repair; change for repair. Optional: effect, small, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L effect job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L; a new look is L), newLook and animated (true or false), risks (a list from the job card\'s Risks row, [] = none: server-result, danger-area, paid-random, frequent-effect, event); studioId and images (owner-approved reference image paths) for proof, build and repair; change for repair. Optional: effect, small, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'game-designer, vfx-designer, sound-designer (art-director for a new look) write independent proposals' },
-    { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
-    { title: 'Direction sheet', detail: 'vfx-designer synthesises; others sign' },
-    { title: 'Contract', detail: 'gameplay window, animator timing list, one event timeline' },
-    { title: 'Envelope', detail: 'vfx and sound co-design the envelope on the event ids; vfx merges' },
-    { title: 'First sample', detail: 'first-pass spec.json and temporary sound' },
+    { title: 'Exchange', detail: 'each lead names only production-changing conflicts; the art-director consults when the effect adds a colour role or a shape-code entry' },
+    { title: 'Direction sheet', detail: 'vfx-designer synthesises (options not picked closed with "may return only if"); others sign' },
+    { title: 'Contract', detail: 'gameplay window, animator blocking markers (draft timing list), one event timeline' },
+    { title: 'Envelope', detail: 'vfx and sound co-design the envelope on the event ids and the blocking markers; vfx merges' },
+    { title: 'First sample', detail: 'the blocking pass (placeholder sprites, real sizes and timing, the real truth edge) and temporary sound on the blocking markers' },
     { title: 'Lock', detail: 'final timing list (animated); vfx-designer locks the timeline' },
-    { title: 'Final build', detail: 'spec.json and cue cards against the locked timeline' },
-    { title: 'Wiring', detail: 'clip import, then one builder wires the spec and cues (one Studio driver)' },
-    { title: 'Capture', detail: 'studio-operator records the game camera in a busy scene' },
-    { title: 'Review chain', detail: 'scripts, maker self-review, then game-designer, art-director, sound sync beside code review; repairs by makers' },
+    { title: 'Final build', detail: 'VFX textures and spec.json, then final sound on the locked timing-list revision' },
+    { title: 'Wiring', detail: 'clip import, then one builder wires the spec and cues with the test hooks (one Studio driver)' },
+    { title: 'Capture', detail: 'studio-operator records the game camera in a busy scene and the named captures the risks need' },
+    { title: 'Review chain', detail: 'scripts (flash_count.py), maker self-review, then game-designer, art-director, sound sync, live-ops event review (risk event) beside code review and qa-lead acceptance (truth risks); repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts' },
   ],
 }
 
-// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T07, owner approval J016-D5: built the same way as job-cutscene.js); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T07, owner approval J016-D5: built the same way as job-cutscene.js); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §6. Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
 // One stage per call. Never start a stage before the owner's gate answer for the previous one.
@@ -39,6 +39,13 @@ const GATE = A.gate || ''        // the owner's words at the last gate, verbatim
 const CHANGE = A.change || ''    // the owner's G3 change request, verbatim (stage repair)
 const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)   // owner-approved reference images from the last gate (key frames or look references)
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
+// The job card's Risks row (README args table): each token switches on the recipe's *(risk: …)* rows (job-types.md §6).
+const RISK_TOKENS = ['server-result', 'danger-area', 'paid-random', 'frequent-effect', 'event']
+const RISKS = Array.isArray(A.risks) ? A.risks : []
+const EVENT = RISKS.includes('event')                  // a job from a live-ops update brief: live-ops event review before G3
+const TRUTH = RISKS.filter(r => r !== 'event')         // gameplay-truth risks: the qa-lead's protected acceptance rows
+const PF_ROWS = { 'server-result': 'PF-02 rejected request', 'danger-area': 'PF-04 drawn area on the debug shape over 20 fuse runs',
+  'paid-random': 'PF-06 identical windups', 'frequent-effect': 'PF-10 100 triggers and a burst' }
 const DIR = `knowledge/jobs/${JOB}`
 const TIMELINE = `${DIR}/contract-timeline.md`      // the one event timeline (templates/jobs/contract-header.md)
 const WINDOW = `${DIR}/gameplay-window.md`          // the game-designer's gameplay event and timing window
@@ -46,6 +53,7 @@ const VFX = `content/vfx/${EFFECT}/`                // brief.md, frame-script.md
 const SND = `output/sound/${EFFECT}/`               // cue cards, prompts, mix plan
 const SND_TEMP = `output/sound/${EFFECT}-temp/`     // temporary sound for the proof
 const ANIM = `content/anim/${EFFECT}/`              // clip, timing-list.md, import-record.md
+const MARKERS = ANIMATED ? [`${ANIM}timing-list.md`] : []   // the animator's blocking markers (draft timing list): VFX and sound key to them before either builds
 const CAPS = `output/vfx/${EFFECT}/captures/`       // one folder per capture tag
 const SETUP = `${DIR}/capture-setup.md`             // the builder's trigger, camera and busy-scene setup
 
@@ -57,6 +65,11 @@ const lacking = []
 if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (an S effect job runs without a workflow; a new look is L)')
 if (typeof A.newLook !== 'boolean') lacking.push('newLook: true or false (a new look brings the art-director and is sized L)')
 if (typeof A.animated !== 'boolean') lacking.push('animated: true or false (an effect on an animation takes its times from the timing list)')
+if (!Array.isArray(A.risks)) lacking.push(`risks: a list from the job card's Risks row ([] = none); effect accepts ${RISK_TOKENS.join(', ')}`)
+else {
+  const unknown = A.risks.filter(r => !RISK_TOKENS.includes(r))
+  if (unknown.length) lacking.push(`risks: unknown token ${unknown.map(r => JSON.stringify(r)).join(', ')}; effect accepts ${RISK_TOKENS.join(', ')}`)
+}
 if (SIZE === 'M' && NEW_LOOK) lacking.push('size L: an effect that sets a new look is sized L, so the owner sees the proof at G2 (rules/company.md §2)')
 if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the capture needs Studio, and Studio has one writer at a time (rules/company.md §9)')
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved key frames or look references from the last gate (no visual build without an approved image, lead decision LD2)')
@@ -77,6 +90,8 @@ const ROLE = {
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
   code: { type: 'reviewer', model: 'opus', effort: 'medium' },
   anim: { type: 'animator', model: 'opus', effort: 'high' },
+  qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
+  liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
 const WIRE = SMALL ? ROLE.quick : ROLE.build
 // Roles a blocking finding or an owner change may be routed to; anything else goes back to the lead.
@@ -118,6 +133,9 @@ const FINDING = { type: 'object', additionalProperties: false, required: ['id', 
 
 const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT })
+// The vfx-designer's proposal also says whether the effect extends the art bible (recipe §6: the art-director then joins as a consult).
+const S_VFX_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT,
+  adds_colour_role: { type: 'boolean' }, adds_shape_code: { type: 'boolean' } })
 const S_CAPTURE = schema({ captures_made: { type: 'integer' }, captures_looked_at: { type: 'integer' } })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
 const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR })
@@ -149,7 +167,9 @@ const TRUTH_RULE = 'VFX is visuals only: the effect never adds or changes gamepl
 const POLICY_RULE = 'If the effect shows a purchase, a reward or a paid random outcome, load platform-policy (AGENTS.md §2): odds first, an identical wind-up for every outcome, no near-miss, no celebration below cost.'
 const PROPOSAL_RULE = 'Numbers, names and feel you introduce are PROPOSAL until the owner confirms (AGENTS.md §0): list each in proposals and each open choice in questions with a default.'
 const NO_CODE_RULE = 'You never write game code: the frame script, spec.json and your notes are data; wiring belongs to the builder (vfx-designer role, write scope). Hand wiring notes over in your files.'
-const IDS_RULE = `Event ids are the ones in ${TIMELINE}; use them unchanged in the timing list, the frame script, spec.json and the cue cards (rig-pipeline §5). Never invent asset ids or paths.`
+const IDS_RULE = `Event ids are the ones in ${TIMELINE}; use them unchanged in the timing list, the frame script, spec.json and the cue cards (rig-pipeline §5). One marker list: where animation, VFX and sound meet, a retime is a contract change to all of them in the same turn (orchestration/references/briefs-and-handoffs.md §3). Never invent asset ids or paths.`
+const RETIME_RULE = 'Your timing list is the blocking markers VFX and sound key to: a retime is re-sent in this same hand-back (the next timing-list revision written, every moved event id in moved_events or the change table), never in a later message.'
+const CLOSED_DOORS = `the options not picked at G1 (closed doors in ${DIR}/decisions.md; each returns only on its "may return only if" condition in ${DIR}/direction.md)`
 const NO_IMAGES_RULE = 'Do not generate images with ChatGPT in this step: the built-in browser serves one agent at a time.'
 const NO_REF_RULE = 'No approved reference image path in refs means no visual build: return blocked and name the image you need (AGENTS.md §3.5, lead decision LD2).'
 const CHECK_BUDGET = 'Check budget (owner J005-D8): numbers for every case (clip_metrics.py, counters, Output lines); stills of the game camera at the key frames (wind-up, peak, tail) plus any frame where a number fails. Set captures_made and captures_looked_at.'
@@ -209,9 +229,17 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, effect: EFFECT, newLook: NEW_LOOK, animated: ANIMATED, wiring: WIRE.type, steps: [], images_pending: [], lessons: [] }
+// Every gate packet carries the could-not-check list and the owner-confirmed lines (job-types.md cross-type rules).
+const OWNER_LINES = ['feel at normal speed (stills and logs cannot show it)',
+  'two listens: the key event alone, then the full mix, each on a phone speaker and on headphones (Studio MCP records no sound; sync is judged from the Output log)']
+const SKIPPED = STAGE === 'build' || STAGE === 'repair'
+  ? (TRUTH.length ? [] : ['qa-lead protected acceptance: risks names no gameplay-truth risk']).concat(EVENT ? [] : ['live-ops event review: risks has no event'])
+  : []
+const results = { job: JOB, stage: STAGE, size: SIZE, effect: EFFECT, newLook: NEW_LOOK, animated: ANIMATED, risks: RISKS, wiring: WIRE.type, steps: [], images_pending: [], lessons: [],
+  could_not_check: [], owner_confirmed: OWNER_LINES.slice(), skipped_slots: SKIPPED }
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
+  if (x && Array.isArray(x.checks)) x.checks.filter(c => c && c.result === 'not verified').forEach(c => results.could_not_check.push(`${step}: ${c.id}: ${c.evidence}`))
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/
   return x
@@ -232,11 +260,12 @@ function ownsOf(name, pass) {
   return ['your own output folder for this job']
 }
 const WIRE_OWNS = ['the wiring files the job card names for this effect (trigger, effect player call, spec and cue loading) and their tests; if the job card names none, only new files in the effects folder the game profile names, plus tests',
+  'the Studio-only test hook scripts and the test project file that maps them (engineering-craft/references/presentation.md §9)',
   `test place content in studio ${STUDIO} for the capture setup`, SETUP]
 
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
-  const vfxFocus = 'the frame script idea at the game camera (6-10 moments in ms with screen %, shapes, colours, brightness, compared with 1-3 pro frame scripts of the same type), importance 1-10 per viewer (player, ally, threatened), context and technique per part (vfx-design §3), shape language, flash count, camera channels allowed, and the crafts that join'
+  const vfxFocus = 'the frame script idea at the game camera (6-10 moments in ms with screen %, shapes, colours, brightness, compared with 1-3 pro frame scripts of the same type), importance 1-10 per viewer (player, ally, threatened), context and technique per part (vfx-design §3), shape language, flash count, camera channels allowed, and the crafts that join' + (NEW_LOOK ? '' : '; say whether the effect adds a colour role or a shape-code entry to the art bible (adds_colour_role, adds_shape_code): the art-director then consults')
   const leads = [
     { r: ROLE.design, focus: 'the gameplay event: what triggers it and what it confirms, its timing window in seconds read from config (telegraph lead, hit or confirm frame, recovery, total gameplay length; a value config does not hold is a PROPOSAL marked as one), how often it plays and how many can be on screen at once, who sees it, and what must stay readable during it (threats and enemy telegraphs, other players, HUD numbers, the next action)', skills: ['game-design'] },
     { r: ROLE.vfx, focus: vfxFocus + (NEW_LOOK ? '; write the frame script in words and numbers only: the art-director makes the pictures for this new look' : '; show 2 approaches as key-frame sheets through reference-images (vfx family), checked against the art bible'), skills: NEW_LOOK ? ['vfx-design'] : ['vfx-design', 'reference-images'] },
@@ -257,11 +286,27 @@ async function direction() {
     owns: [`${DIR}/direction/proposal-${L.r.type}.md`].concat(L.r === imageMaker ? [`${DIR}/direction/image-prompts.md`, 'content/art/refs/ (through tools/art/art_refs.py)'] : []),
     deliver: `${DIR}/direction/proposal-${L.r.type}.md: intended player experience, options (pictures where you make them), non-negotiables with reasons, uncertain assumptions, known limits`,
     checks: ['the proposal file exists and names at least one non-negotiable and one uncertain assumption', 'every picture listed in options exists on disk, or images.state is pending and the prompts file lists it', 'every number has its source (config key, reference, study) or is marked PROPOSAL'],
-  }, S_PROPOSAL, 'Proposals')))
+  }, L.r === ROLE.vfx ? S_VFX_PROPOSAL : S_PROPOSAL, 'Proposals')))
   props.forEach((p, i) => keep(`D1 ${leads[i].r.type}`, p))
   if (missing(props).length) return Object.assign(results, { status: 'failed', outcome: 'a direction proposal is missing; rerun the stage' })
+  // Recipe §6: the art-director leads for a new look; inside the style it consults (and signs) only when the effect adds a colour role or a shape-code entry.
+  const vfxProp = props[leads.findIndex(L => L.r === ROLE.vfx)]
+  const adds = vfxProp ? [vfxProp.adds_colour_role ? 'a colour role' : '', vfxProp.adds_shape_code ? 'a shape-code entry' : ''].filter(Boolean) : []
+  const CONSULT = !NEW_LOOK && adds.length > 0
+  results.art_director = NEW_LOOK ? 'direction lead (new look)' : CONSULT ? `consult and signature (adds ${adds.join(' and ')})` : 'not in direction (no new look, colour role or shape-code entry)'
 
   phase('Exchange')
+  const consult = CONSULT ? () => call(ROLE.art, {
+    id: 'D2-consult-art-director', task: `art bible consult for effect: ${EFFECT}`,
+    intent: `Direction stage, consult. The vfx-designer's proposal adds ${adds.join(' and ')} to the art bible. Judge only that addition against the art bible (locks, colour roles, reserved colours, shape code): fits, fits with a change (name it), or an owner question. You sign the direction sheet after the synthesis.`,
+    skills: ['art-direction'],
+    inputs: [`${DIR}/direction/proposal-vfx-designer.md`],
+    refs: ['knowledge/design/art-bible.md   # take: colour roles, reserved colours, shape code'],
+    rules: [NO_IMAGES_RULE],
+    owns: [`${DIR}/exchange/consult-art-director.md`],
+    deliver: `${DIR}/exchange/consult-art-director.md in the templates/jobs/exchange-note.md format`,
+    checks: ['every added colour role or shape-code entry has a verdict with its art-bible line'],
+  }, S_EXCHANGE, 'Exchange') : null
   const ex = await parallel(leads.map(L => () => call(L.r, {
     id: `D2-${L.r.type}`, task: `effect direction exchange: ${EFFECT}`,
     intent: 'Direction stage, one exchange. Read every other lead\'s proposal and list only the conflicts that would change production (for example a frame-script peak outside the gameplay window, a sound job that fights the picture, a look that hides what must stay readable), and evidence that is missing. Agreement needs no entry. Do not rewrite your proposal.',
@@ -270,24 +315,26 @@ async function direction() {
     owns: [`${DIR}/exchange/r1-${L.r.type}.md`],
     deliver: `${DIR}/exchange/r1-${L.r.type}.md in the templates/jobs/exchange-note.md format`,
     checks: ['each conflict names what breaks, with evidence, and the decision owner or the test that settles it (rules/company.md §3)'],
-  }, S_EXCHANGE, 'Exchange')))
-  ex.forEach((x, i) => keep(`D2 ${leads[i].r.type}`, x))
+  }, S_EXCHANGE, 'Exchange')).concat(consult ? [consult] : []))
+  ex.forEach((x, i) => keep(i < leads.length ? `D2 ${leads[i].r.type}` : 'D2 consult art-director', x))
+  if (CONSULT && !ok(ex[leads.length])) return Object.assign(results, { status: 'failed', outcome: 'the art-director consult did not finish (its status is in steps); rerun the stage' })
+  const consultFile = CONSULT ? [`${DIR}/exchange/consult-art-director.md`] : []
 
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.vfx, {
     id: 'D3-synthesis', task: `effect direction sheet: ${EFFECT}`,
-    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the ${leads.length} proposals and the exchange notes: the target experience, the gameplay event and its window (the game-designer's, with sources), the frame script idea and importance, the sound's job, 2-3 options for the owner shown as pictures (${NEW_LOOK ? 'the art-director\'s reference images' : 'your key-frame sheets'}), one recommendation with its trade-off in player terms, non-negotiables, known limits, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Never invent the owner's taste to break a tie: a taste tie becomes a G1 question.`,
+    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the ${leads.length} proposals and the exchange notes: the target experience, the gameplay event and its window (the game-designer's, with sources), the frame script idea and importance, the sound's job, 2-3 options for the owner shown as pictures (${NEW_LOOK ? 'the art-director\'s reference images' : 'your key-frame sheets'}), one recommendation with its trade-off in player terms, non-negotiables, known limits, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Never invent the owner's taste to break a tie: a taste tie becomes a G1 question. Gates close doors: give every option its "may return only if" condition; the options the owner does not pick at G1 become closed doors with it, and later briefs carry them in avoid. List what nobody could check yet as checks marked not verified (the G1 could-not-check list).${CONSULT ? ' Take the art-director\'s consult verdicts on the colour role or shape-code entry.' : ''}`,
     skills: ['vfx-design'],
-    inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
+    inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)).concat(consultFile),
     refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1'],
     rules: [NO_IMAGES_RULE + ' Use the pictures the proposals already made.', TRUTH_RULE, PROPOSAL_RULE, NO_CODE_RULE],
     owns: [`${DIR}/direction.md`],
     deliver: `${DIR}/direction.md (revision 1)`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 options, each with pictures on disk or rows in a pending prompts file', 'the gameplay window is the game-designer\'s, with its config source or marked PROPOSAL'],
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 options, each with pictures on disk or rows in a pending prompts file', 'the gameplay window is the game-designer\'s, with its config source or marked PROPOSAL', 'every option names its "may return only if" condition'],
   }, S_SYNTHESIS, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, { status: 'failed', outcome: 'direction sheet not written' })
 
-  const signers = leads.map(L => L.r).filter(r => r !== ROLE.vfx)
+  const signers = leads.map(L => L.r).filter(r => r !== ROLE.vfx).concat(CONSULT ? [ROLE.art] : [])
   let signs = await parallel(signers.map(r => () => call(r, {
     id: `D3-sign-${r.type}`, task: `sign effect direction: ${EFFECT}`,
     intent: 'Direction stage, signature. Read the direction sheet. Where pictures are still pending (prompt rows only), judge the prompt rows against the art bible and write in your sign file that the look is judged again on the images in the gate packet. Sign the part inside your authority, or name the one incompatibility that stops you, with evidence. A preference is not an incompatibility.',
@@ -314,8 +361,10 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: `Direction sheet ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner's yes and records the approved image paths for args.images; then shows the options as pictures, the recommendation and usage, records the owner's words, then calls stage ${SIZE === 'L' ? 'proof (L)' : 'build (M: the proof runs inside build and is shown at G3)'}.`,
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions } : null,
+    outcome: `Direction sheet ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner's yes and records the approved image paths for args.images; then shows the options as pictures, the recommendation and usage, records the owner's words and the options not picked as closed doors with their "may return only if" conditions in decisions.md, then calls stage ${SIZE === 'L' ? 'proof (L)' : 'build (M: the proof runs inside build and is shown at G3)'}.`,
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions,
+      could_not_check: results.could_not_check } : null,
+    owner_confirmed: OWNER_LINES.map(l => `${l}: nothing plays at G1; the owner confirms it on the first playable (${SIZE === 'L' ? 'G2' : 'G3'})`),
   })
 }
 
@@ -339,6 +388,7 @@ async function wire(tag, ph, pass, rev, items) {
       ? 'Proof stage wiring. Put the first-pass effect into the test place so it plays from spec.json with the temporary sound, at the timeline event times, started the way the game will start it. Temporary is right: the goal is one honest capture, not final code.'
       : 'Build stage wiring. Wire the effect as data: the player loads spec.json and the cue cards\' Roblox objects, and plays every layer and cue on its timeline event. Failing case first for any logic you add.')
       + ` Then prepare the capture setup in ${SETUP}: a trigger the studio-operator can fire, the game camera, and the busy scene the job card names (if it names none: the game profile's test place with the usual on-screen clutter for this event: other players' effects, enemies, HUD). Every play prints one Output line per event id, VFX layer start and sound cue start, on one clock, so sync can be checked from the log.`
+      + (/-sync$/.test(tag) ? ' Keep the test hooks working.' : ` Before any partner's first capture, deliver the Studio-only test hooks and the debug log (engineering-craft/references/presentation.md §9; hook names: testing/references/player-facing.md §3): \`Rate\` (fires the effect at a rate and logs the live copies), \`Reject\` (the server rejects the request), \`DebugShape\` (a see-through part of the server's hit shape, from the same data row as the effect). A hook with nothing to act on (no server request, no hit shape) is marked not needed in coverage, with the reason.`)
       + (fixes ? ` Also fix the items in the findings field in a new revision; keep the protected list in ${DIR}/evidence.md passing.` : '')
       + (/-sync$/.test(tag) ? '\nRepairs changed the data (spec, cue cards, clip or timeline): sync the changed data into the place; change code only where the data change needs it.' : ''),
     findings: items || [],
@@ -354,16 +404,30 @@ async function wire(tag, ph, pass, rev, items) {
         : 'If the wiring adds or changes a client-callable request, load networking-security and validate every client call (AGENTS.md §2).',
       'Everything the effect spawns is cleaned up after its tail; live copies are capped as spec.json says.'],
     deliver: `code, tests, a change manifest, and ${SETUP}`,
-    checks: ['the gate passes (python tools/verify.py or the game\'s gate)', 'one test play in Studio prints an Output line for every event id in the timeline (MCP-verified)', 'no instance the effect spawned remains 2 s after its tail (count before and after, MCP-verified)'],
+    checks: ['the gate passes (python tools/verify.py or the game\'s gate)', 'one test play in Studio prints an Output line for every event id in the timeline (MCP-verified)', 'no instance the effect spawned remains 2 s after its tail (count before and after, MCP-verified)',
+      'each delivered hook (Rate, Reject, DebugShape) acts once in Studio and its log line prints (MCP-verified)'],
   }, S_HANDBACK, ph))
   if (x) lastWire = x
   return x
 }
 
+// Named review captures (job-types.md "Named review captures") the reviewers of this job need, from the risks.
+function namedCaptures(proofPass) {
+  return [].concat(RISKS.includes('danger-area') ? ['hit-shape overlay (hook DebugShape at warning, contact and end)'] : [])
+    .concat(proofPass ? [] : ['two-client (the busiest expected moment, acting or threatened player and a bystander)'])
+    .concat(!proofPass && RISKS.includes('server-result') ? ['rejected request (hook Reject: no success layer plays)'] : [])
+    .concat(!proofPass && EVENT ? ['the rows of the event capture set that apply to this effect (live-ops-craft/references/event-review.md §2)'] : [])
+}
 function capture(tag, ph, items) {
+  const proofPass = tag.indexOf('proof') === 0
+  const named = namedCaptures(proofPass)
   return call(ROLE.op, {
     id: `CAP-${tag}`, task: `record effect capture: ${EFFECT}`, studioWrite: true,
-    intent: `Record the candidate as the reviewers will judge it, following ${SETUP}: (1) the game camera in the busy scene, with the ${tag.indexOf('proof') === 0 ? 'temporary' : 'final'} sound, at the narrowest phone aspect and at desktop; (2) the same trigger in the dark test place with a fixed camera at 30 fps, frames named f###_<ms>ms.jpg for tools/vfx/clip_metrics.py; (3) the reduced-flash or reduced-motion variant if spec.json has one; (4) the Output lines of every play (event id, VFX layer start, sound cue start). Write capture-log.md: what you captured, studio_id, the git short hash and the spec.json, cue-card and timeline revisions loaded. If the Studio MCP cannot record audio, say so: sound sync is then judged from the Output log and labelled so.`
+    intent: (proofPass
+      ? `Record the blocking pass as the reviewers will judge it, following ${SETUP}: (1) at most 4 key stills at the game camera in the busy scene at the narrowest phone aspect: build, peak, result, tail; (2) the same trigger in the dark test place with a fixed camera at 30 fps, frames named f###_<ms>ms.jpg for tools/vfx/clip_metrics.py and tools/vfx/flash_count.py (clip numbers for every case); (3) the Output lines of every play with the temporary sound's cue times (event id, VFX layer start, sound cue start).`
+      : `Record the candidate as the reviewers will judge it, following ${SETUP}: (1) the game camera in the busy scene, with the final sound, at the narrowest phone aspect and at desktop; (2) the same trigger in the dark test place with a fixed camera at 30 fps, frames named f###_<ms>ms.jpg for tools/vfx/clip_metrics.py and tools/vfx/flash_count.py; (3) the reduced-flash or reduced-motion variant if spec.json has one; (4) the Output lines of every play (event id, VFX layer start, sound cue start).`)
+      + (named.length ? ` Also the named captures (orchestration/references/job-types.md "Named review captures"): ${named.join('; ')}.` : '')
+      + ' Write capture-log.md: what you captured, studio_id, the git short hash and the spec.json, cue-card and timeline revisions loaded. If the Studio MCP cannot record audio, say so: sound sync is then judged from the Output log and labelled so.'
       + (items && items.length ? ' Also cover the capture findings in the findings field.' : ''),
     findings: items || [],
     skills: ['studio-mcp'],
@@ -372,7 +436,8 @@ function capture(tag, ph, items) {
     notInScope: ['changing the place, the effect or any source', 'judging the look or the feel'],
     deliver: `${CAPS}${tag}/ (frame sets, Output log, capture-log.md)`,
     rules: [CHECK_BUDGET],
-    checks: ['a capture exists for the game camera in the busy scene at phone aspect and at desktop (MCP-verified)', 'the dark-place frame set exists and is named for clip_metrics.py', 'the Output log has a line for every event id in the timeline'],
+    checks: [proofPass ? 'at most 4 key stills (build, peak, result, tail) exist at the game camera in the busy scene (MCP-verified)' : 'a capture exists for the game camera in the busy scene at phone aspect and at desktop (MCP-verified)',
+      'the dark-place frame set exists and is named f###_<ms>ms.jpg', 'the Output log has a line for every event id in the timeline'].concat(named.length ? ['each named capture exists, or its missing hook is named'] : []),
   }, S_CAPTURE, ph)
 }
 
@@ -395,7 +460,7 @@ async function applyFixes(work, tag, pass, ph) {
       inputs: [`${DIR}/reviews/`, `${DIR}/evidence.md`, tl(rev)],
       protect: [`the protected list in ${DIR}/evidence.md`],
       owns: ownsOf(name, pass).concat([`${DIR}/evidence.md (your rows only)`]),
-      rules: [TRUTH_RULE, IDS_RULE, NO_IMAGES_RULE].concat(name === 'vfx-designer' ? [NO_CODE_RULE] : []).concat(name === 'animator' ? ['Retime only inside the game-designer\'s gameplay window; a marker is presentation, never damage authority (rig-pipeline §5). Re-import the changed clip into Studio.'] : []),
+      rules: [TRUTH_RULE, IDS_RULE, NO_IMAGES_RULE].concat(name === 'vfx-designer' ? [NO_CODE_RULE] : []).concat(name === 'animator' ? ['Retime only inside the game-designer\'s gameplay window; a marker is presentation, never damage authority (rig-pipeline §5). Re-import the changed clip into Studio.', RETIME_RULE] : []),
       deliver: 'the fixed revision and an evidence row per item',
       checks: ['each item is fixed with evidence, or answered with evidence that it is not a defect', 'timing_changed is true only when a time moved, and the hand-back names the moved event ids'],
     }, S_FIX, ph))
@@ -446,9 +511,9 @@ async function proof() {
   if (ANIMATED) {
     const timing = keep('P1 timing list', await call(ROLE.anim, {
       id: 'P1-timing', task: `effect action blocking and timing list: ${EFFECT}`,
-      intent: `Proof stage, contract step 2. Set the action's beats inside the game-designer's window: if an approved clip already exists, take its timing and do not re-animate; otherwise block the action in Blender (key poses and timing only, no polish). Write the timing list (rig-pipeline §5): event id, time in seconds with the source frame and frame rate, meaning, owner, consumers, interruption rule.`,
+      intent: `Proof stage, contract step 2. Set the action's beats inside the game-designer's window: if an approved clip already exists, take its timing and do not re-animate; otherwise block the action in Blender (key poses and timing only, no polish). Write the blocking markers as the draft timing list (rig-pipeline §5): event id, time in seconds with the source frame and frame rate, meaning, owner, consumers, interruption rule. VFX and sound key to these markers before either builds.`,
       inputs: [`${WINDOW}@rev${win.timeline_revision}`, `${DIR}/direction.md`],
-      rules: ['Never retime gameplay to fit a clip; a marker is presentation, never damage authority (rig-pipeline §5).', NO_IMAGES_RULE],
+      rules: ['Never retime gameplay to fit a clip; a marker is presentation, never damage authority (rig-pipeline §5).', RETIME_RULE, NO_IMAGES_RULE],
       owns: [ANIM],
       consumers: ['vfx-designer', 'sound-designer', WIRE.type],
       deliver: `${ANIM}timing-list.md (revision 1) and a blocking playblast from the game camera`,
@@ -478,7 +543,7 @@ async function proof() {
       id: `E-r${round}-vfx-designer`, task: `effect envelope proposal: ${EFFECT}`,
       intent: `Envelope round ${round}. For each event id on the timeline, propose the picture envelope (wind-up, peak, tail: onset, peak time and length in ms, peak screen coverage, brightest point) from your frame script, and write the sound brief: what is on screen and when (the sound-designer chooses the sounds).${round > 1 ? ' Answer the sound-designer\'s round-1 note.' : ''}`,
       skills: ['vfx-design'],
-      inputs: [tl(rev)].concat(round > 1 ? [`${DIR}/exchange/env-r1-sound-designer.md`] : []),
+      inputs: [tl(rev)].concat(MARKERS).concat(round > 1 ? [`${DIR}/exchange/env-r1-sound-designer.md`] : []),
       rules: [IDS_RULE, NO_CODE_RULE, NO_IMAGES_RULE],
       owns: [`${DIR}/exchange/env-r${round}-vfx-designer.md`, `${VFX}frame-script.md`],
       deliver: `${DIR}/exchange/env-r${round}-vfx-designer.md in the exchange-note format, against ${tl(rev)}`,
@@ -490,7 +555,7 @@ async function proof() {
       id: `E-r${round}-${p.r.type}`, task: `effect envelope response: ${EFFECT}`,
       intent: `Envelope round ${round}. ${p.ask}`,
       skills: p.r === ROLE.sound ? ['sound-design'] : undefined,
-      inputs: [tl(rev), `${DIR}/exchange/env-r${round}-vfx-designer.md`],
+      inputs: [tl(rev), `${DIR}/exchange/env-r${round}-vfx-designer.md`].concat(MARKERS),
       rules: [IDS_RULE, NO_IMAGES_RULE],
       owns: [`${DIR}/exchange/env-r${round}-${p.r.type}.md`],
       deliver: `${DIR}/exchange/env-r${round}-${p.r.type}.md in the exchange-note format, against ${tl(rev)}`,
@@ -515,21 +580,22 @@ async function proof() {
   phase('First sample')
   const first = await parallel([
     () => call(ROLE.vfx, {
-      id: 'P3-first-spec', task: `first-pass effect spec: ${EFFECT}`, visual: true,
-      intent: 'Proof stage. Build the first pass of the effect as data: frame script at the game camera, layer plan from the type recipe, spec.json with exact values, named curves and a budget block (vfx-craft §3). First pass: the big shapes, timing and brightest point must be right; polish comes after the gate. Name the one capture you need.',
+      id: 'P3-first-spec', task: `blocking pass of effect spec: ${EFFECT}`, visual: true,
+      intent: 'Proof stage: the blocking pass (vfx-design/references/review.md §I2). Build the effect as data with placeholder sprites at real sizes and timing and the real truth edge (the drawn area from the gameplay data row): frame script at the game camera, layer plan from the type recipe, spec.json with exact values, named curves and a budget block (vfx-craft §3); placeholder layers marked as such. No texture pick before the art-director\'s blocking check; polish comes after the gate. Name the one capture you need.',
       skills: ['vfx-design', 'vfx-craft'],
-      inputs: [tl(rev), WINDOW, `${DIR}/direction.md`],
+      inputs: [tl(rev), WINDOW, `${DIR}/direction.md`].concat(MARKERS),
+      avoid: [CLOSED_DOORS, 'texture picks and polish'],
       rules: [TRUTH_RULE, NO_CODE_RULE, IDS_RULE, NO_IMAGES_RULE, 'Flash safety by design: at most 2 large flashes per rolling second, never more than 3; no saturated red flashes; Bloom and colour pulses count (vfx-design §4).'],
       owns: [VFX],
       consumers: ['sound-designer', WIRE.type, 'studio-operator'],
-      deliver: `${VFX}brief.md, frame-script.md, spec.json (first pass)`,
-      checks: ['every layer peak sits on its timeline event within one frame', 'spec.json has a budget block with sources', 'the vfx-design §6 planning self-check passes'],
+      deliver: `${VFX}brief.md, frame-script.md, spec.json (blocking pass)`,
+      checks: ['every layer peak sits on its timeline event within one frame', 'spec.json has a budget block with sources', 'the drawn edge reads the gameplay data row, never a second constant', 'the vfx-design §6 planning self-check passes'],
     }, S_HANDBACK, 'First sample'),
     () => call(ROLE.sound, {
       id: 'P3-temp-sound', task: `temporary sound for effect proof: ${EFFECT}`,
-      intent: 'Proof stage. Make temporary sound on the timeline\'s event ids, keyed to the picture envelope, so the owner judges timing with sound. Temporary: rough is right, but the transient sits on the picture events.',
+      intent: `Proof stage. Make temporary sound on the timeline's event ids${ANIMATED ? ' and the animator\'s blocking markers' : ''}, keyed to the picture envelope, so the owner judges timing with sound on the first playable. Temporary: rough is right, but the transient sits on the picture events. Final sound processing waits for the locked timing-list revision.`,
       skills: ['sound-design'],
-      inputs: [tl(rev)],
+      inputs: [tl(rev)].concat(MARKERS),
       rules: [IDS_RULE, 'Never invent asset ids; a sound that must be uploaded is an owner action in questions.'],
       owns: [SND_TEMP],
       consumers: [WIRE.type],
@@ -551,6 +617,8 @@ async function proof() {
   phase('Capture')
   const cap = keep('P5 capture', await capture('proof-r0', 'Capture', []))
   if (!ok(cap)) return { status: 'failed', outcome: 'no proof capture; reviews need it' }
+  // Recipe §6 production order: the owner checks in on the first playable (blocking pass with temp sound); a workflow cannot pause, so it is an owner-confirmed line.
+  results.owner_confirmed.push(`first playable: the blocking pass with temp sound on the blocking markers (${CAPS}proof-r*/), owner check-in at ${SIZE === 'L' ? 'G2' : 'G3 (M: the proof ran inside build)'}`)
   const rv = await reviewChain('proof', 'proof', false)
   return Object.assign(rv, { timeline: tl(rev) })
 }
@@ -558,23 +626,25 @@ async function proof() {
 // ================================================================ production: lock → spec and cue cards → wiring → capture → reviews
 async function production() {
   phase('Lock')
+  let markersRev = null   // the final timing-list revision: locked with the timeline, then final sound keys to it
   if (ANIMATED) {
     const polish = keep('B1 final timing list', await call(ROLE.anim, {
       id: 'B1-polish', task: `effect action polish and final timing list: ${EFFECT}`,
       intent: `Build stage. Polish the action clip (or confirm the approved one), export it, and write the final timing list revision. Beats stay inside the game-designer's window; a beat that moves from the proof is named in moved_events so VFX and sound recheck. Roblox import happens at wiring, not now.`,
       inputs: [`${ANIM}`, WINDOW, TIMELINE],
-      rules: ['Never retime gameplay to fit a clip (rig-pipeline §5).', NO_IMAGES_RULE],
+      rules: ['Never retime gameplay to fit a clip (rig-pipeline §5).', RETIME_RULE, NO_IMAGES_RULE],
       owns: [ANIM],
       consumers: ['vfx-designer', 'sound-designer', WIRE.type],
       deliver: `${ANIM} exported clip and timing-list.md (final revision)`,
       checks: ['every timeline event has a timing-list row', 'no foot sliding or interpenetration in the game-camera playblast'],
     }, S_TIMELINE, 'Lock'))
     if (!ok(polish)) return { status: 'failed', outcome: 'final animation not finished' }
+    markersRev = polish.timeline_revision
   }
   const lock = keep('B1 lock', await call(ROLE.vfx, {
     id: 'B1-lock', task: `lock event timeline for build: ${EFFECT}`,
-    intent: `Build stage. Lock the event timeline: apply the owner's gate words, ${ANIMATED ? 'take the final timing list, ' : ''}and write the locked revision with a change table row. Every event that moved since the proof is named in moved_events with its consumers to recheck (rules/messages.md §5). A gate request that changes the gameplay window or scope is not yours to settle: return needs-decision.`,
-    inputs: [TIMELINE, WINDOW].concat(ANIMATED ? [`${ANIM}timing-list.md`] : []).concat([`${DIR}/decisions.md`]),
+    intent: `Build stage. Lock the event timeline: apply the owner's gate words, ${ANIMATED ? 'take the final timing list and name its revision as locked, ' : ''}and write the locked revision with a change table row. Every event that moved since the proof is named in moved_events with its consumers to recheck (rules/messages.md §5). A gate request that changes the gameplay window or scope is not yours to settle: return needs-decision.`,
+    inputs: [TIMELINE, WINDOW].concat(ANIMATED ? [`${ANIM}timing-list.md@rev${markersRev}`] : []).concat([`${DIR}/decisions.md`]),
     rules: [IDS_RULE, NO_CODE_RULE, NO_IMAGES_RULE],
     owns: [TIMELINE],
     consumers: ['sound-designer', WIRE.type].concat(ANIMATED ? ['animator'] : []),
@@ -583,36 +653,37 @@ async function production() {
   }, S_TIMELINE, 'Lock'))
   if (!ok(lock)) return { status: lock ? lock.status : 'failed', outcome: lock ? lock.outcome : 'timeline not locked' }
   const LOCKED = tl(lock.timeline_revision)
+  const LOCKED_MARKERS = markersRev ? `${ANIM}timing-list.md@rev${markersRev}` : ''
 
   phase('Final build')
-  const fx = await parallel([
-    () => call(ROLE.vfx, {
-      id: 'B2-spec', task: `final effect spec: ${EFFECT}`, visual: true,
-      intent: 'Build stage. Finish the effect as data against the locked timeline and the agreed envelopes: frame script, layer plan, spec.json with exact values, named curves, textures from the shared set, a budget block, the reduced-flash and reduced-motion variants, then the vfx-craft §5 self-check. Keep what passed in the proof review.',
-      skills: ['vfx-design', 'vfx-craft'],
-      inputs: [LOCKED, `${VFX}spec.json`, `${DIR}/reviews/`],
-      protect: [`the protected list in ${DIR}/evidence.md`],
-      rules: [TRUTH_RULE, NO_CODE_RULE, IDS_RULE, NO_IMAGES_RULE, 'Flash safety by design: at most 2 large flashes per rolling second, never more than 3; no saturated red flashes; Bloom and colour pulses count (vfx-design §4).'],
-      owns: [VFX],
-      consumers: ['sound-designer', WIRE.type, 'studio-operator'],
-      deliver: `${VFX}frame-script.md and spec.json (final revision)`,
-      checks: ['each layer peak sits on its timeline event within one frame', 'budget numbers with their sources', 'the vfx-craft §5 self-check passes'],
-    }, S_HANDBACK, 'Final build'),
-    () => call(ROLE.sound, {
-      id: 'B2-cues', task: `effect cue cards: ${EFFECT}`,
-      intent: 'Build stage. Design the final sounds against the locked timeline and the agreed envelopes: one filled cue card per sound event (sound-design references/cue-card.md), AI generation prompts, variants and repetition plan for how often it plays, the mix and priority plan, and the listening-test plan. Sync target on every card.',
-      skills: ['sound-design'],
-      inputs: [LOCKED, SND_TEMP, `${DIR}/reviews/`],
-      protect: [`the protected list in ${DIR}/evidence.md`],
-      rules: [IDS_RULE, 'Never invent asset ids; a sound that must be uploaded is an owner action in questions.'],
-      owns: [SND],
-      consumers: [WIRE.type],
-      deliver: `${SND} cue cards, prompts, mix plan and listening-test plan`,
-      checks: ['every sound event id has a cue card keyed to its timeline event', 'the sound-design self-check passes'],
-    }, S_HANDBACK, 'Final build'),
-  ])
-  fx.forEach((x, i) => keep(['B2 spec', 'B2 cue cards'][i], x))
-  if (!ok(fx[0]) || !ok(fx[1])) return { status: 'failed', outcome: 'spec.json or cue cards did not finish; see steps' }
+  // Recipe §6 production order: VFX textures and build → final sound processing, only on the locked timing-list revision.
+  const spec = keep('B2 spec', await call(ROLE.vfx, {
+    id: 'B2-spec', task: `final effect spec: ${EFFECT}`, visual: true,
+    intent: 'Build stage. VFX textures and build: finish the effect as data against the locked timeline and the agreed envelopes: frame script, layer plan, spec.json with exact values, named curves, textures from the shared set (picked now, after the art-director\'s blocking check), a budget block, the reduced-flash and reduced-motion variants, then the vfx-craft §5 self-check. Keep what passed in the blocking-pass review.',
+    skills: ['vfx-design', 'vfx-craft'],
+    inputs: [LOCKED, `${VFX}spec.json`, `${DIR}/reviews/`],
+    protect: [`the protected list in ${DIR}/evidence.md`],
+    avoid: [CLOSED_DOORS],
+    rules: [TRUTH_RULE, NO_CODE_RULE, IDS_RULE, NO_IMAGES_RULE, 'Flash safety by design: at most 2 large flashes per rolling second, never more than 3; no saturated red flashes; Bloom and colour pulses count (vfx-design §4).'],
+    owns: [VFX],
+    consumers: ['sound-designer', WIRE.type, 'studio-operator'],
+    deliver: `${VFX}frame-script.md and spec.json (final revision)`,
+    checks: ['each layer peak sits on its timeline event within one frame', 'budget numbers with their sources', 'the vfx-craft §5 self-check passes'],
+  }, S_HANDBACK, 'Final build'))
+  if (!ok(spec)) return { status: spec ? spec.status : 'failed', outcome: 'spec.json did not finish; see steps' }
+  const cues = keep('B2 cue cards', await call(ROLE.sound, {
+    id: 'B2-cues', task: `effect cue cards: ${EFFECT}`,
+    intent: `Build stage. Final sound processing, now that the timing-list revision is locked (${LOCKED}${LOCKED_MARKERS ? `, ${LOCKED_MARKERS}` : ''}): design the final sounds against it and the agreed envelopes: one filled cue card per sound event (sound-design references/cue-card.md), AI generation prompts, variants and repetition plan for how often it plays, the mix and priority plan, and the listening-test plan. Sync target on every card.`,
+    skills: ['sound-design'],
+    inputs: [LOCKED].concat(LOCKED_MARKERS ? [LOCKED_MARKERS] : []).concat([`${VFX}spec.json`, SND_TEMP, `${DIR}/reviews/`]),
+    protect: [`the protected list in ${DIR}/evidence.md`],
+    rules: [IDS_RULE, 'Never invent asset ids; a sound that must be uploaded is an owner action in questions.'],
+    owns: [SND],
+    consumers: [WIRE.type],
+    deliver: `${SND} cue cards, prompts, mix plan and listening-test plan`,
+    checks: ['every sound event id has a cue card keyed to its timeline event', 'the sound-design self-check passes'],
+  }, S_HANDBACK, 'Final build'))
+  if (!ok(cues)) return { status: cues ? cues.status : 'failed', outcome: 'cue cards did not finish; see steps' }
 
   phase('Wiring')
   // One Studio driver at a time: the clip imports, then the builder wires, then the studio-operator records.
@@ -630,13 +701,22 @@ async function production() {
 }
 
 // ================================================================ the review chain on one frozen candidate
-// Order (recipe §6, rules/company.md §7): scripts → maker self-review → game-designer → art-director → sound sync,
-// with code review beside the creative order (it reads the diff, not Studio). Reviewers judge captures and specs; makers fix.
+// Order (recipe §6, rules/company.md §7): scripts → maker self-review → game-designer → art-director → sound sync
+// → (risk: event) live-ops event review, with code review and (truth risks, final candidate) the qa-lead's protected acceptance
+// beside the creative order. Reviewers judge captures and specs; makers fix.
 async function reviewChain(label, pass, withCode) {
   phase('Review chain')
+  const proofPass = label === 'proof'
+  const QA = !proofPass && TRUTH.length > 0      // recipe §6: qa-lead protected acceptance when a gameplay-truth risk is named
+  const LIVEOPS = !proofPass && EVENT            // recipe "Not recipes": the live-ops review slot after integration, before G3
+  const designOn = proofPass ? '' : '; judge on the named captures: ' + ['the two-client capture of the busiest moment']
+    .concat(RISKS.includes('danger-area') ? ['the hit-shape overlay'] : []).concat(RISKS.includes('server-result') ? ['the rejected request (no success layer plays)'] : []).join(', ')
   const creative = [
-    { r: ROLE.design, skills: ['game-design'], q: 'whether the effect hides information players need (threats and enemy telegraphs, other players, HUD numbers, the next action), whether its drawn area matches the gameplay truth from config (edge within 5 percent), and whether it fits the timing window and stays readable at the real rate and count on screen' },
-    { r: ROLE.art, skills: ['art-direction', 'art-review'], q: 'whether the brightest point sits where the eye must go, the value ladder (pure white and pure black saved for the top priority; measure with tools/art/look_check.py value), one focus, one primary shape, one hue and one accent, and the match with the art bible' },
+    { r: ROLE.design, skills: ['game-design'], q: 'whether the effect hides information players need (threats and enemy telegraphs, other players, HUD numbers, the next action), whether its drawn area matches the gameplay truth from config (edge within 5 percent), and whether it fits the timing window and stays readable at the real rate and count on screen' + designOn },
+    proofPass
+      ? { r: ROLE.art, skills: ['art-direction', 'art-review'], q: 'the blocking check, before any texture pick: the grey and black-fill stills of the blocking pass (vfx-design/references/review.md §I3; make them from the key stills with tools/art/look_check.py value and silhouette): the primary holds the top luminance at the focus, one primary shape in black-fill at the phone viewport, rank order and size steps' }
+      : { r: ROLE.art, skills: ['art-direction', 'art-review'], extra: [`${DIR}/reviews/   # take: your blocking check of the proof (proof-r*-art-director.md)`],
+        q: 'on the coloured build, after your blocking check: whether the brightest point sits where the eye must go, the value ladder (pure white and pure black saved for the top priority; measure with tools/art/look_check.py value), one focus, one primary shape, one hue and one accent, and the match with the art bible' },
     { r: ROLE.sound, skills: ['sound-design'], q: 'sync of every cue to its picture event on the capture (sound onset 0 to +40 ms after the first lit frame of its event, never more than one frame, 16.7 ms at 60 fps, early: vfx-design juice-repetition-sync JU-29), and the mix on phone speaker and headphones where a recording exists' },
   ]
   for (let round = 0; round <= 2; round++) {
@@ -646,14 +726,14 @@ async function reviewChain(label, pass, withCode) {
     // Scripts first: the measurable checks, in Studio (one writer).
     const scripts = keep(`RV ${tag} scripts`, await call(ROLE.op, {
       id: `RV-${tag}-scripts`, task: `measurable checks on effect capture: ${EFFECT}`, studioWrite: true,
-      intent: reviewIntent('the measurable checks: python tools/vfx/clip_metrics.py on the dark-place frames (onset, peak, visible time, coverage); flash safety counted from the per-frame bright coverage; budget numbers (live emitters, particles, beams, lights and parts during the effect, from Studio counters) against the budget block in spec.json and the game profile\'s budgets; the gate. Numbers for every case; images only for a failing number'),
+      intent: reviewIntent('the measurable checks: python tools/vfx/clip_metrics.py on the dark-place frames (onset, peak, visible time, coverage); flash safety with python tools/vfx/flash_count.py on the same frames (the studio\'s one flash counter); budget numbers (live emitters, particles, beams, lights and parts during the effect, from Studio counters) against the budget block in spec.json and the game profile\'s budgets; the gate. Numbers for every case; images only for a failing number'),
       skills: ['studio-mcp'],
       inputs: [CAP, `${VFX}spec.json`, 'knowledge/design/game-profile.md'],
-      fixed: ['flash_limit: at most 2 large flashes per rolling second by design, never more than 3; no saturated red flash; Bloom and colour pulses count (vfx-design §4). Name the large-flash threshold you used and its source.',
+      fixed: ['flash_limit: at most 2 large flashes per rolling second by design, never more than 3; no saturated red flash; Bloom and colour pulses count (vfx-design §4). Quote flash_count.py\'s effects count and its thresholds.',
         'budgets: the spec.json budget block and the game profile; a missing budget is a finding for the vfx-designer, never a pass.'],
       owns: [`${DIR}/reviews/${tag}-scripts.md`, `${CAP}metrics.json (clip_metrics.py output)`],
       deliver: `${DIR}/reviews/${tag}-scripts.md (templates/jobs/review.md) with the numbers`,
-      checks: ['every number names its tool output or Studio counter', 'the flash count shows its arithmetic from metrics.json', 'the gate result is quoted'],
+      checks: ['every number names its tool output or Studio counter', 'the flash count quotes the flash_count.py output', 'the gate result is quoted'],
       rules: ['Light checks: numbers for every case; images only for a failing number plus a few key frames (owner J005-D8).'],
     }, S_REVIEW, 'Review chain'))
     // Maker self-review at the real camera, and the freeze of the candidate (rules/company.md §7, §4 step 8).
@@ -671,9 +751,9 @@ async function reviewChain(label, pass, withCode) {
       id: `RV-${tag}-${o.r.type}`, task: `review effect ${label}: ${EFFECT}`, visual: o.r === ROLE.art,
       intent: reviewIntent(o.q),
       skills: o.skills,
-      inputs: [CAP, `${DIR}/evidence.md`, TIMELINE, `${VFX}spec.json`, `${DIR}/direction.md`, `${DIR}/reviews/${tag}-scripts.md`],
-      owns: [`${DIR}/reviews/${tag}-${o.r.type}.md`], deliver: `${DIR}/reviews/${tag}-${o.r.type}.md (templates/jobs/review.md)`,
-      checks: ['every finding has a location (capture and frame), evidence and the smallest fix', 'keep lists what works'],
+      inputs: [CAP, `${DIR}/evidence.md`, TIMELINE, `${VFX}spec.json`, `${DIR}/direction.md`, `${DIR}/reviews/${tag}-scripts.md`].concat(o.extra || []),
+      owns: [`${DIR}/reviews/${tag}-${o.r.type}.md`], deliver: `${DIR}/reviews/${tag}-${o.r.type}.md (${o.form || 'templates/jobs/review.md'})`,
+      checks: (o.checks || []).concat(['every finding has a location (capture and frame), evidence and the smallest fix', 'keep lists what works']),
       rules: ['Light checks: numbers for every case; images only for a failing number plus a few key frames (owner J005-D8).', 'Visual notes are pictures: a paint-over or a marked-up frame (rules/company.md §7).', 'Judge the captures; do not open Studio. A missing capture is a finding for the studio-operator.', NO_IMAGES_RULE, TRUTH_RULE, POLICY_RULE],
     }, S_REVIEW, 'Review chain')
     // Code review reads the wiring diff beside the creative order; the creative order runs one after another.
@@ -686,10 +766,26 @@ async function reviewChain(label, pass, withCode) {
       checks: ['every finding has file:line, the input or sequence, and the wrong outcome for players', 'a clean review says so plainly'],
       rules: ['If the wiring adds a client-callable request, load networking-security.', TRUTH_RULE],
     }, S_REVIEW, 'Review chain') : Promise.resolve(null)
+    // The qa-lead's protected acceptance runs beside the creative order (the creative reviewers stay out of Studio).
+    const qaP = QA ? call(ROLE.qa, {
+      id: `RV-${tag}-qa-lead`, task: `protected acceptance of effect: ${EFFECT}`, studioWrite: true,
+      intent: `Protected acceptance on the frozen candidate (revision in ${DIR}/evidence.md) for the gameplay-truth risks this job names: ${TRUTH.map(r => PF_ROWS[r]).join('; ')} (testing/references/player-facing.md §2), with the builder's test hooks (§3). You write and run the protected tests; you never fix product code. Name the maker role for each FAIL (${MAKERS.join(', ')}).`,
+      skills: ['testing', 'studio-mcp'],
+      inputs: [CAP, `${DIR}/evidence.md`, `${VFX}spec.json`, SETUP, TIMELINE],
+      owns: [`${DIR}/reviews/${tag}-qa-lead.md`, 'the protected acceptance tests for this effect, in the test folder the game profile names'],
+      deliver: `${DIR}/reviews/${tag}-qa-lead.md (templates/jobs/review.md) with a verdict per row`,
+      checks: ['every named row has PASS, FAIL, BLOCKED or NOT RUN bound to the candidate revision', 'every FAIL names its log lines or probe numbers and a maker role'],
+      rules: [CHECK_BUDGET, TRUTH_RULE, POLICY_RULE],
+    }, S_REVIEW, 'Review chain') : Promise.resolve(null)
     const crea = []
     for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o)))
+    // (risk: event) after the creative order and before G3: the live-ops event review on its capture set.
+    const live = LIVEOPS ? keep(`RV ${tag} live-ops-designer`, await reviewOne({ r: ROLE.liveops, skills: ['live-ops-craft'], form: 'live-ops-craft/references/event-review.md §4',
+      q: 'the event review E-01 to E-19 (live-ops-craft/references/event-review.md §3) on the rows of its capture set (§2) that this effect touches; a line whose capture is missing is not verified and goes on the could-not-check list',
+      checks: ['every line E-01 to E-19 has a status: gate-verified, MCP-verified, owner-confirmed, not verified, or n/a with the reason'] })) : null
     const codeR = withCode ? keep(`RV ${tag} reviewer`, await codeP) : null
-    const all = [scripts, self].concat(crea).concat(withCode ? [codeR] : [])
+    const qaR = QA ? keep(`RV ${tag} qa-lead`, await qaP) : null
+    const all = [scripts, self].concat(crea).concat(LIVEOPS ? [live] : []).concat(withCode ? [codeR] : []).concat(QA ? [qaR] : [])
     if (missing(all).length) return { status: 'failed', outcome: `review round ${round} (${label}): a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))

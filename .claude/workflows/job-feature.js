@@ -1,23 +1,23 @@
 export const meta = {
   name: 'job-feature',
   description: 'Run one stage (direction, proof, build or repair) of a gameplay feature job led by the game-designer with the architect as technical lead; owner gates sit between calls.',
-  whenToUse: 'An M or L gameplay feature job (a system players use: combat move, shop logic, quest, upgrade) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), money and numbers (true or false); studioId for proof, build and repair; change for repair; images (owner-approved UI target image and VFX key frames from G2) for build and repair when the feature has visible UI or effects. Optional: feature, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L gameplay feature job (a system players use: combat move, shop logic, quest, upgrade) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), money and numbers (true or false), risks (a list, [] for none, of: saves, remotes, trades, paid-random, server-result, rewards, event); studioId for proof, build and repair; change for repair; images (owner-approved UI target image and VFX key frames from G2) for build and repair when the feature has visible UI or effects. Optional: feature, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
-    { title: 'Proposals', detail: 'game-designer, architect (and progression-designer for numbers) write independent proposals' },
+    { title: 'Proposals', detail: 'game-designer (feature spec with the feedback stack), architect (and progression-designer for numbers) write independent proposals' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
-    { title: 'Direction sheet', detail: 'game-designer synthesises; the other leads sign' },
-    { title: 'Contract', detail: 'feature contract: behaviours, states, events, tuning keys, acceptance checks; crafts state needs' },
-    { title: 'Prototype', detail: 'feature-builder builds a minimal grey-box in Studio beside the UI and VFX target images; studio-operator plays it' },
+    { title: 'Direction sheet', detail: 'game-designer synthesises; animator and sound-designer consult on the draft; the other leads sign' },
+    { title: 'Contract', detail: 'feature contract with the feedback stack, the tier table (rewards) and the qa-lead trace table; crafts state needs; architect merges the presentation contract' },
+    { title: 'Prototype', detail: 'feature-builder builds the skeleton with named stand-ins and temp cues beside the UI and VFX target images; studio-operator plays it' },
     { title: 'Proof review', detail: 'game-designer judges the play, then the architect the risky claims; repairs by makers' },
-    { title: 'Plan', detail: 'architect plan and builder brief, then qa-lead protected acceptance tests' },
-    { title: 'Production', detail: 'feature-builder beside progression tables, UI, VFX and sound against the event names' },
-    { title: 'Integration', detail: 'feature-builder wires the frozen candidate; gate PASS' },
-    { title: 'Review chain', detail: 'reviewer, then qa-lead and performance-engineer in Studio, beside game-designer play and art-director; repairs by makers' },
+    { title: 'Plan', detail: 'architect plan with the presentation contract, reviewer plan check (money or code risks), then qa-lead protected acceptance tests' },
+    { title: 'Production', detail: 'feature-builder skeleton, then UI, VFX and sound against the event ids beside the progression tables' },
+    { title: 'Integration', detail: 'feature-builder delivers test hooks and debug log, wires, runs the worst-case pass and freezes the candidate; gate PASS' },
+    { title: 'Review chain', detail: 'reviewer, architect, qa-lead and performance-engineer beside game-designer play (named captures), art-director and live-ops (event); repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected roles' },
   ],
 }
 
-// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T06, owner approval J016-D5: built the same way as job-cutscene); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T06, owner approval J016-D5: built the same way as job-cutscene); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §5. Rules: rules/company.md, rules/messages.md, rules/anti-overengineering.md rule 20.
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
 // One stage per call. Never start a stage before the owner's gate answer for the previous one.
@@ -39,6 +39,17 @@ const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
 const DIR = `knowledge/jobs/${JOB}`
 const CONTRACT = `${DIR}/contract-${FEATURE}.md`
+const PRESENT = `${DIR}/architect/presentation-contract.md`   // the architect's merge of the crafts' needs (architecture/references/presentation-contract.md)
+const TIERS = `${DIR}/progression/tier-table.md`              // risk rewards: the reward and celebration tier table
+const TRACE = `${DIR}/qa/trace-table.md`                      // the qa-lead's trace table, written at contract time
+// The job card's Risks row (README args table; job-types.md "Risk-gated slots"). money stays its own arg.
+const RISK_TOKENS = ['saves', 'remotes', 'trades', 'paid-random', 'server-result', 'rewards', 'event']
+const RISKS = Array.isArray(A.risks) ? A.risks : null
+const has = t => !!RISKS && RISKS.includes(t)
+const PLAN_CHECK = MONEY || ['saves', 'remotes', 'trades', 'paid-random'].some(has)   // reviewer plan check before code
+const REJECTED = MONEY || has('server-result')   // the game-designer judges a rejected-request capture
+// The game-designer's play captures (job-types.md §5 Review order; names from "Named review captures").
+const NAMED = (REJECTED ? ['rejected request'] : []).concat(['slow confirmation', 'two-client (acting player and a bystander)', 'grayscale, sound off, reduced motion', 'the real rate and a burst', 'lowest graphics'])
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair}', got: A }
@@ -51,6 +62,11 @@ if (typeof A.numbers !== 'boolean') lacking.push('numbers: true or false (number
 if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the prototype and the build run in Studio, one Studio driver at a time (rules/company.md §9)')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
+if (!RISKS) lacking.push(`risks: a list ([] = none) of the job card's Risks row, from ${RISK_TOKENS.join(', ')} (orchestration/references/job-types.md risk-gated slots)`)
+else {
+  const unknown = RISKS.filter(t => !RISK_TOKENS.includes(t))
+  if (unknown.length) lacking.push(`risks: unknown token ${unknown.map(t => JSON.stringify(t)).join(', ')}; job-feature accepts ${RISK_TOKENS.join(', ')} (money is its own arg)`)
+}
 if (lacking.length) {
   return { status: 'blocked', outcome: `stage ${STAGE} needs args: ${lacking.join('; ')}. See .agents/workflows/jobs/README.md.`, required: lacking, got: A }
 }
@@ -70,6 +86,8 @@ const ROLE = {
   vfx: { type: 'vfx-designer', model: 'opus', effort: 'high' },
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
   art: { type: 'art-director', model: 'opus', effort: 'high' },
+  anim: { type: 'animator', model: 'opus', effort: 'high' },             // consulted only: timings and markers, no clips in this job
+  liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },   // risk event: the event review before G3
 }
 
 // ---------------------------------------------------------------- schemas (rules/messages.md §3; evidence before status)
@@ -108,15 +126,18 @@ const ITEM = { type: 'object', additionalProperties: false, required: ['about', 
 const FINDING = { type: 'object', additionalProperties: false, required: ['id', 'class', 'maker_role', 'where', 'expected', 'observed', 'evidence', 'smallest_fix'],
   properties: { id: STR, class: { type: 'string', enum: ['blocking', 'recommendation', 'new request'] }, maker_role: STR, where: STR, expected: STR, observed: STR, evidence: STR, smallest_fix: STR } }
 const CRAFT_OUT = { type: 'object', additionalProperties: false, required: ['role', 'why'],
-  properties: { role: { type: 'string', enum: ['ui-ux-designer', 'vfx-designer', 'sound-designer'] }, why: STR } }
+  properties: { role: { type: 'string', enum: ['ui-ux-designer', 'vfx-designer', 'sound-designer', 'animator'] }, why: STR } }
 const PERF_RISK = { type: 'string', enum: ['heavy', 'light'] }
 
 const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, risky_claims: { type: 'array', items: CLAIM }, known_limits: STRS })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
-const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR, risky_claims: { type: 'array', items: CLAIM } })
+const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR, risky_claims: { type: 'array', items: CLAIM },
+  no_timed_actions: { type: 'boolean' }, no_player_feedback: { type: 'boolean' } })
 const S_SIGN = schema({ signs: { type: 'boolean' }, incompatibility: STR })
 const S_CONTRACT = schema({ contract_revision: { type: 'integer' }, crafts_not_needed: { type: 'array', items: CRAFT_OUT }, no_visible_parts: { type: 'boolean' } })
+const S_TIERS = schema({ contract_revision: { type: 'integer' } })
+const S_PRESENT = schema({ presentation_revision: { type: 'integer' } })
 const S_PLAN = schema({ plan_revision: { type: 'integer' }, performance_risk: PERF_RISK, builder_brief: STR, acceptance_path: STR,
   crafts_not_needed: { type: 'array', items: CRAFT_OUT }, no_visible_parts: { type: 'boolean' } })
 const S_CANDIDATE = schema({ candidate: STR, gate: { type: 'string', enum: ['PASS', 'FAIL', 'NOT RUN'] } })
@@ -220,7 +241,10 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, feature: FEATURE, numbers: NUMBERS, money: MONEY, steps: [], images_pending: [], lessons: [] }
+// Risk-gated slots skipped for no risk: a line for the job card, never a silent gap (job-types.md cross-type rules).
+const SKIPPED = [[PLAN_CHECK, 'reviewer plan check (no money, saves, remotes, trades or paid-random)'], [has('rewards'), 'reward and celebration tier table (no rewards)'],
+  [REJECTED, 'rejected-request capture for the game-designer (no money or server-result)'], [has('event'), 'live-ops event review (no event)']].filter(x => !x[0]).map(x => x[1])
+const results = { job: JOB, stage: STAGE, size: SIZE, feature: FEATURE, numbers: NUMBERS, money: MONEY, risks: RISKS, skipped_for_no_risk: SKIPPED, steps: [], images_pending: [], lessons: [] }
 function pendingStop(what) {
   return { status: 'blocked', outcome: `${what}: the image batch is pending. The lead runs it with the owner's yes, adds the approved paths to args.images and calls this stage again; steps whose deliverables already match keep them, and every step after the batch builds from the approved images.`, images_pending: results.images_pending }
 }
@@ -235,10 +259,12 @@ function keep(step, x) {
 function missing(list) { return list.map((x, i) => (x && (x.status === undefined || x.status === 'done') ? null : i)).filter(i => i !== null) }
 function notDone(step, x) { return { status: x ? x.status : 'failed', outcome: `${step}: ${x ? x.outcome : 'agent returned nothing'}` } }
 
-const MAKERS = 'game-designer (spec, contract, incentives), progression-designer (numbers and tables), architect (plan, placement, approach), feature-builder (code, wiring, behaviour), qa-lead (acceptance tests), ui-ux-designer, vfx-designer, sound-designer, studio-operator (a missing or unclear capture)'
+const MAKERS = 'game-designer (spec, contract, feedback stack, incentives), progression-designer (numbers, tables, reward tiers), architect (plan, presentation contract, placement, approach), feature-builder (code, wiring, behaviour, test hooks), qa-lead (trace table, acceptance tests), animator (timing list draft), ui-ux-designer, vfx-designer, sound-designer, studio-operator (a missing or unclear capture)'
 const CODE_SKILLS = ['engineering-craft', 'testing']
 let contractRev = 0                 // set when this call writes the contract (proof stage, or build for M)
+let presRev = 0                     // set when this call merges the presentation contract (proof stage, or build for M)
 let crafts = [ROLE.ui, ROLE.vfx, ROLE.sound]
+let motion = true                   // a player action has a gameplay window or feedback motion: the animator states timings
 let visible = true
 let captureAsks = []                // findings for the studio-operator: carried into the next play session's brief
 // Where each maker writes (role files, Write scope); used by fixes and owner changes.
@@ -251,17 +277,25 @@ function ownsOf(m) {
     'ui-ux-designer': [`content/ui/${FEATURE}/`],
     'vfx-designer': [`content/vfx/${FEATURE}/`],
     'sound-designer': [`output/sound/${FEATURE}/`],
+    animator: [`${DIR}/animation/`],
   }
   return map[m] || []
 }
 function captureNote() { return captureAsks.length ? `\nThe last review found these capture gaps; close them in this session: ${JSON.stringify(captureAsks)}` : '' }
 function contractIn() { return contractRev ? `${CONTRACT}@rev${contractRev}` : `${CONTRACT}@<the revision approved at G2, named in ${DIR}/decisions.md>` }
+function presIn() { return presRev ? `${PRESENT}@rev${presRev}` : `${PRESENT}@<the revision approved at G2, named in ${DIR}/decisions.md>` }
+function tiersIn() { return has('rewards') ? [`${TIERS}   # the reward and celebration tier table: size each celebration to its tier`] : [] }
+// Gate packet lines (job-types.md cross-type rules): what no check could verify, and what only the owner can confirm.
+function couldNotCheck(list) { return list.filter(Boolean).flatMap(x => (x.checks || []).filter(c => c.result === 'not verified').map(c => `${c.id}: ${c.evidence}`)) }
+function ownerLines(what) {
+  return [`feel at normal speed on ${what}`].concat(crafts.includes(ROLE.sound) ? ['two listens: the key event alone, then the full mix, each on a phone speaker and on headphones'] : [])
+}
 
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
   const leads = [
     { r: ROLE.design, skills: ['game-design', 'preproduction'],
-      focus: 'the feature spec in player words: what the player does, feels and decides, moment by moment; the type of fun named (never just "fun"); the acceptance cases on 5 paths (success, boundary, interruption, denied action, multiplayer disagreement) with their failures (spam, disconnect, out of currency or resources, invalid target); an experience test (what players do or say if it works); 2 approaches' },
+      focus: 'the feature spec in player words: what the player does, feels and decides, moment by moment; the type of fun named (never just "fun"); the acceptance cases on 5 paths (success, boundary, interruption, denied action, multiplayer disagreement) with their failures (spam, disconnect, out of currency or resources, invalid target); an experience test (what players do or say if it works); the feedback stack per action (preproduction/references/documents.md §6); 2 approaches' },
     { r: ROLE.arch, skills: ['architecture', 'engineering-craft'],
       focus: 'the engine feature for each part (with its docs mirror page), the risky claims (engine behaviour the docs do not state, cost at peak, replication, exploit surface) and the Studio probe or prototype test that settles each, client/server placement and replication footprint, the simplest version with a rough size, where the grey-box prototype lives (paths outside production source, replaced in build) and who owns which production files' },
   ]
@@ -296,22 +330,42 @@ async function direction() {
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.design, {
     id: 'D3-synthesis', task: `feature direction sheet: ${FEATURE}`,
-    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes: the behaviour in player words (what the player does, feels, decides), 2-3 options with one recommendation and its trade-off in player terms, the risky claims and how the proof will test each, scope (in, out, later), non-negotiables, known limits, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Keep the architect\'s prototype paths and file owners in a technical section. Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.',
+    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes: the behaviour in player words (what the player does, feels, decides), 2-3 options with one recommendation and its trade-off in player terms, the risky claims and how the proof will test each, the feedback stack per action, scope (in, out, later), non-negotiables, known limits, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Options that failed a check are listed with the reason, never shown as equals; each option not picked is recorded as a closed door with "may return only if". Keep the architect\'s prototype paths and file owners in a technical section. Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question. Set no_timed_actions when no player action has a gameplay window or feedback motion, and no_player_feedback when the feature has no player feedback at all.',
     skills: ['game-design'],
     inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
     refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1; options are described in player words, with wireframes or reference images only where a picture says more'],
     owns: [`${DIR}/direction.md`],
     deliver: `${DIR}/direction.md (revision 1)`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', 'every risky claim has the test the proof runs for it', 'the player-facing part has no data structures'],
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', 'every risky claim has the test the proof runs for it', 'the player-facing part has no data structures', 'every option not picked has its reason and a "may return only if" line'],
   }, S_SYNTHESIS, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, notDone('direction sheet', syn))
+
+  // Consults read the game-designer's spec, so they come after the draft and before the signatures (not D1-independent).
+  const consults = (syn.no_timed_actions ? [] : [{ r: ROLE.anim, skills: ['animation-design'],
+    ask: 'For each player action with a gameplay window or feedback, give the frame lengths and the named markers (such as contact, release, impact) for the spec\'s timing stages, before any clip is keyed.',
+    check: 'every action with a gameplay window or feedback has frame lengths and named markers per timing stage' }])
+    .concat(syn.no_player_feedback ? [] : [{ r: ROLE.sound, skills: ['sound-design'],
+      ask: 'Read the feedback stack and return the cue list per state change, or the reason for none.',
+      check: 'every state change in the feedback stack has a cue or the reason for none' }])
+  const cons = await parallel(consults.map(c => () => call(c.r, {
+    id: `D3-consult-${c.r.type}`, task: `feature direction consult: ${FEATURE}`,
+    intent: `Direction stage, consult on the direction sheet draft. ${c.ask} A request in the sheet that your craft cannot meet at the game camera or the real rate is a conflict, with evidence.`,
+    skills: c.skills,
+    inputs: [`${DIR}/direction.md@rev${syn.revision}`, `${DIR}/direction/proposal-game-designer.md`],
+    owns: [`${DIR}/direction/consult-${c.r.type}.md`],
+    deliver: `${DIR}/direction/consult-${c.r.type}.md (exchange-note format)`,
+    checks: [c.check],
+  }, S_EXCHANGE, 'Direction sheet')))
+  cons.forEach((x, i) => keep(`D3 consult ${consults[i].r.type}`, x))
+  if (missing(cons).length) return Object.assign(results, { status: 'failed', outcome: 'a direction consult returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' })
+  const consultNotes = consults.map(c => `${DIR}/direction/consult-${c.r.type}.md`)
 
   // Each other direction lead signs its part (rules/company.md §4 step 2).
   const signers = leads.filter(L => L.r !== ROLE.design).map(L => L.r)
   const signs = await parallel(signers.map(r => () => call(r, {
     id: `D3-sign-${r.type}`, task: `sign feature direction: ${FEATURE}`,
     intent: 'Direction stage, signature. Read the direction sheet. Sign the part inside your authority, or name the one incompatibility that stops you, with evidence. A preference is not an incompatibility.',
-    inputs: [`${DIR}/direction.md@rev${syn.revision}`],
+    inputs: [`${DIR}/direction.md@rev${syn.revision}`].concat(consultNotes),
     owns: [`${DIR}/direction/sign-${r.type}.md`],
     deliver: `${DIR}/direction/sign-${r.type}.md`,
     checks: ['signs is true, or incompatibility names what breaks and the evidence'],
@@ -319,12 +373,12 @@ async function direction() {
   signs.forEach((s, i) => keep(`D3 sign ${signers[i].type}`, s))
   if (missing(signs).length) return Object.assign(results, { status: 'failed', outcome: 'a signature step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' })
   const blocked = signs.filter(s => !s.signs)
-  if (blocked.length) {
+  if (blocked.length || cons.some(c => c.conflicts.length)) {
     // The one resolution round (rules/company.md §9): the job lead revises once; what stays open goes to the owner.
     syn = keep('D3 resolution', await call(ROLE.design, {
       id: 'D3-resolution', task: `resolve feature direction incompatibilities: ${FEATURE}`,
-      intent: 'Direction stage, the one resolution round. Revise the direction sheet for the named incompatibilities. Resolve what is inside a decision owner\'s authority; record dissent; anything still open becomes a G1 question for the owner with a default. Merge every signature file into the Signatures table.',
-      inputs: [`${DIR}/direction.md@rev${syn.revision}`].concat(signers.map(r => `${DIR}/direction/sign-${r.type}.md`)),
+      intent: 'Direction stage, the one resolution round. Revise the direction sheet for the named incompatibilities and consult conflicts. Resolve what is inside a decision owner\'s authority; record dissent; anything still open becomes a G1 question for the owner with a default. Merge every signature file into the Signatures table.',
+      inputs: [`${DIR}/direction.md@rev${syn.revision}`].concat(signers.map(r => `${DIR}/direction/sign-${r.type}.md`), consultNotes),
       owns: [`${DIR}/direction.md`],
       deliver: `${DIR}/direction.md (next revision, change table row)`,
       checks: ['each incompatibility is resolved with a decision record or listed as a G1 question'],
@@ -332,8 +386,9 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: 'Direction sheet ready for the G1 packet. The lead shows the behaviour in player words, the risky claims and how the proof tests them, scope and usage, records the owner\'s words, then calls stage proof (L) or build (M).',
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, risky_claims: syn.risky_claims, questions: syn.questions } : null,
+    outcome: 'Direction sheet ready for the G1 packet. The lead shows the behaviour in player words, the risky claims and how the proof tests them, the closed doors, scope and usage, and the could-not-check list (nothing plays before G2, so no feel or listening line yet), records the owner\'s words, then calls stage proof (L) or build (M).',
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, risky_claims: syn.risky_claims, questions: syn.questions,
+      consults: consultNotes, could_not_check: couldNotCheck(props.concat(ex, [syn], cons, signs)), owner_confirmed: [] } : null,
   })
 }
 
@@ -342,56 +397,111 @@ async function proof() {
   phase('Contract')
   let plan = keep('P1 feature contract', await call(ROLE.design, {
     id: 'P1-contract', task: `feature contract: ${FEATURE}`,
-    intent: 'Proof stage. Turn the approved direction into the shared feature contract every craft builds against: the behaviours (state model: every state, entry condition, transition, timeout, interruption, end state), the state names, the events (stable names; the hooks UI, VFX and sound attach to, each with when it fires and who sees it), the tuning keys with units, allowed range and PROPOSAL values (the data lives in data files, not here), the outputs per state or event, failure handling, and the acceptance checks: you, the briefer, write them (Given / when / then on the 5 paths: success, boundary, interruption, denied action, multiplayer disagreement), never the builder. Say which of UI, VFX and sound this feature does not need, with the reason, and whether it has no visible parts at all.',
+    intent: 'Proof stage. Turn the approved direction into the shared feature contract every craft builds against: the behaviours (state model: every state, entry condition, transition, timeout, interruption, end state), the state names, the events (stable names; the hooks UI, VFX and sound attach to, each with when it fires and who sees it), the tuning keys with units, allowed range and PROPOSAL values (the data lives in data files, not here), the outputs per state or event, failure handling, the feedback stack per action with the denial reasons and their messages (filled now, before the builder\'s contract), and the acceptance checks: you, the briefer, write them (Given / when / then on the 5 paths: success, boundary, interruption, denied action, multiplayer disagreement), never the builder. Say which of the animator (no player action with a gameplay window or feedback motion), UI, VFX and sound this feature does not need, with the reason, and whether it has no visible parts at all.',
     skills: ['game-design', 'preproduction'],
-    inputs: [`${DIR}/direction.md`],
-    refs: ['templates/jobs/contract-header.md   # take: the header, owner, consumers, ids, change table', '.agents/skills/preproduction/references/documents.md §3-§4   # take: the feature-spec fields 4-13 and the tuning-table fields as the body'],
+    inputs: [`${DIR}/direction.md`, `${DIR}/direction/   # the G1 consult notes (animator timings, sound cue list) where direction.md names them`],
+    refs: ['templates/jobs/contract-header.md   # take: the header, owner, consumers, ids, change table', '.agents/skills/preproduction/references/documents.md §3-§4, §6   # take: the feature-spec fields 4-13, the tuning-table fields and the feedback stack as the body'],
     owns: [CONTRACT],
     consumers: ['architect', 'feature-builder', 'qa-lead', 'progression-designer', 'ui-ux-designer', 'vfx-designer', 'sound-designer'],
     deliver: `${CONTRACT} (revision 1)`,
-    checks: ['every event and state has one stable name used everywhere in the file', 'every acceptance check is runnable and names its expected result, including at least one failure case per path', 'every tuning key has units, a range and a PROPOSAL value or TBD with its owner'],
+    checks: ['every event and state has one stable name used everywhere in the file', 'every acceptance check is runnable and names its expected result, including at least one failure case per path', 'every tuning key has units, a range and a PROPOSAL value or TBD with its owner', 'every action has a feedback stack row set, and every denial reason its message'],
   }, S_CONTRACT, 'Contract'))
   if (!ok(plan)) return notDone('feature contract', plan)
   const out = (plan.crafts_not_needed || []).map(c => c.role)
   crafts = [ROLE.ui, ROLE.vfx, ROLE.sound].filter(r => !out.includes(r.type))
+  motion = !out.includes(ROLE.anim.type)
   visible = !plan.no_visible_parts
   let rev = plan.contract_revision
 
-  const needers = [ROLE.arch].concat(NUMBERS ? [ROLE.prog] : []).concat(crafts)
+  if (has('rewards')) {
+    // Risk rewards: the tier table is in the contract before the crafts state needs and long before UI, VFX and sound production.
+    const tiers = keep('P1 tier table', await call(ROLE.prog, {
+      id: 'P1-tiers', task: `reward and celebration tier table: ${FEATURE}`,
+      intent: 'Proof stage, contract time (risk: rewards). Write the reward and celebration tier table (tier, trigger, measured rate per event) so UI, VFX and sound size each celebration to its tier before production, and add it to the contract. Rates come from a simulation output, never from writing.',
+      skills: ['progression-design', 'progression-craft'],
+      inputs: [`${CONTRACT}@rev${rev}`, `${DIR}/direction.md`],
+      owns: [TIERS, `${DIR}/progression/`, `${CONTRACT} (its reward and celebration tier section and one change table row only)`],
+      consumers: ['ui-ux-designer', 'vfx-designer', 'sound-designer', 'qa-lead'],
+      deliver: `${TIERS} and the contract's tier section (next revision)`,
+      checks: ['every reward event in the contract has a tier and a measured rate with its simulation output file', 'the contract change table row names UI, VFX and sound to recheck'],
+    }, S_TIERS, 'Contract'))
+    if (!ok(tiers)) return notDone('tier table', tiers)
+    rev = tiers.contract_revision
+  }
+
+  // The qa-lead's trace table at contract time: the player-facing rows and the test hooks the builder must deliver (testing/references/player-facing.md §3).
+  const trace = keep('P1 trace table', await call(ROLE.qa, {
+    id: 'P1-trace', task: `player-facing trace table at contract time: ${FEATURE}`,
+    intent: 'Proof stage, contract time. Write your trace table from the contract: the player-facing rows (what each viewer must see and hear on attempt, pending, success, denial and failure) and the Studio-only test hooks and debug log lines the builder must deliver so every row can be checked. The architect copies the hooks into the builder\'s contract.',
+    skills: ['testing'],
+    inputs: [`${CONTRACT}@rev${rev}`].concat(tiersIn()),
+    refs: ['.agents/skills/testing/references/player-facing.md §3   # take: sources of truth and the hook names'],
+    owns: [`${DIR}/qa/`],
+    consumers: ['architect (copies the hooks into the plan)', 'feature-builder (delivers the hooks)'],
+    deliver: TRACE,
+    checks: ['every contract behaviour and every feedback stack row has a trace row with its check', 'every row a capture cannot prove names the hook or log line that proves it'],
+  }, S_HANDBACK, 'Contract'))
+  if (!ok(trace)) return notDone('trace table', trace)
+
+  // Interfaces before the plan: the crafts state needs against the feedback stack; the architect merges them into the presentation contract (≤ 2 rounds).
+  const needers = [ROLE.arch].concat(NUMBERS ? [ROLE.prog] : []).concat(motion ? [ROLE.anim] : []).concat(crafts)
+  const ASK = {
+    architect: ' Architect: can each behaviour be built where the plan will place it, and does every event carry what consumers need?',
+    'progression-designer': ' Progression: the tuning keys and the values players feel.',
+    'ui-ux-designer': ' UI: the states, the denial reasons and their messages, and the motion-table rows.',
+    animator: ' Animator: the timing list draft for actions with motion (frame lengths, named markers); VFX and sound key to it next.',
+    'vfx-designer': ' VFX: importance per viewer, caps, the per-viewer and reduced variants and the budget block per event, and each shared event' + "'" + 's envelope (wind-up, peak, tail) on the animator' + "'" + 's markers; the sound-designer answers your note next.',
+    'sound-designer': ' Sound: cue ids, the voice cap and merge needs per event, and your answer to the vfx-designer' + "'" + 's envelope note per shared event (onset against its peak).',
+  }
   for (let round = 1; round <= 2; round++) {
-    const needBrief = (r, extra, inputs) => call(r, {
+    const needBrief = (r, inputs) => call(r, {
       id: `P2-needs-r${round}-${r.type}`, task: `feature needs against contract: ${FEATURE}`,
-      intent: `Proof stage, interface round ${round}. Read the feature contract and state what your part needs from it for the prototype now and the build later, against this revision: agree, conflict or missing evidence per state, event or tuning key you touch. Architect: can each behaviour be built where the plan places it, and does every event carry what consumers need?${extra}`,
-      inputs: [`${CONTRACT}@rev${rev}`, `${DIR}/direction.md`].concat(inputs || []),
+      intent: `Proof stage, interface round ${round}, before the architect freezes the plan. Read the feature contract and its feedback stack and state what your part needs for the prototype now and the build later, against this revision: agree, conflict or missing evidence per state, event or tuning key you touch.${ASK[r.type] || ''}`,
+      inputs: [`${CONTRACT}@rev${rev}`, `${DIR}/direction.md`, TRACE].concat(tiersIn(), inputs || []),
       owns: [`${DIR}/exchange/p${round}-${r.type}.md`],
       deliver: `${DIR}/exchange/p${round}-${r.type}.md in the exchange-note format`,
       checks: ['every conflict names the state, event or key, what breaks and who decides or which test settles it'],
     }, S_EXCHANGE, 'Contract')
-    // A shared event's envelope: VFX writes first, then sound answers on that note (job-effect.js shape; no "read it if it exists").
-    const hasV = needers.includes(ROLE.vfx)
-    const hasS = needers.includes(ROLE.sound)
-    const rest = needers.filter(r => r !== ROLE.vfx && r !== ROLE.sound)
-    const out = await parallel(rest.map(r => () => needBrief(r, '')).concat(hasV || hasS ? [async () => {
-      const v = hasV ? await needBrief(ROLE.vfx, ' VFX: say what each event must carry (position, target, strength) and propose each shared event' + "'" + 's envelope (wind-up, peak, tail); the sound-designer answers your note next.') : null
-      const so = hasS ? await needBrief(ROLE.sound, ' Sound: say what each event must carry' + (hasV ? ' and answer the vfx-designer' + "'" + 's envelope note per shared event (onset against its peak).' : '.'), hasV ? [`${DIR}/exchange/p${round}-vfx-designer.md`] : []) : null
-      return [v, so].filter((x, i) => (i === 0 ? hasV : hasS))
+    // One marker list: the animator writes first, VFX keys to it, sound answers the VFX note (job-effect.js shape; no "read it if it exists").
+    const chain = [ROLE.anim, ROLE.vfx, ROLE.sound].filter(r => needers.includes(r))
+    const rest = needers.filter(r => !chain.includes(r))
+    const out = await parallel(rest.map(r => () => needBrief(r)).concat(chain.length ? [async () => {
+      const got = []
+      for (const r of chain) got.push(await needBrief(r, got.length ? chain.slice(0, got.length).map(p => `${DIR}/exchange/p${round}-${p.type}.md`) : []))
+      return got
     }] : []))
-    const ordered = rest.concat(hasV ? [ROLE.vfx] : []).concat(hasS ? [ROLE.sound] : [])
-    const notes = out.slice(0, rest.length).concat(hasV || hasS ? (out[rest.length] || ordered.slice(rest.length).map(() => null)) : [])
+    const ordered = rest.concat(chain)
+    const notes = out.slice(0, rest.length).concat(chain.length ? (out[rest.length] || chain.map(() => null)) : [])
     notes.forEach((n, i) => keep(`P2 r${round} ${ordered[i].type}`, n))
     if (missing(notes).length) return { status: 'failed', outcome: `interface round ${round}: a needs note returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const open = notes.reduce((s, n) => s + n.conflicts.length + n.missing.length, 0)
+    const noteFiles = needers.map(r => `${DIR}/exchange/p${round}-${r.type}.md`)
+    if (open) {
+      plan = keep(`P2 r${round} merge`, await call(ROLE.design, {
+        id: `P2-merge-r${round}`, task: `merge needs into feature contract: ${FEATURE}`,
+        intent: `Proof stage, merge round ${round}. Read the exchange notes; decide what is inside your authority, ask for a small test where words cannot settle it, and write the next contract revision with a change table row naming the consumers to recheck. What stays open after round 2 becomes a G2 question with a default.`,
+        inputs: [`${CONTRACT}@rev${rev}`].concat(noteFiles),
+        owns: [CONTRACT],
+        deliver: `${CONTRACT} (next revision)`,
+        checks: ['every conflict from this round is resolved, tested or listed as an owner question'],
+      }, S_CONTRACT, 'Contract'))
+      if (!ok(plan)) return notDone('contract merge', plan)
+      rev = plan.contract_revision
+    }
+    const pres = keep(`P2 r${round} presentation`, await call(ROLE.arch, {
+      id: `P2-presentation-r${round}`, task: `presentation contract: ${FEATURE}`,
+      intent: `Proof stage, round ${round}. Merge the crafts' needs into the presentation contract before you freeze the plan, with one marker list where animation, VFX and sound meet (a retime changes all of them the same turn). What stays open after round 2 becomes a G2 question with a default.`,
+      skills: ['architecture'],
+      inputs: [`${CONTRACT}@rev${rev}`, TRACE].concat(tiersIn(), noteFiles),
+      refs: ['.agents/skills/architecture/references/presentation-contract.md   # take: the rows and the fill order', '.agents/skills/orchestration/references/briefs-and-handoffs.md §3   # take: the timing contract'],
+      owns: [PRESENT],
+      consumers: ['feature-builder', 'qa-lead', 'ui-ux-designer', 'vfx-designer', 'sound-designer', 'animator'],
+      deliver: `${PRESENT} (next revision)`,
+      checks: ['every contract event has its presentation rows, and every need in this round\'s notes is merged, refused with a reason or listed as an owner question'],
+    }, S_PRESENT, 'Contract'))
+    if (!ok(pres)) return notDone('presentation contract', pres)
+    presRev = pres.presentation_revision
     if (!open) break
-    plan = keep(`P2 r${round} merge`, await call(ROLE.design, {
-      id: `P2-merge-r${round}`, task: `merge needs into feature contract: ${FEATURE}`,
-      intent: `Proof stage, merge round ${round}. Read the exchange notes; decide what is inside your authority, ask for a small test where words cannot settle it, and write the next contract revision with a change table row naming the consumers to recheck. What stays open after round 2 becomes a G2 question with a default.`,
-      inputs: [`${CONTRACT}@rev${rev}`].concat(needers.map(r => `${DIR}/exchange/p${round}-${r.type}.md`)),
-      owns: [CONTRACT],
-      deliver: `${CONTRACT} (next revision)`,
-      checks: ['every conflict from this round is resolved, tested or listed as an owner question'],
-    }, S_CONTRACT, 'Contract'))
-    if (!ok(plan)) return notDone('contract merge', plan)
-    rev = plan.contract_revision
   }
   contractRev = rev
 
@@ -420,14 +530,29 @@ async function proof() {
     }, S_TARGETS, 'Prototype')))
     return out
   })()
+  // The skeleton plays the sound-designer's temp cues (job-types.md §5 Proof): they exist before the builder wires them.
+  const TEMP = `output/sound/${FEATURE}/temp/`
+  if (crafts.includes(ROLE.sound)) {
+    const temp = keep('P3 temp cues', await call(ROLE.sound, {
+      id: 'P3-temp-cues', task: `temp cues for the skeleton: ${FEATURE}`,
+      intent: 'Proof stage. Make temp cues for the skeleton on the presentation contract\'s cue ids, so the game-designer judges the play with sound: library sounds or quick placeholders, no final processing.',
+      skills: ['sound-design'],
+      inputs: [`${PRESENT}@rev${presRev}`, `${CONTRACT}@rev${rev}`],
+      owns: [TEMP],
+      consumers: ['feature-builder (plays them by cue id in the skeleton)'],
+      deliver: `${TEMP} temp cues and a cue table (cue id, event id, file)`,
+      checks: ['every audible event in the presentation contract has a temp cue or the reason for none'],
+    }, S_HANDBACK, 'Prototype'))
+    if (!ok(temp)) return notDone('temp cues', temp)
+  }
   const proto = keep('P3 grey-box prototype', await call(ROLE.build, {
     id: 'P3-prototype', task: `grey-box prototype in Studio: ${FEATURE}`, studioWrite: true,
-    intent: 'Proof stage. Build the smallest playable grey-box prototype in Studio that answers the risky claims in the direction sheet and lets the game-designer judge the fun: the core behaviour and its main failure cases, grey parts, placeholder feedback (print or simple text) on the contract\'s event names. It is a question, not the product: no polish, no UI, no final values, nothing in production source. Run the probe for every engine claim the docs do not state before you build on it.',
+    intent: `Proof stage. Build the skeleton as the smallest playable grey-box prototype in Studio that answers the risky claims in the direction sheet and lets the game-designer judge the fun: the server rule and result path playable with named stand-ins on the presentation contract's event ids${crafts.includes(ROLE.sound) ? ' and the sound-designer\'s temp cues' : ''}, the main failure cases, grey parts, and the test hooks the trace table names for the proof captures. It is a question, not the product: no polish, no UI, no final values, nothing in production source. Run the probe for every engine claim the docs do not state before you build on it.`,
     skills: CODE_SKILLS,
-    inputs: [`${CONTRACT}@rev${rev}`, `${DIR}/direction.md`, `${DIR}/direction/proposal-architect.md`],
+    inputs: [`${CONTRACT}@rev${rev}`, `${PRESENT}@rev${presRev}`, TRACE, `${DIR}/direction.md`, `${DIR}/direction/proposal-architect.md`].concat(crafts.includes(ROLE.sound) ? [TEMP] : []),
     fixed: [`events: the event names in ${CONTRACT}@rev${rev}   # contract`, `tuning: PROPOSAL values under the contract's tuning keys, in one data file inside the prototype paths   # contract`],
-    open: ['how the prototype is built inside its paths', 'which placeholder feedback shows each event'],
-    avoid: ['production structure, frameworks or abstractions', 'UI, VFX or sound work', 'tuning numbers inside logic'],
+    open: ['how the prototype is built inside its paths', 'what each named stand-in looks like'],
+    avoid: ['production structure, frameworks or abstractions', 'UI, VFX or sound production work', 'tuning numbers inside logic'],
     owns: [`the prototype paths named in ${DIR}/direction.md (architect's section; outside production source)`, `the prototype's place content in studio ${STUDIO}`, `${DIR}/prototype/`],
     notInScope: ['production code', 'protected acceptance tests', 'UI, VFX and sound'],
     deliver: `the prototype in Studio and ${DIR}/prototype/notes.md: how to play it, which risky claim each part tests, probe outputs, what it does not do`,
@@ -460,6 +585,7 @@ async function proof() {
 
     phase('Proof review')
     const blocking = []
+    const reviews = []
     for (const o of proofReviewers) {
       const rv = keep(`PR r${round} ${o.r.type}`, await call(o.r, {
         id: `PR-r${round}-${o.r.type}`, task: `review feature prototype: ${FEATURE}`,
@@ -470,9 +596,11 @@ async function proof() {
         rules: ['Judge the captures; do not open Studio. A missing or unclear capture is a blocking finding with maker studio-operator.'],
       }, S_REVIEW, 'Proof review'))
       if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+      reviews.push(rv)
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
     }
-    if (!blocking.length) return { status: 'done', outcome: `Proof clean on round ${round}.${targets.length ? ' The G2 packet shows the UI target image and the VFX key frames (run any pending batch with the owner' + "'" + 's yes first); the lead passes the approved paths as args.images to stage build.' : ''}`, contract: `${CONTRACT}@rev${rev}`, prototype: `${DIR}/prototype/notes.md`, captures: `${DIR}/captures/proof-r${round}/` }
+    if (!blocking.length) return { status: 'done', outcome: `Proof clean on round ${round}.${targets.length ? ' The G2 packet shows the UI target image and the VFX key frames (run any pending batch with the owner' + "'" + 's yes first); the lead passes the approved paths as args.images to stage build.' : ''}`, contract: `${CONTRACT}@rev${rev}`, presentation: `${PRESENT}@rev${presRev}`, prototype: `${DIR}/prototype/notes.md`, captures: `${DIR}/captures/proof-r${round}/`,
+      could_not_check: couldNotCheck([play].concat(reviews)), owner_confirmed: ownerLines('the playable prototype') }
     if (round === 2) return { status: 'needs-decision', outcome: 'Blocking proof findings remain after 2 repair rounds: diagnose the brief, the approach or the design with the architect and the game-designer (rules/company.md §7).', blocking }
     const fixed = await repairRound(blocking, `proof-r${round}`, 'Proof review', true)
     if (fixed.status) return fixed
@@ -524,11 +652,11 @@ async function repairRound(findings, tag, phaseName, prototype) {
 // ================================================================ production, integration and the review chain
 async function production() {
   phase('Plan')
-  const plan = keep('B1 architect plan', await call(ROLE.arch, {
+  let plan = keep('B1 architect plan', await call(ROLE.arch, {
     id: 'B1-plan', task: `feature plan and builder brief: ${FEATURE}`,
-    intent: 'Build stage, the technical plan before code. From the contract and the proof results, write the decision record (contract, invariants with one owner per fact, the engine feature per part with its docs page or probe, client/server placement and replication footprint, the design budget, the simplest version with its size, rejected alternatives only for consequential choices) and the builder brief as a file in the engineering-craft hand-off format (files owned, the public interface to keep, invariants, allowed dependencies, non-goals, acceptance checks with failure cases). Also name: what the prototype keeps or throws away, the data files and their format for the tuning keys, the analytics events if the feature adds a new player step, a currency source or sink, or a quit point (analytics skill), the protected acceptance test path the builder cannot edit, test plan seeds for the qa-lead (invariants and failure cases), and whether the feature is heavy on performance (many parts, effects, bodies, players or network traffic). Copy from the contract which of UI, VFX and sound it does not need and whether it has no visible parts.',
+    intent: 'Build stage, the technical plan before code, with the presentation contract frozen into it (the crafts\' needs are merged there). From the contract and the proof results, write the decision record (contract, invariants with one owner per fact, the engine feature per part with its docs page or probe, client/server placement and replication footprint, the design budget, the simplest version with its size, rejected alternatives only for consequential choices) and the builder brief as a file in the engineering-craft hand-off format (files owned, the public interface to keep, invariants, allowed dependencies, non-goals, acceptance checks with failure cases). Also name: what the prototype keeps or throws away, the data files and their format for the tuning keys, the analytics events if the feature adds a new player step, a currency source or sink, or a quit point (analytics skill), the protected acceptance test path the builder cannot edit, the test hooks and debug log lines from the qa-lead\'s trace table (copied into the builder brief), test plan seeds for the qa-lead (invariants and failure cases), and whether the feature is heavy on performance (many parts, effects, bodies, players or network traffic). Copy from the contract which of UI, VFX and sound it does not need and whether it has no visible parts.',
     skills: ['architecture', 'engineering-craft', 'performance'].concat(MONEY || NUMBERS ? ['analytics'] : []),
-    inputs: [contractIn(), `${DIR}/direction.md`, `${DIR}/prototype/notes.md`, `${DIR}/reviews/   # the proof reviews`],
+    inputs: [contractIn(), presIn(), TRACE, `${DIR}/direction.md`, `${DIR}/prototype/notes.md`, `${DIR}/reviews/   # the proof reviews`],
     refs: ['.agents/skills/engineering-craft/references/handoffs.md §1, §7, §11-§13   # take: the build ticket, the qa-lead ticket and the craft hand-offs'],
     open: ['the structure, the engine features, the budget values (PROPOSAL)'],
     avoid: ['a framework or a second owner for any fact', 'one-use abstractions', 'production code (you do not write it)'],
@@ -539,6 +667,32 @@ async function production() {
     rules: ['Budgets, limits and fallbacks are your call as PROPOSAL values; ask the owner only a real design fork, with a default.'],
   }, S_PLAN, 'Plan'))
   if (!ok(plan)) return notDone('architect plan', plan)
+  if (PLAN_CHECK) {
+    // Risk money, saves, remotes, trades or paid-random: the reviewer checks the plan before code, one exchange (code-review/references/review-method.md §7).
+    const pc = keep('B1 plan check', await call(ROLE.review, {
+      id: 'B1-plan-check', task: `plan check before code: ${FEATURE}`,
+      intent: 'Build stage, plan check before code (one exchange). Check the plan, the builder brief and the presentation contract: invariant cards, request and result shapes, grant ids, and the attempt, confirmed, pending, denied and reduced rows. Report proven findings for the architect; you do not edit the plan.',
+      skills: ['code-review'],
+      inputs: [`${DIR}/architect/plan.md@rev${plan.plan_revision}`, `${DIR}/architect/brief-feature-builder.md`, presIn(), contractIn()],
+      refs: ['.agents/skills/code-review/references/review-method.md §7   # take: the plan check'],
+      owns: [`${DIR}/reviews/plan-check-reviewer.md`], deliver: `${DIR}/reviews/plan-check-reviewer.md (templates/jobs/review.md, where = the plan's section)`,
+      checks: ['every finding names the plan section, the input or sequence and the wrong outcome for players'],
+    }, S_REVIEW, 'Plan'))
+    if (!ok(pc)) return notDone('plan check', pc)
+    const pcBlocking = pc.findings.filter(f => f.class === 'blocking')
+    if (pcBlocking.length) {
+      plan = keep('B1 plan answer', await call(ROLE.arch, {
+        id: 'B1-plan-answer', task: `answer the plan check: ${FEATURE}`,
+        intent: 'Build stage, the answer to the plan check (the one exchange). Fix each blocking finding in the next plan revision, or answer it with evidence that it is not a defect; the build starts from this revision.',
+        skills: ['architecture'],
+        findings: pcBlocking,
+        inputs: [`${DIR}/architect/plan.md@rev${plan.plan_revision}`, `${DIR}/reviews/plan-check-reviewer.md`, presIn(), contractIn()],
+        owns: [`${DIR}/architect/`], deliver: `${DIR}/architect/plan.md (next revision) and the builder brief, with a change table row`,
+        checks: ['each finding is fixed in the plan or answered with evidence'],
+      }, S_PLAN, 'Plan'))
+      if (!ok(plan)) return notDone('plan check answer', plan)
+    }
+  }
   const PLAN = `${DIR}/architect/plan.md@rev${plan.plan_revision}`
   const BRIEF = plan.builder_brief || `${DIR}/architect/brief-feature-builder.md`
   const ACCEPT = plan.acceptance_path || `the protected acceptance path named in ${PLAN}`
@@ -553,38 +707,39 @@ async function production() {
     return { status: 'blocked', outcome: 'The feature has visible UI or effects: stage build needs args.images, the owner-approved UI target image and VFX key frames from G2 (lead decision LD2). Run any pending batch with the owner' + "'" + 's yes, then call build again with args.images (resume the run so the unchanged steps come from cache).', required: ['images'] }
   }
 
-  // The qa-lead writes the protected acceptance tests from the contract before code exists (expected results from the brief, not the code).
+  // The qa-lead writes the protected acceptance tests from its trace table before code exists (expected results from the brief, not the code).
   const qa = keep('B1 acceptance tests', await call(ROLE.qa, {
     id: 'B1-acceptance', task: `protected acceptance tests: ${FEATURE}`,
-    intent: 'Build stage. Write the trace table from the contract\'s behaviours, failure cases and the binding rules in this brief to checks, and the protected acceptance tests the builder cannot edit, on the real content tables and scale the contract names. Expected results come from the contract and the plan, never from code. Plan the Studio and multi-client scenarios and the planted-fault check you will run on the candidate.',
+    intent: 'Build stage. Extend your trace table (written at contract time) with the plan\'s seeds and the binding rules in this brief, and write the protected acceptance tests the builder cannot edit from it, on the real content tables and scale the contract names. Expected results come from the contract, the presentation contract and the plan, never from code. Plan the Studio and multi-client scenarios and the planted-fault check you will run on the candidate.',
     skills: ['testing', 'engineering-craft', 'studio-mcp'],
-    inputs: [contractIn(), PLAN, `${DIR}/architect/test-seeds.md`],
+    inputs: [TRACE, contractIn(), presIn(), PLAN, `${DIR}/architect/test-seeds.md`],
     owns: [ACCEPT, `${DIR}/qa/`],
     consumers: ['feature-builder (runs them, never edits them)', 'reviewer'],
-    deliver: `${ACCEPT} and ${DIR}/qa/trace-table.md with the scenario plan`,
+    deliver: `${ACCEPT} and ${TRACE} (next revision) with the scenario plan`,
     checks: ['every acceptance check in the contract and every binding rule in this brief has a row in the trace table with a test id', 'each test can fail: it fails now, before the feature code exists, with a clear message'],
   }, S_HANDBACK, 'Plan'))
   if (!ok(qa)) return notDone('acceptance tests', qa)
 
   phase('Production')
-  // Studio has one writer: the feature-builder. Tables and craft specs are files, made beside it against the event names.
-  const lanes = [
-    () => call(ROLE.build, {
-      id: 'B2-build', task: `build the feature: ${FEATURE}`, studioWrite: true,
-      intent: `Build stage. Build the feature to the architect's brief: the behaviours, states and events of the contract, server-authoritative where the plan says, tuning values read from data under the contract's tuning keys (PROPOSAL values until the progression tables land in integration). Write the failing case first, on the real content and scale the brief names. Fire every contract event by its exact name with what consumers need. UI, VFX and sound are wired in integration, not now.`,
-      skills: CODE_SKILLS.concat(['architecture']),
-      inputs: [BRIEF, PLAN, contractIn(), `${ACCEPT} (read and run only)`],
-      fixed: [`files_owned: the source files ${BRIEF} names   # architect plan`, `interface and invariants: as in ${BRIEF}   # architect plan`, `events and tuning keys: as in ${contractIn()}   # contract`],
-      open: ['code structure inside the owned files', 'helper names', 'test layout'],
-      avoid: ['a framework or a second owner for a fact', 'custom infrastructure without the engine-gate answer (EC-03)', 'numbers inside logic'],
-      protect: [ACCEPT],
-      owns: [`the source files ${BRIEF} names for feature-builder, their tests and fixtures`, `test place content in studio ${STUDIO}`],
-      notInScope: ['UI screens, VFX and sound wiring (integration)', 'protected acceptance tests', 'shared registries (return the lines you need)'],
-      deliver: 'code, tests and the change manifest (engineering-craft EC-13)',
-      checks: ['a test for each contract behaviour failed before the code and passes now (log)', 'the protected acceptance tests that cover only the systems built so far pass (log)', 'luau-analyze clean on the owned files', 'the gate prints RESULT: PASS (gate-verified)', 'a Studio play-test of the core behaviour shows each contract event in Output (MCP-verified)'],
-    }, S_HANDBACK, 'Production'),
-  ]
-  const laneNames = ['B2 build']
+  // The skeleton first (the server rule and result path); then the presentation pass against its event ids, beside the progression tables.
+  const skel = keep('B2 skeleton', await call(ROLE.build, {
+    id: 'B2-build', task: `build the feature skeleton: ${FEATURE}`, studioWrite: true,
+    intent: `Build stage, the skeleton. Build the feature to the architect's brief from what the plan keeps of the proof prototype: the server rule and result path, the behaviours, states and events of the contract, server-authoritative where the plan says, every presentation-contract event fired by its id with named stand-ins, tuning values read from data under the contract's tuning keys (PROPOSAL values until the progression tables land in integration). Write the failing case first, on the real content and scale the brief names. UI, VFX and sound are wired in integration, not now.`,
+    skills: CODE_SKILLS.concat(['architecture']),
+    inputs: [BRIEF, PLAN, contractIn(), presIn(), `${ACCEPT} (read and run only)`],
+    fixed: [`files_owned: the source files ${BRIEF} names   # architect plan`, `interface and invariants: as in ${BRIEF}   # architect plan`, `events and tuning keys: as in ${contractIn()}   # contract`],
+    open: ['code structure inside the owned files', 'helper names', 'test layout'],
+    avoid: ['a framework or a second owner for a fact', 'custom infrastructure without the engine-gate answer (EC-03)', 'numbers inside logic'],
+    protect: [ACCEPT],
+    owns: [`the source files ${BRIEF} names for feature-builder, their tests and fixtures`, `test place content in studio ${STUDIO}`],
+    notInScope: ['UI screens, VFX and sound wiring (integration)', 'protected acceptance tests', 'shared registries (return the lines you need)'],
+    deliver: 'code, tests and the change manifest (engineering-craft EC-13)',
+    checks: ['a test for each contract behaviour failed before the code and passes now (log)', 'the protected acceptance tests that cover only the systems built so far pass (log)', 'luau-analyze clean on the owned files', 'the gate prints RESULT: PASS (gate-verified)', 'a Studio play-test of the core behaviour shows each contract event in Output (MCP-verified)'],
+  }, S_HANDBACK, 'Production'))
+  if (!ok(skel)) return notDone('feature skeleton', skel)
+  // Studio has one writer: the feature-builder. Tables and craft specs are files, made against the skeleton's event ids.
+  const lanes = []
+  const laneNames = []
   if (NUMBERS) {
     lanes.push(() => call(ROLE.prog, {
       id: 'B3-tables', task: `progression tables for the feature: ${FEATURE}`,
@@ -603,10 +758,10 @@ async function production() {
   if (crafts.includes(ROLE.ui)) {
     lanes.push(() => call(ROLE.ui, {
       id: 'B4-ui', task: `feature UI states: ${FEATURE}`,
-      intent: 'Build stage. Design the screens and HUD parts this feature needs so the player never misreads what happened: one screen state for every contract state that shows, failure messages for denied and unavailable, phone first. Paid-random odds and honest prices where money is involved.',
+      intent: 'Build stage, presentation pass. Design the screens and HUD parts this feature needs so the player never misreads what happened: one screen state for every contract state that shows, the denial messages and the motion-table rows of the presentation contract, phone first. Paid-random odds and honest prices where money is involved.',
       skills: ['ui-design', 'ui-figma', STYLE_BOOK], visual: true,
-      inputs: [contractIn(), PLAN],
-      fixed: [`states and data from the server: as in ${contractIn()}   # contract`],
+      inputs: [contractIn(), presIn(), PLAN].concat(tiersIn()),
+      fixed: [`states and data from the server: as in ${contractIn()}   # contract`, `event ids and rows: as in ${presIn()}   # presentation contract`],
       open: ['layout, look, motion, wording'],
       owns: [`content/ui/${FEATURE}/`],
       consumers: ['feature-builder (builds it with ui-basics)'],
@@ -621,10 +776,10 @@ async function production() {
       const out = []
       if (crafts.includes(ROLE.vfx)) out.push(keep('B5 vfx', await call(ROLE.vfx, {
         id: 'B5-vfx', task: `feature effects: ${FEATURE}`, visual: true,
-        intent: 'Build stage. Design the effects on the contract' + "'" + 's event names so players read each moment (what must be seen first); never set or change gameplay truth, only show it. Write each shared event' + "'" + 's picture envelope (wind-up, peak, tail: onset, peak time, length) in the frame scripts: the sound-designer keys its cues to your file next.',
+        intent: 'Build stage, presentation pass. Design the effects on the presentation contract' + "'" + 's event ids and marker list so players read each moment (what must be seen first), with its per-viewer and reduced variants; never set or change gameplay truth, only show it. Write each shared event' + "'" + 's picture envelope (wind-up, peak, tail: onset, peak time, length) in the frame scripts: the sound-designer keys its cues to your file next.',
         skills: ['vfx-design', 'vfx-craft'],
-        inputs: [contractIn(), PLAN],
-        fixed: [`events, timing and sizes the effect shows: as in ${contractIn()}   # contract`, `effect budget: as in ${PLAN}   # architect plan`],
+        inputs: [contractIn(), presIn(), PLAN].concat(tiersIn()),
+        fixed: [`events, timing and sizes the effect shows: as in ${contractIn()}   # contract`, `event ids, markers, caps and budget: as in ${presIn()} and ${PLAN}   # presentation contract, architect plan`],
         open: ['layers, textures, curves, camera feel'],
         owns: [`content/vfx/${FEATURE}/`],
         consumers: ['feature-builder (wires spec.json on the client)', 'sound-designer'],
@@ -633,10 +788,10 @@ async function production() {
       }, S_HANDBACK, 'Production')))
       if (crafts.includes(ROLE.sound)) out.push(keep('B6 sound', await call(ROLE.sound, {
         id: 'B6-sound', task: `feature sounds: ${FEATURE}`,
-        intent: 'Build stage. Design the cues on the contract' + "'" + 's event names so each result is heard as it happens (success, denied and failure must sound different)' + (crafts.includes(ROLE.vfx) ? ', keyed to the vfx-designer' + "'" + 's frame scripts on every shared event (transient on the first lit frame, body, tail); an envelope you cannot meet is a question naming the event.' : '.'),
+        intent: 'Build stage, presentation pass. Replace the temp cues with the cues on the presentation contract' + "'" + 's cue ids so each result is heard as it happens (success, denied and failure must sound different)' + (crafts.includes(ROLE.vfx) ? ', keyed to the vfx-designer' + "'" + 's frame scripts on every shared event (transient on the first lit frame, body, tail); an envelope you cannot meet is a question naming the event.' : '.'),
         skills: ['sound-design'],
-        inputs: [contractIn(), PLAN].concat(crafts.includes(ROLE.vfx) ? [`content/vfx/${FEATURE}/`] : []),
-        fixed: [`events and how often each can repeat at worst: as in ${contractIn()}   # contract`],
+        inputs: [contractIn(), presIn(), PLAN].concat(tiersIn(), crafts.includes(ROLE.vfx) ? [`content/vfx/${FEATURE}/`] : []),
+        fixed: [`events and how often each can repeat at worst: as in ${contractIn()}   # contract`, `cue ids, voice cap and merge rules: as in ${presIn()}   # presentation contract`],
         open: ['the sounds, layers, mix inside the budget'],
         owns: [`output/sound/${FEATURE}/`],
         consumers: ['feature-builder (plays cues by id from data)'],
@@ -649,22 +804,22 @@ async function production() {
   }
   const made = await parallel(lanes)
   made.forEach((x, i) => { if (!Array.isArray(x)) keep(laneNames[i], x) })
-  if (!ok(made[0])) return notDone('feature build', made[0])
   const failedLane = made.findIndex(x => (Array.isArray(x) ? !x.length || x.some(y => !ok(y)) : !ok(x)))
   if (failedLane >= 0) return notDone(laneNames[failedLane], Array.isArray(made[failedLane]) ? made[failedLane].find(y => !ok(y)) : made[failedLane])
 
   phase('Integration')
   const cand = keep('B7 integration', await call(ROLE.build, {
     id: 'B7-integrate', task: `integrate the feature candidate: ${FEATURE}`, studioWrite: true,
-    intent: `Integration. As integrator, wire everything into one frozen candidate: ${NUMBERS ? 'the progression tables into the data files, ' : ''}${crafts.includes(ROLE.ui) ? 'the UI built from its spec with ui-basics (every state), ' : ''}${crafts.includes(ROLE.vfx) ? 'the effects from spec.json on the client on their events, ' : ''}${crafts.includes(ROLE.sound) ? 'the sound cues played by id from data, ' : ''}and the analytics events the plan names. Run the gate and the protected acceptance tests. Record the candidate revision and the protected list (passing acceptance tests) in ${DIR}/evidence.md, with a short how-to-play note for the studio-operator.`,
+    intent: `Integration. As integrator, first deliver the Studio-only test hooks and the debug log the trace table names, before any partner's first capture. Then wire everything into one candidate: ${NUMBERS ? 'the progression tables into the data files, ' : ''}${crafts.includes(ROLE.ui) ? 'the UI built from its spec with ui-basics (every state), ' : ''}${crafts.includes(ROLE.vfx) ? 'the effects from spec.json on the client on their events, ' : ''}${crafts.includes(ROLE.sound) ? 'the sound cues played by id from data, ' : ''}and the analytics events the plan names. Then the worst-case pass: drive the hooks (a rejected request, a slow confirmation), a burst at the real rate and the plan's peak case, and fix what breaks. Run the gate and the protected acceptance tests and freeze the candidate. Record the candidate revision and the protected list (passing acceptance tests) in ${DIR}/evidence.md, with a short how-to-play note and the hook names for the studio-operator.`,
     skills: CODE_SKILLS.concat(crafts.includes(ROLE.ui) ? ['ui-basics'] : []).concat(['analytics']),
-    inputs: [BRIEF, PLAN, contractIn()].concat(NUMBERS ? [`content/progression/${FEATURE}/`] : []).concat(crafts.includes(ROLE.ui) ? [`content/ui/${FEATURE}/spec.md`] : [])
+    refs: ['.agents/skills/engineering-craft/references/presentation.md §9   # take: the test hooks and the debug log'],
+    inputs: [BRIEF, PLAN, contractIn(), presIn(), TRACE].concat(NUMBERS ? [`content/progression/${FEATURE}/`] : []).concat(crafts.includes(ROLE.ui) ? [`content/ui/${FEATURE}/spec.md`] : [])
       .concat(crafts.includes(ROLE.vfx) ? [`content/vfx/${FEATURE}/`] : []).concat(crafts.includes(ROLE.sound) ? [`output/sound/${FEATURE}/`] : []),
     protect: [ACCEPT],
     owns: [`the source files ${BRIEF} names for feature-builder`, `the data files ${PLAN} names`, `${DIR}/evidence.md`, `test place content in studio ${STUDIO}`],
     notInScope: ['changing a craft spec (report a spec you cannot build to its maker)', 'protected acceptance tests'],
     deliver: `the candidate (revision in ${DIR}/evidence.md), the change manifest, the gate log`,
-    checks: ['the gate prints RESULT: PASS on the candidate revision (gate-verified)', 'the protected acceptance tests pass on the candidate (log)', 'every contract event fires its wired UI, VFX and sound in a Studio play-test (MCP-verified Output log)'],
+    checks: ['every test hook and debug log line the trace table names works in a Studio play-test (MCP-verified)', 'the gate prints RESULT: PASS on the candidate revision (gate-verified)', 'the protected acceptance tests pass on the candidate (log)', 'every contract event fires its wired UI, VFX and sound in a Studio play-test (MCP-verified Output log)', 'the worst-case pass: each case with its observed result (MCP-verified Output log)'],
     rules: ['Visual effects never decide gameplay; the server decides and the client shows.'],
   }, S_CANDIDATE, 'Integration'))
   if (!ok(cand)) return notDone('integration', cand)
@@ -682,9 +837,10 @@ async function reviewChain(label, o) {
     const later = round ? ' This is a later round: review the new revision\'s changes and the protected list, not old code again (rule 20).' : ''
     const capP = call(ROLE.op, {
       id: `RV-${tag}-capture`, task: `play and record the feature candidate: ${FEATURE}`, studioWrite: true,
-      intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Play it for the game-designer and the art-director, who judge only your captures: every acceptance case in the contract, free play as a new player, multi-client when other players are involved (Studio MCP plays one client: write the exact manual steps and mark it not verified when it cannot), at the narrowest phone aspect and at desktop. Record what happened, not your opinion of it.${captureNote()}`,
+      intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Play it for the game-designer, the art-director${has('event') ? ' and the live-ops-designer' : ''}, who judge only your captures: every acceptance case in the contract, free play as a new player, the named captures ${NAMED.join('; ')}${has('event') ? ', and the event capture set (live-ops-craft/references/event-review.md §2)' : ''}, multi-client when other players are involved (Studio MCP plays one client: write the exact manual steps and mark it not verified when it cannot), at the narrowest phone aspect and at desktop. Record what happened, not your opinion of it.${captureNote()}`,
       skills: ['studio-mcp'],
       inputs: [`${DIR}/evidence.md`, contractIn()],
+      refs: ['.agents/skills/orchestration/references/job-types.md "Named review captures"   # take: what each named capture shows and the hook it needs'],
       owns: [`${DIR}/captures/${tag}/`], deliver: `${DIR}/captures/${tag}/: the observed result and stills per case at its key moments, the visible states at phone and desktop, the Output log with event names and times`,
       rules: [CAPTURE_LIMIT, CHECK_BUDGET],
       checks: ['each acceptance case has an observed result with its Output lines (MCP-verified)', 'the captures name the candidate revision'],
@@ -693,7 +849,8 @@ async function reviewChain(label, o) {
       id: `RV-${tag}-${x.r.type}`, task: `review feature ${label}: ${FEATURE}`, studioWrite: studio, visual: !!x.visual,
       intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Check ${x.q}. Open the code, tests and captures first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (${MAKERS}).${later}`,
       skills: x.skills,
-      inputs: [`${DIR}/evidence.md`, contractIn(), `${DIR}/architect/plan.md`, `${DIR}/direction.md`, `${DIR}/captures/${tag}/`],
+      inputs: [`${DIR}/evidence.md`, contractIn(), presIn(), `${DIR}/architect/plan.md`, `${DIR}/direction.md`, `${DIR}/captures/${tag}/`],
+      refs: x.refs,
       owns: [`${DIR}/reviews/${tag}-${x.r.type}.md`], deliver: `${DIR}/reviews/${tag}-${x.r.type}.md (templates/jobs/review.md)`,
       checks: ['every finding has a location (file:line, test, case or capture), evidence and the smallest fix', 'keep lists what works'],
       rules: ['Light checks: numbers for every case; images only for a failing number plus a few key frames (owner J005-D8).', 'Report only what affects correctness, safety, money, saves, the stated requirements or scope; no style findings (rule 18). A clean review is valid.'].concat(studio ? [] : ['Do not open Studio. A missing or unclear capture is a blocking finding with maker studio-operator.']),
@@ -701,25 +858,31 @@ async function reviewChain(label, o) {
     const codeReview = { r: ROLE.review, skills: ['code-review', 'engineering-craft'], q: 'the code change against the plan: run the gate yourself on the candidate first (a FAIL is a blocking finding for the feature-builder), then walk the harm order (lost or duplicated saves, exploitable requests, money and policy, leaks and races after yields, performance at peak, structure, invented or outdated APIs, over-building), the engine-gate answers, placement and replication, and whether the tests can fail' }
     const tech = [{ r: ROLE.qa, skills: ['testing', 'studio-mcp'], q: 'the protected acceptance suite on the exact candidate revision, the Studio and multi-client scenarios in the trace table, lifecycle repeats (join, leave, respawn, rejoin), and the planted-fault check (caught x of n); verdicts PASS / FAIL / BLOCKED / NOT RUN with logs, and the owner\'s plain-words result card' }]
       .concat(o.heavy ? [{ r: ROLE.perf, skills: ['performance', 'studio-mcp'], q: 'frame time, server heartbeat, memory and network traffic with a fixed capture recipe (3+ runs, spread) at the plan\'s peak case, against the plan and game profile budgets; phone results BLOCKED without a phone' }] : [])
-    const creative = [{ r: ROLE.design, skills: ['game-design'], q: 'design validation in play from the captures: the intended experience and type of fun show, every acceptance case behaves as the contract says, the incentives push players the right way, and the experience test in the contract is met' }]
+    const archReview = { r: ROLE.arch, skills: ['architecture'], q: 'cost and contract: the candidate against the plan, the presentation contract and the budgets', refs: ['.agents/skills/architecture/references/review-checklist.md   # take: the review lines'] }
+    const creative = [{ r: ROLE.design, skills: ['game-design'], q: `design validation in play from the captures, including the named captures ${NAMED.join('; ')}: the intended experience and type of fun show, every acceptance case behaves as the contract says, the incentives push players the right way, and the experience test in the contract is met` }]
       .concat(o.visible ? [{ r: ROLE.art, visual: true, skills: ['art-direction', 'art-review'], q: 'the visible parts in the integrated game: what reads first, readability at the game camera on a phone, and whether UI, effects and feedback match the art bible' }] : [])
-    // The code review needs no Studio; Studio checks run one after another after the capture, beside the creative order, which judges captures only.
+      // Risk event: the live-ops review runs after the creative reviews, inside the same repair-round limits.
+      .concat(has('event') ? [{ r: ROLE.liveops, skills: ['live-ops-craft'], q: 'the event review E-01 to E-19 on the event capture set (a missing capture is a blocking finding for the studio-operator)', refs: ['.agents/skills/live-ops-craft/references/event-review.md §2-§3   # take: the capture set and the checklist'] }] : [])
+    // The code and architect reviews need no Studio; Studio checks run one after another after the capture, beside the creative order, which judges captures only.
     const codeP = reviewOne(codeReview, false)
+    const archP = reviewOne(archReview, false)
     const capDone = capP.then(c => keep(`RV ${tag} capture`, c))
     const techP = (async () => { if (!ok(await capDone)) return []; const out = []; for (const x of tech) out.push(await reviewOne(x, true)); return out })()
     const cap = await capDone
-    if (!ok(cap)) { keep(`RV ${tag} reviewer`, await codeP); return notDone(`${tag} capture`, cap) }
+    if (!ok(cap)) { keep(`RV ${tag} reviewer`, await codeP); keep(`RV ${tag} architect`, await archP); return notDone(`${tag} capture`, cap) }
     const crea = []
     for (const x of creative) crea.push(keep(`RV ${tag} ${x.r.type}`, await reviewOne(x, false)))
     const code = keep(`RV ${tag} reviewer`, await codeP)
+    const archR = keep(`RV ${tag} architect`, await archP)
     const techR = await techP
     techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
-    const all = [code].concat(techR, crea)
+    const all = [code, archR].concat(techR, crea)
     if (missing(all).length) return { status: 'failed', outcome: `review round ${round}: a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet.`, new_requests: requests, reviews: all.map(x => x.files).flat() }
+      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet with the could-not-check list and the owner-confirmed lines.`, new_requests: requests, reviews: all.map(x => x.files).flat(),
+        could_not_check: couldNotCheck([cap].concat(all)), owner_confirmed: ownerLines('the Studio build') }
     }
     const codeF = blocking.filter(f => f.maker_role === ROLE.build.type)
     const otherF = blocking.filter(f => f.maker_role !== ROLE.build.type)

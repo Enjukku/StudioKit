@@ -1,23 +1,24 @@
 export const meta = {
   name: 'job-marketing-art',
   description: 'Run one stage (direction, proof, build or repair) of a marketing art job (game icon, thumbnails, key art and its crops) led by marketing; owner gates sit between calls.',
-  whenToUse: 'An M or L marketing art job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), piece (icon, thumbnails or key-art), launch (true or false); images (owner-approved image paths: the chosen rough, then the green-lit image) for proof, build and repair; change for repair. Optional: trends, gate, imagesApproved. No Studio driver is needed. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L marketing art job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), piece (icon, thumbnails or key-art), launch (true or false), risks (a list from the job card\'s Risks row, [] = none; marketing art accepts: event); images (owner-approved image paths: the chosen rough, then the green-lit image) for proof, build and repair; change for repair. Optional: trends, gate, imagesApproved. No Studio driver is needed. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'marketing, game-designer, art-director (and trend-scout) write independent proposals' },
-    { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
-    { title: 'Direction sheet', detail: 'marketing makes 3-5 rough thumbnails at the real slot size; others sign' },
-    { title: 'Green light', detail: 'the chosen thumbnail with value and light set, tested at real size and in the real layout' },
+    { title: 'Exchange', detail: 'each lead names only production-changing conflicts; the animator sets the hero\'s key pose when the hero is a character' },
+    { title: 'Direction sheet', detail: 'marketing makes a labelled warm-up and 3-5 rough thumbnails from different hooks at the real slot size; others sign' },
+    { title: 'Green light', detail: 'on the chosen thumbnail: silhouette and a 3-value study in grey, then 2-3 light set-ups compared; crop safe squares; real size and real layout' },
     { title: 'Green light review', detail: 'art-director, then game-designer; repairs by marketing' },
     { title: 'Render', detail: 'full render on the frozen big shapes; a staged Blender render when the route needs one' },
-    { title: 'Polish', detail: 'polish, then the layered file (foreground, midground, background)' },
+    { title: 'Colour', detail: 'colour on the approved values, then rebalance the read' },
+    { title: 'Polish', detail: 'detail and polish, then the layered file (foreground, midground, background, effects, light, title)' },
     { title: 'Crop family', detail: 'every crop planned in the direction sheet, each at its real size' },
-    { title: 'Review chain', detail: 'scripts, then art-director, then game-designer; repairs by makers' },
+    { title: 'Review chain', detail: 'scripts, then art-director, then game-designer (then live-ops-designer for an event job); repairs by makers' },
     { title: 'Owner package', detail: 'marketing writes the G3 decision package; the owner does every external action' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected layers and crops' },
   ],
 }
 
-// Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016-T08, owner approval J016-D5: one saved workflow per job type, built like job-cutscene); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016-T08, owner approval J016-D5: one saved workflow per job type, built like job-cutscene); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §7. Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // Evidence: knowledge/jobs/J016-orchestration/design-jobtypes.md §7; riot-extracts.md §4 (marketing row: thumbnail → green light → render → polish).
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
@@ -40,8 +41,12 @@ const GATE = A.gate || ''               // the owner's words at the last gate, v
 const CHANGE = A.change || ''           // the owner's G3 change request, verbatim (stage repair)
 const DIR = `knowledge/jobs/${JOB}`
 const MK = `${DIR}/marketing`           // marketing's work folder (marketing role write scope default)
+const POSE_DIR = `${DIR}/pose`          // the animator's key pose of a character hero (direction stage)
 const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)   // owner-approved images from the last gate (the chosen rough; then the green-lit image)
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
+const RISKS_OK = ['event']              // the risks tokens marketing art accepts (README args table)
+const RISKS = Array.isArray(A.risks) ? A.risks : []
+const EVENT = RISKS.includes('event')   // a job from a live-ops update brief: the live-ops-designer reviews before G3
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair, piece: icon | thumbnails | key-art}', got: A }
@@ -54,6 +59,11 @@ if (typeof A.launch !== 'boolean') lacking.push('launch: true or false (a new ga
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved image paths (the chosen rough for the green light; the green-lit image after G2), lead decision LD2')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the green light inside stage build')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
+if (!Array.isArray(A.risks)) lacking.push('risks: a list of the job card\'s Risks row tokens ([] = none; marketing art accepts: event)')
+else {
+  const unknown = A.risks.filter(x => !RISKS_OK.includes(x))
+  if (unknown.length) lacking.push(`risks: unknown token ${unknown.map(x => JSON.stringify(x)).join(', ')} (marketing art accepts: event)`)
+}
 if (lacking.length) {
   return { status: 'blocked', outcome: `stage ${STAGE} needs args: ${lacking.join('; ')}. See .agents/workflows/jobs/README.md.`, required: lacking, got: A }
 }
@@ -94,6 +104,10 @@ const ROLE = {
   // Staged Blender renders with the game's real models and set (image-pipeline "Final assets", route c, owner J012-D7).
   env: { type: 'environment-designer', model: 'opus', effort: 'high' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },
+  // Recipe §7 direction leads: consulted when a character is the hero (the signature move's key pose at the still's camera).
+  anim: { type: 'animator', model: 'opus', effort: 'high' },
+  // Risk event (README args table): reviews the finished images before G3.
+  live: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
 const RENDERERS = ['environment-designer', 'modeler']
 const MAKERS = ['marketing'].concat(RENDERERS)   // the only roles that make this job's images
@@ -128,8 +142,10 @@ const IMAGE_OUT = { type: 'object', additionalProperties: false, required: ['sta
   properties: { state: { type: 'string', enum: ['made', 'pending', 'not needed'] }, prompts_file: STR, paths: STRS } }
 const OPTION = { type: 'object', additionalProperties: false, required: ['name', 'pictures', 'player_gets', 'cost_and_risk'],
   properties: { name: STR, pictures: STRS, player_gets: STR, cost_and_risk: STR } }
-const ROUGH = { type: 'object', additionalProperties: false, required: ['name', 'pictures', 'hero', 'claim_id', 'small_read', 'cost_and_risk'],
-  properties: { name: STR, pictures: STRS, hero: STR, claim_id: STR, small_read: STR, cost_and_risk: STR } }
+const ROUGH = { type: 'object', additionalProperties: false, required: ['name', 'pictures', 'hero', 'claim_id', 'small_read', 'cost_and_risk', 'lost_because', 'may_return_if'],
+  properties: { name: STR, pictures: STRS, hero: STR, claim_id: STR, small_read: STR, cost_and_risk: STR, lost_because: STR, may_return_if: STR } }
+// A rough that failed a check is listed with the reason, never shown as an equal (job-types.md cross-type rules).
+const FAILED = { type: 'object', additionalProperties: false, required: ['name', 'check', 'reason'], properties: { name: STR, check: STR, reason: STR } }
 const CROP = { type: 'object', additionalProperties: false, required: ['crop', 'destination', 'format', 'real_size', 'size_source'],
   properties: { crop: STR, destination: STR, format: STR, real_size: STR, size_source: STR } }
 const ITEM = { type: 'object', additionalProperties: false, required: ['about', 'why', 'needs'], properties: { about: STR, why: STR, needs: STR } }
@@ -138,10 +154,10 @@ const FINDING = { type: 'object', additionalProperties: false, required: ['id', 
 
 const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, captures_needed: STRS })
-const S_PROPOSAL_MKT = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, captures_needed: STRS, slot_sizes_missing: STRS })
+const S_PROPOSAL_MKT = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, captures_needed: STRS, slot_sizes_missing: STRS, hero_is_character: { type: 'boolean' } })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
-const S_DIRECTION = schema({ revision: { type: 'integer' }, roughs: { type: 'array', items: ROUGH }, recommended: STR, tradeoff: STR,
-  crop_plan: { type: 'array', items: CROP }, captures_needed: STRS, owner_actions: STRS, images: IMAGE_OUT })
+const S_DIRECTION = schema({ revision: { type: 'integer' }, warm_up: STRS, roughs: { type: 'array', items: ROUGH }, failed_roughs: { type: 'array', items: FAILED }, recommended: STR, tradeoff: STR,
+  crop_plan: { type: 'array', items: CROP }, could_not_check: STRS, captures_needed: STRS, owner_actions: STRS, images: IMAGE_OUT })
 const S_SIGN = schema({ signs: { type: 'boolean' }, incompatibility: STR })
 const S_GREENLIGHT = schema({ revision: { type: 'integer' }, big_shapes: STRS, captures_needed: STRS, images: IMAGE_OUT })
 const S_RENDER = schema({ revision: { type: 'integer' }, render_route: { type: 'string', enum: ['chatgpt', 'chatgpt-touched-up', 'staged-render'] }, render_maker: STR, images: IMAGE_OUT })
@@ -149,7 +165,7 @@ const S_STEP = schema({ revision: { type: 'integer' } })
 const S_IMAGE_STEP = schema({ revision: { type: 'integer' }, images: IMAGE_OUT })
 const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
 const S_SCRIPTS = schema({ candidate_revision: { type: 'integer' }, findings: { type: 'array', items: FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
-const S_PACKAGE = schema({ recommended: STR, owner_actions: STRS })
+const S_PACKAGE = schema({ recommended: STR, could_not_check: STRS, owner_actions: STRS })
 const S_SCOPE = schema({ affected_roles: STRS, affected_files: STRS, revision: { type: 'integer' }, new_scope: { type: 'boolean' }, moves_big_shapes: { type: 'boolean' } })
 
 // ---------------------------------------------------------------- briefs (rules/messages.md §2, built per call)
@@ -182,7 +198,7 @@ const JOB_RULES = [
 function imageRule(maker) {
   if (maker === 'edit') return 'Images: edit the existing files only (an image editor and the tools named in this brief); do not generate images in this step: the built-in browser serves one agent at a time (rules/company.md §9).'
   return maker
-    ? `Images (lead decision LD2): write every prompt first in image-prompts.md next to this step\'s deliverable (the tools/art/art_refs.py manifest path, each row\'s assembled prompt, its input images, fixed identity). Generate and download only when your tools include the built-in browser (mcp__Claude_Browser__*, the default route) and images_approved is true (the owner's yes for this batch); you are then the only browser user in this step: at most 2 regenerations per image with a fixed identity; if the quota stops a run, say so and stop, no retry loop. The Codex route (art_refs.py run) is a fallback only when the owner's yes names it. Otherwise return images.state pending with the image-prompts.md path: the step does not fail, and the lead runs the batch with the owner.`
+    ? `Images (lead decision LD2): write every prompt first in image-prompts.md next to this step\'s deliverable (the tools/art/art_refs.py manifest path, each row\'s assembled prompt, its input images, fixed identity). Generate and download only when your tools include the built-in browser (mcp__Claude_Browser__*, the default route) and images_approved is true (the owner's yes for this batch); you are then the only browser user in this step: every rough and option image at the highest image quality (\`reference-images\` I-13, owner J018-D7); at most 2 regenerations per image with a fixed identity; if the quota stops a run, say so and stop, no retry loop. The Codex route (art_refs.py run) is a fallback only when the owner's yes names it. Otherwise return images.state pending with the image-prompts.md path: the step does not fail, and the lead runs the batch with the owner.`
     : 'Images: do not generate images with ChatGPT in this step. The built-in browser serves one agent at a time and this workflow gives it only to the image-making steps (rules/company.md §9). Measure, mark up copies and point at files by path.'
 }
 const NO_REF_RULE = 'No approved image path in refs means no visual build: return blocked and name the image you need (AGENTS.md §3.5, lead decision LD2). An approved image already in refs is not made again.'
@@ -217,6 +233,7 @@ function brief(r, o) {
   lines.push(`  real_layout: ${P.layout}   # recipe §7: tested at real size and in the real layout`)
   lines.push(`  size_check: ${P.check}   # image-pipeline.md §2`)
   lines.push(`  work_folder: ${MK}/   # marketing role write scope default`)
+  lines.push(`  risks: [${RISKS.join(', ')}]   # args.risks, the job card's Risks row`)
   if (o.fixed && o.fixed.length) o.fixed.forEach(x => lines.push(`  ${x}`))
   if (o.images === true) lines.push(`  images_approved: ${IMAGES_APPROVED}   # args.imagesApproved: the owner's yes for this batch, recorded by the lead in ${DIR}/decisions.md`)
   if (o.open) lines.push(`open: [${o.open.join(', ')}]`)
@@ -245,7 +262,7 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, piece: PIECE, steps: [], captures_needed: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, piece: PIECE, risks: RISKS, steps: [], captures_needed: [], images_pending: [], lessons: [] }
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.captures_needed) x.captures_needed.forEach(c => { if (!results.captures_needed.includes(c)) results.captures_needed.push(c) })
@@ -263,16 +280,20 @@ const SKILLS = {
   'trend-scout': ['market-trends', 'trend-scan'],
   'environment-designer': ['environment-design', 'environment-craft', 'reference-images'],
   modeler: ['modeling-design', 'modeling-craft', 'reference-images'],
+  animator: ['animation-design', 'animation-craft'],
+  'live-ops-designer': ['live-ops-design', 'live-ops-craft'],
 }
 // The trend-scout writes only in its own job folder (trend-scout role write scope).
 function propPath(r) { return r === ROLE.trend ? `${DIR}/trend-scout/proposal-trend-scout.md` : `${DIR}/direction/proposal-${r.type}.md` }
 function exPath(r) { return r === ROLE.trend ? `${DIR}/trend-scout/r1-trend-scout.md` : `${DIR}/exchange/r1-${r.type}.md` }
 const OWNER_ACTIONS = 'every upload, activation, publication and spend is an owner action in Creator Hub'
+// Gates close doors (job-types.md cross-type rules): later briefs carry the options not picked in avoid.
+const CLOSED = 'the roughs the owner did not pick (closed doors in campaign.md)'
 
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
   const leads = [
-    { r: ROLE.mkt, focus: 'the hook: the single message a viewer understands before reading any text, the hero of the image as the job brief\'s strategy names it, the one action and its consequence, the promise-ledger claim each concept would show, the destinations and crops the family needs, and which real slot sizes are measured in knowledge/design/marketing/surfaces.md (list each unmeasured one in slot_sizes_missing)' },
+    { r: ROLE.mkt, focus: 'the hook: the single message a viewer understands before reading any text, the hero of the image as the job brief\'s strategy names it (set hero_is_character true when the hero is a character: the animator then gives its signature key pose), the one action and its consequence, the promise-ledger claim each concept would show, the destinations and crops the family needs, and which real slot sizes are measured in knowledge/design/marketing/surfaces.md (list each unmeasured one in slot_sizes_missing)' },
     { r: ROLE.design, focus: 'the truth the art must tell about play: which promise-ledger claims are playable in the launch build, the signature moment and how fast a new player reaches it, what is planned or cut and must stay out of the image, and the real scale and situation of the hero in play' },
     { r: ROLE.art, focus: 'style and identity: whether the art bible has the family for this piece (if not, the locks you propose, marked PROPOSAL), the 2-3 identity anchors per hero that every product keeps (same face and posture), the value and colour roles that separate the image from the Roblox page around it, and the style rules a reviewer will hold it to' },
   ]
@@ -304,6 +325,23 @@ async function direction() {
   }
 
   phase('Exchange')
+  // Recipe §7: the animator is consulted when a character is the hero; marketing's proposal names the hero. It runs beside the exchange.
+  const HERO_POSE = props[0].hero_is_character === true
+  const poseCall = () => call(ROLE.anim, {
+    id: 'D2-hero-pose', task: `signature key pose of the hero for marketing art: ${PIECE}`,
+    intent: `Direction stage. The hero of this ${PIECE} is a character, so the roughs use the signature move's key pose from the game: players must meet the character they will really play. Give marketing the key frame that carries the premise best, set on the rig at the camera of each concept in marketing's proposal, shaded and in black-fill, with the clip name and frame. If no rigged clip of the signature move exists yet, say so in coverage (not done) and keep status done: the roughs then pose the hero from the anchors and the pose check goes on the could-not-check list.`,
+    skills: SKILLS.animator,
+    inputs: [`${propPath(ROLE.mkt)}@rev1`],
+    refs: ['.agents/skills/marketing-craft/references/handoffs.md §7   # take: the pose ask and its check', '.agents/skills/animation-design/references/game-timing.md §6   # take: your side of the hand-off'],
+    open: ['which key frame carries the premise best', 'small offsets inside the key pose for each camera, recorded with the reason'],
+    avoid: ['a new pose made only for the still'],
+    owns: [`${POSE_DIR}/`],
+    consumers: ['marketing (roughs, green light)', 'art-director (anchor check)'],
+    notInScope: ['the image\'s composition, light and colour'],
+    deliver: `${POSE_DIR}/: per camera the key pose render, shaded and black-fill, with the clip name and frame`,
+    checks: ['each black-fill matches the clip\'s key frame (look_check.py silhouette --compare), or the difference is listed with its reason'],
+    rules: ['Blender: you are the only Blender user in this step.'],
+  }, S_STEP, 'Exchange')
   const ex = await parallel(leads.map(L => () => call(L.r, {
     id: `D2-${L.r.type}`, task: `marketing art direction exchange: ${PIECE}`,
     intent: 'Direction stage, one exchange. Read every other lead\'s proposal and list only the conflicts that would change production (what the hero is, what the image promises, a style or identity rule, a truth problem), and evidence that is missing. Agreement needs no entry. Do not rewrite your proposal.',
@@ -312,29 +350,35 @@ async function direction() {
     deliver: `${exPath(L.r)} in the templates/jobs/exchange-note.md format`,
     checks: ['each conflict names what breaks, with evidence, and the decision owner (marketing: the message; game-designer: truth to play; art-director: style and identity, rules/company.md §3) or the test that settles it'],
     rules: L.r === ROLE.trend ? ['Every number keeps its label and date.'] : [],
-  }, S_EXCHANGE, 'Exchange')))
-  ex.forEach((x, i) => keep(`D2 ${leads[i].r.type}`, x))
+  }, S_EXCHANGE, 'Exchange')).concat(HERO_POSE ? [poseCall] : []))
+  ex.slice(0, leads.length).forEach((x, i) => keep(`D2 ${leads[i].r.type}`, x))
+  if (HERO_POSE) {
+    const pose = keep('D2 hero pose', ex[leads.length])
+    if (!ok(pose)) return Object.assign(results, { status: 'failed', outcome: 'the animator\'s hero pose step returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' })
+  }
 
   phase('Direction sheet')
   let syn = keep('D3 direction sheet', await call(ROLE.mkt, {
     id: 'D3-direction', task: `marketing art direction sheet and rough thumbnails: ${PIECE}`, images: true,
-    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes, with 3-5 rough thumbnails of the ${PIECE} for the owner: distinct concepts (core action, social moment, progression payoff, each only if the game has it), never palette swaps, each with one hero, one action and one consequence at a moment ordinary play reaches. Rough is right: big shapes, value groups and the read at the real slot size, not polish. Show each rough at the real slot size and in the real layout, and state the one you prefer with its trade-off in player terms. Plan the family of crops now (every destination, format, real size and its source, safe area), because the crops are made from the final layered file and the composition must hold in each. Before anyone sees a rough, look at it yourself: the hero's face and identity against the anchors first (a wrong face draws the first note every time), then hands, object count, scale, fake UI, stray text. Ties go back to the brief's strategy; never invent the owner's taste: a taste tie becomes a G1 question.`,
+    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes, with a labelled warm-up of the typical idea first (the baseline, not an option), then 3-5 rough thumbnails of the ${PIECE} for the owner, each from a different hook (layout, story or camera: core action, social moment, progression payoff, each only if the game has it), never palette swaps, all at equal finish, each with one hero, one action and one consequence at a moment ordinary play reaches.${HERO_POSE ? ` The hero is a character: pose it from the animator's key pose in ${POSE_DIR}/.` : ''} Rough is right: big shapes, value groups and the read at the real slot size, not polish. Show each rough at the real slot size with its sheet and in the real layout, in colour, grey and black-fill. State the one you prefer with reasons tied to the sell list, and for each other rough the reason it lost and the "may return only if" condition that would reopen it. A rough that failed a check goes in failed_roughs with the reason, never among the roughs shown as equals. List in could_not_check every check you could not run, with the missing input. Plan the family of crops now (every destination, format, real size and its source, safe area), because the crops are made from the final layered file and the composition must hold in each. Before anyone sees a rough, look at it yourself: the hero's face and identity against the anchors first (a wrong face draws the first note every time), then hands, object count, scale, fake UI, stray text. Ties go back to the brief's strategy; never invent the owner's taste: a taste tie becomes a G1 question.`,
     skills: ['marketing-design', 'marketing-craft', 'reference-images'],
-    inputs: leads.map(L => `${propPath(L.r)}@rev1`).concat(leads.map(L => `${exPath(L.r)}@rev1`)),
+    inputs: leads.map(L => `${propPath(L.r)}@rev1`).concat(leads.map(L => `${exPath(L.r)}@rev1`)).concat(HERO_POSE ? [`${POSE_DIR}/`] : []),
     refs: [
       'templates/jobs/direction-sheet.md   # take: the structure, revision 1; options become the roughs',
       'templates/marketing/thumbnail-brief.md   # take: one image brief per concept (message, picture, test, manifest row)',
-      '.agents/skills/marketing-craft/references/image-pipeline.md   # take: steps 1-8 for the roughs (message, art lock, manifest, generate, own look, format, measure)',
+      '.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: stages 1-4 (brief with the sell list, art lock and research, thumbnail round with the warm-up, the pick sheet)',
     ],
     open: ['the concepts, the composition of each rough, the manifest wording, which rough you prefer'],
     avoid: ['palette swaps posing as concepts', 'a feature, reward or scene the game does not have', 'polish before the big shapes read at real size', 'words drawn by the image model'],
     owns: [`${DIR}/direction.md`, `${MK}/`, `${FAMILY_DIR} (through tools/art/art_refs.py)`],
     consumers: ['art-director (style sign)', 'game-designer (truth sign)', 'the lead (G1 packet)'],
-    deliver: `${DIR}/direction.md (revision 1): target experience, the 3-5 roughs (paths to each image, its real-size sheet and real-layout mock), the preferred rough and its trade-off, the crop plan, non-negotiables, known limits, decision records, G1 questions, owner actions; image briefs in ${MK}/briefs/; the campaign record ${MK}/campaign.md`,
+    deliver: `${DIR}/direction.md (revision 1): target experience, the warm-up, the 3-5 roughs (paths to each image in colour, grey and black-fill, its real-size sheet and real-layout mock), the failed roughs with reasons, the preferred rough with its reasons and trade-off, why each other lost and its "may return only if" condition, the crop plan, non-negotiables, known limits, the could-not-check list, decision records, G1 questions, owner actions; image briefs in ${MK}/briefs/; the campaign record ${MK}/campaign.md`,
     checks: [
-      'there are 3-5 roughs, each with a thumb_check.py contact sheet and JSON at the real size and a real-layout mock on disk, or images.state is pending and the manifest lists every rough (the sheets follow the batch)',
+      'a labelled warm-up exists apart from the roughs',
+      'there are 3-5 roughs from different hooks, each with a thumb_check.py contact sheet and JSON at the real size, colour, grey and black-fill versions and a real-layout mock on disk, or images.state is pending and the manifest lists the warm-up and every rough (the sheets follow the batch)',
       'every rough cites a promise-ledger claim id marked playable',
-      'the preferred rough is named with its trade-off',
+      'the preferred rough is named with reasons tied to the sell list; every other rough has lost_because and may_return_if; every rough that failed a check is in failed_roughs, not in roughs',
+      'could_not_check lists every check not run, with its missing input (empty only when every check ran)',
       'the crop plan lists every destination with format, real size and size source',
       'every conflict in the exchange notes is resolved in a decision record or listed as a G1 question',
     ],
@@ -369,9 +413,9 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: `Direction sheet ready for the G1 packet. The lead runs any pending rough batch (images_pending) with the owner's yes and the contact sheets after it, then shows the 3-5 roughs at the real slot size, the preferred one, the crop plan, scope and usage, records the owner's words, routes the captures listed, then calls stage proof (L) or build (M). ${OWNER_ACTIONS}.`,
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, roughs: syn.roughs, recommended: syn.recommended, tradeoff: syn.tradeoff,
-      crop_plan: syn.crop_plan, questions: syn.questions, owner_actions: syn.owner_actions } : null,
+    outcome: `Direction sheet ready for the G1 packet. The lead runs any pending rough batch (images_pending) with the owner's yes and the contact sheets after it, then shows the labelled warm-up and the 3-5 roughs at the real slot size, the preferred one with its reasons, the failed roughs with their reasons (never as equals), the crop plan, the could-not-check list, scope and usage, records the owner's words and the roughs not picked as closed doors with their "may return only if" condition, routes the captures listed, then calls stage proof (L) or build (M). ${OWNER_ACTIONS}.`,
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, warm_up: syn.warm_up, roughs: syn.roughs, failed_roughs: syn.failed_roughs, recommended: syn.recommended, tradeoff: syn.tradeoff,
+      crop_plan: syn.crop_plan, could_not_check: syn.could_not_check, questions: syn.questions, owner_actions: syn.owner_actions } : null,
   })
 }
 
@@ -437,7 +481,7 @@ async function reviewLoop(L) {
       const mine = byMaker[m] || []
       keep(`FIX ${tag} ${m}`, await call(r, {
         id: `FIX-${tag}-${m}`, task: `fix marketing art review findings: ${PIECE}`, images: m === 'marketing',
-        intent: `Repair round ${round + 1}. Fix the blocking findings in the findings field in a new revision of your own files; take or decline each recommendation with a reason. The big shapes the green light froze do not move: a fix that would move them goes back as needs-decision. ${m === 'marketing' && order.length > 1 ? 'Then carry the renderer\'s new revision through polish, the layered file and every crop. ' : ''}Re-run thumb_check.py on every file you changed and name the new revision.${mine.length ? ' The items are in the findings field.' : ' No findings of your own: integrate the other makers\' fixes.'}`,
+        intent: `Repair round ${round + 1}. Fix the blocking findings in the findings field in a new revision of your own files; take or decline each recommendation with a reason. The big shapes the green light froze do not move: a fix that would move them goes back as needs-decision. ${m === 'marketing' && order.length > 1 ? 'Then carry the renderer\'s new revision through colour, polish, the layered file and every crop. ' : ''}Re-run thumb_check.py on every file you changed and name the new revision.${mine.length ? ' The items are in the findings field.' : ' No findings of your own: integrate the other makers\' fixes.'}`,
         findings: mine,
         inputs: [`${DIR}/reviews/`, `${DIR}/evidence.md`, `${DIR}/direction.md`],
         protect: ['the protected list in evidence.md', 'the big shapes the green-light record freezes'].concat(keeps),
@@ -456,18 +500,33 @@ async function reviewLoop(L) {
 // ================================================================ the proof: green light (L: before G2; M: inside build, shown at G3)
 async function proof() {
   phase('Green light')
-  const gl = keep('P1 green light', await call(ROLE.mkt, {
-    id: 'P1-greenlight', task: `green-light thumbnail: ${PIECE}`, images: true,
-    intent: `Proof stage: the green light. Take the rough the owner chose at G1 (each one, if the owner chose more than one) and bring it to green light: the big shapes of the chosen rough stay where they are; set the value first (a grey value pass, checked with look_check.py value), then the light and colour. Test it at the real slot size with thumb_check.py and in the real layout, and check that the hero stays inside the safe area of every crop in the crop plan. Look at the hero's face and identity against the anchors first and fix a wrong face before anyone reviews. Write a green-light record that names the big shapes this approval freezes (hero silhouette and position, the main value groups, light direction, the crop safe areas): after green light they do not move.`,
-    skills: ['marketing-craft', 'reference-images'],
+  // Recipe §7 proof: silhouette and a 3-value study in grey first (the cheapest pass that tests the read), then 2-3 light set-ups compared.
+  const value = keep('P1 value study', await call(ROLE.mkt, {
+    id: 'P1-value', task: `silhouette and 3-value study of the chosen thumbnail: ${PIECE}`, images: 'edit',
+    intent: `Proof stage, the cheapest pass that tests the read: grey, nothing polished. On the rough the owner chose at G1 (each one, if the owner chose more than one): the silhouette on the traced hero mask's black-fill at the real slot size, then a 3-value study in grey. The big shapes of the chosen rough stay where they are. Record the roughs the owner did not pick in campaign.md as closed doors, each with its "may return only if" condition from the direction sheet.`,
+    skills: ['marketing-craft'],
     inputs: [`${DIR}/direction.md`, `${DIR}/decisions.md`, `${MK}/`],
-    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md   # take: steps 5-9 (own look, format, measure, checklist)', 'templates/marketing/thumbnail-icon-checklist.md   # take: I1-I4 and I9 at this stage'],
-    open: ['how you set value and light inside the art bible', 'the regeneration or paint-over route for this pass'],
-    avoid: ['moving the chosen rough\'s big shapes', 'detail and polish before value and light read at real size', 'a concept the owner did not choose'],
+    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: stage 5, silhouette and value; §4 for the 3-value command'],
+    open: ['how the value groups are set inside the art bible'],
+    avoid: ['moving the chosen rough\'s big shapes', 'colour, detail or polish', CLOSED],
+    owns: [`${MK}/greenlight/`, `${MK}/campaign.md`],
+    consumers: ['marketing (light set-ups)', 'art-director', 'the lead (G2 packet)'],
+    deliver: `${MK}/greenlight/: the black-fill silhouette sheet at the real size, the 3-value study and its look_check.py value JSON; campaign.md with the closed doors`,
+    checks: ['a black-fill sheet at the real size and a 3-value study with its JSON exist for every chosen rough', 'every rough not picked is a closed door in campaign.md with its "may return only if" condition'],
+  }, S_STEP, 'Green light'))
+  if (!ok(value)) return { status: 'failed', outcome: 'silhouette and value study not made' }
+  const gl = keep('P2 green light', await call(ROLE.mkt, {
+    id: 'P2-light', task: `light set-ups and green-light thumbnail: ${PIECE}`, images: true,
+    intent: `Proof stage: the green light. On the approved values, make 2-3 light set-ups and compare them at the real slot size in grey; pick one and say why. Then mark every planned crop's safe square on the master, test the image at the real slot size with thumb_check.py and in the real layout. Look at the hero's face and identity against the anchors first and fix a wrong face before anyone reviews. Write a green-light record that names the big shapes this approval freezes (hero silhouette and position, the main value groups, light direction, the crop safe squares): after green light they do not move.`,
+    skills: ['marketing-craft', 'reference-images'],
+    inputs: [`${DIR}/direction.md`, `${MK}/greenlight/`, `${DIR}/decisions.md`],
+    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: stage 5, light set-ups per route and composition; §2 for thumb_check.py', `${POSE_DIR}/   # take: the hero's key pose, when the hero is a character`, 'templates/marketing/thumbnail-icon-checklist.md   # take: I1-I4 and I9 at this stage'],
+    open: ['the light set-ups inside the art bible', 'the regeneration or paint-over route for this pass'],
+    avoid: ['moving the approved big shapes and value groups', 'detail and polish before value and light read at real size', CLOSED],
     owns: [`${MK}/greenlight/`, `${FAMILY_DIR} (through tools/art/art_refs.py)`, `${MK}/campaign.md`],
     consumers: ['art-director', 'game-designer', 'the lead (G2 packet)'],
-    deliver: `${MK}/greenlight/: the green-light image, its thumb_check.py sheet and JSON, the look_check.py value JSON, the real-layout mock, a safe-area check per planned crop, and greenlight.md (revision, the frozen big shapes)`,
-    checks: ['thumb_check.py sheet and JSON exist for the green-light image at the real size', 'a real-layout mock exists', 'the hero sits inside the safe area of every planned crop', 'greenlight.md names the frozen big shapes'],
+    deliver: `${MK}/greenlight/: the 2-3 light set-ups with the pick and its reason, the green-light image, its thumb_check.py sheet and JSON, the real-layout mock, the safe square of every planned crop marked, and greenlight.md (revision, the frozen big shapes)`,
+    checks: ['2-3 light set-ups are compared in grey at the real size, the pick has a reason', 'thumb_check.py sheet and JSON exist for the green-light image at the real size', 'a real-layout mock exists', 'every planned crop\'s safe square is marked and the hero sits inside each', 'greenlight.md names the frozen big shapes'],
   }, S_GREENLIGHT, 'Green light'))
   if (!ok(gl)) return { status: 'failed', outcome: 'green-light image not made' }
   const glWait = pendingStop(gl, 'green light')
@@ -494,9 +553,9 @@ async function production() {
     intent: `Build stage: render. Render the green-lit image at the full master size. Pick the route per image and say why (owner J012-D7): ChatGPT as generated, ChatGPT touched up by hand, or a staged render in Blender with the game's real models and set (closest to the real game when the models exist). For the first two routes, render now. For a staged render, do not render: write the ticket in ${DIR}/ledger.md (rules/messages.md §2 brief, the green-lit image as composition target) and return render_route staged-render with render_maker environment-designer (a scene) or modeler (one model). The big shapes the green light froze do not move: compare the render with the green-light image (python tools/art/look_check.py silhouette <render> --compare <green-light image>) and report the aligned IoU.`,
     skills: ['marketing-craft', 'reference-images'],
     inputs: [GL, `${MK}/greenlight/`, `${DIR}/direction.md`],
-    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md   # take: "Final assets" (three routes), steps 4-6'],
+    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: "Final assets" (three routes), stage 6'],
     open: ['the route per image and its reason', 'how the render is made inside the art bible'],
-    avoid: ['moving the frozen big shapes', 'a beauty shot judged only at full size'],
+    avoid: ['moving the frozen big shapes', 'a beauty shot judged only at full size', CLOSED],
     protect: ['the big shapes the green-light record freezes'],
     owns: [`${MK}/render/`, `${FAMILY_DIR} (through tools/art/art_refs.py)`, `${DIR}/ledger.md (your ticket row)`, `${MK}/campaign.md`],
     deliver: `${MK}/render/ (the full-size render, its route record, the silhouette comparison JSON) or the staged-render ticket`,
@@ -525,12 +584,30 @@ async function production() {
     if (!ok(staged)) return { status: 'failed', outcome: 'staged render not made' }
   }
 
+  // Recipe §7 production order: render → colour and rebalance → detail and polish → layered file → crop family.
+  phase('Colour')
+  const colour = keep('B1 colour', await call(ROLE.mkt, {
+    id: 'B1-colour', task: `colour and rebalance the marketing art: ${PIECE}`, images: 'edit',
+    intent: 'Build stage: colour, then rebalance. Colour goes on top of the green-lit values, with the art bible\'s palette roles. Try colour with global moves on the whole image (2-3 colourways), pick one and say why. Then rebalance: re-run the read order and the contrast numbers at the real size, so the hero still reads first. No new big shapes.',
+    skills: ['marketing-craft'],
+    inputs: [`${MK}/render/`, GL, `${DIR}/direction.md`],
+    refs: ['.agents/skills/marketing-craft/references/image-pipeline.md §1   # take: stage 7'],
+    open: ['the colourways inside the art bible'],
+    avoid: ['moving the frozen big shapes', 'local repainting in place of a global colour move'],
+    protect: ['the big shapes the green-light record freezes'],
+    owns: [`${MK}/colour/`, `${MK}/campaign.md`],
+    consumers: ['marketing (polish)'],
+    deliver: `${MK}/colour/: the colourways, the chosen one with its reason, and its thumb_check.py sheet at the real size`,
+    checks: ['2-3 colourways exist and the pick has a reason', 'a thumb_check.py sheet of the chosen colourway at the real size exists and the hero still reads first'],
+  }, S_STEP, 'Colour'))
+  if (!ok(colour)) return { status: 'failed', outcome: 'colour pass not finished' }
+
   phase('Polish')
   const polish = keep('B2 polish', await call(ROLE.mkt, {
     id: 'B2-polish', task: `polish the marketing art: ${PIECE}`, images: 'edit',
-    intent: 'Build stage: polish. Bring every part up together on the render: edges, detail clumped where the eye must go and calm around it, the hero\'s face and identity against the anchors first. Add title text only if the owner approved the wording, in an editor on its own layer, spelling checked at full and real size, and keep a text-free version. No new big shapes.',
+    intent: 'Build stage: detail and polish, last. Bring every part up together on the chosen colourway: edges, detail clumped where the eye must go and calm around it, the hero\'s face and identity against the anchors first. Effects and extra light only now, each on its own layer. Add title text only if the owner approved the wording, in an editor on its own layer, spelling checked at full and real size, and keep a text-free version. No new big shapes.',
     skills: ['marketing-craft'],
-    inputs: [`${MK}/render/`, GL, `${DIR}/direction.md`],
+    inputs: [`${MK}/colour/`, `${MK}/render/`, GL, `${DIR}/direction.md`],
     open: ['the polish itself'],
     avoid: ['moving the frozen big shapes', 'detail that splits the one clear moment at real size'],
     protect: ['the big shapes the green-light record freezes'],
@@ -541,14 +618,14 @@ async function production() {
   if (!ok(polish)) return { status: 'failed', outcome: 'polish not finished' }
   const layered = keep('B3 layered file', await call(ROLE.mkt, {
     id: 'B3-layered', task: `layered file for the marketing art: ${PIECE}`, images: 'edit',
-    intent: 'Build stage: the layered file. Deliver the polished master as one layered source file with foreground, midground and background on separate layers (title text on its own layer), so the family of crops and later products can re-lay the parts without repainting. The flattened layers must match the polished master.',
+    intent: 'Build stage: the layered file. Deliver the polished master as one layered source file with foreground, midground, background, effects, extra light and title text on separate layers, so the family of crops and later products can re-lay the parts without repainting. The flattened layers must match the polished master.',
     skills: ['marketing-craft'],
     inputs: [`${MK}/final/`, `${MK}/render/`],
     open: ['the file format and layer naming'],
     owns: [`${MK}/final/`],
     consumers: ['marketing (crop family)', 'later products of this game'],
     deliver: `${MK}/final/ the layered file and a note of its layers`,
-    checks: ['the layered file has foreground, midground and background layers (and a separate text layer if text exists)', 'the flattened layers match the polished master: the pixel difference is measured and reported'],
+    checks: ['the layered file has foreground, midground, background, effects and light layers (and a separate title layer if text exists)','the flattened layers match the polished master: the pixel difference is measured and reported'],
   }, S_STEP, 'Polish'))
   if (!ok(layered)) return { status: 'failed', outcome: 'layered file not made' }
 
@@ -572,30 +649,34 @@ async function production() {
 }
 
 async function reviewChain(label) {
+  const reviewers = [
+    { r: ROLE.art, skills: ['art-review'], q: 'identity read largest (the hero reads first and largest at real size, same face and posture as the anchors in every crop), silhouette, value ladder and the style rules of the art bible family, and that the big shapes match the green light' },
+    { r: ROLE.design, skills: ['game-design', 'platform-policy'], q: 'truth to play in every crop: each moment, object, reward and scale is what ordinary play in the launch build gives (promise-ledger claim playable), no fake UI, currency, prices, rewards or odds, and the feeling matches the real player fantasy' },
+  ]
+  // Risk event: after the creative chain, the live-ops-designer reviews the finished images (no Studio: the image files stand in for the capture set).
+  if (EVENT) reviewers.push({ r: ROLE.live, skills: ['live-ops-craft'],
+    q: 'the event review lines of live-ops-craft/references/event-review.md §3 that apply to marketing images, on the image files, their sheets and real-layout mocks: truth to the promise (E-01, E-02), rarer looks bigger (E-06), identity kept (E-09), one brand property changed (E-10), the motif comes from the game (E-11); other lines are n/a with the reason. Close your review file with the could-not-check list' })
   const rv = await reviewLoop({
     label, phase: 'Review chain', what: `Review chain on the frozen candidate in ${DIR}/evidence.md`, scripts: true, makers: MAKERS,
     inputs: [`${DIR}/evidence.md`, `${MK}/final/`, `${MK}/checks/`, `${MK}/greenlight/`, `${DIR}/direction.md`, 'knowledge/design/art-bible.md', 'knowledge/design/promise-ledger.md'],
-    reviewers: [
-      { r: ROLE.art, skills: ['art-review'], q: 'identity read largest (the hero reads first and largest at real size, same face and posture as the anchors in every crop), silhouette, value ladder and the style rules of the art bible family, and that the big shapes match the green light' },
-      { r: ROLE.design, skills: ['game-design', 'platform-policy'], q: 'truth to play in every crop: each moment, object, reward and scale is what ordinary play in the launch build gives (promise-ledger claim playable), no fake UI, currency, prices, rewards or odds, and the feeling matches the real player fantasy' },
-    ],
+    reviewers,
   })
   if (!ok(rv)) return rv
   phase('Owner package')
   const pkg = keep('B6 owner package', await call(ROLE.mkt, {
     id: `B6-package-${label}`, task: `owner decision package for marketing art: ${PIECE}`,
-    intent: 'Owner package for G3. Write the decision package from the clean review chain: the recommended images and the rejected ones with reasons, every sheet and mock, the claim id per image, what each image tests (one player expectation), the test label (Home personalization is adaptive allocation, an icon change is observational) and whether the analyst\'s spec exists, the rollback (the current live images), and every owner action in order. Nothing is published by default.',
+    intent: 'Owner package for G3. Write the decision package from the clean review chain: the recommended images and the rejected ones with reasons, every sheet and mock, the claim id per image, what each image tests (one player expectation), the test label (Home personalization is adaptive allocation, an icon change is observational) and whether the analyst\'s spec exists, the rollback (the current live images), the could-not-check list (every check nobody could run, with the missing input, from your hand-backs and the review files), and every owner action in order. Nothing is published by default.',
     skills: ['marketing-craft'],
     inputs: [`${DIR}/evidence.md`, `${DIR}/reviews/`, `${MK}/final/`, `${MK}/campaign.md`],
     refs: ['.agents/skills/marketing-craft/SKILL.md §3 step 9   # take: the owner package contents'],
     owns: [`${MK}/owner-package.md`, `${MK}/campaign.md`],
     consumers: ['the lead (readiness and the G3 packet)'],
     deliver: `${MK}/owner-package.md`,
-    checks: ['every decision the owner must make has a recommendation and a default', 'every external step is listed as an owner action', 'the rollback names the current live images'],
+    checks: ['every decision the owner must make has a recommendation and a default', 'every external step is listed as an owner action', 'the rollback names the current live images', 'could_not_check lists every check not run, with its missing input'],
   }, S_PACKAGE, 'Owner package'))
   if (!ok(pkg)) return { status: 'failed', outcome: 'owner package not written' }
-  return { status: 'done', outcome: `Review chain clean and owner package written. The lead runs readiness and the G3 packet; ${OWNER_ACTIONS}.`,
-    new_requests: rv.new_requests, reviews: rv.reviews, package: `${MK}/owner-package.md`, owner_actions: pkg.owner_actions }
+  return { status: 'done', outcome: `Review chain clean and owner package written. The lead runs readiness and the G3 packet with the could-not-check list; ${OWNER_ACTIONS}.`,
+    new_requests: rv.new_requests, reviews: rv.reviews, package: `${MK}/owner-package.md`, could_not_check: pkg.could_not_check, owner_actions: pkg.owner_actions }
 }
 
 // ================================================================ stage: repair (a G3 change, affected layers and crops only)

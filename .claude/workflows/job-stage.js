@@ -1,25 +1,25 @@
 export const meta = {
   name: 'job-stage',
   description: 'Run one stage (direction, proof, build or repair) of a stage job (level, hub, lobby, arena, world area) led by the environment-designer; owner gates sit between calls.',
-  whenToUse: 'An M or L stage job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L); studioId for proof, build and repair; images (owner-approved reference image paths) for build and repair; change for repair. Optional: stageId, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L stage job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L); risks (a list, [] = none; stage accepts: event) in every stage; studioId for proof, build and repair; images (owner-approved reference image paths) for build and repair; change for repair. Optional: stageId, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
-    { title: 'Proposals', detail: 'game, art, environment and performance leads write independent proposals' },
+    { title: 'Proposals', detail: 'game, art, environment and performance leads write independent proposals; the game-designer brings 2-3 layout options' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
-    { title: 'Direction sheet', detail: 'environment-designer synthesises and drafts the blueprint for G1; others sign' },
-    { title: 'Contract', detail: 'route graph, the G1 blueprint refined, ambience map, kit piece list; consumers check' },
-    { title: 'Greybox', detail: 'playable greybox in Studio, walk tests and multi-client playtest' },
+    { title: 'Direction sheet', detail: 'environment-designer synthesises and drafts the blueprint for G1; layouts considered, closed doors, could-not-check; others sign' },
+    { title: 'Contract', detail: 'route graph with route table, hazard sheets and read rank; the G1 blueprint refined; read plan; ambience map; kit piece and floor-material lists; consumers check' },
+    { title: 'Greybox', detail: 'playable greybox in Studio and the grey value pass; walk tests and multi-client playtest' },
     { title: 'Proof review', detail: 'game-designer (play), then art-director, then performance-engineer' },
-    { title: 'Art blockout', detail: 'art shapes snapped to the approved greybox; playtest and game-designer check-in' },
+    { title: 'Art blockout', detail: 'art shapes snapped to the approved greybox; playtest, game-designer check-in, art-director paint-over before set dressing' },
     { title: 'Kit and art', detail: 'kit pieces (modeler), art production and placement; playtest and check-in' },
-    { title: 'Light and atmosphere', detail: 'only after the space plays well' },
+    { title: 'Light and atmosphere', detail: 'art-director picks from 2-3 grey lighting variants, then the light pass; only after the space plays well' },
     { title: 'Ambience', detail: 'sound and ambient VFX from the ambience map; VFX placement check-in' },
-    { title: 'Freeze', detail: 'one frozen candidate, review packet, recorded playtest' },
-    { title: 'Review chain', detail: 'scripts, QA and performance in Studio beside game, art, sound and VFX reviews; repairs by makers' },
+    { title: 'Freeze', detail: 'one frozen candidate, review packet, recorded playtest and named captures' },
+    { title: 'Review chain', detail: 'scripts, QA and performance in Studio beside game, art, sound and VFX reviews, then the event review (risk: event); repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts' },
   ],
 }
 
-// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T04, owner approval J016-D5). Shape copied from job-cutscene.js; revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T04, owner approval J016-D5). Shape copied from job-cutscene.js; revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §3. Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
 // One stage per call. Never start a stage before the owner's gate answer for the previous one.
@@ -39,6 +39,10 @@ const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
 const DIR = `knowledge/jobs/${JOB}`
 const SDIR = `content/stages/${SID}`
+// The job card's Risks row (README args table): each token switches on a recipe *(risk: …)* row. Stage accepts only `event`.
+const RISKS_OK = ['event']
+const RISKS = Array.isArray(A.risks) ? A.risks : null
+const EVENT = !!RISKS && RISKS.includes('event')   // a job from a live-ops update brief: the live-ops event review runs before G3
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair}', got: A }
@@ -46,6 +50,8 @@ if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
 // Lead decision LD9: an arg that switches binding rules or gates has no silent default.
 const lacking = []
 if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2; M runs the proof inside build)')
+if (!RISKS) lacking.push('risks: a list of the job card\'s Risks row tokens ([] = none); stage accepts: event')
+else if (RISKS.some(t => !RISKS_OK.includes(t))) lacking.push(`risks: unknown token ${RISKS.filter(t => !RISKS_OK.includes(t)).map(t => JSON.stringify(t)).join(', ')}; stage accepts only: ${RISKS_OK.join(', ')}`)
 if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the greybox and the place live in Studio; one Studio driver at a time (rules/company.md §9)')
 if ((STAGE === 'build' || STAGE === 'repair') && !IMAGES.length) lacking.push('images: the owner-approved key-place reference image paths (no art without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
@@ -65,6 +71,7 @@ const ROLE = {
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
   vfx: { type: 'vfx-designer', model: 'opus', effort: 'high' },
   qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
+  liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
 // Fixes and small changes run the environment-designer at medium (owner J008-D1); the brief says why.
 const ENV_FIX = { type: 'environment-designer', model: 'opus', effort: 'medium' }
@@ -124,15 +131,19 @@ const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: 
 const S_SIGN = schema({ signs: { type: 'boolean' }, incompatibility: STR })
 const S_ROUTE = schema({ route_graph_revision: INT })
 // The blueprint draft is shown at G1 with the direction sheet (recipe §3 "G1 shows"; owner J008: blueprint approved before any building).
-const S_DIRECTION = schema({ revision: INT, blueprint_revision: INT, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR })
+// G1 also shows the layouts considered, the options that failed a check (with the reason), the closed doors and the could-not-check list (cross-type rules).
+const S_DIRECTION = schema({ revision: INT, blueprint_revision: INT, layouts: { type: 'array', items: OPTION }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR,
+  failed_options: STRS, closed_doors: STRS, could_not_check: STRS })
 // approved_items_changed: every change to an item the owner approved at G1; a non-empty list stops the proof before the greybox.
-const S_CONTRACT = schema({ route_graph_revision: INT, blueprint_revision: INT, ambience_map_revision: INT, kit_piece_ids: STRS, approved_items_changed: STRS })
+const S_CONTRACT = schema({ route_graph_revision: INT, blueprint_revision: INT, ambience_map_revision: INT, kit_piece_ids: STRS, floor_materials: STRS, approved_items_changed: STRS })
 // Every build step of the place reports the two recipe return paths: play-affecting art changes and new surface materials.
 const S_BUILD = schema({ revision: INT, play_affecting_changes: STRS, new_surface_materials: STRS, kit_piece_ids: STRS })
 const S_PLAYTEST = schema({ measurements: { type: 'array', items: MEASURE }, captures: STRS, captures_made: INT, captures_looked_at: INT })
 const S_PROPOSAL_IMG = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT })
 const S_KIT = schema({ images: IMAGE_OUT })
-const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+const REVIEW_PROPS = { findings: { type: 'array', items: FINDING }, keep: STRS, could_not_check: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } }
+const S_REVIEW = schema(REVIEW_PROPS)
+const S_REVIEW_IMG = schema(Object.assign({}, REVIEW_PROPS, { images: IMAGE_OUT }))   // a review that may generate paint-overs
 const S_SCOPE = schema({ affected_roles: STRS, touches_play: { type: 'boolean' }, new_scope: { type: 'boolean' } })
 
 // ---------------------------------------------------------------- briefs (rules/messages.md §2, built per call)
@@ -204,7 +215,11 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, stageId: SID, steps: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, stageId: SID, risks: RISKS, steps: [], images_pending: [], lessons: [],
+  // Risk-gated slots skipped for no risk are a line for the job card, not a silent gap (cross-type rules).
+  risk_slots_skipped: ['build', 'repair'].includes(STAGE) && !EVENT ? ['live-ops event review before G3 (risks has no event)'] : [] }
+// Cross-type rules: every gate packet carries the could-not-check list and these owner-confirmed lines.
+const OWNER_CONFIRMS = ['feel at normal speed: the owner walks the route in the Studio build', 'ambience: two listens, the key event alone then the full mix, each on a phone speaker and on headphones']
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
@@ -230,7 +245,7 @@ function imageRule(promptsFile) {
 // Findings for the studio-operator (a missing or unclear capture) go into the next playtest brief, not to a repair step (auditor B R8).
 let captureAsks = []
 function captureNote() { return captureAsks.length ? `\nThe last review found these capture gaps; close them in this session: ${JSON.stringify(captureAsks)}` : '' }
-const BUILD_REPORT = 'In play_affecting_changes list every change that moves a route edge, an opening, cover, a sight line, a blocking surface or collision against the approved greybox (where, before, after). In new_surface_materials list every surface material the place did not use before (material, where, which footstep or impact sound it needs). Empty lists are a claim: check against the greybox before you return them.'
+const BUILD_REPORT = `In play_affecting_changes list every change that moves a route edge, an opening, cover, a sight line, a blocking surface or collision against the approved greybox (where, before, after). In new_surface_materials list every surface material not on the floor-material list in ${SDIR}/kit-pieces.md (material, where, which footstep or impact sound it needs). Empty lists are a claim: check against the greybox and the list before you return them.`
 
 // ---------------------------------------------------------------- shared steps
 // Playtests continue during art (recipe §3): the studio-operator drives Studio and records; it never fixes.
@@ -288,10 +303,10 @@ async function returnPaths(x, tag, phaseName) {
   if (mats.length) {
     const s = keep(`${tag} materials`, await call(ROLE.sound, {
       id: `${tag}-materials`, task: `new surface materials in stage ${SID}`,
-      intent: `The environment-designer uses surface materials the stage did not use before; each one needs footstep and impact sounds. Accept the ones you can make in this job's time, or refuse with the reason (time, clash with the ambience). The materials are in the findings field.`,
+      intent: `The environment-designer uses surface materials that are not on the floor-material list you agreed in the contract; each one needs footstep and impact sounds. Accept the ones you can make in this job's time, or refuse with the reason (time, clash with the ambience). The materials are in the findings field.`,
       findings: mats,
       skills: ['sound-design'],
-      inputs: [`${SDIR}/ambience-map.md`, `${SDIR}/review/`],
+      inputs: [`${SDIR}/ambience-map.md`, `${SDIR}/kit-pieces.md   # take: the floor-material list`, `${SDIR}/review/`],
       owns: [`output/sound/${SID}-ambience/materials-${tag}.md`],
       deliver: `output/sound/${SID}-ambience/materials-${tag}.md: one row per material, accept or refuse, with the reason`,
       checks: ['every listed material has a row', 'signs is true only if you accept every material; incompatibility names each refused one'],
@@ -384,13 +399,40 @@ async function checkIn(name, phaseName, look, playFocus) {
   }
 }
 
+// The art-director's check-ins (recipe §3): it judges the environment-designer's captures and never edits; ≤ 2 repair rounds.
+// A pending paint-over batch stops the stage: the next step builds on it (lead decision LD2).
+async function artCheckIn(name, phaseName, look, inputs, paint) {
+  for (let round = 0; round <= 2; round++) {
+    const tag = `${name}-r${round}`
+    const rv = keep(`AC ${tag} art-director`, await call(ROLE.art, {
+      id: `AC-${tag}-art-director`, task: `art-director check-in on stage ${SID}: ${name}`,
+      intent: `Build stage, art check-in "${name}". Look at the captures first, then the hand-backs. ${look} You do not edit the place. Classify each finding: blocking, recommendation or new request, and name the maker role (${MAKERS}).`,
+      skills: ['art-direction', 'art-review'],
+      refs: IMAGES.map(p => `${p}   # owner-approved key-place reference (args.images)`).concat([BIBLE]),
+      inputs,
+      images: paint ? `${DIR}/art/${name}/image-prompts.md` : undefined,
+      owns: [`${DIR}/reviews/checkin-${tag}-art-director.md`].concat(paint ? [`${DIR}/art/${name}/`] : []),
+      deliver: `${DIR}/reviews/checkin-${tag}-art-director.md (templates/jobs/review.md)${paint ? `; the paint-over in ${DIR}/art/${name}/` : ''}`,
+      checks: ['every finding names the capture, the numbers (look_check.py) where a number decides, and the smallest fix', 'keep lists what works'],
+      rules: ['Judge the captures; do not open Studio. A missing capture is a finding for the environment-designer.', NO_BLENDER, LIGHT].concat(paint ? [] : [NO_BROWSER]),
+    }, paint ? S_REVIEW_IMG : S_REVIEW, phaseName))
+    if (!ok(rv)) return { status: 'failed', outcome: `art check-in ${name} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage from here` }
+    if (rv.images && rv.images.state === 'pending') return { status: 'blocked', outcome: `Art check-in ${name}: a paint-over batch is pending and the next step builds on it. The lead runs it with the owner's yes, then calls build again.`, images_pending: results.images_pending }
+    const blocking = rv.findings.filter(f => f.class === 'blocking')
+    if (!blocking.length) return { status: 'done', outcome: `art check-in ${name} clean on round ${round}`, keep: rv.keep }
+    if (round === 2) return { status: 'needs-decision', outcome: `Art check-in ${name}: blocking findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).`, blocking }
+    const stop = await repairByMaker(blocking, tag, phaseName, round)
+    if (stop) return stop
+  }
+}
+
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
   const leads = [
     { r: ROLE.design, skills: ['level-design', 'game-design'],
-      focus: 'the stage\'s job and its hook; the target experience (one type of fun); the level job card (level-design §3 step 1); a route graph draft (nodes and edges, the 10 node fields where you know them); the first view; encounters, teaching and pacing (rest and peak); intended route times at the game\'s walk speed; and the decisions that are yours: routes, cover, sight lines, blocking surfaces' },
+      focus: 'the stage\'s job and its hook; the target experience (one type of fun); the level job card (level-design §3 step 1); a route graph draft (nodes and edges, the 10 node fields where you know them); the first view; encounters, teaching and pacing (rest and peak); intended route times at the game\'s walk speed; the route table (each segment in seconds at walk speed) and the hazard sheets; 2-3 layout options from different hooks as top-down route sketches with their route times, your pick and why the others lose, any layout that failed a check listed with the reason; and the decisions that are yours: routes, cover, sight lines, blocking surfaces' },
     { r: ROLE.art, skills: ['art-direction', 'reference-images'],
-      focus: 'the look: 2-3 key-place reference images through reference-images (concept and environment families; real photos first for real places), the value band, palette and light mood per area, the first view as a picture, each checked against the art bible' },
+      focus: 'the look: 2-3 key-place reference images through reference-images (concept and environment families; real photos first for real places) at equal finish, each from its own hook and shown in colour, grey and black-fill at the size players see it; the value bands and reserved colours, palette and light mood per area, the first view as a picture, each checked against the art bible' },
     { r: ROLE.env, skills: ['environment-design', 'level-design'],
       focus: 'the place: the set list (what players expect to find here), landmarks and their 2-3 iconic traits at play distance, terrain per area, built-where (Blender, Studio or split, with reasons), the ambience idea per area (what you hear and what moves, and why), scale against the player envelope; a first blueprint sketch of your own (site plan with zones, path network and heights, a scale sheet against the player envelope), made without the game-designer\'s route graph: the direction sheet step joins the two; show the first view and the landmarks as Blender blockout stills or an annotated top-down sketch' },
     { r: ROLE.perf, skills: ['performance'],
@@ -430,14 +472,15 @@ async function direction() {
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.env, {
     id: 'D3-synthesis', task: `stage direction sheet: ${SID}`,
-    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience; the route graph and first view from the game-designer\'s proposal (its route decisions stay the game-designer\'s: you record them, you do not change them); 2-3 looks for the owner shown as pictures (the art-director\'s images); one recommendation with its trade-off in player terms; the budget and its source; non-negotiables; known limits; and a decision record for every consequential conflict (decision owner per the decision rights; record dissent and a revisit trigger). Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.\nThen write the blueprint draft the owner approves at G1, before any building (owner J008): your blueprint sketch laid on the game-designer\'s route graph, in the stage-blueprint template, marked DRAFT FOR G1: stage card, set list, site plan (zones, path network, heights), scale sheet with a player-size reference in every space, structures at plan depth, guidance per decision point, built-where, the light, air and ambience plan in one line per area, the estimate against the budget, and §K Approval left empty for the lead to fill with the owner\'s words. The route graph decides the layout: where your sketch disagrees with it, the route graph wins and the difference becomes a decision record the game-designer owns.',
+    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience; the route graph and first view from the game-designer\'s proposal, with the 2-3 layout options it considered (top-down route sketches with route times, in layouts) and why the others lost (its route decisions stay the game-designer\'s: you record them, you do not change them); 2-3 looks for the owner shown as pictures at equal finish (the art-director\'s images); one recommendation with its trade-off in player terms; options that failed a check listed with the reason in failed_options, never shown as equals; every option not picked recorded in the sheet as a closed door with "may return only if" (closed_doors); what G1 cannot show yet in could_not_check; the budget and its source; non-negotiables; known limits; and a decision record for every consequential conflict (decision owner per the decision rights; record dissent and a revisit trigger). Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.\nThen write the blueprint draft the owner approves at G1, before any building (owner J008): your blueprint sketch laid on the game-designer\'s route graph, in the stage-blueprint template, marked DRAFT FOR G1: stage card, set list, site plan (zones, path network, heights), scale sheet with a player-size reference in every space, structures at plan depth, guidance per decision point, built-where, the light, air and ambience plan in one line per area, the estimate against the budget, and §K Approval left empty for the lead to fill with the owner\'s words. The route graph decides the layout: where your sketch disagrees with it, the route graph wins and the difference becomes a decision record the game-designer owns.',
     skills: ['environment-design', 'level-design'],
     inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
     refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1', 'templates/environment/stage-blueprint.md   # take: sections A-K at draft depth', PROFILE],
     owns: [`${DIR}/direction.md`, `${SDIR}/blueprint.md`],
     consumers: ['game-designer', 'art-director', 'performance-engineer'],
-    deliver: `${DIR}/direction.md (revision 1) and ${SDIR}/blueprint.md (revision 1, DRAFT FOR G1): what G1 shows: the route graph, the blueprint draft, the first view, 2-3 pictured looks, the recommendation`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 looks, each with pictures on disk or rows in a pending prompts file', 'the route graph in the sheet matches the game-designer\'s proposal, or each difference has a decision record the game-designer owns', 'the blueprint draft is checked by a script, not by eye: every route graph edge and opening appears in its site plan (list the check and its output)', 'every space in the scale sheet has a player-size reference; §K Approval is empty'],
+    deliver: `${DIR}/direction.md (revision 1) and ${SDIR}/blueprint.md (revision 1, DRAFT FOR G1): what G1 shows: the route graph with the 2-3 layout options considered and why the others lost, the blueprint draft, the first view, 2-3 pictured looks at equal finish, the recommendation`,
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 looks, each with pictures on disk or rows in a pending prompts file',
+      '2-3 layouts, each a top-down route sketch with route times; one line per losing layout on why it lost', 'every option not picked is a closed door with its "may return only if" condition; failed options carry the check they failed', 'the route graph in the sheet matches the game-designer\'s proposal, or each difference has a decision record the game-designer owns', 'the blueprint draft is checked by a script, not by eye: every route graph edge and opening appears in its site plan (list the check and its output)', 'every space in the scale sheet has a player-size reference; §K Approval is empty'],
     rules: [BLENDER_ONLY, NO_BROWSER],
   }, S_DIRECTION, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, { status: 'failed', outcome: 'direction sheet not written' })
@@ -468,8 +511,9 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: `Direction sheet and blueprint draft ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner's yes and records the approved image paths for args.images; then shows the route graph, the blueprint draft, the first view, the looks as pictures, the recommendation and usage; records the owner's words with the approved blueprint revision in ${DIR}/decisions.md and in the blueprint's §K; then calls stage proof (L) or build (M).`,
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, blueprint: `${SDIR}/blueprint.md@rev${syn.blueprint_revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions } : null,
+    outcome: `Direction sheet and blueprint draft ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner's yes and records the approved image paths for args.images; then shows the route graph with the layouts considered, the blueprint draft, the first view, the looks as pictures, the recommendation, the failed options, the could-not-check list and usage; records the owner's words with the approved blueprint revision in ${DIR}/decisions.md and in the blueprint's §K; then calls stage proof (L) or build (M).`,
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, blueprint: `${SDIR}/blueprint.md@rev${syn.blueprint_revision}`, layouts: syn.layouts, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff,
+      failed_options: syn.failed_options, closed_doors: syn.closed_doors, could_not_check: syn.could_not_check, owner_confirms: OWNER_CONFIRMS, questions: syn.questions } : null,
   })
 }
 
@@ -480,42 +524,42 @@ async function proof() {
   phase('Contract')
   const route = keep('P1 route graph', await call(ROLE.design, {
     id: 'P1-route-graph', task: `route graph for stage ${SID}`,
-    intent: 'Proof stage. Turn the approved direction and the G1-approved blueprint into the full route graph the greybox is built on: nodes and edges with the 10 node fields, the 5 player walk-throughs and the 4 failure traces, the first view, the landmark each decision point needs, the sight lines, cover and blocking surfaces that must hold, and the intended time of each edge at the game\'s walk speed (edge lengths from the approved site plan). Keep the layout the owner approved: a route change that moves an approved zone, path or opening is listed under questions for the owner, not made. The environment-designer refines the blueprint from this file next.',
+    intent: 'Proof stage. Turn the approved direction and the G1-approved blueprint into the full route graph the greybox is built on: nodes and edges with the 10 node fields, the 5 player walk-throughs and the 4 failure traces, the first view, the landmark each decision point needs, the sight lines, cover and blocking surfaces that must hold, and the intended time of each edge at the game\'s walk speed (edge lengths from the approved site plan); the route table (seconds per segment at walk speed), a hazard sheet per hazard and the read rank per key view (what the player must see first, second, third), which the read plan is built on. Keep the layout the owner approved: a route change that moves an approved zone, path or opening is listed under questions for the owner, not made. The environment-designer refines the blueprint from this file next.',
     skills: ['level-design', 'game-design'],
     inputs: [`${DIR}/direction.md`, APPROVED, `${DIR}/direction/proposal-game-designer.md`],
     refs: ['.agents/skills/level-design/references/review-artifact.md   # take: §1 node fields, §2 walk-throughs and traces', PROFILE],
     owns: [`${DIR}/route-graph.md`],
     consumers: ['environment-designer', 'studio-operator', 'qa-lead'],
     deliver: `${DIR}/route-graph.md (revision 1, change table)`,
-    checks: ['every node has the 10 fields, or UNKNOWN with the test that will set it', 'every edge has an intended time computed from a length and the walk speed, or PROPOSAL', 'every sight line, cover and blocking surface that must hold has an id the reviews can cite'],
+    checks: ['every node has the 10 fields, or UNKNOWN with the test that will set it', 'every edge has an intended time computed from a length and the walk speed, or PROPOSAL', 'the route table covers every segment; every hazard has a sheet; every key view has a read rank','every sight line, cover and blocking surface that must hold has an id the reviews can cite'],
   }, S_ROUTE, 'Contract'))
   if (!ok(route)) return { status: 'failed', outcome: 'route graph not written' }
   let rg = route.route_graph_revision
 
   let plan = keep('P2 blueprint', await call(ROLE.env, {
     id: 'P2-blueprint', task: `refine the approved blueprint, ambience map and kit list: ${SID}`,
-    intent: 'Proof stage. Write the shared contract the greybox and later the art are built against. Refine the blueprint the owner approved at G1; do not write it from scratch: add the detail the greybox needs inside the approved layout (exact heights, structure plans per floor with elevations and one section, the full scale sheet with a player-size reference in every space, guidance per decision point, built-where per piece). In approved_items_changed list every change to an item the owner approved (a zone, path, opening, structure position or size, a scale value); added detail inside an approved item is not a change. Then write the ambience map revision 1 (zones, what you hear, what moves, point sources, blends; numbers UNKNOWN until the greybox sets them) and the kit piece list for the modeler (each piece: id, purpose, size from the scale sheet, pivot, collision, budget source, where used; shared kit pieces reused first). Keep every route edge, opening, sight line and timing of the route graph; a layout change is a proposal to the game-designer, never a silent edit.',
+    intent: 'Proof stage. Write the shared contract the greybox and later the art are built against. Refine the blueprint the owner approved at G1; do not write it from scratch: add the detail the greybox needs inside the approved layout (exact heights, structure plans per floor with elevations and one section, the full scale sheet with a player-size reference in every space, guidance per decision point, built-where per piece). In approved_items_changed list every change to an item the owner approved (a zone, path, opening, structure position or size, a scale value); added detail inside an approved item is not a change. Then write the read plan (environment-design read-plan.md §1), built on the game-designer\'s route table, hazard sheets and read rank and on the art bible\'s value bands and reserved colours (a missing row stays PROPOSAL and a question to the art-director); the ambience map revision 1 (zones, what you hear, what moves, point sources, blends; numbers UNKNOWN until the greybox sets them); and the kit piece list for the modeler (each piece: id, purpose, size from the scale sheet, pivot, collision, budget source, where used; shared kit pieces reused first) with the floor-material list (each walkable material and where), which goes to the sound-designer in the needs round before any material is built. Keep every route edge, opening, sight line and timing of the route graph; a layout change is a proposal to the game-designer, never a silent edit.',
     skills: ['environment-design', 'environment-craft', 'level-design'],
     inputs: [`${DIR}/direction.md`, APPROVED, `${DIR}/route-graph.md@rev${rg}`],
     refs: ['templates/environment/stage-blueprint.md', 'templates/environment/ambience-map.md', PROFILE, BIBLE],
-    owns: [`${SDIR}/blueprint.md`, `${SDIR}/ambience-map.md`, `${SDIR}/kit-pieces.md`],
+    owns: [`${SDIR}/blueprint.md`, `${SDIR}/read-plan.md`, `${SDIR}/ambience-map.md`, `${SDIR}/kit-pieces.md`],
     consumers: ['game-designer', 'sound-designer', 'vfx-designer', 'modeler', 'performance-engineer'],
-    deliver: `${SDIR}/blueprint.md (next revision after the approved one, with a change table row naming what was refined), ${SDIR}/ambience-map.md and ${SDIR}/kit-pieces.md (revision 1 each)`,
+    deliver: `${SDIR}/blueprint.md (next revision after the approved one, with a change table row naming what was refined), ${SDIR}/read-plan.md, ${SDIR}/ambience-map.md and ${SDIR}/kit-pieces.md with its floor-material list (revision 1 each)`,
     rules: [NEEDS_APPROVAL],
-    checks: ['built_on names the approved blueprint revision from decisions.md', 'the change table holds a diff against the approved revision; approved_items_changed lists every changed approved item, or is empty', 'the plan is checked by a script, not by eye: every route graph edge and opening appears in the site plan (list the check and its output)', 'every space in the scale sheet has a player-size reference', 'every zone in the ambience map has an id, a feeling, neighbours and a fallback', 'kit_piece_ids lists every piece in the kit piece list'],
+    checks: ['the read plan names the route table, hazard sheet and read rank revisions and the art bible rows it is built on', 'floor_materials lists every walkable material in the floor-material list','built_on names the approved blueprint revision from decisions.md', 'the change table holds a diff against the approved revision; approved_items_changed lists every changed approved item, or is empty', 'the plan is checked by a script, not by eye: every route graph edge and opening appears in the site plan (list the check and its output)', 'every space in the scale sheet has a player-size reference', 'every zone in the ambience map has an id, a feeling, neighbours and a fallback', 'kit_piece_ids lists every piece in the kit piece list'],
   }, S_CONTRACT, 'Contract'))
   if (!ok(plan)) return { status: plan && plan.status === 'blocked' ? 'blocked' : 'failed', outcome: plan ? plan.outcome : 'blueprint, ambience map or kit list not written' }
   const changedApproved = (plan.approved_items_changed || []).slice()
 
   const needers = [
-    { r: ROLE.design, q: 'the blueprint against your route graph: every edge, opening, sight line, cover, blocking surface and intended time' },
-    { r: ROLE.sound, q: 'the ambience map: zones, what you hear, point sources and blends; say now which sources or surface materials would cost more time than this job has' },
+    { r: ROLE.design, q: 'the blueprint against your route graph: every edge, opening, sight line, cover, blocking surface and intended time; the read plan against your route table, hazard sheets and read rank' },
+    { r: ROLE.sound, q: 'the floor-material list in the kit piece list, before any material is built: a footstep and impact set for each walkable material, or refuse a material that costs more time than this job has; and the ambience map: zones, what you hear, point sources and blends; say now which sources would cost more time than this job has' },
     { r: ROLE.vfx, q: 'the ambience map: what moves, visible causes, the shared wind state and the quiet space that must stay readable' },
     { r: ROLE.model, q: 'the kit piece list: each piece buildable at its size, pivot, collision and budget; reuse from the shared kit' },
     { r: ROLE.perf, q: 'the blueprint estimate per zone against the budget, and the stress scene the build must be measured in' },
   ]
   for (let round = 1; round <= 2; round++) {
-    const pins = [`${DIR}/route-graph.md@rev${rg}`, `${SDIR}/blueprint.md@rev${plan.blueprint_revision}`, `${SDIR}/ambience-map.md@rev${plan.ambience_map_revision}`, `${SDIR}/kit-pieces.md`]
+    const pins = [`${DIR}/route-graph.md@rev${rg}`, `${SDIR}/blueprint.md@rev${plan.blueprint_revision}`, `${SDIR}/read-plan.md`, `${SDIR}/ambience-map.md@rev${plan.ambience_map_revision}`, `${SDIR}/kit-pieces.md   # with the floor-material list`]
     const needBrief = (N, extra, inputs) => call(N.r, {
       id: `P3-needs-r${round}-${N.r.type}`, task: `stage contract needs: ${SID}`,
       intent: `Proof stage, interface round ${round}. Check ${N.q}. State, per item you touch: agree, conflict or missing evidence, against these revisions.${extra}`,
@@ -554,10 +598,10 @@ async function proof() {
     rg = rmerge.route_graph_revision
     plan = keep(`P3 r${round} merge`, await call(ROLE.env, {
       id: `P3-merge-r${round}`, task: `merge needs into the stage contract: ${SID}`,
-      intent: `Proof stage, merge round ${round}. Read the exchange notes and the route graph revision; decide what is inside your authority, ask for a small test where words cannot settle it, and write the next revisions of the blueprint, the ambience map and the kit piece list, each with a change table row naming the consumers to recheck. Budget items are the performance-engineer's: record its position. What stays open after round 2 becomes a G2 question. In approved_items_changed list every change this round makes to an item the owner approved at G1.`,
+      intent: `Proof stage, merge round ${round}. Read the exchange notes and the route graph revision; decide what is inside your authority, ask for a small test where words cannot settle it, and write the next revisions of the blueprint, the read plan, the ambience map and the kit piece list with its floor-material list (a material the sound-designer refused is replaced), each with a change table row naming the consumers to recheck. Budget items are the performance-engineer's: record its position. What stays open after round 2 becomes a G2 question. In approved_items_changed list every change this round makes to an item the owner approved at G1.`,
       inputs: [`${DIR}/route-graph.md@rev${rg}`, `${SDIR}/blueprint.md@rev${plan.blueprint_revision}`, `${SDIR}/ambience-map.md@rev${plan.ambience_map_revision}`].concat(notePaths),
-      owns: [`${SDIR}/blueprint.md`, `${SDIR}/ambience-map.md`, `${SDIR}/kit-pieces.md`],
-      deliver: 'the next revisions of the three contract files',
+      owns: [`${SDIR}/blueprint.md`, `${SDIR}/read-plan.md`, `${SDIR}/ambience-map.md`, `${SDIR}/kit-pieces.md`],
+      deliver: 'the next revisions of the four contract files',
       checks: ['every conflict from this round is resolved, tested or listed as an owner question', 'the site plan still contains every route graph edge (script output)'],
     }, S_CONTRACT, 'Contract'))
     if (!ok(plan)) return { status: 'failed', outcome: 'stage contract merge failed' }
@@ -571,14 +615,14 @@ async function proof() {
   phase('Greybox')
   const grey = keep('P4 greybox', await call(ROLE.env, {
     id: 'P4-greybox', task: `playable greybox in Studio: ${SID}`, studioWrite: true,
-    intent: 'Proof stage. Build the playable greybox in Studio from the blueprint: grey blocks only, true scale against the real avatar and camera, a player-size dummy in every space, spawn, goals, boundaries that act like the world, landmarks as blocks with their silhouettes, the zone volumes and anchors from the ambience map, rough light only for readability. No art, dressing or final light: this is the cheap proof the owner judges at G2. Walk it yourself at player speed, run the scene audit, take the camera set, then write the ambience map numbers the greybox now sets (zone bounds, source positions) with the greybox revision as their source.',
+    intent: 'Proof stage. Build the playable greybox in Studio from the blueprint: grey blocks only, true scale against the real avatar and camera, a player-size dummy in every space, spawn, goals, boundaries that act like the world, landmarks as blocks with their silhouettes, the zone volumes and anchors from the ambience map. No art, dressing or final light: this is the cheap proof the owner judges at G2. Then the grey value pass: still in grey, choose the key light direction from 2-3 compared directions by the numbers (environment-design light-and-air.md LA-15) and measure the first view (review.md RD2, look_check.py). Walk it yourself at player speed, run the scene audit, save its probe output as the approved blockout\'s probe (the qa-lead diffs against it later), take the camera set, then write the ambience map numbers the greybox now sets (zone bounds, source positions) with the greybox revision as their source.',
     skills: ['environment-design', 'environment-craft', 'studio-mcp'],
     inputs: [`${SDIR}/blueprint.md@rev${plan.blueprint_revision}`, APPROVED, `${DIR}/decisions.md`, `${DIR}/route-graph.md@rev${rg}`, `${SDIR}/ambience-map.md@rev${plan.ambience_map_revision}`],
     refs: ['.agents/skills/environment-craft/references/audit-and-capture.md   # take: §1 scene audit, §2 camera set', PROFILE],
     owns: [`${SDIR}/`, `the place content in studio ${STUDIO}`],
     consumers: ['studio-operator', 'game-designer', 'art-director', 'performance-engineer'],
-    deliver: `${SDIR}/greybox/ (record with revision and route lengths from coordinates), ${SDIR}/review/ (audit.json, camera set captures: top-down, first view, each landmark from its decision point, a scale shot per space), ${SDIR}/ambience-map.md (next revision)`,
-    checks: ['python tools/env/scene_audit.py audit ran on this revision (audit.json path)', 'a scale shot with the player dummy in every space', 'every route edge length exported from coordinates', 'play_affecting_changes lists every place where the greybox departs from the blueprint, or is empty'],
+    deliver: `${SDIR}/greybox/ (record with revision, route lengths from coordinates and the saved probe output), ${SDIR}/review/ (audit.json, camera set captures: top-down, first view, each landmark from its decision point, a scale shot per space; the grey value pass: the compared light directions, the pick and the first-view numbers), ${SDIR}/ambience-map.md (next revision)`,
+    checks: ['python tools/env/scene_audit.py audit ran on this revision (audit.json path); its probe output is saved in the greybox folder', 'the key light direction is chosen in grey from 2-3 directions, with look_check.py numbers per direction; the first view is measured','a scale shot with the player dummy in every space', 'every route edge length exported from coordinates', 'play_affecting_changes lists every place where the greybox departs from the blueprint, or is empty'],
     rules: [`No greybox before an approved blueprint (owner J008): start only if ${DIR}/decisions.md carries the G1 approval line for ${SDIR}/blueprint.md (the owner's words and the approved revision) and the revision in inputs only adds detail inside that approved revision (its change table says so). No approval line: build nothing and return status blocked. The revision departs from the approved one: build nothing and return status needs-decision. Name the approval line (the decisions.md row) in built_on.`, BLENDER_ONLY, BUILD_REPORT],
   }, S_BUILD, 'Greybox'))
   if (!ok(grey)) return { status: grey && ['blocked', 'needs-decision'].includes(grey.status) ? grey.status : 'failed', outcome: grey ? grey.outcome : 'greybox not built' }
@@ -589,12 +633,13 @@ async function proof() {
   phase('Proof review')
   const order = [
     { r: ROLE.design, q: 'play: measured route times against the intended times, the first view, landmark read at every decision point in both directions, teaching and pacing, falls and recovery, groups (the level-design fixed checks C1-C19 in `level-design/references/review-artifact.md`, every check re-rated each round, Pass / Fail / Unproven)', skills: ['level-design', 'game-design'] },
-    { r: ROLE.art, q: 'composition and value in the blockout: does the first view frame the goal, do the landmark silhouettes read at play distance, does the value band of the chosen look fit these spaces', skills: ['art-direction', 'art-review'] },
+    { r: ROLE.art, q: 'composition and value in the blockout and the grey value pass: does the first view frame the goal (its numbers), does the key light direction chosen in grey serve the read, do the landmark silhouettes read at play distance, does the value band of the chosen look fit these spaces', skills: ['art-direction', 'art-review'] },
     { r: ROLE.perf, q: 'cost: the scene audit counts per zone against the budget, and what the full art, light and ambience will add in the stress scene; write the budget file the build is measured against', skills: ['performance'] },
   ]
   for (let round = 0; round <= 2; round++) {
     if (round > 0) keep(`PR r${round} playtest`, await playtest(`greybox-r${round}`, 'Proof review', 'the fixed items in the last review files, then route times, first view and landmark read again'))
     const blocking = []
+    const cnc = []   // the could-not-check list for the G2 packet (cross-type rules)
     for (const o of order) {
       const rv = keep(`PR r${round} ${o.r.type}`, await call(o.r, {
         id: `PR-r${round}-${o.r.type}`, task: `review stage greybox: ${SID}`,
@@ -608,9 +653,10 @@ async function proof() {
       }, S_REVIEW, 'Proof review'))
       if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing; rerun` }
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
+      cnc.push(...(rv.could_not_check || []))
     }
     if (!blocking.length) {
-      return { status: 'done', outcome: `Proof ready for the owner (review clean on round ${round}).`, route_graph: `${DIR}/route-graph.md@rev${rg}`, greybox: `${SDIR}/greybox/`, playtests: `${DIR}/playtests/` }
+      return { status: 'done', outcome: `Proof ready for the owner (review clean on round ${round}).`, route_graph: `${DIR}/route-graph.md@rev${rg}`, greybox: `${SDIR}/greybox/`, playtests: `${DIR}/playtests/`, could_not_check: cnc, owner_confirms: OWNER_CONFIRMS }
     }
     if (round === 2) return { status: 'needs-decision', outcome: 'Greybox: blocking findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
     const stop = await repairByMaker(blocking, `greybox-r${round}`, 'Proof review', round)
@@ -642,6 +688,11 @@ async function production() {
     'that the art blockout keeps the approved routes, cover, sight lines and blocking surfaces, that landmarks still read from their decision points, and the placement of masses and terrain',
     'the art blockout: route times and landmark read against the greybox playtest, falls and stuck spots on the new shapes'))
   if (!ok(c1)) return c1
+  // Recipe §3 check-ins: the art-director paints over the first rough art on the greybox before set dressing starts.
+  const paint = keep('B1 paint-over', await artCheckIn('paintover', 'Art blockout',
+    'Give a paint-over of the first rough art over the greybox (art-review feedback-briefs.md §6: a marked capture by default; a generated paint-over only for the 1-2 worst notes) on the art blockout captures from the greybox cameras: what reads, what competes, where the detail and quiet areas go, inside the approved greybox. Set dressing builds toward it.',
+    [`${SDIR}/review/`, `${SDIR}/read-plan.md`, `${DIR}/direction.md`, `${DIR}/reviews/`], true))
+  if (!ok(paint)) return paint
 
   phase('Kit and art')
   // Studio has one writer and Blender one user: the modeler works in Blender while the environment-designer works in Studio.
@@ -668,11 +719,11 @@ async function production() {
     },
     async () => keep('B2 art production', await call(ROLE.env, {
       id: 'B2-art-production', visual: true, task: `art production inside the greybox: ${SID}`, studioWrite: true,
-      intent: 'Build stage. Art production inside the approved greybox: terrain everywhere with height and layers on theme, assembly, finish on every face and every enterable room, set dressing that tells a story of use (calm space where the player must read, detail where the player stops). Use stand-ins where a kit piece is still being made. Breadth first, then polish. No final light or atmosphere yet: that waits until the space plays well.',
+      intent: 'Build stage. Art production inside the approved greybox: terrain everywhere with height and layers on theme, assembly, finish on every face and every enterable room, set dressing that tells a story of use (calm space where the player must read, detail where the player stops), toward the art-director\'s paint-over. Surface materials come from the floor-material list the sound-designer agreed. Use stand-ins where a kit piece is still being made. Breadth first, then polish. No final light or atmosphere yet: that waits until the space plays well.',
       skills: ['environment-design', 'environment-craft', 'studio-mcp'],
-      inputs: [GREY, `${SDIR}/blueprint.md`, `${SDIR}/kit-pieces.md`, `${DIR}/reviews/`],
+      inputs: [GREY, `${SDIR}/blueprint.md`, `${SDIR}/read-plan.md`, `${SDIR}/kit-pieces.md   # take: the floor-material list`, `${DIR}/art/paintover/   # the art-director's paint-over`, `${DIR}/reviews/`],
       refs: [BIBLE, PROFILE],
-      protect: c1.keep || [],
+      protect: (c1.keep || []).concat(paint.keep || []),
       owns: [`${SDIR}/`, `the place content in studio ${STUDIO}`],
       deliver: `the place revision and ${SDIR}/review/ captures from the camera set`,
       checks: ['captures from every camera in the set, including low oblique and back faces', 'the scene audit shows 0 floating and 0 buried parts, or each is listed'],
@@ -706,13 +757,33 @@ async function production() {
   if (!ok(c2)) return c2
 
   phase('Light and atmosphere')
-  const lit = keep('B3 light', await call(ROLE.env, {
-    id: 'B3-light-atmosphere', visual: true, task: `light, atmosphere and sky: ${SID}`, studioWrite: true,
-    intent: 'Build stage. The space plays well (check-in clean). Set light, atmosphere and sky for the chosen look: light leads to the next choice, haze suggests depth but never hides information, the route reads at low quality without optional effects. Use the engine\'s own lighting.',
+  // Recipe §3 check-ins: the art-director reviews 2-3 grey lighting variants at the game camera before the light pass.
+  const lv = keep('B3 light variants', await call(ROLE.env, {
+    id: 'B3-light-variants', task: `grey lighting variants: ${SID}`, studioWrite: true,
+    intent: 'Build stage. Before the light pass, set up 2-3 lighting variants on the dressed place, keeping the key light direction chosen in the grey value pass, and capture each in grey (colour removed) at the game camera from the camera set, with look_check.py value numbers on the first view and the decision views. The art-director picks one next; do not start the light pass.',
     skills: ['environment-design', 'environment-craft', 'studio-mcp'],
-    inputs: [`${DIR}/direction.md`, `${DIR}/reviews/`, `${SDIR}/review/`],
+    inputs: [`${SDIR}/review/   # take: the grey value pass`, `${SDIR}/read-plan.md`, `${DIR}/direction.md`],
     refs: [BIBLE, '.agents/skills/environment-design/references/light-and-air.md'],
     protect: c2.keep || [],
+    owns: [`${SDIR}/`, `the place content in studio ${STUDIO}`],
+    deliver: `${SDIR}/review/light-variants/ (per variant: the settings, the grey captures and the numbers)`,
+    checks: ['2-3 variants, each with grey captures from the same cameras and look_check.py numbers', 'the place is left on its pre-variant light, or the hand-back says which variant is live'],
+    rules: [NO_BLENDER, NO_BROWSER, BUILD_REPORT],
+  }, S_BUILD, 'Light and atmosphere'))
+  if (!ok(lv)) return { status: 'failed', outcome: 'grey lighting variants not made' }
+  stop = await returnPaths(lv, 'B3-variants', 'Light and atmosphere')
+  if (stop) return stop
+  const pick = keep('B3 light check-in', await artCheckIn('light-variants', 'Light and atmosphere',
+    'Review the 2-3 grey lighting variants at the game camera: which one makes the objective win the focus, keeps the read rank and stays in the value band. Name the pick and why the others lost in keep. A blocking finding means no variant works.',
+    [`${SDIR}/review/light-variants/`, `${SDIR}/read-plan.md`, `${DIR}/direction.md`], false))
+  if (!ok(pick)) return pick
+  const lit = keep('B3 light', await call(ROLE.env, {
+    id: 'B3-light-atmosphere', visual: true, task: `light, atmosphere and sky: ${SID}`, studioWrite: true,
+    intent: 'Build stage. The space plays well (check-in clean) and the art-director picked a grey lighting variant. Set light, atmosphere and sky for the chosen look from that variant: light leads to the next choice, haze suggests depth but never hides information, the route reads at low quality without optional effects. Use the engine\'s own lighting.',
+    skills: ['environment-design', 'environment-craft', 'studio-mcp'],
+    inputs: [`${DIR}/direction.md`, `${DIR}/reviews/   # take: the light-variants check-in pick`, `${SDIR}/review/`],
+    refs: [BIBLE, '.agents/skills/environment-design/references/light-and-air.md'],
+    protect: (c2.keep || []).concat(pick.keep || []),
     owns: [`${SDIR}/`, `the place content in studio ${STUDIO}`],
     deliver: `the place revision and the camera set at low and high quality in ${SDIR}/review/ (the quality level recorded per capture)`,
     checks: ['every camera in the set at low and high quality', 'the first view and every decision-point view still show the next goal (captures)'],
@@ -790,7 +861,9 @@ async function freeze(label, phaseName, protect) {
   const back = await returnPaths(fz, `FZ-${label}`, phaseName)
   if (back) return back
   const rec = keep(`FZ ${label} record`, await playtest(`${label}-record`, phaseName,
-    'the frozen candidate as the reviewers will judge it: the full route walked in play mode, the review packet camera set, the first view, landmark read at every decision point both ways, the stress scene, and a multi-client run',
+    'the frozen candidate as the reviewers will judge it: the full route walked in play mode, the review packet camera set, the first view, landmark read at every decision point both ways, the stress scene, and a multi-client run; '
+      + 'the named captures for the art-director (art-review look-check.md §1): the layer cuts, the environment-only capture (UI, effects and characters off together), the lowest-graphics capture of the busiest view, and the main landmark\'s mask capture with depth and head-height row markers'
+      + (EVENT ? '; for the live-ops event review, the event capture set that applies (live-ops-craft event-review.md §2)' : ''),
     [`${DIR}/evidence.md`, `${SDIR}/review-packet.md`]))
   if (!ok(rec)) return { status: 'failed', outcome: 'no recorded playtest of the candidate; the reviews need it' }
   return null
@@ -799,15 +872,18 @@ async function freeze(label, phaseName, protect) {
 async function reviewChain(label) {
   phase('Review chain')
   const tech = [
-    { r: ROLE.qa, q: 'collision, falls and stuck spots: every boundary, edge, pit, river and high place with walk and jump; every fall has a way back; out of bounds; respawn; groups separated and regrouped with several clients', skills: ['testing', 'studio-mcp'], owns: `${DIR}/qa/` },
+    { r: ROLE.qa, q: 'collision, falls and stuck spots: every boundary, edge, pit, river and high place with walk and jump; every fall has a way back; out of bounds; respawn; groups separated and regrouped with several clients; ledges against the jump height; collision and cover diffed against the approved blockout (tools/env/scene_audit.py diff against the greybox probe); every gameplay cue present at the lowest and highest graphics quality; spawn positions and facing (testing PF-12)', skills: ['testing', 'studio-mcp'], owns: `${DIR}/qa/` },
     { r: ROLE.perf, q: 'frame time and memory in the stress scene against the budget file (Studio numbers are relative; a phone verdict needs a phone, else BLOCKED for that line)', skills: ['performance', 'studio-mcp'], owns: `${DIR}/perf/` },
   ]
   const creative = [
     { r: ROLE.design, q: 'play in the recorded playtest: routes, route times, readability in play, teaching and pacing; play wins over art readability', skills: ['level-design', 'game-design'] },
-    { r: ROLE.art, q: 'the camera set, the value ladder, rest areas next to detail, the first view and landmarks against the chosen look and the art bible', skills: ['art-direction', 'art-review'] },
+    { r: ROLE.art, q: 'the camera set plus the layer cuts, the environment-only capture, the lowest-graphics capture of the busiest view and the main landmark\'s mask capture: name the environment band, reserved colours and focus numbers beside the value ladder and rest areas next to detail; the first view and landmarks against the chosen look and the art bible', skills: ['art-direction', 'art-review'] },
     { r: ROLE.sound, q: 'the ambience: map vs place (audit), a visible cause for every source, blends at every border, one wind state shared with VFX; listening stays pending until someone listens', skills: ['sound-design'] },
     { r: ROLE.vfx, q: 'the ambient effects: visible causes, the quiet spaces kept clear, wind agreement with sound and plants, budget per zone', skills: ['vfx-design'] },
   ]
+  // (risk: event) after the creative order, before G3: the live-ops event review on the integrated candidate (recipe "Not recipes").
+  const eventSlot = { r: ROLE.liveops, q: 'the event review E-01 to E-19 on its capture set (the promise sentence from the update brief the job card names; a line whose capture is missing is not verified and goes on the could-not-check list)', skills: ['live-ops-design', 'live-ops-craft'],
+    refs: ['.agents/skills/live-ops-craft/references/event-review.md   # take: §2 the capture set, §3 E-01 to E-19'] }
   let recorded = label   // the freeze whose recorded playtest the reviewers judge
   for (let round = 0; round <= 2; round++) {
     const tag = `${label}-r${round}`
@@ -826,6 +902,7 @@ async function reviewChain(label) {
       id: `RV-${tag}-${o.r.type}`, task: `review stage ${label}: ${SID}`, studioWrite: studio,
       intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Check ${o.q}. Open the captures, the audit and the files first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (${MAKERS}).`,
       skills: o.skills,
+      refs: o.refs,
       inputs: [`${DIR}/evidence.md`, `${DIR}/playtests/${recorded}-record/`, `${SDIR}/review-packet.md`, `${SDIR}/review/`, `${DIR}/reviews/${tag}-scripts/`, `${DIR}/route-graph.md`, `${DIR}/direction.md`],
       owns: [`${DIR}/reviews/${tag}-${o.r.type}.md`].concat(o.owns ? [o.owns] : []),
       deliver: `${DIR}/reviews/${tag}-${o.r.type}.md (templates/jobs/review.md)`,
@@ -836,6 +913,7 @@ async function reviewChain(label) {
     const techP = (async () => { const out = []; for (const o of tech) out.push(await reviewOne(o, true)); return out })()
     const crea = []
     for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o, false)))
+    if (EVENT) crea.push(keep(`RV ${tag} ${eventSlot.r.type}`, await reviewOne(eventSlot, false)))
     const techR = await techP
     techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
     const all = [scripts].concat(crea, techR)
@@ -843,7 +921,8 @@ async function reviewChain(label) {
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet (listening and phone lines stay open until checked).`, new_requests: requests, reviews: all.map(x => x.files).flat() }
+      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet (listening and phone lines stay open until checked).`, new_requests: requests, reviews: all.map(x => x.files).flat(),
+        could_not_check: all.flatMap(x => x.could_not_check || []), owner_confirms: OWNER_CONFIRMS }
     }
     if (round === 2) {
       return { status: 'needs-decision', outcome: 'Blocking findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
@@ -906,7 +985,7 @@ if (STAGE === 'direction') return await direction()
 if (STAGE === 'proof') {
   const p = await proof()
   if (!ok(p)) return Object.assign(results, p)
-  return Object.assign(results, p, { outcome: (p.outcome || '') + ' The lead shows the greybox playtest captures, route times, first view and landmark read at G2 and records the owner\'s words before stage build.' })
+  return Object.assign(results, p, { outcome: (p.outcome || '') + ' The lead shows the greybox playtest captures, route times, first view, landmark read and the grey value pass at G2 and records the owner\'s words before stage build.' })
 }
 if (STAGE === 'build') {
   if (SIZE === 'M') {

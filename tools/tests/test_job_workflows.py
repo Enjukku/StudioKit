@@ -28,7 +28,8 @@ STAGES = ("direction", "proof", "build", "repair")
 LATER = ("proof", "build", "repair")
 
 # Complete args per workflow (the README args table); every test starts from these and changes one thing.
-BASE = {"job": "J099-test", "studioId": "studio-1", "change": "make it slower", "images": ["content/art/refs/approved.png"], "size": "L"}
+BASE = {"job": "J099-test", "studioId": "studio-1", "change": "make it slower", "images": ["content/art/refs/approved.png"], "size": "L",
+        "risks": []}
 EXTRA = {
     "job-cutscene.js": {},
     "job-character.js": {"variant": False, "playable": True, "base": "archer"},
@@ -40,13 +41,13 @@ EXTRA = {
 }
 # Lead decision LD9: args that switch rules or gates, and the stages that need them (a missing one is `blocked`, 0 agents).
 REQUIRED = {
-    "job-cutscene.js": {"size": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
-    "job-character.js": {"size": STAGES, "variant": STAGES, "playable": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
-    "job-stage.js": {"size": STAGES, "studioId": LATER, "images": ("build", "repair"), "change": ("repair",)},
-    "job-ui-screen.js": {"size": STAGES, "shop": STAGES, "newLook": STAGES, "images": LATER, "studioId": ("build", "repair"), "change": ("repair",)},
-    "job-feature.js": {"size": STAGES, "money": STAGES, "numbers": STAGES, "studioId": LATER, "change": ("repair",)},
-    "job-effect.js": {"size": STAGES, "newLook": STAGES, "animated": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
-    "job-marketing-art.js": {"size": STAGES, "piece": STAGES, "launch": STAGES, "images": LATER, "change": ("repair",)},
+    "job-cutscene.js": {"size": STAGES, "risks": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
+    "job-character.js": {"size": STAGES, "risks": STAGES, "variant": STAGES, "playable": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
+    "job-stage.js": {"size": STAGES, "risks": STAGES, "studioId": LATER, "images": ("build", "repair"), "change": ("repair",)},
+    "job-ui-screen.js": {"size": STAGES, "risks": STAGES, "shop": STAGES, "newLook": STAGES, "images": LATER, "studioId": ("build", "repair"), "change": ("repair",)},
+    "job-feature.js": {"size": STAGES, "risks": STAGES, "money": STAGES, "numbers": STAGES, "studioId": LATER, "change": ("repair",)},
+    "job-effect.js": {"size": STAGES, "risks": STAGES, "newLook": STAGES, "animated": STAGES, "studioId": LATER, "images": LATER, "change": ("repair",)},
+    "job-marketing-art.js": {"size": STAGES, "risks": STAGES, "piece": STAGES, "launch": STAGES, "images": LATER, "change": ("repair",)},
 }
 # A maker each workflow routes repairs to (for the bounded-rounds test).
 MAKER = {"job-cutscene.js": "vfx-designer", "job-character.js": "modeler", "job-stage.js": "environment-designer",

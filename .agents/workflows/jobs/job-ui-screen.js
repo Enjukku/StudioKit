@@ -1,7 +1,7 @@
 export const meta = {
   name: 'job-ui-screen',
   description: 'Run one stage (direction, proof, build or repair) of a UI screen job led by the ui-ux-designer; owner gates sit between calls.',
-  whenToUse: 'An M or L UI screen job (HUD, menu, shop, inventory, popup, reward reveal, onboarding) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L; a look change is L), shop and newLook (true or false); images (owner-approved reference image paths) for proof, build and repair; studioId for build and repair; change for repair. Optional: screen, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L UI screen job (HUD, menu, shop, inventory, popup, reward reveal, onboarding) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L; a look change is L), shop and newLook (true or false), risks (a list, [] = none: paid-random, server-result, shop-screen, event); images (owner-approved reference image paths) for proof, build and repair; studioId for build and repair; change for repair. Optional: screen, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'direction leads write independent proposals' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
@@ -9,16 +9,18 @@ export const meta = {
     { title: 'Contract', detail: 'state map and spec; consumers state needs' },
     { title: 'Proof', detail: 'clickable Figma prototype of every state at phone size (L jobs; a look change is always L)' },
     { title: 'Proof review', detail: 'game-designer, then art-director, then feature-builder' },
+    { title: 'Plan check', detail: 'shop or paid-random: the reviewer checks the code contract before the builder (one exchange)' },
+    { title: 'Motion storyboard', detail: 'one beat list: ui-ux-designer, then VFX world-to-HUD beats, then the sound cue list' },
     { title: 'Figma build', detail: 'Figma build to the target image, then the Roblox handoff' },
-    { title: 'Production', detail: 'feature-builder implements beside UI sounds and UI effects' },
-    { title: 'Integration', detail: 'one Studio driver wires sounds and effects and freezes the candidate' },
+    { title: 'Production', detail: 'feature-builder implements (test hooks and debug log) beside UI sounds and UI effects' },
+    { title: 'Integration', detail: 'feature-builder wires sounds and effects and freezes the candidate; studio-operator takes the review captures' },
     { title: 'Code review', detail: 'gate PASS and reviewer; code repairs by the feature-builder' },
-    { title: 'Review chain', detail: 'QA in Studio beside ui-ux, art, game-designer on captures; repairs by makers' },
+    { title: 'Review chain', detail: 'QA in Studio beside ui-ux, progression (shop, shop-screen), art, game-designer, live-ops (event) on captures; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected layers' },
   ],
 }
 
-// Author: workflow author (J016-T05) · claude-opus-5-5 · high · 2026-10-21 (J016, owner approval J016-D5); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: workflow author (J016-T05) · claude-opus-5-5 · high · 2026-10-21 (J016, owner approval J016-D5); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §4. Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // Shared structure copied from job-cutscene.js (args checks, ROLE table, schemas, BASE_RULES, studioRule, brief, call, roleOf, keep, missing,
 // the review chain, bounded repair rounds, unroutable makers → needs-decision, the stage dispatcher).
@@ -42,6 +44,14 @@ const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
 const DIR = `knowledge/jobs/${JOB}`
 const UI = `content/ui/${SCREEN}`
+// The job card's Risks row (README args table): each token switches on the recipe's (risk: …) rows (job-types.md §4, Cross-type rules).
+const RISK_TOKENS = ['paid-random', 'server-result', 'shop-screen', 'event']
+const RISKS = Array.isArray(A.risks) ? A.risks : []
+const PAID = RISKS.includes('paid-random')            // a paid reveal: plan check, one capture per paid-reveal tier
+const SERVER_RESULT = RISKS.includes('server-result') // the server confirms the result: a rejected-request capture
+const SHOP_SCREEN = RISKS.includes('shop-screen')     // an odds or progress screen that does not sell: progression-designer review
+const EVENT = RISKS.includes('event')                 // a job from a live-ops update brief: live-ops event review before G3
+const PROG = SHOP || SHOP_SCREEN                      // the progression-designer joins (numbers, odds, tiers)
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair}', got: A }
@@ -56,6 +66,11 @@ if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-app
 if ((STAGE === 'build' || STAGE === 'repair') && !STUDIO) lacking.push('studioId: one Studio driver at a time (rules/company.md §9)')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the contract inside stage build (job-types.md §4)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
+if (!Array.isArray(A.risks)) lacking.push(`risks: a list from the job card's Risks row ([] = none; tokens: ${RISK_TOKENS.join(', ')})`)
+else {
+  const unknown = A.risks.filter(x => !RISK_TOKENS.includes(x))
+  if (unknown.length) lacking.push(`risks: unknown token ${unknown.map(x => JSON.stringify(x)).join(', ')}; this workflow accepts ${RISK_TOKENS.join(', ')}`)
+}
 if (lacking.length) {
   return { status: 'blocked', outcome: `stage ${STAGE} needs args: ${lacking.join('; ')}. See .agents/workflows/jobs/README.md.`, required: lacking, got: A }
 }
@@ -72,9 +87,21 @@ const ROLE = {
   vfx: { type: 'vfx-designer', model: 'opus', effort: NEW_LOOK ? 'high' : 'medium' },             // UI effects from the library are small effects
   review: { type: 'reviewer', model: 'opus', effort: SHOP ? 'high' : 'medium' },                  // high for money, saves, remotes
   qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
+  operator: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },                       // takes the named review captures
+  ops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },                            // risk event: the event review before G3
 }
 // Who may fix a blocking finding (findings go back to their maker; reviewers never edit). Approved direction (decision, style) is not refixed silently.
-const FIXERS = [ROLE.ui, ROLE.build, ROLE.sound, ROLE.vfx].concat(SHOP ? [ROLE.prog] : [])
+const FIXERS = [ROLE.ui, ROLE.build, ROLE.sound, ROLE.vfx].concat(PROG ? [ROLE.prog] : [])
+const MAKER_NAMES = FIXERS.map(r => r.type).join(', ')
+// Risk-gated slots skipped for no risk are lines in the job card, never a silent gap (Cross-type rules); the lead writes them.
+const SKIPPED = [].concat(
+  SHOP || PAID ? [] : ['reviewer plan check (no shop, no paid-random)'],
+  PROG ? [] : ['progression-designer review (no shop, no shop-screen)'],
+  PAID ? [] : ['paid-reveal tier captures (no paid-random)'],
+  SERVER_RESULT || SHOP ? [] : ['rejected-request capture (no server-result, no shop)'],
+  EVENT ? [] : ['live-ops event review (no event)'])
+// Owner-confirmed lines every G3 packet carries (Cross-type rules); stills cannot judge feel or sound.
+const OWNER_LINES = ['motion feel at normal speed on the Studio build', 'UI sound, two listens: the key event alone, then the full mix, each on a phone speaker and on headphones']
 // A G3 change in the owner's words may also change the decision record, so the game-designer applies its part.
 const CHANGERS = FIXERS.concat([ROLE.design])
 
@@ -111,8 +138,9 @@ const OPTION = { type: 'object', additionalProperties: false, required: ['name',
 const ITEM = { type: 'object', additionalProperties: false, required: ['about', 'why', 'needs'], properties: { about: STR, why: STR, needs: STR } }
 const FINDING = { type: 'object', additionalProperties: false, required: ['id', 'class', 'maker_role', 'where', 'expected', 'observed', 'evidence', 'smallest_fix'],
   properties: { id: STR, class: { type: 'string', enum: ['blocking', 'recommendation', 'new request'] }, maker_role: STR, where: STR, expected: STR, observed: STR, evidence: STR, smallest_fix: STR } }
-// UI findings also name the layer that failed, so a state or readability failure returns to the state map or layout, not to styling (job-types.md §4).
-const LAYERS = ['state map', 'layout or readability', 'styling', 'code', 'data', 'sound', 'effect']
+// UI findings also name the layer that failed, so a state or readability failure returns to the state map or layout, not to styling,
+// and a read-order failure returns to the grey value pass (job-types.md §4 Return paths).
+const LAYERS = ['state map', 'layout or readability', 'read order', 'styling', 'code', 'data', 'sound', 'effect']
 const UI_FINDING = Object.assign({}, FINDING, {
   required: FINDING.required.concat(['layer']),
   properties: Object.assign({}, FINDING.properties, { layer: { type: 'string', enum: LAYERS } }),
@@ -122,11 +150,13 @@ const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT })
 const S_CAPTURE = schema({ candidate_revision: STR, captures_made: { type: 'integer' }, captures_looked_at: { type: 'integer' } })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
-const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR })
+const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR,
+  failed_options: STRS, closed_doors: STRS, could_not_check: STRS })
 const S_SIGN = schema({ signs: { type: 'boolean' }, incompatibility: STR })
 const S_CONTRACT = schema({ spec_revision: { type: 'integer' }, states: STRS, events: STRS, readiness_missing: STRS })
 const S_FIGMA = schema({ spec_revision: { type: 'integer' }, figma_file: STR, node_ids: STRS, screenshots: STRS, images: IMAGE_OUT })
-const S_REVIEW = schema({ findings: { type: 'array', items: UI_FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+const S_REVIEW = schema({ findings: { type: 'array', items: UI_FINDING }, keep: STRS, could_not_check: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+const S_STORYBOARD = schema({ beat_list_revision: { type: 'integer' }, world_to_hud: { type: 'boolean' } })
 const S_SCOPE = schema({ affected_roles: STRS, spec_revision: { type: 'integer' }, new_scope: { type: 'boolean' } })
 
 // ---------------------------------------------------------------- briefs (rules/messages.md §2, built per call)
@@ -147,7 +177,7 @@ const BASE_RULES = [
   'Your final answer is the hand-back object: coverage lists every item in scope; every pass names its evidence.',
 ].concat(SHOP ? [SHOP_RULE] : [])
 const PROPOSAL_RULE = 'Design numbers (sizes, colours, timings, prices, odds) are PROPOSALs until the owner confirms them: mark each one PROPOSAL in your file and list it under proposals.'
-const LAYER_RULE = `Name the layer that failed for every finding (${LAYERS.join(', ')}). A state or readability failure is a state map or layout finding even when styling could hide it: it returns to the state map or layout, not to styling (job-types.md §4).`
+const LAYER_RULE = `Name the layer that failed for every finding (${LAYERS.join(', ')}). A state or readability failure is a state map or layout finding even when styling could hide it: it returns to the state map or layout, not to styling; a read-order failure (the first-noticed element is not rank 1 at phone fit) returns to the grey value pass (job-types.md §4). List every check you could not run, with the input that would close it, in could_not_check.`
 const BIBLE = 'knowledge/design/art-bible.md   # take: UI LOCK, ICON LOCK, colour roles, value, anchors'
 const NO_IMAGES = 'Images: do not generate images in this step (the built-in browser serves one agent at a time); work from the approved images in refs, words, existing captures and screenshots.'
 const NO_REF_RULE = 'No reference image means no styling: if refs has no approved target image, return blocked and name the image you need (AGENTS.md §3.5, lead decision LD2).'
@@ -210,7 +240,7 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, screen: SCREEN, shop: SHOP, steps: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, screen: SCREEN, shop: SHOP, risks: RISKS, skipped_slots: STAGE === 'direction' ? [] : SKIPPED, steps: [], images_pending: [], lessons: [] }
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
@@ -236,17 +266,20 @@ const BUILDER_RULES = [
   'If the screen adds a new player step, a currency flow or a quit point (onboarding, a first purchase), load the analytics skill and log it.',
   'Tuning and layout numbers live in data files, never as numbers inside logic modules.',
 ]
-const LAYOUT_LAYERS = ['state map', 'layout or readability']
+const LAYOUT_LAYERS = ['state map', 'layout or readability', 'read order']
 function routeOf(f) { return LAYOUT_LAYERS.includes(f.layer) ? ROLE.ui.type : f.maker_role }
 
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
   const leads = [
     { r: ROLE.design,
-      focus: 'the decision the screen serves, as a decision record (ui-design references/screen-contract.md §1): the player\'s goal at this moment, the information needed before choosing, every action including Back and Close, the consequence and cost of each, the proof it registered, the recovery route; what the player must see first; and one sentence that says what success looks like in play, testable on a capture. The decision is yours (rules/company.md §3); layout and look are not' + (SHOP ? '. Because this screen sells or rolls: what is offered, what makes the offer honest, and which platform-policy rules shape the decision' : ''),
-      skills: ['game-design', 'ui-design'].concat(SHOP ? ['platform-policy'] : []),
-      checks: ['every field of the decision record is filled, and the success sentence can be checked on a capture'] },
-  ].concat(SHOP ? [
+      focus: 'the decision the screen serves, as a decision record (ui-design references/screen-contract.md §1): the player\'s goal at this moment, the information needed before choosing, every action including Back and Close, the consequence and cost of each, the proof it registered, the recovery route; what the player must see first; and one sentence that says what success looks like in play, testable on a capture. The decision is yours (rules/company.md §3); layout and look are not' + (SHOP ? '. Because this screen sells or rolls: what is offered, what makes the offer honest, and which platform-policy rules shape the decision' : '') +
+        `. Also, in ${DIR}/direction/information-list.md, the information list per moment with read times, the read rank and the screen's feedback stack (preproduction references/documents.md §6, §9): the ui-ux-designer builds its flow on this file, so it is written in this step`,
+      skills: ['game-design', 'ui-design', 'preproduction'].concat(SHOP ? ['platform-policy'] : []),
+      owns: [`${DIR}/direction/information-list.md`],
+      checks: ['every field of the decision record is filled, and the success sentence can be checked on a capture',
+        `${DIR}/direction/information-list.md has a read time per item per moment, one read rank (rank 1 named) and a feedback stack row per action`] },
+  ].concat(PROG ? [
     { r: ROLE.prog,
       focus: 'the numbers the screen shows: currencies, prices, quantities, durations, odds and pity, purchase limits and balances after purchase; where each value lives in the progression tables; the platform-policy limits on paid random items, mixed economies and restricted players',
       skills: ['progression-design', 'progression-craft', 'platform-policy'],
@@ -254,13 +287,16 @@ async function direction() {
       checks: ['every number names its source table and row, or is marked PROPOSAL'] },
   ] : []).concat([
     { r: ROLE.ui,
-      focus: 'the state list (screen-contract.md §3: every screen state, item state and control state; n/a with a reason), the focus map (§4), the attention inventory (§2), a grey-box wireframe with real content (longest name, biggest number, real price format; at least two structures compared, with the reason for the winner), the size math for the smallest phone (§5), the style book from the game profile with a one-line visual thesis, and 2-3 whole-screen target reference images of this screen in that style book, made from the wireframe\'s content (ChatGPT in the built-in browser, ui-figma references/image-generation.md §2)',
+      focus: 'the state list (screen-contract.md §3: every screen state, item state and control state; n/a with a reason), the focus map (§4), the attention inventory (§2), the flow sheet with taps per task, built on the game-designer\'s information list and read rank, 2-3 wireframe options with real content (longest name, biggest number, real price format) and the recommended pick with its reasons, the grey value pass of the pick (a luminance image and tools/art/look_check.py value --compare-subjects numbers: rank 1 is noticed first at phone fit), the size math for the smallest phone (§5), the style book from the game profile with a one-line visual thesis, and 2-3 whole-screen target reference images of this screen in that style book at equal finish, made from the wireframe\'s content (ChatGPT in the built-in browser, ui-figma references/image-generation.md §2). Options that failed a check are listed with the reason, never shown as equals',
       skills: ['ui-design', 'ui-figma', 'reference-images', STYLE_BOOK].concat(SHOP ? ['platform-policy'] : []),
+      inputs: [`${DIR}/direction/information-list.md   # the game-designer's information list, read rank and feedback stack (the one other lead's file you read)`],
       owns: [`${UI}/refs/`, `${UI}/screens/wireframe/`, 'content/art/refs/ui/ (through tools/art/art_refs.py)'],
       images: `${UI}/refs/image-prompts.md`,
       rules: ['Do not start styling: the owner picks the target image at G1. Originals only.'],
       checks: ['the state list has every row of screen-contract.md §3, each filled or n/a with a reason',
-        'the wireframe uses real content and names the smallest phone it was sized for',
+        'the flow sheet names the taps per task',
+        '2-3 wireframe options use real content and name the smallest phone they were sized for; the pick has its reasons',
+        'the grey value pass has its luminance image and look_check.py numbers, and names the first-noticed element',
         `2-3 target reference images exist in ${UI}/refs/, or images.state is pending and ${UI}/refs/image-prompts.md lists them`] },
     { r: ROLE.art,
       focus: 'style cohesion: which art-bible locks (UI LOCK, ICON LOCK, colour roles, value, shape language, anchors) the screen must keep, what must not compete with the gameplay behind it, and how it sits beside the game\'s other screens. Judge from the art bible, the approved anchors and existing captures; you make no new images in this step',
@@ -273,18 +309,27 @@ async function direction() {
         'the file owners list names every source file the screen would add or change'] },
   ])
   phase('Proposals')
-  const props = await parallel(leads.map(L => () => call(L.r, {
+  const propose = (L) => call(L.r, {
     id: `D1-${L.r.type}`, task: `UI screen direction proposal: ${SCREEN}`,
     intent: `Direction stage of a UI screen job (the screen: ${SCREEN}). UX flow comes before UI, function before polish. Write your own short proposal for ${L.focus}. Work alone: you must not open any other lead's proposal, even when the context packet lists one (independent first ideas, rules/knowledge.md §3).`,
     images: L.images, rules: [PROPOSAL_RULE].concat(L.rules || []),
-    skills: L.skills,
+    skills: L.skills, inputs: L.inputs,
     refs: [`${DIR}/job-card.md   # take: the owner's words, scope, references`, '.agents/skills/ui-design/references/screen-contract.md   # take: decision record, state list, focus map, size math fields'],
     open: ['your proposal\'s content and options'],
     avoid: [`${DIR}/direction/proposal-*.md written by other leads`, 'Figma components or polished screens', 'game code'],
     owns: [`${DIR}/direction/proposal-${L.r.type}.md`].concat(L.owns || ['nothing else']),
     deliver: `${DIR}/direction/proposal-${L.r.type}.md: intended player experience, options (pictures where you make them), non-negotiables with reasons, uncertain assumptions, known limits`,
     checks: ['the proposal file exists and names at least one non-negotiable and one uncertain assumption', 'every picture listed in options exists on disk, or images.state is pending and the prompts file lists it'].concat(L.checks),
-  }, S_PROPOSAL, 'Proposals')))
+  }, S_PROPOSAL, 'Proposals')
+  // The game-designer's information list comes before the UI flow (job-types.md §4 Direction leads); the other leads write meanwhile.
+  const firstPair = leads.filter(L => L.r === ROLE.design || L.r === ROLE.ui)
+  const rest = leads.filter(L => !firstPair.includes(L))
+  const out = await parallel([async () => {
+    const d = await propose(firstPair[0])
+    return [d, d && d.status === 'done' ? await propose(firstPair[1]) : null]
+  }].concat(rest.map(L => () => propose(L))))
+  const byLead = new Map([[firstPair[0], (out[0] || [])[0]], [firstPair[1], (out[0] || [])[1]]].concat(rest.map((L, i) => [L, out[i + 1]])))
+  const props = leads.map(L => byLead.get(L))
   props.forEach((p, i) => keep(`D1 ${leads[i].r.type}`, p))
   if (missing(props).length) return Object.assign(results, { status: 'failed', outcome: 'a direction proposal is missing; rerun the stage' })
 
@@ -302,13 +347,13 @@ async function direction() {
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.ui, {
     id: 'D3-synthesis', task: `UI screen direction sheet: ${SCREEN}`,
-    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes: the owner\'s words; the target experience; the decision record as the game-designer wrote it (the decision is the game-designer\'s: change it only with its signature); the state list and focus map; the grey-box wireframe with real content; 2-3 pictured style targets for the owner with one recommendation and its trade-off in player terms; non-negotiables; known limits; a "File owners" section from the feature-builder\'s proposal' + (SHOP ? '; the shown numbers with their sources and the platform-policy items from the progression-designer' : '') + '; and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.',
+    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the proposals and the exchange notes: the owner\'s words; the target experience; the decision record as the game-designer wrote it (the decision is the game-designer\'s: change it only with its signature); the information list and read rank; the state list and focus map; the flow sheet with taps per task; the 2-3 wireframe options with real content and the recommended pick with its reasons; the grey value pass (luminance image and look_check.py numbers); 2-3 pictured style targets at equal finish for the owner with one recommendation and its trade-off in player terms; the options that failed a check with the reason (failed_options); non-negotiables; known limits; a "File owners" section from the feature-builder\'s proposal' + (PROG ? '; the shown numbers with their sources and the platform-policy items from the progression-designer' : '') + '; a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger); a "Closed doors" section for the G1 options the owner does not pick, each with "may return only if" (filled after G1; later briefs carry them in avoid); and the could-not-check list. Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.',
     skills: ['ui-design'],
-    inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
-    refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1'],
+    inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat([`${DIR}/direction/information-list.md`], leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
+    refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1', '.agents/skills/orchestration/references/gates-and-feedback.md §3-§4   # take: options and the pick; closing doors'],
     owns: [`${DIR}/direction.md`],
     deliver: `${DIR}/direction.md (revision 1)`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 style targets, each with pictures on disk or rows in a pending prompts file', 'the decision record, the wireframe and the File owners section are present'],
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 style targets at equal finish, each with pictures on disk or rows in a pending prompts file', 'the decision record, the flow sheet with taps per task, 2-3 wireframe options with the pick and its reasons, the grey value pass and the File owners section are present', 'failed options name the failed check; the could-not-check list is filled or says none'],
   }, S_SYNTHESIS, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, { status: 'failed', outcome: 'direction sheet not written' })
 
@@ -337,8 +382,10 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: 'Direction sheet ready for the G1 packet. The lead shows the decision record, the grey-box wireframe with real content, the 2-3 pictured style targets, the recommendation and usage, records the owner\'s words (including which style target is the target image), runs any pending image batch (images_pending) with the owner\'s yes and passes the approved image paths (the chosen target image first) as args.images, then calls stage proof (L) or build (M; a look change is always L).',
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, wireframe: `${UI}/screens/wireframe/`, targets: `${UI}/refs/`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions } : null,
+    outcome: 'Direction sheet ready for the G1 packet. The lead shows the decision record, the flow sheet with taps per task, the 2-3 wireframe options with real content and the recommended pick with its reasons, the grey value pass, the 2-3 pictured style targets at equal finish, the failed options with their reasons, the could-not-check list, the recommendation and usage; records the owner\'s words (including which style target is the target image) and has the options not picked written as closed doors with "may return only if"; runs any pending image batch (images_pending) with the owner\'s yes and passes the approved image paths (the chosen target image first) as args.images, then calls stage proof (L) or build (M; a look change is always L).',
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, information_list: `${DIR}/direction/information-list.md`, wireframe: `${UI}/screens/wireframe/`, targets: `${UI}/refs/`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff,
+      failed_options: syn.failed_options, closed_doors: syn.closed_doors, could_not_check: syn.could_not_check,
+      owner_confirmed: ['none at G1: motion feel is judged at normal speed on the G2 prototype (L) and the Studio build (G3); UI sound at G3 by two listens'], questions: syn.questions } : null,
   })
 }
 
@@ -352,7 +399,7 @@ async function contract() {
     inputs: [`${DIR}/direction.md`],
     refs: ['.agents/skills/ui-design/references/screen-contract.md   # take: every table', '.agents/skills/ui-figma/references/roblox-handoff.md §4   # take: the spec.md fields the handoff will fill later'],
     owns: [`${UI}/spec.md`],
-    consumers: ['feature-builder', 'game-designer', 'sound-designer', 'vfx-designer'].concat(SHOP ? ['progression-designer'] : []),
+    consumers: ['feature-builder', 'game-designer', 'sound-designer', 'vfx-designer'].concat(PROG ? ['progression-designer'] : []),
     rules: [PROPOSAL_RULE],
     deliver: `${UI}/spec.md (revision 1, with a change table)`,
     checks: ['every state of screen-contract.md §3 is in the state map or n/a with a reason', 'every transition names its event id, and every event id appears once', 'every data field names its source and owner', 'sizes are given for the smallest phone in the game profile'],
@@ -365,7 +412,7 @@ async function contract() {
     { r: ROLE.design, q: 'the states cover every action, failure and recovery in the decision record' },
     { r: ROLE.sound, q: 'which events need a UI sound and which stay quiet, and what each sound must say (cue, feedback or emotion)' },
     { r: ROLE.vfx, q: 'which events need a UI effect from the VFX texture library, and the screen budget for them' },
-  ].concat(SHOP ? [{ r: ROLE.prog, q: 'every shown price, quantity, odd and limit maps to a field fed from the progression tables' }] : [])
+  ].concat(PROG ? [{ r: ROLE.prog, q: 'every shown price, quantity, odd and limit maps to a field fed from the progression tables' }] : [])
   for (let round = 1; round <= 2; round++) {
     const needBrief = (N, extra, inputs) => call(N.r, {
       id: `C2-needs-r${round}-${N.r.type}`, task: `UI screen needs against the spec: ${SCREEN}`,
@@ -425,13 +472,13 @@ async function proof() {
   phase('Proof')
   let proto = keep('P1 prototype', await call(ROLE.ui, {
     id: 'P1-prototype', task: `clickable Figma prototype of every state: ${SCREEN}`, visual: true,
-    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events, in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5-§6) before anyone sees it.',
+    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events and playing at normal speed (the owner judges motion feel on it at G2), in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5-§6) before anyone sees it.',
     skills: ['ui-design', 'ui-figma', STYLE_BOOK],
     inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image chosen at G1`],
     refs: ['.agents/skills/ui-figma/references/figma-mcp.md   # take: load the Figma server skills first; inspect, then write; node ids from every write'],
     owns: [`${UI}/screens/proto/`, `${UI}/figma-ids.json`, 'the Figma file the job card names (prototype pages)'],
     open: ['component structure', 'how far styling goes in the proof'],
-    avoid: ['states or flows the spec does not list', 'final polish of every component (build stage)'],
+    avoid: ['states or flows the spec does not list', 'final polish of every component (build stage)', `the closed doors in ${DIR}/direction.md (options not picked at G1)`],
     deliver: `the Figma prototype link and node ids in ${UI}/figma-ids.json, and a screenshot per state at phone size in ${UI}/screens/proto/`,
     checks: ['every state in the spec has a prototype frame and a screenshot (MCP-verified, Figma)', 'every transition in the spec is wired and clickable', 'the self-review lists where the prototype is weaker than the target image'],
   }, S_FIGMA, 'Proof'))
@@ -443,8 +490,10 @@ async function proof() {
     { r: ROLE.art, q: 'style cohesion with the art bible and the target image; what reads first, also in grayscale', skills: ['art-review'] },
     { r: ROLE.build, q: 'whether it is buildable: every state maps to data and events the server can give, native vs baked layers are feasible in Roblox, nothing needs a field or a remote the spec does not name', skills: ['ui-basics', 'engineering-craft'] },
   ]
+  const g2 = (cnc) => ({ prototype: `${UI}/figma-ids.json`, owner_confirmed: ['motion feel at normal speed on the Figma prototype'], could_not_check: cnc })
   for (let round = 0; round <= 2; round++) {
     const blocking = []
+    const cnc = []
     for (const o of order) {
       const rv = keep(`PR r${round} ${o.r.type}`, await call(o.r, {
         id: `PR-r${round}-${o.r.type}`, task: `review UI prototype: ${SCREEN}`, visual: o.r === ROLE.art,
@@ -457,12 +506,13 @@ async function proof() {
       }, S_REVIEW, 'Proof review'))
       if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
+      ;(rv.could_not_check || []).forEach(x => cnc.push(`${o.r.type}: ${x}`))
     }
-    if (!blocking.length) return { status: 'done', outcome: `Proof clean on round ${round}.`, spec: spec(), prototype: `${UI}/figma-ids.json` }
+    if (!blocking.length) return { status: 'done', outcome: `Proof clean on round ${round}.`, spec: spec(), prototype: `${UI}/figma-ids.json`, g2: g2(cnc) }
     if (round === 2) {
       return { status: 'needs-decision', outcome: 'Blocking prototype findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
     }
-    const fixed = await fixFindings(blocking, `proto-r${round}`, round, [ROLE.ui].concat(SHOP ? [ROLE.prog] : []), 'proof', order.map(o => `${DIR}/reviews/prototype-rev${round}-${o.r.type}.md`))
+    const fixed = await fixFindings(blocking, `proto-r${round}`, round, [ROLE.ui].concat(PROG ? [ROLE.prog] : []), 'proof', order.map(o => `${DIR}/reviews/prototype-rev${round}-${o.r.type}.md`))
     if (fixed) return fixed
   }
 }
@@ -491,7 +541,7 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   // 1. The ui-ux-designer first: the state map and layout come before everything built on them.
   if (byMaker[ROLE.ui.type]) {
     keep(`FIX ${tag} ${ROLE.ui.type}`, await call(ROLE.ui, Object.assign(fixBrief(ROLE.ui.type,
-      ' A state or readability finding is fixed in the state map or the layout (a new spec revision and the Figma frames), not by restyling. Update the handoff if it changed.'),
+      ' A state or readability finding is fixed in the state map or the layout (a new spec revision and the Figma frames), not by restyling; a read-order finding goes back to the grey value pass (new luminance image and look_check.py value --compare-subjects numbers), then layout and styling follow it. Update the handoff if it changed.'),
       { owns: [`${UI}/`, 'the Figma file the job card names'], skills: ['ui-design', 'ui-figma'] }), S_HANDBACK, phaseName))
   }
   // 2. Other non-Studio makers in parallel, against the spec revision the ui-ux-designer may just have written.
@@ -503,19 +553,92 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
   // 3. The feature-builder last: the only Studio driver; it fixes its own findings and implements the other makers' revisions.
   if (mode === 'proof') return null
   keep(`FIX ${tag} ${ROLE.build.type}`, await call(ROLE.build, Object.assign(fixBrief(ROLE.build.type,
-    ` Also implement every revision the other makers wrote in this round (spec, handoff, sound cues, effects), failing case first for logic, and rerun the gate.${mode === 'chain' ? ` Then record new captures of every state the fixes touched into ${DIR}/captures/ (the creative reviewers judge captures) and update the candidate revision in ${DIR}/evidence.md.` : ''}`),
-    { owns: [FILE_OWNERS, `${DIR}/evidence.md (your rows only)`].concat(mode === 'chain' ? [`${DIR}/captures/`] : []), skills: BUILDER_SKILLS, studioWrite: true, rules: BUILDER_RULES }), S_HANDBACK, phaseName))
+    ` Also implement every revision the other makers wrote in this round (spec, handoff, sound cues, effects), failing case first for logic, and rerun the gate.${mode === 'chain' ? ` Then refreeze: write the new candidate revision in ${DIR}/evidence.md (the studio-operator recaptures it before the next review round).` : ''}`),
+    { owns: [FILE_OWNERS, `${DIR}/evidence.md (your rows only)`], skills: BUILDER_SKILLS, studioWrite: true, rules: BUILDER_RULES }), S_HANDBACK, phaseName))
   return null
 }
 
 // ================================================================ production, integration, code review and the review chain
 async function production() {
+  // (risk: a purchase or paid reveal) the reviewer checks the plan before the builder: one exchange, not a rework round (job-types.md §4).
+  if (SHOP || PAID) {
+    phase('Plan check')
+    const pc = keep('B0 plan check', await call(ROLE.review, {
+      id: 'B0-plan-check', task: `plan check of the UI screen code contract: ${SCREEN}`,
+      intent: `Build stage, plan check before any code (code-review references/review-method.md §7): the screen ${SHOP ? 'sells, prices or rolls' : 'shows a paid reveal'}. Review the code contract and the spec as the plan: requests are intents and the server computes outcomes; grants have ids; each player-facing moment names its attempt, confirmed, pending, denied and reduced states${PAID ? '; paid random: one odds table, effective odds, the restricted path' : ''}. Findings use the review format with where = the plan's section and the maker: architect (code contract) or ui-ux-designer (spec). The build starts from the corrected plan.`,
+      skills: ['code-review', 'networking-security', 'data-saving', 'platform-policy'],
+      inputs: [CODE_CONTRACT, spec()],
+      owns: [`${DIR}/reviews/plan-check-reviewer.md`], deliver: `${DIR}/reviews/plan-check-reviewer.md (templates/jobs/review.md)`,
+      rules: [LAYER_RULE],
+      checks: ['every finding names the plan section, the rule id it breaks and the smallest fix'],
+    }, S_REVIEW, 'Plan check'))
+    if (!pc) return { status: 'failed', outcome: 'plan check returned nothing' }
+    const pf = pc.findings.filter(f => f.class === 'blocking')
+    const toUi = pf.filter(f => f.maker_role === ROLE.ui.type || LAYOUT_LAYERS.includes(f.layer))
+    const toArch = pf.filter(f => !toUi.includes(f))
+    const planFix = (r, list, own, sch) => call(r, {
+      id: `B0-plan-fix-${r.type}`, task: `correct the plan after the plan check: ${SCREEN}`,
+      intent: 'Build stage, the one plan-check exchange. Correct your plan file for the findings in the findings field (or answer one with evidence that it is not a defect) and add a change table row naming the consumers to recheck.',
+      findings: list, inputs: [`${DIR}/reviews/plan-check-reviewer.md`, spec(), CODE_CONTRACT],
+      owns: [own], deliver: `${own} (next revision)`,
+      checks: ['each finding is fixed in the plan or answered with evidence'],
+    }, sch, 'Plan check')
+    if (toUi.length) {
+      const u = keep('B0 plan fix ui-ux-designer', await planFix(ROLE.ui, toUi, `${UI}/spec.md`, S_CONTRACT))
+      if (!ok(u)) return { status: 'failed', outcome: 'plan-check correction of the spec did not finish; see steps' }
+      if (u.spec_revision) SPEC_REV = u.spec_revision
+    }
+    if (toArch.length) {
+      const a = keep('B0 plan fix architect', await planFix(ROLE.arch, toArch, CODE_CONTRACT, S_HANDBACK))
+      if (!ok(a)) return { status: 'failed', outcome: 'plan-check correction of the code contract did not finish; see steps' }
+    }
+  }
+
+  // The motion storyboard on one beat list before any Figma motion work (job-types.md §4 Production order; Cross-type rules: one marker list).
+  // VFX writes its world-to-HUD beats first, sound answers on them (README: VFX writes each envelope first).
+  phase('Motion storyboard')
+  const BEATS = `${UI}/motion/storyboard.md`
+  const sb = keep('B0 storyboard', await call(ROLE.ui, {
+    id: 'B0-storyboard', task: `motion storyboard on one beat list: ${SCREEN}`,
+    intent: 'Build stage, before any Figma motion work. Write the screen\'s motion storyboard as one beat list keyed to the spec\'s event names: per press and transition, the beats with PROPOSAL times. Set world_to_hud true when rewards fly from the world into the HUD (the vfx-designer then adds its world-to-HUD beats). The sound-designer keys its UI cue list to this file next.',
+    skills: ['ui-design', 'ui-figma'],
+    inputs: [spec(), `${DIR}/direction.md`, `${DIR}/direction/information-list.md   # the feedback stack`],
+    owns: [BEATS], consumers: ['sound-designer', 'vfx-designer', 'feature-builder'],
+    rules: [PROPOSAL_RULE],
+    deliver: `${BEATS} (revision 1)`,
+    checks: ['every beat names its event id from the spec', 'every press and key transition in the spec has its beats'],
+  }, S_STORYBOARD, 'Motion storyboard'))
+  if (!ok(sb)) return { status: 'failed', outcome: 'motion storyboard not written' }
+  const beatsIn = pin(BEATS, sb.beat_list_revision)
+  const beatNotes = []
+  if (sb.world_to_hud) {
+    const v = keep('B0 storyboard vfx', await call(ROLE.vfx, {
+      id: 'B0-storyboard-vfx', task: `world-to-HUD beats on the UI beat list: ${SCREEN}`,
+      intent: 'Build stage, motion storyboard. Rewards fly from the world into this screen: write the world-to-HUD beats on the beat list (launch, flight, arrival at the HUD target, the counter tick) with onset, peak and length per event id. The sound-designer answers your note next.',
+      skills: ['vfx-design'], inputs: [beatsIn, spec()],
+      owns: [`${DIR}/exchange/storyboard-vfx-designer.md`], deliver: `${DIR}/exchange/storyboard-vfx-designer.md in the exchange-note format`,
+      checks: ['every beat names its event id and its onset, peak and length'],
+    }, S_HANDBACK, 'Motion storyboard'))
+    if (!ok(v)) return { status: 'failed', outcome: 'world-to-HUD beats not written' }
+    beatNotes.push(`${DIR}/exchange/storyboard-vfx-designer.md`)
+  }
+  const sc = keep('B0 storyboard sound', await call(ROLE.sound, {
+    id: 'B0-storyboard-sound', task: `UI cue list on the UI beat list: ${SCREEN}`,
+    intent: `Build stage, motion storyboard. Answer the beat list with the UI cue list keyed to the screen's event names: which beats sound and which stay quiet, each cue's onset against its beat${beatNotes.length ? ' and against the vfx-designer\'s world-to-HUD peaks' : ''}.`,
+    skills: ['sound-design'], inputs: [beatsIn, spec()].concat(beatNotes),
+    owns: [`${DIR}/exchange/storyboard-sound-designer.md`], deliver: `${DIR}/exchange/storyboard-sound-designer.md in the exchange-note format`,
+    checks: ['every cue names its event id and beat', 'every quiet beat says why'],
+  }, S_HANDBACK, 'Motion storyboard'))
+  if (!ok(sc)) return { status: 'failed', outcome: 'UI cue list not written' }
+  beatNotes.push(`${DIR}/exchange/storyboard-sound-designer.md`)
+
   phase('Figma build')
   const figma = keep('B1 Figma build and handoff', await call(ROLE.ui, {
     id: 'B1-figma', task: `Figma build to the target image and Roblox handoff: ${SCREEN}`,
-    intent: 'Build stage. Build the screen in Figma to the target image the owner chose: tokens, then components with state variants, then every state of the spec as screens made from instances. Effects come from the VFX texture library before anything is drawn or generated. Review it yourself at phone, tablet and PC size, in grayscale, with the longest text, every state, side by side with the target image; close the gaps you list. Then write the Roblox handoff: layer table (native, baked or tiled), exports, 9-slice insets, live text fields with their data source, motion records with PROPOSAL values and their tests.',
+    intent: 'Build stage. Build the screen in Figma to the target image the owner chose: tokens, then components with state variants, then every state of the spec as screens made from instances. Effects come from the VFX texture library before anything is drawn or generated. Review it yourself at phone, tablet and PC size, in grayscale, with the longest text, every state, side by side with the target image; close the gaps you list. Then write the Roblox handoff: layer table (native, baked or tiled), exports, 9-slice insets, live text fields with their data source, motion records with PROPOSAL values and their tests. Motion follows the storyboard: first merge the sound cue list (and the world-to-HUD beats, if any) into the beat list as the job\'s one marker list; the motion records key to it.',
     skills: ['ui-design', 'ui-figma', STYLE_BOOK],
-    inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image`].concat(SIZE === 'L' ? [`${UI}/figma-ids.json   # the approved prototype`] : []),
+    inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image`, beatsIn].concat(beatNotes, SIZE === 'L' ? [`${UI}/figma-ids.json   # the approved prototype`] : []),
+    avoid: [`the closed doors in ${DIR}/direction.md (options not picked at G1)`],
     refs: ['.agents/skills/ui-figma/references/figma-mcp.md', '.agents/skills/ui-figma/references/roblox-handoff.md §4   # take: the handoff package', '.agents/skills/ui-figma/references/effect-assets.md   # take: library shortlist', '.agents/skills/ui-design/references/review.md §5-§6   # take: self-review captures (§5) and the self-review by stage (§6)'],
     owns: [`${UI}/`, 'the Figma file the job card names'],
     consumers: ['feature-builder', 'sound-designer', 'vfx-designer'],
@@ -528,21 +651,22 @@ async function production() {
   // A pending batch that later steps build on stops the stage (lead decision LD2): no implementation, code review or capture on placeholder art.
   if (figma.images && figma.images.state === 'pending') return pendingStop('Figma build: icons and item art')
   if (figma.spec_revision) SPEC_REV = figma.spec_revision
-  const HANDOFF = [spec(), `${UI}/export/`, `${UI}/screens/`, `${UI}/figma-ids.json`]
+  const HANDOFF = [spec(), `${UI}/export/`, `${UI}/screens/`, `${UI}/figma-ids.json`, `${BEATS}   # the merged beat list`]
+  const HOOKS = `Deliver the Studio-only test hooks and the debug log at this wiring step, before any partner's first capture (engineering-craft references/presentation.md §9; hook names: testing references/player-facing.md §3): the review captures need Trigger, Reject, DelayMs, Reduced${PAID ? ', Outcome or Seed' : ''} and FxLog; test build only.`
 
   phase('Production')
   // The feature-builder is the only Studio driver; sound and effects work outside Studio meanwhile.
   const prod = await parallel([
     () => call(ROLE.build, {
       id: 'B2-implement', task: `implement the UI screen in Roblox: ${SCREEN}`, studioWrite: true, visual: true,
-      intent: 'Build stage. First check the handoff you received against the spec (next-craft check): a gap goes back to the ui-ux-designer as a finding in your hand-back, never a guess. Then build the screen in Roblox from the handoff and the spec: every state, live text fields bound to their data sources, the focus map for gamepad, touch targets at the smallest phone size, safe areas, and the remotes the spec names with server validation. Failing case first for logic.',
+      intent: `Build stage. First check the handoff you received against the spec (next-craft check): a gap goes back to the ui-ux-designer as a finding in your hand-back, never a guess. Then build the screen in Roblox from the handoff and the spec: every state, live text fields bound to their data sources, the focus map for gamepad, touch targets at the smallest phone size, safe areas, and the remotes the spec names with server validation. Failing case first for logic. ${HOOKS}`,
       skills: BUILDER_SKILLS, inputs: HANDOFF.concat([`${DIR}/direction.md`]),
-      refs: ['.agents/skills/ui-basics/references/facts.md'],
-      owns: [FILE_OWNERS], consumers: ['qa-lead', 'reviewer'],
+      refs: ['.agents/skills/ui-basics/references/facts.md', '.agents/skills/engineering-craft/references/presentation.md §9   # take: hooks and debug log lines'],
+      owns: [FILE_OWNERS], consumers: ['qa-lead', 'reviewer', 'studio-operator'],
       notInScope: ['UI sounds and effects (sound-designer, vfx-designer; you wire them in integration)', 'restyling: the look comes from the handoff'],
       rules: BUILDER_RULES,
-      deliver: 'code, tests and a change manifest; one Studio capture per state at the smallest phone size',
-      checks: ['the gate passes (python tools/verify.py or the game\'s gate): RESULT: PASS', 'every state in the spec is reachable in Studio (MCP-verified capture per state)', 'every client call has a server validation test'],
+      deliver: 'code, tests, the test hooks and debug log, and a change manifest; one Studio capture per state at the smallest phone size',
+      checks: ['the gate passes (python tools/verify.py or the game\'s gate): RESULT: PASS', 'every state in the spec is reachable in Studio (MCP-verified capture per state)', 'every client call has a server validation test', 'each hook in the list works in Studio and the production build maps none of them (MCP-verified)'],
     }, S_HANDBACK, 'Production'),
     async () => {
       const v = keep('B4 ui effects', await call(ROLE.vfx, {
@@ -577,7 +701,7 @@ async function production() {
     refs: ['templates/jobs/evidence.md   # take: the ledger format'],
     owns: [FILE_OWNERS, `${DIR}/evidence.md`], rules: BUILDER_RULES,
     deliver: `the wired candidate and ${DIR}/evidence.md`,
-    checks: ['the gate passes: RESULT: PASS', 'each sound and effect fires on its event id in a Studio play-test log (MCP-verified)', 'evidence.md names the candidate revision and the protected list'],
+    checks: ['the gate passes: RESULT: PASS', 'each sound and effect fires on its event id in a Studio play-test log (MCP-verified)', 'with FxLog on, the debug log prints evt, ui, cue and vfx lines for every event id (MCP-verified)', 'evidence.md names the candidate revision, the test hooks and the protected list'],
   }, S_HANDBACK, 'Integration'))
   if (!ok(integ)) return { status: 'failed', outcome: 'integration incomplete; see steps' }
   return candidate('candidate')
@@ -587,17 +711,30 @@ async function production() {
 async function candidate(label) {
   const code = await codeReview(label)
   if (!ok(code)) return code
-  const cap = keep('B6 capture', await call(ROLE.build, {
-    id: `B6-capture-${label}`, task: `record the UI candidate: ${SCREEN}`, studioWrite: true,
-    intent: 'Integration. Record the frozen candidate as the creative reviewers will judge it: every state of the spec at the smallest phone size, and the key states at tablet and desktop; the longest text and the biggest number; grayscale; gamepad focus on each focusable control; each transition as before, mid and after stills with the Output log of its event, sound and effect start times. Name every capture and the candidate revision in evidence.md.',
-    inputs: [`${DIR}/evidence.md`, spec()],
-    owns: [`${DIR}/captures/`, `${DIR}/evidence.md (capture rows)`], skills: ['studio-mcp'],
-    rules: [CAPTURE_LIMIT, CHECK_BUDGET],
-    deliver: `${DIR}/captures/ (stills named state_device, output.log) and the evidence rows`,
-    checks: ['a still exists for every state at the smallest phone size and for the key states at tablet and desktop (MCP-verified)', 'output.log has one line per transition event with its UI, sound and effect start times (MCP-verified)'],
-  }, S_CAPTURE, 'Integration'))
+  const cap = await captureCandidate(label)
   if (!ok(cap)) return { status: 'failed', outcome: 'no candidate captures; reviews need them' }
   return reviewChain(label)
+}
+
+// The named review captures (job-types.md §4 Review captures, "Named review captures"), taken by the studio-operator on the frozen candidate,
+// first and again after every repair round (reviewers never judge stale captures).
+async function captureCandidate(label) {
+  const named = ['Device Simulator stills of every state at the smallest phone and a PC size', 'the screen over the busiest gameplay moment',
+    'a frame folder (f###_<ms>ms.jpg) of each press and key transition by the S-33 capture rules (ui-design references/review.md §6: cropped to the control with a margin, or inside its face when the world moves behind it; more idle frames before the press than after; the press frame\'s ms noted)']
+    .concat(PAID ? ['one paid-reveal tier capture per tier (a frame folder from the press frame; the lowest tier twice; hook Outcome or Seed)'] : [],
+      SERVER_RESULT || SHOP ? ['a rejected request (hook Reject): no success layer plays, the refusal plays'] : [],
+      ['reduced motion on (hook Reduced)', 'the largest text size', 'grayscale stills of the key states'],
+      EVENT ? ['the event capture set rows this screen appears in (live-ops-craft references/event-review.md §2), for the live-ops-designer'] : [])
+  return keep(`B6 capture ${label}`, await call(ROLE.operator, {
+    id: `B6-capture-${label}`, task: `record the UI review captures: ${SCREEN}`, studioWrite: true,
+    intent: `Integration. Take the review captures of the frozen candidate in ${DIR}/evidence.md, as the reviewers will judge it: ${named.join('; ')}. Record the Output log (debug log on) with each event's UI, sound and effect start times. Name every capture and the candidate revision in evidence.md. Clear every hook attribute after each run.`,
+    inputs: [`${DIR}/evidence.md   # the candidate revision and the test hooks`, spec()],
+    refs: ['.agents/skills/ui-design/references/review.md §6-§7   # take: the S-33 capture rules and the review slot\'s capture list', '.agents/skills/orchestration/references/job-types.md   # take: Named review captures'],
+    owns: [`${DIR}/captures/`, `${DIR}/evidence.md (capture rows)`], skills: ['studio-mcp'],
+    rules: [CAPTURE_LIMIT, CHECK_BUDGET, 'A capture you cannot take (a hook missing, a device size missing) is a not-done coverage item with the reason, never a substitute capture.'],
+    deliver: `${DIR}/captures/ (stills named state_device, frame folders, output.log) and the evidence rows`,
+    checks: ['a still exists for every state at the smallest phone and at a PC size (MCP-verified)', 'every named capture in the intent exists or is a not-done coverage item with the reason', 'output.log has one line per transition event with its UI, sound and effect start times (MCP-verified)'],
+  }, S_CAPTURE, 'Integration'))
 }
 
 async function codeReview(label) {
@@ -625,18 +762,24 @@ async function codeReview(label) {
 
 async function reviewChain(label) {
   phase('Review chain')
-  const QA = { r: ROLE.qa, q: 'every state of the spec, touch and gamepad (and mouse and keyboard), the longest text and the biggest number, the smallest phone and its safe area, pending and error states with a slow or failing server', skills: ['testing', 'studio-mcp', 'ui-basics'] }
+  const QA = { r: ROLE.qa, q: 'every state of the spec, touch and gamepad (and mouse and keyboard), the longest text and the biggest number, the smallest phone and its safe area; the truth rows: a rejected request and the pending path (slow or failing server), counters exact after a burst and after a buy during the count-up, refusals shown at the control, reduced motion on', skills: ['testing', 'studio-mcp', 'ui-basics'] }
   const RECHECK = { r: ROLE.review, q: 'the code the last repair round changed, and the gate', skills: ['code-review', 'networking-security'].concat(SHOP ? ['data-saving', 'platform-policy'] : []) }
+  // Creative order: ui-ux → (risk: shop, odds or progress screen) progression → art → game-designer; then (risk: event) the live-ops event review before G3.
   const creative = [
-    { r: ROLE.ui, q: 'the Roblox build against your target image and Figma screens: depth, shine, material, spacing, type, every state, every device size', skills: ['ui-design', 'ui-figma'] },
+    { r: ROLE.ui, q: 'the Roblox build against your target image and Figma screens on the review captures (your review slot, ui-design references/review.md §7): depth, shine, material, spacing, type, every state, every device size, the press frame folders', skills: ['ui-design', 'ui-figma'] },
+  ].concat(PROG ? [
+    { r: ROLE.prog, q: 'the numbers: every shown number against the display fixtures, odds rows equal to the server\'s data, the next goal and its requirement readable at two timeline points, each reward\'s tier and text name equal to the tier table (progression-craft references/data-handoff.md §4-§5)', skills: ['progression-design', 'progression-craft', 'platform-policy'] },
+  ] : [], [
     { r: ROLE.art, q: 'the integrated look: cohesion with the art bible and the game\'s other screens; what reads first; value in grayscale', skills: ['art-review'] },
     { r: ROLE.design, q: 'whether the decision works: the success sentence in the decision record, the next meaningful action, the cost, the proof it registered and the way back' + (SHOP ? '; the offer is honest (platform-policy)' : ''), skills: ['game-design', 'ui-design'].concat(SHOP ? ['platform-policy'] : []) },
-  ]
+  ], EVENT ? [
+    { r: ROLE.ops, q: 'the event review E-01 to E-19 on its capture set (live-ops-craft references/event-review.md §2-§3) for the lines this screen touches; a missing capture is a not-verified line on could_not_check; fix owners outside this job go on that list too', skills: ['live-ops-design', 'live-ops-craft', 'platform-policy'] },
+  ] : [])
   for (let round = 0; round <= 2; round++) {
     const tag = `${label}-r${round}`
     const reviewOne = (o, studio) => call(o.r, {
       id: `RV-${tag}-${o.r.type}`, task: `review UI screen ${label}: ${SCREEN}`, studioWrite: studio, visual: o.r === ROLE.ui || o.r === ROLE.art,
-      intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Check ${o.q}. Open the captures and the files first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (ui-ux-designer, feature-builder, sound-designer, vfx-designer${SHOP ? ', progression-designer' : ''}).${round ? ' This is a recheck: check the fixed findings and what the fixes touched; keep items stay checked unless a fix touched them.' : ''}`,
+      intent: `Review chain on the frozen candidate in ${DIR}/evidence.md. Check ${o.q}. Open the captures and the files first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (${MAKER_NAMES}).${round ? ' This is a recheck: check the fixed findings and what the fixes touched; keep items stay checked unless a fix touched them.' : ''}`,
       skills: o.skills,
       inputs: [`${DIR}/evidence.md`, spec(), `${DIR}/direction.md`, `${DIR}/captures/`, `${UI}/screens/`, `${UI}/refs/   # the target image`],
       owns: [`${DIR}/reviews/${tag}-${o.r.type}.md`].concat(o.r === ROLE.qa ? [`${DIR}/qa/`] : []), deliver: `${DIR}/reviews/${tag}-${o.r.type}.md (templates/jobs/review.md)`,
@@ -656,13 +799,17 @@ async function reviewChain(label) {
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet (listening stays an owner-confirmed line).`, new_requests: requests, reviews: all.map(x => x.files).flat() }
+      const cnc = all.flatMap((x, i) => (x.could_not_check || []).map(c => `${creative.concat(tech)[i].r.type}: ${c}`))
+      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet with the could-not-check list and the owner-confirmed lines (motion feel at normal speed; two listens for UI sound).`, new_requests: requests, reviews: all.map(x => x.files).flat(),
+        g3: { owner_confirmed: OWNER_LINES, could_not_check: cnc } }
     }
     if (round === 2) {
       return { status: 'needs-decision', outcome: 'Blocking findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
     }
     const fixed = await fixFindings(blocking, tag, round, FIXERS, 'chain', creative.concat(tech).map(o => `${DIR}/reviews/${tag}-${o.r.type}.md`))
     if (fixed) return fixed
+    const recap = await captureCandidate(`${tag}-fix`)
+    if (!ok(recap)) return { status: 'failed', outcome: `${tag}: the repaired candidate was not recaptured; reviews need fresh captures` }
   }
 }
 
@@ -671,7 +818,7 @@ async function repair() {
   phase('Repair')
   const scope = keep('R1 scope', await call(ROLE.ui, {
     id: 'R1-scope', task: `map owner change to affected UI layers: ${SCREEN}`,
-    intent: `Repair stage. The owner asked for this change at G3: "${CHANGE}". Map it to the layers it touches (the decision record, the state map, layout, styling, code, data, sounds, effects) and the roles that own them (game-designer, ui-ux-designer, feature-builder, sound-designer, vfx-designer${SHOP ? ', progression-designer' : ''}). If states, events or data fields move, write the next spec revision with the consumers to recheck. Say if the change is new scope (outside the approved brief).`,
+    intent: `Repair stage. The owner asked for this change at G3: "${CHANGE}". Map it to the layers it touches (the decision record, the state map, layout, the grey value pass (read order), styling, code, data, sounds, effects) and the roles that own them (game-designer, ui-ux-designer, feature-builder, sound-designer, vfx-designer${PROG ? ', progression-designer' : ''}). If states, events or data fields move, write the next spec revision with the consumers to recheck. Say if the change is new scope (outside the approved brief).`,
     inputs: [spec(), `${DIR}/evidence.md`, `${DIR}/decisions.md`],
     owns: [`${UI}/spec.md`, `${DIR}/exchange/repair-scope.md`], deliver: `${DIR}/exchange/repair-scope.md`,
     checks: ['every affected role is named with the states, events or files it must change or recheck'],
@@ -709,7 +856,7 @@ async function repair() {
 if (STAGE === 'direction') return await direction()
 if (STAGE === 'proof') {
   const p = await proof()
-  return Object.assign(results, p, { outcome: (p.outcome || '') + (ok(p) ? ' The lead shows the clickable prototype and its state screenshots at G2 and records the owner\'s words before stage build.' : '') })
+  return Object.assign(results, p, { outcome: (p.outcome || '') + (ok(p) ? ' The lead shows the clickable prototype and its state screenshots at G2 with the could-not-check list, has the owner judge motion feel at normal speed on the prototype (an owner-confirmed line in g2), and records the owner\'s words before stage build.' : '') })
 }
 if (STAGE === 'build') {
   // M jobs (inside the approved look; a look change is L and is refused above): build starts with the contract

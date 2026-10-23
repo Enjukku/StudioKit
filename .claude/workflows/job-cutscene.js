@@ -1,23 +1,23 @@
 export const meta = {
   name: 'job-cutscene',
   description: 'Run one stage (direction, proof, build or repair) of a cutscene job led by the film-director; owner gates sit between calls.',
-  whenToUse: 'An M or L cutscene job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L); studioId and images (owner-approved reference image paths) for proof, build and repair; change for repair. Optional: sequence, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L cutscene job the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), risks (a list, [] = none; accepted: event); studioId and images (owner-approved reference image paths) for proof, build and repair; change for repair. Optional: sequence, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'direction leads write independent proposals' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
     { title: 'Direction sheet', detail: 'film-director synthesises; others sign' },
     { title: 'Contract', detail: 'beat sheet and shot list; crafts state needs (VFX, then sound on its note)' },
-    { title: 'Proof', detail: 'storyboards first (a pending batch stops here), then Studio probes, greybox if needed, temp cues, timed animatic' },
+    { title: 'Proof', detail: 'blocking and value strips first (art-director reviews the value strip), storyboards (a pending batch stops here), then Studio probes, greybox if needed, temp cues, timed animatic' },
     { title: 'Proof review', detail: 'art-director, then architect; repairs by the film-director' },
     { title: 'Craft planning', detail: 'animator, environment, UI, architect player contract, VFX then sound envelope; film locks' },
     { title: 'Production', detail: 'set, animation and the VFX and sound prototype in parallel; combined check-in; finals' },
     { title: 'Integration', detail: 'one Studio driver: clips, scene data, player code, candidate capture' },
-    { title: 'Review chain', detail: 'scripts first; QA and phone beside code review and film, art, sound sync; repairs by makers' },
+    { title: 'Review chain', detail: 'scripts first; QA and phone beside code review and film, art, sound sync; risk event: live-ops event review last; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts, in dependency order' },
   ],
 }
 
-// Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016, owner approval J016-D4); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016, owner approval J016-D4); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §1. Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // Audit fixes: knowledge/jobs/J016-orchestration/reviews/workflows-322c8ad-auditor-b.md F1-F13, tabletop-322c8ad-auditor-e.md TT-02..TT-12.
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
@@ -37,6 +37,10 @@ const GATE = A.gate || ''        // the owner's words at the last gate, verbatim
 const CHANGE = A.change || ''    // the owner's G3 change request, verbatim (stage repair)
 const IMAGES = [].concat(A.images || []).filter(x => typeof x === 'string' && x)   // owner-approved reference images from the last gate (path, optional "# take / avoid")
 const IMAGES_APPROVED = A.imagesApproved === true   // the owner's yes for this stage's image batch, recorded by the lead in decisions.md
+// The job card's Risks row (README args table): each token switches on a recipe's (risk: ...) slot; no default.
+const RISK_TOKENS = ['event']   // event: a job from a live-ops update brief (job-types.md "Not recipes")
+const RISKS = A.risks
+const EVENT = Array.isArray(RISKS) && RISKS.includes('event')
 const DIR = `knowledge/jobs/${JOB}`
 const FILM = `content/film/${SEQ}`
 const UISPEC = `content/ui/${SEQ}-cutscene/spec.md`
@@ -51,6 +55,11 @@ if (!['M', 'L'].includes(SIZE)) lacking.push('size: M or L (rules/company.md §2
 if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the Studio probes, the build and the captures need one Studio driver (rules/company.md §9)')
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved reference image paths from the last gate (no visual work without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
+if (!Array.isArray(RISKS)) lacking.push(`risks: the job card's Risks row as a list ([] = none); this workflow accepts: ${RISK_TOKENS.join(', ')}`)
+else {
+  const unknown = RISKS.filter(t => !RISK_TOKENS.includes(t))
+  if (unknown.length) lacking.push(`risks: unknown token ${unknown.map(t => JSON.stringify(t)).join(', ')}; this workflow accepts: ${RISK_TOKENS.join(', ')}`)
+}
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
 if (lacking.length) {
   return { status: 'blocked', outcome: `stage ${STAGE} needs args: ${lacking.join('; ')}. See .agents/workflows/jobs/README.md.`, required: lacking, got: A }
@@ -73,6 +82,8 @@ const ROLE = {
   model: { type: 'modeler', model: 'opus', effort: 'high' },
   rig: { type: 'character-rigger', model: 'opus', effort: 'high' },
   anim: { type: 'animator', model: 'opus', effort: 'high' },
+  liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
+  op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
 }
 function nm(r) { return r.type }
 // Money, saves and remotes run the builder and the reviewer at high (roles README). The architect's player contract (build stage) says which apply;
@@ -122,13 +133,16 @@ const FINDING = { type: 'object', additionalProperties: false, required: ['id', 
 const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
-const S_SYNTHESIS = schema({ revision: INT, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR })
+const FAILED = { type: 'object', additionalProperties: false, required: ['name', 'check', 'reason'], properties: { name: STR, check: STR, reason: STR } }
+const CLOSED_DOOR = { type: 'object', additionalProperties: false, required: ['name', 'may_return_only_if'], properties: { name: STR, may_return_only_if: STR } }
+const S_SYNTHESIS = schema({ revision: INT, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR,
+  failed_options: { type: 'array', items: FAILED }, closed_doors: { type: 'array', items: CLOSED_DOOR }, could_not_check: STRS })
 const S_SIGN = schema({ signs: BOOL, incompatibility: STR })
 const S_CONTRACT = schema({ beat_sheet_revision: INT, needs_greybox: BOOL, readiness_missing: STRS, new_cast_needed: BOOL })
 const S_ANIMATIC = schema({ beat_sheet_revision: INT })
 const S_BOARDS = schema({ images: IMAGE_OUT })
 const S_PLAYER = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM }, contract_revision: INT, code_owners: STRS, adds_remote: BOOL, saves_data: BOOL })
-const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, could_not_check: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
 const S_FIX = schema({ timing_changed: BOOL, moved_events: STRS, beat_sheet_revision: INT })
 const S_CAPTURE = schema({ candidate_revision: STR, captures_made: INT, captures_looked_at: INT })
 const S_SCOPE = schema({ affected_roles: STRS, beat_sheet_revision: INT, new_scope: BOOL, timing_changed: BOOL })
@@ -159,6 +173,11 @@ const CAPTURE_LIMIT = 'Studio MCP screen_capture gives still images only; no MCP
 const CHECK_BUDGET = 'Check budget (owner J005-D8): scripted numbers for every case (event times from the Output log, shotlist.py log-diff); stills only at the key frames the beat sheet marks (first frame, each peak, last frame per shot and each ending) plus any frame where a number fails. Set captures_made and captures_looked_at.'
 const ART_BIBLE_MISSING = 'If knowledge/design/art-bible.md does not exist yet, do not write it in this step: propose its locks in your proposal marked PROPOSAL and add the G1 question "the game has no art bible: approve these locks or open the art-bible work first" (reference-images: the art bible comes first).'
 const LIGHT = 'Light checks: numbers for every case; images only for a failing number plus a few key frames (owner J005-D8).'
+const CNC = 'could_not_check lists every line you could not verify, with the missing input or capture that would close it'
+// Cross-type rules (job-types.md): every gate packet carries the could-not-check list and these owner-confirmed lines; gates close doors.
+const OWNER_CONFIRM = ['feel at normal speed: the owner watches the moving picture (the animatic at G2, the Studio build at G3) at normal speed',
+  'two listens: the key event alone, then the full mix, each on a phone speaker and on headphones']
+const CLOSED = `the closed doors in ${DIR}/direction.md (options not picked at G1; each returns only if its "may return only if" condition holds)`
 // A pending batch that later steps build on stops the stage (lead decision LD2): nothing is built or reviewed on unapproved images.
 function pendingStop(what) {
   return { status: 'blocked', outcome: `${what}: the image batch is pending. The lead runs it with the owner\'s yes, adds the approved paths to args.images and calls this stage again; steps whose deliverables already match keep them, and every step after the batch builds from the approved images.`, images_pending: results.images_pending }
@@ -192,7 +211,8 @@ function brief(r, o) {
   const fixed = (o.fixed || []).concat(o.images ? [`images_approved: ${IMAGES_APPROVED}   # args.imagesApproved: the owner's yes for this batch, recorded by the lead in ${DIR}/decisions.md`] : [])
   if (fixed.length) { lines.push('fixed:'); fixed.forEach(x => lines.push(`  ${x}`)) }
   if (o.open) lines.push(`open: [${o.open.join(', ')}]`)
-  if (o.avoid) lines.push(`avoid: [${o.avoid.join(', ')}]`)
+  const avoid = (o.avoid || []).concat(STAGE === 'direction' ? [] : [CLOSED])
+  if (avoid.length) lines.push(`avoid: [${avoid.join(', ')}]`)
   if (o.protect && o.protect.length) lines.push(`protected: [${o.protect.join(', ')}]`)
   if (o.findings && o.findings.length) { lines.push('findings:   # the items to fix, from the review files (rules/messages.md §6)'); o.findings.forEach(x => lines.push(`  - ${JSON.stringify(x)}`)) }
   if (o.consumers) lines.push(`consumers: [${o.consumers.join(', ')}]`)
@@ -217,10 +237,12 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, steps: [], images_pending: [], lessons: [] }
+const results = { job: JOB, stage: STAGE, size: SIZE, risks: RISKS, steps: [], images_pending: [], lessons: [], could_not_check: [], owner_confirmed: OWNER_CONFIRM }
+if (STAGE === 'build' || STAGE === 'repair') results.skipped_slots = EVENT ? [] : ['live-ops event review: risks does not name event']
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
+  if (x && Array.isArray(x.could_not_check)) x.could_not_check.forEach(line => results.could_not_check.push({ step, line }))   // the gate packet's could-not-check list
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/
   return x
 }
@@ -240,8 +262,8 @@ function caps() { return `${FILM}/captures/${capTag}/` }
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
   const leads = [
-    { r: ROLE.film, blender: true, focus: 'the beat contract (the player\'s situation before, the change in knowledge or feeling, the consequential action, the state after), the camera mode with its reason, staging intent, and 2 approaches shown as Blender blockout stills or simple sketches (boards come in the proof stage)', skills: ['film-direction'] },
-    { r: ROLE.art, images: `${DIR}/direction/image-prompts.md`, focus: 'the look per beat: palette, value, light, shape language; 2-3 reference images through reference-images, checked against the art bible', skills: ['art-direction', 'reference-images'] },
+    { r: ROLE.film, blender: true, focus: 'the beat contract (the player\'s situation before, the change in knowledge or feeling, the consequential action, the state after), the camera mode with its reason, staging intent, and for the key beat a labelled warm-up (the obvious take, the baseline) plus 2-3 approaches, each from its own hook, as greybox contact sheets from Blender (shaded and black-fill) at equal finish (film-craft step 3, options pass; boards come in the proof stage)', skills: ['film-direction', 'film-craft'] },
+    { r: ROLE.art, images: `${DIR}/direction/image-prompts.md`, focus: 'the look per beat: palette, value, light, shape language; 2-3 reference images at equal finish through reference-images, checked against the art bible', skills: ['art-direction', 'reference-images'] },
     { r: ROLE.arch, focus: 'feasibility: runtime choice (Event Sequencer, a studio player or video), camera ownership, streaming readiness, skip and every ending and its teardown, multiplayer audience; the Studio probes that must run in the proof stage before G2, each with what it settles', skills: ['architecture', 'engineering-craft'] },
     { r: ROLE.design, focus: 'only the gameplay state sheet: when control stops, what keeps running, what can interrupt, audience, skip policy, who decides completion', skills: ['game-design'] },
   ]
@@ -275,14 +297,14 @@ async function direction() {
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.film, {
     id: 'D3-synthesis', task: `cutscene direction sheet: ${SEQ}`,
-    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience, 2-3 options for the owner shown as pictures (the proposals\' pictures; pending images by their prompt rows), one recommendation with its trade-off in player terms, non-negotiables, known limits, the Studio probes the architect named for the proof, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.',
+    intent: 'Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience, 2-3 options for the owner shown as pictures (the key-beat contact sheets beside the labelled warm-up, and the look pictures; pending images by their prompt rows), one recommendation with its trade-off in player terms and why each other option lost; options that failed a check listed with the check and reason, never shown as equals; each option not picked recorded as a closed door with "may return only if <condition>"; the could-not-check list; non-negotiables, known limits, the Studio probes the architect named for the proof, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). Never invent the owner\'s taste to break a tie: a taste tie becomes a G1 question.',
     skills: ['film-direction'],
     inputs: leads.map(L => `${DIR}/direction/proposal-${L.r.type}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${L.r.type}.md`)),
     refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1'],
     rules: [POLICY_RULE],
     owns: [`${DIR}/direction.md`],
     deliver: `${DIR}/direction.md (revision 1)`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 options, each with pictures on disk or rows in a pending prompts file'],
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 options, each with pictures on disk or rows in a pending prompts file', 'every option not recommended has why it lost and a closed-door row with its "may return only if" condition', CNC],
   }, S_SYNTHESIS, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, notDone('direction sheet', syn))
 
@@ -310,8 +332,9 @@ async function direction() {
   }
   return Object.assign(results, {
     status: ok(syn) ? 'done' : 'failed',
-    outcome: 'Direction sheet ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner\'s yes, shows the options as pictures, the recommendation and usage, records the owner\'s words and the approved image paths, then calls stage proof (L) or build (M) with args.images.',
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions } : null,
+    outcome: 'Direction sheet ready for the G1 packet. The lead runs any pending image batch (images_pending) with the owner\'s yes, shows the options as pictures, the recommendation, the failed options and closed doors, could_not_check, the owner_confirmed lines and usage, records the owner\'s words and the approved image paths, then calls stage proof (L) or build (M) with args.images.',
+    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff, questions: syn.questions,
+      failed_options: syn.failed_options, closed_doors: syn.closed_doors } : null,
   })
 }
 
@@ -370,12 +393,48 @@ async function proof() {
   }
 
   phase('Proof')
-  // Boards first, on their own (the one browser user): the animatic and (M) the whole build are made from them, so a pending batch stops the stage here.
+  // Cheap passes first (recipe §1 proof): the blocking strip and the value strip are the boards' layout input; the art-director reviews the value strip
+  // before any board is made (other findings: 2 repair rounds, then needs-decision).
+  const STRIPS = `${FILM}/strips/`
+  let strips = keep('P3a strips', await call(ROLE.film, {
+    id: 'P3a-strips', task: `blocking and value strips: ${SEQ}`, blender: true, visual: true,
+    intent: 'Proof stage, the cheap passes before the boards. Make the blocking strip and the value strip (grayscale key frames in shot order, light chosen in grey) on a proxy greybox, measured with tools/art/look_check.py value. Nothing coloured or polished: these strips are the storyboards\' layout input.',
+    skills: ['film-craft'],
+    inputs: [beats(), `${DIR}/direction.md`],
+    refs: ['.agents/skills/film-craft/SKILL.md steps 5-6   # blocking pass, value pass', '.agents/skills/film-craft/references/blender-previs.md §7   # strips, black-fill, luminance images', 'tools/art/look_check.py'],
+    owns: [STRIPS], deliver: `${STRIPS} the blocking strip, the value strip and the look_check.py value numbers per key frame`,
+    checks: ['every shot has a key frame in both strips', 'look_check.py value numbers exist for every key frame (film-craft references/review.md B-06..B-09, B-17, B-18)'],
+  }, S_HANDBACK, 'Proof'))
+  if (!ok(strips)) return notDone('blocking and value strips', strips)
+  for (let round = 1; round <= 3; round++) {
+    const vr = keep(`P3a value review r${round}`, await call(ROLE.art, {
+      id: `P3a-value-r${round}`, task: `review the cutscene value strip: ${SEQ}`, visual: true,
+      intent: `Proof stage, value-strip review round ${round}, before the boards. Review the film-director's value strip, with the blocking strip beside it: value bands, read order and what the eye reaches first per shot, against the art bible and the approved images. Numbers first (look_check.py); open images only where a number fails. Do not edit the strips. Classify each finding: blocking, recommendation or new request.`,
+      skills: ['art-review'],
+      inputs: [STRIPS, beats(), `${DIR}/direction.md`],
+      owns: [`${DIR}/reviews/value-strip-rev${round}-art-director.md`], deliver: `${DIR}/reviews/value-strip-rev${round}-art-director.md in the templates/jobs/review.md format`,
+      rules: [LIGHT],
+      checks: ['every finding names the shot, expected, observed, evidence and the smallest fix', 'keep lists what works', CNC],
+    }, S_REVIEW, 'Proof'))
+    if (!ok(vr)) return notDone(`value-strip review round ${round}`, vr)
+    if (!vr.findings.some(f => f.class === 'blocking')) break
+    if (round === 3) return { status: 'needs-decision', outcome: 'Blocking value-strip findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).' }
+    strips = keep(`P3a strips fix r${round}`, await call(ROLE.film, {
+      id: `P3a-strips-fix-r${round}`, task: `fix value-strip findings: ${SEQ}`, blender: true, visual: true,
+      intent: `Proof stage, value-strip repair round ${round}. Fix the blocking findings in the art-director's review; keep what it lists under keep; re-measure with look_check.py value.`,
+      inputs: [`${DIR}/reviews/value-strip-rev${round}-art-director.md`, STRIPS, beats()],
+      protect: ['every keep item in the review file'],
+      owns: [STRIPS], deliver: `${STRIPS} new strip revision with its numbers`,
+      checks: ['each blocking finding is fixed with its new number, or answered with evidence'],
+    }, S_HANDBACK, 'Proof'))
+    if (!ok(strips)) return notDone(`value-strip repair round ${round}`, strips)
+  }
+  // Boards next, on their own (the one browser user): the animatic and (M) the whole build are made from them, so a pending batch stops the stage here.
   const boards = keep('P4 storyboards', await call(ROLE.film, {
     id: 'P4-boards', task: `storyboards: ${SEQ}`, visual: true, images: `${FILM}/boards/image-prompts.md`,
-    intent: 'Proof stage. Make the storyboards from the beat sheet (reference-images, storyboard family, continuity reviewed against the approved images), one board per shot key moment, and a contact sheet.',
+    intent: 'Proof stage. Make the storyboards from the beat sheet (reference-images, storyboard family, continuity reviewed against the approved images), one board per shot key moment, each taking its layout from the reviewed blocking and value strips, and a contact sheet.',
     skills: ['film-craft', 'reference-images'],
-    inputs: [beats()],
+    inputs: [beats(), `${STRIPS}   # the reviewed blocking and value strips: the boards' layout input`],
     owns: [`${FILM}/boards/`, 'content/art/refs/storyboard/ (through tools/art/art_refs.py)'], deliver: `${FILM}/boards/ boards and contact sheet (or image-prompts.md with every board)`,
     checks: ['every shot has a board, or a row in image-prompts.md while images.state is pending', 'each board names its shot id'],
   }, S_BOARDS, 'Proof'))
@@ -449,13 +508,13 @@ async function proof() {
         inputs: [`${FILM}/`, `${DIR}/direction.md`, beats(), `${DIR}/architect/probes/probes.md`],
         owns: [`${DIR}/reviews/animatic-rev${round}-${o.r.type}.md`], deliver: `${DIR}/reviews/animatic-rev${round}-${o.r.type}.md in the templates/jobs/review.md format`,
         rules: o.r === ROLE.art ? [POLICY_RULE] : [],
-        checks: ['every finding names where (shot and time), expected, observed, evidence and the smallest fix', 'keep lists what works'],
+        checks: ['every finding names where (shot and time), expected, observed, evidence and the smallest fix', 'keep lists what works', CNC],
       }, S_REVIEW, 'Proof review'))
       if (!rv) return { status: 'failed', outcome: `proof review by ${o.r.type} returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
       rv.findings.filter(f => f.class === 'blocking').forEach(f => blocking.push(f))
     }
     if (!blocking.length) {
-      return { status: 'done', outcome: 'Proof ready for the owner.', beat_sheet: beats(), animatic: `${FILM}/`, probes: `${DIR}/architect/probes/probes.md` }
+      return { status: 'done', outcome: 'Proof ready for the owner (the G2 packet carries could_not_check and the owner_confirmed lines).', beat_sheet: beats(), animatic: `${FILM}/`, probes: `${DIR}/architect/probes/probes.md` }
     }
     if (round === 3) break
     // The fix may write a new beat-sheet revision: the next reviewers and the G2 packet name that revision (approval bound to a revision).
@@ -652,7 +711,7 @@ async function production() {
       if (!combo) return null
       const polish = keep('B3 anim final', await call(ROLE.anim, {
         id: 'B3-polish', task: `cutscene animation polish and timing list: ${SEQ}`, blender: true, visual: true,
-        intent: 'Build stage. Polish the clips with the film-director\'s combined notes for the animator, export them, and write the timing list (event id, time in seconds with source frame and frame rate, meaning, consumers) that VFX and sound finish against. A beat time that moves from the locked beat sheet is named in the timing list\'s change table. Roblox import happens in integration, not now.',
+        intent: 'Build stage. Polish the clips with the film-director\'s combined notes for the animator, export them, and write the timing list, the job\'s one marker list where animation, VFX and sound meet (event id, time in seconds with source frame and frame rate, meaning, consumers) that VFX and sound finish against. A beat time that moves from the locked beat sheet is named in the timing list\'s change table. Roblox import happens in integration, not now.',
         inputs: [`content/anim/${SEQ}/`, `${DIR}/reviews/combined-film-director.md`, beats()], protect: combo.keep,
         owns: [`content/anim/${SEQ}/`], consumers: ['vfx-designer', 'sound-designer'], deliver: `content/anim/${SEQ}/ exported clips and timing-list.md`,
         checks: ['every beat event in the beat sheet has a timing-list row', 'no foot sliding or interpenetration in the shot-camera playblasts (counts)'],
@@ -713,7 +772,7 @@ async function reviewChain(label) {
       intent: `Review chain on the frozen candidate in ${DIR}/evidence.md (captures in ${caps()}). Check ${q}. Open the captures, the logs and the files first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (${MAKERS.join(', ')}).${later}`,
       inputs: [`${DIR}/evidence.md`, beats(), player(), `${DIR}/direction.md`, caps()],
       owns: [`${DIR}/reviews/${tag}-${id}.md`], deliver: `${DIR}/reviews/${tag}-${id}.md (templates/jobs/review.md)`,
-      checks: ['every finding has a location, expected, observed, evidence and the smallest fix', 'keep lists what works'],
+      checks: ['every finding has a location, expected, observed, evidence and the smallest fix', 'keep lists what works', CNC],
     }, o), S_REVIEW, 'Review chain')
     // Scripts first (recipe §1): a FAIL is a blocking finding for its maker, and the other reviews wait for the repair.
     const scripts = keep(`RV ${tag} scripts`, await reviewOne(ROLE.qa, 'scripts',
@@ -738,7 +797,7 @@ async function reviewChain(label) {
           rules: ['A clean review says so plainly; no style findings.'], checks: ['every finding has file:line, the input or sequence, and the wrong outcome for players'] })))()
       const crea = []
       const creative = [
-        [ROLE.film, 'staging, timing, camera and emotional clarity from the stills and the event times in output.log, against the beat sheet', { visual: true, rules: [LIGHT, POLICY_RULE, 'Judge the captures; do not open Studio. A missing capture is a finding for the film-director.'] }],
+        [ROLE.film, 'staging, timing, camera and emotional clarity from the stills and the event times in output.log, against the beat sheet; per shot the first-second read, the read order and the value lines on the captures (look_check.py value, against the approved value strip)', { visual: true, rules: [LIGHT, POLICY_RULE, 'Judge the captures; do not open Studio. A missing capture is a finding for the film-director.'] }],
         [ROLE.art, 'the integrated look: do set, light, animation and effects cooperate; what reads first; the match with the approved images and the art bible', { visual: true, rules: [LIGHT, POLICY_RULE, 'Visual notes are paint-overs or marked-up stills.', 'Judge the captures; do not open Studio. A missing capture is a finding for the film-director.'] }],
         [ROLE.sound, 'sync of every cue to its picture event from output.log (sound onset 0 to +40 ms after the first lit frame of its event) and the mix plan against the game\'s mix; listening on a phone speaker and headphones stays an owner-confirmed line for the G3 packet', { rules: [LIGHT, CAPTURE_LIMIT, 'Judge the log and the files; do not open Studio. A missing log line is a finding for the feature-builder.'] }],
       ]
@@ -750,11 +809,28 @@ async function reviewChain(label) {
       const code = await codeP
       all.push(...crea, ...techR, code)
       if (missing(all).length) return { status: 'failed', outcome: `review round ${round}: a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+      if (EVENT) {
+        // Risk event (job-types.md "Not recipes"): after the creative chain, the live-ops event review on its capture set; the Studio is free again here.
+        const evCaps = `${caps()}event/`
+        const ec = keep(`RV ${tag} event captures`, await call(ROLE.op, {
+          id: `RV-${tag}-event-captures`, task: `event capture set for the cutscene: ${SEQ}`, studioWrite: true,
+          intent: `Review chain, risk event. On the frozen candidate in ${DIR}/evidence.md, take the event capture set of live-ops-craft/references/event-review.md §2 that this cutscene's event touches; write n/a with the reason for each capture that does not apply.`,
+          skills: ['studio-mcp'], inputs: [`${DIR}/evidence.md`, beats()],
+          refs: ['.agents/skills/live-ops-craft/references/event-review.md §2   # the capture set and its image budget'],
+          owns: [evCaps], rules: [CAPTURE_LIMIT, LIGHT], deliver: `${evCaps} stills named by capture id, and a list of every §2 capture: taken or n/a with the reason`,
+          checks: ['every §2 capture is taken or n/a with its reason', 'each still names its capture id, camera and viewport'],
+        }, S_CAPTURE, 'Review chain'))
+        if (!ok(ec)) return notDone(`review round ${round}: event captures`, ec)
+        all.push(keep(`RV ${tag} live-ops-designer`, await reviewOne(ROLE.liveops, 'live-ops-designer',
+          `the event review E-01 to E-19 of live-ops-craft/references/event-review.md §3 on the captures in ${evCaps} and ${caps()}; a fix owner outside the maker list is named as it is (the lead routes it)`,
+          { skills: ['live-ops-design', 'live-ops-craft'], inputs: [`${DIR}/evidence.md`, beats(), `${DIR}/direction.md`, evCaps, caps()], rules: [LIGHT, 'Judge the captures; do not open Studio. A missing capture is a could-not-check line.'] })))
+        if (missing(all).length) return { status: 'failed', outcome: `review round ${round}: the live-ops event review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+      }
     }
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet (listening and phone lines stay owner-confirmed or BLOCKED until checked).`, new_requests: requests, reviews: all.map(x => x.files).flat() }
+      return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet with could_not_check and the owner_confirmed lines (listening and phone lines stay owner-confirmed or BLOCKED until checked).`, new_requests: requests, reviews: all.map(x => x.files).flat() }
     }
     const codeF = blocking.filter(f => f.maker_role === ROLE.build.type)
     const otherF = blocking.filter(f => f.maker_role !== ROLE.build.type)

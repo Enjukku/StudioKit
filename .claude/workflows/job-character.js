@@ -1,24 +1,25 @@
 export const meta = {
   name: 'job-character',
   description: 'Run one stage (direction, proof, build or repair) of a character or creature job led by the art-director, with a variant mode for skins and recolours; owner gates sit between calls.',
-  whenToUse: 'An M or L character or creature job (player character, NPC, pet, boss; a skin, recolour or themed version with variant: true) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), variant and playable (true or false), base (variant); studioId and images (owner-approved reference image paths) for proof, build and repair; change for repair. Optional: asset, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
+  whenToUse: 'An M or L character or creature job (player character, NPC, pet, boss; a skin, recolour or themed version with variant: true) the lead has opened (job folder, job card with the owner\'s words, knowledge/jobs/active.md). Required args: job, stage, size (M or L), variant and playable (true or false), base (variant), risks (a list, [] = none: new-enemy, sold-variant (variant only), event); studioId and images (owner-approved reference image paths) for proof, build and repair, and studioId in direction when risks names new-enemy; change for repair. Optional: asset, gate, imagesApproved. Full table: .agents/workflows/jobs/README.md.',
   phases: [
     { title: 'Proposals', detail: 'game-designer, art-director, rigger and animator propose alone' },
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
     { title: 'Direction sheet', detail: 'art-director synthesises; others sign' },
-    { title: 'Contract', detail: 'reference set, gameplay sheet, rig sheet S0-S2 and K2' },
-    { title: 'Proof', detail: 'blockout at player scale, proxy rig, signature pose at the game camera in Studio' },
+    { title: 'Behaviour test', detail: 'risk new-enemy: plain Parts play the planned behaviour in Studio; the game-designer judges before G1' },
+    { title: 'Contract', detail: 'reference set, the modeler\'s reference check, gameplay sheet, sound plan, rig sheet S0-S2 and K2' },
+    { title: 'Proof', detail: 'blockout at player scale, proxy rig, signature pose options and stress poses at the game camera, roster lineup' },
     { title: 'Proof review', detail: 'art-director, then animator, then game-designer; repairs by makers' },
     { title: 'Model', detail: 'S3 cuts and geometry, art check-in, texture polish, S4 rigger acceptance' },
     { title: 'Rig', detail: 'S5 rig and tests, S6 animator acceptance' },
     { title: 'Animation and effects', detail: 'S7 clips and timing list, VFX and sound on it, icon renders' },
     { title: 'Integration', detail: 'one Studio driver: import, wiring, frozen candidate captures' },
-    { title: 'Review chain', detail: 'scripts, then art-director and game-designer beside the phone check; repairs by makers' },
+    { title: 'Review chain', detail: 'scripts, then art-director and game-designer beside the phone check (and PF-13 for a sold variant); the event review last for an event; repairs by makers' },
     { title: 'Repair', detail: 'a G3 change reopens only the affected crafts' },
   ],
 }
 
-// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T03, owner approval J016-D5: built the way job-cutscene.js is); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage).
+// Author: workflow author · claude-opus-5-5 · high · 2026-10-21 (J016-T03, owner approval J016-D5: built the way job-cutscene.js is); revised by workflow-fixer W3 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (repair round 1: pending images stop the stage); revised by J019 workflow maker · claude-opus-5-5 · high · 2026-10-22 (G3-P4: recipe rows of b2eeb73, risks arg).
 // Recipe: .agents/skills/orchestration/references/job-types.md §2; stages and checks: .agents/skills/rig-pipeline/SKILL.md S0-S8.
 // Rules: rules/company.md, rules/messages.md, rules/knowledge.md.
 // The script cannot read or write files: every agent reads the job folder and writes its own files.
@@ -52,6 +53,15 @@ const GSHEET = `${DIR}/design/gameplay-sheet.md`
 const REFSET = `${DIR}/art/reference-set.md`
 const BASE_RIG = BASE ? `content/rigs/${BASE}/` : 'the base asset\'s rig folder named in the job card'
 const BASE_ANIM = BASE ? `content/anim/${BASE}/` : 'the base asset\'s clip folder named in the job card'
+// The job card's Risks row (job-types.md "Risk-gated slots"): each token switches on one recipe slot; no default.
+const RISK_TOKENS = ['new-enemy', 'sold-variant', 'event']
+const RISKS = Array.isArray(A.risks) ? A.risks : []
+const NEW_ENEMY = RISKS.includes('new-enemy')   // behaviour test in direction (job-types.md §2)
+const SOLD = RISKS.includes('sold-variant')     // qa-lead PF-13 check in the review chain (variant mode)
+const EVENT = RISKS.includes('event')           // live-ops event review before G3 (job-types.md "Not recipes")
+const BEHAVIOUR = `${DIR}/direction/behaviour-test`
+const LINEUP = `${DIR}/captures/roster-lineup`
+const REFCHECK = `${MODEL}/ asset record   # the modeler's reference check (modeling-design/references/reference-check.md §7)`
 
 if (!JOB || !['direction', 'proof', 'build', 'repair'].includes(STAGE)) {
   return { status: 'blocked', outcome: 'args need {job, stage: direction | proof | build | repair}', got: A }
@@ -66,6 +76,11 @@ if (STAGE !== 'direction' && !STUDIO) lacking.push('studioId: the character is c
 if (STAGE !== 'direction' && !IMAGES.length) lacking.push('images: the owner-approved reference image paths from the last gate (no visual work without an approved image, lead decision LD2)')
 if (STAGE === 'repair' && !CHANGE) lacking.push('change: the owner\'s G3 change request, verbatim')
 if (STAGE === 'proof' && SIZE === 'M') lacking.push('size L for stage proof: an M job runs the proof inside stage build')
+if (!Array.isArray(A.risks)) lacking.push(`risks: a list of the job card's Risks row tokens ([] = none): ${RISK_TOKENS.join(', ')}`)
+const unknownRisks = RISKS.filter(r => !RISK_TOKENS.includes(r))
+if (unknownRisks.length) lacking.push(`risks: unknown token ${unknownRisks.map(r => JSON.stringify(r)).join(', ')}; this workflow accepts ${RISK_TOKENS.join(', ')}`)
+if (SOLD && !VARIANT) lacking.push('risks: sold-variant needs variant: true (a sold skin is a variant; job-types.md §2 variant mode)')
+if (STAGE === 'direction' && NEW_ENEMY && !STUDIO) lacking.push('studioId: the behaviour test (risk new-enemy) captures plain Parts in Studio in direction, one Studio driver at a time')
 if (lacking.length) {
   return { status: 'blocked', outcome: `stage ${STAGE} needs args: ${lacking.join('; ')}. See .agents/workflows/jobs/README.md.`, required: lacking, got: A }
 }
@@ -85,6 +100,8 @@ const ROLE = {
   // Wiring touches remotes (and, for a variant, ownership saves): the reviewer runs high (roles README).
   code: { type: 'reviewer', model: 'opus', effort: 'high' },
   anim: { type: 'animator', model: 'opus', effort: 'high' },
+  op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
+  live: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
 // Wiring a character touches remotes (and, for a variant, ownership saves): feature-builder runs high (roles README).
 const BUILD_HIGH = Object.assign({}, ROLE.build, { effort: 'high' })
@@ -118,8 +135,9 @@ function schema(extra) {
 // An image step's result (lead decision LD2): made, or pending with the prompts file for the lead's batch between stages.
 const IMAGE_OUT = { type: 'object', additionalProperties: false, required: ['state', 'prompts_file', 'paths'],
   properties: { state: { type: 'string', enum: ['made', 'pending', 'not needed'] }, prompts_file: STR, paths: STRS } }
-const OPTION = { type: 'object', additionalProperties: false, required: ['name', 'pictures', 'player_gets', 'cost_and_risk'],
-  properties: { name: STR, pictures: STRS, player_gets: STR, cost_and_risk: STR } }
+// hook: the idea the option comes from, "warm-up" or "radical" marked (job-types.md cross-type rules: options at G1).
+const OPTION = { type: 'object', additionalProperties: false, required: ['name', 'hook', 'pictures', 'player_gets', 'cost_and_risk'],
+  properties: { name: STR, hook: STR, pictures: STRS, player_gets: STR, cost_and_risk: STR } }
 const ITEM = { type: 'object', additionalProperties: false, required: ['about', 'why', 'needs'], properties: { about: STR, why: STR, needs: STR } }
 const FINDING = { type: 'object', additionalProperties: false, required: ['id', 'class', 'maker_role', 'where', 'expected', 'observed', 'evidence', 'smallest_fix'],
   properties: { id: STR, class: { type: 'string', enum: ['blocking', 'recommendation', 'new request'] }, maker_role: STR, where: STR, expected: STR, observed: STR, evidence: STR, smallest_fix: STR } }
@@ -131,12 +149,18 @@ const S_HANDBACK = schema()
 const S_PROPOSAL = schema({ options: { type: 'array', items: OPTION }, known_limits: STRS, images: IMAGE_OUT })
 const S_REFSET = schema({ images: IMAGE_OUT })
 const S_WIRING = schema({ contract_revision: { type: 'integer' }, code_owners: STRS })
-const S_CAPTURE = schema({ candidate_revision: STR, captures_made: { type: 'integer' }, captures_looked_at: { type: 'integer' } })
+const S_CAPTURE = schema({ candidate_revision: STR, captures_made: { type: 'integer' }, captures_looked_at: { type: 'integer' }, could_not_check: STRS })
 const S_EXCHANGE = schema({ conflicts: { type: 'array', items: ITEM }, missing: { type: 'array', items: ITEM } })
+// failed_options: options that failed the grey pass or another check, with the numbers and reason (never shown as equals);
+// closed_doors: options not picked, each with its "may return only if" condition (cross-type rules).
 const S_SYNTHESIS = schema({ revision: { type: 'integer' }, options: { type: 'array', items: OPTION }, recommended: STR, tradeoff: STR,
-  anchors: STRS, signature_action: STR, costly_parts: STRS })
+  why_others_lost: STRS, failed_options: STRS, closed_doors: STRS, anchors: STRS, signature_action: STR, costly_parts: STRS, could_not_check: STRS })
 const S_SIGN = schema({ signs: { type: 'boolean' }, incompatibility: STR })
-const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+const S_REVIEW = schema({ findings: { type: 'array', items: FINDING }, keep: STRS, could_not_check: STRS, verdict: { type: 'string', enum: ['fix-first', 'ready for the next review', 'ready for the owner'] } })
+// The behaviour test verdict (risk new-enemy): the first enum value is the pass.
+const S_BEHAVIOUR = schema({ behaviour_verdict: { type: 'string', enum: ['plays as intended', 'does not play as intended'] }, measured: STRS, could_not_check: STRS })
+// The modeler's reference check: asks for the art-director (missing views, gaps that change the look, unclear material intent).
+const S_REFCHECK = schema({ asks: { type: 'array', items: ITEM } })
 const S_SCOPE = schema({ affected_roles: STRS, rig_sheet_touched: { type: 'boolean' }, new_scope: { type: 'boolean' } })
 // A receiver's check at a hand-off (K1, K2, S4, S6): accepted, one note sent, or a design question for the owner.
 const S_CHECK = schema({ verdict: { type: 'string', enum: ['accepted', 'note sent', 'needs-decision'] }, note_items: { type: 'array', items: NOTE_ITEM }, sheet_revision: { type: 'integer' } })
@@ -223,7 +247,18 @@ function roleOf(name) {
   return k ? ROLE[k] : null
 }
 function ok(x) { return x && x.status === 'done' }
-const results = { job: JOB, stage: STAGE, size: SIZE, asset: ASSET, variant: VARIANT, playable: PLAYABLE, steps: [], images_pending: [], lessons: [] }
+// Risk-gated slots: one line each for the job card, run or skipped (cross-type rules: a skipped slot is a line, not a silent gap).
+const RISK_SLOTS = [
+  { slot: 'behaviour test (direction)', risk: 'new-enemy', runs: NEW_ENEMY },
+  { slot: 'qa-lead PF-13 variant parity (review chain)', risk: 'sold-variant', runs: SOLD },
+  { slot: 'live-ops event review E-01 to E-19 (review chain, before G3)', risk: 'event', runs: EVENT },
+]
+const results = { job: JOB, stage: STAGE, size: SIZE, asset: ASSET, variant: VARIANT, playable: PLAYABLE, risks: RISKS, risk_slots: RISK_SLOTS, steps: [], images_pending: [], lessons: [] }
+// The owner-confirmed lines every gate packet carries (cross-type rules); Studio MCP captures stills, so feel and listening are the owner's.
+function ownerLines(feel, sound) {
+  return [].concat(feel ? [`feel at normal speed: ${feel} (owner-confirmed)`] : [],
+    sound ? ['two listens: the key event alone, then the full mix, each on a phone speaker and on headphones (owner-confirmed)'] : [])
+}
 function keep(step, x) {
   results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
@@ -315,23 +350,27 @@ function handOffStop(c, what) {
 
 // ================================================================ stage: direction (D1-D3) → G1
 async function direction() {
+  // Constraint owners state limits before design (cross-type rules); job-types.md §2 Direction leads.
+  const R15 = '; when the game uses the standard R15 body for shared clips, state its limits (no clavicles, no fingers: wind-ups go into upper-torso and upper-arm range, hand reads into hand poses or swaps); a custom rig is an owner choice, so name its cost'
   const leads = [
     { r: ROLE.design, skills: ['game-design', 'platform-policy'],
       focus: VARIANT
         ? 'the variant\'s place in play: how players get it (sold, earned, rolled) and the platform rules that apply, and the parity rule it must keep: no gameplay disadvantage for players who own it (hitbox, size, visibility, readability of the signature action)'
-        : 'the character\'s role in play: what it does, its gameplay role, its signature action and the window it must read in, the game camera and typical distance, the most on screen at once and the target device, numbers as PROPOSAL; for a character players buy or roll, the platform rules that apply' },
+        : 'the character\'s role in play: what it does, its gameplay role, its signature action and the window it must read in, the reaction window for each threat\'s tell and the play rate of each action, the game camera and typical distance, the most on screen at once and the target device, numbers as PROPOSAL; for a character players buy or roll, the platform rules that apply'
+          + (NEW_ENEMY ? '; the planned movement pattern, speed and attack radius per threat, which the behaviour test plays with plain Parts after the direction sheet' : '') },
     { r: ROLE.art, skills: ['art-direction', 'reference-images'],
-      focus: VARIANT
+      focus: (VARIANT
         ? '2-3 costume and palette directions as reference images that keep the base identity anchors (name them and mark them on every image), checked against the art bible; only costume and palette are open'
-        : '2-3 visual directions as reference images through reference-images, checked against the art bible; 2-3 identity anchors per direction (what makes it recognisable at the game camera), shape language, value and colour roles' },
+        : '2-3 visual directions as reference images through reference-images, checked against the art bible; 2-3 identity anchors per direction (what makes it recognisable at the game camera), shape language, value and colour roles; the character card (feel words, size, age, material, nearest similar character)')
+        + '. Each direction comes from its own hook, with the labelled warm-up (the typical idea) and one radical option marked; run the grey pass on every option first (grey and black-fill at phone size at the game camera; reference-images, orchestration/references/gates-and-feedback.md §3): only options that pass go forward, at equal finish with anchors marked; an option that fails is a numbers line with the reason, never a picture shown as an equal' },
     { r: ROLE.rig, skills: ['rig-pipeline', 'rigging-design'],
       focus: VARIANT
         ? `whether the costume adds moving parts beyond the base rig in ${BASE_RIG}, what the base rig and clips cannot carry (clipping and silhouette risks at the base range of motion), each with a cheap fallback`
-        : 'the rig cost of the character: rig-costly parts (capes, coattails, long hair, parts over joints, loose accessories) each with a cheap fallback, the likely route per region (rigid pieces, skinning or mixed) and what must be separate' },
+        : 'the rig cost of the character: rig-costly parts (capes, coattails, long hair, parts over joints, loose accessories) each with a cheap fallback, the likely route per region (rigid pieces, skinning or mixed) and what must be separate' + R15 },
     { r: ROLE.anim, skills: ['rig-pipeline'],
       focus: VARIANT
         ? 'which base clips the costume threatens (clipping, silhouette lost in motion) and whether any new part needs its own motion'
-        : 'the motion profile: the action list the role implies (idle, locomotion, the signature action, hits, any emotes), what must move and how far in words, contacts and held tools, which parts are costly to animate and why; timing inside gameplay windows as PROPOSAL' },
+        : 'the motion profile: the action list the role implies (idle, locomotion, the signature action, hits, any emotes), what must move and how far in words, contacts and held tools, which parts are costly to animate and why; timing inside gameplay windows as PROPOSAL' + R15 },
   ]
   phase('Proposals')
   const props = await parallel(leads.map(L => () => call(L.r, {
@@ -349,7 +388,8 @@ async function direction() {
     avoid: [`${DIR}/direction/proposal-*.md written by other leads`, 'polished final assets'],
     owns: [`${DIR}/direction/proposal-${nm(L.r)}.md`].concat(L.r === ROLE.art ? [`${DIR}/direction/image-prompts.md`, 'content/art/refs/ (through tools/art/art_refs.py)'] : L.r === ROLE.rig ? [`${DIR}/direction/stills-character-rigger/`] : []),
     deliver: `${DIR}/direction/proposal-${nm(L.r)}.md: intended player experience, options (pictures where you make them), non-negotiables with reasons, uncertain assumptions, known limits`,
-    checks: ['the proposal file exists and names at least one non-negotiable and one uncertain assumption', 'every picture listed in options exists on disk, or images.state is pending and the prompts file lists it'],
+    checks: ['the proposal file exists and names at least one non-negotiable and one uncertain assumption', 'every picture listed in options exists on disk, or images.state is pending and the prompts file lists it']
+      .concat(L.r === ROLE.art ? ['every option names its hook, the warm-up and the radical one marked; each option\'s grey-pass result (grey and black-fill at phone size) is in the file, and a failing option is a numbers line with the reason'] : []),
   }, S_PROPOSAL, 'Proposals')))
   props.forEach((p, i) => keep(`D1 ${nm(leads[i].r)}`, p))
   if (missing(props).length) return Object.assign(results, { status: 'failed', outcome: 'a direction proposal is missing; rerun the stage' })
@@ -368,14 +408,15 @@ async function direction() {
   phase('Direction sheet')
   let syn = keep('D3 synthesis', await call(ROLE.art, {
     id: 'D3-synthesis', task: `character direction sheet: ${ASSET}`,
-    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience (what the player should feel seeing it and playing it or against it), 2-3 directions for the owner shown as pictures with the identity anchors marked, one recommendation with its trade-off in player terms, the signature action, the parts costly to animate with their cheap fallbacks, non-negotiables, known limits, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). The game-designer owns the role in play: take its gameplay facts as given or record the conflict. Never invent the owner's taste to break a tie: a taste tie becomes a G1 question.${VARIANT ? ' Variant: list the fixed items (base rig, clips, identity anchors) and show each direction beside the base.' : ''}`,
+    intent: `Direction stage, synthesis. As job lead, write one direction sheet from the four proposals and the exchange notes: the target experience (what the player should feel seeing it and playing it or against it), 2-3 directions for the owner that passed the grey pass, at equal finish, each with its grey and black-fill at phone size and the identity anchors marked, each hook named with the warm-up and the radical one marked; the options that failed as a numbers list with the reason; one recommendation with its trade-off in player terms and the reasons the others lost; the options not picked as closed doors, each with "may return only if"; the signature action, the parts costly to animate with their cheap fallbacks, non-negotiables, known limits${VARIANT ? '' : ', the character card (feel words, size, age, material, nearest similar character)'}, what could not be checked, and a decision record for every consequential conflict (decision owner per rules/company.md §3; record dissent and a revisit trigger). The game-designer owns the role in play: take its gameplay facts as given or record the conflict. Never invent the owner's taste to break a tie: a taste tie becomes a G1 question.${VARIANT ? ' Variant: list the fixed items (base rig, clips, identity anchors) and show each direction beside the base.' : ''}`,
     skills: ['art-direction', 'art-review'],
     inputs: leads.map(L => `${DIR}/direction/proposal-${nm(L.r)}.md`).concat(leads.map(L => `${DIR}/exchange/r1-${nm(L.r)}.md`)),
     refs: ['templates/jobs/direction-sheet.md   # take: the structure, revision 1'],
     fixed: VARIANT_FIXED,
     owns: [`${DIR}/direction.md`],
     deliver: `${DIR}/direction.md (revision 1)`,
-    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 directions, each with pictures on disk or rows in a pending prompts file, and its anchors marked', 'the signature action and each costly part with its fallback are named'],
+    checks: ['every conflict in the exchange notes is either resolved in a decision record or listed as a G1 question', '2-3 directions, each with pictures on disk or rows in a pending prompts file, and its anchors marked', 'the signature action and each costly part with its fallback are named',
+      'every failed option is a numbers line with its reason; every option not picked is a closed door with its "may return only if" condition'],
   }, S_SYNTHESIS, 'Direction sheet'))
   if (!ok(syn)) return Object.assign(results, { status: 'failed', outcome: 'direction sheet not written' })
 
@@ -402,11 +443,48 @@ async function direction() {
       checks: ['each incompatibility is resolved with a decision record or listed as a G1 question'],
     }, S_SYNTHESIS, 'Direction sheet'))
   }
+  const g1 = syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff,
+    why_others_lost: syn.why_others_lost, failed_options: syn.failed_options, closed_doors: syn.closed_doors,
+    anchors: syn.anchors, signature_action: syn.signature_action, costly_parts: syn.costly_parts, questions: syn.questions,
+    could_not_check: [].concat(syn.could_not_check || []), owner_confirmed: ownerLines(NEW_ENEMY ? 'the behaviour test (plain Parts) played in Studio' : '', false) } : null
+  if (!ok(syn)) return Object.assign(results, { status: 'failed', outcome: 'direction sheet not resolved', g1 })
+
+  // Behaviour test (risk new-enemy, job-types.md §2): after D3, before G1; no modeler brief before its verdict.
+  if (NEW_ENEMY) {
+    phase('Behaviour test')
+    const cap = keep('D4 behaviour capture', await call(ROLE.op, {
+      id: 'D4-behaviour-capture', task: `behaviour test capture: ${ASSET}`, studioWrite: true,
+      intent: 'Direction stage, behaviour test (risk new-enemy). Before any model is briefed, show whether the planned behaviour plays: in the test place, plain Parts move with the planned pattern, speed and attack radius from the direction sheet, beside a player-size stand-in, seen from the game camera. Record each threat\'s tell-to-contact time and each action\'s rate from the Output log on one clock, and stills at the key frames.',
+      skills: ['studio-mcp'],
+      inputs: [`${DIR}/direction.md@rev${syn.revision}`, `${DIR}/direction/proposal-game-designer.md`, 'knowledge/design/game-profile.md   # take: camera'],
+      owns: [`${BEHAVIOUR}/`, `the test place content in studio ${STUDIO}`],
+      consumers: ['game-designer'],
+      deliver: `${BEHAVIOUR}/ stills, Output log lines and a manifest (camera, distance, speeds, radii, place)`,
+      rules: [CHECK_BUDGET, 'Plain Parts in the test place only: no model, no art, no game source.', 'Studio MCP screen_capture gives still images only: motion is judged from the Output log times and the key-frame stills, labelled so; list what they cannot show in could_not_check.'],
+      checks: ['every threat has its tell-to-contact time and every action its rate, from the Output log (MCP-verified)', 'the manifest names the camera, distance, speeds and radii used'],
+    }, S_CAPTURE, 'Behaviour test'))
+    if (!ok(cap)) return Object.assign(results, { status: cap ? cap.status : 'failed', outcome: `behaviour test capture: ${cap ? cap.outcome : 'agent returned nothing'}`, g1 })
+    const judged = keep('D4 behaviour verdict', await call(ROLE.design, {
+      id: 'D4-behaviour-verdict', task: `judge the behaviour test: ${ASSET}`,
+      intent: 'Direction stage, behaviour test verdict (risk new-enemy). Judge the captures and log times against the reaction window of each threat\'s tell and the play rate of each action in the direction sheet: does the behaviour play as intended before any model is made? The verdict goes into the G1 packet.',
+      skills: ['game-design'],
+      inputs: [`${BEHAVIOUR}/`, `${DIR}/direction.md@rev${syn.revision}`],
+      owns: [`${BEHAVIOUR}/verdict.md`],
+      deliver: `${BEHAVIOUR}/verdict.md: planned against measured per threat and action, the verdict and the reasons`,
+      rules: ['Judge the captures and log; do not open Studio.'],
+      checks: ['each threat and action has planned and measured values side by side', 'what the stills and the log cannot show is in could_not_check'],
+    }, S_BEHAVIOUR, 'Behaviour test'))
+    if (!ok(judged)) return Object.assign(results, { status: judged ? judged.status : 'failed', outcome: `behaviour test verdict: ${judged ? judged.outcome : 'agent returned nothing'}`, g1 })
+    g1.behaviour_test = { verdict: judged.behaviour_verdict, measured: judged.measured, file: `${BEHAVIOUR}/verdict.md`, captures: `${BEHAVIOUR}/` }
+    g1.could_not_check = g1.could_not_check.concat(cap.could_not_check || [], judged.could_not_check || [])
+    if (judged.behaviour_verdict !== 'plays as intended') {
+      return Object.assign(results, { status: 'needs-decision', outcome: 'The behaviour test does not play as intended: the lead shows the verdict, the captures and the direction at G1; no modeler brief until the owner decides (job-types.md §2).', g1 })
+    }
+  }
   return Object.assign(results, {
-    status: ok(syn) ? 'done' : 'failed',
-    outcome: 'Direction sheet ready for the G1 packet. The lead shows the directions as pictures with anchors marked, the recommendation, the signature move, what is costly to animate and usage, runs any pending image batch (images_pending) with the owner\'s yes, records the owner\'s words and the approved image paths, then calls stage proof (L) or build (M) with args.images.',
-    g1: syn ? { direction: `${DIR}/direction.md@rev${syn.revision}`, options: syn.options, recommended: syn.recommended, tradeoff: syn.tradeoff,
-      anchors: syn.anchors, signature_action: syn.signature_action, costly_parts: syn.costly_parts, questions: syn.questions } : null,
+    status: 'done',
+    outcome: 'Direction sheet ready for the G1 packet. The lead shows the directions that passed the grey pass at equal finish (grey and black-fill at phone size, anchors marked, hooks with the warm-up and radical marked), the failed options as numbers, the recommendation and why the others lost, the closed doors, the signature move, what is costly to animate, the behaviour-test verdict when it ran, the could-not-check list and the owner-confirmed lines, and usage; runs any pending image batch (images_pending) with the owner\'s yes, records the owner\'s words and the approved image paths, then calls stage proof (L) or build (M) with args.images.',
+    g1,
   })
 }
 
@@ -445,7 +523,8 @@ async function proof() {
   if (refset.images && refset.images.state === 'pending') return pendingStop('reference set')
 
   // Playable: the architect writes the wiring contract with the code file owners at the interfaces step (lead decision LD10), beside S0.
-  const [s0raw, wc] = await parallel([() => call(ROLE.rig, {
+  // Beside them (job-types.md §2): the modeler's reference check before S1, and the sound plan from the character card before any clip.
+  const [s0raw, wc, rc, sp] = await parallel([() => call(ROLE.rig, {
     id: 'S0-sheet', task: `open the rig sheet: ${ASSET}`,
     intent: `Proof stage, rig-pipeline S0 on the lead's behalf. Copy templates/rig/rig-sheet.md to ${SHEET}${VARIANT ? ` (variant: start from the base sheet in ${BASE_RIG}; name the base revision it starts from)` : ''} and fill §A from the job card, the direction sheet, the reference set and the gameplay sheet: purpose, approved reference image with its G1 decision line, model source (the modeler builds it: blockout in this stage, final geometry at S3; snapshot when it exists), camera and size on screen, target device and most visible, runtime driver, movement owner. Write UNKNOWN with the reason where a value is not known.${VARIANT ? ' Then compare the variant\'s reference set with the base §B and §C records and say whether the costume adds moving parts the base rig does not have.' : ''}`,
     skills: ['rig-pipeline'],
@@ -467,11 +546,51 @@ async function proof() {
     deliver: `${WIRING} (revision 1)`,
     rules: WIRING_RULES,
     checks: ['every action in the gameplay sheet maps to one owner file in the Code file owners table', 'every engine claim names its docs mirror page or a probe to run', 'every client-callable request lists its server checks in order'],
-  }, S_WIRING, 'Contract')) : null])
+  }, S_WIRING, 'Contract')) : null,
+  async () => keep('P1 reference check', await call(ROLE.model, {
+    id: 'P1-reference-check', task: `check the reference set before the build: ${ASSET}`, visual: true,
+    intent: 'Proof stage, contract: the modeler checks the reference set before S1, so the rig plan and the blockout start from one decided character. Write the iconic qualities, the gaps to decide (with the choice made), the material intent per region and the missing views; what needs the art-director goes in one note.',
+    skills: ['modeling-design'],
+    inputs: [REFSET, `${DIR}/direction.md`],
+    refs: ['.agents/skills/modeling-design/references/reference-check.md   # take: §7, the check and its note', 'templates/model/asset-record.md   # take: the record the check opens'],
+    owns: [`${MODEL}/ (asset record)`, `${DIR}/exchange/reference-check-modeler.md`],
+    consumers: ['art-director', 'character-rigger', 'animator'],
+    deliver: `the reference check in the asset record in ${MODEL}/; ${DIR}/exchange/reference-check-modeler.md only when the art-director must answer (asks)`,
+    rules: ['Blender: do not use Blender in this step; this is a check of the images, not a build.'].concat(VARIANT_RULE),
+    checks: ['3-5 iconic qualities, every gap with its choice or an ask, material intent per region, the missing views listed (reference-check.md §7)'],
+  }, S_REFCHECK, 'Contract')),
+  async () => VARIANT ? null : keep('P1 sound plan', await call(ROLE.sound, {
+    id: 'P1-sound-plan', task: `character sound plan: ${ASSET}`,
+    intent: 'Proof stage, interfaces. Read the character card in the direction sheet (feel words, size, age, material, nearest similar character) and return the character sound plan with its signature before any clip is made, so the animator and the vfx-designer build toward the same character. A missing card field is a question, not a guess.',
+    skills: ['sound-design'],
+    inputs: [`${DIR}/direction.md   # the character card`, GSHEET],
+    owns: [`${SOUND}/sound-plan.md`],
+    consumers: ['animator', 'vfx-designer'],
+    deliver: `${SOUND}/sound-plan.md`,
+    checks: ['each cue traces to a feel word of the card; the nearest similar character is named with how this plan differs (sound-design review R-12)', 'the signature sound names the action it marks'],
+  }, S_HANDBACK, 'Contract'))])
   const s0 = keep('S0 rig sheet', s0raw)
   if (!ok(s0)) return { status: 'failed', outcome: 'rig sheet not opened' }
   if (PLAYABLE && !ok(wc)) return { status: wc ? wc.status : 'failed', outcome: `wiring contract: ${wc ? wc.outcome : 'agent returned nothing'}` }
   if (wc && wc.contract_revision) wiringRev = wc.contract_revision
+  if (!ok(rc)) return { status: rc ? rc.status : 'failed', outcome: `reference check: ${rc ? rc.outcome : 'agent returned nothing'}` }
+  if (!VARIANT && !ok(sp)) return { status: sp ? sp.status : 'failed', outcome: `sound plan: ${sp ? sp.outcome : 'agent returned nothing'}` }
+  if (rc.asks.length) {
+    // The producer answers on the consumer's note (README: sideways work through files); new views are images (LD2).
+    const ans = keep('P1 reference answer', await call(ROLE.art, {
+      id: 'P1-reference-answer', task: `answer the modeler's reference check: ${ASSET}`, visual: true, images: `${DIR}/art/image-prompts.md`,
+      intent: 'Proof stage, contract. Answer every ask in the modeler\'s reference-check note in the reference set: decide each gap that changes the look, answer each material intent, add each missing view (or a prompt row for it). An ask you cannot settle inside the approved direction is a G2 question.',
+      skills: ['art-review', 'reference-images'],
+      inputs: [`${DIR}/exchange/reference-check-modeler.md`, REFSET],
+      owns: [`${DIR}/art/`, 'content/art/refs/ (through tools/art/art_refs.py)'],
+      consumers: ['modeler', 'character-rigger', 'animator'],
+      deliver: `${REFSET} (next revision) with every ask answered`,
+      rules: VARIANT_RULE,
+      checks: ['every ask is answered in the reference set or listed as a G2 question', 'every new view exists on disk, or images.state is pending and the prompts file lists it'],
+    }, S_REFSET, 'Contract'))
+    if (!ok(ans)) return { status: ans ? ans.status : 'failed', outcome: `reference check answer: ${ans ? ans.outcome : 'agent returned nothing'}` }
+    if (ans.images && ans.images.state === 'pending') return pendingStop('reference check views')
+  }
   const runNeeds = !VARIANT || s0.new_moving_parts
   if (!runNeeds) log('Variant with no new moving parts: S1-S2 skipped; the base rig plan applies (job-types.md §2 variant mode).')
 
@@ -480,7 +599,7 @@ async function proof() {
     const s1 = keep('S1 motion needs', await call(ROLE.anim, {
       id: 'S1-needs', task: `motion needs for the rig sheet: ${ASSET}`,
       intent: `Proof stage, rig-pipeline S1. Study the whole character from the reference set's multi-view images and the game camera view. Write the motion profile, then the §B animator keys for ${needsScope}: what it is, moves, driver, range of motion per axis with its unit, the pose or clip that needs it and its source, own-motion parts, contacts, held tools, stress poses, silhouette that must keep, sockets needed. The clip list comes from the gameplay sheet; never invent mass or delay numbers.`,
-      inputs: [REFSET, GSHEET, `${SHEET}@rev${s0.sheet_revision}`, `${DIR}/direction.md`],
+      inputs: [REFSET, REFCHECK, GSHEET, `${SHEET}@rev${s0.sheet_revision}`, `${DIR}/direction.md`],
       owns: [`the animator keys (§B) of ${SHEET}`, `${ANIM}/motion-profile.md`],
       consumers: ['character-rigger'],
       deliver: `${SHEET} §B animator keys and ${ANIM}/motion-profile.md`,
@@ -515,7 +634,7 @@ async function proof() {
       id: 'S2-plan', task: `rig plan: ${ASSET}`,
       intent: `Proof stage, rig-pipeline S2. No final geometry exists yet: plan from the reference set views, the costly parts in the direction sheet and the §B needs. Pick the route per region (rigid pieces, skinning or mixed) with the reason, the joint plan with pivots and axes, the cut list with why, deformation zones, budgets (§E, every limit with its source), the test plan (§F), and marked-up renders of the cuts and zones on the reference views. Answer every §B record: supported, supported with a limit, or not supported with an alternative.${VARIANT ? ' Variant: plan only the new moving parts; base joints, names and rest pose stay unchanged.' : ''}`,
       skills: ['rig-pipeline', 'rigging-design'],
-      inputs: [SHEET, REFSET, `${DIR}/direction.md`, GSHEET].concat(VARIANT ? [BASE_RIG] : []),
+      inputs: [SHEET, REFSET, REFCHECK, `${DIR}/direction.md`, GSHEET].concat(VARIANT ? [BASE_RIG] : []),
       fixed: LIMITS.concat(VARIANT_FIXED),
       owns: [`the rigger keys (§C), §E and §F of ${SHEET}`, `${RIG}/renders/`],
       consumers: ['animator', 'modeler'],
@@ -553,8 +672,8 @@ async function proof() {
     id: 'P2-blockout', task: `character blockout at player scale: ${ASSET}`, visual: true,
     intent: `Proof stage. Build a blockout at player scale from the reference set: big shapes, proportions and the identity anchors readable; split into the parts the rig plan cuts (rough, no caps); flat colour blocks for value only, no detail. Export it for the rigger's proxy rig.${VARIANT ? ' Variant: block out the costume on the base model; the base proportions stay.' : ''}`,
     skills: ['modeling-design', 'modeling-craft', 'rig-pipeline'],
-    inputs: [REFSET, SHEET, GSHEET].concat(VARIANT ? [BASE_RIG] : []),
-    refs: ['templates/model/asset-record.md   # take: the record the blockout starts', 'tools/model/review_renders.py   # the standard review set'],
+    inputs: [REFSET, REFCHECK, SHEET, GSHEET].concat(VARIANT ? [BASE_RIG] : []).concat(NEW_ENEMY ? [`${BEHAVIOUR}/verdict.md   # the behaviour test verdict shown at G1`] : []),
+    refs: ['templates/model/asset-record.md   # take: the record the reference check opened', 'tools/model/review_renders.py   # the standard review set'],
     fixed: VARIANT_FIXED,
     owns: [`${MODEL}/ (asset record, work/, export/, renders/)`],
     consumers: ['character-rigger'],
@@ -565,31 +684,48 @@ async function proof() {
   if (!ok(block)) return { status: 'failed', outcome: 'blockout not made' }
   const pose = keep('P3 proxy rig and signature pose', await call(ROLE.rig, {
     id: 'P3-proxy-pose', task: `proxy rig and signature pose at the game camera: ${ASSET}`, studioWrite: true, visual: true,
-    intent: `Proof stage. ${VARIANT ? 'Bind the costume blockout to the base rig.' : 'Rig the blockout with a proxy rig: one bone per part at the S2 joint plan\'s pivots.'} Pose the signature pose from the §B stress poses and the direction sheet (if the direction sheet names a signature move, its key poses as a rough blocked move). Import into the test place and capture it at the game camera and typical distance from the gameplay sheet, against the game's background (a real place where it will be seen), plus the 6 review views of the rest pose. Review your own captures first.`,
+    intent: `Proof stage. ${VARIANT ? 'Bind the costume blockout to the base rig.' : 'Rig the blockout with a proxy rig: one bone per part at the S2 joint plan\'s pivots.'} Pose 2-3 signature pose options from the §B stress poses and the direction sheet (if the direction sheet names a signature move, its key poses as a rough blocked move), each as black-fill at the game camera at phone size, for the reviewers to pick from; and the 2-3 hardest §B stress poses with their part-overlap and cap-exposure numbers (tools/rig/rig_audit.py overlap_pairs and cap_count). Import into the test place and capture at the game camera and typical distance from the gameplay sheet, against the game's background (a real place where it will be seen), plus the 6 review views of the rest pose. Review your own captures first.`,
     skills: ['rigging-craft', 'studio-mcp'],
     inputs: [`${MODEL}/export/`, SHEET, GSHEET, `${DIR}/direction.md`],
     owns: [`${RIG}/proof/`, `the test place content in studio ${STUDIO}`],
     consumers: ['art-director', 'animator', 'game-designer'],
     deliver: `${RIG}/proof/ captures and a capture manifest (camera, distance, field of view, place, rig sheet revision)`,
     rules: VARIANT_RULE.concat([LIGHT]),
-    checks: ['the game camera capture exists and names its camera, distance and place (MCP-verified)', 'the 6 rest views exist', 'part interpenetration at the pose is counted by script and the number is in the hand-back'],
+    checks: ['each signature pose option has a black-fill at the game camera at phone size and a shaded capture (MCP-verified; camera, distance and place named)', 'each of the 2-3 hardest stress poses has its overlap-pair and cap-exposure numbers in the hand-back', 'the 6 rest views exist'],
   }, S_HANDBACK, 'Proof'))
   if (!ok(pose)) return { status: 'failed', outcome: 'proxy pose not captured' }
+  const lu = await lineup('P3-roster-lineup', 'Proof')
+  if (!ok(lu)) return { status: lu ? lu.status : 'failed', outcome: `roster lineup: ${lu ? lu.outcome : 'agent returned nothing'}` }
 
   const creative = [
-    { r: ROLE.art, skills: ['art-review'], q: 'silhouette and identity anchors at the game camera against the background; value; whether the approved direction is reachable from this blockout' + (VARIANT ? '; the base is recognisable in every view' : '') },
-    { r: ROLE.anim, q: 'whether the proportions and the proxy rig are usable: can every action in the clip list be reached, does the signature pose hold without breaking a part' },
-    { r: ROLE.design, skills: ['game-design'], q: 'whether the role reads at the game camera: what it is, what it does, the signature action' + (VARIANT ? '; no disadvantage for players who own it' : '') },
+    { r: ROLE.art, skills: ['art-review'], q: 'silhouette and identity anchors at the game camera against the background; value; whether the approved direction is reachable from this blockout; pick the signature pose from the 2-3 black-fill options at phone size, with the reason' + (VARIANT ? '; the base is recognisable in every view' : '') },
+    { r: ROLE.anim, q: 'whether the proportions and the proxy rig are usable: read the black-fill of the picked signature pose and the stress-pose overlap and cap-exposure numbers; can every action in the clip list be reached, does the signature pose hold without breaking a part' },
+    { r: ROLE.design, skills: ['game-design'], q: 'whether the role reads at the game camera against the roster lineup: what it is, what it does, the signature action' + (VARIANT ? '; no disadvantage for players who own it' : '') },
   ]
   const rv = await reviewLoop({
     label: 'proof', phaseName: 'Proof review', what: 'character proof', ctx: 'proof', creative, tech: [],
-    intro: `Proof review on the captures in ${RIG}/proof/ (domain lead first, rules/company.md §7).`,
-    lookFirst: `the captures in ${RIG}/proof/ and the blockout renders in ${MODEL}/renders/`,
-    inputs: [`${RIG}/proof/`, `${MODEL}/renders/`, `${DIR}/direction.md`, REFSET, SHEET, GSHEET],
+    intro: `Proof review on the captures in ${RIG}/proof/ and the roster lineup in ${LINEUP}/ (domain lead first, rules/company.md §7).`,
+    lookFirst: `the captures in ${RIG}/proof/, the roster lineup in ${LINEUP}/ and the blockout renders in ${MODEL}/renders/`,
+    inputs: [`${RIG}/proof/`, `${LINEUP}/`, `${MODEL}/renders/`, `${DIR}/direction.md`, REFSET, SHEET, GSHEET],
     captureMaker: 'character-rigger',
   })
   if (!ok(rv)) return rv
-  return { status: 'done', outcome: 'Proof ready for the owner.', rig_sheet: SHEET, captures: `${RIG}/proof/`, reviews: rv.reviews, new_requests: rv.new_requests }
+  return { status: 'done', outcome: 'Proof ready for the owner.', rig_sheet: SHEET, captures: `${RIG}/proof/`, roster_lineup: `${LINEUP}/`, reviews: rv.reviews, new_requests: rv.new_requests, could_not_check: rv.could_not_check }
+}
+
+// The named roster lineup capture (job-types.md "Named review captures"): the studio-operator, the Studio driver for this step.
+async function lineup(id, phaseName) {
+  return keep(id, await call(ROLE.op, {
+    id, task: `roster lineup capture: ${ASSET}`, studioWrite: true,
+    intent: 'Proof stage, the roster lineup capture: the new character (as built for the proof) next to the existing roster members at the same scale, at the game camera, so the game-designer judges whether its role reads among them.',
+    skills: ['studio-mcp'],
+    inputs: [`${RIG}/proof/`, GSHEET, 'knowledge/design/game-profile.md   # take: camera, the released roster models'],
+    owns: [`${LINEUP}/`, `the test place content in studio ${STUDIO}`],
+    consumers: ['game-designer', 'art-director'],
+    deliver: `${LINEUP}/ stills and a manifest (camera, distance, place, roster members and their revisions)`,
+    rules: [CHECK_BUDGET, 'Capture only; do not edit models or game source. No released roster model: say so in could_not_check.'],
+    checks: ['the lineup still at the game camera exists and names the roster members shown (MCP-verified)'],
+  }, S_CAPTURE, phaseName))
 }
 
 // ================================================================ production (rig-pipeline S3-S7), integration and the review chain
@@ -753,7 +889,7 @@ async function production() {
     const blk = keep('S7 blocking', await call(ROLE.anim, {
       id: 'S7-blocking', task: `character animation blocking: ${ASSET}`, visual: true,
       intent: `Build stage, rig-pipeline S7. Block ${clipScope} in Blender on the accepted rig: key poses and timing inside each action's gameplay windows. Do not polish yet: the art-director and the game-designer check the blocking first. The proof's signature pose was the G2 sample (rig-pipeline S7).`,
-      inputs: [`${RIG}/export/`, `${RIG}/control-manifest.json`, GSHEET, SHEET, `${DIR}/direction.md`],
+      inputs: [`${RIG}/export/`, `${RIG}/control-manifest.json`, GSHEET, SHEET, `${DIR}/direction.md`].concat(VARIANT ? [] : [`${SOUND}/sound-plan.md   # the signature sound the clips carry`]),
       owns: [`${ANIM}/`],
       deliver: `${ANIM}/ blocking playblasts from the game camera`,
       rules: ['Never retime gameplay to fit a clip: the windows come from the gameplay sheet (rig-pipeline §5).'].concat(VARIANT_RULE),
@@ -818,7 +954,7 @@ async function production() {
       return keep('S7 sound', await call(ROLE.sound, {
         id: 'S7-sound', task: `sound for the character's actions: ${ASSET}`,
         intent: 'Build stage. Design the character\'s sounds (footsteps, voice or creature sounds, the signature action) against the timing list (same event ids), keyed to the vfx-designer\'s frame scripts on every shared cue (transient on the first lit frame, body, tail); an envelope you cannot meet is a question naming the event id.',
-        skills: ['sound-design'], inputs: [TIMING, `${VFX}/`, `${DIR}/direction.md`, GSHEET],
+        skills: ['sound-design'], inputs: [`${SOUND}/sound-plan.md   # your plan from the proof`, TIMING, `${VFX}/`, `${DIR}/direction.md`, GSHEET],
         owns: [`${SOUND}/`], consumers: ['feature-builder'],
         deliver: `${SOUND}/ cue cards, prompts and a mix note per cue`,
         rules: ['No asset uploads without the owner\'s yes.'],
@@ -866,7 +1002,9 @@ async function production() {
     checks: ['a game camera still of every clip at its key frames exists (MCP-verified)', 'evidence.md names the candidate revision and the protected list'],
   }, S_CAPTURE, 'Integration'))
   if (!ok(cap)) return { status: 'failed', outcome: 'no candidate capture; reviews need it' }
-  return reviewChain('candidate')
+  const rc = await reviewChain('candidate')
+  if (ok(rc)) rc.could_not_check = [].concat(cap.could_not_check || [], rc.could_not_check || [])
+  return rc
 }
 
 function reviewChain(label) {
@@ -885,7 +1023,14 @@ function reviewChain(label) {
     ],
     tech: [
       { r: ROLE.perf, skills: ['performance', 'studio-mcp'], q: 'the cost on a phone with the most on screen from the gameplay sheet: frame time and memory in the test place, triangles and draw cost, against the game profile budgets with their sources; without a phone the phone result is BLOCKED' },
-    ],
+    ].concat(SOLD ? [
+      // Risk sold-variant (job-types.md §2 variant mode): parity against the base, beside the creative order.
+      { r: ROLE.qa, slot: 'pf13', skills: ['testing', 'studio-mcp'], inputs: [`${DIR}/evidence.md`, BASE_RIG, SHEET, `${DIR}/design/`],
+        q: 'variant parity (testing PF-13): the variant changes no stat, collision, hit box or socket position against the base; data diff and attachment and size probe in the test place',
+        checks: ['each PF-13 row names the base value and the variant value side by side'] },
+    ] : []),
+    // Risk event (job-types.md "Not recipes"): the live-ops review after the creative reviews, on the event capture set.
+    event: EVENT,
     // A wired character is code: the reviewer reads the diff beside the creative order (AGENTS.md §2, lead decision LD15).
     code: PLAYABLE ? [
       { r: ROLE.code, skills: ['code-review', 'networking-security'].concat(VARIANT ? ['data-saving', 'platform-policy'] : []), rules: WIRING_RULES,
@@ -906,12 +1051,13 @@ async function reviewLoop(cfg) {
   for (let round = 0; round <= 5; round++) {
     const tag = `${cfg.label}-r${round}`
     const reviewOne = (o, studio) => call(o.r, {
-      id: `RV-${tag}-${nm(o.r)}`, task: `review ${cfg.what}: ${ASSET}`, studioWrite: studio, visual: o.r === ROLE.art,
+      id: `RV-${tag}-${o.slot || nm(o.r)}`, task: `review ${cfg.what}: ${ASSET}`, studioWrite: studio, visual: o.r === ROLE.art,
       intent: `${cfg.intro} Check ${o.q}. Open ${cfg.lookFirst} first, then the hand-backs. You do not edit the work. Classify findings: blocking, recommendation or new request, and name the maker role for each (${MAKERS}).${round ? ' This is a recheck: check the fixed findings, what the fixes touched and the protected list.' : ''}`,
       skills: o.skills,
       inputs: o.inputs || cfg.inputs,
-      owns: [`${DIR}/reviews/${tag}-${nm(o.r)}.md`], deliver: `${DIR}/reviews/${tag}-${nm(o.r)}.md (templates/jobs/review.md)`,
-      checks: ['every finding has a location (view, pose, clip and frame, or file), expected, observed, evidence and the smallest fix', 'keep lists what works'].concat(o.checks || []),
+      refs: o.refs,
+      owns: [`${DIR}/reviews/${tag}-${o.slot || nm(o.r)}.md`], deliver: `${DIR}/reviews/${tag}-${o.slot || nm(o.r)}.md (templates/jobs/review.md)`,
+      checks: ['every finding has a location (view, pose, clip and frame, or file), expected, observed, evidence and the smallest fix', 'keep lists what works', 'what you could not check is in could_not_check'].concat(o.checks || []),
       rules: [LIGHT].concat(studio ? [] : [`Judge the captures and files; do not open Studio. A missing capture is a finding for the ${cfg.captureMaker}.`]).concat(o.rules || []).concat(VARIANT_RULE),
     }, S_REVIEW, cfg.phaseName)
     const all = []
@@ -933,6 +1079,25 @@ async function reviewLoop(cfg) {
       const techR = await techP
       const codeR = await codeP
       const got = crea.concat(techR, codeR)
+      if (cfg.event && !missing(got).length) {
+        // After the creative chain, with Studio free: the studio-operator takes the event capture set, then the live-ops-designer reviews.
+        const ec = keep(`CAP ${tag} event`, await call(ROLE.op, {
+          id: `CAP-${tag}-event`, task: `event capture set: ${ASSET}`, studioWrite: true,
+          intent: `${cfg.intro} Take the event capture set (live-ops-craft/references/event-review.md §2) on the frozen candidate for the live-ops-designer's event review.`,
+          skills: ['studio-mcp'],
+          inputs: [`${DIR}/evidence.md`, `${DIR}/job-card.md   # the live-ops update brief it comes from`],
+          refs: ['.agents/skills/live-ops-craft/references/event-review.md   # take: §2, the capture set'],
+          owns: [`${DIR}/captures/event-${tag}/`, `the test place content in studio ${STUDIO}`],
+          consumers: ['live-ops-designer'],
+          deliver: `${DIR}/captures/event-${tag}/ and a manifest naming each capture of §2 or why it is missing`,
+          rules: [CHECK_BUDGET, 'Capture only; do not edit the candidate.'],
+          checks: ['every capture names the candidate revision (MCP-verified)'],
+        }, S_CAPTURE, cfg.phaseName))
+        got.push(ec && ec.status === 'done' ? keep(`RV ${tag} live-ops-designer`, await reviewOne({ r: ROLE.live, skills: ['live-ops-craft'],
+          inputs: [`${DIR}/captures/event-${tag}/`, `${DIR}/evidence.md`, `${DIR}/job-card.md   # the live-ops update brief`, `${DIR}/direction.md`],
+          refs: ['.agents/skills/live-ops-craft/references/event-review.md   # take: §3, E-01 to E-19, and §4 for the note'],
+          q: 'the event review E-01 to E-19 (live-ops-craft/references/event-review.md §3) on the event capture set' }, false)) : ec)
+      }
       if (missing(got).length) return { status: 'failed', outcome: `${cfg.phaseName} round ${round}: a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
       got.forEach(x => all.push(x))
     }
@@ -940,7 +1105,8 @@ async function reviewLoop(cfg) {
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      return { status: 'done', outcome: `${cfg.phaseName} clean on round ${round}.${cfg.ctx === 'candidate' ? ' The lead runs readiness and the G3 packet.' : ''}`, new_requests: requests, reviews }
+      return { status: 'done', outcome: `${cfg.phaseName} clean on round ${round}.${cfg.ctx === 'candidate' ? ' The lead runs readiness and the G3 packet.' : ''}`, new_requests: requests, reviews,
+        could_not_check: all.flatMap(x => x.could_not_check || []) }
     }
     const codeF = blocking.filter(f => f.maker_role === 'feature-builder')
     const otherF = blocking.filter(f => f.maker_role !== 'feature-builder')
@@ -985,13 +1151,15 @@ async function repairRound(tag, round, blocking, cfg) {
     if ((changed('modeler') || changed('animator')) && !changed('character-rigger')) {
       keep(`RECAP ${tag} character-rigger`, await call(ROLE.rig, {
         id: `RECAP-${tag}`, task: `re-pose and recapture the proof: ${ASSET}`, studioWrite: true,
-        intent: `${RN}. The blockout or the motion needs changed (${done.join(', ')}). Update the proxy rig, re-pose the signature pose and recapture at the game camera on the game's background and in the 6 rest views, as before.`,
+        intent: `${RN}. The blockout or the motion needs changed (${done.join(', ')}). Update the proxy rig, re-pose the signature pose options and the stress poses with their numbers, and recapture at the game camera on the game's background and in the 6 rest views, as before.`,
         skills: ['rigging-craft', 'studio-mcp'], inputs: [`${MODEL}/export/`, SHEET, GSHEET],
         owns: [`${RIG}/proof/`, `the test place content in studio ${STUDIO}`],
         deliver: `${RIG}/proof/ new captures and manifest revision`,
         checks: ['the new captures name the changed input revisions (MCP-verified)'],
       }, S_HANDBACK, cfg.phaseName))
     }
+    // The lineup shows the proof as built: retaken after any maker change to it.
+    if (done.some(m => m !== 'art-director' && m !== 'game-designer')) await lineup(`RECAP-${tag}-lineup`, cfg.phaseName)
     return null
   }
   // The receiver runs the check (rig-pipeline §3): geometry → rigger, rig → animator; then the integrator refreezes.
@@ -1060,13 +1228,19 @@ async function repair() {
 if (STAGE === 'direction') return await direction()
 if (STAGE === 'proof') {
   const p = await proof()
-  return Object.assign(results, p, ok(p) ? { outcome: p.outcome + ' The lead shows the signature pose at the game camera, the blockout views and the rig plan at G2 and records the owner\'s words before stage build.' } : {})
+  return Object.assign(results, p, ok(p) ? { outcome: p.outcome + ' The lead shows at G2 the picked signature pose (black-fill at phone size, with the other options), the stress poses with their overlap and cap-exposure numbers, the roster lineup, the blockout views and the rig plan, and records the owner\'s words before stage build.' } : {})
+}
+// The G3 packet lines (cross-type rules): the could-not-check list and the owner-confirmed lines; sound exists when the job made it.
+function g3(r) {
+  return ok(r) ? { g3: { could_not_check: r.could_not_check || [], owner_confirmed: ownerLines('every clip and the signature action, played in Studio', !VARIANT) } } : {}
 }
 if (STAGE === 'build') {
   if (SIZE === 'M') {
     const p = await proof()
     if (!ok(p)) return Object.assign(results, p)
   }
-  return Object.assign(results, await production())
+  const b = await production()
+  return Object.assign(results, b, g3(b))
 }
-return Object.assign(results, await repair())
+const rp = await repair()
+return Object.assign(results, rp, g3(rp))
