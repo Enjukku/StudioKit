@@ -11,3 +11,4 @@ supersedes: []
 # Active jobs
 
 The lead keeps this list current: one line per open M or L job, `- <job-id> · <title>` (a split request adds `· linked: <job-id>, owns: <shared interface>`). Remove the line when the job closes. The `SubagentStart` and compaction hooks read it (`context_packet.py --job` takes the folder name).
+- J020-sound-workbench · the sound workflow and an in-house AI audio editor
