@@ -1,1 +1,2 @@
 - [Workflow script reviews](workflow-script-reviews.md) — prove job-*.js findings with harness scenarios (nullLabel, statusLabel, blockLabelOnce); where defects cluster
+- [Audio tool reviews](audio-tool-reviews.md) — run real quiet/hot-start takes; level-dependent ops, drop-only guards, one-sided family rules

@@ -34,7 +34,7 @@ supersedes: []
 | Code file owners | set when the tool design is approved |
 | Linked jobs | J019 G3-P11 (sound designer tools), J018-D7 |
 | Risks (review slots) | none of the game tokens; tool risk: wrong numbers that look right (J018 lesson) |
-| Status | G1 passed 2026-10-23 (J020-D13, `b7f85f5`); stage 2: editor design |
+| Status | G1 passed 2026-10-23 (J020-D13); build in progress: steps 1-4 committed, repair round for steps 3-4 running (see Progress) |
 
 ## Four lines (goal)
 | Line | Value |
@@ -59,3 +59,13 @@ supersedes: []
 | Gate | Date | Revision approved | Owner's words |
 | --- | --- | --- | --- |
 | G1 workflow | 2026-10-23 | `workflow-map.md`, `research-2d-3d.md` at `b7f85f5` | "Yes, you understand it. G1 passes; begin the editor design. I'll send the ElevenLabs guide." |
+
+## Progress (2026-10-23, written before a usage reset)
+| Step (`editor-design.md` §10) | State | Commit |
+| --- | --- | --- |
+| Design + architect review-1 (13 findings) | done | `03c14a5` |
+| 1-2 ffmpeg adapter, measures, intake, FLAC export | done; code review fix-first → repaired (per-channel timing, declared latency, DC removal, exact-answer tests); lead re-ran the proof cases | `725fa2d`, `2bc2385` |
+| 3-4 card, recipe, two-pass render, numpy and ffmpeg operations | built `83f50c1`; code review on 10 real ElevenLabs takes = fix-first: F1 denoise wipes a quiet take and passes, F2 D-03 family check bypassable, F3 saturate/compress do nothing on quiet takes, F4 stretch range, F5 chorus false refusals, F6 malformed card exit code, F7 hot start; lead decisions: exit 3 "family incomplete", intake compares with the file's own stated length (ElevenLabs returns 480 ms for 0.5 s), realistic fixtures + optional real-take test (env SOUNDBENCH_REAL_TAKES) | repair **running, not committed** |
+| 5 rank · 6 layers, loops, variants · 7 generate (key registered, J020-D14) · 8 books · 9 real cue set, G3 | pending | — |
+
+**Resume:** `git status` (the builder's repair edits to `tools/audio/soundbench/` and `tools/tests/test_soundbench_*.py` may be on disk uncommitted). If the repair hand-back is missing, re-run the review findings above against the files: re-test F1 (hit-speed-1, denoise nr 40 nf -20 must be refused) and F2 (one-sided family) with copies from `GreatWallSim/.claude/worktrees/modest-cartwright-690aa7/audio/_raw/sfx/`; gate; commit; then a short re-review; then step 5. Open notes: ElevenLabs WAV output needs the Pro tier (§8); an `ELEVENLABS_API_KEY` is also set in the Windows environment and wins over the key file.

@@ -1,0 +1,20 @@
+---
+name: audio-tool-reviews
+description: How to review soundbench / audio DSP tools: run real ElevenLabs takes (quiet, hot-start), check level-dependent ops and one-sided declarations
+metadata:
+  type: feedback
+---
+
+Review audio tools (tools/audio/soundbench) by running real takes, not only the builder's synthetic fixtures. Real
+GreatWallSim ElevenLabs takes (GreatWallSim worktree audio/_raw/sfx, read-only; copy to scratch) peak anywhere from
+-36 to 0 dBFS, start mid-waveform (first sample -1 to -20 dB re peak), and 0.5 s requests decode to 480 ms.
+
+**Why:** in J020 steps 3-4 (2026-10-23) every synthetic test passed, but real takes showed: saturate (tanh normalised
+to full scale) is a pure gain on quiet takes; afftdn `nf` in absolute dBFS ate a quiet hit's body (-14 dB, 480 -> 176
+ms, channel balance changed) and the attack guard passed it; stretch refused on its own probe at ratios inside its
+allowed range; a paid-reveal family declared on one card only let the other sibling be re-rendered 8 LU louder at exit 0.
+
+**How to apply:** for each op ask "what does it do to a take at -35 dBFS peak?" (absolute thresholds, drives, noise
+floors); for each guard ask "does it check only a drop, so a rise or a loss of body passes?"; for every two-sided rule
+(families, siblings) ask "what if only one side declares it?"; sweep each allowed parameter range, not the tested
+points; check malformed-input exit codes against the documented 0/1/2 contract.
