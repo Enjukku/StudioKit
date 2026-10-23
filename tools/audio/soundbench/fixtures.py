@@ -1,0 +1,122 @@
+"""Synthetic test sounds with known answers (design section 9): no audio files live in the repo.
+
+Kit tool (universal). Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 step 1-2)
+
+Every fixture is made from fixed formulas and a seeded `numpy.random.RandomState` (its stream is stable across numpy
+versions), so the same call gives the same samples on every run. Each returns float64 samples shaped (n, channels).
+Stereo fixtures are deliberately unequal (the right channel is quieter and carries its own noise), so a channel swap
+changes a number. Times are in ms, levels in dBFS.
+
+Usage (tests and probes):
+  from tools.audio.soundbench import fixtures
+  x = fixtures.make("clean_hit", 44100, 2)
+  fixtures.write_wav(path, x, 44100)
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import numpy as np
+
+RATES = (44100, 48000)
+CHANNELS = (1, 2)
+RIGHT_GAIN = 0.6  # stereo fixtures: right channel level vs the left
+
+# Known answers the tests use (the fixture is built from these numbers).
+CLEAN_HIT_ONSET_MS = 20.0
+LATE_HIT_ONSET_MS = 120.0
+HIT_LENGTH_MS = 400.0
+CHIME_HZ = 554.37  # C#5: the "wrong note" in an A-major game
+ROUGH_CARRIER_HZ = 440.0
+ROUGH_MOD_HZ = 70.0
+ROUGH_DEPTH = 0.6
+THUMP_HZ = 60.0
+HUM_HZ = 50.0
+DC_OFFSET = 0.08
+
+
+def _t(rate: int, ms: float) -> np.ndarray:
+    return np.arange(int(round(rate * ms / 1000))) / rate
+
+
+def _silence(rate: int, ms: float) -> np.ndarray:
+    return np.zeros(int(round(rate * ms / 1000)))
+
+
+def _fade_out(y: np.ndarray, rate: int, ms: float = 5.0) -> np.ndarray:
+    """A short linear fade at the end, so a fixture never ends on a cut (a real click)."""
+    k = min(len(y), int(round(rate * ms / 1000)))
+    y = y.copy()
+    y[len(y) - k:] *= np.linspace(1, 0, k)
+    return y
+
+
+def _hit_body(rate: int, ms: float, rs: np.random.RandomState) -> np.ndarray:
+    """A broadband hit: a noise crack plus a 330 Hz body, fast decay; peak about -3 dBFS."""
+    t = _t(rate, ms)
+    crack = rs.standard_normal(len(t)) * np.exp(-t * 60)
+    body = np.sin(2 * np.pi * 330 * t) * np.exp(-t * 10)
+    y = 0.35 * crack + 0.45 * body
+    return _fade_out(y / np.max(np.abs(y)) * 10 ** (-3 / 20), rate)
+
+
+def _mono(name: str, rate: int, rs: np.random.RandomState) -> np.ndarray:
+    if name == "clean_hit":
+        return np.concatenate([_silence(rate, CLEAN_HIT_ONSET_MS), _hit_body(rate, HIT_LENGTH_MS, rs), _silence(rate, 80)])
+    if name == "late_hit":
+        return np.concatenate([_silence(rate, LATE_HIT_ONSET_MS), _hit_body(rate, HIT_LENGTH_MS, rs), _silence(rate, 80)])
+    if name == "bass_thump":
+        t = _t(rate, 350)
+        y = _fade_out(0.7 * np.sin(2 * np.pi * THUMP_HZ * t) * np.exp(-t * 9), rate)
+        return np.concatenate([_silence(rate, 10), y, _silence(rate, 40)])
+    if name == "hiss_lock":  # noise only: no note, no transient
+        return 0.1 * rs.standard_normal(len(_t(rate, 300)))
+    if name == "wrong_chime":
+        t = _t(rate, 600)
+        y = sum(a * np.sin(2 * np.pi * CHIME_HZ * k * t) for k, a in ((1, 1.0), (2, 0.3), (3, 0.12)))
+        return np.concatenate([_silence(rate, 15), _fade_out(0.5 * y * np.exp(-t * 5), rate), _silence(rate, 30)])
+    if name == "rough_tone":
+        t = _t(rate, 500)
+        am = 1 + ROUGH_DEPTH * np.sin(2 * np.pi * ROUGH_MOD_HZ * t)
+        return 0.3 * np.sin(2 * np.pi * ROUGH_CARRIER_HZ * t) * am
+    if name == "clipped":
+        t = _t(rate, 300)
+        return np.clip(3.0 * np.sin(2 * np.pi * 220 * t) * np.exp(-t * 4), -1.0, 1.0)
+    if name == "dc_offset":
+        return _mono("clean_hit", rate, rs) + DC_OFFSET
+    if name == "hummed":
+        y = _mono("clean_hit", rate, rs)
+        t = np.arange(len(y)) / rate
+        hum = sum(a * np.sin(2 * np.pi * HUM_HZ * k * t) for k, a in ((1, 1.0), (2, 0.5), (3, 0.25)))
+        return y + 0.03 * hum
+    if name == "bad_seam_bed":  # a bed that starts at 0 and ends near its crest: a jump at the loop wrap
+        t = _t(rate, 1000)
+        return 0.25 * np.sin(2 * np.pi * 220.25 * t) + 0.15 * np.sin(2 * np.pi * 110.25 * t)
+    raise KeyError(f"unknown fixture {name!r}")
+
+
+NAMES = ("clean_hit", "late_hit", "bass_thump", "hiss_lock", "wrong_chime", "rough_tone", "clipped", "dc_offset",
+         "hummed", "bad_seam_bed")
+
+
+def make(name: str, rate: int, channels: int = 1, seed: int = 7) -> np.ndarray:
+    """One fixture as float64 (n, channels). Stereo: right = RIGHT_GAIN x left plus its own -60 dBFS noise."""
+    rs = np.random.RandomState(seed + NAMES.index(name))
+    left = _mono(name, rate, rs)
+    if channels == 1:
+        return left[:, None]
+    if channels != 2:
+        raise ValueError("fixtures are mono or stereo")
+    right = RIGHT_GAIN * left + 0.001 * rs.standard_normal(len(left)) * (np.abs(left) > 0)
+    if name == "clipped":
+        right = np.clip(right, -1.0, 1.0)
+    return np.stack([left, right], axis=1)
+
+
+def write_wav(path: Path, x: np.ndarray, rate: int) -> Path:
+    """Float32 WAV (no quantisation beyond float32), the format every measure test reads."""
+    import soundfile as sf
+
+    sf.write(str(path), np.asarray(x, dtype=np.float32), rate, subtype="FLOAT")
+    return path

@@ -164,8 +164,9 @@ def run(root: Path, fast: bool, out=sys.stdout) -> int:
     else:
         code, text = _run(root, ["-m", "unittest", "discover", "-s", "tools/tests", "-p", "test_*.py", "-t", "tools/tests"])
         ran = re.findall(r"Ran \d+ tests?", text)
+        skipped = re.findall(r"skipped=(\d+)", text)  # J020: tools that need ffmpeg or Blender skip without them
         failures = [ln.strip() for ln in text.splitlines() if ln.startswith(("FAIL:", "ERROR:"))]
-        detail = (ran[-1] if ran else "") + ("" if code == 0 else " | " + (" | ".join(failures[:5]) or _summary(text, False)))
+        detail = (ran[-1] if ran else "") + (f", {skipped[-1]} skipped" if skipped else "") + ("" if code == 0 else " | " + (" | ".join(failures[:5]) or _summary(text, False)))
         report(code == 0, "tests", detail.strip(" |"))
 
     # d

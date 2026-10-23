@@ -1,0 +1,2561 @@
+{
+ "_about": "Golden output of tools/audio/cue_check.py at git HEAD 78c730f, captured before F-01..F-13 moved into soundbench (design G-3). Paths removed. Regenerate only with the old tool; never edit by hand.",
+ "source": "git show 78c730f:tools/audio/cue_check.py",
+ "cases": [
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clean_hit"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 21.07,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -1.38
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 210.0,
+     "level_100ms_after_db": -10.8
+    },
+    "F-06_bands": {
+     "below_120": 0.0023,
+     "120_500": 0.8367,
+     "500_5k": 0.0317,
+     "above_5k": 0.1293
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -22.05,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.6,
+     "trusted": true
+    },
+    "F-11_movement": 0.5887,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clean_hit"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 21.07,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -1.38
+    },
+    "F-04_tail": {
+     "tail_end_ms": 411.75,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 210.0,
+     "level_100ms_after_db": -10.8
+    },
+    "F-06_bands": {
+     "below_120": 0.0023,
+     "120_500": 0.8366,
+     "500_5k": 0.0317,
+     "above_5k": 0.1293
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -23.89,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.5248,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 391.75
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clean_hit"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 20.98,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -1.66
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 210.0,
+     "level_100ms_after_db": -10.9
+    },
+    "F-06_bands": {
+     "below_120": 0.0025,
+     "120_500": 0.836,
+     "500_5k": 0.0293,
+     "above_5k": 0.1321
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -22.42,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.2,
+     "trusted": true
+    },
+    "F-11_movement": 0.5816,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clean_hit"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 20.98,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -1.66
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 210.0,
+     "level_100ms_after_db": -10.9
+    },
+    "F-06_bands": {
+     "below_120": 0.0025,
+     "120_500": 0.836,
+     "500_5k": 0.0293,
+     "above_5k": 0.1322
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -24.36,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.1,
+     "trusted": true
+    },
+    "F-11_movement": 0.5167,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "late_hit"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 120.02,
+    "F-02_peak_position_ms": 123.7,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 520.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 120.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.3
+    },
+    "F-06_bands": {
+     "below_120": 0.0032,
+     "120_500": 0.8178,
+     "500_5k": 0.037,
+     "above_5k": 0.142
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -22.45,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.3,
+     "trusted": true
+    },
+    "F-11_movement": 0.5878,
+    "F-12_length": {
+     "file_ms": 600.0,
+     "sound_ms": 399.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "late_hit"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 120.02,
+    "F-02_peak_position_ms": 123.7,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 510.16,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 120.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.4
+    },
+    "F-06_bands": {
+     "below_120": 0.0032,
+     "120_500": 0.8177,
+     "500_5k": 0.037,
+     "above_5k": 0.1421
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -24.28,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.0,
+     "trusted": true
+    },
+    "F-11_movement": 0.5239,
+    "F-12_length": {
+     "file_ms": 600.0,
+     "sound_ms": 390.14
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "late_hit"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 120.02,
+    "F-02_peak_position_ms": 122.5,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.99,
+     "true_peak_dbtp": -2.51
+    },
+    "F-04_tail": {
+     "tail_end_ms": 520.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 120.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.5
+    },
+    "F-06_bands": {
+     "below_120": 0.0032,
+     "120_500": 0.8186,
+     "500_5k": 0.034,
+     "above_5k": 0.1442
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -22.03,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.6,
+     "trusted": true
+    },
+    "F-11_movement": 0.5813,
+    "F-12_length": {
+     "file_ms": 600.0,
+     "sound_ms": 399.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "late_hit"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 120.02,
+    "F-02_peak_position_ms": 122.5,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.99,
+     "true_peak_dbtp": -2.51
+    },
+    "F-04_tail": {
+     "tail_end_ms": 513.21,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 120.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.5
+    },
+    "F-06_bands": {
+     "below_120": 0.0032,
+     "120_500": 0.8185,
+     "500_5k": 0.034,
+     "above_5k": 0.1443
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -23.89,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.7,
+     "trusted": true
+    },
+    "F-11_movement": 0.5242,
+    "F-12_length": {
+     "file_ms": 600.0,
+     "sound_ms": 393.19
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bass_thump"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 10.11,
+    "F-02_peak_position_ms": 14.1,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.48,
+     "true_peak_dbtp": -3.47
+    },
+    "F-04_tail": {
+     "tail_end_ms": 400.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 240.0,
+     "level_100ms_after_db": -7.8
+    },
+    "F-06_bands": {
+     "below_120": 0.9981,
+     "120_500": 0.0019,
+     "500_5k": 0.0,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -14.58,
+    "F-10_pitch": {
+     "hz": 60.0,
+     "note": "B1",
+     "cents": -49.4,
+     "peak_over_band_median_db": 179.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.2217,
+    "F-12_length": {
+     "file_ms": 400.0,
+     "sound_ms": 389.89
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bass_thump"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 10.11,
+    "F-02_peak_position_ms": 14.04,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.48,
+     "true_peak_dbtp": -3.47
+    },
+    "F-04_tail": {
+     "tail_end_ms": 400.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 240.0,
+     "level_100ms_after_db": -7.8
+    },
+    "F-06_bands": {
+     "below_120": 0.9981,
+     "120_500": 0.0019,
+     "500_5k": 0.0,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -16.52,
+    "F-10_pitch": {
+     "hz": 60.0,
+     "note": "B1",
+     "cents": -49.4,
+     "peak_over_band_median_db": 86.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.3165,
+    "F-12_length": {
+     "file_ms": 400.0,
+     "sound_ms": 389.89
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bass_thump"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 10.1,
+    "F-02_peak_position_ms": 14.1,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.48,
+     "true_peak_dbtp": -3.47
+    },
+    "F-04_tail": {
+     "tail_end_ms": 400.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 240.0,
+     "level_100ms_after_db": -7.8
+    },
+    "F-06_bands": {
+     "below_120": 0.9981,
+     "120_500": 0.0019,
+     "500_5k": 0.0,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -14.58,
+    "F-10_pitch": {
+     "hz": 60.0,
+     "note": "B1",
+     "cents": -49.4,
+     "peak_over_band_median_db": 179.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.2248,
+    "F-12_length": {
+     "file_ms": 400.0,
+     "sound_ms": 389.9
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bass_thump"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 10.1,
+    "F-02_peak_position_ms": 14.02,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.48,
+     "true_peak_dbtp": -3.47
+    },
+    "F-04_tail": {
+     "tail_end_ms": 400.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 240.0,
+     "level_100ms_after_db": -7.8
+    },
+    "F-06_bands": {
+     "below_120": 0.9981,
+     "120_500": 0.0019,
+     "500_5k": 0.0,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -16.52,
+    "F-10_pitch": {
+     "hz": 60.0,
+     "note": "B1",
+     "cents": -49.4,
+     "peak_over_band_median_db": 86.8,
+     "trusted": true
+    },
+    "F-11_movement": 0.3252,
+    "F-12_length": {
+     "file_ms": 400.0,
+     "sound_ms": 389.9
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hiss_lock"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.0,
+    "F-02_peak_position_ms": 187.78,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -8.67,
+     "true_peak_dbtp": -8.01
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 150.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.2
+    },
+    "F-06_bands": {
+     "below_120": 0.0056,
+     "120_500": 0.0173,
+     "500_5k": 0.2034,
+     "above_5k": 0.7737
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.619,
+    "F-09_loudness_rms_dbfs": -20.06,
+    "F-10_pitch": {
+     "hz": 3180.0,
+     "note": "G7",
+     "cents": 24.1,
+     "peak_over_band_median_db": 10.3,
+     "trusted": false
+    },
+    "F-11_movement": 0.005,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 300.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hiss_lock"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.0,
+    "F-02_peak_position_ms": 187.78,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -8.67,
+     "true_peak_dbtp": -8.01
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 150.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.2
+    },
+    "F-06_bands": {
+     "below_120": 0.0056,
+     "120_500": 0.0173,
+     "500_5k": 0.2034,
+     "above_5k": 0.7737
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.621,
+    "F-09_loudness_rms_dbfs": -22.0,
+    "F-10_pitch": {
+     "hz": 3180.0,
+     "note": "G7",
+     "cents": 24.1,
+     "peak_over_band_median_db": 10.3,
+     "trusted": false
+    },
+    "F-11_movement": 0.0051,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 300.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hiss_lock"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.0,
+    "F-02_peak_position_ms": 172.52,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -8.66,
+     "true_peak_dbtp": -8.01
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 240.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": null
+    },
+    "F-06_bands": {
+     "below_120": 0.005,
+     "120_500": 0.0153,
+     "500_5k": 0.1879,
+     "above_5k": 0.7918
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.404,
+    "F-09_loudness_rms_dbfs": -20.06,
+    "F-10_pitch": {
+     "hz": 3460.0,
+     "note": "A7",
+     "cents": -29.8,
+     "peak_over_band_median_db": 10.2,
+     "trusted": false
+    },
+    "F-11_movement": 0.0097,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 300.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hiss_lock"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.0,
+    "F-02_peak_position_ms": 172.52,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -8.66,
+     "true_peak_dbtp": -8.01
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 240.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": null
+    },
+    "F-06_bands": {
+     "below_120": 0.005,
+     "120_500": 0.0153,
+     "500_5k": 0.1879,
+     "above_5k": 0.7918
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.412,
+    "F-09_loudness_rms_dbfs": -22.0,
+    "F-10_pitch": {
+     "hz": 3460.0,
+     "note": "A7",
+     "cents": -29.8,
+     "peak_over_band_median_db": 10.2,
+     "trusted": false
+    },
+    "F-11_movement": 0.0097,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 300.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "wrong_chime"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 15.03,
+    "F-02_peak_position_ms": 15.28,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -4.96,
+     "true_peak_dbtp": -4.96
+    },
+    "F-04_tail": {
+     "tail_end_ms": 613.76,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 470.0,
+     "level_100ms_after_db": -4.7
+    },
+    "F-06_bands": {
+     "below_120": 0.0005,
+     "120_500": 0.0058,
+     "500_5k": 0.9937,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -14.7,
+    "F-10_pitch": {
+     "hz": 555.0,
+     "note": "C#5",
+     "cents": 2.0,
+     "peak_over_band_median_db": 139.9,
+     "trusted": true
+    },
+    "F-11_movement": 0.109,
+    "F-12_length": {
+     "file_ms": 645.01,
+     "sound_ms": 598.73
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "wrong_chime"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 15.03,
+    "F-02_peak_position_ms": 15.28,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -4.96,
+     "true_peak_dbtp": -4.96
+    },
+    "F-04_tail": {
+     "tail_end_ms": 613.76,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 470.0,
+     "level_100ms_after_db": -4.7
+    },
+    "F-06_bands": {
+     "below_120": 0.0005,
+     "120_500": 0.0058,
+     "500_5k": 0.9937,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -16.64,
+    "F-10_pitch": {
+     "hz": 555.0,
+     "note": "C#5",
+     "cents": 2.0,
+     "peak_over_band_median_db": 86.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.1335,
+    "F-12_length": {
+     "file_ms": 645.01,
+     "sound_ms": 598.73
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "wrong_chime"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 15.02,
+    "F-02_peak_position_ms": 15.27,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -4.96,
+     "true_peak_dbtp": -4.96
+    },
+    "F-04_tail": {
+     "tail_end_ms": 613.75,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 470.0,
+     "level_100ms_after_db": -4.7
+    },
+    "F-06_bands": {
+     "below_120": 0.0005,
+     "120_500": 0.0058,
+     "500_5k": 0.9937,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -14.7,
+    "F-10_pitch": {
+     "hz": 555.0,
+     "note": "C#5",
+     "cents": 2.0,
+     "peak_over_band_median_db": 139.9,
+     "trusted": true
+    },
+    "F-11_movement": 0.1127,
+    "F-12_length": {
+     "file_ms": 645.0,
+     "sound_ms": 598.73
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "wrong_chime"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 15.02,
+    "F-02_peak_position_ms": 15.27,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -4.96,
+     "true_peak_dbtp": -4.96
+    },
+    "F-04_tail": {
+     "tail_end_ms": 613.75,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 470.0,
+     "level_100ms_after_db": -4.7
+    },
+    "F-06_bands": {
+     "below_120": 0.0005,
+     "120_500": 0.0058,
+     "500_5k": 0.9937,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -16.64,
+    "F-10_pitch": {
+     "hz": 555.0,
+     "note": "C#5",
+     "cents": 2.0,
+     "peak_over_band_median_db": 86.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.147,
+    "F-12_length": {
+     "file_ms": 645.0,
+     "sound_ms": 598.73
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "rough_tone"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 60.79,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -6.38,
+     "true_peak_dbtp": -6.37
+    },
+    "F-04_tail": {
+     "tail_end_ms": 500.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 70.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": 0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.0,
+     "120_500": 0.9237,
+     "500_5k": 0.0763,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.684,
+    "F-09_loudness_rms_dbfs": -12.75,
+    "F-10_pitch": {
+     "hz": 440.0,
+     "note": "A4",
+     "cents": 0.0,
+     "peak_over_band_median_db": 179.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.0,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 499.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "rough_tone"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 189.18,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -6.38,
+     "true_peak_dbtp": -6.37
+    },
+    "F-04_tail": {
+     "tail_end_ms": 500.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 170.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.0,
+     "120_500": 0.9237,
+     "500_5k": 0.0763,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.702,
+    "F-09_loudness_rms_dbfs": -14.69,
+    "F-10_pitch": {
+     "hz": 440.0,
+     "note": "A4",
+     "cents": 0.0,
+     "peak_over_band_median_db": 86.8,
+     "trusted": true
+    },
+    "F-11_movement": 0.0101,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 499.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "rough_tone"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 60.79,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -6.38,
+     "true_peak_dbtp": -6.37
+    },
+    "F-04_tail": {
+     "tail_end_ms": 500.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 70.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": 0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.0,
+     "120_500": 0.9237,
+     "500_5k": 0.0763,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.684,
+    "F-09_loudness_rms_dbfs": -12.75,
+    "F-10_pitch": {
+     "hz": 440.0,
+     "note": "A4",
+     "cents": 0.0,
+     "peak_over_band_median_db": 174.8,
+     "trusted": true
+    },
+    "F-11_movement": 0.0,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 499.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "rough_tone"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 289.21,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -6.38,
+     "true_peak_dbtp": -6.37
+    },
+    "F-04_tail": {
+     "tail_end_ms": 500.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 270.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.0,
+     "120_500": 0.9237,
+     "500_5k": 0.0763,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.691,
+    "F-09_loudness_rms_dbfs": -14.69,
+    "F-10_pitch": {
+     "hz": 440.0,
+     "note": "A4",
+     "cents": 0.0,
+     "peak_over_band_median_db": 87.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.0104,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 499.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clipped"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 2.54,
+    "F-03_peaks": {
+     "sample_peak_dbfs": 0.01,
+     "true_peak_dbtp": 0.07
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 10.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.4
+    },
+    "F-06_bands": {
+     "below_120": 0.0002,
+     "120_500": 0.9597,
+     "500_5k": 0.0401,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.399,
+    "F-09_loudness_rms_dbfs": -1.53,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 106.8,
+     "trusted": true
+    },
+    "F-11_movement": 0.2629,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 299.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clipped"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 240.14,
+    "F-03_peaks": {
+     "sample_peak_dbfs": 0.01,
+     "true_peak_dbtp": 0.07
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 10.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.4
+    },
+    "F-06_bands": {
+     "below_120": 0.0002,
+     "120_500": 0.9597,
+     "500_5k": 0.0402,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.407,
+    "F-09_loudness_rms_dbfs": -3.47,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 96.7,
+     "trusted": true
+    },
+    "F-11_movement": 0.2013,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 299.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clipped"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 2.54,
+    "F-03_peaks": {
+     "sample_peak_dbfs": 0.01,
+     "true_peak_dbtp": 0.07
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 10.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.4
+    },
+    "F-06_bands": {
+     "below_120": 0.0002,
+     "120_500": 0.9597,
+     "500_5k": 0.0402,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.397,
+    "F-09_loudness_rms_dbfs": -1.53,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 107.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.2716,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 299.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clipped"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.02,
+    "F-02_peak_position_ms": 144.08,
+    "F-03_peaks": {
+     "sample_peak_dbfs": 0.01,
+     "true_peak_dbtp": 0.07
+    },
+    "F-04_tail": {
+     "tail_end_ms": 300.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 10.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.4
+    },
+    "F-06_bands": {
+     "below_120": 0.0002,
+     "120_500": 0.9597,
+     "500_5k": 0.0401,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.397,
+    "F-09_loudness_rms_dbfs": -3.47,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 97.2,
+     "trusted": true
+    },
+    "F-11_movement": 0.1959,
+    "F-12_length": {
+     "file_ms": 300.0,
+     "sound_ms": 299.98
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "dc_offset"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 22.63,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.6
+    },
+    "F-06_bands": {
+     "below_120": 0.0029,
+     "120_500": 0.8268,
+     "500_5k": 0.0388,
+     "above_5k": 0.1315
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -23.52,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.0,
+     "trusted": true
+    },
+    "F-11_movement": 0.5765,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "dc_offset"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 22.63,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.6
+    },
+    "F-06_bands": {
+     "below_120": 0.0029,
+     "120_500": 0.8267,
+     "500_5k": 0.0388,
+     "above_5k": 0.1316
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.019,
+    "F-09_loudness_rms_dbfs": -25.46,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 58.9,
+     "trusted": true
+    },
+    "F-11_movement": 0.5029,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "dc_offset"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 22.42,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.3
+    },
+    "F-06_bands": {
+     "below_120": 0.0027,
+     "120_500": 0.8228,
+     "500_5k": 0.0344,
+     "above_5k": 0.1401
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -24.31,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.1,
+     "trusted": true
+    },
+    "F-11_movement": 0.5709,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "dc_offset"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 22.42,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -3.0
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 200.0,
+     "level_100ms_after_db": -11.3
+    },
+    "F-06_bands": {
+     "below_120": 0.0027,
+     "120_500": 0.8226,
+     "500_5k": 0.0344,
+     "above_5k": 0.1402
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.038,
+    "F-09_loudness_rms_dbfs": -26.25,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 58.9,
+     "trusted": true
+    },
+    "F-11_movement": 0.4837,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hummed"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.98,
+    "F-02_peak_position_ms": 20.88,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.74,
+     "true_peak_dbtp": -2.02
+    },
+    "F-04_tail": {
+     "tail_end_ms": 499.73,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 340.0,
+     "level_100ms_after_db": -10.5
+    },
+    "F-06_bands": {
+     "below_120": 0.1052,
+     "120_500": 0.7425,
+     "500_5k": 0.0336,
+     "above_5k": 0.1187
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.014,
+    "F-09_loudness_rms_dbfs": -21.74,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.9,
+     "trusted": true
+    },
+    "F-11_movement": 0.637,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 498.75
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hummed"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.95,
+    "F-02_peak_position_ms": 20.88,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.74,
+     "true_peak_dbtp": -2.02
+    },
+    "F-04_tail": {
+     "tail_end_ms": 499.71,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 340.0,
+     "level_100ms_after_db": -10.5
+    },
+    "F-06_bands": {
+     "below_120": 0.1052,
+     "120_500": 0.7424,
+     "500_5k": 0.0336,
+     "above_5k": 0.1188
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.035,
+    "F-09_loudness_rms_dbfs": -23.68,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 59.7,
+     "trusted": true
+    },
+    "F-11_movement": 0.5881,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 498.75
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hummed"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.96,
+    "F-02_peak_position_ms": 20.81,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.76,
+     "true_peak_dbtp": -1.77
+    },
+    "F-04_tail": {
+     "tail_end_ms": 499.73,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 340.0,
+     "level_100ms_after_db": -10.6
+    },
+    "F-06_bands": {
+     "below_120": 0.1067,
+     "120_500": 0.7431,
+     "500_5k": 0.0301,
+     "above_5k": 0.1201
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 0.013,
+    "F-09_loudness_rms_dbfs": -21.82,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.2,
+     "trusted": true
+    },
+    "F-11_movement": 0.6373,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 498.77
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hummed"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.94,
+    "F-02_peak_position_ms": 20.81,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.76,
+     "true_peak_dbtp": -1.77
+    },
+    "F-04_tail": {
+     "tail_end_ms": 499.73,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 340.0,
+     "level_100ms_after_db": -10.6
+    },
+    "F-06_bands": {
+     "below_120": 0.1067,
+     "120_500": 0.7431,
+     "500_5k": 0.0301,
+     "above_5k": 0.1202
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.021,
+    "F-09_loudness_rms_dbfs": -23.75,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.2,
+     "trusted": true
+    },
+    "F-11_movement": 0.5787,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 498.79
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bad_seam_bed"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.05,
+    "F-02_peak_position_ms": 981.84,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -7.97,
+     "true_peak_dbtp": -6.89
+    },
+    "F-04_tail": {
+     "tail_end_ms": 1000.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 700.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.2655,
+     "120_500": 0.734,
+     "500_5k": 0.0004,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 41.907,
+    "F-09_loudness_rms_dbfs": -13.71,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 170.8,
+     "trusted": true
+    },
+    "F-11_movement": 0.0004,
+    "F-12_length": {
+     "file_ms": 1000.0,
+     "sound_ms": 999.95
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bad_seam_bed"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 44100,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.05,
+    "F-02_peak_position_ms": 990.93,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -7.97,
+     "true_peak_dbtp": -6.89
+    },
+    "F-04_tail": {
+     "tail_end_ms": 1000.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 700.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.2655,
+     "120_500": 0.734,
+     "500_5k": 0.0004,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 41.183,
+    "F-09_loudness_rms_dbfs": -15.64,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 85.5,
+     "trusted": true
+    },
+    "F-11_movement": 0.0121,
+    "F-12_length": {
+     "file_ms": 1000.0,
+     "sound_ms": 999.95
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bad_seam_bed"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 1,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.04,
+    "F-02_peak_position_ms": 990.92,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -7.97,
+     "true_peak_dbtp": -6.89
+    },
+    "F-04_tail": {
+     "tail_end_ms": 1000.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 700.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.2655,
+     "120_500": 0.734,
+     "500_5k": 0.0004,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": 0.0,
+    "F-08_loop_seam": 45.612,
+    "F-09_loudness_rms_dbfs": -13.71,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 171.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.0004,
+    "F-12_length": {
+     "file_ms": 1000.0,
+     "sound_ms": 999.96
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "bad_seam_bed"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": null,
+   "high_pitch": false,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.04,
+    "F-02_peak_position_ms": 936.42,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -7.97,
+     "true_peak_dbtp": -6.89
+    },
+    "F-04_tail": {
+     "tail_end_ms": 1000.0,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 700.0,
+     "to_minus_20db_ms": null,
+     "level_100ms_after_db": -0.0
+    },
+    "F-06_bands": {
+     "below_120": 0.2655,
+     "120_500": 0.734,
+     "500_5k": 0.0004,
+     "above_5k": 0.0
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 44.545,
+    "F-09_loudness_rms_dbfs": -15.64,
+    "F-10_pitch": {
+     "hz": 220.0,
+     "note": "A3",
+     "cents": 0.0,
+     "peak_over_band_median_db": 85.2,
+     "trusted": true
+    },
+    "F-11_movement": 0.0157,
+    "F-12_length": {
+     "file_ms": 1000.0,
+     "sound_ms": 999.96
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "clean_hit"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": 200.0,
+   "high_pitch": true,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 20.0,
+    "F-02_peak_position_ms": 20.98,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -3.0,
+     "true_peak_dbtp": -1.66
+    },
+    "F-04_tail": {
+     "tail_end_ms": 420.0,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 210.0,
+     "level_100ms_after_db": -10.9
+    },
+    "F-06_bands": {
+     "below_120": 0.0025,
+     "120_500": 0.836,
+     "500_5k": 0.0293,
+     "above_5k": 0.1322,
+     "below_low_cut": 0.0053
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -24.36,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.1,
+     "trusted": true
+    },
+    "F-11_movement": 0.5167,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 400.0
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "wrong_chime"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": 200.0,
+   "high_pitch": true,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 15.02,
+    "F-02_peak_position_ms": 15.27,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -4.96,
+     "true_peak_dbtp": -4.96
+    },
+    "F-04_tail": {
+     "tail_end_ms": 613.75,
+     "ends_above_-40": false
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 470.0,
+     "level_100ms_after_db": -4.7
+    },
+    "F-06_bands": {
+     "below_120": 0.0005,
+     "120_500": 0.0058,
+     "500_5k": 0.9937,
+     "above_5k": 0.0,
+     "below_low_cut": 0.0009
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.0,
+    "F-09_loudness_rms_dbfs": -16.64,
+    "F-10_pitch": {
+     "hz": 555.0,
+     "note": "C#5",
+     "cents": 2.0,
+     "peak_over_band_median_db": 87.1,
+     "trusted": true
+    },
+    "F-11_movement": 0.147,
+    "F-12_length": {
+     "file_ms": 645.0,
+     "sound_ms": 598.73
+    }
+   }
+  },
+  {
+   "kind": "measure",
+   "fixtures": [
+    "hummed"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "low_cut": 200.0,
+   "high_pitch": true,
+   "expected": {
+    "tool": "cue_check measure",
+    "rate": 48000,
+    "channels": 2,
+    "verdict": "measured (screening aid: look at the waveform before any fix note; review.md section 4)",
+    "F-01_onset_ms": 0.94,
+    "F-02_peak_position_ms": 20.81,
+    "F-03_peaks": {
+     "sample_peak_dbfs": -2.76,
+     "true_peak_dbtp": -1.77
+    },
+    "F-04_tail": {
+     "tail_end_ms": 499.73,
+     "ends_above_-40": true
+    },
+    "F-05_envelope": {
+     "loudest_window_ms": 20.0,
+     "to_minus_20db_ms": 340.0,
+     "level_100ms_after_db": -10.6
+    },
+    "F-06_bands": {
+     "below_120": 0.1067,
+     "120_500": 0.7431,
+     "500_5k": 0.0301,
+     "above_5k": 0.1202,
+     "below_low_cut": 0.114
+    },
+    "F-07_mono_drop_db": -0.0,
+    "F-08_loop_seam": 0.021,
+    "F-09_loudness_rms_dbfs": -23.75,
+    "F-10_pitch": {
+     "hz": 330.0,
+     "note": "E4",
+     "cents": 2.0,
+     "peak_over_band_median_db": 60.4,
+     "trusted": true
+    },
+    "F-11_movement": 0.5787,
+    "F-12_length": {
+     "file_ms": 500.0,
+     "sound_ms": 498.79
+    }
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "integrated",
+   "fixtures": [
+    "clean_hit",
+    "late_hit",
+    "wrong_chime"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "integrated",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "common_length_ms": 1045.0,
+    "lufs": [
+     -24.37,
+     -23.72,
+     -19.12
+    ],
+    "spread_lu": 5.25
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "wrong_chime",
+    "rough_tone"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     598.73,
+     499.98
+    ],
+    "lufs": [
+     -16.32,
+     -11.13,
+     -13.46
+    ],
+    "spread_lu": 5.19
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "hiss_lock"
+   ],
+   "rate": 44100,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     300.0
+    ],
+    "lufs": [
+     -16.32,
+     -16.92
+    ],
+    "spread_lu": 0.59
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "integrated",
+   "fixtures": [
+    "clean_hit",
+    "late_hit",
+    "wrong_chime"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "integrated",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "common_length_ms": 1045.0,
+    "lufs": [
+     -23.03,
+     -22.38,
+     -17.78
+    ],
+    "spread_lu": 5.25
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "wrong_chime",
+    "rough_tone"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     391.75,
+     598.73,
+     499.98
+    ],
+    "lufs": [
+     -14.99,
+     -9.79,
+     -12.13
+    ],
+    "spread_lu": 5.19
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "hiss_lock"
+   ],
+   "rate": 44100,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 44100,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     391.75,
+     300.0
+    ],
+    "lufs": [
+     -14.99,
+     -15.58
+    ],
+    "spread_lu": 0.59
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "integrated",
+   "fixtures": [
+    "clean_hit",
+    "late_hit",
+    "wrong_chime"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "integrated",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "common_length_ms": 1045.0,
+    "lufs": [
+     -24.73,
+     -23.3,
+     -19.12
+    ],
+    "spread_lu": 5.62
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "wrong_chime",
+    "rough_tone"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     598.73,
+     499.98
+    ],
+    "lufs": [
+     -16.69,
+     -11.13,
+     -13.46
+    ],
+    "spread_lu": 5.56
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "hiss_lock"
+   ],
+   "rate": 48000,
+   "channels": 1,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     300.0
+    ],
+    "lufs": [
+     -16.69,
+     -16.89
+    ],
+    "spread_lu": 0.2
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "integrated",
+   "fixtures": [
+    "clean_hit",
+    "late_hit",
+    "wrong_chime"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "integrated",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "common_length_ms": 1045.0,
+    "lufs": [
+     -23.4,
+     -21.96,
+     -17.78
+    ],
+    "spread_lu": 5.62
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "wrong_chime",
+    "rough_tone"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     598.73,
+     499.98
+    ],
+    "lufs": [
+     -15.35,
+     -9.79,
+     -12.13
+    ],
+    "spread_lu": 5.56
+   }
+  },
+  {
+   "kind": "parity",
+   "mode": "momentary",
+   "fixtures": [
+    "clean_hit",
+    "hiss_lock"
+   ],
+   "rate": 48000,
+   "channels": 2,
+   "expected": {
+    "tool": "cue_check parity",
+    "mode": "momentary",
+    "rate": 48000,
+    "verdict": "measured (screening aid: look at the waveforms before any fix note; review.md F-13)",
+    "window_ms": 100.0,
+    "trimmed_sound_ms": [
+     400.0,
+     300.0
+    ],
+    "lufs": [
+     -15.35,
+     -15.55
+    ],
+    "spread_lu": 0.2
+   }
+  }
+ ]
+}
