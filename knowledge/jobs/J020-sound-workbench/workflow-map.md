@@ -78,7 +78,7 @@ A command-line tool made for the agent: text recipes in, numbers and spectrogram
 | 3D | a sound that should come from a place: a waterfall, a machine, another player's action | AudioPlayer → Wire → AudioEmitter on the part; the AudioListener (camera or character, `SoundService.ListenerLocation`) → Wire → AudioDeviceOutput | per emitter: `DistanceAttenuationMode` presets (Linear, LinearSquared, Inverse, InverseTapered) between `DistanceAttenuationBounds` (full volume inside the minimum, silent at the maximum; default 4 to 10,000 studs), or `Custom`, a volume-over-distance curve set with `SetDistanceAttenuation()` (the docs' example: half volume at 50 studs, silent at 70) |
 
 ### When a sound is 2D or 3D (the rule every cue card follows; J020-LD5, J020-D12)
-The docs define the two kinds: 2D "plays from no particular location, remaining at the same volume regardless of the player's position"; 3D "plays from a particular location [...] increasing or decreasing in volume depending on the player's position and orientation". The rule below is the studio's, built on that definition. The question for every sound: **does where it comes from, or how far away it is, tell the player something?** Yes → 3D. No → 2D.
+The docs define the two kinds: 2D "plays from no particular location, remaining at the same volume regardless of the player's position"; 3D "plays from a particular location [...] increasing or decreasing in volume depending on the player's position and orientation". The rule below is the studio's, built on that definition and on the web research in `research-2d-3d.md` (2026-10-23). The question for every sound: **does where it comes from, or how far away it is, tell the player something?** Yes → 3D. No → 2D.
 
 **Sounds made by a player: the actor rule.** One event often needs two versions. The player who acts hears it 2D (steady, close, always clear). Every other player hears it 3D from the actor's position, so they can tell who did it, where and how far away.
 
@@ -95,7 +95,7 @@ The docs define the two kinds: 2D "plays from no particular location, remaining 
 | Source | Kind | Why | Range (start values, PROPOSAL) |
 | --- | --- | --- | --- |
 | UI, menus, screens, shop | 2D | about me, no place | — |
-| Music, game narration | 2D | for everyone the same | — |
+| Music, game narration | 2D | not a thing in the world; spreading score in space makes players mistake it for world sound | — |
 | Global game events: round start, timer, flood warning, server announcements | 2D | every player must hear them wherever they are | — |
 | An event for one area only (a boss roar in its arena) | 2D for the players inside the area (triggered by the area), or 3D with a range the size of the area | everyone in the area must hear it; outside, no one | the area's size |
 | Enemies and NPCs: steps, idles, barks | 3D | where they are | near to middle (20-60) |
@@ -117,7 +117,7 @@ Voice chat is Roblox's own system, not our files. When none of these rows fits: 
 | `DistanceAttenuationBounds` (min, max) | full volume inside min; silent at or beyond max; default 4 to 10,000 studs | min = the size of the thing (you are "at" it); max = where it must be gone. Write both on the cue card in studs |
 | `DistanceAttenuationMode` | `Linear`: even fade between min and max. `LinearSquared`: steeper fade (Linear squared). `Inverse`: min ÷ distance, "mirroring how sounds attenuate in the real world" (never quite silent before max). `InverseTapered`: Inverse near min, LinearSquared near max, so it still ends silent at max. `Custom`: your own curve (`SetDistanceAttenuation()`; the docs' example: half volume at 50 studs, silent at 70) | ambience and world sources: `InverseTapered`; gameplay cues that must stay clear to a set range, then stop: `Linear`; `Custom` only when the card needs a shape the presets cannot give |
 | Angle (`SetAngleAttenuation()`) | quieter when you are behind the emitter's look direction | only for sounds that point one way (a speaker, a cannon mouth); default none |
-| `SoundService.ListenerLocation` | where the "ear" is: `Character`, `Camera`, `Default` (camera, in games with voice chat) or `None` (script) | one per game, in the game profile; with a third-person camera, `Character` keeps distances true to where the player stands (PROPOSAL, check in the first game) |
+| `SoundService.DefaultListenerLocation` | where the "ear" is: `Character` ("heard from the position of your character while matching the orientation of your camera"), `Camera`, `Default` (like Camera with default voice chat) or `None` (script) | `Character` in every game: distance from the character, direction from the camera, as middleware does it for third-person games (`research-2d-3d.md` §2); in cutscenes the listener moves to the camera by script (Studio probe in the first cutscene) |
 | `AcousticSimulationEnabled` | muffling through walls, bending round corners, echo, done by the engine; works only on 3D sounds and needs the emitter and the listener both on | not by default; a Studio probe in the first real game as the second route for fitting the space (J020-LD6) |
 | `AudioInteractionGroup` | an emitter is heard only by listeners in the same group | default; only for split audio worlds |
 
