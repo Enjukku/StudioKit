@@ -230,6 +230,23 @@ class NewMeasuresTest(unittest.TestCase):
         self.assertEqual((r["edges"], r["edge_count"]), (["start", "end"], 2))
         self.assertEqual(r["count"], 0)  # edges are reported apart from interior clicks
 
+    def test_edges_read_the_samples_playback_starts_from(self):
+        """Playback starts and stops from the file's own first and last samples, not from the mean-removed audio (J020
+        step 5: a real low thump that starts and ends at exactly 0 read two edge clicks after its -0.0135 mean was
+        removed). Both directions: a net offset with zero edges reads none; a DC take with hot edges reads both."""
+        rate = 44100
+        t = np.arange(int(0.3 * rate)) / rate
+        half = col(0.4 * np.sin(np.pi * t / 0.3) * np.sin(2 * np.pi * 60 * t) + 0.3 * np.sin(np.pi * t / 0.3) ** 8, 2)
+        half[0] = half[-1] = 0.0  # starts and ends at exactly 0, as a trimmed and faded render does
+        self.assertGreater(abs(float(half.mean())), 0.01 * float(np.max(np.abs(half))))  # a real net offset
+        dc = fx.make("dc_offset", rate, 2)  # silence + 0.08 at both ends: playback jumps to 0.08
+        with tempfile.TemporaryDirectory() as d:
+            for name, x, want in (("half", half, []), ("dc", dc, ["start", "end"])):
+                with self.subTest(case=name):
+                    p = fx.write_wav(Path(d) / f"{name}.wav", x, rate)
+                    self.assertEqual(m.measure(p)["clicks"]["edges"], want)
+                    self.assertEqual(m.measure_audio(x, rate)["clicks"]["edges"], want)
+
     def test_clicks_false_reading_hidden_in_noise(self):
         x = loaded("hiss_lock", 48000, 1)
         x[4800, 0] += 0.3

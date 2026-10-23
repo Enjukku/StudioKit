@@ -7,11 +7,15 @@ What every real take must survive (the repair-round findings, 2026-10-23):
   - a normal render (dc, high-pass, trim, fade, loudness, peak) ends 0 or 1, never a crash, and starts silent;
   - denoise with the reviewer's settings (nr 40, nf -20 dBFS) is refused on every take whose floor is under -23 dBFS;
   - saturate and compress act on a quiet take exactly as on the same take normalised;
-  - chorus is not refused on the takes' own timing.
+  - chorus is not refused on the takes' own timing;
+  - rank (J020 step 5): each sound's takes t1..tN ranked as one round: exit 0 or 1, the order equals the documented key
+    recomputed from the table, a miss called fixed passes after the fix, a too-quiet level called a prompt miss does
+    not fit its headroom by the design's formula, the top take's proof render agrees, and nothing is written to out/.
 """
 
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -29,7 +33,7 @@ except ImportError:  # optional deps: the kit gate is standard library only
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from tools.audio.soundbench import ffmpeg as sbf  # noqa: E402
-from tools.audio.soundbench import fxops, intake, ops, render  # noqa: E402
+from tools.audio.soundbench import fxops, intake, ops, rank, render  # noqa: E402
 from tools.audio.soundbench import measures as m  # noqa: E402
 from tools.audio.soundbench.core import SoundbenchError, read_float32  # noqa: E402
 
@@ -46,6 +50,11 @@ CARD = {"kind": "hit", "category": "sfx", "tier": "minor",
         "level": {"measure": "F-09", "target": -24.0, "tolerance": 0.5, "must": False},
         "targets": {"edge_clicks": {"max": 0, "must": True}},
         "playback": {"space": "2D", "takes_room": False, "ducks": None}}
+RANK_CARD = {"category": "sfx", "level": {"measure": "F-09", "target": -18.0, "tolerance": 1.0, "must": True},
+             "targets": {"onset_ms": {"max": 5, "must": True}, "true_peak_dbtp": {"max": -1.0, "must": True},
+                         "edge_clicks": {"max": 0, "must": True}, "sound_ms": {"min": 40, "max": 400, "must": False},
+                         "phone_loss_db": {"max": 12, "must": False}},
+             "playback": {"space": "2D", "takes_room": False, "ducks": None}}
 RECIPE = {"design": [{"op": "dc"}, {"op": "highpass", "hz": 60}],
           "edit": [{"op": "trim"}, {"op": "fade", "out_ms": 10}, {"op": "loudness"}, {"op": "peak"}]}
 
@@ -107,6 +116,46 @@ class RealTakeTest(unittest.TestCase):
                     yn, _ = ops.run(op, x * k, rate, ops.check_params(op, given), {"kind": "hit", "category": "sfx"})
                     np.testing.assert_allclose(yq * k, yn, rtol=1e-9, atol=1e-12)
                 fxops.run("chorus", x, rate, ops.check_params("chorus", {}), {"kind": "whoosh"})
+
+    def test_rank_every_real_round(self):
+        rounds: dict = {}
+        for mp3 in TAKES:
+            found = re.match(r"^(.+)\.t(\d+)$", mp3.stem)
+            if found:
+                rounds.setdefault(found[1], []).append((int(found[2]), mp3))
+        self.assertTrue(rounds, "no takes named <sound>.t<n>.mp3")
+        with tempfile.TemporaryDirectory() as tmp:
+            for sound, takes in sorted(rounds.items()):
+                with self.subTest(sound=sound):
+                    cue = "REAL-" + re.sub(r"[^A-Za-z0-9-]", "-", sound)
+                    folder = Path(tmp) / cue
+                    (folder / "takes").mkdir(parents=True)
+                    for n, src in takes:
+                        take = folder / "takes" / f"{cue}.r1.t{n}.mp3"
+                        shutil.copyfile(src, take)
+                        intake.decode_take(take, requested_ms=requested_ms(src))
+                    kind = "whoosh" if re.search(r"whoosh|swish", sound) else "hit"
+                    card = {**RANK_CARD, "cue": cue, "kind": kind, "tier": {3: "minor", 4: "frequent"}.get(len(takes), "important")}
+                    (folder / "card.json").write_text(json.dumps(card), encoding="utf-8")
+                    doc, code = rank.rank(folder)
+                    self.assertIn(code, (0, 1))
+                    keys = [e["rank_key"] for e in doc["takes"]]
+                    self.assertEqual(keys, sorted(keys))
+                    for e in doc["takes"]:
+                        self.assertEqual(e["rank_key"], [int(bool(e["rejected"])), len(e["must_after"]),
+                                                         len(e["aim_after"]), len(e["fixed"]), len(e["near_after"]), e["n"]])
+                        after = {r["target"]: r for r in e["after"]}
+                        for x in e["misses"]:
+                            if x["fix"] == "fixed":
+                                self.assertEqual(after[x["target"]]["result"], "pass")
+                        lv = (e["fix"] or {}).get("level")
+                        if lv and lv["gain_needed_db"] > 0:
+                            cut = max(0.0, lv["true_peak_in_dbtp"] + lv["gain_needed_db"] - lv["peak_limit_dbtp"])
+                            self.assertEqual(lv["fits"], cut <= lv["tolerance"] + 1e-9)
+                            self.assertEqual(after["level"]["result"] == "pass", lv["fits"])
+                    if doc["proof"] is not None:
+                        self.assertTrue(doc["proof"]["agrees"])
+                    self.assertFalse((folder / "out").exists())
 
 
 if __name__ == "__main__":

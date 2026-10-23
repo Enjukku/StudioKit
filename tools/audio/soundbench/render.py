@@ -261,23 +261,20 @@ def plan(card: dict, recipe: dict) -> tuple[list, list, bool]:
     return design, edit, reordered
 
 
-def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
-    cue_dir = Path(cue_dir)
-    card = cardmod.load_card(cue_dir / "card.json")
-    recipe = cardmod.load_recipe(cue_dir / "recipe.json")
-    if recipe["cue"] != card["cue"] or cue_dir.name != card["cue"]:
-        raise SoundbenchError(f"cue ids differ: folder {cue_dir.name!r}, card {card['cue']!r}, recipe {recipe['cue']!r}")
-    design, edit, reordered = plan(card, recipe)
-    family_members(card, cue_dir)  # refuse an inconsistent family before any audio is touched
-    x, rate, take = check_take(cue_dir, recipe)
-    cue = card["cue"]
+def context(card: dict, edit: list) -> dict:
+    """The card's context every operation reads (kind, category, onset binding, level, key, the edit pass's fade-out)."""
     fade = next((s for s in edit if s["op"] == "fade"), None)
-    ctx = {"kind": card["kind"], "category": card["category"], "binding": cardmod.onset_binding(card),
-           "level": card["level"], "key": card.get("key"), "fade_out_ms": fade["params"]["out_ms"] if fade else 0.0}
-    start = snapshot(x, rate)
+    return {"kind": card["kind"], "category": card["category"], "binding": cardmod.onset_binding(card),
+            "level": card["level"], "key": card.get("key"), "fade_out_ms": fade["params"]["out_ms"] if fade else 0.0}
+
+
+def apply_steps(passes, card: dict, ctx: dict, x: np.ndarray, rate: int) -> tuple[np.ndarray, list]:
+    """Run planned steps in order, each logged with its parameters, its numbers and a before/after snapshot (G-2).
+    `passes`: (pass name, planned steps) pairs. `peak` takes the card's true-peak max as its ceiling when lower.
+    `render` and `rank` both run their steps through this one loop."""
     steps = []
     y = x
-    for passname, seq in (("design", design), ("edit", edit)):
+    for passname, seq in passes:
         for st in seq:
             if st["op"] == "export":
                 continue
@@ -288,6 +285,22 @@ def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
             y, info = ops.run(st["op"], y, rate, params, {**ctx, "why": st["why"]})
             steps.append({"pass": passname, "op": st["op"], "stage": st.get("stage"), "params": params,
                           "why": st["why"], "info": info, "before": before, "after": snapshot(y, rate)})
+    return y, steps
+
+
+def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
+    cue_dir = Path(cue_dir)
+    card = cardmod.load_card(cue_dir / "card.json")
+    recipe = cardmod.load_recipe(cue_dir / "recipe.json")
+    if recipe["cue"] != card["cue"] or cue_dir.name != card["cue"]:
+        raise SoundbenchError(f"cue ids differ: folder {cue_dir.name!r}, card {card['cue']!r}, recipe {recipe['cue']!r}")
+    design, edit, reordered = plan(card, recipe)
+    family_members(card, cue_dir)  # refuse an inconsistent family before any audio is touched
+    x, rate, take = check_take(cue_dir, recipe)
+    cue = card["cue"]
+    ctx = context(card, edit)
+    start = snapshot(x, rate)
+    y, steps = apply_steps((("design", design), ("edit", edit)), card, ctx, x, rate)
     out_dir, rep_dir = cue_dir / "out", cue_dir / "report"
     out_file = out_dir / f"{cue}.flac"
     log_file = out_dir / f"{cue}.log.json"

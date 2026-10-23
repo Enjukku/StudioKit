@@ -12,6 +12,9 @@ Usage:
   python -m tools.audio.soundbench compare <a> <b> [--low-cut HZ] [--high-pitch] [--json]
   python -m tools.audio.soundbench parity <file> <file> [...] --mode integrated|momentary [--json]
   python -m tools.audio.soundbench render <cue-folder> [--picture] [--json]
+  python -m tools.audio.soundbench rank <cue-folder> [--round K] [--picture] [--json]
+Exit codes for rank: 0 the top take passes every must-target after its fixable steps; 1 regenerate with a changed
+prompt (or, after round 3, the cue goes to the owner); 2 refused.
 Exit codes for render: 0 every must-target and the family check passed; 1 one failed (file written, report says
 why); 2 refused; 3 a paid-reveal family is incomplete (re-render after the siblings).
 """
@@ -97,6 +100,11 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("cue", type=Path, help="the cue folder (card.json, recipe.json, takes/)")
     r.add_argument("--picture", action="store_true", help="always write the before and after pictures")
     r.add_argument("--json", action="store_true")
+    k = sub.add_parser("rank", help="score every take of a round against card.json and put them in order")
+    k.add_argument("cue", type=Path, help="the cue folder (card.json, takes/)")
+    k.add_argument("--round", type=int, help="the round to rank (default: the highest present; at most 3, J020-D7)")
+    k.add_argument("--picture", action="store_true", help="pictures of every take (default: the top take when needed)")
+    k.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     try:
         if a.cmd == "doctor":
@@ -117,6 +125,24 @@ def main(argv: list[str] | None = None) -> int:
                 if rep["family"]:
                     print(f"family {rep['family']['id']}: {rep['family']['result']} {rep['family'].get('reason', '')}")
                 print(f"file: {rep['file']}  exit {code}")
+            return code
+        if a.cmd == "rank":
+            from . import rank as rankmod
+
+            doc, code = rankmod.rank(a.cue, a.round, a.picture)
+            if a.json:
+                print(json.dumps({k_: doc[k_] for k_ in ("cue", "round", "order", "verdict", "proof", "warnings",
+                                                         "exit_code")}, indent=2))
+            else:
+                for i, e in enumerate(doc["takes"], 1):
+                    state = ("rejected: " + "; ".join(e["rejected"]) if e["rejected"] else
+                             "passes after fix" if e["passes_after_fix"] else f"must misses after fix {e['must_after']}")
+                    print(f"{i}. {e['take']:<34} {state}; fixed {e['fixed']}; aim misses {e['aim_after']}")
+                print(f"verdict: {doc['verdict']['say']}")
+                for d in doc["verdict"].get("prompt_must_change", []):
+                    print(f"  prompt must change: {d['target']} ({'must' if d['must'] else 'aim'}) missed by "
+                          f"{d['takes_missing']} of {d['of']}; closest {d['closest']}")
+                print(f"report: {a.cue / 'report' / (doc['cue'] + '.r' + str(doc['round']) + '.rank.md')}  exit {code}")
             return code
         if a.cmd == "measure":
             rec = measures.measure(a.files[0], a.low_cut, a.high_pitch)

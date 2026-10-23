@@ -1,6 +1,6 @@
 # tools/audio/soundbench: the kit's audio editor for an agent
 
-> Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 steps 1-4; repair rounds 2 and 3). Kit tool (universal). Design: `knowledge/jobs/J020-sound-workbench/editor-design.md`.
+> Author: feature-builder · claude-opus-5-5 · high · 2026-10-23 (J020 steps 1-5; repair rounds 2 and 3). Kit tool (universal). Design: `knowledge/jobs/J020-sound-workbench/editor-design.md`.
 
 Built for an agent that cannot hear (J020-D2): text in, numbers and pictures out. Its first duty is to give right numbers and **never shift or damage a sound without an error**. Every number is a screening aid, never a taste verdict (G-4): the owner judges in play-tests (J020-D3).
 
@@ -17,6 +17,7 @@ Needs Python 3.11, numpy, scipy, soundfile, pyloudnorm, matplotlib, and ffmpeg (
 | `compare <a> <b> [--json]` | every measure of two files side by side with `b - a`, and the lag of b behind a (same rate only) |
 | `parity <files> --mode integrated\|momentary [--json]` | F-13 loudness parity (integrated: options and siblings; momentary: paid random results) |
 | `render <cue-folder> [--picture] [--json]` | applies `recipe.json` to the take, exports FLAC, re-measures the delivered file against `card.json`, runs the paid-reveal family check. Exit 0 every must-target passed; 1 a must-target, the level or the family check failed (the file is still written, the report says why); 2 refused (also any malformed input or unexpected error); 3 a paid-reveal family is incomplete: re-render after the siblings |
+| `rank <cue-folder> [--round K] [--picture] [--json]` | scores every take of one round (`takes/<cue>.r<k>.t<n>.mp3`, the highest round unless `--round`; round 4 refused, J020-D7) against `card.json`, computes which misses the edit pass can fix, orders the takes and proves the top take's fix with a real render on a temp copy (section below). Writes `report/<cue>.r<k>.rank.json` and `.md` only. Exit 0 the top take passes every must-target after its fixable steps; 1 no take does: regenerate with a changed prompt, or after round 3 the cue goes to the owner with its numbers; 2 refused (bad input, a changed take, an inconsistent family, or rank and render disagree) |
 
 ## A cue folder (design section 2)
 
@@ -75,16 +76,16 @@ In `measure` output next to F-01..F-12. Known false readings are in each functio
 | `attack_share_5ms` | energy in the first 5 ms after F-01 / the F-12 sound's energy | a noise head moves the onset |
 | `phone_loss_db` | dB lost through a 400 Hz high-pass and 10 kHz low-pass (4th order) | a rough phone model |
 | `tail_noise` | floor after the F-12 sound (or the last 100 ms) and signal-to-noise | `sound_reaches_end` true: the floor is the sound itself |
-| `clicks` | steps over 8x the local step RMS (±2 ms) and 1 % of the peak, every channel; `edges`: a first or last sample at 1 % of the peak or more (card target `edge_clicks`) | a hard edge from silence reads as a click; a click in loud noise hides; a loop's end edge is its seam |
+| `clicks` | steps over 8x the local step RMS (±2 ms) and 1 % of the peak, every channel; `edges`: a first or last sample, as stored (before the mean is removed: playback starts from it), at 1 % of the peak or more (card target `edge_clicks`) | a hard edge from silence reads as a click; a click in loud noise hides; a loop's end edge is its seam |
 | `tonality` | spectral flatness (tonal / mixed / noisy) and the notes present | harmonics are listed as notes |
 | `roughness` | depth of 30-150 Hz envelope movement | two close notes beating read rough |
 | lag (`compare`; the adapter per channel) | cross-correlation, mean removed | periodic, silent or inverted input reads "not clear" |
 
-PROPOSAL values (start points a check may change; each is a named constant in its module): the click factor 8, the flatness limits 0.05 / 0.30, the lag limits (correlation 0.5, second peak under 90 %), the intake tolerance 10 ms, the latency tolerance 0 samples, the denoise nf margin 3 dB, the level guard 1.5 dB, the length keep 85 %, the balance 1 dB (chorus 2 dB), the channels-alike correlation 0.9, the rubberband loss limit 6 dB, the edge fade 0.5 ms, the chorus wet limit 0.9 x in_gain (measured: the probe first fails at 0.90), the saturate body window +-10 ms.
+PROPOSAL values (start points a check may change; each is a named constant in its module): the click factor 8, the flatness limits 0.05 / 0.30, the lag limits (correlation 0.5, second peak under 90 %), the intake tolerance 10 ms, the latency tolerance 0 samples, the denoise nf margin 3 dB, the level guard 1.5 dB, the length keep 85 %, the balance 1 dB (chorus 2 dB), the channels-alike correlation 0.9, the rubberband loss limit 6 dB, the edge fade 0.5 ms, the chorus wet limit 0.9 x in_gain (measured: the probe first fails at 0.90), the saturate body window +-10 ms; rank: near-silent -60 dBFS, clipped -1 dBFS with 8 ms within 0.5 dB of the peak, a missing band under a tenth of its minimum, the fix fade-out 10 ms, the cut 1 ms inside, the `near` margins in `tables.json`.
 
 ## Known limits
 
-- **Speed on long files:** F-09 and F-10 (moved unchanged from cue_check) find their loudest 400 ms and 200 ms windows with `np.convolve`, which grows with file length times window length: a 2-minute music bed takes minutes. The new measures use cumulative sums (120 s stereo: about 2 s). A faster F-09/F-10 needs its own golden check before it replaces the old arithmetic.
+- **Speed on long files:** F-10 (moved unchanged from cue_check) finds its loudest 200 ms window with `np.convolve`, which grows with file length times window length: a 2-minute music bed takes minutes. F-09 now uses a cumulative sum over the same 400 ms windows (J020 step 5: the convolve was 97 % of a rank's time; the 55-case golden test passes and the old and new arithmetic differ by under 1e-13 dB on every fixture); the new measures use cumulative sums too. A faster F-10 needs the same golden check before it replaces the old arithmetic.
 - **Lag on periodic sounds:** a steady tone or a loop correlates equally at every period, so its timing is proven on the probe signal, not on the audio itself (the log says so). That proves the graph's latency, not that this audio came out aligned.
 - **Known latencies are measured per rate:** afftdn 1,102 samples at 44.1 kHz, 1,200 at 48 kHz on ffmpeg 9.0.2. Not a formula (22,050 Hz reads 550, not round(0.025 x rate) = 551): other rates and other filters are refused until measured and added to `KNOWN_LATENCY`.
 - **Intake takes MP3 only.** A WAV or PCM take from ElevenLabs (design section 8) needs its own intake path in step 7.
@@ -97,9 +98,26 @@ PROPOSAL values (start points a check may change; each is a named constant in it
 
 `tools/tests/test_soundbench_realtakes.py` runs every check above on real ElevenLabs takes when `SOUNDBENCH_REAL_TAKES` names a folder of MP3s (with their sidecars), and skips with the reason otherwise; no audio is committed. Fixtures modelled on real takes (peaks -24 to -36 dBFS, a mid-waveform start, 480 ms, channels 1.1 dB apart) are `fixtures.make_real(name, rate)`.
 
-## Not built yet (design section 10, steps 5-9)
+## Ranking takes (`rank`, design section 6)
 
-`rank`; layers (several takes, `align`), loops (`loop_bed`, `loop_music`), variants (step 6); `generate` (step 7); the books (step 8); the Ogg path for files over 20 MB. Flanger, a second exciter and `anlmdn` are not built (design section 4).
+Every number in the rank table is a measure of `measures.py` scored by `render.evaluate` (the function `render` uses on the delivered file), so a reader can recompute it.
+
+1. **Rejected outright** (no fix is claimed): clipped at the source (decoded peak at -1 dBFS or more and 8 ms or more within 0.5 dB of its own peak; 62 real takes read at most 4.4 ms, clipped fixtures 9.5-161 ms, also after an MP3 round trip); near-silent (sample peak under -60 dBFS; the quietest real take peaks at -43.9); no sound in a band the card needs (a `must` band share under a tenth of its minimum).
+2. **Each target scored**: `inside`, `near` (inside but within the `near` margin in `tables.json`; still a pass, as render counts it) or `miss`, with `miss_by` (how far outside) or `margin` (how far inside).
+3. **Fixable is computed, never guessed.** The edit-pass steps for the take's misses (a late onset or main transient, or a click at the start edge: `trim`; sound or file too long: `cut` 1 ms inside the maximum with a 10 ms fade-out, planned on the audio after `trim`, since trimming moves the length; a click at the end edge: `fade`; `mono`; then `loudness` and `peak` whenever any step runs) are run through render's own step loop (`render.apply_steps`), measured again and scored again. A miss counts as fixed only when its re-measured row passes; a row the fix itself breaks is listed under `introduced`. Anything no edit-pass step moves (bands, phone loss, flatness, attack, key, too short or too early) is a prompt miss: rank does not compute design steps.
+4. **The level is derived as well as simulated** (review-1 #9: `peak` is gain only, sfx and ui do not limit transients): `gain_needed = target - level_in`, `peak_limit = min(-1.0, card true_peak max) - 0.5`, `headroom = peak_limit - true_peak_in`, `peak_cut = max(0, true_peak_in + gain_needed - peak_limit)`, `predicted = level_in + gain_needed - peak_cut`; it fits when `|predicted - target| <= tolerance`. The derived and the simulated level must agree within 0.1 dB, or rank refuses (exit 2). A take too loud always fits. For music, ambience and voice the reason adds that a `limit` design step could make room (not computed).
+5. **Order** (`rank_key`): rejected last; then fewest must-misses after the fix, fewest aim-misses after it, fewest misses that needed a fix, fewest near readings, the take number. A must-miss never ranks above a pass.
+6. **Proof**: the top take's fix recipe (empty design pass) is rendered for real on a temp copy of the cue (hash checks, parameter checks, edit pass, FLAC export, the delivered file measured again); every target row must match the simulation (values within 0.02 or 0.2 %), or rank refuses. The copy is removed; rank never writes `out/` or `<family-id>.family.json`.
+7. **Verdict**: `use` (the top take and its edit steps, a start for `recipe.json`), `regenerate` (round 1 or 2: the targets still missed after the fix, how many takes miss each, the closest value and its direction) or `owner` (round 3, J020-D7). Takes per round other than minor 3, frequent 4, important 6 (J020-D9) is a warning.
+8. **Pictures** (light-check rule): the top take before and after its fix when an after-fix row misses or reads near, or for an important cue; `--picture` draws every take.
+
+Paid-reveal families: rank refuses an inconsistent family declaration exactly as `render` does (exit 2) and never checks or writes D-03 state; `render` still runs F-13 b and the F-03 1 dB check on every member's delivered file.
+
+Known limits: rank computes edit-pass fixes only, so a miss an `eq` or `limit` design step could close reads as a prompt miss (the sound designer may still try it; `render` measures the result). The clip check cannot see clipping that was scaled down after it happened or a clipped crack under 8 ms in total, and a sustained low tone normalised to full scale can read clipped.
+
+## Not built yet (design section 10, steps 6-9)
+
+Layers (several takes, `align`), loops (`loop_bed`, `loop_music`), variants (step 6); `generate` (step 7); the books (step 8); the Ogg path for files over 20 MB. Flanger, a second exciter and `anlmdn` are not built (design section 4).
 
 ## Python use
 

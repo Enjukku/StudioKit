@@ -203,8 +203,11 @@ def f09_rms(snd: np.ndarray, rate: int) -> float:
     """F-09's linear RMS: the loudest 400 ms window of the F-12 sound (mono), or the whole sound if shorter."""
     w = int(0.4 * rate)
     if len(snd) > w:
-        e = np.convolve(snd ** 2, np.ones(w), "valid") / w
-        return float(np.sqrt(e.max()))
+        # every 400 ms window's energy from one cumulative sum: the same windows as cue_check's
+        # np.convolve(snd ** 2, np.ones(w), "valid"), in O(n) instead of O(n * w) (J020 step 5; golden-checked)
+        c = np.concatenate([[0.0], np.cumsum(snd.astype(np.float64) ** 2)])
+        e = (c[w:] - c[:-w]) / w
+        return float(np.sqrt(max(float(e.max()), 0.0)))
     return float(np.sqrt(np.mean(snd ** 2))) if len(snd) else 0.0
 
 
@@ -357,7 +360,7 @@ def tail_noise(x: np.ndarray, rate: int) -> dict:
             "window_ms": round(1000 * k / rate, 2), "sound_reaches_end": flag}
 
 
-def clicks(x: np.ndarray, rate: int) -> dict:
+def clicks(x: np.ndarray, rate: int, raw: np.ndarray | None = None) -> dict:
     """Clicks: sample-to-sample steps over 8 x the RMS of the steps around them (a centred 4 ms window, the step
     itself included) and at least 1 % of the file's sample peak, on every channel; nearby hits within 1 ms count once.
 
@@ -365,12 +368,18 @@ def clicks(x: np.ndarray, rate: int) -> dict:
     stops from silence there, so the file clicks at its edge (7 of 10 real takes started mid-waveform); they are not
     in `count`. Known false readings: a real hard transient that starts from silence on a square edge reads as a
     click; a click inside a loud noisy passage hides under its large normal steps; a click under 1 % of the peak is
-    not counted; a loop's end edge is its seam (read F-08 there, not `edges`)."""
+    not counted; a loop's end edge is its seam (read F-08 there, not `edges`).
+
+    `raw`: the samples as stored (before the mean is removed). The edges read them, because playback starts and stops
+    from the file's own first and last samples (J020 step 5: a low thump that starts and ends at exactly 0 read two
+    edge clicks from its removed -0.0135 mean; a DC take read none). Without `raw` the edges read `x`."""
     steps = np.abs(np.diff(x, axis=0))
     peak = float(np.max(np.abs(x)))
     w = 2 * max(1, int(round(CLICK_LOCAL_S * rate))) + 1
-    edges = [] if peak <= 0 else [name for name, s in (("start", x[0]), ("end", x[-1]))
-                                  if float(np.max(np.abs(s))) >= CLICK_MIN_OF_PEAK * peak]
+    e = x if raw is None else np.asarray(raw, dtype=np.float64)
+    e_peak = float(np.max(np.abs(e)))
+    edges = [] if e_peak <= 0 else [name for name, s in (("start", e[0]), ("end", e[-1]))
+                                    if float(np.max(np.abs(s))) >= CLICK_MIN_OF_PEAK * e_peak]
     if peak <= 0 or len(steps) < w:
         return {"count": 0, "first_ms": [], "edges": edges, "edge_count": len(edges)}
     kernel = np.ones(w) / w
@@ -485,11 +494,11 @@ def lag(reference: np.ndarray, candidate: np.ndarray, rate: int, search_samples:
             "clear": corr >= LAG_MIN_CORRELATION and second < LAG_MAX_SECOND_PEAK}
 
 
-def new_numbers(x: np.ndarray, rate: int) -> dict:
-    """The design section 5 measures of a loaded buffer (DC removed)."""
+def new_numbers(x: np.ndarray, rate: int, raw: np.ndarray | None = None) -> dict:
+    """The design section 5 measures of a loaded buffer (DC removed); `raw` (as stored) for the click edges."""
     return {"main_transient_ms": main_transient_ms(x, rate), "attack_rise_ms": attack_rise_ms(x, rate),
             "attack_share_5ms": attack_share(x, rate), "phone_loss_db": phone_loss_db(x, rate),
-            "tail_noise": tail_noise(x, rate), "clicks": clicks(x, rate), "tonality": tonality(x, rate),
+            "tail_noise": tail_noise(x, rate), "clicks": clicks(x, rate, raw), "tonality": tonality(x, rate),
             "roughness": roughness(x, rate)}
 
 
@@ -498,18 +507,21 @@ def measure(path: Path, low_cut: float | None = None, high_pitch: bool = False) 
     path = Path(path)
     rec = cue_record(path, low_cut, high_pitch)
     x, rate = load(path)
-    rec.update(new_numbers(x, rate))
+    import soundfile as sf
+
+    raw, _ = sf.read(str(path), always_2d=True, dtype="float64")
+    rec.update(new_numbers(x, rate, raw))
     return rec
 
 
 def measure_audio(x: np.ndarray, rate: int, low_cut: float | None = None, high_pitch: bool = False) -> dict:
     """Every measure of a buffer, the same way `measure` reads a file (DC removed per channel, float64)."""
     a = np.asarray(x, dtype=np.float64)
-    a = a[:, None] if a.ndim == 1 else a
-    a = a - a.mean(axis=0)
+    raw = a[:, None] if a.ndim == 1 else a
+    a = raw - raw.mean(axis=0)
     rec = {"rate": rate, "channels": int(a.shape[1])}
     rec.update(cue_numbers(a, rate, low_cut, high_pitch))
-    rec.update(new_numbers(a, rate))
+    rec.update(new_numbers(a, rate, raw))
     return rec
 
 

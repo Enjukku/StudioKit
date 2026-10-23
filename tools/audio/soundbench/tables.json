@@ -25,5 +25,13 @@
     "minor_pentatonic": [0, 3, 5, 7, 10],
     "dorian": [0, 2, 3, 5, 7, 9, 10],
     "chromatic": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  },
+  "_about_near": "rank (J020 step 5): a value inside its target but within this margin of a limit reads `near` (still a pass, as render counts it; a picture is made for it under the light-check rule). Units are the target's own (ms, dB, share 0-1, count). `level` is the margin inside the card's level tolerance. PROPOSAL values.",
+  "near": {
+    "onset_ms": 1.0, "main_transient_ms": 2.0, "attack_rise_ms": 1.0, "attack_share_5ms": 0.02,
+    "sound_ms": 20.0, "file_ms": 20.0, "true_peak_dbtp": 0.5, "sample_peak_dbfs": 0.5,
+    "below_120": 0.02, "band_120_500": 0.02, "band_500_5k": 0.02, "above_5k": 0.02,
+    "phone_loss_db": 1.0, "mono_drop_db": 0.5, "loop_seam": 0.2, "clicks": 0, "edge_clicks": 0,
+    "tail_snr_db": 3.0, "roughness": 0.02, "flatness": 0.02, "level": 0.25, "form.loop": 0.2
   }
 }
