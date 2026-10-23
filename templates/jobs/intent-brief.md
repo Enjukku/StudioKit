@@ -29,6 +29,8 @@ consumers: [<roles that use this output>]
 peers: {<role>: <agent id from crew.md>}   # only for agents the lead spawns by hand; none inside a saved workflow
 owns: [<paths the receiver may write>]
 not_in_scope: [<items>]
+budget: <passes, image cap, tokens>   # optional; job card (M and L lead briefs state it)
+stop: <what "done" looks like>       # optional; job card (M and L lead briefs state it)
 rules: [<every rule the work must keep, in full words, incl. the owner's limits>]
 deliver: <path, not named report/summary/findings/analysis>
 checks:

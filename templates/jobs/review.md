@@ -17,8 +17,10 @@ artifact: <path>@rev<N>
 reviewer: <role>
 looked_at_first: [<the artifact, captures, references opened before the maker's hand-back>]
 findings:
-  - {id: F1, class: blocking | recommendation | new request, where: "<frame, test, location>", expected: "...", observed: "...", evidence: "...", smallest_fix: "..."}
+  - {id: F1, class: blocking | recommendation | new request, where: "<frame, test, location>", expected: "...", observed: "...", evidence: "...", smallest_fix: "...", protect: "<optional: what the fix must not break>", retest: "<optional: how the fix will be checked>"}
 keep: [<what works; joins the protected list>]
+weakest_part: "<optional: the work's weakest part, one line>"
+could_not_check: [{step: "<check>", missing_input: "<what>", closes_it: "<what would>", who: "<role>"}]   # optional; [] = every check ran
 verdict: fix-first | ready for the next review | ready for the owner
 </spec>
 ```
