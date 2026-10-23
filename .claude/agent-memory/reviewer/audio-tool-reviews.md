@@ -25,3 +25,11 @@ An automatic fix inside an op (trim's 0.5 ms edge fade) can bypass a rule anothe
 of attack share or needs a why): sweep the real takes for the protected measure. Whole-file summary numbers
 (saturate residual_db) are dominated by the transient on hits: compare with the body-only number before trusting.
 Real GreatWallSim takes include no sustained kind: stretch/pitch need synthetic sustained material (slow: ~10 min).
+
+Step 5 `rank` (2026-10-23) lessons: (1) a clip check relative to the take's own peak fails after MP3: the decoder
+overshoots above the clipped plateau, so 100 ms of clipping reads ~0.1 ms "within 0.5 dB of peak"; always test clip
+detectors on clipped-then-MP3-encoded broadband real takes, not a sine fixture. (2) LUFS measures (F-13a, LUFS-I) are
+not linear in gain on quiet takes (-70 LUFS absolute gate): any formula "gain = target - level_in" breaks; run real
+rounds with every level measure the card can name, not only F-09. (3) A ranker that judges only the "fix every miss"
+plan can turn a must-passing take into a regenerate (aim fixes + loudness/peak); always compare against "no steps".
+(4) A refused fix that keeps raw counts in a sort key can outrank a passing entry: check the key has a "passes" term.
