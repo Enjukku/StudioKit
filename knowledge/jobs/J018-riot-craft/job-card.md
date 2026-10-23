@@ -2,7 +2,7 @@
 type: job
 scope: universal
 status: active
-updated: 2026-10-21
+updated: 2026-10-22
 source: owner chat 2026-10-21 (after J017)
 supersedes: []
 ---
@@ -150,4 +150,13 @@ Keys follow `J016-orchestration/riot-extracts.md` §1. The J016 extracts in `J01
 | G3 final | 2026-10-22 | rebuilt agents at commit `7876e3d` (all 17 roles + reference-images, orchestration, level-design) accepted; the 11 proposal decisions in `g3-proposals.md` still open (owner named changes, list not received yet) | "G3: accept the rebuilt agents, but change these decisions:" |
 
 ## Close-out
-Metrics in `evidence.md` §4. Filed into the vault (`orchestration` skill §9): [ ] decisions [ ] precedents [ ] vocabulary [ ] systems [ ] tried-and-failed [ ] taste log [ ] catalogs [ ] lesson drafts [ ] removed from `knowledge/jobs/active.md`
+**Closed 2026-10-22 in J019** (all G3 decisions applied: J019 card). Metrics in `evidence.md` §4. Filed (`orchestration` skill §9; a kit job files no rows into the `scope: game` ledgers, lead decision J019-LD4):
+- [x] decisions: J018-D1..D8 in this job's `decisions.md` (universal); `knowledge/design/decisions.md` n/a (game ledger)
+- [x] precedents: n/a (no game artifact; the accepted agents are the kit itself at `7876e3d` and the J019 commits)
+- [x] vocabulary: the kit names the books share are in the `knowledge/design/vocabulary.md` header note (J019 P6), filed as rows at the first game job
+- [x] systems: n/a (no game system)
+- [x] tried-and-failed: hand-written measuring code in books, `knowledge/inbox/2026-10-22-J018-orchestrator-tried-hand-measures.md` (retry condition there)
+- [x] taste log: owner words J018-D3, D4, D7, D8, `knowledge/inbox/2026-10-22-J018-orchestrator-owner-taste.md`
+- [x] catalogs: n/a (no new reusable assets; new tools are listed in the J019 card step 3)
+- [x] lesson drafts: 5 earlier `knowledge/inbox/2026-10-22-J018-*` + kit-job filing, tried-hand-measures, owner-taste
+- [x] removed from `knowledge/jobs/active.md`

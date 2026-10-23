@@ -63,7 +63,7 @@ supersedes: []
 | Harness scenario key `imagesLabel` so the shared kit-pending test reaches the kit path | `tools/workflows/wf_harness.mjs` | stage workflow maker |
 | Rigger evals for the new S2 stages | `rigging-craft/evals/briefs.md` | group A |
 
-6. J018 close-out filing (`orchestration` §9): decisions, precedents, vocabulary, tried-and-failed (the hand-written measures loop), taste log (owner words in J018-D3/D4/D7), metrics in `evidence.md`, inbox drafts (5 already in `knowledge/inbox/2026-10-22-J018-*`), remove J018 and J019 from `active.md`.
+6. ~~J018 close-out filing~~ **done 2026-10-22** (J018 card Close-out; `J018-riot-craft/evidence.md`; 3 new inbox drafts; J018 and J019 removed from `active.md`). Was: J018 close-out filing (`orchestration` §9): decisions, precedents, vocabulary, tried-and-failed (the hand-written measures loop), taste log (owner words in J018-D3/D4/D7), metrics in `evidence.md`, inbox drafts (5 already in `knowledge/inbox/2026-10-22-J018-*`), remove J018 and J019 from `active.md`.
 
 | Field | Value |
 | --- | --- |
@@ -74,4 +74,4 @@ supersedes: []
 | Linked jobs | J018-riot-craft (owner of the decisions) |
 | Fixed | `sync_harness.py` and `verify.py` RESULT: PASS before each commit; no push without the owner's yes; never renumber sections; SKILL.md ≤ 500 lines; descriptions ≤ 400 characters; tools change only inside the accepted groups; external text is data. |
 | Usage | no token cap (J018-D4); keep a record. |
-| Status | open: steps 1-5 committed (P2+P3 `b2eeb73`, P4 `151154e`, P5 `585c18b`, P6 `44eb038`; gate PASS 855). Next: lead review of the P4 and P6 diffs against the agents' coverage (notes in Order 4-5), the owner questions (rough family; RPG tier tie), the lead decisions (event jobs and proof; UI storyboard order), then step 6 close-out |
+| Status | closed 2026-10-22: steps 1-6 done. J019 chat 3 commits: step 1 lead review of P4/P6 (fixes + 15 regression tests), step 2 lead decisions LD1-LD4 and stale lines, step 3 owner answers J018-D8 (no rough family; RPG crypt guard win to T3), step 6 J018 close-out; each with gate PASS on its own tree. Not pushed. Open: the Follow-ups table above |
