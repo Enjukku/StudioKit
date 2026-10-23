@@ -138,3 +138,39 @@ could_not_check:
 verdict: fix-first
 </spec>
 ```
+
+## Round 3 (8aa1e4b)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-23
+
+Frozen revision 8aa1e4b, found with `git log -1 --grep "^J020 soundbench rank repair round 2"`. The working tree under `tools/audio` matches it. Scope: R2-1, R2-2, and anything this diff broke. The rank, measures, render and io tests pass (62 + 39). I re-ran e3, e5, e6 and e7 on copies of the real takes in the session scratchpad (`rv/`).
+
+```text
+<spec>
+artifact: tools/audio/soundbench@8aa1e4b (rank.py, export.py)
+reviewer: reviewer
+looked_at_first: [git diff 99f3782 8aa1e4b (rank.py, export.py), then the builder's message]
+earlier_findings:
+  - {id: R2-1, status: fixed, retrace: "e6 (a), LUFS-I single-take round of hit-speed-2.t3: exit 1 regenerate. Every plan is refused with its reason: 'all' because LUFS-I needs 0.4 s, 'none' because of export's full-scale refusal. plan None, no proof, no exit 2. e6 (b) and (c), thump-4.t1: exit 1. 'none' is refused with export's reason, and plan_for adds loudness + peak to plans that lack them. e5 rendered every kept plan: LUFS-I 60/60 agree (the 2 others have every plan refused and are correctly not passing), F-13a 62/62, F-09 62/62; no round refused"}
+  - {id: R2-1 part, status: withdrawn, retrace: "In round 2 I wrote that loudness + peak 'would deliver' e6 (c). That was wrong. A real render of [loudness, peak] on thump-4.t1 exits 1, and so does [peak] alone: the level lands at -18.91 against a minimum of -18.4. The -1.0 dBTP ceiling minus its 0.5 dB margin takes 1.5 dB off a take whose raw true peak is +0.01. Exit 1 is correct, as the builder said. A deliverable level would need a ceiling above the house -1 dBTP, which is not a fix rank may choose"}
+  - {id: R2-2, status: fixed, retrace: "e7: the same clean files now read 0.20-3.63 ms (the 1.92 s swish 12.86 -> 3.63 ms; the 2 s pad 12.83 -> 3.40 ms); none rejected. e3: every full-scale clip of a sustained take after MP3 is still caught (12.7-102 ms), with the same results as round 2. The window reading is never above the old total, so the 62 clean takes stay under 7.23 ms"}
+findings: []
+broke_check:
+  - "export.check_exportable: the same checks in the same order, moved out of export_flac; export_flac calls it first. The render and io tests pass"
+  - "every plan refused -> plan None: passes is False (take_entry checks rej first, so a rejected take never reads fix['plan']); classify, _why, prompt_misses and the markdown handle plan None and audio None"
+  - "proof now runs only for a passing top take: every exit 0 'use' is still proven by a real render; a failing round no longer depends on the proof"
+keep:
+  - "the shared export check, so rank keeps only plans render can deliver"
+  - "the 300 ms window reading of clipping"
+  - "e5 is now inside the real-take test"
+stated_limits (not defects; the docstrings name them):
+  - "clipped short hits are not caught after MP3: clipped tips under about 1 ms (hit-speed-1.t2 +12 dB 4.3 ms; thump-4.t1 +12 dB 9.46 ms)"
+  - "a steady tone or slow full-scale rumble can read clipped (2-3 of 97 long fixtures, up to 20 ms): a false rejection"
+  - "clipping scaled down after it happened is not seen"
+  - "no real ElevenLabs take of 2 s or more yet: the long calibration set is built from 480-800 ms takes"
+  - "check_exportable leaves out export's 20 MB size check (it needs the encoded file)"
+could_not_check:
+  - {step: "the stated limits on a real long take", missing_input: "a real ElevenLabs take of 2 s or more", closes_it: "measure the first long cue's takes and compare them with the calibration", who: "feature-builder"}
+verdict: ready for the next review
+</spec>
+```
