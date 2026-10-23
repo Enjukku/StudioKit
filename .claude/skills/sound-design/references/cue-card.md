@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by J020 step 8 sound-designer · claude-opus-5-5 · high · 2026-10-23: playback fields 51-56, the `card.json` part (§D), the play-test log.
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Revised by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by J020 step 8 sound-designer · claude-opus-5-5 · high · 2026-10-23: playback fields 51-56, the `card.json` part (§D), the play-test log. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D4, on 982592c): field 43 carries the target-experience sentence.
 
 # Cue card
 
@@ -52,7 +52,7 @@ folder (§D), read by `soundbench`.
 | 40 | Verification statuses | Evidence reviewed, file analysed (F-xx), auditioned (the owner's play-test, never your own), game-tested; phone, headphones, mono, sound-off, 1,000-event fixture | passed/failed/not-run | S-204, S-217 |
 | 41 | Load and expiry | Load watchdog; late-event expiry | ms | S-223 |
 | 42 | Change gate | Fields an agent may tune (with bounds); fields needing designer review; fallback; rollback | lists | S-217 |
-| 43 | Job and story point | Cue, feedback or emotion; the story point in one line; the target-experience line quoted | text | SC-01 |
+| 43 | Job and story point | Cue, feedback or emotion; the story point in one line; the target-experience line quoted (kind of fun + the sentence of what the player must feel); that sentence picks the `emotion-recipes.md` row and the prompt's emotional intent; field 44 stays the mechanic word | text | SC-01 |
 | 44 | Verb and texture | The mechanic verb (as on the clip card and frame script); how the texture moves like it | text | SC-03 |
 | 45 | Stages | Stage → event id @ timing revision → attempt or outcome → layers (`craft-process.md` §2) | table | SC-04 |
 | 46 | Identity | Signature element; character feel words; nearest similar to differ from; tone words; identity-sheet check | text | SC-11 |

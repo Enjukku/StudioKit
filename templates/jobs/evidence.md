@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: <role> · <model id> · <effort> · <date>
-<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016); cause list aligned with rules/knowledge.md §8 by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3. The job's evidence ledger: written by the integrator and reviewers, checked by the lead at readiness, read by /improve. -->
+<!-- Template: orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016); cause list aligned with rules/knowledge.md §8 by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3. The job's evidence ledger: written by the integrator and reviewers, checked by the lead at readiness, read by /improve.; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: belief check, BAR line, target-experience sentence) -->
 
 # Evidence: <job-id>
 
@@ -38,3 +38,5 @@ Cause (the list in `rules/knowledge.md` §8, word for word): context missed · c
 | Usage: estimate vs actual (tokens) | |
 | Owner decisions asked | |
 | What more iteration would fix | |
+| Hand-backs by `BAR` line: bar met / floor only (reasons) / no `BAR` row (J021) | |
+| `proposals` raised / taken by the lead or owner (J021) | |

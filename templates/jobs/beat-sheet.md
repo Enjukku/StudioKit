@@ -22,9 +22,9 @@ What each row must hold: `film-direction` §3 step 1; checked by `film-craft/ref
 | Problem and constraints | <the problem the moment solves; devices, play camera, cast and rig limits, sets, platform limits> |
 | Premise | <one sentence> |
 | Hook | <one line: what makes this moment compelling> |
-| Target experience | <from the game profile> |
+| Target experience | <the job card's line: kind of fun + the sentence of what the player must feel or believe; the game profile's target when the card has none> |
 | Sell list (2-4) | <1 …, 2 …: what the player must feel or know after it> |
-| Budget and stop criteria | <options, passes, images; when this moment is done> |
+| Budget and stop criteria | <options, passes, images; floor: the success test; bar: the signs a top director needs to see before shipping (`rules/messages.md` §2)> |
 | Player's situation before | <where they are, what they know, what they were doing> |
 | Change in knowledge or feeling | <from → to, e.g. curiosity → recognition of danger> |
 | Consequential character action | <the action that changes the situation> |

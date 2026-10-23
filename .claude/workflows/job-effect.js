@@ -238,7 +238,7 @@ const SKIPPED = STAGE === 'build' || STAGE === 'repair'
 const results = { job: JOB, stage: STAGE, size: SIZE, effect: EFFECT, newLook: NEW_LOOK, animated: ANIMATED, risks: RISKS, wiring: WIRE.type, steps: [], images_pending: [], lessons: [],
   could_not_check: [], owner_confirmed: OWNER_LINES.slice(), skipped_slots: SKIPPED }
 function keep(step, x) {
-  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
+  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [], bar: ((x && x.checks) || []).filter(c => c.id === 'BAR').map(c => `${c.result}: ${c.evidence}`)[0] || 'no BAR row' })   // J021: the lead sees each maker's bar line
   if (x && Array.isArray(x.checks)) x.checks.filter(c => c && c.result === 'not verified').forEach(c => results.could_not_check.push(`${step}: ${c.id}: ${c.evidence}`))
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/

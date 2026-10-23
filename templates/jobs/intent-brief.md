@@ -1,4 +1,4 @@
-<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised 2026-10-21 (J016: packet, owner_words, inputs@rev, protected, consumers, peers); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (peers only for hand-spawned agents; brief files need frontmatter). A brief saved as a file in the job folder (a ledger ticket's `ask`) starts with the frontmatter block of templates/jobs/contract-header.md (type: job, without revision) so kb_index --lint passes. -->
+<!-- > Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; revised 2026-10-21 (J016: packet, owner_words, inputs@rev, protected, consumers, peers); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (peers only for hand-spawned agents; brief files need frontmatter). A brief saved as a file in the job folder (a ledger ticket's `ask`) starts with the frontmatter block of templates/jobs/contract-header.md (type: job, without revision) so kb_index --lint passes. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: stop floor and bar). -->
 # Brief: <job-id>-T<nn> <craft>
 
 Format and rules: `rules/messages.md` §1-2. Prose in `<intent>`, every exact value in `<spec>`. A `fixed` value needs a source; the how goes in `open`. Every input has a revision. Send the brief whole, in one message.
@@ -30,7 +30,9 @@ peers: {<role>: <agent id from crew.md>}   # only for agents the lead spawns by 
 owns: [<paths the receiver may write>]
 not_in_scope: [<items>]
 budget: <passes, image cap, tokens>   # optional; job card (M and L lead briefs state it)
-stop: <what "done" looks like>       # optional; job card (M and L lead briefs state it)
+stop:                                # optional; job card (M and L lead briefs state it); top level, never under fixed
+  floor: <the job card's success test, quoted>
+  bar: <observable signs a top professional in this craft needs before shipping; no method>   # a missed bar is reported on the BAR check, never blocking (rules/messages.md §2)
 rules: [<every rule the work must keep, in full words, incl. the owner's limits>]
 deliver: <path, not named report/summary/findings/analysis>
 checks:

@@ -1,4 +1,4 @@
-> Author: J018 maker orchestration · claude-opus-5-5 · high · 2026-10-22 (repair rounds 1 and 2 the same day). Part of `orchestration`: built also from the owner's Riot transcripts (J018). The lead's side of feedback with the owner: goal questions, gate packets, options, closed doors, owner notes, showing early, when a job is done. Binding rules: `rules/company.md` §2, §7, §11; formats: `rules/messages.md`. The checks you run before a report: `orchestration` SKILL §14.
+> Author: J018 maker orchestration · claude-opus-5-5 · high · 2026-10-22 (repair rounds 1 and 2 the same day). Part of `orchestration`: built also from the owner's Riot transcripts (J018). The lead's side of feedback with the owner: goal questions, gate packets, options, closed doors, owner notes, showing early, when a job is done. Binding rules: `rules/company.md` §2, §7, §11; formats: `rules/messages.md`. The checks you run before a report: `orchestration` SKILL §14. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): outside method from the target-experience sentence, BAR and belief lines, floor and bar.
 
 # Gates and feedback with the owner
 
@@ -28,6 +28,8 @@ Screening aids, then count by eye: `grep -n "^Shown:" <packet.md> | awk -F: '{l=
 - stand-ins by name: temp sound, placeholder sprites, proxy rig, PROPOSAL numbers, placeholders left for later design;
 - the could-not-check list: the step, the missing input, the capture or test that would close it, who can provide it;
 - the owner-confirmed lines on the playable preview: "Feel at normal speed: play <place or link> and judge <goal>." "Listening: the key event alone, then the full mix, on a phone speaker and on headphones."
+- each craft's `BAR` line (bar met, or floor only with the reason; floor only is never a blocking finding, J021-D5);
+- at G1, the belief check result when the job card has one (supported / not supported / cannot tell yet, how sure, path), or "untested: no player data" with the cheapest test;
 - for visible work, the grayscale, sound-off and reduced-motion checks, or each named "not verified"; a safety or comfort fault (flashes over 3 per second, an intense channel with no reduced path) blocks the gate.
 
 **What each input can prove** (so no check claims more than its input shows):
@@ -42,7 +44,7 @@ Screening aids, then count by eye: `grep -n "^Shown:" <packet.md> | awk -F: '{l=
 | Playable preview judged by the owner | feel at normal speed, listening | (owner-confirmed) |
 
 ## 3. Options and the pick (what the direction stage brings to G1)
-- Research first: the game's own anchors and approved images, then real-world reference per aspect (material, pose, place, phenomenon), one source from outside games; each entry says what it is for.
+- Research first: the game's own anchors and approved images, then real-world reference per aspect (material, pose, place, phenomenon), one source from outside games, chosen from the job's target-experience sentence (which field already makes people feel, do or believe this?); each entry says what it is for. The outside entry names the method taken, as an action that field's experts do ("hold on the reaction, withhold the creature"), not a topic ("horror films") and not only a look. Borrow a method, never a voice. The role's caps, safety, truth and platform rules win over any borrowed method; never a pressure method (false scarcity, countdowns, streaks, chance tricks).
 - Hooks: each option takes its idea from a different source or reading of the theme. The first, typical idea is labelled warm-up and set aside. At least one option is radical (it changes a primary trait: silhouette, mechanism, main material, camera).
 - Distinct, not variants: options differ in the big read (layout, silhouette, mechanism, camera), not in colour. Two that look alike in black-fill are one option.
 - Equal finish: polish on one option makes the owner pick it for the wrong reason.
@@ -78,7 +80,7 @@ The rule is SKILL §6; this is how it runs.
 - When the owner wants to see more often, give status pictures, not extra gates (an extra gate opens only when scope, intent, rights, spend or release risk changes: `rules/company.md` §2), unless the owner asks for a gate.
 
 ## 7. When it is done
-- The job card states stop criteria per stage (the success test passing at the game camera on a phone; every acceptance check with evidence) and a budget (passes, image cap, tokens).
+- The job card states stop criteria per stage (the success test passing at the game camera on a phone; every acceptance check with evidence) and a budget (passes, image cap, tokens). Stop criteria have a floor (the success test) and a bar (observable signs a top professional needs; `rules/messages.md` §2). The work aims at the bar inside the budget; a missed bar is reported on the `BAR` line, never another round.
 - A review round ends when it brings no new notes or only repeats them; after two repair rounds, diagnose (SKILL §7.3).
 - "It would be cooler" after G1 is new scope (additions are tickets: SKILL §6).
 - A structural idea at polish becomes a follow-up job or an item for the next update.

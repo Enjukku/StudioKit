@@ -3,7 +3,7 @@ name: analysis-craft
 description: The analyst's how for a Roblox game's player data - pull with tools/analytics, check the math, answer the owner plainly; weekly page, A/B test plan and reading, what a feature should log. Use for "pull the numbers", "write the weekly page", "plan an A/B test", "read this test", "what should this feature log". Read analysis-design first (what and why).
 ---
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Built in J013 (owner's analyst paper + fact-checks `knowledge/reference/analyst/01..03`; tool `tools/analytics/` J013-T04). Owner decisions: J013-D1 (Sonnet medium; Opus high for deep investigations), D3 (analyst plans events, `analytics` owns code), D4 (Open Cloud tool, key in the owner's environment), D5 (weekly page routing), D6 (defaults).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit skill: universal. Built in J013 (owner's analyst paper + fact-checks `knowledge/reference/analyst/01..03`; tool `tools/analytics/` J013-T04). Owner decisions: J013-D1 (Sonnet medium; Opus high for deep investigations), D3 (analyst plans events, `analytics` owns code), D4 (Open Cloud tool, key in the owner's environment), D5 (weekly page routing), D6 (defaults). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): §3.7 belief check.
 
 # Analysis craft: from question to a decision the owner can trust
 
@@ -76,6 +76,13 @@ Every task starts the same: **(a)** `status` (history fresh? >21 days → warn) 
 
 ### 3.6 Event planning for a new feature
 Follow `references/event-planning.md` §2; deliver the measurement spec and the engineering brief (`handoffs.md` §5); write no code.
+
+### 3.7 Belief check (a job's problem line rests on a belief about players; short form, from the lead's brief only)
+1. The brief gives the belief word for word, the owner's words, the universe id and the date of the last build change. Write the metric contract with the belief as one measurable claim ("step X loses more first-session players than any other step"). No measure in the catalog or `telemetry.md`: verdict `cannot tell yet: no measurement`, name the cheapest way to get one (§3.6, or observed play), stop.
+2. `status`; pull only what the claim needs (one metric set, at most one funnel); `stats maturity`; point status; breaks. Data from before the last build change that touched the area is not comparable.
+3. Verdict, one of three: `supported` (counts and likely range sit on the claim's side) · `not supported` (no such effect, or the loss is elsewhere: say where) · `cannot tell yet` (immature cohorts, point status, below the dashboard minimum, a break, no events). `Cannot tell yet` is a full answer and counts as the bar met; a deadline never turns it into a guess (`analysis-design` §3 step 7).
+4. No cause (A-06): a supported claim says where and how many, never why. The reason stays a hypothesis for the designer.
+5. Hand back Part 1 only (claim, verdict, counts, how sure with reasons, what the data cannot say), Part 2 sources and `calc/`, and the four G1 lines: `Belief check: "<claim>" -> <verdict>` · `Data: <which players, UTC dates, counts, the comparison> (finding: <path>)` · `How sure: <High | Medium | Low>, because <reason>. The data shows where, not why.` · `What it changes: <nothing | the problem line could read "<restated>"; the owner decides, default: the owner's words stand>`. File: `knowledge/jobs/<job>/analyst/belief-check.md`. Never escalate to a deep investigation on your own; propose it as a follow-up.
 
 ## 4. Craft core
 | ID | Practice | Evidence |

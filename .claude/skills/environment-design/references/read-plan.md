@@ -1,4 +1,4 @@
-> Author: J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22. Kit reference: universal. Part of `environment-design` (§3 steps 2-3); built also from the owner's Riot transcripts (J018). Until `templates/environment/stage-blueprint.md` carries it, attach this sheet to your blueprint copy as §L.
+> Author: J018 maker environment-designer · claude-opus-5-5 · high · 2026-10-22. Kit reference: universal. Part of `environment-design` (§3 steps 2-3); built also from the owner's Riot transcripts (J018). Until `templates/environment/stage-blueprint.md` carries it, attach this sheet to your blueprint copy as §L. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): target-experience line, outside method.
 
 # The read plan, the ranked work list and the option round
 
@@ -7,7 +7,7 @@ A place is planned around what the player must read in it. Write this sheet befo
 ## 1. The read plan sheet (`content/stages/<stage-id>/read-plan.md`)
 | Field | What to write | Example (a mining-town hub) |
 | --- | --- | --- |
-| Job and conflict | the game designer's job sentence and conflict sentence, copied with their revision | "Sell ore, upgrade the pick, find the next mine"; no conflict (social hub) |
+| Job and conflict | the game designer's job sentence and conflict sentence, copied with their revision; the job card's target-experience line (kind of fun + what the place must make the player feel or do), quoted | "Sell ore, upgrade the pick, find the next mine"; no conflict (social hub) |
 | Personality | the place as a character, 3-5 words; they drive shape language and materials | "busy, dusty, proud, frontier" |
 | Story facts | 3 facts: who lives or works here, what happened, climate and age; each mapped to props, wear or layout | miners live upstairs of the shops (laundry lines, lamps lit at dusk); a cave-in closed the old shaft (boarded entrance, rubble); dry and windy (dust drifts against the north walls) |
 | Theme cues | 2-3 signature materials or shapes that make the setting unmistakable | ore veins in the rock, timber shoring, rail tracks |
@@ -28,9 +28,9 @@ Each field has a source (layout, art bible, owner D-id, game profile) or is `PRO
 The environment fills most of the screen and there is always more to build than time allows. Rank the work with the game designer before the blueprint: play spaces and the main route first, landmarks and the first view next, side areas and filler last. The rank sets where unique assets, triangles and polish go; the background takes reused kit pieces. The 3-5 most-visited views get every top-ranked item visible and finished in them.
 
 ## 3. The option round (step 3)
-- **Research first.** Real-world reference for the place type (layouts, odd details, materials, how water or rock really behaves) and the game's own anchors. Note per entry what it is for and one specific detail you will use. Take ideas, never a design.
+- **Research first.** Real-world reference for the place type (layouts, odd details, materials, how water or rock really behaves) and the game's own anchors. Note per entry what it is for and one specific detail you will use. Add one method from the field the target-experience sentence points to (for "the player feels watched": how a stage or museum designer controls sight lines and sound), written as an action. Take ideas, never a design; a method that would change routes goes to the game designer as a proposal (E-02).
 - **Keyword table.** For each word of the brief: colour key, setting, typical prop, typical sound ("abandoned" → dust greys, boarded doors, swinging sign, creak).
-- **Three distinct directions,** each from a different source or reading of the theme (a different layout idea, landmark or light, never only a colour change), one deliberately unexpected, taking an idea from outside games (architecture, film, a real place). The first batch is a warm-up: label it so and keep going. All options at the same low finish and small size, same camera, labelled A, B, C.
+- **Three distinct directions,** each from a different source or reading of the theme (a different layout idea, landmark or light, never only a colour change), one deliberately unexpected, taking a method from outside games (architecture, film, a real place; preferably the field the target-experience sentence points to). The first batch is a warm-up: label it so and keep going. All options at the same low finish and small size, same camera, labelled A, B, C.
 - **Pick with reasons.** One recommendation with the reason tied to the read plan ("B frames the gate as the brightest shape from spawn"); one line per rejected option on why it lost; record what is kept from a rejected one. An option that reads as another genre or tone loses, however beautiful. A second round may vary one named element of the pick (the light, the landmark, the ground) and merge the strongest two. Ties go to the owner with your recommendation.
 - **Image budget:** at most 3 option images per round and 2 rounds before the owner; refined images only after a recorded pick.
 

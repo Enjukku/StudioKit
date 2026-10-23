@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: target-experience sentence, belief check, floor and bar) -->
 
 # Job card: <job-id> <title>
 
@@ -35,9 +35,10 @@ What each line holds: `orchestration` SKILL §1 step 1; written before the first
 | --- | --- |
 | Problem | |
 | Constraints | |
-| Target experience | |
+| Target experience | <one or two named kinds of fun>: <what the work must make the player feel, do or believe, one sentence, no number (the number goes in the success test)> |
 | Success test | |
 | Goal word | <the word every goal question carries (`orchestration/references/gates-and-feedback.md` §1)> |
+| Belief check | <the player belief the problem rests on, word for word> → <analyst result path and verdict, or "not run: no player data (reason)", or "none"> (`orchestration` SKILL §1 step 1) |
 
 ## References
 <owner-approved links and files>
@@ -58,7 +59,7 @@ Agent ids: `crew.md`.
 <saved workflow `job-<type>` stage by stage / subagents by hand / production chat, and why>
 
 ## Stop criteria and budget per stage
-What they hold: `orchestration` SKILL §3 step 3 (token estimate source) and `orchestration/references/gates-and-feedback.md` §7.
+What they hold: `orchestration` SKILL §3 step 3 (token estimate source) and `orchestration/references/gates-and-feedback.md` §7. Write stop criteria as `floor: <the success test> · bar: <observable signs a top professional needs>` (`rules/messages.md` §2).
 | Stage | Stop criteria | Passes | Image cap | Tokens estimate | Tokens actual |
 | --- | --- | --- | --- | --- | --- |
 | direction | | | | | |

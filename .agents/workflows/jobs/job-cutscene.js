@@ -240,7 +240,7 @@ function ok(x) { return x && x.status === 'done' }
 const results = { job: JOB, stage: STAGE, size: SIZE, risks: RISKS, steps: [], images_pending: [], lessons: [], could_not_check: [], owner_confirmed: OWNER_CONFIRM }
 if (STAGE === 'build' || STAGE === 'repair') results.skipped_slots = EVENT ? [] : ['live-ops event review: risks does not name event']
 function keep(step, x) {
-  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
+  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [], bar: ((x && x.checks) || []).filter(c => c.id === 'BAR').map(c => `${c.result}: ${c.evidence}`)[0] || 'no BAR row' })   // J021: the lead sees each maker's bar line
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
   if (x && Array.isArray(x.could_not_check)) x.could_not_check.forEach(line => results.could_not_check.push({ step, line }))   // the gate packet's could-not-check list
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/

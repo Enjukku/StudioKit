@@ -1,4 +1,4 @@
-> Author: J018 maker reference-images · claude-opus-5-5 · high · 2026-10-22. Part of `reference-images`; built also from the owner's Riot transcripts (J018). The rounds of an image batch (SKILL §4): the brief, research, the rough round, the pick, iterate and final rounds, paint-overs, the image budget, worked examples. The lines that check each part: `self-review.md` (ids in brackets).
+> Author: J018 maker reference-images · claude-opus-5-5 · high · 2026-10-22. Part of `reference-images`; built also from the owner's Riot transcripts (J018). The rounds of an image batch (SKILL §4): the brief, research, the rough round, the pick, iterate and final rounds, paint-overs, the image budget, worked examples. The lines that check each part: `self-review.md` (ids in brackets). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): outside method in direction rounds.
 
 # Rounds: from brief to a reference the next maker can build from
 
@@ -21,7 +21,7 @@ Write it in the job folder, above the manifest. A field that does not apply says
 
 ## 2. Research board and keyword table (R0) [BR4-BR5]
 - **Two halves.** (a) Our game: the approved anchors and art-bible images, for colour, composition and gesture. (b) The real world, per aspect (pose, material, place, phenomenon, motion), each entry with what it is for and one observed property you take ("ember: a dark crust with orange cracks, not a flat orange"). Reference made only of other games is a copy of a copy.
-- **One source family from outside games** (a craft, fashion, architecture, nature, another medium), and one reference you dislike with what it teaches.
+- **One source family from outside games** (a craft, fashion, architecture, nature, another medium), and one reference you dislike with what it teaches. In a direction round (a new look or new options), choose the outside family from the job's target-experience sentence and name the method taken, as an action that field's experts do, not a topic.
 - **One narrow direction per board:** 3-5 pillar words, the 3-5 key features that make each subject read, and a one-line sensitivity note (culture, age, maturity, franchise risk: `platform-policy`).
 - **Creatures:** a real source per body part ("lion face, bear hips, beetle shell"). **Fusions** (two ideas in one brief): reference the overlap: an object that is both, a costume piece of the new idea, a pose from both worlds.
 - **Missing reference is made, not guessed:** a ChatGPT pose image, or a posed Blender mannequin in the game's proportions rendered from the game camera (ask the modeler or animator). Motion subjects get motion reference for their key poses. A style or light question may take painted key art for how its shadows and highlights are placed.

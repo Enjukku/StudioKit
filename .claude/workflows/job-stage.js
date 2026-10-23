@@ -221,7 +221,7 @@ const results = { job: JOB, stage: STAGE, size: SIZE, stageId: SID, risks: RISKS
 // Cross-type rules: every gate packet carries the could-not-check list and these owner-confirmed lines.
 const OWNER_CONFIRMS = ['feel at normal speed: the owner walks the route in the Studio build', 'ambience: two listens, the key event alone then the full mix, each on a phone speaker and on headphones']
 function keep(step, x) {
-  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
+  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [], bar: ((x && x.checks) || []).filter(c => c.id === 'BAR').map(c => `${c.result}: ${c.evidence}`)[0] || 'no BAR row' })   // J021: the lead sees each maker's bar line
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/
   return x

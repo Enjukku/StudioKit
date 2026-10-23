@@ -242,7 +242,7 @@ function roleOf(name) {
 function ok(x) { return x && x.status === 'done' }
 const results = { job: JOB, stage: STAGE, size: SIZE, screen: SCREEN, shop: SHOP, risks: RISKS, skipped_slots: STAGE === 'direction' ? [] : SKIPPED, steps: [], images_pending: [], lessons: [] }
 function keep(step, x) {
-  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [] })
+  results.steps.push({ step, status: x ? x.status : 'missing', outcome: x ? x.outcome : 'agent returned nothing', files: x ? x.files : [], bar: ((x && x.checks) || []).filter(c => c.id === 'BAR').map(c => `${c.result}: ${c.evidence}`)[0] || 'no BAR row' })   // J021: the lead sees each maker's bar line
   if (x && x.images && x.images.state === 'pending') results.images_pending.push({ step, prompts: x.images.prompts_file })
   if (x && x.lesson && x.lesson.type !== 'none' && !SMOKE) results.lessons.push(Object.assign({ step }, x.lesson))   // lesson drafts for the lead to file in knowledge/inbox/
   return x

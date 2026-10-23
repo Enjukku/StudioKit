@@ -1,6 +1,6 @@
 # Studio Kit — shared rulebook for Roblox game projects
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; §0-1 and §5 revised in J016 (2026-10-21); revised by orchestrator-fixer W1 · claude-opus-5-5 · high · 2026-10-21 (J016 G3). Kit file: universal. Game-specific facts live in `knowledge/design/game-profile.md`, never here.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-20; §0-1 and §5 revised in J016 (2026-10-21); revised by orchestrator-fixer W1 · claude-opus-5-5 · high · 2026-10-21 (J016 G3); §4 professional bar added by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D3, D5). Kit file: universal. Game-specific facts live in `knowledge/design/game-profile.md`, never here.
 
 This project is built by an **AI game studio**: the owner is the creative director and lead designer; AI agents do the engineering, art, content, verification and records. This file is the single, assistant-neutral rulebook. Harness specifics: Claude Code → `rules/assistants/claude.md`; Codex → `rules/assistants/codex.md`.
 
@@ -51,6 +51,7 @@ Rojo for sync, Wally for packages, Luau `--!strict` in shared and server code, s
 
 - Plan → build → verify → record. Non-trivial work gets a short numbered plan with a check per step.
 - Build what was asked, at the size it needs (`rules/anti-overengineering.md`): no extras, no one-use abstractions, found problems become follow-ups; data tables over hard-coded branches.
+- **Aim at the professional bar** (M and L work that makes a deliverable). The brief's `stop` gives the floor (the owner's success test) and the bar: the observable signs a top professional in your craft needs to see before shipping; your book's checks are part of it. If the brief gives no bar, write one from your book. Aim at it inside the brief's scope, budget and repair limits. The hand-back's `checks` has a `BAR` row: pass = bar met, with evidence; fail or not verified = floor only, with the reason. Floor only is a valid finish: never a blocking finding, never another round. If no book of yours covers the task type, name the method a professional would use, in one line. Not for S work, the quick-builder, `research` or `mechanical` roles, or reviews.
 - Say what you assumed. Push back when a rule looks wrong for the case. When a brief conflicts with a rule: build the version that keeps the rule, name the rule, and return `needs-decision` so the owner chooses; never break the rule silently or refuse silently.
 - Check what changed before reporting a state (other chats work in parallel).
 - Surgical edits: touch what the task needs; file unrelated problems as open questions. Never renumber sections in `rules/*.md` or skills: add text inside a section or append a new one at the end, so every § reference stays valid.

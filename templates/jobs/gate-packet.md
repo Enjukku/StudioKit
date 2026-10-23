@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6). One packet per gate (G1, G2, G3), one screen, kept by the lead. The order of the sections is `orchestration` SKILL §8; what each gate shows, the image budget and the checks block are `orchestration/references/gates-and-feedback.md` §2; a filled example: same file §8.1. Copy to the job folder as `gate-<G1|G2|G3>.md`. -->
+<!-- Template: J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6). One packet per gate (G1, G2, G3), one screen, kept by the lead. The order of the sections is `orchestration` SKILL §8; what each gate shows, the image budget and the checks block are `orchestration/references/gates-and-feedback.md` §2; a filled example: same file §8.1. Copy to the job folder as `gate-<G1|G2|G3>.md`.; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: belief check, BAR line, target-experience sentence) -->
 
 # Gate packet: <job-id> <G1 | G2 | G3> (candidate revision <n>)
 
@@ -34,6 +34,7 @@ Shown: <a.png, b.png>
 | Real alternative | |
 | Trade-off in player terms | |
 | Why each other option loses | |
+| Belief check (analyst) | <the belief, verdict (supported / not supported / cannot tell yet), how sure, path; or "untested: no player data" with the cheapest test; G1 only> |
 
 ## 5. What changed since the last approval
 <revision n-1 → n: what moved and what went stale>
@@ -42,6 +43,8 @@ Shown: <a.png, b.png>
 | Check (read, then feel, then look) | Result | Label (gate-verified / MCP-verified / owner-confirmed / not verified) | Input |
 | --- | --- | --- | --- |
 | | | | |
+
+BAR per craft: <role: bar met | floor only (reason)>, one line per hand-back with a `BAR` check; floor only is not a blocking finding.
 
 Stand-ins: <temp sound, placeholders, proxy rig, PROPOSAL numbers>
 

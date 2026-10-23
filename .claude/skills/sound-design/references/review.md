@@ -1,4 +1,4 @@
-> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018).
+> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D4, on 982592c): R-01.
 
 # Review: inputs, the owner's play-test, self-review list, file measures
 
@@ -48,7 +48,7 @@ Run every line that fits the cue type; mark each passed, failed, MEASURED or not
 **a. Frame and stages (input D, unless named)**
 | ID | Look for |
 | --- | --- |
-| R-01 | The card names the job (cue, feedback, emotion), the story point in one line, and quotes the target-experience line. |
+| R-01 | The card names the job (cue, feedback, emotion), the story point in one line, and quotes the target-experience line with its sentence; the emotion row chosen traces to that sentence. |
 | R-02 | Every state change in the feature spec has a cue or a written reason for none; miss, block, refusal and success each have their own cue; refusal sounds are soft and rate-limited (at most about one per 0.5 s (P)). |
 | R-03 | The card names the emotion, not only the object; mood variants exist where the object appears in areas of different mood. |
 | R-04 | An ability card starts with the mechanic verb, the same word as the animator's clip card and the VFX frame script; the chosen texture moves like it (a slow has the longest tail of its family, F-05). |

@@ -1,4 +1,4 @@
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-13. Rebuilt by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (inputs per check, the self-review lines by pass in §I, the blocking pass and the value and silhouette gates).
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-13. Rebuilt by J018 maker vfx-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (inputs per check, the self-review lines by pass in §I, the blocking pass and the value and silhouette gates). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): PL-08.
 
 # Effect review and self-review
 
@@ -216,7 +216,7 @@ Run the lines of the pass you are at before its hand-off or check-in; write each
 | PL-05 | Rate and burst written; frequent effects have a merge window, a live-copy cap and particles per copy | S |
 | PL-06 | Per-viewer and reduced variants: every intense channel has an off path that keeps footprint, contact, outcome, threats and pickups; colour is paired with shape | S |
 | PL-07 | Budget line, stop criteria and pass budget, dated before the first spec | S |
-| PL-08 | Research: one observed property of the real phenomenon named and used; 1-3 pro frame scripts read (peak %, peak ms, tail); the reuse search result named (recoloured or retimed, or new and why) | job record |
+| PL-08 | Research: one observed property of the real phenomenon (or one method from the outside field the target-experience sentence points to) named and used; 1-3 pro frame scripts read (peak %, peak ms, tail); the reuse search result named (recoloured or retimed, or new and why) | job record |
 | PL-09 | Options: 2-3 at equal finish, each with a hook from a different source, one atypical, the first labelled warm-up; each names the read it solves and its cost (budget line); an option outside the game's tone words is dropped; picked by a goal question; a reason per losing option; merges named | job record |
 | PL-10 | Frame script at the game camera with the screen-size math (height % and area % at the game distance; projectiles at launch and impact), compared with ≥1 pro frame script: peak coverage, peak ms, tail ms side by side | S |
 | PL-11 | The frame script tells a beginning, a middle and an end: tell or build → beat → one peak row on the contact event → result rows after their cause → tail; the gaps between the main beats are not all equal; exits are staggered (glow, flare, sparks, embers and smoke last) | S |

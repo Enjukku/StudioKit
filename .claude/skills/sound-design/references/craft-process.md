@@ -1,4 +1,4 @@
-> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by J020 step 8 sound-designer · claude-opus-5-5 · high · 2026-10-23: the approved sound workflow (J020-D1 to D14): soundbench, takes per round, regenerate rounds, the play-test instead of check-ins.
+> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by J020 step 8 sound-designer · claude-opus-5-5 · high · 2026-10-23: the approved sound workflow (J020-D1 to D14): soundbench, takes per round, regenerate rounds, the play-test instead of check-ins. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D4, on 982592c): target-experience sentence sets the emotion.
 
 # Craft process: from event to finished cue
 
@@ -9,7 +9,7 @@ change. Self-review lines R-xx live in `review.md` §3; the measures F-xx in `re
 
 | Input | Owner | What I take from it | Ask when |
 | --- | --- | --- | --- |
-| Direction sheet: the target-experience line | lead, direction leads | quoted on every card (field 43) | before step 1 |
+| Direction sheet: the target-experience line (kind of fun + the sentence of what the player must feel) | lead, direction leads | quoted on every card (field 43); the sentence sets the target emotion | before step 1 |
 | Feature spec feedback stack (`preproduction/references/documents.md` §6) | game designer | named stages, attempt cue, outcome response and its confirmation source, outcome tiers, failure and refusal cues, celebration tier and length, frequency and merge window | before step 2 |
 | Threat and hazard sheets (same file §7) | game designer | the reaction window, the tell channels, escalation | before step 2 for any enemy or hazard |
 | Read rank and information list (same file §9) | game designer | loudness tiers and caps per scene; what the player must know per moment | before step 1 |
