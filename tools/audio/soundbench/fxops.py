@@ -51,6 +51,8 @@ LENGTH_FLOOR_MARGIN_DB = 10.0  # ... "clearly above" = 10 dB over the take's tai
 BALANCE_MOVE_DB = 1.0  # PROPOSAL: the left-right level difference moves at most 1 dB ...
 BALANCE_MOVE_CHORUS_DB = 2.0  # ... 2 dB for chorus (its copies follow each channel: up to 0.96 dB on 62 real takes)
 NF_MARGIN_DB = 3.0  # PROPOSAL: denoise's nf may sit at most 3 dB above the take's measured tail floor
+CHORUS_WET_MAX_RATIO = 0.9  # chorus decay must stay under 0.9 x in_gain: at 0.90 the probe first saw two equal copies
+                            # (sweep 2026-10-23, weakest modulation, every delay, in_gain and rate; 0.85-0.89 passed)
 AFFTDN_NF_MIN = -80.0  # afftdn's lowest nf: a floor under it has nothing for denoise to remove
 RUBBERBAND_MAX_LOSS_DB = 6.0  # PROPOSAL: smooth rubberband loses 0.4-4.3 dB by content and rate (probe 2026-10-23);
                               # the loss is restored by gain, and more than 6 dB is refused as damage
@@ -200,9 +202,9 @@ def denoise_floor_check(x: np.ndarray, rate: int, nf_db: float | None) -> tuple[
                                   f"({AFFTDN_NF_MIN:g} dBFS): nothing to remove, refused")
         nf_db = round(floor, 1)
     if nf_db > floor + NF_MARGIN_DB:
-        raise SoundbenchError(f"denoise: nf {nf_db:g} dBFS is above the take's measured tail floor {floor:.1f} dBFS "
-                              f"(+{NF_MARGIN_DB:g} dB allowed): afftdn would treat the sound as noise; set nf_db at or "
-                              "below the floor, refused")
+        raise SoundbenchError(f"denoise: nf {nf_db:.2f} dBFS is above the limit {floor + NF_MARGIN_DB:.2f} dBFS (the take's "
+                              f"measured tail floor {floor:.2f} dBFS + {NF_MARGIN_DB:g} dB): afftdn would treat the sound "
+                              "as noise; set nf_db at or below the floor, refused")
     return floor, nf_db
 
 

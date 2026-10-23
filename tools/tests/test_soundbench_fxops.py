@@ -334,7 +334,7 @@ class RealisticTakeTest(unittest.TestCase):
         for rate in fx.RATES:
             with self.subTest(rate=rate):
                 x = fx.make_real("quiet_hit", rate)
-                with self.assertRaisesRegex(SoundbenchError, "above the take's measured tail floor"):
+                with self.assertRaisesRegex(SoundbenchError, "above the limit .* measured tail floor"):
                     run("denoise", x, rate, "hit", nr_db=40, nf_db=-20)
 
     def test_f1_the_damage_guards_refuse_it_without_the_nf_check(self):
@@ -384,6 +384,31 @@ class RealisticTakeTest(unittest.TestCase):
                 y, info = run("chorus", x, rate, "impact")
                 self.assertEqual(info["timing"]["dry_path_timing"]["channel_lags_samples"], [0, 0])
                 self.assertGreater(len(y), len(x))
+
+    def test_a_wet_copy_as_strong_as_the_dry_one_is_refused_at_the_parameter_check(self):
+        """R2-3 (re-review, lead decision): with decay >= 0.9 x in_gain the probe sees wet and dry copies of near-equal
+        size and timing cannot be proven (sweep 2026-10-23: the first probe refusal at 0.90, never at 0.85-0.89, for
+        every delay, in_gain and rate, at the weakest modulation). Refused before anything runs; just inside runs."""
+        for in_gain in (0.5, 1.0):
+            with self.subTest(in_gain=in_gain):
+                with self.assertRaisesRegex(SoundbenchError, "wet copy as strong as the dry one"):
+                    ops.check_params("chorus", {"in_gain": in_gain, "decay": 0.9 * in_gain})
+                ops.check_params("chorus", {"in_gain": in_gain, "decay": 0.89 * in_gain})
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                x = standins.make("hit", rate, 2, int(0.5 * rate)).astype(np.float64)
+                y, info = run("chorus", x, rate, "hit", in_gain=0.5, decay=0.445, depth_ms=0.1, speed_hz=0.05)
+                self.assertTrue(info["timing"]["timing_source"].startswith("probe and"))
+
+    def test_the_denoise_refusal_prints_the_numbers_it_compared(self):
+        x = fx.make_real("quiet_hit", 44100)
+        floor = m.tail_noise(x - x.mean(axis=0), 44100)["floor_dbfs"]
+        nf = round(floor + fxops.NF_MARGIN_DB + 0.02, 2)  # just over the limit
+        with self.assertRaises(SoundbenchError) as err:
+            run("denoise", x, 44100, "hit", nf_db=nf)
+        text = str(err.exception)
+        self.assertIn(f"{floor:.2f}", text)
+        self.assertIn(f"{floor + fxops.NF_MARGIN_DB:.2f}", text)
 
     def test_chorus_on_a_quiet_whoosh(self):
         """F5: real whooshes were refused (the wet copy moved the correlation peak 11 samples)."""

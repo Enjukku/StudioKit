@@ -41,6 +41,7 @@ SPACE_MAX_DECAY_S = 1.5  # `space` is the sound's own tail, never a room (J020-D
 TRIM_PREROLL_MS = 1.0  # trim keeps 1 ms before the binding onset (a fade over it when it is not silent)
 EDGE_SILENT_DB = -60.0  # a first sample above peak - 60 dB is not silent: it would click when playback starts ...
 EDGE_FADE_MS = 0.5  # ... so trim fades the first 0.5 ms (7 of 10 real takes started above -20 dB re peak)
+RESIDUAL_TRANSIENT_MS = 10.0  # saturate's body residual leaves out the peak +-10 ms
 CUT_FADE_MIN_MS = 5.0  # a cut through sound needs a fade-out of at least 5 ms
 CUT_SILENT_DB = -60.0  # ... "through sound" = the last 1 ms before the cut above peak - 60 dB
 FADE_IN_KEEP_SHARE = 0.9  # a fade-in that leaves under 90 % of the attack share needs a `why`
@@ -133,6 +134,13 @@ def check_params(op: str, step: dict) -> dict:
         out[name] = v
     if op == "cut" and (out["end_ms"] is None) == (out["after_sound_ms"] is None):
         raise SoundbenchError("cut: give exactly one of end_ms or after_sound_ms")
+    if op == "chorus":
+        from . import fxops
+
+        if out["decay"] >= fxops.CHORUS_WET_MAX_RATIO * out["in_gain"]:
+            raise SoundbenchError(f"chorus: decay {out['decay']:g} is {fxops.CHORUS_WET_MAX_RATIO:g} x in_gain "
+                                  f"({out['in_gain']:g}) or more: wet copy as strong as the dry one: timing cannot be "
+                                  "proven (the probe sees two equal copies); lower the decay")
     return out
 
 
@@ -522,14 +530,21 @@ def nonlinear_residual_db(x: np.ndarray, y: np.ndarray) -> float | None:
 def op_saturate(x, rate, p, ctx):
     """Soft clip relative to the input's own peak: pk * tanh(g x / pk) / tanh(g), so a quiet take is driven exactly as
     hard as a loud one (the peak stays the peak), mixed with the dry sound. Logs the nonlinear residual (what the
-    saturation added, dB re the output) and the phone-speaker loss before and after (S-156)."""
+    saturation added, dB re the output) over the whole file and over the body outside +-10 ms of the peak
+    (`residual_body_db`: the peak-relative drive saturates a transient hard and the body hardly; on thump-3.t2 the
+    whole file read -8.3 dB and the body -47.7 dB), and the phone-speaker loss before and after (S-156)."""
     g = 10 ** (p["drive_db"] / 20)
     pk = float(np.max(np.abs(x)))
     if g == 1 or pk <= 0:
         return x.copy(), {"residual_db": None}
     wet = pk * np.tanh(g * x / pk) / math.tanh(g)
     y = (1 - p["mix"]) * x + p["mix"] * wet
+    i = int(np.argmax(np.max(np.abs(x), axis=1)))
+    k = int(round(RESIDUAL_TRANSIENT_MS * rate / 1000))
+    body = np.ones(len(x), dtype=bool)
+    body[max(0, i - k):i + k + 1] = False  # the peak +-10 ms: what the relative drive hits hardest
     return y, {"residual_db": nonlinear_residual_db(x, y),
+               "residual_body_db": nonlinear_residual_db(x[body], y[body]) if body.any() else None,
                "phone_loss_db": [measures.phone_loss_db(x - x.mean(axis=0), rate),
                                  measures.phone_loss_db(y - y.mean(axis=0), rate)]}
 
@@ -558,16 +573,24 @@ def op_trim(x, rate, p, ctx):
         faded = True
     first_before = _edge_db(y[0], x)
     edge_faded = False
+    share_before = measures.attack_share(y - y.mean(axis=0), rate)
     if first_before is not None and first_before > EDGE_SILENT_DB:  # starts mid-waveform: it would click
         k = min(len(y), max(1, int(round(EDGE_FADE_MS * rate / 1000))))
         y[:k] *= np.linspace(0, 1, k, endpoint=False)[:, None]
         edge_faded = True
+    share_after = measures.attack_share(y - y.mean(axis=0), rate)
+    extra = {}
+    if edge_faded and share_before and share_after is not None and share_after < FADE_IN_KEEP_SHARE * share_before:
+        # the lead's decision (R2-2): a click is worse, so it still fades; the loss is logged and the card's attack
+        # targets decide whether the render passes
+        extra["edge_fade_attack_loss"] = round(1 - share_after / share_before, 4)
     a = y - y.mean(axis=0)
     f01 = 1000 * measures.onset_index(a.mean(axis=1)) / rate
     mt = measures.main_transient_ms(a, rate)
     return y, {"binding": binding, "trimmed_ms": round(1000 * start / rate, 3), "preroll_faded": faded,
                "first_sample_db_re_peak": [first_before, _edge_db(y[0], x)], "edge_faded": edge_faded,
-               "lead_in_ms": None if mt is None else round(max(0.0, mt - f01), 2)}
+               "attack_share": [share_before, share_after],
+               "lead_in_ms": None if mt is None else round(max(0.0, mt - f01), 2), **extra}
 
 
 def _edge_db(sample: np.ndarray, x: np.ndarray) -> float | None:

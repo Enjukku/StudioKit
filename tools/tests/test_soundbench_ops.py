@@ -289,6 +289,45 @@ class QuietTakeTest(unittest.TestCase):
                     k = int(round(ops.EDGE_FADE_MS * rate / 1000))
                     np.testing.assert_allclose(y[k:], x[len(x) - len(y) + k:])  # only the first 0.5 ms changed
 
+    def test_trim_logs_the_attack_share_and_flags_an_edge_fade_loss(self):
+        """R2-2 (re-review, lead decision): the edge fade is held to fade-in's 90 % attack-share rule, but it still
+        fades (a click is worse) and logs `edge_fade_attack_loss`; the card's attack targets then decide."""
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                t = np.arange(int(0.3 * rate)) / rate
+                rs = np.random.RandomState(3)
+                sharp = (rs.standard_normal(len(t)) * np.exp(-t / 0.001) + 0.05 * np.sin(2 * np.pi * 200 * t))
+                x = np.stack([sharp, 0.8 * sharp], axis=1) * 0.3  # loudest at sample 0: the fade cuts its attack
+                y, info = run("trim", x, rate, {**CTX, "binding": "F-01"})
+                before, after = info["attack_share"]
+                self.assertLess(after, ops.FADE_IN_KEEP_SHARE * before)
+                self.assertTrue(info["edge_faded"])  # still faded
+                self.assertEqual(float(np.max(np.abs(y[0]))), 0.0)
+                self.assertAlmostEqual(info["edge_fade_attack_loss"], 1 - after / before, delta=1e-3)
+                q = fx.make_real("quiet_hit", rate)  # a -5 dB first sample on a slower attack: under 10 % lost
+                y, info = run("trim", q, rate, {**CTX, "binding": "F-01"})
+                self.assertTrue(info["edge_faded"])
+                self.assertGreaterEqual(info["attack_share"][1], ops.FADE_IN_KEEP_SHARE * info["attack_share"][0])
+                self.assertNotIn("edge_fade_attack_loss", info)
+
+    def test_saturate_logs_the_body_residual_apart_from_the_transient(self):
+        """R2-4 (re-review): relative-to-peak drive saturates a transient hard and the body hardly; the whole-file
+        residual hid that (thump-3.t2: -8.3 dB whole, -47.7 dB body)."""
+        for rate in fx.RATES:
+            with self.subTest(rate=rate):
+                t = np.arange(int(0.4 * rate)) / rate
+                body = 0.05 * np.sin(2 * np.pi * 220 * t)
+                x = np.stack([body, body], axis=1)
+                at, k = int(0.1 * rate), int(0.004 * rate)  # a 4 ms hot burst: the peak, ten times the body
+                burst = 0.5 * np.exp(-np.arange(k) / (0.001 * rate)) * np.sign(np.sin(np.arange(k) * 0.9) + 1e-9)
+                x[at:at + k] += burst[:, None]
+                y, info = run("saturate", x, rate, drive_db=12)
+                self.assertGreater(info["residual_db"], -20)  # the burst saturated hard ...
+                self.assertLess(info["residual_body_db"], info["residual_db"] - 15)  # the body barely saturated
+                steady = tone(rate, 400, 220, 0.5, 2)
+                y, info = run("saturate", steady, rate, drive_db=12)
+                self.assertAlmostEqual(info["residual_body_db"], info["residual_db"], delta=1.0)
+
     def test_trim_leaves_a_silent_start_alone(self):
         x = fx.make("late_hit", 44100, 2)
         y, info = run("trim", x, 44100)

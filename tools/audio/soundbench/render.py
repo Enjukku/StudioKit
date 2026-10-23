@@ -146,12 +146,13 @@ def family_members(card: dict, cue_dir: Path) -> dict | None:
     """Check the family is declared the same way by every member before anything renders (F2, repair round 2).
 
     Refused (exit 2) unless every sibling's card.json exists and declares the same family id, the same paid_reveal
-    and the same member set, and unless every card in the neighbouring cue folders that lists this cue as a family
-    member is itself in that set. A cue whose own card declares no family is refused when another card lists it (a
+    and the same member set, unless every card in the neighbouring cue folders that lists this cue as a family
+    member is itself in that set, and unless every neighbouring card that declares the same family id is in that set
+    (two pairs sharing one id would otherwise each pass on their own, R2-1). A cue whose own card declares no family is refused when another card lists it (a
     one-sided family could bypass D-03). None when the cue is in no family."""
     cue = card["cue"]
     fam = card.get("family")
-    listing = {}
+    listing, same_id = {}, set()
     for other in sorted(cue_dir.parent.iterdir()):
         cpath = other / "card.json"
         if other.name == cue or not cpath.is_file():
@@ -163,6 +164,8 @@ def family_members(card: dict, cue_dir: Path) -> dict | None:
         of = oc.get("family")
         if of and cue in of["siblings"]:
             listing[other.name] = of["id"]
+        if of and fam and of["id"] == fam["id"]:
+            same_id.add(other.name)
     if fam is None:
         if listing:
             raise SoundbenchError(f"{sorted(listing)} list {cue} as a family member, but {cue}'s card declares no family: "
@@ -186,6 +189,11 @@ def family_members(card: dict, cue_dir: Path) -> dict | None:
         if problems:
             raise SoundbenchError(f"family {fam['id']!r}: sibling {sib} declares {', '.join(problems)}; this card declares "
                                   f"id {fam['id']!r}, paid_reveal {fam['paid_reveal']}, members {sorted(members)}: refused")
+    outside = sorted(same_id - members)
+    if outside:
+        raise SoundbenchError(f"{outside} declare the same family id {fam['id']!r} but are not in this card's member set "
+                              f"{sorted(members)}: every card of one family declares one member set (D-03 must see "
+                              "every member), refused")
     strangers = sorted(n for n in listing if n not in members)
     if strangers:
         raise SoundbenchError(f"{strangers} list {cue} in a family but are not members of {fam['id']!r}: refused")

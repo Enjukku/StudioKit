@@ -301,6 +301,33 @@ class RenderTest(unittest.TestCase):
         with self.assertRaisesRegex(SoundbenchError, "not members"):
             render.render(cues["SFX-Q1"])
 
+    def test_two_pairs_sharing_one_family_id_are_refused(self):
+        """R2-1 (re-review): four cards declare family 'egg'; COMMON/RARE list only each other, EPIC/LEGEND only each
+        other and run 5 dB hotter. Each pair was consistent, so both passed and the true 5 LU spread went unseen.
+        Every render must refuse (exit 2) until the four cards declare one member set; then D-03 sees all four."""
+        chime = fx.make("wrong_chime", 44100, 2) * 0.3
+        pairs = {"SFX-EGG-COMMON": (["SFX-EGG-RARE"], -20.0), "SFX-EGG-RARE": (["SFX-EGG-COMMON"], -20.0),
+                 "SFX-EGG-EPIC": (["SFX-EGG-LEGEND"], -15.0), "SFX-EGG-LEGEND": (["SFX-EGG-EPIC"], -15.0)}
+        cues = self._members(self.d, {n: ({"id": "egg", "paid_reveal": True, "siblings": sibs}, chime, target)
+                                      for n, (sibs, target) in pairs.items()})
+        for name, cue in cues.items():
+            with self.subTest(cue=name):
+                with self.assertRaisesRegex(SoundbenchError, "same family id"):
+                    render.render(cue)
+                self.assertFalse((cue / "out").exists())
+        self.assertFalse((self.d / "egg.family.json").exists())
+        everyone = sorted(pairs)
+        for name, cue in cues.items():  # one member set: now the whole family is checked
+            card = json.loads((cue / "card.json").read_text(encoding="utf-8"))
+            card["family"]["siblings"] = [n for n in everyone if n != name]
+            (cue / "card.json").write_text(json.dumps(card), encoding="utf-8")
+        codes = [render.render(cues[n])[1] for n in everyone]
+        doc, code = render.render(cues["SFX-EGG-COMMON"])
+        self.assertEqual((doc["family"]["result"], code), ("fail", 1))
+        self.assertEqual(doc["family"]["members"], everyone)
+        self.assertGreater(doc["family"]["spread_lu"], 1.0)
+        self.assertNotIn(0, codes)  # no member passed while the hotter pair was in the family
+
     def test_a_malformed_card_is_exit_2_with_the_reason(self):
         """F6: "targets" as a list crashed with AttributeError and exit 1 (= a must-target failed)."""
         c, r = named(CARD, RECIPE, "SFX-T-BAD")
