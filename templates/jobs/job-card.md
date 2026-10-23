@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer) -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots) -->
 
 # Job card: <job-id> <title>
 
@@ -26,6 +26,7 @@ supersedes: []
 | Studio place (`studio_id`) | <the test place the Studio driver uses; none = Blender or files only> |
 | Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect at the interfaces step |
 | Linked jobs | <job-id: which shared interface it owns (saved fields, ids, who grants, who checks)>; none = a single job |
+| Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): money, saves, remotes, trades, paid random items, a server-confirmed result, rewards, a frequent effect, a danger area, a sold variant, a new enemy with behaviour, a shop, odds or progress screen; none = "none" |
 | Status | proposed |
 
 ## Goal and feeling
