@@ -87,9 +87,9 @@ if (lacking.length) {
 
 // ---------------------------------------------------------------- roles (model and effort from .agents/roles/README.md)
 const ROLE = {
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
-  rig: { type: 'character-rigger', model: 'opus', effort: 'high' },
+  rig: { type: 'character-rigger', model: 'opus', effort: 'medium' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },
   vfx: { type: 'vfx-designer', model: 'opus', effort: 'high' },
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
@@ -99,7 +99,7 @@ const ROLE = {
   arch: { type: 'architect', model: 'opus', effort: 'high' },
   // Wiring touches remotes (and, for a variant, ownership saves): the reviewer runs high (roles README).
   code: { type: 'reviewer', model: 'opus', effort: 'high' },
-  anim: { type: 'animator', model: 'opus', effort: 'high' },
+  anim: { type: 'animator', model: 'opus', effort: 'medium' },
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
   live: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }

@@ -2,7 +2,7 @@
 name: explore
 description: Fast read-only scout - finds files, code, call paths, tests, decisions and knowledge notes for one bounded question, and returns paths with line numbers. Use instead of reading many files yourself. Never edits, never judges; if the question needs judgment, it says so and stops.
 tier: mechanical
-effort: low
+effort: medium
 tools: Read, Glob, Grep, Bash
 color: yellow
 memory: none

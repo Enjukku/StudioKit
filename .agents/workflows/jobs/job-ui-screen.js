@@ -80,7 +80,7 @@ const ROLE = {
   ui: { type: 'ui-ux-designer', model: 'opus', effort: SHOP || NEW_LOOK ? 'high' : 'medium' },   // high for a new look or a shop
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
   prog: { type: 'progression-designer', model: 'opus', effort: 'high' },
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
   build: { type: 'feature-builder', model: 'opus', effort: SHOP || PAID ? 'high' : 'medium' },            // high for money, saves, remotes
   arch: { type: 'architect', model: 'opus', effort: 'high' },                                     // writes the code file owners (lead decision LD10)
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },

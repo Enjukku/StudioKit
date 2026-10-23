@@ -67,8 +67,8 @@ if (lacking.length) {
 
 // ---------------------------------------------------------------- roles (model and effort from .agents/roles/README.md)
 const ROLE = {
-  film: { type: 'film-director', model: 'opus', effort: 'high' },
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
+  film: { type: 'film-director', model: 'opus', effort: 'medium' },
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
   arch: { type: 'architect', model: 'opus', effort: 'high' },
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
   env: { type: 'environment-designer', model: 'opus', effort: 'high' },
@@ -80,8 +80,8 @@ const ROLE = {
   qa: { type: 'qa-lead', model: 'opus', effort: 'medium' },
   perf: { type: 'performance-engineer', model: 'opus', effort: 'high' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },
-  rig: { type: 'character-rigger', model: 'opus', effort: 'high' },
-  anim: { type: 'animator', model: 'opus', effort: 'high' },
+  rig: { type: 'character-rigger', model: 'opus', effort: 'medium' },
+  anim: { type: 'animator', model: 'opus', effort: 'medium' },
   liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
 }

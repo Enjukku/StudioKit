@@ -64,7 +64,7 @@ if (lacking.length) {
 const ROLE = {
   env: { type: 'environment-designer', model: 'opus', effort: 'high' },
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
   perf: { type: 'performance-engineer', model: 'opus', effort: 'high' },
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },

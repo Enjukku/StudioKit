@@ -86,8 +86,8 @@ const ROLE = {
   ui: { type: 'ui-ux-designer', model: 'opus', effort: 'medium' },
   vfx: { type: 'vfx-designer', model: 'opus', effort: 'high' },
   sound: { type: 'sound-designer', model: 'opus', effort: 'medium' },
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
-  anim: { type: 'animator', model: 'opus', effort: 'high' },             // consulted only: timings and markers, no clips in this job
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
+  anim: { type: 'animator', model: 'opus', effort: 'medium' },             // consulted only: timings and markers, no clips in this job
   liveops: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },   // risk event: the event review before G3
 }
 

@@ -99,13 +99,13 @@ const FAMILY_DIR = PIECE === 'icon' ? 'content/art/refs/game-icon/' : 'content/a
 const ROLE = {
   mkt: { type: 'marketing', model: 'opus', effort: LAUNCH ? 'high' : 'medium' },
   design: { type: 'game-designer', model: 'opus', effort: 'high' },
-  art: { type: 'art-director', model: 'opus', effort: 'high' },
+  art: { type: 'art-director', model: 'opus', effort: 'medium' },
   trend: { type: 'trend-scout', model: 'sonnet', effort: 'medium' },
   // Staged Blender renders with the game's real models and set (image-pipeline "Final assets", route c, owner J012-D7).
   env: { type: 'environment-designer', model: 'opus', effort: 'high' },
   model: { type: 'modeler', model: 'opus', effort: 'high' },
   // Recipe §7 direction leads: consulted when a character is the hero (the signature move's key pose at the still's camera).
-  anim: { type: 'animator', model: 'opus', effort: 'high' },
+  anim: { type: 'animator', model: 'opus', effort: 'medium' },
   // Risk event (README args table): reviews the finished images before G3.
   live: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
