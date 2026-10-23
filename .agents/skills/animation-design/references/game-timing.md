@@ -75,7 +75,7 @@ Join at concept time: the animator says what is feasible, or that more is possib
 
 ## 8. Reduced motion and every player
 - A tell, a contact and an outcome read from the pose and the silhouette alone, with effects hidden, sound off and colour removed. Effects, colour and sound add to the read; they never carry it alone.
-- Reduced motion (the player's Roblox setting) removes camera-driven motion, shake and flashes, never the tell pose or the contact; if a clip leans on camera motion for its read, it fails.
+- Reduced motion (the player's Roblox setting) removes camera-driven motion, and through the Flashes and Shake defaults also shake and flashes (`architecture/references/presentation-contract.md` §4), never the tell pose or the contact; if a clip leans on camera motion for its read, it fails.
 - Nothing in a clip pulses or flickers faster than 3 times per second; a looping bob or pulse on a pickup or hazard follows its meaning: slow is safe, fast is urgent.
 
 ## 9. Paid random reveals

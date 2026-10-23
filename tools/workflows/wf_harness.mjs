@@ -11,7 +11,7 @@
 //   conflicts             the first interface round has a conflict
 //   affected              array: the repair scope's affected roles
 //   timing                fix and scope steps report timing_changed true
-//   images                'pending': every image step returns images.state pending
+//   images                'pending': every image step returns images.state pending; imagesLabel (regex): only the matching ones
 //   lesson                every hand-back carries the optional lesson draft
 //   set                   {key: value}: override that hand-back key on every agent that returns it (e.g. {no_visible_parts: true})
 //   nullLabel             regex: matching agent() calls return null (the subagent died or was skipped)
@@ -97,7 +97,7 @@ function fake(sch, label) {
   if ('new_cast_needed' in out) out.new_cast_needed = !!scenario.newCast
   if ('timing_changed' in out) out.timing_changed = !!scenario.timing
   if ('conflicts' in out && scenario.conflicts && /-r1-/.test(label)) out.conflicts = [{ about: 'B1', why: 'w', needs: 'n' }]
-  if (out.images && scenario.images) out.images.state = scenario.images
+  if (out.images && scenario.images && (!scenario.imagesLabel || new RegExp(scenario.imagesLabel).test(label))) out.images.state = scenario.images
   if (scenario.lesson && sch.properties && sch.properties.lesson) {
     out.lesson = fakeValue(sch.properties.lesson, 'lesson')
     out.lesson.type = scenario.lesson === 'none' ? 'none' : 'failure'   // 'none' = nothing to keep, the workflow skips it

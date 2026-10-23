@@ -303,8 +303,11 @@ class JobWorkflowTests(unittest.TestCase):
                 self.assertGreaterEqual(index(out["labels"], maker), 0)
                 self.assertEqual(index(out["labels"], later), -1, "nothing is built or reviewed on unapproved images")
                 self.assertTrue(out["result"]["images_pending"])
-        kit = run("job-stage.js", full("job-stage.js", stage="build"), {"images": "pending", "set": {"kit_piece_ids": ["rock-a"]}})
+        # only the kit model sheet is pending, so the run reaches the kit path (the paint-over check would stop it first)
+        kit = run("job-stage.js", full("job-stage.js", stage="build"), {"images": "pending", "imagesLabel": r"B2-kit-", "set": {"kit_piece_ids": ["rock-a"]}})
         self.assertEqual(kit["status"], "blocked", kit["outcome"])
+        self.assertIn("Kit pieces", kit["outcome"])
+        self.assertGreaterEqual(index(kit["labels"], r"B2-kit-rock-a"), 0)
         self.assertEqual(index(kit["labels"], r"B3-light"), -1)
 
     # ------------------------------------------------------------------ cutscene: the pilot (auditor B F1-F13, auditor E TT-03, TT-04, TT-12)

@@ -291,6 +291,14 @@ class FeatureWorkflowTests(unittest.TestCase):
         low = feat("build", {"dump": r"reviewer: RV-"}, risks=[], money=False)
         self.assertTrue(all("effort: medium" in d["prompt"] for d in low["dumps"]))
 
+    # ------------------------------------------------------------------ J019 follow-up: a wide repair never starts more than 5 agents at once
+    def test_a_repair_touching_many_crafts_stays_at_five_agents(self):
+        roles = ["progression-designer", "architect", "qa-lead", "animator", "ui-ux-designer", "vfx-designer", "sound-designer", "game-designer", "feature-builder"]
+        out = feat("repair", {"affected": roles}, risks=[])
+        self.assertDone(out)
+        self.assertLessEqual(out["maxConcurrent"], 5)
+        self.assertFalse(out.get("violation"))
+
 
 if __name__ == "__main__":
     unittest.main()

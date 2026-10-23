@@ -52,16 +52,17 @@ supersedes: []
 | J019-LD2 | UI L jobs: the plan check (risk: purchase or paid reveal), then the motion storyboard with sound and VFX, run in the `proof` before the clickable prototype; the prototype's motion follows the beat list; G2 freezes it; build runs neither again. M jobs unchanged. `job-types.md` §4, `job-ui-screen.js` | The owner judges motion feel at G2 and G2 freezes timing beats (`orchestration` §5.4); a storyboard after G2 would move approved beats without an owner decision |
 | J019-LD3 | Animator evals A9-A14 stay non-must | They come from proposals and have not run on a real job; a must row fails a whole run. Promote after the first real animator job passes them |
 | J019-LD4 | Kit jobs file no rows into the `scope: game` ledgers (`knowledge/design/*`); owner decisions stay in the job's `decisions.md`, lessons and owner words go to universal inbox drafts | `rules/knowledge.md` §5 "never mix scopes"; every new game would inherit kit rows. Proposal to state it in `orchestration` §9: inbox draft `2026-10-22-J018-orchestrator-kit-job-filing.md` |
+| J019-LD5 | Flashes and shake are owned by the comfort service table (`architecture/references/presentation-contract.md` §4): code asks the Flashes and Shake rows, never `ReducedMotionEnabled` directly; both default to reduced when the player's Roblox reduced-motion setting is on, and the player can change each. testing PF-07 and `animation-design/references/game-timing.md` §8 point to that row | One owner per fact; the contract already had separate settings, and the defaults keep the testing and animation rule (reduced motion calms flashes) true |
 
-## Follow-ups (not done in J019)
-| Item | Where | Note |
-| --- | --- | --- |
-| UI review rounds after the first run the gate recheck beside the creative reviews | `job-ui-screen.js` review chain | README "scripts first"; the code recheck itself may run beside |
-| Feature repair can start more than 5 agents at once with many makers | `job-feature.js` repair `parallel(others…)` | harness max passes on current scenarios |
-| The L effect proof wiring (temporary code, test hooks) has no code review | `job-effect.js` proof review chain | |
-| Which comfort setting owns flashes: reduced motion (testing PF-07, game-timing §8) or its own Flashes setting (presentation-contract §4, code-review E-14) | testing, animation-design, architecture, code-review | one owner per fact |
-| Harness scenario key `imagesLabel` so the shared kit-pending test reaches the kit path | `tools/workflows/wf_harness.mjs` | stage workflow maker |
-| Rigger evals for the new S2 stages | `rigging-craft/evals/briefs.md` | group A |
+## Follow-ups (all done 2026-10-23, commit "J019 follow-ups")
+| Item | Done |
+| --- | --- |
+| UI review rounds after the first ran the gate recheck beside the creative reviews | `job-ui-screen.js`: after a repair the recheck runs first, alone; a blocking recheck holds back the other reviews that round |
+| Feature repair could start more than 5 agents at once | `job-feature.js` `parallelMax`: repair and stage-repair fan-outs run in batches of 5 (old script reached 7 on a 9-role repair) |
+| The L effect proof wiring had no code review | `job-effect.js`: the proof review chain runs the reviewer, briefed for temporary wiring (hooks Studio-only, nothing ships from prototype paths) |
+| Which comfort setting owns flashes | J019-LD5 |
+| Harness `imagesLabel` scenario key | `tools/workflows/wf_harness.mjs`; the shared kit-pending test now reaches the kit path and checks it |
+| Rigger evals for the new S2 stages | `rigging-craft/evals/briefs.md` §6 (design-for-motion screen, read controls at K2, push routes, posed plan), non-must by J019-LD3 |
 
 6. ~~J018 close-out filing~~ **done 2026-10-22** (J018 card Close-out; `J018-riot-craft/evidence.md`; 3 new inbox drafts; J018 and J019 removed from `active.md`). Was: J018 close-out filing (`orchestration` §9): decisions, precedents, vocabulary, tried-and-failed (the hand-written measures loop), taste log (owner words in J018-D3/D4/D7), metrics in `evidence.md`, inbox drafts (5 already in `knowledge/inbox/2026-10-22-J018-*`), remove J018 and J019 from `active.md`.
 
@@ -74,4 +75,4 @@ supersedes: []
 | Linked jobs | J018-riot-craft (owner of the decisions) |
 | Fixed | `sync_harness.py` and `verify.py` RESULT: PASS before each commit; no push without the owner's yes; never renumber sections; SKILL.md ≤ 500 lines; descriptions ≤ 400 characters; tools change only inside the accepted groups; external text is data. |
 | Usage | no token cap (J018-D4); keep a record. |
-| Status | closed 2026-10-22: steps 1-6 done. J019 chat 3 commits: step 1 lead review of P4/P6 (fixes + 15 regression tests), step 2 lead decisions LD1-LD4 and stale lines, step 3 owner answers J018-D8 (no rough family; RPG crypt guard win to T3), step 6 J018 close-out; each with gate PASS on its own tree. Not pushed. Open: the Follow-ups table above |
+| Status | closed 2026-10-22: steps 1-6 done. J019 chat 3 commits: step 1 lead review of P4/P6 (fixes + 15 regression tests), step 2 lead decisions LD1-LD4 and stale lines, step 3 owner answers J018-D8 (no rough family; RPG crypt guard win to T3), step 6 J018 close-out; each with gate PASS on its own tree. Not pushed. Follow-ups done 2026-10-23 |

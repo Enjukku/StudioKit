@@ -252,6 +252,13 @@ class EffectWorkflowTests(unittest.TestCase):
                 self.assertIn(words, lines)
         self.assertEqual(fx("build")["result"]["could_not_check"], [], "clean checks leave the list empty")
 
+    # ------------------------------------------------------------------ J019 follow-up: the L proof wiring gets the code review
+    def test_the_proof_wiring_gets_the_code_review(self):
+        out = run(NAME, full(NAME, stage="proof", size="L", risks=[]), {"dump": r"reviewer: RV-proof-r0-reviewer"})
+        self.assertEqual(out["status"], "done", out["outcome"])
+        self.assertGreaterEqual(index(out["labels"], r"reviewer: RV-proof-r0-reviewer"), 0)
+        self.assertIn("temporary wiring", out["dumps"][0]["prompt"])
+
 
 if __name__ == "__main__":
     unittest.main()

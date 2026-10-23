@@ -819,26 +819,37 @@ async function reviewChain(label) {
       rules: ['Light checks: numbers for every case; images only for a failing number plus a few key frames (owner J005-D8).', LAYER_RULE]
         .concat(studio ? [] : ['Judge the captures; do not open Studio. A missing capture is a finding for the feature-builder.']),
     }, S_REVIEW, 'Review chain')
+    // After a repair round the gate and the code recheck run first, alone: a FAIL holds back the other reviews (README: scripts first).
+    let recheck = null
+    if (round > 0) {
+      recheck = keep(`RV ${tag} ${RECHECK.r.type}`, await reviewOne(RECHECK, false))
+      if (missing([recheck]).length) return { status: recheck ? recheck.status : 'failed', outcome: `review round ${round}: the gate and code recheck returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
+    }
+    const recheckFail = !!recheck && recheck.findings.some(f => f.class === 'blocking')
     // Technical checks run one after the other (Studio has one writer), beside the creative order ui-ux → art → game-designer, which judges captures only.
-    const tech = round === 0 ? [QA] : [RECHECK, QA]
-    const techP = (async () => { const out = []; for (const o of tech) out.push(await reviewOne(o, o.r === ROLE.qa)); return out })()
+    const tech = [QA]
     const crea = []
-    for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o, false)))
-    const techR = await techP
-    techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
-    const all = crea.concat(techR)
+    let techR = []
+    if (!recheckFail) {
+      const techP = (async () => { const out = []; for (const o of tech) out.push(await reviewOne(o, true)); return out })()
+      for (const o of creative) crea.push(keep(`RV ${tag} ${o.r.type}`, await reviewOne(o, false)))
+      techR = await techP
+      techR.forEach((x, i) => keep(`RV ${tag} ${tech[i].r.type}`, x))
+    }
+    const ran = (recheck ? [RECHECK] : []).concat(recheckFail ? [] : creative.concat(tech))   // the slots that ran, in the order of `all`
+    const all = (recheck ? [recheck] : []).concat(crea, techR)
     if (missing(all).length) return { status: 'failed', outcome: `review round ${round}: a review returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage` }
     const blocking = all.flatMap(x => x.findings.filter(f => f.class === 'blocking'))
     const requests = all.flatMap(x => x.findings.filter(f => f.class === 'new request'))
     if (!blocking.length) {
-      const cnc = all.flatMap((x, i) => (x.could_not_check || []).map(c => `${creative.concat(tech)[i].r.type}: ${c}`))
+      const cnc = all.flatMap((x, i) => (x.could_not_check || []).map(c => `${ran[i].r.type}: ${c}`))
       return { status: 'done', outcome: `Review chain clean on round ${round}. The lead runs readiness and the G3 packet with the could-not-check list and the owner-confirmed lines (motion feel at normal speed; two listens for UI sound).`, new_requests: requests, reviews: all.map(x => x.files).flat(),
         g3: { owner_confirmed: OWNER_LINES, could_not_check: cnc } }
     }
     if (round === 2) {
       return { status: 'needs-decision', outcome: 'Blocking findings remain after 2 repair rounds: diagnose the brief, tool, standard or approach (rules/company.md §7).', blocking }
     }
-    const fixed = await fixFindings(blocking, tag, round, FIXERS, 'chain', creative.concat(tech).map(o => `${DIR}/reviews/${tag}-${o.r.type}.md`))
+    const fixed = await fixFindings(blocking, tag, round, FIXERS, 'chain', ran.map(o => `${DIR}/reviews/${tag}-${o.r.type}.md`))
     if (fixed) return fixed
     const recap = await captureCandidate(`${tag}-fix`)
     if (!ok(recap)) return { status: 'failed', outcome: `${tag}: the repaired candidate was not recaptured; reviews need fresh captures` }

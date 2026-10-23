@@ -50,11 +50,11 @@ One client module, read-only for everyone else:
 | Setting | Source | Effect |
 | --- | --- | --- |
 | Reduced motion | `GuiService.ReducedMotionEnabled` (read-only, not replicated: `_api-reference/classes/GuiService.yaml:262-277`) | tweens snap (time 0) or fade (`production/publishing/accessibility.md:186-188`); camera-driven motion off; poses and tells unchanged |
-| Shake | the game's setting (off, low, full) | shake strength; off removes it; the weight stays in pose, timing and sound |
-| Flashes | the game's setting | a flash or blink becomes a steady shape or glow with a fill countdown |
+| Shake | the game's setting (off, low, full); default off when reduced motion is on | shake strength; off removes it; the weight stays in pose, timing and sound |
+| Flashes | the game's setting; default reduced when reduced motion is on | a flash or blink becomes a steady shape or glow with a fill countdown |
 | Screen effects | the game's setting | full-screen tints, vignettes and FOV punches removed |
 | Effect clarity | the game's setting (all, reduced, essential) | tones other players' non-threat effects; never hides a threat, a pickup or the player's own outcome |
-Rules: settings change only the local screen; they never replicate and never change gameplay; every reduced variant keeps footprint, contact, outcome, threats and pickups. Whether `ReducedMotionEnabled` signals a change while the game runs is not in the docs: probe in Studio before relying on a live update; otherwise read it when a screen or effect starts.
+Rules: this table is the one owner of which setting removes what (J019): effect and UI code ask the Flashes and Shake rows, never `ReducedMotionEnabled` directly; the defaults above make a player's Roblox reduced-motion setting also calm flashes and shake, and the player can change each. Settings change only the local screen; they never replicate and never change gameplay; every reduced variant keeps footprint, contact, outcome, threats and pickups. Whether `ReducedMotionEnabled` signals a change while the game runs is not in the docs: probe in Studio before relying on a live update; otherwise read it when a screen or effect starts.
 
 ## 5. Engine facts the contract leans on (checked in the docs mirror)
 | Fact | Docs | Use |

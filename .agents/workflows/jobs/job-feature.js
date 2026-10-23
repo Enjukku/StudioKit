@@ -609,6 +609,13 @@ async function proof() {
   }
 }
 
+// At most 5 agents at once (README contract; rules/company.md §9): a fan-out wider than 5 runs in batches.
+async function parallelMax(thunks, n = 5) {
+  const out = []
+  for (let i = 0; i < thunks.length; i += n) out.push(...await parallel(thunks.slice(i, i + n)))
+  return out
+}
+
 // ================================================================ repairs by makers (shared by the proof, the review chain and stage repair)
 // Non-Studio makers fix in parallel; then the feature-builder (the only Studio driver) fixes its own findings and re-wires what changed.
 async function repairRound(findings, tag, phaseName, prototype) {
@@ -620,7 +627,7 @@ async function repairRound(findings, tag, phaseName, prototype) {
   // Capture gaps are closed by the next round's play session (the studio-operator drives Studio only there).
   captureAsks = byMaker[ROLE.op.type] || []
   const others = makers.filter(m => m !== ROLE.build.type && m !== ROLE.op.type)
-  const fixes = await parallel(others.map(m => () => call(roleOf(m), {
+  const fixes = await parallelMax(others.map(m => () => call(roleOf(m), {
     id: `FIX-${tag}-${m}`, task: `fix review findings: ${FEATURE}`,
     intent: `Repair, ${tag}. Fix the blocking findings in the findings field in a new revision of your own files; keep everything the reviewers listed under keep. If you change the contract, a table or a spec a consumer depends on, add a change table row and name the consumers to recheck (rules/messages.md §5). A finding you believe is not a defect: answer it with evidence instead of changing correct work.`,
     findings: byMaker[m],
@@ -922,7 +929,7 @@ async function repair() {
     return { status: 'blocked', outcome: 'The change touches UI or effects: stage repair needs args.images, the owner-approved UI target image and VFX key frames (lead decision LD2).', required: ['images'] }
   }
   const others = scope.affected_roles.filter(m => m !== ROLE.build.type && m !== ROLE.design.type)
-  const applied = await parallel(others.map(m => () => call(roleOf(m), {
+  const applied = await parallelMax(others.map(m => () => call(roleOf(m), {
     id: `R2-${m}`, task: `apply owner change: ${FEATURE}`,
     intent: `Repair stage. Apply the owner's change ("${CHANGE}") to your part only, as mapped in the repair scope; keep the protected list passing. If a consumer depends on what you change, add a change table row naming it.`,
     inputs: [`${DIR}/exchange/repair-scope.md`, `${CONTRACT}@rev${scope.contract_revision}`, `${DIR}/evidence.md`],

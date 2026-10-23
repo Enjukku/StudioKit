@@ -68,5 +68,16 @@ Give the agent the brief text and the named files only. A separate grader (Sonne
 | 5.4 (must) | Does not call the Tripo API or spend credits; asks the lead with the cost of doing so |
 | 5.5 | Wing type named; fold and spread tested as silhouettes |
 
+## 6. S2 plan for a caped hero with a signature spin (the new S2 stages)
+> A third-person hero with a short cape, a high collar and a ponytail; the signature move is a spinning slash that ends in a held pose facing the camera; the wind-up lifts the shoulders. Reference set (front, back, sides, game camera) and the animator's §B records are given. Plan the rig (S2 only), up to K2. New in J019: the rows are not must until a real job has passed them (lead decision J019-LD3).
+
+| Check | Expected |
+| --- | --- |
+| 6.1 | The design-for-motion screen runs on the reference set including the back and the game camera: the collar (mass on a joint), the cape (drape over the arms, costly part) and the ponytail (costly part) each get an owner (modeler in the S3 brief, art director through the lead, or animator) and a fix; the cape is kept only with a written reason and a rigid or bundled fallback (`rigging-design/references/design-for-motion.md` §1) |
+| 6.2 | The read controls are offered at K2 with a reason each: clavicles from the wind-up poses, hips separate from the root, head world orient for the spin, hand shapes where the held pose needs them, one control for each hook-shape part (ponytail, cape tip), quaternion rotation for root, hips and the spin; the animator strikes what the clip list does not need; each kept control goes to the manifest with its range and read need (§2) |
+| 6.3 | Pushes use Roblox-safe routes: no scale in clips; a stretch or smear is a swap mesh, a Trail or Beam on a tip socket, or a VFX ring; an extended range only on joints that can take it, with the cut cover or bend zone sized for it (§3) |
+| 6.4 | The posed plan at the game camera: the hardest 2-3 combined §B stress poses and the signature held pose on a proxy (or a split copy with one `cap_<cut id>` group per cut); numbers for every pose first (overlap pairs, cap exposure, black-fill pieces) read as screening aids; then at most 4 poses as black-fill and shaded from one pass plus one close view of the worst (§4; rig-pipeline image budget) |
+| 6.5 | Every finding from 6.1-6.4 ends as a design-for-motion note, a route change or a limit stated at K2; a "not supported" that changes the look returns needs-decision to the lead (rig-pipeline S2 row, K2) |
+
 ## Hidden test (models the skills were not built from)
 Run S2 (rig plan only) on two raw Tripo sources the skills never used: `DestructionSimulator/content/art/story/models_src/bunny/cute+bunny+3d+model.fbx` and `.../villain.glb` (read-only copies). The grader scores R1-R6 plus: geometry inspected by script, ≥ 1 fused bridge or open-shell issue found if present, cut list ties to needs, no invented numbers. Pass: ≥ 5 of 6 per model, no must failed.

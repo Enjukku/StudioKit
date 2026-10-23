@@ -627,7 +627,8 @@ async function proof() {
   if (!ok(cap)) return { status: 'failed', outcome: 'no proof capture; reviews need it' }
   // Recipe §6 production order: the owner checks in on the first playable (blocking pass with temp sound); a workflow cannot pause, so it is an owner-confirmed line.
   results.owner_confirmed.push(`first playable: the blocking pass with temp sound on the blocking markers (${CAPS}proof-r*/), owner check-in at ${SIZE === 'L' ? 'G2' : 'G3 (M: the proof ran inside build)'}`)
-  const rv = await reviewChain('proof', 'proof', false)
+  // The proof wiring is code (temporary wiring and the test hooks): it gets the reviewer too (README: every candidate with code).
+  const rv = await reviewChain('proof', 'proof', true)
   return Object.assign(rv, { timeline: tl(rev) })
 }
 
@@ -772,7 +773,7 @@ async function reviewChain(label, pass, withCode) {
       inputs: (lastWire && lastWire.files && lastWire.files.length ? lastWire.files : ['the files in the latest wiring change manifest']).concat([`${VFX}spec.json`, SETUP]),
       owns: [`${DIR}/reviews/${tag}-reviewer.md`], deliver: `${DIR}/reviews/${tag}-reviewer.md (templates/jobs/review.md)`,
       checks: ['every finding has file:line, the input or sequence, and the wrong outcome for players', 'a clean review says so plainly'],
-      rules: ['If the wiring adds a client-callable request, load networking-security.', TRUTH_RULE],
+      rules: ['If the wiring adds a client-callable request, load networking-security.', TRUTH_RULE].concat(proofPass ? ["This is the proof's temporary wiring: check that the test hooks run in Studio only, that nothing in the prototype paths can ship, and the harm order above; no polish or structure findings for code the build replaces."] : []),
     }, S_REVIEW, 'Review chain') : Promise.resolve(null)
     // The qa-lead's protected acceptance runs beside the creative order (the creative reviewers stay out of Studio).
     const qaP = QA ? call(ROLE.qa, {

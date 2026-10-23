@@ -280,6 +280,18 @@ class UiScreenRecipeTests(unittest.TestCase):
         self.assertEqual(index(out["labels"], r"B0-plan-check"), -1, "the plan check ran in the proof")
         self.assertIn("the beat list the owner approved at G2", out["dumps"][0]["prompt"])
 
+    # ------------------------------------------------------------------ J019 follow-up: after a repair the gate recheck runs first, alone
+    def test_after_a_repair_the_gate_recheck_runs_before_the_other_reviews(self):
+        out = run(UI, ui(stage="build"), {"blockLabelOnce": r"art-director: RV-candidate-r0", "maker": "ui-ux-designer"})
+        self.assertEqual(out["status"], "done", out["outcome"])
+        labels = out["labels"]
+        recheck = index(labels, r"reviewer: RV-candidate-r1-reviewer")
+        self.assertGreaterEqual(recheck, 0)
+        self.assertLess(recheck, index(labels, r"qa-lead: RV-candidate-r1-"))
+        self.assertLess(recheck, index(labels, r"ui-ux-designer: RV-candidate-r1-"))
+        held = run(UI, ui(stage="build"), {"blockLabel": r"art-director: RV-candidate-r0|reviewer: RV-candidate-r1-reviewer", "maker": "ui-ux-designer"})
+        self.assertEqual(index(held["labels"], r"ui-ux-designer: RV-candidate-r1-"), -1, "a failing recheck holds back the other reviews that round")
+
 
 if __name__ == "__main__":
     unittest.main()
