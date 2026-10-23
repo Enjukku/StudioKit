@@ -33,3 +33,6 @@ not linear in gain on quiet takes (-70 LUFS absolute gate): any formula "gain = 
 rounds with every level measure the card can name, not only F-09. (3) A ranker that judges only the "fix every miss"
 plan can turn a must-passing take into a regenerate (aim fixes + loudness/peak); always compare against "no steps".
 (4) A refused fix that keeps raw counts in a sort key can outrank a passing entry: check the key has a "passes" term.
+Rank round 2 (2026-10-23): a "do nothing" plan added as a fix candidate must pass the export's own refusals (a
+master over full scale cannot be written at 24-bit); proof-render every take's kept plan, not just the top. A clip
+or level reading that is a total time (ms over a threshold) grows with take length: calibrate on long takes too.

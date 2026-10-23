@@ -91,3 +91,50 @@ verdict: fix-first
 - **"Near":** inside the target and close to a limit, as the builder made it (keep list).
 - **D-03:** rank cannot weaken render's checks (keep list).
 - **render refactor:** behaviour unchanged. The clicks change alters render's edge reading only for files with DC at an edge, in the correct direction (keep list).
+
+## Round 2 (99f3782)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-23
+
+Frozen revision 99f3782. The working tree under `tools/audio` equals it. The 58 rank and measures tests pass. All runs used copies of the real takes in the session scratchpad (`rv/`): e1-e4 rerun; e2 rerun with F-09, F-13a and LUFS-I cards; e5 proof-renders every take's kept plan, not only the top take; e6 and e7 are new.
+
+```text
+<spec>
+artifact: tools/audio/soundbench/rank.py@99f3782
+reviewer: reviewer
+looked_at_first: [git diff b12e82e 99f3782 (rank.py), then the builder's message]
+earlier_findings:
+  - {id: F1, status: fixed for what it claims, retrace: "e3 rerun: every full-scale clip of a sustained take is now caught after MP3 (swish-2.t1, whoosh-1.t2, note-speed-1.t2 at +3/+6/+12 dB: 12.7-102 ms). Short hits are not caught (hit-speed-1.t2 +12 dB 4.3 ms; thump-4.t1 +12 dB 9.46 ms, just under 10). This is the stated known limit. The 62 clean takes: max 7.23 ms, none rejected. The limit itself: see R2-2"}
+  - {id: F2, status: fixed, retrace: "e2 with F-13a: gainfly-thump-1 now ranks (exit 1, regenerate) instead of refusing; no round refused with F-09, F-13a or LUFS-I cards; e5: the kept plan of all 62 takes agrees with a real render under F-09 and F-13a"}
+  - {id: F3, status: fixed, retrace: "e1: thump-4.t2 now exits 0 'use' with plan none (steps []); the real render with edit [] exits 0"}
+  - {id: F4, status: fixed, retrace: "e4: thump-3.t2 now plans peak with ceiling -3.0 and exits 0; the level -23.423 matches the real render"}
+  - {id: F5, status: fixed, retrace: "rank_key[1] = not passes; passes no longer needs a fix (rank.py rank_key, take_entry). A take whose fix was refused is judged on the plan it kept (must or none): under LUFS-I, 23 takes kept 'must' and 5 kept 'none'"}
+findings:
+  - {id: R2-1, class: blocking, where: "tools/audio/soundbench/rank.py best_fix + take_entry (plan 'none' is never refused) and rank() -> prove() (runs for any non-rejected top take that has a fix)",
+     expected: "a round whose takes all fail ends 'regenerate' (exit 1) or 'owner' after round 3 (J020-D7); a 'none' plan is only a candidate when render can deliver the take with no steps",
+     observed: "The 'none' plan scores the raw master even when its sample peak is over full scale. render refuses to export such a file ('sample peak 1.022407 reaches full scale: the 24-bit file would clip'). This is new in this round: before, a refused fix left fix None and no proof ran. (a) LUFS-I card, single-take round of gainfly-hit-speed-2.t3: the all and must plans are refused (under 0.4 s), 'none' is kept with 3 must misses, the take is top, prove() calls render, render refuses, and rank exits 2 for the whole round instead of 'regenerate'. (b) A card with only an F-09 level target (-17.4) and gainfly-thump-4.t1 (sample peak 1.000135): 'none' passes every must-target, so it is top, the proof refuses, and rank exits 2, although loudness + peak would deliver it. e5 found 2 of 62 kept plans that render cannot export (hit-speed-2.t3, thump-4.t1, both 'none' under LUFS-I)",
+     evidence: "Medium (it fails safe as a refusal, never a wrong 'use'; it blocks a round on real takes; 11 of the 62 real masters have a true peak at or above 0 dBTP, and at least 2 reach sample full scale). Runs: scratchpad rv/e6.py (cases a, c), rv/e5.py e2lu. Label: not verified in Studio (a tool run)",
+     smallest_fix: "Treat 'none' as refused when the raw sample peak reaches full scale (the same test export uses), so the take falls back to a plan with peak. Only prove a top take that passes",
+     protect: "F3's e1 case (plan none, exit 0) and the e5 sweep (every kept plan exports and agrees)",
+     retest: "rv/e6.py cases a and c: (a) exit 1 regenerate, (c) exit 0 with loudness + peak and an agreeing proof"}
+  - {id: R2-2, class: blocking, where: "tools/audio/soundbench/rank.py CLIP_MS = 10.0 and clip_reading (the total time at or above -1 dBFS, not scaled by length)",
+     expected: "§6.1 rejects only takes clipped at the source; the 2.8 ms margin must hold for every take length a card can ask for",
+     observed: "The reading is a total time, so it grows with the length of the take. The calibration set has takes of 480 and 800 ms only. Clean (unclipped) takes normalised to -0.1 dBFS, MP3 128k and decoded: gainfly-swish-2.t1 repeated 4x (1.92 s) reads 12.86 ms and is rejected outright; a clean 2 s three-note pad reads 12.83 ms and is rejected. The single 480 ms swish reads 2.34 ms. A rejected take gets no fix, so a clean longer cue (ambience, music bed, a long whoosh) at ElevenLabs' usual near-full-scale level can be regenerated round after round and sent to the owner (J020-D7)",
+     evidence: "Medium (a false 'rejected' on clean material; the 10 ms limit with 2.8 ms margin is safe only for takes up to about 0.8 s, the lengths it was measured on). Run: scratchpad rv/e7.py. Label: not verified in Studio",
+     smallest_fix: "Make the reading independent of length: for example ms per second of sound, or the longest stretch near full scale within any 100 ms window. Recalibrate on clean full-scale takes of 2 s or more and on the existing clipped set",
+     protect: "the sustained clipped cases caught now (12.7-102 ms) and the 62 clean real takes",
+     retest: "rv/e7.py: the 1.92 s swish and the 2 s pad are not rejected; rv/e3.py: the sustained clips are still caught"}
+answers:
+  - "Can choosing between the three plans pick a plan whose proof disagrees? Not on values: e5 proof-rendered every kept plan (F-09 62/62, F-13a 62/62, LUFS-I 60/62), and every one that exported agreed row for row. The 2 failures are exports that render refuses (R2-1)"
+  - "Does the plan order on a tie hide a must miss? No. The key is (must misses, aim misses, plan index), so a tie only happens at equal must counts. The tie goes to 'all', which is the plan with the most steps; it still shows every must miss"
+  - "Is the 10 ms limit safe with its 2.8 ms margin? For takes up to 0.8 s, yes (62 clean takes, max 7.23 ms). For longer takes, no (R2-2)"
+keep:
+  - "applied_gain_db: loudness only scales, so the peak ratio is the exact applied gain; the F-09 results did not change"
+  - "best_fix: duplicate plans skipped; a refused plan keeps its reason; the 'soundbench bug' refusal is still raised"
+  - "dropped_aim_fixes reported in the markdown"
+could_not_check:
+  - {step: "R2-2 on real long takes", missing_input: "a real ElevenLabs take of 2 s or more (the set has none)", closes_it: "one long ambience or whoosh request decoded and measured", who: "feature-builder"}
+  - {step: "planted faults 17/17", missing_input: "the planted-fault log on 99f3782", closes_it: "the builder's log", who: "feature-builder"}
+verdict: fix-first
+</spec>
+```
