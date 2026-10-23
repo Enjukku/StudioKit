@@ -10,15 +10,20 @@ Order of work, each step refusing instead of guessing:
   2. measure every master (`measures.measure_audio`) and score every target with `render.evaluate`, the function
      `render` uses on the delivered file: inside, near (inside but within the `near` margin of `tables.json`) or
      miss, with `miss_by` (how far outside) or `margin` (how far inside);
-  3. reject outright (no fix is simulated): clipped at the source, near-silent, no sound in a band the card needs;
+  3. reject outright (no fix is simulated): clipped at the source (10 ms or more at or above -1 dBFS: full scale, never
+     the decoded take's own peak), near-silent, no sound in a band the card needs;
   4. fixability is computed, never guessed: the edit-pass steps for the take's misses (a late start: `trim`; too long:
-     `cut` with a fade-out; an edge click: `trim` or `fade`; mono; the level: `loudness` then `peak`) are run on the
-     master through the same step loop as `render` (`render.apply_steps`), the result is measured again and scored
-     again. A miss counts as fixed only when that re-measured row passes. The level is also derived from the measures
-     (gain needed against the true-peak headroom, below) and the two must agree within 0.1 dB, or rank refuses
-     (a soundbench bug, never a silent wrong number);
-  5. order: rejected last; then fewest must-misses after the fix, fewest aim-misses after the fix, fewest misses that
-     needed a fix, fewest near readings, the take number (`rank_key`, recomputable from the table);
+     `cut` with a fade-out; an edge click: `trim` or `fade`; mono; the level: `loudness` then `peak`, its ceiling the
+     lowest of -1.0, the card's true-peak max and its sample-peak max) are run on the master through the same step
+     loop as `render` (`render.apply_steps`), the result is measured again and scored again. Three plans are scored:
+     every miss, the must misses only, and no step; the one with the fewest must misses, then aim misses, wins (an aim
+     fix plus the level reset can break a must the take passed untouched). A plan an operation refuses is recorded
+     with its reason. A miss counts as fixed only when the kept plan's re-measured row passes. The level is also
+     derived from the measures (below) and the two must agree within 0.1 dB, or rank refuses (a soundbench bug, never
+     a silent wrong number);
+  5. order: rejected last; then passing after the fix before not passing; then fewest must-misses after the fix,
+     fewest aim-misses, fewest misses that needed a fix, fewest near readings, the take number (`rank_key`,
+     recomputable from the table);
   6. proof: the top take's fix recipe is rendered for real (`render.render` on a temp copy of the cue: hash checks,
      parameter checks, the edit pass, FLAC export, the delivered file measured again) and every target row must
      match the simulation, or rank refuses. The temp copy is removed; rank never writes `out/` or family state;
@@ -27,11 +32,13 @@ Order of work, each step refusing instead of guessing:
 
 The level (review-1 #9). `peak` sets the level by gain only, never a limiter, and sfx and ui do not limit transients,
 so a too-quiet take is fixable only when the gain fits inside its true-peak headroom:
-    gain_needed  = level target - level in (the card's own level measure, on the audio entering `loudness`)
-    peak_limit   = min(-1.0, the card's true_peak_dbtp max) - 0.5            (ops.PEAK_CEILING_DBTP, PEAK_MARGIN_DB)
+    gain_needed  = the gain `loudness` applied (the ratio of the peaks before and after it). For F-09 this equals
+                   target - level in; for F-13a and LUFS-I on a quiet take it does not: the -70 LUFS absolute gate
+                   moves blocks in or out as the gain changes (review-rank F2)
+    peak_limit   = min(-1.0, true_peak_dbtp max, sample_peak_dbfs max) - 0.5  (ops.PEAK_CEILING_DBTP, PEAK_MARGIN_DB)
     headroom     = peak_limit - true peak in
     peak_cut     = max(0, true peak in + gain_needed - peak_limit)
-    predicted    = level in + gain_needed - peak_cut;  fits when |predicted - target| <= tolerance
+    predicted    = level after loudness (the card's measure) - peak_cut;  fits when |predicted - target| <= tolerance
 A take too loud always fits (gain down). For music, ambience and voice a `limit` design step could make room; rank does
 not compute design steps, so it does not count that as a fix.
 
@@ -67,9 +74,14 @@ NEAR: dict = cardmod.TABLES["near"]
 
 # PROPOSAL values (start points a check may change)
 NEAR_SILENT_DBFS = -60.0  # a take peaking under -60 dBFS is near-silent (62 real takes: the quietest peaks -43.9)
-CLIP_FULL_SCALE_DBFS = -1.0  # clipped at the source: the decoded peak reaches -1 dBFS or more ...
-CLIP_TOP_DB = 0.5  # ... and the take stays within 0.5 dB of its own peak ...
-CLIP_TOP_MS = 8.0  # ... for 8 ms or more in total (62 real takes: at most 4.4 ms; clipped fixtures 9.5-161 ms)
+# Clipped at the source (review-rank F1): 10 ms or more in total at or above -1 dBFS, on the decoded take. Measured on
+# the 62 real takes and on the same takes hard-clipped at full scale, MP3-encoded (libmp3lame 128k and 192k) and decoded:
+# clean takes read at most 7.23 ms (128k, swish-2.t1) and 5.78 ms (normalised to -0.1 dBFS, re-encoded at 192k): the
+# margin is 2.8 ms (38 %). Caught at 128k / 192k: +12 dB 37 / 39 of 62, +6 dB 24 / 24, +3 dB 15 / 15, +1 dB 2 / 2. Not
+# caught: short cracks whose clipped tips last under a millisecond (the MP3 smears them; no feature tried separated them
+# from clean full-scale takes with a margin).
+CLIP_FULL_SCALE_DBFS = -1.0
+CLIP_MS = 10.0
 NO_BAND_FRACTION = 0.1  # a must band holding under a tenth of the card's minimum share has no sound there
 FIX_FADE_OUT_MS = 10.0  # the fade-out rank adds with a cut, and for a click at the end edge
 CUT_INSIDE_MS = 1.0  # a cut for sound_ms ends 1 ms inside the card's maximum
@@ -102,25 +114,25 @@ def find_takes(cue_dir: Path, cue: str, round_no: int | None) -> tuple[int, list
 
 
 def clip_reading(x: np.ndarray, rate: int) -> dict:
-    """Clipped at the source: the raw decoded samples reach full scale and sit at their own peak for long.
+    """Clipped at the source: the decoded take spends 10 ms or more in total at or above -1 dBFS (full scale, never the
+    take's own peak: the MP3 decoder overshoots above a clipped plateau, and that overshoot would become the reference).
 
-    Known false readings: a sustained or low tone normalised to full scale stays near its peak for long and reads
-    clipped; clipping that was scaled down after it happened is not seen (the full-scale condition); a single short
-    clipped crack under 8 ms in total is not seen."""
+    Known false readings: a sustained tone or a long low note normalised to full scale sits near full scale for long
+    and reads clipped; clipping scaled down after it happened is not seen; short clipped cracks (the clipped tips
+    under a millisecond each) are not seen after MP3 (a short crack clipped by 6 dB reads about 2 ms)."""
     a = np.abs(np.asarray(x, dtype=np.float64))
     peak = float(a.max())
     pk_db = measures.db(peak)
-    top_ms = 0.0 if peak <= 0 else 1000 * float(np.sum(np.any(a >= peak * 10 ** (-CLIP_TOP_DB / 20), axis=1))) / rate
-    clipped = pk_db is not None and pk_db >= CLIP_FULL_SCALE_DBFS and top_ms >= CLIP_TOP_MS
-    return {"sample_peak_dbfs": None if pk_db is None else round(pk_db, 2), "ms_within_0.5db_of_peak": round(top_ms, 3),
-            "clipped": clipped}
+    ms = 1000 * float(np.sum(np.any(a >= 10 ** (CLIP_FULL_SCALE_DBFS / 20), axis=1))) / rate
+    return {"sample_peak_dbfs": None if pk_db is None else round(pk_db, 2), "ms_at_or_above_-1dbfs": round(ms, 3),
+            "clipped": ms >= CLIP_MS}
 
 
 def rejections(card: dict, flat: dict, clip: dict) -> list[str]:
     out = []
     if clip["clipped"]:
-        out.append(f"clipped at the source: peak {clip['sample_peak_dbfs']} dBFS (>= {CLIP_FULL_SCALE_DBFS}) and "
-                   f"{clip['ms_within_0.5db_of_peak']} ms within {CLIP_TOP_DB} dB of its own peak (>= {CLIP_TOP_MS})")
+        out.append(f"clipped at the source: {clip['ms_at_or_above_-1dbfs']} ms at or above {CLIP_FULL_SCALE_DBFS} dBFS "
+                   f"(>= {CLIP_MS} ms; sample peak {clip['sample_peak_dbfs']} dBFS)")
     pk = clip["sample_peak_dbfs"]
     if pk is None or pk < NEAR_SILENT_DBFS:
         out.append(f"near-silent: sample peak {pk} dBFS (under {NEAR_SILENT_DBFS})")
@@ -188,8 +200,20 @@ def fix_plan(card: dict, raw_rows: list[dict], raw_flat: dict, trimmed: tuple | 
     if _missed(raw_rows, "form.mono"):
         steps.append({"op": "mono"})
     if steps or _missed(raw_rows, "level") or _over(raw_rows, "true_peak_dbtp") or _over(raw_rows, "sample_peak_dbfs"):
-        steps += [{"op": "loudness"}, {"op": "peak"}]
+        steps += [{"op": "loudness"}, {"op": "peak", "ceiling_dbtp": peak_ceiling(card)}]
     return steps
+
+
+def peak_ceiling(card: dict) -> float:
+    """`peak`'s ceiling: the lowest of -1.0 dBTP, the card's true-peak max and its sample-peak max (review-rank F4). A
+    sample peak is never above its true peak, so a true-peak ceiling at the sample max keeps both."""
+    tg = card.get("targets", {})
+    return min([ops.PEAK_CEILING_DBTP] + [tg[k]["max"] for k in ("true_peak_dbtp", "sample_peak_dbfs")
+                                          if k in tg and "max" in tg[k]])
+
+
+def _only_must(rows: list[dict]) -> list[dict]:
+    return [r if r["must"] else {**r, "result": "pass"} for r in rows]
 
 
 def cut_end(card: dict, rows: list[dict], y: np.ndarray, rate: int) -> float | None:
@@ -205,40 +229,61 @@ def cut_end(card: dict, rows: list[dict], y: np.ndarray, rate: int) -> float | N
     return None if not ends else round(max(1.0, min(ends)), 1)
 
 
-def simulate(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict) -> dict:
-    """Run the fix through `render`'s own step loop, measure and score again, and derive the level independently."""
-    def planned(steps):
-        _, edit, _ = render.plan(card, {"design": [], "edit": steps})
-        return edit
+PLAN_MODES = ("all", "must", "none")  # review-rank F3: every miss; the must misses only; no step at all
 
-    pre_ops = ("trim", "cut", "fade", "mono")
-    head = planned([s for s in fix_plan(card, raw_rows, flat, None) if s["op"] == "trim"])
-    y_trim, _ = render.apply_steps((("edit", head),), card, render.context(card, head), x, rate)
+
+def plan_for(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict, mode: str) -> list[dict]:
+    """The fix steps for one plan mode. `all`: every miss. `must`: the must misses only (an aim fix plus the level reset
+    can break a must the take passed untouched). `none`: no step."""
+    if mode == "none":
+        return []
+    rows = raw_rows if mode == "all" else _only_must(raw_rows)
+    head = [s for s in fix_plan(card, rows, flat, None) if s["op"] == "trim"]
+    _, planned_head, _ = render.plan(card, {"design": [], "edit": head})
+    y_trim, _ = render.apply_steps((("edit", planned_head),), card, render.context(card, planned_head), x, rate)
     rec_t = measures.measure_audio(y_trim, rate)
-    trimmed = (score(render.evaluate(card, rec_t, y_trim, rate)), render._flat(rec_t), y_trim, rate)
-    steps = fix_plan(card, raw_rows, flat, trimmed)
-    edit = planned(steps)
+    rows_t = score(render.evaluate(card, rec_t, y_trim, rate))
+    return fix_plan(card, rows, flat, (rows_t if mode == "all" else _only_must(rows_t), render._flat(rec_t), y_trim,
+                                       rate))
+
+
+def applied_gain_db(before: np.ndarray, after: np.ndarray) -> float:
+    """The gain `loudness` applied (it only scales): the ratio of the peaks. For F-13a and LUFS-I on a quiet take this
+    is not target - level_in: the -70 LUFS absolute gate moves blocks in or out as the gain changes (review-rank F2)."""
+    return 20 * math.log10(float(np.max(np.abs(after))) / float(np.max(np.abs(before))))
+
+
+def simulate(card: dict, x: np.ndarray, rate: int, steps: list[dict], raw_rows: list[dict]) -> dict:
+    """Run a plan through `render`'s own step loop, measure and score again, and derive the level independently:
+    predicted = the level after `loudness` (its measure, on the audio it made) - the peak cut, where the peak cut is
+    max(0, true peak in + the gain loudness applied - peak limit)."""
+    if not steps:
+        return {"steps": [], "rows": raw_rows, "level": None, "log": [], "audio": x}
+    _, edit, _ = render.plan(card, {"design": [], "edit": steps})
     ctx = render.context(card, edit)
-    pre = [s for s in edit if s["op"] in pre_ops]
-    post = [s for s in edit if s["op"] in ("loudness", "peak")]
+    pre = [s for s in edit if s["op"] in ("trim", "cut", "fade", "mono")]
+    loud = [s for s in edit if s["op"] == "loudness"]
+    peak = [s for s in edit if s["op"] == "peak"]
     y_pre, log_pre = render.apply_steps((("edit", pre),), card, ctx, x, rate)
+    y_loud, log_loud = render.apply_steps((("edit", loud),), card, ctx, y_pre, rate)
     lv = card["level"]
     derived = None
-    if post:
+    if loud or peak:
         level_in = measures.level_db(y_pre, rate, lv["measure"])
         tp_in = measures.true_peak_db(y_pre)
-        gain = lv["target"] - level_in if any(s["op"] == "loudness" for s in post) else 0.0
-        tp_max = card.get("targets", {}).get("true_peak_dbtp", {}).get("max", 0.0)
-        limit = min(ops.PEAK_CEILING_DBTP, tp_max) - ops.PEAK_MARGIN_DB
-        cut_db = max(0.0, tp_in + gain - limit) if any(s["op"] == "peak" for s in post) else 0.0
-        predicted = level_in + gain - cut_db
+        gain = applied_gain_db(y_pre, y_loud) if loud else 0.0
+        level_loud = measures.level_db(y_loud, rate, lv["measure"]) if loud else level_in
+        limit = (min(peak[0]["params"]["ceiling_dbtp"], peak_ceiling(card)) if peak else math.inf) - ops.PEAK_MARGIN_DB
+        cut_db = max(0.0, tp_in + gain - limit) if peak else 0.0
+        predicted = level_loud - cut_db
         derived = {"measure": lv["measure"], "level_in": round(level_in, 3), "target": lv["target"],
-                   "tolerance": lv["tolerance"], "gain_needed_db": round(gain, 3), "true_peak_in_dbtp": round(tp_in, 3),
+                   "tolerance": lv["tolerance"], "gain_needed_db": round(gain, 3),
+                   "level_after_loudness": round(level_loud, 3), "true_peak_in_dbtp": round(tp_in, 3),
                    "peak_limit_dbtp": limit, "headroom_db": round(limit - tp_in, 3), "peak_cut_db": round(cut_db, 3),
                    "shortfall_db": round(max(0.0, cut_db - lv["tolerance"]), 3) if gain > 0 else 0.0,
                    "predicted_level": round(predicted, 3),
                    "fits": abs(predicted - lv["target"]) <= lv["tolerance"]}
-    y, log_post = render.apply_steps((("edit", post),), card, ctx, y_pre, rate)
+    y, log_post = render.apply_steps((("edit", peak),), card, ctx, y_loud, rate)
     final = measures.measure_audio(y, rate)
     rows = score(render.evaluate(card, final, y, rate))
     if derived is not None:
@@ -247,7 +292,32 @@ def simulate(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: d
         if sim is None or abs(sim - derived["predicted_level"]) > LEVEL_AGREE_DB:
             raise SoundbenchError(f"rank: the derived level {derived['predicted_level']} and the simulated level {sim} "
                                   f"disagree by more than {LEVEL_AGREE_DB} dB: a soundbench bug, refused")
-    return {"steps": steps, "rows": rows, "level": derived, "log": log_pre + log_post, "audio": y}
+    return {"steps": steps, "rows": rows, "level": derived, "log": log_pre + log_loud + log_post, "audio": y}
+
+
+def best_fix(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict) -> dict:
+    """Score every plan mode and keep the one with the fewest must misses after it, then the fewest aim misses, then
+    the first in PLAN_MODES (the all-steps plan carries the fullest reasons on a tie) (review-rank F3). A plan the operations refuse (for example a cut that leaves LUFS-I under 0.4 s)
+    is recorded with its reason; the empty plan is never refused."""
+    tried, refused, seen = [], [], []
+    for mode in PLAN_MODES:
+        try:
+            steps = plan_for(card, x, rate, raw_rows, flat, mode)
+            if steps in seen:
+                continue
+            seen.append(steps)
+            tried.append((mode, simulate(card, x, rate, steps, raw_rows)))
+        except SoundbenchError as err:
+            if "soundbench bug" in str(err):
+                raise
+            refused.append({"plan": mode, "error": str(err)})
+    count = lambda f, must: sum(r["must"] == must and r["result"] != "pass" for r in f["rows"])  # noqa: E731
+    mode, fix = min(tried, key=lambda t: (count(t[1], True), count(t[1], False), PLAN_MODES.index(t[0])))
+    first = tried[0][1] if tried[0][0] == "all" else None
+    dropped = [] if first is None or first is fix else [
+        r["target"] for r, c in zip(first["rows"], fix["rows"])
+        if not r["must"] and r["result"] == "pass" and c["result"] != "pass"]
+    return {**fix, "plan": mode, "dropped_aim_fixes": dropped, "refused_plans": refused}
 
 
 def classify(card: dict, raw_rows: list[dict], fix: dict | None) -> tuple[list[dict], list[dict]]:
@@ -274,7 +344,12 @@ def classify(card: dict, raw_rows: list[dict], fix: dict | None) -> tuple[list[d
 
 def _why(card: dict, r: dict, fix: dict | None, a: dict | None) -> str:
     if fix is None:
-        return "not simulated (the take is rejected, or its fix was refused)"
+        return "not simulated (the take is rejected)"
+    refused = "".join(f"the {p['plan']} fix was refused ({p['error']}); " for p in fix.get("refused_plans", []))
+    return refused + _why_kept(card, r, fix, a)
+
+
+def _why_kept(card: dict, r: dict, fix: dict, a: dict | None) -> str:
     t, v = r["target"], a["value"] if a else None
     if t == "level" and fix["level"] and fix["level"]["gain_needed_db"] > 0:
         d = fix["level"]
@@ -299,35 +374,32 @@ def take_entry(card: dict, cue_dir: Path, n: int, rel: str) -> dict:
     clip = clip_reading(x, rate)
     raw_rows = score(render.evaluate(card, rec, x, rate))
     rej = rejections(card, flat, clip)
-    fix, fix_error = None, None
-    if not rej:
-        try:
-            fix = simulate(card, x, rate, raw_rows, flat)
-        except SoundbenchError as err:
-            if "soundbench bug" in str(err):
-                raise
-            fix_error = str(err)
+    fix = None if rej else best_fix(card, x, rate, raw_rows, flat)
+    fix_error = "; ".join(f"{p['plan']}: {p['error']}" for p in fix["refused_plans"]) if fix else None
     misses, introduced = classify(card, raw_rows, fix)
     after = fix["rows"] if fix else raw_rows
     must_after = [r["target"] for r in after if r["must"] and r["result"] != "pass"]
     aim_after = [r["target"] for r in after if not r["must"] and r["result"] != "pass"]
     fixed = [m_["target"] for m_ in misses if m_["fix"] == "fixed"]
     near_after = [r["target"] for r in after if r["score"] == "near"]
-    passes = not rej and fix is not None and not must_after
+    passes = not rej and not must_after
     return {"take": take["take"], "n": n, "rate": rate, "channels": int(x.shape[1]),
             "take_sha256": take["take_sha256"], "clip": clip, "rejected": rej, "raw": raw_rows,
-            "fix": None if fix is None else {"steps": fix["steps"], "level": fix["level"], "log": fix["log"]},
+            "fix": None if fix is None else {"steps": fix["steps"], "plan": fix["plan"], "level": fix["level"],
+                                             "dropped_aim_fixes": fix["dropped_aim_fixes"],
+                                             "refused_plans": fix["refused_plans"], "log": fix["log"]},
             "fix_error": fix_error, "after": after, "misses": misses, "introduced": introduced,
             "must_after": must_after, "aim_after": aim_after, "fixed": fixed, "near_after": near_after,
             "passes_after_fix": passes, "_audio": (x, fix["audio"] if fix else None)}
 
 
 def rank_key(e: dict) -> list[int]:
-    """The order: rejected last; then fewest must-misses after the fix, fewest aim-misses after it, fewest misses that
+    """The order: rejected last; then a take that passes after its fix before one that does not (review-rank F5: a take
+    whose fix was refused is judged on the plan it kept); then fewest must-misses after the fix, fewest aim-misses after it, fewest misses that
     needed a fix (a fixable miss counts less than an unfixable one, design section 6), fewest near readings, the take
     number. Every part is a count in the take's table, so a reader can recompute it."""
-    return [int(bool(e["rejected"])), len(e["must_after"]), len(e["aim_after"]), len(e["fixed"]), len(e["near_after"]),
-            e["n"]]
+    return [int(bool(e["rejected"])), int(not e["passes_after_fix"]), len(e["must_after"]), len(e["aim_after"]),
+            len(e["fixed"]), len(e["near_after"]), e["n"]]
 
 
 def order(entries: list[dict]) -> list[dict]:
@@ -336,7 +408,7 @@ def order(entries: list[dict]) -> list[dict]:
     return sorted(entries, key=lambda e: e["rank_key"])
 
 
-RANK_KEY = ["rejected (0/1)", "must misses after fix", "aim misses after fix", "misses that needed a fix",
+RANK_KEY = ["rejected (0/1)", "does not pass after fix (0/1)", "must misses after fix", "aim misses after fix", "misses that needed a fix",
             "near readings after fix", "take number"]
 
 
@@ -492,7 +564,9 @@ def markdown(doc: dict) -> str:
             lines.append(f"| {r['target']} | {r['measure']} | {_fmt(r['value'])} | {_fmt(r['min'])} | {_fmt(r['max'])} | "
                          f"{'must' if r['must'] else 'aim'} | {r['score']} | {fix} | {_fmt(a['value'])} ({a['score']}) |")
         if e["fix"]:
-            lines.append(f"\nFix steps: `{json.dumps(e['fix']['steps'])}`")
+            lines.append(f"\nFix steps ({e['fix']['plan']} plan): `{json.dumps(e['fix']['steps'])}`")
+            if e["fix"]["dropped_aim_fixes"]:
+                lines.append(f"Aim fixes left out (they broke a must-target): {e['fix']['dropped_aim_fixes']}")
             if e["fix"]["level"]:
                 lines.append(f"Level: `{json.dumps(e['fix']['level'])}`")
         if e["fix_error"]:

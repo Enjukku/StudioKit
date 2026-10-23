@@ -148,7 +148,8 @@ class RankTest(unittest.TestCase):
         cue = make_round(self.d, card_for("SFX-R-ORD"), [quiet_bass(), late_hit(), fx.make_real("quiet_hit", R),
                                                          fx.make("clipped", R, 2)])
         doc, _ = rank.rank(cue)
-        keys = [[int(bool(e["rejected"])), sum(r["must"] and r["result"] != "pass" for r in e["after"]),
+        keys = [[int(bool(e["rejected"])), int(not e["passes_after_fix"]),
+                 sum(r["must"] and r["result"] != "pass" for r in e["after"]),
                  sum(not r["must"] and r["result"] != "pass" for r in e["after"]),
                  sum(x["fix"] == "fixed" for x in e["misses"]), sum(r["score"] == "near" for r in e["after"]), e["n"]]
                 for e in doc["takes"]]
@@ -281,6 +282,94 @@ class RankTest(unittest.TestCase):
                 self.assertFalse(rank.clip_reading(y, R)["clipped"], rank.clip_reading(y, R))
         self.assertTrue(rank.clip_reading(fx.make("clipped", R, 2), R)["clipped"])
 
+    @unittest.skipUnless(HAS_LAME, "ffmpeg with libmp3lame not found: the MP3 clip test skipped")
+    def test_clipped_broadband_takes_after_mp3_are_rejected_at_128k_and_192k(self):
+        """F1 (review-rank): clipping happens at full scale; the MP3 decoder's overshoot must not hide it. Broadband
+        real-like takes hard-clipped at full scale, encoded at ElevenLabs' two MP3 rates and decoded at intake."""
+        cases = (("quiet_whoosh", 12, True), ("soft_note", 6, True), ("soft_note", 12, True), ("quiet_hit", 12, True),
+                 ("quiet_whoosh", 0, False), ("soft_note", 0, False), ("quiet_hit", 0, False),
+                 ("quiet_hit", 6, False))  # known false reading: a short crack clipped by 6 dB reads ~2 ms, not caught
+        for name, gain, want in cases:
+            for kbps in (128, 192):
+                with self.subTest(fixture=name, gain=gain, kbps=kbps):
+                    x = fx.make_real(name, R)
+                    x = x / np.max(np.abs(x)) * 10 ** ((gain if gain else -0.1) / 20)
+                    y = np.clip(x, -1.0, 1.0)
+                    wav = fx.write_wav(self.d / f"{name}{gain}{kbps}.wav", y, R)
+                    mp3 = self.d / f"{name}{gain}{kbps}.mp3"
+                    subprocess.run([str(FOUND.path), "-hide_banner", "-nostdin", "-y", "-loglevel", "error", "-i",
+                                    str(wav), "-c:a", "libmp3lame", "-b:a", f"{kbps}k", str(mp3)], check=True)
+                    intake.decode_take(mp3, sidecar=self.d / f"{name}{gain}{kbps}.side.json")
+                    z = read_float32(intake.master_path(mp3))[0].astype(np.float64)
+                    self.assertEqual(rank.clip_reading(z, R)["clipped"], want, rank.clip_reading(z, R))
+
+    def test_level_derivation_uses_the_gain_loudness_applied_for_gated_measures(self):
+        """F2 (review-rank): F-13a and LUFS-I gate blocks at -70 LUFS, so on a quiet take the gain loudness applies is
+        not target - level_in. Rank must rank the round (no refusal) and its derivation must match the simulation."""
+        quiet = fx.make_real("quiet_hit", R) * 10 ** (-12 / 20)  # peak -48 dBFS: 2.6 dB non-linear at the -70 gate
+        for measure in ("F-09", "F-13a", "LUFS-I"):
+            with self.subTest(measure=measure):
+                c = card_for(f"SFX-R-GATE{measure.replace('-', '')}", targets={"true_peak_dbtp": {"max": -1.0, "must": True}})
+                c["level"] = {"measure": measure, "target": -20.0, "tolerance": 1.0, "must": True}
+                doc, code = rank.rank(make_round(self.d, c, [quiet]))
+                lv = entry(doc, 1)["fix"]["level"]
+                self.assertLessEqual(abs(lv["predicted_level"] - lv["simulated_level"]), rank.LEVEL_AGREE_DB)
+                y = read_float32(self.d / c["cue"] / "takes" / f"{c['cue']}.r1.t1.master.wav")[0].astype(np.float64)
+                self.assertAlmostEqual(lv["level_in"], m.level_db(y, R, measure), delta=0.002)
+                self.assertIn(code, (0, 1))
+
+    def test_a_take_that_passes_untouched_is_never_told_to_regenerate(self):
+        """F3 (review-rank, the thump-4 t2 case): raw level passes, raw true peak between the peak limit (-1.5) and
+        the card's max (-1.0), an aim edge miss. The all-steps plan (trim, fade, loudness, peak) cuts the level under
+        its tolerance; the take with no step passes every must, so rank says use."""
+        x = fx.make_real("soft_note", R)  # starts and ends mid-waveform: an edge-click aim miss
+        x = x / m.true_peak_db(x) ** 0 * 10 ** ((-1.2 - m.true_peak_db(x)) / 20)  # true peak -1.2 dBTP
+        level = m.level_db(x, R, "F-09")
+        c = card_for("SFX-R-THUMP4", targets={"true_peak_dbtp": {"max": -1.0, "must": True},
+                                              "edge_clicks": {"max": 0, "must": False}})
+        c["level"]["target"] = round(level + 0.9, 3)  # raw level passes, 0.1 dB inside a 1 dB tolerance
+        doc, code = rank.rank(make_round(self.d, c, [x]))
+        e = entry(doc, 1)
+        self.assertEqual(code, 0, e["must_after"])
+        self.assertEqual(e["must_after"], [])
+        self.assertTrue(e["fix"]["dropped_aim_fixes"])  # the edge fix it left out is reported
+        self.assertTrue(doc["proof"]["agrees"])
+
+    def test_a_sample_peak_max_sets_the_peak_ceiling(self):
+        """F4 (review-rank): a card's sample_peak_dbfs max is a ceiling the fix must respect."""
+        x = fx.make_real("soft_note", R)  # crest about 12.8 dB: F-09 -15.5 puts the peak near -2.7 dBFS
+        c = card_for("SFX-R-SPMAX", targets={"sample_peak_dbfs": {"max": -3.0, "must": True}})
+        c["level"]["target"] = -15.5
+        doc, code = rank.rank(make_round(self.d, c, [x]))
+        e = entry(doc, 1)
+        self.assertEqual(code, 0, e["must_after"])
+        peak = next(s for s in e["fix"]["steps"] if s["op"] == "peak")
+        self.assertEqual(peak["ceiling_dbtp"], -3.0)
+        self.assertLessEqual(row(e, "sample_peak_dbfs")["value"], -3.0)
+        self.assertEqual(e["fix"]["level"]["peak_limit_dbtp"], -3.0 - ops.PEAK_MARGIN_DB)
+
+    def test_a_take_whose_fix_was_refused_never_sorts_above_a_pass(self):
+        """F5 (review-rank): a refused fix with no raw must miss and no aim miss against a passing take with two aim
+        misses: the passing take is first."""
+        refused = {"rejected": [], "passes_after_fix": False, "must_after": [], "aim_after": [], "fixed": [],
+                   "near_after": [], "n": 1}
+        passing = {"rejected": [], "passes_after_fix": True, "must_after": [], "aim_after": ["sound_ms", "flatness"],
+                   "fixed": ["level"], "near_after": [], "n": 2}
+        self.assertEqual([e["n"] for e in rank.order([refused, passing])], [2, 1])
+
+    def test_a_refused_fix_names_its_reason(self):
+        """F5 (review-rank): LUFS-I refuses a fix that leaves the file under 0.4 s; the take does not pass (its raw
+        level misses) and the level miss says why the fix was refused."""
+        c = card_for("SFX-R-LUFSCUT")
+        c["level"] = {"measure": "LUFS-I", "target": -20.0, "tolerance": 1.0, "must": True}
+        c["targets"]["file_ms"] = {"max": 350, "must": True}  # the cut makes the file 350 ms: under 0.4 s
+        doc, code = rank.rank(make_round(self.d, c, [fx.make_real("quiet_hit", R)]))
+        e = entry(doc, 1)
+        self.assertFalse(e["passes_after_fix"])
+        self.assertEqual(code, 1)
+        self.assertIn("0.4 s", miss(e, "level")["why"])
+        self.assertIn("refused", miss(e, "level")["why"])
+
     def test_regenerate_lists_what_the_prompt_must_change_and_round_3_goes_to_the_owner(self):
         c = card_for("SFX-R-REGEN")
         cue = make_round(self.d, c, [quiet_bass(), quiet_bass() * 0.5, quiet_bass() * 0.25])
@@ -387,10 +476,28 @@ def _flag_fixed_when_a_step_ran(orig):
 
 
 def _score_raw_as_after(orig):
-    def simulate(card, x, rate, raw_rows, flat):
-        out = orig(card, x, rate, raw_rows, flat)
+    def simulate(card, x, rate, steps, raw_rows):
+        out = orig(card, x, rate, steps, raw_rows)
         out["rows"] = raw_rows
         return out
+    return simulate
+
+
+def _clip_against_own_peak(orig):
+    def clip_reading(x, rate):
+        return orig(np.asarray(x) / np.max(np.abs(x)), rate)  # the decoded overshoot becomes the reference again
+    return clip_reading
+
+
+def _gain_from_the_target(card, y_pre, y_loud, rate):
+    return card["level"]["target"] - m.level_db(y_pre, rate, card["level"]["measure"])
+
+
+def _old_gain(orig_simulate):
+    def simulate(card, x, rate, steps, raw_rows):
+        with mock.patch.object(rank, "applied_gain_db",
+                               lambda before, after: _gain_from_the_target(card, before, after, rate)):
+            return orig_simulate(card, x, rate, steps, raw_rows)
     return simulate
 
 
@@ -424,11 +531,33 @@ FAULTS = {
         (lambda: mock.patch.object(rank, "simulate", _score_raw_as_after(rank.simulate)),
          ["test_a_realistic_round_is_ranked_with_its_fixes"]),
     "the clip check off":
-        (lambda: mock.patch.object(rank, "CLIP_TOP_MS", 1e9),
+        (lambda: mock.patch.object(rank, "CLIP_MS", 1e9),
          ["test_rejected_outright_clipped_near_silent_and_no_band", "test_full_scale_clean_takes_are_not_clipped"]),
-    "the clip check reads absolute level only (no own-peak run)":
-        (lambda: mock.patch.object(rank, "CLIP_TOP_MS", 0.0),
+    "the clip check at any time near full scale (no 10 ms run)":
+        (lambda: mock.patch.object(rank, "CLIP_MS", 0.0),
          ["test_full_scale_clean_takes_are_not_clipped"]),
+    "F1: the clip check measured against the decoded peak":
+        (lambda: mock.patch.object(rank, "clip_reading", _clip_against_own_peak(rank.clip_reading)),
+         ["test_clipped_broadband_takes_after_mp3_are_rejected_at_128k_and_192k"]),
+    "F2: the level gain taken as target - level_in":
+        (lambda: mock.patch.object(rank, "simulate", _old_gain(rank.simulate)),
+         ["test_level_derivation_uses_the_gain_loudness_applied_for_gated_measures"]),
+    "F3: only the all-steps plan scored":
+        (lambda: mock.patch.object(rank, "PLAN_MODES", ("all",)),
+         ["test_a_take_that_passes_untouched_is_never_told_to_regenerate"]),
+    "F4: the peak ceiling from the true-peak max only":
+        (lambda: mock.patch.object(rank, "peak_ceiling", lambda card: min(
+            [-1.0] + [card["targets"][k]["max"] for k in ("true_peak_dbtp",) if k in card.get("targets", {})])),
+         ["test_a_sample_peak_max_sets_the_peak_ceiling"]),
+    "F5: passes left out of the order key":
+        (lambda: mock.patch.object(rank, "rank_key", lambda e: [int(bool(e["rejected"])), len(e["must_after"]),
+                                                                len(e["aim_after"]), len(e["fixed"]),
+                                                                len(e["near_after"]), e["n"]]),
+         ["test_a_take_whose_fix_was_refused_never_sorts_above_a_pass"]),
+    "F5: a refused fix without its reason":
+        (lambda: mock.patch.object(rank, "_why", lambda card, r, fix, a: rank._why_kept(card, r, fix, a)
+                                   if fix else "rejected"),
+         ["test_a_refused_fix_names_its_reason"]),
     "near-silent set at -20 dBFS (rejects real quiet takes)":
         (lambda: mock.patch.object(rank, "NEAR_SILENT_DBFS", -20.0),
          ["test_a_realistic_round_is_ranked_with_its_fixes"]),

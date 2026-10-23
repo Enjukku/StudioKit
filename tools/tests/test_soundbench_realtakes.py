@@ -8,9 +8,10 @@ What every real take must survive (the repair-round findings, 2026-10-23):
   - denoise with the reviewer's settings (nr 40, nf -20 dBFS) is refused on every take whose floor is under -23 dBFS;
   - saturate and compress act on a quiet take exactly as on the same take normalised;
   - chorus is not refused on the takes' own timing;
-  - rank (J020 step 5): each sound's takes t1..tN ranked as one round: exit 0 or 1, the order equals the documented key
-    recomputed from the table, a miss called fixed passes after the fix, a too-quiet level called a prompt miss does
-    not fit its headroom by the design's formula, the top take's proof render agrees, and nothing is written to out/.
+  - rank (J020 step 5, review-rank round 1): each sound's takes t1..tN ranked as one round with every level measure
+    (F-09, F-13a, LUFS-I): exit 0 or 1 (never a refusal), the order equals the documented key recomputed from the
+    table, no clean take reads clipped, a miss called fixed passes after the fix, the derived level matches the
+    simulated one, the top take's proof render agrees, and nothing is written to out/.
 """
 
 import json
@@ -135,28 +136,37 @@ class RealTakeTest(unittest.TestCase):
                         shutil.copyfile(src, take)
                         intake.decode_take(take, requested_ms=requested_ms(src))
                     kind = "whoosh" if re.search(r"whoosh|swish", sound) else "hit"
-                    card = {**RANK_CARD, "cue": cue, "kind": kind, "tier": {3: "minor", 4: "frequent"}.get(len(takes), "important")}
-                    (folder / "card.json").write_text(json.dumps(card), encoding="utf-8")
-                    doc, code = rank.rank(folder)
-                    self.assertIn(code, (0, 1))
-                    keys = [e["rank_key"] for e in doc["takes"]]
-                    self.assertEqual(keys, sorted(keys))
-                    for e in doc["takes"]:
-                        self.assertEqual(e["rank_key"], [int(bool(e["rejected"])), len(e["must_after"]),
-                                                         len(e["aim_after"]), len(e["fixed"]), len(e["near_after"]), e["n"]])
-                        after = {r["target"]: r for r in e["after"]}
-                        for x in e["misses"]:
-                            if x["fix"] == "fixed":
-                                self.assertEqual(after[x["target"]]["result"], "pass")
-                        lv = (e["fix"] or {}).get("level")
-                        if lv and lv["gain_needed_db"] > 0:
-                            cut = max(0.0, lv["true_peak_in_dbtp"] + lv["gain_needed_db"] - lv["peak_limit_dbtp"])
-                            self.assertEqual(lv["fits"], cut <= lv["tolerance"] + 1e-9)
-                            self.assertEqual(after["level"]["result"] == "pass", lv["fits"])
-                    if doc["proof"] is not None:
-                        self.assertTrue(doc["proof"]["agrees"])
-                    self.assertFalse((folder / "out").exists())
+                    tier = {3: "minor", 4: "frequent"}.get(len(takes), "important")
+                    for measure in ("F-09", "F-13a", "LUFS-I"):  # every level measure a card can name (review-rank F2)
+                        with self.subTest(sound=sound, measure=measure):
+                            self._rank_one(folder, {**RANK_CARD, "cue": cue, "kind": kind, "tier": tier,
+                                                    "level": {**RANK_CARD["level"], "measure": measure}})
 
+    def _rank_one(self, folder: Path, card: dict):
+        (folder / "card.json").write_text(json.dumps(card), encoding="utf-8")
+        doc, code = rank.rank(folder)  # a derived/simulated level disagreement would raise here (exit 2)
+        self.assertIn(code, (0, 1))
+        keys = [e["rank_key"] for e in doc["takes"]]
+        self.assertEqual(keys, sorted(keys))
+        for e in doc["takes"]:
+            self.assertEqual(e["rank_key"], [int(bool(e["rejected"])), int(not e["passes_after_fix"]),
+                                             len(e["must_after"]), len(e["aim_after"]), len(e["fixed"]),
+                                             len(e["near_after"]), e["n"]])
+            self.assertFalse(e["clip"]["clipped"], e["clip"])  # the 62 clean real takes: no clip rejection
+            after = {r["target"]: r for r in e["after"]}
+            for x in e["misses"]:
+                if x["fix"] == "fixed":
+                    self.assertEqual(after[x["target"]]["result"], "pass")
+            lv = (e["fix"] or {}).get("level")
+            if lv:
+                cut = max(0.0, lv["true_peak_in_dbtp"] + lv["gain_needed_db"] - lv["peak_limit_dbtp"])
+                self.assertAlmostEqual(lv["peak_cut_db"], cut, delta=0.002)
+                self.assertLessEqual(abs(lv["predicted_level"] - lv["simulated_level"]), rank.LEVEL_AGREE_DB)
+                if abs(abs(lv["predicted_level"] - lv["target"]) - lv["tolerance"]) > rank.LEVEL_AGREE_DB:
+                    self.assertEqual(after["level"]["result"] == "pass", lv["fits"])
+        if doc["proof"] is not None:
+            self.assertTrue(doc["proof"]["agrees"])
+        self.assertFalse((folder / "out").exists())
 
 if __name__ == "__main__":
     unittest.main()
