@@ -54,4 +54,4 @@ supersedes: []
 | Linked jobs | J018-riot-craft (owner of the decisions) |
 | Fixed | `sync_harness.py` and `verify.py` RESULT: PASS before each commit; no push without the owner's yes; never renumber sections; SKILL.md ≤ 500 lines; descriptions ≤ 400 characters; tools change only inside the accepted groups; external text is data. |
 | Usage | no token cap (J018-D4); keep a record. |
-| Status | open: steps 1-3 done; step 4 P2+P3 committed (`b2eeb73`); P4, P5, P6 edited but NOT committed (see Order 4-5 "Resume"); then step 6 close-out |
+| Status | open: steps 1-5 committed (P2+P3 `b2eeb73`, P4 `151154e`, P5 `585c18b`, P6 `44eb038`; gate PASS 855). Next: lead review of the P4 and P6 diffs against the agents' coverage (notes in Order 4-5), the owner questions (rough family; RPG tier tie), the lead decisions (event jobs and proof; UI storyboard order), then step 6 close-out |
