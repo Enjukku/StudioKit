@@ -44,25 +44,59 @@ supersedes: []
 | --- | --- | --- | --- |
 | 1 | Frame and stage the cue (cue card, timing list) | sound designer | books (unchanged) |
 | 2 | Write targets on the card as numbers: start, attack, length, bands, phone loss, loudness slot, notes | sound designer | cue card |
-| 3 | Prompt and generate 4-8 takes | sound designer | ElevenLabs, prompt book rebuilt from your guide; `eleven.py` moved into the kit |
+| 3 | Prompt and generate takes: minor cue 1, frequent cue 2, hero cue 3 (J020-LD1) | sound designer | ElevenLabs, prompt book rebuilt from your guide; a new kit generate step (GreatWallSim's `eleven.py` only as reference, J020-D5) |
 | 4 | Measure every take and rank it against the card | workbench | **new editor**: measure + pick |
 | 5 | Fit edits from a written recipe, in the book's order, all baked into the file (space too) | workbench | **new editor**: edit |
 | 6 | Re-measure, plus a spectrogram picture; a take that still misses → change the prompt and regenerate (at most 3 rounds), never pile on edits | sound designer | workbench |
 | 7 | Layer the important sounds (click + body + tail, each generated alone) and make variant sets for frequent sounds | workbench | workbench: layer, variants |
 | 8 | Export Ogg with a log of every edit (redo from the original take at any time) | workbench | workbench |
-| 9 | Upload (your approval rule per game) | lead | `upload_roblox.py` moved into the kit |
-| 10 | Play only in Roblox: the graph places and plays the sound and sets volume; no effects | feature-builder | Roblox audio graph |
+| 9 | Upload (your approval rule per game) | lead | a new kit upload step (GreatWallSim's `upload_roblox.py` only as reference) |
+| 10 | Play only in Roblox (J020-D8): most sounds 2D (same volume everywhere); 3D only for sounds that come from a place, with a falloff range per sound; volume and ducking by fader volume (J020-LD4); no effects | feature-builder | Roblox audio graph (§6) |
 | 11 | Prove each sound plays on its event (debug cue log) | studio operator | Studio |
 | 12 | You judge in play-tests; each flag becomes a lesson in the books | owner | play-test |
 
 ## 4. The editor (what it is, for the design step after G1)
-A command-line tool made for the agent: text recipes in, numbers and spectrogram pictures out, every step logged and redone from the original take, tests built from the faults the GreatWallSim review found. It runs on what the kit already has (numpy, scipy, soundfile, pyloudnorm) plus ffmpeg for the effects that are hard to make sound clean (pitch without a length change, time stretch, some reverb). It replaces `audio_edit.py` and joins `cue_check.py` into one tool, so there is one way to measure.
+A command-line tool made for the agent: text recipes in, numbers and spectrogram pictures out, every step logged and redone from the original take, tests built from the faults the GreatWallSim review found. It runs on what the kit already has (numpy, scipy, soundfile, pyloudnorm) plus ffmpeg for the effects that are hard to make sound clean (pitch without a length change, time stretch, some reverb). It is built new (J020-D5); GreatWallSim's `audio_edit.py` is only a reference for what it does well (careful loudness, loops, layering at exact times, an edit log per file) and stays unchanged in that game (J020-D6). It joins `cue_check.py` into one tool, so there is one way to measure. It covers every edit the book's design pass needs: clean (trim, fades, noise, hum, rumble), pitch with and without a length change, time stretch, EQ (cuts, boosts, shelves), compression, transient shaping, saturation, designed space (reverb, echo) baked in, movement (chorus, flanger), layering, variant sets, loops, loudness and peak limits.
 
 **Limit, said plainly:** the agent cannot hear. The editor proves numbers (timing, loudness, phone audibility, seams, notes). Whether a sound feels right stays your call in the play-test.
 
-## 5. Questions for you
-1. **Volume in Roblox:** is setting volume, 3D distance and turning other sounds down under an important one fine? That is playback, not editing. My recommendation: yes.
-2. **Rooms:** a sound that plays in different spaces (a cave and a hall) gets one file per space with its reverb baked in. More files, but no Roblox effects. OK?
-3. **Listening:** I take check-ins A, B and C out of the books and use your play-tests only. OK?
-4. **GreatWallSim:** it keeps its own tools until the kit editor replaces them through a kit sync. OK?
-5. **Regenerate limit:** at most 3 prompt rounds per cue, then it goes to you as "cannot make it fit yet" with the numbers. OK, or another number?
+## 5. Your answers (2026-10-23)
+| # | Question | Answer |
+| --- | --- | --- |
+| 1 | Volume and 3D in Roblox | J020-D8: play and place only; 3D for the few sounds that come from a place |
+| 2 | Rooms | left to the lead: J020-LD2 |
+| 3 | Listening check-ins | replaced by your play-tests: J020-LD3 |
+| 4 | GreatWallSim | keeps its tools unchanged; the kit is built new: J020-D5, J020-D6 |
+| 5 | Regenerate limit | 3 rounds: J020-D7 |
+| — | Takes per prompt | J020-LD1: 1, 2 or 3 by cue type |
+
+## 6. Roblox sound playback (Roblox Creator Docs mirror, read 2026-10-23: `audio/objects.md` "2D audio", "3D audio"; `_api-reference/classes/AudioEmitter.yaml`; `_api-reference/enums/DistanceAttenuationMode.yaml`, `SoundService.yaml` ListenerLocation)
+| Kind | When | How it is wired | Falloff |
+| --- | --- | --- | --- |
+| 2D | most sounds: UI, own feedback, rewards, music, most effects | AudioPlayer → Wire → AudioDeviceOutput (through a fader bus) | none: same volume wherever the player is |
+| 3D | a sound that should come from a place: a waterfall, a machine, another player's action | AudioPlayer → Wire → AudioEmitter on the part; the AudioListener (camera or character, `SoundService.ListenerLocation`) → Wire → AudioDeviceOutput | per emitter: `DistanceAttenuationMode` presets (Linear, LinearSquared, Inverse, InverseTapered) between `DistanceAttenuationBounds` (full volume inside the minimum, silent at the maximum; default 4 to 10,000 studs), or `Custom`, a volume-over-distance curve set with `SetDistanceAttenuation()` (the docs' example: half volume at 50 studs, silent at 70) |
+
+### When a sound is 2D or 3D (the rule every cue card follows; J020-LD5)
+The docs define the two kinds: 2D "plays from no particular location, remaining at the same volume regardless of the player's position"; 3D "plays from a particular location [...] increasing or decreasing in volume depending on the player's position and orientation". The choice below is the studio's rule built on that definition.
+
+| Question about the sound | Answer → kind | Examples |
+| --- | --- | --- |
+| Is it about me, the player: my input, my result, my reward, my purchase, a screen? | 2D | button clicks, my coin pickup, level up, purchase, my own footsteps and jumps |
+| Must every player hear it the same wherever they stand? | 2D | music, narration, a round start, a flood warning, the dam-built fanfare |
+| Does it tell me *where* something is, so I can find it, face it or avoid it? | 3D | a threat's tell, an enemy, another player's action, a pickup to look for |
+| Does it belong to a place I can see, and should it fade as I walk away? | 3D | a waterfall, a machine, a fire, a fountain, wind at a cliff edge |
+| Is it the general mood of a whole area? | 2D bed for the area, plus 3D point sources for the visible things in it | a forest bed (2D) with a stream (3D) |
+
+When in doubt: 2D. Most sounds are 2D (J020-D8); a 3D sound must name what its position tells the player.
+
+### Setting a 3D sound (from the docs)
+| Setting | What it does (docs) | Studio rule |
+| --- | --- | --- |
+| `DistanceAttenuationBounds` (min, max) | full volume inside min; silent at or beyond max; default 4 to 10,000 studs | min = the size of the thing (you are "at" it); max = where it must be gone. Write both on the cue card in studs |
+| `DistanceAttenuationMode` | `Linear`: even fade between min and max. `LinearSquared`: steeper fade (Linear squared). `Inverse`: min ÷ distance, "mirroring how sounds attenuate in the real world" (never quite silent before max). `InverseTapered`: Inverse near min, LinearSquared near max, so it still ends silent at max. `Custom`: your own curve (`SetDistanceAttenuation()`; the docs' example: half volume at 50 studs, silent at 70) | ambience and world sources: `InverseTapered`; gameplay cues that must stay clear to a set range, then stop: `Linear`; `Custom` only when the card needs a shape the presets cannot give |
+| Angle (`SetAngleAttenuation()`) | quieter when you are behind the emitter's look direction | only for sounds that point one way (a speaker, a cannon mouth); default none |
+| `SoundService.ListenerLocation` | where the "ear" is: `Character`, `Camera`, `Default` (camera, in games with voice chat) or `None` (script) | one per game, in the game profile; with a third-person camera, `Character` keeps distances true to where the player stands (PROPOSAL, check in the first game) |
+| `AcousticSimulationEnabled` | muffling through walls, bending round corners, echo, done by the engine | off (J020-D1) |
+| `AudioInteractionGroup` | an emitter is heard only by listeners in the same group | default; only for split audio worlds |
+
+The books change to match (in the build stage): `roblox-audio.md` keeps the graph, 2D and 3D and the falloff rules above, and drops the live AudioReverb, AudioEqualizer, AudioFilter and compressor ducking (J020-D1, J020-LD4); each cue card names 2D or 3D, and for 3D its falloff mode and range.
