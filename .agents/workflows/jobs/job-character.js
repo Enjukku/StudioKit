@@ -99,7 +99,7 @@ const ROLE = {
   arch: { type: 'architect', model: 'opus', effort: 'high' },
   // Wiring touches remotes (and, for a variant, ownership saves): the reviewer runs high (roles README).
   code: { type: 'reviewer', model: 'opus', effort: 'high' },
-  anim: { type: 'animator', model: 'opus', effort: 'medium' },
+  anim: { type: 'animator', model: 'opus', effort: 'high' },   // character animation players see all the time: high (owner 2026-10-23)
   op: { type: 'studio-operator', model: 'sonnet', effort: 'medium' },
   live: { type: 'live-ops-designer', model: 'opus', effort: 'medium' },
 }
