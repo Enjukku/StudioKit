@@ -15,8 +15,8 @@ One file per animated asset: `content/anim/<asset-id>/animation-set.md`. Clips c
 States source: <feature contract / spec path @ revision>
 
 ## Clips
-| Clip id | State | Loop / one-shot | Entry pose → exit pose | Length (s) and source (window id / measured / PROPOSAL) | Who must react + reaction window (source) (`animation-design/references/game-timing.md` §1-§2) | Play rate (source) | Pushed moments (1-2; `animation-design/references/principles.md` P-10.5) | Priority intent | Layered joints (blank = whole body) | Interruption rule | Attachments | Events (timing list ids) | Reduced-motion variant (`game-timing.md` §8) | LOD variant | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Clip id | State | Loop / one-shot | Entry pose → exit pose | Length (s) and source (window id / measured / PROPOSAL) | Who must react + reaction window (source) (`animation-design/references/game-timing.md` §1-§2) | Play rate (source) | Pushed moments (1-2; `animation-design/references/principles.md` P-10.5) | Priority intent | Layered joints (blank = whole body) | Interruption rule | Blend owner (Animator / code / named role) | Attachments | Events (timing list ids) | Reduced-motion variant (`game-timing.md` §8) | LOD variant | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## Transitions to test
 | From | To | Blend length (source) | Must keep (contacts, grip) | Clean-up | Result |

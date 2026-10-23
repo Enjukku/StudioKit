@@ -52,13 +52,13 @@ Each example shows the decisions, the presentation contract rows that matter, an
 ## D. Shop purchase that is refused
 **Parameters:** shop screen, phones. Feedback stack: press sink at once; pending state when slow; success burst only on a confirmed purchase; refusal at the control with cause and fix.
 **Decisions:**
-- `PurchaseService.requestPurchase` returns `done`, `denied(reason)` or `unavailable` (R-13); reason codes (`need_gold`, `level_locked`, `sold_out`) carry the numbers the UI needs (`{need = 40}`).
+- `PurchaseService.requestPurchase` returns `done`, `denied(reason)` or `unavailable` (R-13); reason codes (`not_enough_gold`, `level_locked`, `sold_out`) carry the numbers the UI needs (`{need = 40}`).
 - The UI shows the press feedback before any reply; the coin burst and chime play only on `done`; `unavailable` shows "try again" with no charge.
 | Row | Layer | Source | Information |
 | --- | --- | --- | --- |
 | P-1 | attempt: button sinks, click | input | motion + sound |
 | P-2 | pending: spinner on the button | no reply after the pending threshold (feature spec) | icon |
 | P-3 | outcome: burst, chime, item in inventory | `done` | text + sound + item |
-| P-4 | refusal: "Need 40 more gold" at the button, soft rate-limited thud | `denied(need_gold, {need = 40})` | text + icon + sound |
+| P-4 | refusal: "Need 40 more gold" at the button, soft rate-limited thud | `denied(not_enough_gold, {need = 40})` | text + icon + sound |
 **What the old plan missed:** a denial with no reason, so the UI could only flash red; the burst played on the press and "un-played" on refusal.
 **Checks:** AR-07, AR-16, RV-01.

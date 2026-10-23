@@ -15,7 +15,7 @@ States (J003 addition, aligning the paper's mixed words, N2 W14): **proposed** �
 | World and characters | `knowledge/design/world-and-characters.md` | places, landmarks, characters and the role they make readable, where each key moment happens | reference |
 | Key moments | `knowledge/design/moments/<moment-id>.md` (beat-sheet template) | setup, decision, consequence, payoff; state names; the timed stages (tell, build, peak, result); who owns what | reference |
 | Role cards | `knowledge/design/world-and-characters.md` (one section per character, unit or pet) | §8 | reference |
-| Closed doors | the job folder, `closed-doors.md` (final ones also in `tried-and-failed.md`) | directions the owner closed, with the date and words; never re-proposed without new owner words | job |
+| Closed doors | the job's `decisions.md`, Closed doors table (`knowledge/jobs/README.md`, "decisions.md layout"; final ones also in `tried-and-failed.md`) | directions the owner closed, with the date and words; never re-proposed without new owner words | job |
 | Core loop | `knowledge/design/core-loop.md` | three scales, coupling, resets vs persists, experiment cards (`game-design`) | reference |
 | Feature specs | `knowledge/design/features/<F-id>.md` | T3, 15 fields (§3) | reference |
 | Tuning values | the game's data files under `content/` (path set by the architect) + the T4 table (§4) in the feature spec | one source per value | — |

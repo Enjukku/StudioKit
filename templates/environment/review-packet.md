@@ -27,7 +27,7 @@ Workflow: `environment-design/references/review.md`. Copy to `content/stages/<st
 | Camera id | Kind (player-eye approach, decision point, reverse route, high overview, top-down layout, contact close-up, skyline, scale-with-player, stress scene) | Position / target / FOV | Image (lowest setting) | Image (highest setting) | Compared with (reference image or blueprint sheet) |
 | --- | --- | --- | --- | --- | --- |
 
-Minimum for any stage: player-eye views along the whole route (approach, decision, after commit, return), front / sides / back / high 3/4 of every structure, one top-down of the whole stage, one scale shot with the player figure per area, and low oblique or under-roof views of stepped roofs and overhangs. Move the camera or character into the content before capturing (streaming draws only what is near).
+Pick the cameras by the stage's risks from the kinds in `environment-design/references/review.md` §3, not by a fixed count. Every stage has the key views of that section: the first view after spawn, the busiest moment, one decision view per zone, the top-down and one view per hazard. Move the camera or character into the content before capturing (streaming draws only what is near).
 
 ## C. Look checks (`environment-design/references/review.md` §7)
 One row per §7 line; the line, its input and its numbers recipe are defined there (never copied here). Every line is re-rated every round, not only the failed ones (`review.md` §4). A fix job runs the §7 fix-job lines and marks the others `n/a (fix job)`. A line that cannot run is `not verified` and goes to the could-not-check list in §F.

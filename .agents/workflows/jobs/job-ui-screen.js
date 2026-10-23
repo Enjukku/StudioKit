@@ -7,10 +7,10 @@ export const meta = {
     { title: 'Exchange', detail: 'each lead names only production-changing conflicts' },
     { title: 'Direction sheet', detail: 'ui-ux-designer synthesises; others sign' },
     { title: 'Contract', detail: 'state map and spec; consumers state needs' },
+    { title: 'Plan check', detail: 'shop or paid-random: the reviewer checks the code contract before the builder (one exchange; L: in the proof)' },
+    { title: 'Motion storyboard', detail: 'one beat list: ui-ux-designer, then VFX world-to-HUD beats, then the sound cue list (L: in the proof, before the prototype; G2 freezes it)' },
     { title: 'Proof', detail: 'clickable Figma prototype of every state at phone size (L jobs; a look change is always L)' },
     { title: 'Proof review', detail: 'game-designer, then art-director, then feature-builder' },
-    { title: 'Plan check', detail: 'shop or paid-random: the reviewer checks the code contract before the builder (one exchange)' },
-    { title: 'Motion storyboard', detail: 'one beat list: ui-ux-designer, then VFX world-to-HUD beats, then the sound cue list' },
     { title: 'Figma build', detail: 'Figma build to the target image, then the Roblox handoff' },
     { title: 'Production', detail: 'feature-builder implements (test hooks and debug log) beside UI sounds and UI effects' },
     { title: 'Integration', detail: 'feature-builder wires sounds and effects and freezes the candidate; studio-operator takes the review captures' },
@@ -464,17 +464,104 @@ async function contract() {
   return { status: 'done', outcome: 'State map, spec and code contract agreed.', spec: spec(), code_contract: CODE_CONTRACT }
 }
 
-// ================================================================ the proof (contract → clickable Figma prototype → lead reviews)
+// The motion storyboard on one beat list before any Figma motion work (job-types.md §4; Cross-type rules: one marker list).
+// L: in the proof, before the clickable prototype, so G2 judges and freezes these beats (lead decision J019-LD2); M: in build.
+// VFX writes its world-to-HUD beats first, sound answers on them (README: VFX writes each envelope first).
+async function storyboard(stageWord) {
+  phase('Motion storyboard')
+  const sb = keep('B0 storyboard', await call(ROLE.ui, {
+    id: 'B0-storyboard', task: `motion storyboard on one beat list: ${SCREEN}`,
+    intent: `${stageWord}, before any Figma motion work. Write the screen's motion storyboard as one beat list keyed to the spec\'s event names: per press and transition, the beats with PROPOSAL times. Set world_to_hud true when rewards fly from the world into the HUD (the vfx-designer then adds its world-to-HUD beats). The sound-designer keys its UI cue list to this file next.`,
+    skills: ['ui-design', 'ui-figma'],
+    inputs: [spec(), `${DIR}/direction.md`, `${DIR}/direction/information-list.md   # the feedback stack`],
+    owns: [BEATS], consumers: ['sound-designer', 'vfx-designer', 'feature-builder'],
+    rules: [PROPOSAL_RULE],
+    deliver: `${BEATS} (revision 1)`,
+    checks: ['every beat names its event id from the spec', 'every press and key transition in the spec has its beats'],
+  }, S_STORYBOARD, 'Motion storyboard'))
+  if (!ok(sb)) return { stop: { status: sb ? sb.status : 'failed', outcome: 'motion storyboard not written' } }
+  const beatsIn = pin(BEATS, sb.beat_list_revision)
+  const beatNotes = []
+  if (sb.world_to_hud) {
+    const v = keep('B0 storyboard vfx', await call(ROLE.vfx, {
+      id: 'B0-storyboard-vfx', task: `world-to-HUD beats on the UI beat list: ${SCREEN}`,
+      intent: `${stageWord}, motion storyboard. Rewards fly from the world into this screen: write the world-to-HUD beats on the beat list (launch, flight, arrival at the HUD target, the counter tick) with onset, peak and length per event id. The sound-designer answers your note next.`,
+      skills: ['vfx-design'], inputs: [beatsIn, spec()],
+      owns: [`${DIR}/exchange/storyboard-vfx-designer.md`], deliver: `${DIR}/exchange/storyboard-vfx-designer.md in the exchange-note format`,
+      checks: ['every beat names its event id and its onset, peak and length'],
+    }, S_HANDBACK, 'Motion storyboard'))
+    if (!ok(v)) return { stop: { status: v ? v.status : 'failed', outcome: 'world-to-HUD beats not written' } }
+    beatNotes.push(`${DIR}/exchange/storyboard-vfx-designer.md`)
+  }
+  const sc = keep('B0 storyboard sound', await call(ROLE.sound, {
+    id: 'B0-storyboard-sound', task: `UI cue list on the UI beat list: ${SCREEN}`,
+    intent: `${stageWord}, motion storyboard. Answer the beat list with the UI cue list keyed to the screen's event names: which beats sound and which stay quiet, each cue's onset against its beat${beatNotes.length ? ' and against the vfx-designer\'s world-to-HUD peaks' : ''}.`,
+    skills: ['sound-design'], inputs: [beatsIn, spec()].concat(beatNotes),
+    owns: [`${DIR}/exchange/storyboard-sound-designer.md`], deliver: `${DIR}/exchange/storyboard-sound-designer.md in the exchange-note format`,
+    checks: ['every cue names its event id and beat', 'every quiet beat says why'],
+  }, S_HANDBACK, 'Motion storyboard'))
+  if (!ok(sc)) return { stop: { status: sc ? sc.status : 'failed', outcome: 'UI cue list not written' } }
+  beatNotes.push(`${DIR}/exchange/storyboard-sound-designer.md`)
+  return { beatsIn, beatNotes }
+}
+
+
+// (risk: a purchase or paid reveal) the reviewer checks the plan before the builder: one exchange, not a rework round (job-types.md §4).
+// L: in the proof, after the contract and before the storyboard; M: at the start of build. Returns a stop result or null.
+async function planCheck() {
+  if (SHOP || PAID) {
+    phase('Plan check')
+    const pc = keep('B0 plan check', await call(ROLE.review, {
+      id: 'B0-plan-check', task: `plan check of the UI screen code contract: ${SCREEN}`,
+      intent: `${SIZE === 'L' ? 'Proof stage' : 'Build stage'}, plan check before any code (code-review references/review-method.md §7): the screen ${SHOP ? 'sells, prices or rolls' : 'shows a paid reveal'}. Review the code contract and the spec as the plan: requests are intents and the server computes outcomes; grants have ids; each player-facing moment names its attempt, confirmed, pending, denied and reduced states${PAID ? '; paid random: one odds table, effective odds, the restricted path' : ''}. Findings use the review format with where = the plan's section and the maker: architect (code contract) or ui-ux-designer (spec). The build starts from the corrected plan.`,
+      skills: ['code-review', 'networking-security', 'data-saving', 'platform-policy'],
+      inputs: [CODE_CONTRACT, spec()],
+      owns: [`${DIR}/reviews/plan-check-reviewer.md`], deliver: `${DIR}/reviews/plan-check-reviewer.md (templates/jobs/review.md)`,
+      rules: [LAYER_RULE],
+      checks: ['every finding names the plan section, the rule id it breaks and the smallest fix'],
+    }, S_REVIEW, 'Plan check'))
+    if (!ok(pc)) return { status: pc ? pc.status : 'failed', outcome: 'the plan check returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
+    const pf = pc.findings.filter(f => f.class === 'blocking')
+    const toUi = pf.filter(f => f.maker_role === ROLE.ui.type || LAYOUT_LAYERS.includes(f.layer))
+    const toArch = pf.filter(f => !toUi.includes(f))
+    const planFix = (r, list, own, sch) => call(r, {
+      id: `B0-plan-fix-${r.type}`, task: `correct the plan after the plan check: ${SCREEN}`,
+      intent: 'The one plan-check exchange. Correct your plan file for the findings in the findings field (or answer one with evidence that it is not a defect) and add a change table row naming the consumers to recheck.',
+      findings: list, inputs: [`${DIR}/reviews/plan-check-reviewer.md`, spec(), CODE_CONTRACT],
+      owns: [own], deliver: `${own} (next revision)`,
+      checks: ['each finding is fixed in the plan or answered with evidence'],
+    }, sch, 'Plan check')
+    if (toUi.length) {
+      const u = keep('B0 plan fix ui-ux-designer', await planFix(ROLE.ui, toUi, `${UI}/spec.md`, S_CONTRACT))
+      if (!ok(u)) return { status: 'failed', outcome: 'plan-check correction of the spec did not finish; see steps' }
+      if (u.spec_revision) SPEC_REV = u.spec_revision
+    }
+    if (toArch.length) {
+      const a = keep('B0 plan fix architect', await planFix(ROLE.arch, toArch, CODE_CONTRACT, S_HANDBACK))
+      if (!ok(a)) return { status: 'failed', outcome: 'plan-check correction of the code contract did not finish; see steps' }
+    }
+  }
+  return null
+}
+
+const BEATS = `${UI}/motion/storyboard.md`
+
+// ================================================================ the proof (contract → motion storyboard → clickable Figma prototype → lead reviews)
 async function proof() {
   const c = await contract()
   if (!ok(c)) return c
 
+  const pc = await planCheck()
+  if (pc) return pc
+  const st = await storyboard('Proof stage')
+  if (st.stop) return st.stop
+
   phase('Proof')
   let proto = keep('P1 prototype', await call(ROLE.ui, {
     id: 'P1-prototype', task: `clickable Figma prototype of every state: ${SCREEN}`, visual: true,
-    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events and playing at normal speed (the owner judges motion feel on it at G2), in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5-§6) before anyone sees it.',
+    intent: 'Proof. Make a clickable Figma prototype of every state in the spec at the smallest phone size, with the transitions wired on the spec\'s events and playing at normal speed, timed to the motion storyboard\'s beat list and the sound and VFX notes on it (the owner judges motion feel on it at G2, and G2 freezes those beats), in the look of the target image the owner chose at G1, far enough that the reviewers can judge the direction. Then review it yourself (ui-design references/review.md §5-§6) before anyone sees it.',
     skills: ['ui-design', 'ui-figma', STYLE_BOOK],
-    inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image chosen at G1`],
+    inputs: [spec(), `${DIR}/direction.md`, `${UI}/refs/   # the target image chosen at G1`, st.beatsIn].concat(st.beatNotes),
     refs: ['.agents/skills/ui-figma/references/figma-mcp.md   # take: load the Figma server skills first; inspect, then write; node ids from every write'],
     owns: [`${UI}/screens/proto/`, `${UI}/figma-ids.json`, 'the Figma file the job card names (prototype pages)'],
     open: ['component structure', 'how far styling goes in the proof'],
@@ -562,77 +649,20 @@ async function fixFindings(blocking, tag, round, makers, mode, reviewFiles) {
 
 // ================================================================ production, integration, code review and the review chain
 async function production() {
-  // (risk: a purchase or paid reveal) the reviewer checks the plan before the builder: one exchange, not a rework round (job-types.md §4).
-  if (SHOP || PAID) {
-    phase('Plan check')
-    const pc = keep('B0 plan check', await call(ROLE.review, {
-      id: 'B0-plan-check', task: `plan check of the UI screen code contract: ${SCREEN}`,
-      intent: `Build stage, plan check before any code (code-review references/review-method.md §7): the screen ${SHOP ? 'sells, prices or rolls' : 'shows a paid reveal'}. Review the code contract and the spec as the plan: requests are intents and the server computes outcomes; grants have ids; each player-facing moment names its attempt, confirmed, pending, denied and reduced states${PAID ? '; paid random: one odds table, effective odds, the restricted path' : ''}. Findings use the review format with where = the plan's section and the maker: architect (code contract) or ui-ux-designer (spec). The build starts from the corrected plan.`,
-      skills: ['code-review', 'networking-security', 'data-saving', 'platform-policy'],
-      inputs: [CODE_CONTRACT, spec()],
-      owns: [`${DIR}/reviews/plan-check-reviewer.md`], deliver: `${DIR}/reviews/plan-check-reviewer.md (templates/jobs/review.md)`,
-      rules: [LAYER_RULE],
-      checks: ['every finding names the plan section, the rule id it breaks and the smallest fix'],
-    }, S_REVIEW, 'Plan check'))
-    if (!ok(pc)) return { status: pc ? pc.status : 'failed', outcome: 'the plan check returned nothing or did not finish (its status is in steps); fix the cause, then rerun the stage' }
-    const pf = pc.findings.filter(f => f.class === 'blocking')
-    const toUi = pf.filter(f => f.maker_role === ROLE.ui.type || LAYOUT_LAYERS.includes(f.layer))
-    const toArch = pf.filter(f => !toUi.includes(f))
-    const planFix = (r, list, own, sch) => call(r, {
-      id: `B0-plan-fix-${r.type}`, task: `correct the plan after the plan check: ${SCREEN}`,
-      intent: 'Build stage, the one plan-check exchange. Correct your plan file for the findings in the findings field (or answer one with evidence that it is not a defect) and add a change table row naming the consumers to recheck.',
-      findings: list, inputs: [`${DIR}/reviews/plan-check-reviewer.md`, spec(), CODE_CONTRACT],
-      owns: [own], deliver: `${own} (next revision)`,
-      checks: ['each finding is fixed in the plan or answered with evidence'],
-    }, sch, 'Plan check')
-    if (toUi.length) {
-      const u = keep('B0 plan fix ui-ux-designer', await planFix(ROLE.ui, toUi, `${UI}/spec.md`, S_CONTRACT))
-      if (!ok(u)) return { status: 'failed', outcome: 'plan-check correction of the spec did not finish; see steps' }
-      if (u.spec_revision) SPEC_REV = u.spec_revision
-    }
-    if (toArch.length) {
-      const a = keep('B0 plan fix architect', await planFix(ROLE.arch, toArch, CODE_CONTRACT, S_HANDBACK))
-      if (!ok(a)) return { status: 'failed', outcome: 'plan-check correction of the code contract did not finish; see steps' }
-    }
+  if (SIZE !== 'L') {
+    const pc = await planCheck()
+    if (pc) return pc
   }
 
-  // The motion storyboard on one beat list before any Figma motion work (job-types.md §4 Production order; Cross-type rules: one marker list).
-  // VFX writes its world-to-HUD beats first, sound answers on them (README: VFX writes each envelope first).
-  phase('Motion storyboard')
-  const BEATS = `${UI}/motion/storyboard.md`
-  const sb = keep('B0 storyboard', await call(ROLE.ui, {
-    id: 'B0-storyboard', task: `motion storyboard on one beat list: ${SCREEN}`,
-    intent: 'Build stage, before any Figma motion work. Write the screen\'s motion storyboard as one beat list keyed to the spec\'s event names: per press and transition, the beats with PROPOSAL times. Set world_to_hud true when rewards fly from the world into the HUD (the vfx-designer then adds its world-to-HUD beats). The sound-designer keys its UI cue list to this file next.',
-    skills: ['ui-design', 'ui-figma'],
-    inputs: [spec(), `${DIR}/direction.md`, `${DIR}/direction/information-list.md   # the feedback stack`],
-    owns: [BEATS], consumers: ['sound-designer', 'vfx-designer', 'feature-builder'],
-    rules: [PROPOSAL_RULE],
-    deliver: `${BEATS} (revision 1)`,
-    checks: ['every beat names its event id from the spec', 'every press and key transition in the spec has its beats'],
-  }, S_STORYBOARD, 'Motion storyboard'))
-  if (!ok(sb)) return { status: 'failed', outcome: 'motion storyboard not written' }
-  const beatsIn = pin(BEATS, sb.beat_list_revision)
-  const beatNotes = []
-  if (sb.world_to_hud) {
-    const v = keep('B0 storyboard vfx', await call(ROLE.vfx, {
-      id: 'B0-storyboard-vfx', task: `world-to-HUD beats on the UI beat list: ${SCREEN}`,
-      intent: 'Build stage, motion storyboard. Rewards fly from the world into this screen: write the world-to-HUD beats on the beat list (launch, flight, arrival at the HUD target, the counter tick) with onset, peak and length per event id. The sound-designer answers your note next.',
-      skills: ['vfx-design'], inputs: [beatsIn, spec()],
-      owns: [`${DIR}/exchange/storyboard-vfx-designer.md`], deliver: `${DIR}/exchange/storyboard-vfx-designer.md in the exchange-note format`,
-      checks: ['every beat names its event id and its onset, peak and length'],
-    }, S_HANDBACK, 'Motion storyboard'))
-    if (!ok(v)) return { status: 'failed', outcome: 'world-to-HUD beats not written' }
-    beatNotes.push(`${DIR}/exchange/storyboard-vfx-designer.md`)
+  // The motion storyboard (job-types.md §4): an L job made it in the proof and G2 froze it; an M job makes it here.
+  let beatsIn = `${BEATS}   # the beat list the owner approved at G2`
+  let beatNotes = [`${DIR}/exchange/storyboard-sound-designer.md`, `${DIR}/exchange/storyboard-vfx-designer.md   # when rewards fly from the world`]
+  if (SIZE !== 'L') {
+    const st = await storyboard('Build stage')
+    if (st.stop) return st.stop
+    beatsIn = st.beatsIn
+    beatNotes = st.beatNotes
   }
-  const sc = keep('B0 storyboard sound', await call(ROLE.sound, {
-    id: 'B0-storyboard-sound', task: `UI cue list on the UI beat list: ${SCREEN}`,
-    intent: `Build stage, motion storyboard. Answer the beat list with the UI cue list keyed to the screen's event names: which beats sound and which stay quiet, each cue's onset against its beat${beatNotes.length ? ' and against the vfx-designer\'s world-to-HUD peaks' : ''}.`,
-    skills: ['sound-design'], inputs: [beatsIn, spec()].concat(beatNotes),
-    owns: [`${DIR}/exchange/storyboard-sound-designer.md`], deliver: `${DIR}/exchange/storyboard-sound-designer.md in the exchange-note format`,
-    checks: ['every cue names its event id and beat', 'every quiet beat says why'],
-  }, S_HANDBACK, 'Motion storyboard'))
-  if (!ok(sc)) return { status: 'failed', outcome: 'UI cue list not written' }
-  beatNotes.push(`${DIR}/exchange/storyboard-sound-designer.md`)
 
   phase('Figma build')
   const figma = keep('B1 Figma build and handoff', await call(ROLE.ui, {

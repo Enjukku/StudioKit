@@ -93,14 +93,15 @@ class UiScreenRecipeTests(unittest.TestCase):
         for changes, expect in cases:
             for size in ("M", "L"):
                 with self.subTest(changes=changes, size=size):
-                    out = run(UI, ui(stage="build", size=size, **changes))
+                    # L: the plan check runs in the proof, before the storyboard (J019-LD2); M: at the start of build
+                    out = run(UI, ui(stage="build" if size == "M" else "proof", size=size, **changes))
                     self.assertEqual(out["status"], "done", out["outcome"])
                     labels = out["labels"]
                     check = index(labels, r"^reviewer: B0-plan-check")
                     self.assertEqual(check >= 0, expect, labels)
                     if expect:
                         self.assertLess(check, index(labels, r"B0-storyboard"))
-                        self.assertLess(check, index(labels, r"feature-builder: B2-implement"))
+                        self.assertLess(check, index(labels, r"feature-builder: B2-implement" if size == "M" else r"P1-prototype"))
                         if size == "M":
                             self.assertGreater(check, index(labels, r"architect: C3-code-owners"))
                     else:
@@ -109,7 +110,7 @@ class UiScreenRecipeTests(unittest.TestCase):
     def test_plan_check_findings_correct_the_plan_before_the_build(self):
         for maker, fixer in (("architect", r"architect: B0-plan-fix-architect"), ("ui-ux-designer", r"ui-ux-designer: B0-plan-fix-ui-ux-designer")):
             with self.subTest(maker=maker):
-                out = run(UI, ui(stage="build"), {"blockLabel": r"reviewer: B0-plan-check", "maker": maker})
+                out = run(UI, ui(stage="build", size="M"), {"blockLabel": r"reviewer: B0-plan-check", "maker": maker})
                 self.assertEqual(out["status"], "done", out["outcome"])
                 labels = out["labels"]
                 fix = index(labels, fixer)
@@ -117,7 +118,7 @@ class UiScreenRecipeTests(unittest.TestCase):
                 self.assertEqual(sum(1 for x in labels if "B0-plan-check" in x), 1, "one exchange, no second check")
 
     def test_storyboard_runs_vfx_then_sound_before_the_figma_build(self):
-        out = run(UI, ui(stage="build"), {"timeline": True, "set": {"world_to_hud": True}, "dump": r"B1-figma"})
+        out = run(UI, ui(stage="build", size="M"), {"timeline": True, "set": {"world_to_hud": True}, "dump": r"B1-figma"})
         self.assertEqual(out["status"], "done", out["outcome"])
         board = span(out, r"ui-ux-designer: B0-storyboard$")
         vfx = span(out, r"vfx-designer: B0-storyboard-vfx")
@@ -132,7 +133,7 @@ class UiScreenRecipeTests(unittest.TestCase):
                 self.assertIn(text, prompt)
 
     def test_storyboard_without_world_rewards_skips_vfx_beats(self):
-        out = run(UI, ui(stage="build"), {"timeline": True, "dump": r"B0-storyboard-sound"})
+        out = run(UI, ui(stage="build", size="M"), {"timeline": True, "dump": r"B0-storyboard-sound"})
         self.assertEqual(index(out["labels"], r"B0-storyboard-vfx"), -1)
         self.assertGreater(span(out, r"ui-ux-designer: B1-figma")["start"], span(out, r"sound-designer: B0-storyboard-sound")["end"])
         self.assertNotIn("storyboard-vfx-designer.md", out["dumps"][0]["prompt"])
@@ -244,7 +245,7 @@ class UiScreenRecipeTests(unittest.TestCase):
 
     # ------------------------------------------------------------------ J019 lead review: a review that does not finish is never a pass
     def test_a_plan_check_that_does_not_finish_stops_the_build(self):
-        out = run(UI, ui(stage="build", risks=["paid-random"]), {"statusLabel": r"B0-plan-check", "status": "blocked"})
+        out = run(UI, ui(stage="build", size="M", risks=["paid-random"]), {"statusLabel": r"B0-plan-check", "status": "blocked"})
         self.assertEqual(out["status"], "blocked", out["outcome"])
         self.assertEqual(index(out["labels"], r"B2-implement"), -1, "no build after an unfinished plan check")
 
@@ -253,9 +254,31 @@ class UiScreenRecipeTests(unittest.TestCase):
         self.assertEqual(out["status"], "blocked", out["outcome"])
 
     def test_a_paid_reveal_gets_the_progression_review_and_a_high_reviewer(self):
-        out = run(UI, ui(stage="build", risks=["paid-random"], shop=False), {"dump": r"reviewer: B0-plan-check"})
+        out = run(UI, ui(stage="build", size="M", risks=["paid-random"], shop=False), {"dump": r"reviewer: B0-plan-check"})
         self.assertGreater(index(out["labels"], r"progression-designer: RV-candidate-r0-"), -1)
         self.assertIn("effort: high", out["dumps"][0]["prompt"])
+
+
+    # ------------------------------------------------------------------ J019-LD2: in L jobs the storyboard comes before the G2 prototype
+    def test_l_proof_runs_plan_check_then_storyboard_then_the_prototype(self):
+        out = run(UI, ui(stage="proof", size="L", shop=True), {"timeline": True, "set": {"world_to_hud": True}, "dump": r"P1-prototype"})
+        self.assertEqual(out["status"], "done", out["outcome"])
+        check = span(out, r"reviewer: B0-plan-check")
+        board = span(out, r"ui-ux-designer: B0-storyboard$")
+        sound = span(out, r"sound-designer: B0-storyboard-sound")
+        proto = span(out, r"ui-ux-designer: P1-prototype")
+        self.assertTrue(check["end"] < board["start"] and sound["end"] < proto["start"], out["labels"])
+        prompt = out["dumps"][0]["prompt"]
+        for text in ("motion/storyboard.md@rev", "storyboard-sound-designer.md", "G2 freezes those beats"):
+            with self.subTest(text=text):
+                self.assertIn(text, prompt)
+
+    def test_l_build_keeps_the_g2_beat_list_and_runs_no_second_storyboard(self):
+        out = run(UI, ui(stage="build", size="L", shop=True), {"dump": r"B1-figma"})
+        self.assertEqual(out["status"], "done", out["outcome"])
+        self.assertEqual(index(out["labels"], r"B0-storyboard"), -1)
+        self.assertEqual(index(out["labels"], r"B0-plan-check"), -1, "the plan check ran in the proof")
+        self.assertIn("the beat list the owner approved at G2", out["dumps"][0]["prompt"])
 
 
 if __name__ == "__main__":

@@ -61,7 +61,7 @@ Name the problem the change solves (inconsistency, unreadability, new camera or 
 Owner approves the packet; nothing is relabelled as approved under the new revision without review.
 
 ## 7. The standards every craft measures against
-The kit template does not yet carry these sections (proposal J018); add them to the game's bible under the direction record, never inside a lock block. Each row: value, source (owner decision id, measured capture, or PROPOSAL), and the check that uses it. Missing value → write `PROPOSAL: <starting value>` or `UNKNOWN`, never leave it blank.
+The kit template carries these sections as its Craft standards table (`templates/skill/art-bible.md`); fill them in the game's bible under the direction record, never inside a lock block. Each row: value, source (owner decision id, measured capture, or PROPOSAL), and the check that uses it. Missing value → write `PROPOSAL: <starting value>` or `UNKNOWN`, never leave it blank.
 | Section | Holds | Starting value (PROPOSAL until the owner decides) | Read by |
 | --- | --- | --- | --- |
 | Screen order | the ranked layers for play (default: UI and gameplay VFX, characters, environment) and any moment that differs | default order | every craft; RD2 |
