@@ -416,6 +416,7 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
         x, st = apply_steps((("design", lay["design"]),), card, ctx, x, rate)
         steps += [{**s, "layer": lay["name"]} for s in st]
         y = assemble.shape_layer(x, rate, lay["gain_db"], lay["fade_in_ms"], lay["fade_out_ms"])
+        y, edge = fade_layer_edges(y, rate)
         if lay["align"] is not None:
             at = assemble.transient_index(y, rate, lay["align"]["on"])
             standalone = at
@@ -430,7 +431,8 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
         info["layers"].append({"name": lay["name"], "take": take["take"], "rate": take["rate"],
                                "offset_samples": off, "offset_ms": round(1000 * off / rate, 3),
                                "gain_db": lay["gain_db"], "fade_ms": [lay["fade_in_ms"], lay["fade_out_ms"]],
-                               "align": lay["align"], "standalone_index": standalone,
+                               "align": lay["align"], "standalone_index": standalone, "edge_fade": edge,
+                               "length_samples": int(len(y)),
                                "reading_dc": None if lay["align"] is None else
                                [round(float(v), 6) for v in y.mean(axis=0)]})
     mix, placed = assemble.place(parts)
@@ -482,10 +484,36 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
     return mix, rate, {"layers": takes, "rate": rate}, steps, info
 
 
-def layer_rows(card: dict, layers: list, placed: list, rate: int) -> list[dict]:
-    """Each layer's own targets, measured on the layer as placed in the mix (alone, before the mix's design pass)."""
+def fade_layer_edges(y: np.ndarray, rate: int) -> tuple[np.ndarray, dict]:
+    """trim's hot-edge fade on both ends of a layer (the same function, `ops.fade_hot_edges`): a take that starts or
+    ends mid-waveform would click where the layer starts or stops inside the mix."""
+    return ops.fade_hot_edges(y, rate, y, start=True, end=True)
+
+
+def layer_edge_clicks(p: np.ndarray, off: int, n: int, rate: int) -> int:
+    """The clicks `measures` counts on a layer as placed (alone, in silence) within 1 ms of its first and last sample:
+    the steps where the layer starts and stops inside the mix (a layer at the file's start or end: its file edge)."""
+    k = int(round(measures.WRAP_CLICK_S * rate))
+    steps = measures.click_steps(p, rate)
+    near = [i for i in steps if abs(i - (off - 1)) <= k or abs(i - (off + n - 1)) <= k]
+    file_edges = measures.clicks(p, rate)["edges"]
+    return len(near) + sum(1 for e in file_edges if (e == "start" and off == 0) or (e == "end" and off + n == len(p)))
+
+
+EDGE_CLICKS_MUST_TIERS = ("important",)  # a layer's edge clicks: must for important cues, aim for the others
+
+
+def layer_rows(card: dict, layers: list, placed: list, rate: int, info: list | None = None) -> list[dict]:
+    """Each layer's own targets, measured on the layer as placed in the mix (alone, before the mix's design pass), and
+    each layer's edge clicks as placed (`layer[<name>].edge_clicks`, max 0: must for important cues, else aim)."""
     rows = []
-    for lay, p in zip(layers, placed):
+    for k, (lay, p) in enumerate(zip(layers, placed)):
+        if info is not None:
+            off, n = info[k]["offset_samples"], info[k]["length_samples"]
+            v = layer_edge_clicks(p, off, n, rate)
+            rows.append({"target": f"layer[{lay['name']}].edge_clicks", "measure": "clicks within 1 ms of the layer's "
+                         "edges, as placed", "value": v, "min": None, "max": 0,
+                         "must": card["tier"] in EDGE_CLICKS_MUST_TIERS, "result": "pass" if v == 0 else "miss"})
         if not lay["targets"]:
             continue
         rec = measures.measure_audio(p, rate)
@@ -576,7 +604,7 @@ def render(cue_dir: Path, picture: bool = False) -> tuple[dict, int]:
                 s["op"] in ("loudness", "peak") for s in edit):
             raise SoundbenchError(f"layers: the summed mix is not exportable ({mixinfo['headroom']['reason']}) and no "
                                   "design step, loudness or peak follows to bring it down: refused before the edit pass")
-        form_rows += layer_rows(card, form["layers"], placed, rate)
+        form_rows += layer_rows(card, form["layers"], placed, rate, mixinfo["layers"])
         starts = [(cue, x, take, steps)]
     elif form["takes"] is not None:
         starts = []

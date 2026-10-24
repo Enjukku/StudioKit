@@ -575,26 +575,47 @@ def op_trim(x, rate, p, ctx):
     if start > 0 and pre > 0 and np.any(np.abs(y[:pre]) > 0):
         y[:pre] *= np.linspace(0, 1, pre, endpoint=False)[:, None]
         faded = True
-    first_before = _edge_db(y[0], x)
-    edge_faded = False
-    share_before = measures.attack_share(y - y.mean(axis=0), rate)
-    if first_before is not None and first_before > EDGE_SILENT_DB:  # starts mid-waveform: it would click
-        k = min(len(y), max(1, int(round(EDGE_FADE_MS * rate / 1000))))
-        y[:k] *= np.linspace(0, 1, k, endpoint=False)[:, None]
-        edge_faded = True
-    share_after = measures.attack_share(y - y.mean(axis=0), rate)
-    extra = {}
-    if edge_faded and share_before and share_after is not None and share_after < FADE_IN_KEEP_SHARE * share_before:
-        # the lead's decision (R2-2): a click is worse, so it still fades; the loss is logged and the card's attack
-        # targets decide whether the render passes
-        extra["edge_fade_attack_loss"] = round(1 - share_after / share_before, 4)
+    y, edge = fade_hot_edges(y, rate, x, start=True, end=False)
+    extra = {k: edge[k] for k in ("edge_fade_attack_loss",) if k in edge}
     a = y - y.mean(axis=0)
     f01 = 1000 * measures.onset_index(a.mean(axis=1)) / rate
     mt = measures.main_transient_ms(a, rate)
     return y, {"binding": binding, "trimmed_ms": round(1000 * start / rate, 3), "preroll_faded": faded,
-               "first_sample_db_re_peak": [first_before, _edge_db(y[0], x)], "edge_faded": edge_faded,
-               "attack_share": [share_before, share_after],
+               "first_sample_db_re_peak": edge["start"]["db_re_peak"], "edge_faded": edge["start"]["faded"],
+               "attack_share": edge["attack_share"],
                "lead_in_ms": None if mt is None else round(max(0.0, mt - f01), 2), **extra}
+
+
+def fade_hot_edges(y: np.ndarray, rate: int, ref: np.ndarray, start: bool = True,
+                   end: bool = False) -> tuple[np.ndarray, dict]:
+    """The hot-edge fade, shared by `trim` (its start) and every layer (both ends, J020 step 6 edge round): an edge
+    sample above the peak of `ref` - 60 dB would click when playback (or the layer) starts or stops there, so the
+    first (last) 0.5 ms is faded from (to) zero. 7 of 10 real takes start mid-waveform. Logs each edge's level re the
+    peak before and after, the attack share before and after, and `edge_fade_attack_loss` when the fade leaves under
+    90 % of the attack share (the lead's decision R2-2: a click is worse, so it still fades; the card's attack targets
+    decide). Works on a copy."""
+    y = y.copy()
+    k = min(len(y), max(1, int(round(EDGE_FADE_MS * rate / 1000))))
+    share_before = measures.attack_share(y - y.mean(axis=0), rate)
+    out: dict = {}
+    for name, on, idx in (("start", start, 0), ("end", end, -1)):
+        if not on:
+            continue
+        before = _edge_db(y[idx], ref)
+        faded = before is not None and before > EDGE_SILENT_DB  # mid-waveform: it would click
+        if faded:
+            ramp = np.linspace(0, 1, k, endpoint=False)[:, None]
+            if name == "start":
+                y[:k] *= ramp
+            else:
+                y[len(y) - k:] *= ramp[::-1]
+        out[name] = {"db_re_peak": [before, _edge_db(y[idx], ref)], "faded": faded}
+    share_after = measures.attack_share(y - y.mean(axis=0), rate)
+    out["attack_share"] = [share_before, share_after]
+    if (any(e["faded"] for e in out.values() if isinstance(e, dict) and "faded" in e) and share_before
+            and share_after is not None and share_after < FADE_IN_KEEP_SHARE * share_before):
+        out["edge_fade_attack_loss"] = round(1 - share_after / share_before, 4)
+    return y, out
 
 
 def _edge_db(sample: np.ndarray, x: np.ndarray) -> float | None:

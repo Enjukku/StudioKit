@@ -184,7 +184,8 @@ class LayerTest(unittest.TestCase):
                 self.assertAlmostEqual(lay["measured"]["main_transient_ms"], 400.0, delta=1000 / R + 0.005)
                 # lead decision (round 2, F2): DC is removed for the reading only, never from the audio
                 self.assertEqual([st for st in doc["steps"] if st["op"] == "dc"], [])
-                self.assertAlmostEqual(lay["reading_dc"][0], float(np.mean(sw[:, 0])), places=5)
+                self.assertAlmostEqual(lay["reading_dc"][0], float(np.mean(sw[:, 0])), delta=1e-4)  # of the layer
+                # as placed: its 0.5 ms edge fades move the mean by about 1e-5
                 self.assertLessEqual(abs(lay["align_correction_samples"]), 1)
                 self.assertLessEqual(abs(lay["standalone_index"] + lay["offset_samples"] - lay["placed_index"]), 1)
 
@@ -207,6 +208,60 @@ class LayerTest(unittest.TestCase):
         np.testing.assert_allclose(y[off:off + n], x, atol=STEP)  # the take itself, sample for sample
         self.assertEqual(float(np.max(np.abs(y[:off]))), 0.0)
         self.assertEqual(m.clicks(y - y.mean(axis=0), R)["count"], 0)
+
+    def test_a_layer_that_starts_and_ends_mid_waveform_is_faded_and_does_not_click(self):
+        """Edge round (F7 class): a take that starts and ends mid-waveform clicked at both edges inside the mix and the
+        render exited 0. Each layer's edges get trim's own hot-edge fade (0.5 ms when the edge sample is over peak -
+        60 dB), logged as trim logs it, and the layer's edge clicks are a row, read with the clicks measure."""
+        cue = "SFX-L-HOT"
+        x = fx.make_real("quiet_hit", R)  # its first sample sits 5 dB under its peak
+        x = x[: int(0.3 * R)]  # cut mid-body: its last sample is hot too
+        pk = float(np.max(np.abs(x)))
+        self.assertGreater(float(np.max(np.abs(x[-1]))), pk * 10 ** (-60 / 20))
+        rec = {"layers": [{"name": "hit", "take": take(cue), "design": [], "offset_ms": 100.0}],
+               "design": [], "edit": []}
+        d = make_cue(self.d, card(cue), rec, {take(cue): (x, R)})
+        doc, code = render.render(d)
+        edge = doc["layers"]["layers"][0]["edge_fade"]
+        self.assertEqual((edge["start"]["faded"], edge["end"]["faded"]), (True, True))
+        self.assertEqual(len(edge["attack_share"]), 2)
+        y = delivered(d)
+        self.assertEqual(m.clicks(y - y.mean(axis=0), R)["count"], 0)
+        row = rows_by(doc)["layer[hit].edge_clicks"]
+        self.assertEqual((row["value"], row["must"], row["result"]), (0, False, "pass"))
+        self.assertEqual(code, 0)
+        off, k = int(round(0.1 * R)), int(round(0.5 * R / 1000))
+        np.testing.assert_allclose(y[off + k:off + len(x) - k], x[k:len(x) - k], atol=STEP)  # only the edges change
+
+    def test_layer_edge_clicks_are_read_and_must_for_important_cues(self):
+        """A spike 0.7 ms into the layer, past the 0.5 ms fade: an edge click the fade cannot remove. It is an aim miss
+        on a minor cue (exit 0, listed) and a must miss on an important one (exit 1)."""
+        for tier, want_must, want_code in (("minor", False, 0), ("important", True, 1)):
+            with self.subTest(tier=tier):
+                cue = f"SFX-L-SPK-{tier.upper()}"
+                x = fx.make_real("quiet_whoosh", R)
+                x[30] += 0.5 * float(np.max(np.abs(x)))
+                lay = {"name": "air", "take": take(cue), "design": [], "offset_ms": 50.0}
+                if tier == "important":
+                    lay["targets"] = {"sound_ms": {"min": 1, "must": False}}
+                d = make_cue(self.d, card(cue, "whoosh", tier=tier),
+                             {"layers": [lay], "design": [], "edit": []}, {take(cue): (x, R)})
+                doc, code = render.render(d)
+                row = rows_by(doc)["layer[air].edge_clicks"]
+                self.assertEqual((row["value"], row["must"], row["result"]), (1, want_must, "miss"))
+                self.assertEqual(code, want_code)
+
+    def test_trim_still_fades_its_start_through_the_shared_function(self):
+        """trim and the layers call one hot-edge fade (no copy): trim's log keys and numbers are unchanged."""
+        x = fx.make_real("soft_note", R)
+        y, info = ops.run("trim", x, R, ops.check_params("trim", {}), {"binding": "main_transient"})
+        self.assertTrue(info["edge_faded"])
+        self.assertEqual(float(np.max(np.abs(y[0]))), 0.0)
+        for k in ("first_sample_db_re_peak", "attack_share"):
+            self.assertEqual(len(info[k]), 2)
+        with mock.patch.object(ops, "fade_hot_edges", side_effect=AssertionError("called")):
+            with self.assertRaises(AssertionError):
+                ops.run("trim", x, R, ops.check_params("trim", {}), {"binding": "main_transient"})
 
     def test_the_correction_after_placing_still_lands_a_skewed_reading(self):
         """The safety net kept by the lead: when the first reading is off (here forced 600 samples off), the one
@@ -954,6 +1009,16 @@ FAULTS = {
     "R3: no correction after placing (align read on the layer alone)":
         (lambda: mock.patch.object(render, "ALIGN_CORRECTIONS", 0),
          [(LayerTest, "test_the_correction_after_placing_still_lands_a_skewed_reading")]),
+    "edge round: layer edges not faded":
+        (lambda: mock.patch.object(render, "fade_layer_edges", lambda y, rate: (y, {
+            "start": {"faded": False}, "end": {"faded": False}, "attack_share": [None, None]})),
+         [(LayerTest, "test_a_layer_that_starts_and_ends_mid_waveform_is_faded_and_does_not_click")]),
+    "edge round: the edge-click row always reads 0":
+        (lambda: mock.patch.object(render, "layer_edge_clicks", lambda p, off, n, rate: 0),
+         [(LayerTest, "test_layer_edge_clicks_are_read_and_must_for_important_cues")]),
+    "edge round: the edge-click row always an aim":
+        (lambda: mock.patch.object(render, "EDGE_CLICKS_MUST_TIERS", ()),
+         [(LayerTest, "test_layer_edge_clicks_are_read_and_must_for_important_cues")]),
     "variants drawn without the seed":
         (lambda: mock.patch.object(assemble.np.random, "RandomState", lambda seed=None: RS(None)),
          [(VariantTest, "test_the_plan_is_seeded_and_spreads_over_the_range")]),
