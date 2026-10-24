@@ -8,7 +8,7 @@ supersedes: []
 revision: 1
 ---
 > Author: film-director · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; beat contract, state-change columns and gameplay state sheet added by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J015, film-direction skill §3); frontmatter, beat ids, consumers and change table added by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3. Used for cutscenes, key moments and effects; it is the cutscene contract (one writer: the film-director). Copy to the job folder or `knowledge/design/moments/<moment-id>.md`. Shots, exact timings and cues live in the shot list (`templates/film/shotlist.example.json`), not here. Revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): problem-to-budget contract rows, intensity and resistance columns, options and pick. -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; beat contract, state-change columns and gameplay state sheet added by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J015, film-direction skill §3); frontmatter, beat ids, consumers and change table added by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3. Used for cutscenes, key moments and effects; it is the cutscene contract (one writer: the film-director). Copy to the job folder or `knowledge/design/moments/<moment-id>.md`. Shots, exact timings and cues live in the shot list (`templates/film/shotlist.example.json`), not here. Revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): problem-to-budget contract rows, intensity and resistance columns, options and pick. Revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design): shot camera, length and markers planned here, no animatic. -->
 
 # Beat sheet: <job-id or moment-id>
 
@@ -36,7 +36,7 @@ What each row must hold: `film-direction` §3 step 1; checked by `film-craft/ref
 | Platform limits | <romance, injury, horror, franchise: what is excluded (`platform-policy`)> |
 
 ## Beats
-One row per beat (`film-direction` §3 step 3; checked by P-05). A beat that changes neither understanding nor feeling is cut or merged. Beat ids (`B01`, `B02`, ...) are stable: never renumber; a new beat takes the next free id. Times are filled from the shot list after previs; before that write the event that ends the beat. Event ids are the shot list's cue ids (`cues[].id`, e.g. `sfx.beacon.pulse`) that VFX, sound and the animator key to.
+One row per beat (`film-direction` §3 step 3; checked by P-05). A beat that changes neither understanding nor feeling is cut or merged. Beat ids (`B01`, `B02`, ...) are stable: never renumber; a new beat takes the next free id. Times come from the shot list the film-director writes with this sheet in D1 (every shot's camera, length and the marker list; no boards or animatic, J024); before that write the event that ends the beat. Event ids are the shot list's cue ids (`cues[].id`, e.g. `sfx.beacon.pulse`) that VFX, sound and the animator key to.
 
 | Beat | Shots | Event ids (shot list `cues`) | Start-end (s) or ending event | Player knows before | Event that changes it (seen or heard) | Whose intention is active | Question carried into the next beat | What resists | Intensity (calm / rising / climax) | What the player sees / feels | Fixed (value + source) | Open per craft (camera / anim / vfx / sound / environment / UI / model) | Owner notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

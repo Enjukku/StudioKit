@@ -1,4 +1,4 @@
-> Author: J018 maker orchestration · claude-opus-5-5 · high · 2026-10-22 (repair rounds 1 and 2 the same day). Part of `orchestration`: built also from the owner's Riot transcripts (J018). What the lead's job cards and briefs carry so each craft can build for the next one. Formats: `rules/messages.md` §1-3; exact vs open per craft: `preproduction/references/handoffs.md` §2; the recipes themselves: `references/job-types.md`. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): target-experience sentence, stop floor and bar out of fixed, outside method.
+> Author: J018 maker orchestration · claude-opus-5-5 · high · 2026-10-22 (repair rounds 1 and 2 the same day). Part of `orchestration`: built also from the owner's Riot transcripts (J018). What the lead's job cards and briefs carry so each craft can build for the next one. Formats: `rules/messages.md` §1-3; exact vs open per craft: `preproduction/references/handoffs.md` §2; the recipes themselves: `references/job-types.md`. Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021): target-experience sentence, stop floor and bar out of fixed, outside method. Revised by orchestrator-writer · claude-opus-5-5 · default · 2026-10-24 (J023): asking the next craft first is the joint needs meeting. Revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design): asking the next craft first is the needs step in direction; capped repair hand-offs (§11).
 
 # Briefs and hand-offs
 
@@ -14,14 +14,15 @@ Before any output, the brief states (in `<intent>` prose, values in `<spec>`):
 | Sell list (visual work) | the job lead's direction | 1 friendly, 2 belongs to the player, 3 farm theme |
 | Display sizes (visual work) | game profile | game camera on a phone, inventory icon, shop card |
 | Budget | job card; image caps start from `reference-images/references/rounds.md` §7 (a higher cap states its reason) | 2 option rounds; images: round 1 at most 6 including regenerations, round 2 at most 3; 400 k tokens |
-| Stop criteria | job card: `stop` floor and bar (`rules/messages.md` §2) | floor: the success test reads in the roughs and their measured grey views at phone size; bar: a cold viewer picks the pet's owner from black-fill alone; or notes repeat |
-| What the consumers need | the needs round (§2) | rigger: joint list and moving parts; animator: the idle pose that must face the camera |
+| Stop criteria | job card: `stop` floor and bar (`rules/messages.md` §2) | floor: the success test reads in the G1 options and their measured grey views at phone size; bar: a cold viewer picks the pet's owner from black-fill alone; or notes repeat |
+| What the consumers need | the merged plan from the direction stage's needs tables (§2) | rigger: joint list and moving parts; animator: the idle pose that must face the camera |
 
 A line the brief cannot fill is written `TBD` with an owner and a test, never invented. `refs` cover every key pose, material and place the work needs; a missing reference is made (`reference-images`, a posed Blender mannequin), never "from memory".
 
 ## 2. Asking the next craft first
 - Before a producer builds, each consumer names what it needs from it: views and callouts (modeler, from the reference images), joint positions, cuts and moving parts (rigger, from the modeler), frame lengths and named markers (VFX and sound, from the animator), layers and crop-safe masters (marketing), data fields and events (UI and VFX, from the builders), footstep materials (sound, from the environment designer).
-- In a saved workflow the recipe's needs round does this through files; in a hand-run stage you ask, and the answers go into the contract, never only into chat.
+- This is the **needs step in direction** (`rules/company.md` §4 step 2; the recipe's needs and limits rows, J024): before G1, every craft in the needs row writes one needs table (≤ 12 rows, `templates/jobs/needs-table.md`) against the job lead's plan revision 1, reading only the plan and its own brief; the job lead merges once into plan revision 2; N2 runs only on a conflict the job lead cannot settle, with only the conflicting rows. In a saved workflow it runs through files; in a hand-run stage you spawn the writers, and the answers go into the plan, never only into chat.
+- Later steps read the merged contract and never ask a craft again for timings, cue ids, joint lists or materials; a need found later is a contract change (`rules/messages.md` §5), not a new round.
 - A strong motif found by any craft (a shape, a symbol, a colour story) is recorded in the contract or, through the art director, in the art bible, so UI, VFX, environment and marketing reuse it.
 - A concept or reference marks where motion and effects go as intent ("the spout tilts toward the next crop"); timing and technique stay with the animator and VFX designer.
 - A consumer hand-back with an unanswered question about its input is a defect in the producer's brief: fix the brief, not the consumer.
@@ -38,9 +39,9 @@ These are contents of the card and briefs, not new stages; stage changes are rec
 | Job type | Add |
 | --- | --- |
 | Character or creature | the role the roster needs (from the game-designer) and its nearest look-alike; the sell list; the shared rig and its joint list (a part with no joint is a scope request); every costly part with its reason (capes, loose cloth, new joint chains, long hair); one character per form; for a creature meant to scare, "keep it scary" with a reference |
-| Stage | the ranked list of what the environment serves (play spaces and routes first, landmarks and first view next, filler last), made with the game-designer; the approved blockout as the limit (a change to routes, cover, sight lines or collision goes to the game-designer first); the floor-material list for the sound designer; light only after the last route change |
+| Stage | the ranked list of what the environment serves (play spaces and routes first, landmarks and first view next, filler last), made with the game-designer; the approved blueprint and route graph as the limit (a change to routes, cover, sight lines or collision goes to the game-designer first); the floor-material list for the sound designer; light only after the last route change |
 | UI screen | the flow (entry, decision, steps, exit) and every screen and state (empty, error, loading, disabled with its reason, reward, pending) before any style |
-| Gameplay feature | the grey-box verdict before any production art brief; the feedback stack per action (attempt cue, confirmed outcome) and its importance tier; a core-mode or rule change adds a linked balance re-check of every unit it touches (game-designer, progression-designer) |
+| Gameplay feature | the feedback stack per action (attempt cue, confirmed outcome) and its importance tier; a core-mode or rule change adds a linked balance re-check of every unit it touches (game-designer, progression-designer) |
 | Effect | the event's importance tier, its play rate and worst-case count; the marker names it keys from |
 | Marketing art | the launched thing as the hero; the asset kit planned at the start (icon, thumbnails, banner, social crops) from one layered master |
 | Live update or event | the player pain point or data behind it (`live-ops-design`, `analysis-design`); the audience and a "what fans want" line; the themes it combines and their maturity level; the theme's differentiator from the nearest existing theme |
@@ -62,7 +63,7 @@ These are contents of the card and briefs, not new stages; stage changes are rec
 ```text
 <intent>
 New players have no friend to follow around the farm. The pet must read as theirs and friendly in one second on a phone,
-and it should feel "happy to see you". This is the direction stage: rough options, not finished art.
+and it should feel "happy to see you". This is the direction stage: pictured options at equal finish and the character sheet, not finished art.
 </intent>
 <spec>
 id: J0xx-T01
@@ -127,3 +128,6 @@ Per-role defaults: `.agents/roles/README.md` (owner-approved).
 | Craft and creative judgment, integrated reviews | Opus · per role table |
 | Reading docs into fact sheets; data pulls; Studio checks | Sonnet · medium |
 | Search, copying, formatting, filing, data entry | Haiku · low (medium if the job ends with a check) |
+
+## 11. Capped repair hand-offs (J024)
+A repair brief to a maker carries only its own findings (id, expected, observed, evidence path), the parts changed since it last worked (file @ revision) and the protected list; a rechecking reviewer gets its own previous findings and that changed-parts list, and reopens only those parts and the fresh capture. At most 10 findings and about 1,500 words per brief; the findings left out go on one `omitted: <ids> (lower rank, sent next round if still open)` line. Never the other reviewers' full review files or the whole previous candidate. Format and rule: `rules/messages.md` §6. In a hand-run stage you build these briefs; saved workflows build them themselves.

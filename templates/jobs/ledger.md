@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: tickets for new work only; stage instead of hops; stale status); frontmatter added by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: tickets for new work only; stage instead of hops; stale status); frontmatter added by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3; revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design: no proof stage) -->
 
 # Ledger: <job-id>
 
@@ -19,7 +19,7 @@ Every request for **new work** between agents is a ticket here (`rules/company.m
 | from, to | asking agent, doing agent |
 | ask | pointer to a brief file in the `rules/messages.md` §2 format |
 | inside | yes = same scope, crew, budget; no = needs decision |
-| stage | direction, proof, build or repair |
+| stage | direction, build or repair |
 | status | proposed, approved, working, blocked, needs-decision, done, failed, stale, cancelled |
 | result | pointer to output files with revisions |
 | updated | date |

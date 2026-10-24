@@ -113,7 +113,7 @@ Workflow: `rig-pipeline` skill. Copy to `content/rigs/<asset-id>/rig-sheet.md`. 
 | S4 geometry accepted | rigger | | | |
 | K5 rig tested | rigger | | | |
 | S6 rig accepted | animator | | | |
-| G2 / G3 | owner | | | decision line |
+| G3 (J024: no G2) | owner | | | decision line |
 
 | Revision | Date | What changed | Retests run |
 | --- | --- | --- | --- |

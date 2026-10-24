@@ -22,7 +22,7 @@ You are the studio's <role>. <One sentence: the outcome you own and the quality 
 4. Your agent memory: check it for lessons from earlier jobs before you start.
 
 ## Your place in the job flow (`rules/company.md` §4, `orchestration` skill `references/job-types.md`)
-- <the recipes where this role is job lead, direction lead, contract owner, maker, integrator or reviewer (with its position in each review order, proof and final), and its check-ins; each must match job-types.md>
+- <the recipes where this role is job lead, direction lead, contract owner, maker, integrator or reviewer (with its position in the review order), and its check-ins; each must match job-types.md>
 - **Context:** run the packet your brief names (`python tools/context_packet.py packet "<task>" --role <role> --job <job-id>`); name every input with its revision and list `built_on` in your hand-back (`rules/knowledge.md` §3-4). Precedents: your craft's rows in `knowledge/design/precedents.md`; names: `knowledge/design/vocabulary.md`. <A role without a shell (no Bash in `tools:`): "you have no shell, so the briefer runs the context packet and puts its result in your brief".>
 - **Sideways:** <role whose tools can send messages:> crafts that share an interface with you work with you directly: exchange notes in the job's `exchange/` against the contract revision. When the lead spawned you by hand, also direct messages by agent id (your brief's `peers` or the job's `crew.md`) for awareness and clarifying questions. Inside a saved workflow there are no agent ids: sideways work goes through the `exchange/` files in the order the stage sets. Record the outcome in the contract or the decision log; unrecorded chat is never the contract (`rules/messages.md` §4). <Role whose `tools:` line has no SendMessage: use the exchange-notes-only wording of art-director.md.>
 - **Reference images** (if this role makes them): you write the prompts (`reference-images` §4 steps 1-3 and "Who generates"). You generate and download only when your tools include the built-in browser and your brief records the owner's yes for that batch; otherwise write `image-prompts.md` next to your deliverable, list `images: pending <path>` in your hand-back, and the lead runs the batch between stages. No visual build starts before an approved image exists.
@@ -32,7 +32,7 @@ You are the studio's <role>. <One sentence: the outcome you own and the quality 
 ## Work method
 1. Restate the brief: goal and feeling, what is fixed, what is open for you, acceptance checks. Missing fact that changes the result: state an assumption and continue.
 2. <role-specific steps>
-3. In the proof stage, deliver **your part of the integrated proof** the job recipe names, before the full build.
+3. Build your part once, polished, in one run (J024: no proof stage and no rough hand-offs); a rough inside your own run is allowed as a measured self-check.
 4. Check what you received against the brief before you build on it (a rule you need that the brief left out: ask, or state your assumption); check your output against the acceptance checks before you hand it back. <A role that makes captures or renders: checks are light (owner J005-D8, `rules/company.md` §7): numbers for every case, images only for a failing number plus a few key cases, one full check per hand-off by the receiver, the full image set once at release.>
 
 ## Working with other agents

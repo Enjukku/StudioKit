@@ -7,12 +7,12 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6). One packet per gate (G1, G2, G3), one screen, kept by the lead. The order of the sections is `orchestration` SKILL §8; what each gate shows, the image budget and the checks block are `orchestration/references/gates-and-feedback.md` §2; a filled example: same file §8.1. Copy to the job folder as `gate-<G1|G2|G3>.md`.; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: belief check, BAR line, target-experience sentence) -->
+<!-- Template: J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6). One packet per gate (G1, G3; no G2 since J024), one screen, kept by the lead. The order of the sections is `orchestration` SKILL §8; what each gate shows, the image budget and the checks block are `orchestration/references/gates-and-feedback.md` §2; a filled example: same file §8.1. Copy to the job folder as `gate-<G1|G3>.md`.; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: belief check, BAR line, target-experience sentence); revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design: no G2, G1 shows the agreed plan, gate-pause last line) -->
 
-# Gate packet: <job-id> <G1 | G2 | G3> (candidate revision <n>)
+# Gate packet: <job-id> <G1 | G3> (candidate revision <n>)
 
 ## 1. The artifact as players meet it
-<path: game-camera capture at phone size, playable preview or icon at its slot size>
+<G1: the option sheet (L) or the direction picture (M), and the agreed plan (plan revision 2) path; G3: game-camera capture at phone size, playable preview or icon at its slot size>
 Not shown: <failed option>, "<the reason>" (<who>)
 
 ## 2. Goal question
@@ -62,3 +62,5 @@ Owner-confirmed lines: <feel at normal speed; listening>
 | Estimate (tokens) | Actual (tokens) |
 | --- | --- |
 | | |
+
+<last line, only when this chat is past the session size (`rules/assistants/claude.md`, Gate pause): "Please answer in a fresh session (or run /compact first); the stage state is in the job files.">

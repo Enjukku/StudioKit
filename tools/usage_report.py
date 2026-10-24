@@ -9,9 +9,9 @@ first call (start-up cost), the median and peak context per call, the total cont
 entered the context, and compactions. It reads the repository's transcript folder and every
 worktree folder of it (`<slug>--claude-worktrees-*`), and subagents at any depth (workflow agents too).
 
-Flags (defaults are PROPOSAL values, J022; change them per run):
-  big context      median context per call over --median-k (200 k)
-  no compaction    peak over --peak-k (400 k) with no automatic compaction
+Flags (peak is the owner's number, J023-D1; the others are PROPOSAL values, J022; change them per run):
+  big context      median context per call over --median-k (300 k)
+  no compaction    peak over --peak-k (500 k, the owner's session size, J023-D1) with no automatic compaction
   many images      a main chat with more than --images (20) images
   many calls       more than --calls (400) calls in one session or agent
   helper on Opus   a built-in helper agent (general-purpose, Explore, Plan) that ran on an Opus model
@@ -19,7 +19,7 @@ Flags (defaults are PROPOSAL values, J022; change them per run):
 Usage:
   python tools/usage_report.py [--since YYYY-MM-DD | --days 7] [--json] [--top 15]
                                [--root REPO] [--projects-dir DIR]
-                               [--median-k 200] [--peak-k 400] [--images 20] [--calls 400]
+                               [--median-k 300] [--peak-k 500] [--images 20] [--calls 400]
 
 Exit codes: 0 ok, 1 no transcript folder for this project.
 """
@@ -153,7 +153,7 @@ def render(out: dict, since: dt.datetime, limits: dict, top: int) -> str:
     lines = [f"# Context and usage since {since.date()}", "",
              f"{len(s)} sessions, {len(a)} subagents, {calls} calls, {k(read)} context read in total. "
              f"Limits: median {k(limits['median'])}, peak {k(limits['peak'])}, images {limits['images']}, "
-             f"calls {limits['calls']} (PROPOSAL, J022).", "",
+             f"calls {limits['calls']} (peak: owner J023-D1; others PROPOSAL, J022).", "",
              "## Sessions (largest first)", "",
              "| Place | Session | Calls | Start | Median | Peak | Read | Subagents (read) | Images | Compactions auto/manual | Flags |",
              "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
@@ -179,8 +179,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--top", type=int, default=15, help="rows per table")
     ap.add_argument("--root", type=Path, default=REPO, help="repository whose transcripts to read")
     ap.add_argument("--projects-dir", type=Path, default=None, help="default ~/.claude/projects")
-    ap.add_argument("--median-k", type=int, default=200)
-    ap.add_argument("--peak-k", type=int, default=400)
+    ap.add_argument("--median-k", type=int, default=300)
+    ap.add_argument("--peak-k", type=int, default=500)
     ap.add_argument("--images", type=int, default=20)
     ap.add_argument("--calls", type=int, default=400)
     args = ap.parse_args(argv)

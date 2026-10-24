@@ -17,6 +17,6 @@ supersedes: []
 ## Lead decisions
 | ID | Decision | Reason |
 | --- | --- | --- |
-| J022-LD1 | Thresholds 200 k median, 400 k peak, 20 images, 400 calls are PROPOSAL defaults of the report, not limits | No owner number; they match the Session size row and S1 |
+| J022-LD1 | (Superseded for median and peak by J023-D1: 300 k median, 500 k peak.) Thresholds 200 k median, 400 k peak, 20 images, 400 calls are PROPOSAL defaults of the report, not limits | No owner number; they match the Session size row and S1 |
 | J022-LD2 | The rules go in `rules/assistants/claude.md` (harness specifics) plus one sentence in `rules/company.md` §7 and one in `orchestration` §1 step 5; no new section | Instruction size stays under 200 lines; no renumbering |
 | J022-LD3 | `usage_report.py` reuses `improve_scan.py` readers and counts one call per message id | One reader for transcripts; the first hand tally double-counted streamed records |

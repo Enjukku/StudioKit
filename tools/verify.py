@@ -34,7 +34,7 @@ ALWAYS_LOADED_MAX = 200
 SKILL_MAX = 500
 DESCRIPTION_MAX = 400
 IMPORT_DEPTH = 4
-TIMEOUT = 600
+TIMEOUT = 1200  # J023: the full suite (1216 tests, workflow replays) took 696 s on 2026-10-24
 # Claude Code memory imports: @path tokens outside code spans and fences.
 IMPORT_RE = re.compile(r"(?<![\w`@/])@([~.\w][\w./\\~-]*)")
 CODE_SPAN = re.compile(r"`[^`\n]*`")

@@ -1,4 +1,4 @@
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. J010. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 feedback stack and checks C5-C6; §11-§14 attempt and outcome, tables as data, test hooks, the shared marker names and sync rule). Format: `rules/messages.md` (§2 brief, §3 hand-back). Values in angle brackets are filled per ticket; example values are examples, not defaults. Every brief is sent whole in one message and lists every rule the receiver must keep.
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. J010. Revised by J018 maker feature-builder · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018) (§1 feedback stack and checks C5-C6; §11-§14 attempt and outcome, tables as data, test hooks, the shared marker names and sync rule). Format: `rules/messages.md` (§2 brief, §3 hand-back). Values in angle brackets are filled per ticket; example values are examples, not defaults. Every brief is sent whole in one message and lists every rule the receiver must keep. Revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design): hand-off lines for the cut flow (needs in direction, no proof, no check-ins).
 
 # Engineering hand-offs
 
@@ -17,7 +17,7 @@
 | performance-engineer → builder | fix inside the builder's files | capture, bottleneck, budget, behaviour to keep |
 | builder → architect | third patch, or the API cannot meet the contract | the attempts and measurements, or the 4-part decision |
 | engineer → game-designer | missing design intent | the question, options, default |
-| architect ↔ animator, vfx-designer, sound-designer, ui-ux-designer | before the plan freezes | the needs round for the presentation contract (`architecture` `references/presentation-contract.md` §3) |
+| architect ↔ animator, vfx-designer, sound-designer, ui-ux-designer | before the plan freezes | the needs and limits tables in direction, before G1 (J024), for the presentation contract (`architecture` `references/presentation-contract.md` §3) |
 | engineer ↔ ui-ux-designer, vfx-designer, sound-designer, animator, environment-designer | a feature needs their craft, or their output needs wiring | the gameplay contract (fixed), the craft (open) |
 
 Rules for every hand-off: the receiver checks what it gets, at the named revision, against the brief before building on it; the reply goes to the asker; new work has a ledger ticket, clarifying questions go to the peer directly and their outcome into the contract (`rules/company.md` §5); `inside: no` → `needs-decision`.

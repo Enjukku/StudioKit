@@ -88,4 +88,4 @@ Figma can keyframe a node (`applyManualKeyframeTrack`, easing objects such as `{
 ## 7. Limits
 - View settings (pixel grid, pixel preview, snap to pixel grid) are the owner's app settings; the API cannot switch them. For pixel work keep every x, y, width, height and stroke an integer and ask the owner to switch them on.
 - Plugins (vectorize, remove background) cannot run through MCP.
-- `generate_image` (Figma AI credits) is used only when the owner asks; ChatGPT in the built-in browser is the default (`reference-images` §4) (`image-generation.md` §1). Tell the owner how many images each route used.
+- `generate_image` (Figma AI credits) is used only when the owner asks; ChatGPT in the owner's Chrome (Claude in Chrome) is the default (`reference-images` §4) (`image-generation.md` §1). Tell the owner how many images each route used.

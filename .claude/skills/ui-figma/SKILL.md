@@ -16,7 +16,7 @@ description: Shared Figma craft for Roblox game UI - file setup, depth block, ou
 | Which Figma effect Roblox can draw, which must be baked; fonts on both sides; export sizes, 9-slice, handoff package | `references/roblox-handoff.md` |
 | Building directly in the owner's Figma: which Figma server skill to load, build order, Plugin API rules that bite game UI, tutorial moves as API calls, motion prototypes, limits | `references/figma-mcp.md` |
 | Sunbursts, glows, sparkles, rings, shines, runes: the shared VFX texture library (7,906 tagged Roblox images) | `references/effect-assets.md` |
-| Generating reference images and icons **with ChatGPT** (default: ChatGPT in the built-in browser, prompts from `tools/art/art_refs.py print`; Figma `generate_image` only when the owner asks) and the art bible locks | `references/image-generation.md`; `reference-images` skill |
+| Generating reference images and icons **with ChatGPT** (default: ChatGPT in the owner's Chrome (Claude in Chrome), prompts from `tools/art/art_refs.py print`; Figma `generate_image` only when the owner asks) and the art bible locks | `references/image-generation.md`; `reference-images` skill |
 | The original step-by-step recipes with timestamps | `knowledge/reference/ui/01a`-`04` (TC, TS, TA, TP) |
 
 ## 3. Steps

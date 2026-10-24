@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: target-experience sentence, belief check, floor and bar) -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: target-experience sentence, belief check, floor and bar); revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design: no proof stage and no G2, `performance` risk token) -->
 
 # Job card: <job-id> <title>
 
@@ -21,12 +21,12 @@ supersedes: []
 | Size | S / M / L |
 | Type (recipe) | cutscene / character / stage / ui-screen / feature / effect / marketing-art / other: <why> |
 | Job lead (agent) | |
-| Direction leads | |
+| Needs and limits writers | <the recipe's needs and limits rows for this job, conditional crafts marked> |
 | Integrator | |
 | Studio place (`studio_id`) | <the test place the Studio driver uses; none = Blender or files only> |
-| Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect at the interfaces step |
+| Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect in its direction limits table and merged into the plan (`rules/company.md` §4 step 2) |
 | Linked jobs | <job-id: which shared interface it owns (saved fields, ids, who grants, who checks)>; none = a single job |
-| Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): tokens (the saved workflow's `risks` arg: `.agents/workflows/jobs/README.md`): `money`, `saves`, `remotes`, `trades`, `paid-random` (paid random items), `server-result` (the server confirms the result), `rewards`, `frequent-effect`, `danger-area`, `sold-variant`, `new-enemy` (with gameplay behaviour), `shop-screen` (shop, odds or progress screen), `event` (from a live-ops update brief); none = "none" |
+| Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): tokens (the saved workflow's `risks` arg: `.agents/workflows/jobs/README.md`): `money`, `saves`, `remotes`, `trades`, `paid-random` (paid random items), `server-result` (the server confirms the result), `rewards`, `frequent-effect`, `danger-area`, `sold-variant`, `new-enemy` (with gameplay behaviour), `performance` (the performance-engineer gives limits and reviews), `shop-screen` (shop, odds or progress screen), `event` (from a live-ops update brief); none = "none" |
 | Status | proposed |
 
 ## Four lines (goal)
@@ -63,7 +63,6 @@ What they hold: `orchestration` SKILL §3 step 3 (token estimate source) and `or
 | Stage | Stop criteria | Passes | Image cap | Tokens estimate | Tokens actual |
 | --- | --- | --- | --- | --- | --- |
 | direction | | | | | |
-| proof | | | | | |
 | build | | | | | |
 
 ## Acceptance checks
@@ -73,7 +72,6 @@ What they hold: `orchestration` SKILL §3 step 3 (token estimate source) and `or
 | Gate | Date | Revision approved | Owner's words | Doors closed (CD ids in `decisions.md`) |
 | --- | --- | --- | --- | --- |
 | G1 direction | | | | |
-| G2 proof (L) | | | | |
 | G3 final | | | | |
 
 ## Close-out

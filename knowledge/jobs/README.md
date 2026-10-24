@@ -8,7 +8,7 @@ M and L jobs get a folder `knowledge/jobs/<job-id>/`, copied from `templates/job
 | --- | --- | --- | --- |
 | job-card.md | job-card.md | lead | the owner's words verbatim, the four lines and goal word, size, recipe, crew, stop criteria and budget per stage (tokens), gates with approved revisions and doors closed, close-out |
 | direction/proposal-<role>.md | (the recipe's D1 brief) | each direction lead | its independent first proposal. Never in the context packet or the area indexes (`rules/knowledge.md` §3): the job lead reads them through its synthesis brief |
-| direction.md | direction-sheet.md | job lead | target experience, G1 options and goal question, dropped options (CD ids in `decisions.md`), non-negotiables, known limits, stop criteria and budget, decision records, signatures |
+| direction.md | direction-sheet.md | job lead | target experience, G1 options and goal question, dropped options (CD ids in `decisions.md`), non-negotiables, known limits, stop criteria and budget, decision records, conflicts with owner, resolution and confirmations (J023) |
 | contract (beat-sheet.md, rig sheet, contract-<name>.md) | beat-sheet.md, `templates/rig/`, contract-header.md | the decision owner | the shared plan crafts build against, with a revision and a change table. Its **Consumers** table is the job's dependency map for that contract (no separate file) |
 | decisions.md | (layout below) | lead | gate answers and other owner decisions with the owner's words and the revision approved; the job's one Closed doors table |
 | gate-<G1\|G2\|G3>.md | gate-packet.md | lead | the packet the owner answers at that gate |
