@@ -96,3 +96,38 @@ verdict: fix-first
 ```
 
 Blocking: F1, F2, F3, F4, F5. Ranked by harm: F1 to F4 are money (a charged call with no record, or credits spent on a known failure), and F5 is the D7 cap. There are no key-leak findings at the blocking level: F6 and F7 are recommendations.
+
+## Round 2: repair round 1 (69460b7), narrow re-review
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-24
+
+**Depth:** deep, re-review by the problem (V-17), against the frozen revision 69460b7. The working tree has no changes under `tools/audio/` or the soundbench tests relative to it. No real calls were made. The scenario script `rev/scen2.py` replaces `urllib.request.urlopen` and `socket.create_connection` with functions that raise, so any real network attempt would fail loudly. None did. S2 patches `generate._opener`, which is what the new code uses. S7 uses only loopback servers.
+
+**About the builder's note on round 1 S2:** at 5a1b5bb, `urllib_send` called `urllib.request.urlopen`, and my S2 patched exactly that name. The round-1 output ("RAISED IncompleteRead") came from the patched object, so no real request was sent in round 1. The note is correct for the new code, and round 2 patches the opener.
+
+```text
+<spec>
+artifact: tools/audio/soundbench@69460b7 (generate.py; tests test_soundbench_generate.py)
+reviewer: reviewer
+looked_at_first: [git diff 69460b7~1 69460b7 -- generate.py (whole), plan() at 69460b7, the changed orphan test]
+earlier_findings:
+  - {id: F1, state: fixed, retest: "S2 (opener patched): 200 + character-cost 6, body cut -> 3 attempts, each charged 'unknown' counted 6 (header cost), possibly 18, exit 2, run log written, lock released. Decode raising ImportError after a paid take: run log written (spent 6), lock released, take and sidecar kept on disk"}
+  - {id: F2, state: fixed, retest: "S1: path taken during the paid call -> the paid bytes go to takes/rejected/SFX-G-HIT.r1.t1.wav with a sidecar, the run continues, spent 18, exit 1, one log, lock released. A held lock is refused before any call (exit 2)"}
+  - {id: F3, state: fixed, retest: "S3: 504, 504, 200 at budget 6 -> 1 call, possibly 6, exit 1 (stopped by the budget); at budget 18 -> 3 calls, spent 6 + possibly 12, exit 0"}
+  - {id: F4, state: fixed, retest: "S4: ffmpeg missing -> refused, 0 calls, no takes/ folder, no lock left; the check runs only when decode is the real intake (generate.py: 'if decode is intake.decode_take'), and the CLI path always uses the real intake"}
+  - {id: F5, state: fixed, retest: "S5: plain r1-r2 then layers -> layer round 3; after body r3, renaming to body2 -> refused. cue_rounds counts rejected .keptN, .bin, layer .keptN and an orphan .json (all -> round 3); another cue's prefix (SFX-G-HITX) is not counted"}
+  - {id: F6, state: fixed, retest: "redir.py: a 302 from loopback comes back as status 302, the other host receives nothing; the run stops with exit 2. A '200' HTML meta-refresh is not followed: its bytes go to rejected/ as not audio, counted at the prediction, exit 1"}
+  - {id: F7, state: fixed, retest: "S6: key placed across byte 600 -> no prefix in the log"}
+findings: []
+changed_test: "test_an_orphan_file_uses_its_round_and_is_never_touched replaces 'an existing file is refused before spending'. This is right under the per-cue round rule (F5 fix): an orphan r1 file is evidence that round 1 started, so counting it is conservative for J020-D7 and spends nothing. The guarantee the old test protected (never overwrite) still holds: the orphan's bytes are checked unchanged, and plan() still refuses any existing path of the new round before any call"
+stated_limits:
+  - "A lock left by a hard kill (process killed, power loss) blocks the cue until someone deletes it. finally releases it on every exception, KeyboardInterrupt included (checked). The refusal names the file and says when to delete it"
+  - "Redaction covers the key as text and the sk_ shape. A service that echoes the key in another encoding (UTF-16, checked: written as s\u0000k\u0000_..., or JSON- or percent-escaped) is not redacted. This needs the service to echo the key in an exotic form"
+  - "A run stopped by the budget mid-round still uses its round with fewer takes (behaviour unchanged from rev 1; conservative for D7)"
+  - "cue_rounds matches without regard to case, so a file with the cue id in other case counts (conservative; no spend)"
+  - "From round 1, still open: the real-service billing on 5xx and cut bodies, the v3 and loop cost model, and the real format-refusal body"
+tests: "test_soundbench_generate + test_soundbench_render on 69460b7: 71 run, 1 skipped (live), OK"
+weakest_part: "The lock was checked in one process with a pre-made lock file, not with two real processes started at the same moment; open(mode 'x') being atomic on NTFS is assumed from the OS, not probed."
+verdict: ready for the next review
+</spec>
+```

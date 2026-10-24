@@ -34,7 +34,7 @@ supersedes: []
 | Code file owners | set when the tool design is approved |
 | Linked jobs | J019 G3-P11 (sound designer tools), J018-D7 |
 | Risks (review slots) | none of the game tokens; tool risk: wrong numbers that look right (J018 lesson) |
-| Status | G1 passed 2026-10-23 (J020-D13); build in progress: steps 1-6 and 8 done (see Progress) |
+| Status | G1 passed 2026-10-23 (J020-D13); build in progress: steps 1-8 done (see Progress) |
 
 ## Four lines (goal)
 | Line | Value |
@@ -70,6 +70,10 @@ supersedes: []
 | 8 books (sound designer skill and role follow the approved workflow) | done; pushed | `982592c` |
 | 5 rank | done; review round 3 ready (`review-rank.md`); known limits: clipped short hits after MP3, steady full-scale rumble reads clipped, no real take of 2 s or more yet | `b12e82e`, `99f3782`, `8aa1e4b` |
 | 6 layers, loops, variants | done; review round 3 ready (`review-step6.md`); known limits: seam jump under the click floor in a bed with a loud section (R1), the edge fade moves the align reading up to 1.6 ms (R4, kept: align reads the audio that is delivered), Roblox's transcode at the loop point not measured, no real take of 2 s or more | `1cdae69`, `2b69063`, `b260065`, `13b27b3` |
-| 7 generate (key registered, J020-D14) · 9 real cue set, G3 | pending | — |
+| 7 generate | done; review round 2 ready (`review-generate.md`); measured on the account (330 credits): 0.5 s minimum, ceil(11 × s) with a duration and 55 flat without, WAV on Creator tier; lead decision: the 3-round limit (D7) is per cue over every sound name; limits: a lock left by a hard kill blocks the cue until deleted, real 5xx billing and format-refusal wording unobserved | `5a1b5bb`, `69460b7` |
+| 8 follow-up: books cover generate, rank, layers, loops, variants and the measured facts | done | `0eb1637` |
+| next: rank does not rank layer takes (`<cue>.<layer>.r<k>.t<n>`) · 9 real cue set, G3 | pending | — |
 
 **Resume:** `git status` (the builder's repair edits to `tools/audio/soundbench/` and `tools/tests/test_soundbench_*.py` may be on disk uncommitted). If the repair hand-back is missing, re-run the review findings above against the files: re-test F1 (hit-speed-1, denoise nr 40 nf -20 must be refused) and F2 (one-sided family) with copies from `GreatWallSim/.claude/worktrees/modest-cartwright-690aa7/audio/_raw/sfx/`; gate; commit; then a short re-review; then step 5. Open notes: ElevenLabs WAV output needs the Pro tier (§8); an `ELEVENLABS_API_KEY` is also set in the Windows environment and wins over the key file.
+
+**Owner action (2026-10-24):** the Windows user variable `ELEVENLABS_API_KEY` holds an ElevenLabs key ID, not a key; it wins over the key file and every call fails with HTTP 400 `api_key_id_used_as_api_key`. Delete it or set it to the real key.
