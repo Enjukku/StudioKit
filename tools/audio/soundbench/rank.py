@@ -463,6 +463,13 @@ def prompt_misses(entries: list[dict]) -> list[dict]:
     return sorted(by.values(), key=lambda d: (not d["must"], -d["takes_missing"], d["target"]))
 
 
+def form_note(proof: dict | None) -> str:
+    """Review step 6 R2: the proof recipe has no loop or variants step, so a loop or variant card's proof can fail form
+    rows that only render judges. The "use" text says so; the verdict and exit code do not change."""
+    rows = [r for r in (proof or {}).get("must_failed", []) if r.split(":")[-1].startswith(("form.", "variants."))]
+    return f"; form rows (loop, variants) are judged at render: {', '.join(rows)}" if rows else ""
+
+
 def needs_proof(top: dict) -> bool:
     """Only a take rank says to use is proven by a real render (review-rank R2-1: a failing top take may be one render
     cannot export; that round is regenerate, exit 1, never a refusal)."""
@@ -529,7 +536,8 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
     if top["passes_after_fix"]:
         code = 0
         verdict = {"action": "use", "take": top["take"], "recipe_edit": top["fix"]["steps"],
-                   "say": f"{top['take']} passes every must-target after its fixable steps: start recipe.json from it"}
+                   "say": f"{top['take']} passes every must-target after its fixable steps: start recipe.json from it"
+                          + form_note(proof)}
     else:
         code = 1
         last = k >= MAX_ROUNDS

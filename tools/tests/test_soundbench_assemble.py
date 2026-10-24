@@ -29,6 +29,7 @@ except ImportError:  # optional deps: the kit gate is standard library only
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from tools.audio.soundbench import assemble, intake, ops, render  # noqa: E402
+from tools.audio.soundbench import rank as rank_mod  # noqa: E402
 from tools.audio.soundbench import export as exportmod  # noqa: E402
 from tools.audio.soundbench import fixtures as fx  # noqa: E402
 from tools.audio.soundbench import measures as m  # noqa: E402
@@ -162,6 +163,51 @@ class LayerTest(unittest.TestCase):
         offs = [e["offset_samples"] for e in doc["layers"]["layers"]]
         self.assertEqual(offs[0] + 400, offs[1] + 2500)  # both click peaks land on the same sample
 
+    def test_the_logged_transient_is_read_after_placing_and_matches_the_marker(self):
+        """Review step 6 R3: a rising layer with DC, placed in a long mix, logged its main transient at 372.22 ms for a
+        400 ms marker (the layer's own mean was removed for align, the placed file's mean for the log). The log is now
+        read on the placed layer, and align corrects once by that same reading: the two agree within one sample, or
+        the log flags the reading as unstable."""
+        for dc in (0.0, 0.1, 0.3):
+            with self.subTest(dc=dc):
+                cue = f"SFX-L-DC{int(dc * 10)}"
+                sw = fx.make_real("quiet_whoosh", R)
+                sw = sw + dc * float(np.max(np.abs(sw)))
+                rec = {"layers": [{"name": "swish", "take": take(cue, 1), "design": [], "align": {"to_ms": 400.0}},
+                                  {"name": "bed", "take": take(cue, 2), "design": [], "offset_ms": 0}],
+                       "design": [], "edit": [{"op": "peak"}]}
+                d = make_cue(self.d, card(cue, "whoosh"), rec,
+                             {take(cue, 1): (sw, R), take(cue, 2): (fx.make_bed("steady_noise", R, 5.0) * 0.1, R)})
+                doc, _ = render.render(d)
+                lay = doc["layers"]["layers"][0]
+                self.assertFalse(lay["align_unstable"], lay)
+                self.assertAlmostEqual(lay["measured"]["main_transient_ms"], 400.0, delta=1000 / R + 0.005)
+                # lead decision (R3): DC removed before the reading, so the standalone and as-placed readings agree
+                self.assertTrue(lay["auto_dc"])
+                auto = [st for st in doc["steps"] if st.get("layer") == "swish" and st["op"] == "dc"]
+                self.assertEqual(len(auto), 1)
+                self.assertIn("added automatically", auto[0]["why"])
+                self.assertLessEqual(abs(lay["align_correction_samples"]), 1)
+                self.assertLessEqual(abs(lay["standalone_index"] + lay["offset_samples"] - lay["placed_index"]), 1)
+
+    def test_the_correction_after_placing_still_lands_a_skewed_reading(self):
+        """The safety net kept by the lead: with the automatic DC step taken away, the DC-skewed whoosh needs a large
+        correction, and the one correction after placing still lands it on the marker by the placed reading."""
+        cue = "SFX-L-NET"
+        sw = fx.make_real("quiet_whoosh", R)
+        sw = sw + 0.1 * float(np.max(np.abs(sw)))
+        rec = {"layers": [{"name": "swish", "take": take(cue, 1), "design": [], "align": {"to_ms": 400.0}},
+                          {"name": "bed", "take": take(cue, 2), "design": [], "offset_ms": 0}],
+               "design": [], "edit": [{"op": "peak"}]}
+        d = make_cue(self.d, card(cue, "whoosh"), rec,
+                     {take(cue, 1): (sw, R), take(cue, 2): (fx.make_bed("steady_noise", R, 5.0) * 0.1, R)})
+        with mock.patch.object(render, "with_auto_dc", lambda design, align: (design, False)):
+            doc, _ = render.render(d)
+        lay = doc["layers"]["layers"][0]
+        self.assertGreater(abs(lay["align_correction_samples"]), 100)  # the skew the DC step now prevents
+        self.assertFalse(lay["align_unstable"])
+        self.assertAlmostEqual(lay["measured"]["main_transient_ms"], 400.0, delta=1000 / R + 0.005)
+
     def test_a_layer_at_another_rate_is_resampled_with_a_log_line_and_keeps_its_time(self):
         cue = "SFX-L-RATE"
         a = np.zeros((4410, 2))
@@ -292,6 +338,34 @@ def failing(rows: dict) -> set:
 
 def search_for(kind: str) -> float:
     return 20.0 if kind in ("steady_tone", "tonal_pad") else 0.0
+
+
+def wind_rain_bed(seconds: float, quiet_db: float = -30.0, loud_share: float = 0.5, seed: int = 3) -> np.ndarray:
+    """The reviewer's R1 bed (review step 6, lib.bed2): circular wind low-passed at 400 Hz at `quiet_db`, rain
+    (low-passed at 6 kHz) swelling in over the middle `loud_share` of the loop; it loops exactly; peak 0.5."""
+    rs = np.random.RandomState(seed)
+    n = int(seconds * R)
+    t = np.arange(n) / n
+    f = np.fft.rfftfreq(n, 1 / R)
+    lp = lambda fc: 1 / np.sqrt(1 + (f / fc) ** 4)  # noqa: E731
+    wind = np.stack([np.fft.irfft(np.fft.rfft(rs.standard_normal(n)) * lp(400), n) for _ in range(2)], 1)
+    rain = np.stack([np.fft.irfft(np.fft.rfft(rs.standard_normal(n)) * lp(6000), n) for _ in range(2)], 1)
+    wind /= np.sqrt(np.mean(wind ** 2))
+    rain /= np.sqrt(np.mean(rain ** 2))
+    c = np.cos(np.pi * loud_share)
+    env = np.clip((np.cos(2 * np.pi * (t - 0.5)) - c) / (1 - c), 0, None)
+    y = wind * 10 ** (quiet_db / 20) + rain * env[:, None]
+    return y / np.max(np.abs(y)) * 0.5
+
+
+def seam_jump(y: np.ndarray, j: float) -> np.ndarray:
+    """A level step of j over the last 200 ms (eased in over 50 ms): at the wrap the file jumps back by j."""
+    z = y.copy()
+    k, ramp = int(0.2 * R), int(0.05 * R)
+    off = np.zeros(len(z))
+    off[-k:] = j
+    off[-k:-k + ramp] = j * (0.5 - 0.5 * np.cos(np.pi * np.arange(ramp) / ramp))
+    return z + off[:, None]
 
 
 class LoopTest(unittest.TestCase):
@@ -436,6 +510,57 @@ class LoopTest(unittest.TestCase):
                 with self.assertRaisesRegex(SoundbenchError, why):
                     assemble.loop_bed(x, R, loop_params("loop_bed", **p))
 
+    def test_a_card_seam_target_tightens_r26_and_loosens_it_only_as_a_must_with_a_why(self):
+        """Review step 6 F1: an aim loop_seam {max: 50} lifted the must F-08 row to 50, so a 0.1 x peak drift jump at
+        the wrap of a tonal pad (F-08 2.7-3.2, caught by no other row) passed at exit 0. A card limit only tightens
+        R-26's 2; it loosens it only as a must target with a `why`."""
+        for sec in (2, 10, 30):
+            x = fx.make_bed("tonal_pad", R, sec + 0.5)
+            y, info = assemble.loop_bed(x, R, loop_params("loop_bed", crossfade_ms=250, search_ms=20))
+            z = y + np.linspace(0, 0.1 * float(np.max(np.abs(y))), len(y))[:, None]
+            for label, seam, want_max in (("aim 50", {"max": 50, "must": False}, 2.0),
+                                          ("aim 3", {"max": 3, "must": False}, 2.0),
+                                          ("must 50 without why", {"max": 50, "must": True}, 2.0),
+                                          ("stricter aim 1.0", {"max": 1.0, "must": False}, 1.0),
+                                          ("must 50 with why", {"max": 50, "must": True,
+                                                                "why": "a granular bed: its seam steps are its texture"},
+                                           50.0)):
+                with self.subTest(seconds=sec, card=label):
+                    c = card("X", "loop_bed", targets={"loop_seam": seam})
+                    row = judge(z, info, c)["form.loop_f08"]
+                    self.assertEqual(row["max"], want_max)
+                    self.assertGreater(row["value"], 2.0)
+                    self.assertEqual(row["result"], "pass" if want_max == 50.0 else "miss")
+        cue = "AMB-AIM50"  # the reviewer's full render (fa_render.py): exit 1, not 0
+        x = fx.make_bed("tonal_pad", R, 10.5)
+        y, _ = assemble.loop_bed(x, R, loop_params("loop_bed", crossfade_ms=250, search_ms=20))
+        z = y + np.linspace(0, 0.1 * float(np.max(np.abs(y))), len(y))[:, None]
+        c = card(cue, "ambience", category="ambience", form={"loop": True},
+                 targets={"loop_seam": {"max": 50, "must": False}})
+        d = make_cue(self.d, c, {"take": take(cue), "design": [], "edit": []}, {take(cue): (z, R)})
+        doc, code = render.render(d)
+        self.assertEqual(code, 1)
+        self.assertIn("form.loop_f08", doc["must_failed"])
+        own = rows_by(doc)["loop_seam"]  # the card's own aim row is unchanged (rank's proof compares it)
+        self.assertEqual((own["max"], own["must"], own["result"]), (50, False, "pass"))
+        self.assertEqual(rows_by(doc)["form.loop_f08"]["limit_from"],
+                         "R-26 (the card's looser limit needs must: true and a why)")
+
+    def test_known_miss_a_seam_in_the_quiet_part_of_a_bed_with_a_loud_section(self):
+        """Pinned known limit (review step 6 R1, lead's decision: named, not recalibrated): wind with rain swelling in
+        over the middle half, looping exactly; a seam jump the size of the wind's own RMS sits under the click floor
+        (1 % of the file peak), and F-08 and wrap_hf read it against the loud rain, so every row passes. The same
+        jump 12 dB larger is caught by the click count. When this test fails, the limit has moved: update the
+        README and docstrings."""
+        y = wind_rain_bed(10.0)
+        local = float(np.sqrt(np.mean(y[-int(0.05 * R):] ** 2)))
+        miss = judge(seam_jump(y, local), None)
+        self.assertEqual(failing(miss), set())  # the known miss
+        self.assertLess(miss["form.loop_wrap_hf"]["value"], -20.0)  # blind by far: the rain sets the baseline
+        caught = judge(seam_jump(y, local * 10 ** (12 / 20)), None)
+        self.assertIn("form.loop_wrap_clicks", failing(caught))
+
+
     def test_rank_still_ranks_and_proves_a_loop_card(self):
         """rank's proof compares render's `targets` with its own simulation row by row: the loop rows live in
         `form_checks`, so a loop card's round is ranked as before (no refusal), and its proof agrees."""
@@ -577,6 +702,22 @@ class VariantTest(unittest.TestCase):
         self.assertEqual(p.returncode, 2, p.stderr)  # a hard refusal
         self.assertIn("SC-12", p.stderr)
         self.assertFalse((d / "out").exists())
+
+    def test_rank_use_names_the_form_rows_its_proof_leaves_to_render(self):
+        """Review step 6 R2: rank said "passes every must-target" while its own proof render failed form.variants (the
+        proof recipe makes no variants). The verdict and exit code stay; the "use" text names the form rows."""
+        from tools.audio.soundbench import rank
+
+        cue = "SFX-V-RANK"
+        c = card(cue, form={"variants": 4})
+        c["level"] = {"measure": "F-09", "target": -24.0, "tolerance": 1.0, "must": True}
+        d = make_cue(self.d, c, {"take": take(cue), "design": [], "edit": []},
+                     {take(cue, n): (fx.make_real("quiet_hit", R, seed=10 + n), R) for n in (1, 2, 3)})
+        (d / "recipe.json").unlink()
+        doc, code = rank.rank(d)
+        self.assertEqual((code, doc["verdict"]["action"]), (0, "use"))
+        self.assertEqual(doc["proof"]["must_failed"], ["form.variants"])
+        self.assertIn("form rows (loop, variants) are judged at render: form.variants", doc["verdict"]["say"])
 
     def test_one_variant_file_per_take(self):
         d = variant_cue(self.d, "SFX-V-TAKES", 3, takes=3)
@@ -745,6 +886,22 @@ FAULTS = {
     "the bar length floored instead of rounded":
         (lambda: mock.patch.object(assemble, "bar_samples", _floored_bars),
          [(LoopTest, "test_loop_music_is_bar_aligned_and_keeps_its_downbeat")]),
+    "F1: an aim loop_seam target sets the must F-08 limit (review step 6)":
+        (lambda: mock.patch.object(render, "f08_limit", lambda c: (c.get("targets", {}).get("loop_seam", {}).get(
+            "max", render.LOOP_F08_MUST_MAX), "card")),
+         [(LoopTest, "test_a_card_seam_target_tightens_r26_and_loosens_it_only_as_a_must_with_a_why")]),
+    "F1: the card limit never applied (a stricter card limit ignored)":
+        (lambda: mock.patch.object(render, "f08_limit", lambda c: (render.LOOP_F08_MUST_MAX, "R-26")),
+         [(LoopTest, "test_a_card_seam_target_tightens_r26_and_loosens_it_only_as_a_must_with_a_why")]),
+    "R2: rank's use text without the form rows":
+        (lambda: mock.patch.object(rank_mod, "form_note", lambda proof: ""),
+         [(VariantTest, "test_rank_use_names_the_form_rows_its_proof_leaves_to_render")]),
+    "R3: the automatic DC step dropped (lead decision)":
+        (lambda: mock.patch.object(render, "with_auto_dc", lambda design, align: (design, False)),
+         [(LayerTest, "test_the_logged_transient_is_read_after_placing_and_matches_the_marker")]),
+    "R3: no correction after placing (align read on the layer alone)":
+        (lambda: mock.patch.object(render, "ALIGN_CORRECTIONS", 0),
+         [(LayerTest, "test_the_correction_after_placing_still_lands_a_skewed_reading")]),
     "variants drawn without the seed":
         (lambda: mock.patch.object(assemble.np.random, "RandomState", lambda seed=None: RS(None)),
          [(VariantTest, "test_the_plan_is_seeded_and_spreads_over_the_range")]),

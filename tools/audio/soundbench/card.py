@@ -182,9 +182,12 @@ def check_targets(targets, where0: str) -> dict:
         where = f"{where0}.{name}"
         if name not in TARGETS:
             raise SoundbenchError(f"{where}: unknown target (known: {sorted(TARGETS)})")
-        _keys(spec, {"min", "max", "must", "binds_to"} if name == "onset_ms" else {"min", "max", "must"}, {"must"},
-              where)
+        allowed = {"min", "max", "must"} | ({"binds_to"} if name == "onset_ms" else set()) | (
+            {"why"} if name == "loop_seam" else set())  # loop_seam: a looser R-26 limit needs must + why (render)
+        _keys(spec, allowed, {"must"}, where)
         _bool(spec["must"], where + ".must")
+        if "why" in spec and (not isinstance(spec["why"], str) or not spec["why"].strip()):
+            raise SoundbenchError(f"{where}.why: needs a non-empty reason")
         if "min" not in spec and "max" not in spec:
             raise SoundbenchError(f"{where}: needs min, max or both")
         lo = _num(spec["min"], where + ".min") if "min" in spec else None

@@ -428,7 +428,11 @@ def loop_wrap(x: np.ndarray, rate: int, seam_ms: float | None = None) -> dict:
         -17.8 on continuous beds; on beds that already hold near-silent lulls they read 0: not seen). None when
         fewer than 8 windows lie outside the seam region.
 
-    Known false readings: a seam on a natural transient (a hit in the bed) reads a high wrap_hf_db (2 of 1,160 natural
+    Known false readings (known limit, review step 6 R1): beds with a loud section: a seam jump under the click
+    floor is not caught. F-08 and wrap_hf read the seam against the whole loop, so a jump in a quiet passage
+    (wind at -30 dB with rain swelling in over half the loop) reads 40 dB under their limits, and only the click
+    floor (1 % of the file peak) remains: a jump the size of the wind's own RMS passes every row
+    (test_known_miss_a_seam_in_the_quiet_part_of_a_bed_with_a_loud_section). Also: a seam on a natural transient (a hit in the bed) reads a high wrap_hf_db (2 of 1,160 natural
     positions over 3 dB in the step 6 calibration); a seam in a natural lull reads a gap; a slope break with no jump
     (a waveform reflected at its crest) is not read; a click inside loud noise hides as in `clicks`; a bump at the
     seam is not read here (the loop step measures its crossfade against its sources: a bed's loudest moment can sit

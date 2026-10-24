@@ -82,8 +82,13 @@ def resample(x: np.ndarray, rate: int, to_rate: int) -> tuple[np.ndarray, dict]:
 
 
 def transient_index(x: np.ndarray, rate: int, on: str) -> int:
-    """The sample a layer is aligned by: F-01's onset, or the main transient as `measures.main_transient_ms` reads it
-    (envelope index + the window-centre offset, so the placed layer measures to the marker)."""
+    """The sample a layer is aligned by first: F-01's onset, or the main transient as `measures.main_transient_ms`
+    reads it (envelope index + the window-centre offset). `render.mix_layers` then reads each layer as placed and
+    corrects the offset once by that reading, so the log and the placement agree (review step 6 R3). DC skews the
+    main-transient reading (a whoosh with DC of 0.1 x peak read 1,225 samples apart alone and in a long mix), so a
+    layer aligned on its main transient gets `dc` first in its design pass automatically (`render.with_auto_dc`,
+    logged); with it the correction is 0 samples at DC of 0 to 0.5 x peak. A layer still more than one sample off
+    after the correction is flagged `align_unstable`."""
     pad = 2 * max(1, int(round(measures.ENV_S * rate)))  # read the layer as it will sit in the file, after silence:
     a = np.vstack([np.zeros((pad, x.shape[1])), x])     # a take loud at its first sample read 0.84 ms later alone
     a = a - a.mean(axis=0)
