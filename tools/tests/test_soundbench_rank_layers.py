@@ -86,7 +86,7 @@ def plain_take(cue_dir: Path, round_no: int, n: int, x: np.ndarray) -> None:
     write_take(cue_dir / "takes" / f"{cue_dir.name}.r{round_no}.t{n}.mp3", x)
 
 
-def cue_folder(root: Path, card: dict, layers: list | None = None) -> Path:
+def cue_folder(root: Path, card: dict, layers: list | None = None, **recipe_parts) -> Path:
     """card.json and recipe.json with the layer plan: sub aligned on its main transient at 300 ms (so the mix is
     longer than the air layer alone), air from the start at -3 dB."""
     cue = root / card["cue"]
@@ -97,7 +97,7 @@ def cue_folder(root: Path, card: dict, layers: list | None = None) -> Path:
                    "align": {"to_ms": 300.0, "on": "main_transient"}, "targets": SUB},
                   {"name": "air", "take": f"takes/{card['cue']}.air.r1.t1.mp3", "design": [], "offset_ms": 0,
                    "gain_db": -3.0, "targets": AIR}]
-    recipe = {"cue": card["cue"], "layers": layers, "design": [], "edit": []}
+    recipe = {"cue": card["cue"], "layers": layers, "design": [], "edit": [], **recipe_parts}
     (cue / "recipe.json").write_text(json.dumps(recipe), encoding="utf-8")
     return cue
 
@@ -118,6 +118,18 @@ def render_choice(cue: Path, layers: list, edit: list) -> tuple[dict, int]:
     rec = json.loads((cue / "recipe.json").read_text(encoding="utf-8"))
     (cue / "recipe.json").write_text(json.dumps({**rec, "layers": layers, "design": [], "edit": edit}),
                                      encoding="utf-8")
+    try:
+        return render.render(cue)
+    finally:
+        (cue / "recipe.json").write_text(json.dumps(rec), encoding="utf-8")
+
+
+def render_as_written(cue: Path, takes: dict, edit: list) -> tuple[dict, int]:
+    """Render recipe.json exactly as written, with only each layer's take and the edit pass replaced (the oracle for
+    review-rank-layers F1 and F3: design steps and the loop stay)."""
+    rec = json.loads((cue / "recipe.json").read_text(encoding="utf-8"))
+    layers = [{**lay, "take": f"takes/{takes[lay['name']]}"} for lay in rec["layers"]]
+    (cue / "recipe.json").write_text(json.dumps({**rec, "layers": layers, "edit": edit}), encoding="utf-8")
     try:
         return render.render(cue)
     finally:
@@ -193,7 +205,7 @@ class LayerRankTest(unittest.TestCase):
         rendered = next(r for r in out["form_checks"] if r["target"] == "layer[air].tail_snr_db")["value"]
         self.assertEqual(ranked, rendered)
         card = card_for("SFX-LR-FRAME")  # the same placed audio read alone, at its own length: another value
-        air = next(lay for lay in rank.layer_plan(cue, card)[0] if lay["name"] == "air")
+        air = next(lay for lay in rank.layer_plan(cue, card)["layers"] if lay["name"] == "air")
         c = rank.place_candidate(cue, card, air, 1, "takes/SFX-LR-FRAME.air.r1.t1.mp3", 1)
         alone = render.layer_rows(card, [air], [c["_p"]], R, [c["_info"]])
         self.assertNotEqual(next(r for r in alone if r["target"] == "layer[air].tail_snr_db")["value"], rendered)
@@ -301,14 +313,121 @@ class LayerRankTest(unittest.TestCase):
                                                                        code_before))
 
 
+    def test_the_mix_design_pass_is_judged_and_proven_as_recipe_json_writes_it(self):
+        """review-rank-layers F1. The card wants the whole cue under 30 % sub energy; recipe.json's mix design pass
+        high-passes the mix at 250 Hz (4th order), which takes the bass's energy away. As written, render passes; with
+        the design stripped the mix misses below_120. rank must judge the recipe as written."""
+        card = card_for("SFX-LR-MIXDES", targets={**CARD["targets"], "below_120": {"max": 0.3, "must": True}})
+        cue = cue_folder(self.d, card, design=[{"op": "highpass", "hz": 250, "order": 4}])
+        layer_round(cue, {"sub": [bass()], "air": [whoosh()]})
+        doc, code = self.rank(cue)
+        v = doc["verdict"]
+        self.assertEqual((code, v["action"]), (0, "use"), v["say"])
+        self.assertEqual(v["recipe"]["design"], [{"op": "highpass", "hz": 250, "order": 4}])
+        out, rcode = render_as_written(cue, v["takes"], v["recipe_edit"])
+        self.assertEqual((rcode, out["must_failed"]), (0, []))
+        self.assertEqual(out["export"]["audio_sha256_float32"], doc["proof"]["audio_sha256_float32"])
+
+    def test_a_layer_design_pass_is_judged_and_copied_into_recipe_layers(self):
+        """review-rank-layers F1. recipe.json gives the air layer a designed tail (space, decay 0.6 s); the air layer
+        must sound at most 500 ms. The whoosh is 480 ms bare and longer with its tail: as written it misses, so rank
+        must not pass it (render reads the layer after its design pass)."""
+        air_lay = {"name": "air", "take": "takes/SFX-LR-LAYDES.air.r1.t1.mp3", "offset_ms": 0, "gain_db": -3.0,
+                   "design": [{"op": "space", "decay_s": 0.6, "wet": 0.3}],
+                   "targets": {"sound_ms": {"max": 500, "must": True}}}
+        sub_lay = {"name": "sub", "take": "takes/SFX-LR-LAYDES.sub.r1.t1.mp3", "design": [{"op": "lowpass", "hz": 300}],
+                   "align": {"to_ms": 300.0, "on": "main_transient"}, "targets": SUB}
+        cue = cue_folder(self.d, card_for("SFX-LR-LAYDES"), [sub_lay, air_lay])
+        layer_round(cue, {"sub": [bass()], "air": [whoosh()]})
+        doc, code = self.rank(cue)
+        air = layer(doc, "air")["takes"][0]
+        self.assertEqual(air["must_after"], ["layer[air].sound_ms"])
+        self.assertEqual((code, doc["verdict"]["action"]), (1, "regenerate"))
+        self.assertEqual(layer(doc, "sub")["placement"]["design"], [{"op": "lowpass", "hz": 300}])
+        out, _ = render_as_written(cue, {"sub": layer(doc, "sub")["top"], "air": air["take"]}, [])
+        rendered = {r["target"]: r for r in out["form_checks"] if r["target"].startswith("layer[")}
+        for e in (air, layer(doc, "sub")["takes"][0]):
+            for r in e["after"]:
+                self.assertEqual((r["value"], r["result"]), (rendered[r["target"]]["value"],
+                                                             rendered[r["target"]]["result"]), r["target"])
+        cue2 = cue_folder(self.d, card_for("SFX-LR-LAYDES2"),
+                          [sub_lay, {**air_lay, "targets": {"sound_ms": {"max": 2000, "must": True}}}])
+        layer_round(cue2, {"sub": [bass()], "air": [whoosh()]})
+        doc2, _ = self.rank(cue2)
+        v = doc2["verdict"]
+        self.assertEqual(v["action"], "use", v["say"])
+        self.assertEqual({lay["name"]: lay["design"] for lay in v["recipe_layers"]},
+                         {"sub": sub_lay["design"], "air": air_lay["design"]})  # a copied recipe keeps its design
+        out, rcode = render_as_written(cue2, v["takes"], v["recipe_edit"])
+        self.assertEqual((rcode, out["must_failed"]), (0, []))
+
+    def test_a_loop_recipe_gets_no_trim_cut_or_fade_and_is_proven_with_its_loop(self):
+        """review-rank-layers F3. A layered bed card with an onset must and a loop_bed in recipe.json; the air layer
+        starts 60 ms in, so the old plan trimmed. render refuses trim, cut and fade in a loop recipe's edit pass."""
+        card = card_for("SFX-LR-LOOP", kind="loop_bed", category="ambience", form={"loop": True},
+                        targets={"onset_ms": {"max": 5, "must": True, "binds_to": "F-01"}})
+        lays = [{"name": "sub", "take": "takes/SFX-LR-LOOP.sub.r1.t1.mp3", "design": [], "offset_ms": 60,
+                 "targets": SUB},
+                {"name": "air", "take": "takes/SFX-LR-LOOP.air.r1.t1.mp3", "design": [], "offset_ms": 60,
+                 "targets": {"below_120": {"max": 0.2, "must": True}}}]
+        cue = cue_folder(self.d, card, lays, loop={"op": "loop_bed", "crossfade_ms": 50})
+        layer_round(cue, {"sub": [bass()], "air": [whoosh()]})
+        doc, code = self.rank(cue)
+        steps = [s["op"] for s in doc["mix"]["fix"]["steps"]]
+        self.assertFalse(set(steps) & {"trim", "cut", "fade"}, steps)
+        out, rcode = render_as_written(cue, doc["mix"]["takes"], doc["mix"]["fix"]["steps"])  # never refused
+        self.assertEqual(rcode, code, (doc["verdict"]["say"], out["must_failed"]))
+        self.assertEqual((code, doc["verdict"]["action"]), (1, "mix_misses"))  # the 60 ms start: no step may fix it
+        self.assertIn("onset_ms", out["must_failed"])
+        onset = next(m for m in doc["mix"]["misses"] if m["target"] == "onset_ms")
+        self.assertIn("a loop recipe has no trim", onset["why"])
+
+    def test_the_round_limit_counts_rejected_rounds_as_generate_does(self):
+        """review-rank-layers F2. Round 3's air takes were all rejected at intake (takes/rejected/): generate counts
+        round 3 and refuses round 4, so rank must send the cue to the owner, rounds left 0, in both paths."""
+        cue = cue_folder(self.d, card_for("SFX-LR-REJ"))
+        layer_round(cue, {"sub": [bass()], "air": [bass()]})
+        os.remove(cue / "prompts.json")
+        layer_round(cue, {"air": [bass()]})
+        rej = cue / "takes" / "rejected"
+        rej.mkdir()
+        (rej / "SFX-LR-REJ.air.r3.t1.mp3").write_bytes(b"refused at intake")
+        self.assertEqual(sorted(generate.cue_rounds(cue / "takes", "SFX-LR-REJ")), [1, 2, 3])
+        doc, code = self.rank(cue)
+        self.assertEqual((doc["round"], doc["rounds_left"], code, doc["verdict"]["action"]), (2, 0, 1, "owner"))
+        plain = cue_folder(self.d, card_for("SFX-LR-REJ1", tier="minor"))
+        plain_take(plain, 1, 1, bass())
+        (plain / "takes" / "rejected").mkdir()
+        (plain / "takes" / "rejected" / "SFX-LR-REJ1.r2.t1.mp3").write_bytes(b"x")
+        (plain / "takes" / "rejected" / "SFX-LR-REJ1.r3.t1.mp3").write_bytes(b"x")
+        card = card_for("SFX-LR-REJ1", tier="minor", targets={"phone_loss_db": {"max": 12, "must": True}})
+        (plain / "card.json").write_text(json.dumps(card), encoding="utf-8")
+        doc, code = self.rank(plain)
+        self.assertEqual((doc["round"], doc["rounds_left"], code, doc["verdict"]["action"]), (1, 0, 1, "owner"))
+
+
 # ------------------------------------------------------------------------------------------------- planted faults
 
 def _swap_targets(orig):
     def plan(cue_dir, card):
-        lays, raw, warnings = orig(cue_dir, card)
-        t = [lay["targets"] for lay in lays]
-        return [{**lay, "targets": t[(i + 1) % len(t)]} for i, lay in enumerate(lays)], raw, warnings
+        lp = orig(cue_dir, card)
+        t = [lay["targets"] for lay in lp["layers"]]
+        return {**lp, "layers": [{**lay, "targets": t[(i + 1) % len(t)]} for i, lay in enumerate(lp["layers"])]}
     return plan
+
+
+def _design_stripped(orig):
+    def plan(cue_dir, card):
+        lp = orig(cue_dir, card)
+        rec = {**lp["recipe"], "design": [], "layers": [{**r, "design": []} for r in lp["recipe"]["layers"]]}
+        return {**lp, "design": [], "layers": [{**lay, "design": []} for lay in lp["layers"]], "recipe": rec}
+    return plan
+
+
+def _loop_ignored(orig):
+    def judge(card, x, rate, reject=True, loop=False):
+        return orig(card, x, rate, reject, False)
+    return judge
 
 
 def _mix_judged_as_passing(orig):
@@ -322,9 +441,9 @@ def _round_per_layer(cue_dir, cue, layered, round_no):
 
 
 def _fake_proof(orig):
-    def prove(card, cue_dir, raw_layers, mix):
-        return {"takes": mix["takes"], "recipe_layers": [{**r, "take": f"takes/{mix['takes'][r['name']]}",
-                                                          "design": []} for r in raw_layers],
+    def prove(card, cue_dir, lp, mix):
+        rec = rank.proof_recipe(lp["recipe"], mix["takes"], mix["fix"]["steps"])
+        return {"takes": mix["takes"], "recipe": rec, "recipe_layers": rec["layers"],
                 "recipe_edit": mix["fix"]["steps"], "must_failed": [], "rows_compared": len(mix["after"]),
                 "layer_rows_compared": len(mix["layer_rows"]), "agrees": True, "audio_sha256_float32": None}
     return prove
@@ -352,6 +471,16 @@ FAULTS = {
     "use without a real render (proof faked)":
         (lambda: mock.patch.object(rank, "prove_layers", _fake_proof(rank.prove_layers)),
          ["test_use_is_proven_by_a_real_render_of_the_layers_recipe"]),
+    "design stripped (layer and mix design passes not run or proven)":
+        (lambda: mock.patch.object(rank, "layer_plan", _design_stripped(rank.layer_plan)),
+         ["test_the_mix_design_pass_is_judged_and_proven_as_recipe_json_writes_it",
+          "test_a_layer_design_pass_is_judged_and_copied_into_recipe_layers"]),
+    "a loop recipe planned with trim, cut or fade":
+        (lambda: mock.patch.object(rank, "judge", _loop_ignored(rank.judge)),
+         ["test_a_loop_recipe_gets_no_trim_cut_or_fade_and_is_proven_with_its_loop"]),
+    "rejected rounds not counted (the round limit from takes/ only)":
+        (lambda: mock.patch.object(rank, "rounds_used", lambda cue_dir, cue, k: k),
+         ["test_the_round_limit_counts_rejected_rounds_as_generate_does"]),
     "a layer that fails is not named (every layer listed)":
         (lambda: mock.patch.object(rank, "prompt_misses", lambda entries: []),
          ["test_a_layer_without_a_passing_take_is_named_with_its_prompt_misses"]),

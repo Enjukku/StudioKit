@@ -52,21 +52,24 @@ holding plain and layer takes is refused. The layer list, each layer's own targe
 recipe.json's `layers` (where render reads them; the card has no layer list), through render's own checks (an
 important cue's layer without targets is refused with render's message); every layer of the round must be named
 there. A layer with no takes in round k is read from its latest round before (a round may regenerate only the layers
-that had no passing take).
-  1. each take is checked (G-1) and placed alone as recipe.json places its layer, through `render.mix_layers` (gain,
-     fades, the layer edge fade, offset or align with its correction; no design pass, as rank judges every take);
-     a take render cannot place is rejected with render's reason;
+that had no passing take). rank judges recipe.json as written: only the layer takes and the edit pass are its own
+(review-rank-layers F1); the 3-round limit and rounds_left use generate's count (`rounds_used`, F2).
+  1. each take is checked (G-1) and placed alone as recipe.json places its layer, through `render.mix_layers` (its
+     own design pass, gain, fades, the layer edge fade, offset or align with its correction); a take render cannot
+     place or design is rejected with render's reason;
   2. its rows are `render.layer_rows` on the layer as placed in the mix it would make with the other layers' chosen
      takes (render reads a layer's rows at the mix's length, and the length moves them: a real hit's sound_ms 274.6
      -> 294.1 ms with 600 ms more); rejection as for a one-shot (clipped, near-silent, no sound in a band the layer
      must have); a layer has no edit pass of its own, so no fix plan: its rows after are its rows as placed. The
      takes are ordered by `rank_key`; the choice is read again until the tops stay the same (2 passes usually);
-  3. when every layer has a passing take, their mix (`render.mix_layers`) is judged as a one-shot take is (`judge`:
-     the card's whole-cue rows, the three plans, the peak ceiling, the level derivation); its layer rows must equal
-     the ranked ones value for value, or rank refuses;
-  4. verdict: `use` (every layer passes and the mix passes every must after its fixable steps: the chosen takes, the
-     layers recipe, the mix's edit steps), proven by a real render of that layers recipe on a temp copy (every
-     whole-cue row and every layer row compared); `mix_misses` (every layer passes alone, the mix misses a must
+  3. when every layer has a passing take, their mix (`render.mix_layers`, then the recipe's mix design pass, then its
+     loop: render's order) is judged as a one-shot take is (`judge`: the card's whole-cue rows, the three plans, the
+     peak ceiling, the level derivation; a loop recipe: no trim, cut or fade, F3); its layer rows must equal the
+     ranked ones value for value, or rank refuses;
+  4. verdict: `use` (every layer passes and the mix passes every must after its fixable steps: the chosen takes,
+     `recipe` = recipe.json with those takes and the mix's edit steps, design, loop and variants as written),
+     proven by a real render of that recipe on a temp copy (every layer row compared, and every whole-cue row when
+     there are no variants; a must row of a variant file that render fails turns `use` into `mix_misses`); `mix_misses` (every layer passes alone, the mix misses a must
      after its fixable steps: said plainly, exit 1, as render exits on that recipe; runner-up passing takes listed;
      no other combination is tried); `regenerate` or `owner` (round 3): the layers without a passing take, each
      with the misses its prompt must change. Report: one section per layer, then the mix and its proof.
@@ -93,7 +96,7 @@ import numpy as np
 
 from . import card as cardmod
 from . import export as exportmod
-from . import measures, ops, render
+from . import assemble, measures, ops, render
 from .core import SoundbenchError, versions
 
 TAKES_PER_ROUND = {"minor": 3, "frequent": 4, "important": 6}  # J020-D9 (owner)
@@ -142,6 +145,16 @@ def plain_rounds(cue_dir: Path, cue: str) -> dict[int, list[tuple[int, str]]]:
         if m and m["cue"] == cue:
             found.setdefault(int(m["round"]), []).append((int(m["take"]), f"takes/{p.name}"))
     return found
+
+
+def rounds_used(cue_dir: Path, cue: str, k: int) -> int:
+    """The rounds the cue has used, counted as `generate` counts them (one function, `generate.cue_rounds`: every file
+    of the cue or any layer, under any name, in takes/ and takes/rejected/; J020-D7, review-rank-layers F2), and at
+    least the round ranked. The 3-round limit and rounds_left come from it; the round ranked stays the highest round
+    with takes in takes/."""
+    from .generate import cue_rounds  # imported here: generate imports rank
+
+    return max(cue_rounds(cue_dir / "takes", cue) | {k})
 
 
 def find_takes(cue_dir: Path, cue: str, round_no: int | None) -> tuple[int, list[tuple[int, str]]]:
@@ -287,12 +300,22 @@ def cut_end(card: dict, rows: list[dict], y: np.ndarray, rate: int) -> float | N
 PLAN_MODES = ("all", "must", "none")  # review-rank F3: every miss; the must misses only; no step at all
 
 
-def plan_for(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict, mode: str) -> list[dict]:
+LOOP_REFUSES = ("trim", "cut", "fade")  # render refuses them in a loop recipe's edit pass (across the seam)
+
+
+def plan_for(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict, mode: str,
+             loop: bool = False) -> list[dict]:
     """The fix steps for one plan mode. `all`: every miss. `must`: the must misses only (an aim fix plus the level reset
-    can break a must the take passed untouched). `none`: no step."""
+    can break a must the take passed untouched). `none`: no step. `loop`: the sound is a recipe's loop, so no trim,
+    cut or fade (render refuses them across the seam): the level steps only (review-rank-layers F3)."""
     if mode == "none":
         return []
     rows = raw_rows if mode == "all" else _only_must(raw_rows)
+    if loop:
+        steps = [s for s in fix_plan(card, rows, flat, None) if s["op"] not in LOOP_REFUSES]
+        if not any(s["op"] == "peak" for s in steps) and not _exportable(x, rate):
+            steps += [{"op": "loudness"}, {"op": "peak", "ceiling_dbtp": peak_ceiling(card)}]
+        return steps
     head = [s for s in fix_plan(card, rows, flat, None) if s["op"] == "trim"]
     _, planned_head, _ = render.plan(card, {"design": [], "edit": head})
     y_trim, _ = render.apply_steps((("edit", planned_head),), card, render.context(card, planned_head), x, rate)
@@ -362,14 +385,14 @@ def simulate(card: dict, x: np.ndarray, rate: int, steps: list[dict], raw_rows: 
     return {"steps": steps, "rows": rows, "level": derived, "log": log_pre + log_loud + log_post, "audio": y}
 
 
-def best_fix(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict) -> dict:
+def best_fix(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: dict, loop: bool = False) -> dict:
     """Score every plan mode and keep the one with the fewest must misses after it, then the fewest aim misses, then
     the first in PLAN_MODES (the all-steps plan carries the fullest reasons on a tie) (review-rank F3). A plan the operations refuse (for example a cut that leaves LUFS-I under 0.4 s)
     is recorded with its reason; the empty plan is never refused."""
     tried, refused, seen = [], [], []
     for mode in PLAN_MODES:
         try:
-            steps = plan_for(card, x, rate, raw_rows, flat, mode)
+            steps = plan_for(card, x, rate, raw_rows, flat, mode, loop)
             if steps in seen:
                 continue
             seen.append(steps)
@@ -382,14 +405,14 @@ def best_fix(card: dict, x: np.ndarray, rate: int, raw_rows: list[dict], flat: d
             refused.append({"plan": mode, "error": str(err)})
     if not tried:  # every plan refused (a take render cannot export whatever the steps): the raw rows, not passing
         return {"steps": [], "rows": raw_rows, "level": None, "log": [], "audio": None, "plan": None,
-                "dropped_aim_fixes": [], "refused_plans": refused}
+                "dropped_aim_fixes": [], "refused_plans": refused, "loop": loop}
     count = lambda f, must: sum(r["must"] == must and r["result"] != "pass" for r in f["rows"])  # noqa: E731
     mode, fix = min(tried, key=lambda t: (count(t[1], True), count(t[1], False), PLAN_MODES.index(t[0])))
     first = tried[0][1] if tried[0][0] == "all" else None
     dropped = [] if first is None or first is fix else [
         r["target"] for r, c in zip(first["rows"], fix["rows"])
         if not r["must"] and r["result"] == "pass" and c["result"] != "pass"]
-    return {**fix, "plan": mode, "dropped_aim_fixes": dropped, "refused_plans": refused}
+    return {**fix, "plan": mode, "dropped_aim_fixes": dropped, "refused_plans": refused, "loop": loop}
 
 
 def classify(card: dict, raw_rows: list[dict], fix: dict | None) -> tuple[list[dict], list[dict]]:
@@ -435,6 +458,9 @@ def _why_kept(card: dict, r: dict, fix: dict, a: dict | None) -> str:
                 f"{d['peak_limit_dbtp']} dBTP - true peak {d['true_peak_in_dbtp']} dBTP): the level lands at "
                 f"{d['simulated_level']} ({d['shortfall_db']} dB outside the tolerance); {tail}")
     step = STEP_FOR.get(t)
+    if fix.get("loop") and step in ("trim", "cut", "trim or fade"):
+        return (f"a loop recipe has no {step} (render refuses trim, cut and fade across the seam): it reads {v}; "
+                "choose the loop's region in recipe.json's loop (start_ms, end_ms), or change the prompt")
     if step and any(s["op"] in step for s in fix["steps"]):
         return f"{step} ran and it still reads {v}"
     if t in ("onset_ms", "main_transient_ms", "sound_ms", "file_ms") and r["min"] is not None and \
@@ -449,15 +475,16 @@ def take_entry(card: dict, cue_dir: Path, n: int, rel: str) -> dict:
             "take_sha256": take["take_sha256"], **judge(card, x, rate)}
 
 
-def judge(card: dict, x: np.ndarray, rate: int, reject: bool = True) -> dict:
-    """One sound against the card's whole-cue rows: rejection (a take only: `reject`), the three plans, the order
-    counts. A take (`take_entry`) and a layered round's mix (`rank_layers`) both go through here."""
+def judge(card: dict, x: np.ndarray, rate: int, reject: bool = True, loop: bool = False) -> dict:
+    """One sound against the card's whole-cue rows: rejection (a take only: `reject`), the three plans (`loop`: no
+    trim, cut or fade), the order counts. A take (`take_entry`) and a layered round's mix (`rank_layers`) both go
+    through here."""
     rec = measures.measure_audio(x, rate)
     flat = render._flat(rec)
     clip = clip_reading(x, rate) if reject else None
     raw_rows = score(render.evaluate(card, rec, x, rate))
     rej = rejections(card, flat, clip) if reject else []
-    fix = None if rej else best_fix(card, x, rate, raw_rows, flat)
+    fix = None if rej else best_fix(card, x, rate, raw_rows, flat, loop)
     fix_error = "; ".join(f"{p['plan']}: {p['error']}" for p in fix["refused_plans"]) if fix else None
     misses, introduced = classify(card, raw_rows, fix)
     after = fix["rows"] if fix else raw_rows
@@ -596,6 +623,7 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
         round_no = k
     k, takes = find_takes(cue_dir, card["cue"], round_no)
     warnings = []
+    used = rounds_used(cue_dir, card["cue"], k)
     want = TAKES_PER_ROUND[card["tier"]]
     if len(takes) != want:
         warnings.append(f"round {k} has {len(takes)} takes; a {card['tier']} cue gets {want} per round (J020-D9)")
@@ -610,13 +638,13 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
                           + form_note(proof)}
     else:
         code = 1
-        last = k >= MAX_ROUNDS
+        last = used >= MAX_ROUNDS
         verdict = {"action": "owner" if last else "regenerate", "prompt_must_change": prompt_misses(entries),
                    "rejected": {e["take"]: e["rejected"] for e in entries if e["rejected"]},
-                   "say": (f"round {k} of {MAX_ROUNDS}: no take passes after its fixable steps and no rounds are left: "
-                           "the cue goes to the owner with this table (J020-D7)") if last else
-                          (f"regenerate with a changed prompt (round {k + 1} of {MAX_ROUNDS}): no take passes after its "
-                           "fixable steps; the prompt must change the misses listed")}
+                   "say": (f"round {used} of {MAX_ROUNDS}: no take passes after its fixable steps and no rounds are "
+                           "left: the cue goes to the owner with this table (J020-D7)") if last else
+                          (f"regenerate with a changed prompt (round {used + 1} of {MAX_ROUNDS}): no take passes after "
+                           "its fixable steps; the prompt must change the misses listed")}
     rep_dir = cue_dir / "report"
     pics = []
     after_flag = any(r["score"] != "inside" for r in top["after"])
@@ -634,7 +662,7 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
     for e in entries:
         del e["_audio"]
     doc = {"tool": "soundbench rank", "cue": cue, "kind": card["kind"], "category": card["category"],
-           "tier": card["tier"], "round": k, "rounds_left": MAX_ROUNDS - k, "takes_expected": want,
+           "tier": card["tier"], "round": k, "rounds_left": MAX_ROUNDS - used, "takes_expected": want,
            "takes_found": len(takes), "warnings": warnings, "rank_key": RANK_KEY,
            "order": [e["take"] for e in entries], "takes": entries, "top": top["take"], "proof": proof,
            "family": None if fam is None else {**fam, "note": "rank does not check D-03 and writes no family state; "
@@ -765,10 +793,12 @@ def cue_round(cue_dir: Path, cue: str, layered: dict, round_no: int | None) -> i
     return k
 
 
-def layer_plan(cue_dir: Path, card: dict) -> tuple[list[dict], list[dict], list[str]]:
-    """recipe.json's layers, through render's own checks (render.plan, render.plan_form: an important cue's layer
-    needs its own targets, ...): (planned layers, the recipe's layer objects, warnings). Per-layer targets and
-    placement live in recipe.json, not the card (cue-card.md: layer targets)."""
+def layer_plan(cue_dir: Path, card: dict) -> dict:
+    """recipe.json, through render's own checks (render.plan, render.plan_form: an important cue's layer needs its own
+    targets, a loop needs form.loop, ...): {"layers": planned layers (each with its own design pass), "recipe": the
+    recipe as written, "design": the planned mix design pass, "loop": (op, params) or None, "variants": bool,
+    "warnings"}. Per-layer targets and placement live in recipe.json, not the card (cue-card.md: layer targets).
+    rank judges the recipe as written: only the takes and the edit pass are its own (review-rank-layers F1)."""
     path = cue_dir / "recipe.json"
     if not path.is_file():
         raise SoundbenchError(f"{card['cue']}: the round has layer takes; each layer is ranked against its own targets "
@@ -782,27 +812,30 @@ def layer_plan(cue_dir: Path, card: dict) -> tuple[list[dict], list[dict], list[
         raise SoundbenchError(f"{card['cue']}: the round has layer takes but recipe.json gives no layers (it gives "
                               f"{'one take' if 'take' in recipe else 'one take per variant'}): write each layer with "
                               "its targets and placement in recipe.json's layers, refused")
-    _, edit, _ = render.plan(card, recipe)
+    design, edit, _ = render.plan(card, recipe)
     form = render.plan_form(card, recipe, edit)
     warnings = []
-    designed = [lay["name"] for lay in form["layers"] if lay["design"]]
-    if designed or recipe["design"]:
-        warnings.append(f"recipe.json's design steps (layers {designed}, mix {[s['op'] for s in recipe['design']]}) "
-                        "are not run: rank judges the takes with their placement only (offset or align, gain, "
-                        "fades), as it judges one-shot takes without a design pass; render measures the design")
-    return form["layers"], recipe["layers"], warnings
+    if recipe["edit"]:
+        warnings.append(f"recipe.json's edit pass {[s['op'] for s in recipe['edit']]} is not read: rank plans the edit "
+                        "pass of the mix (its `recipe_edit`)")
+    if form["loop"] is not None:
+        warnings.append(f"the recipe loops ({form['loop'][0]}): the mix is judged after the loop, and its edit pass "
+                        "has no trim, cut or fade (render refuses them across the seam)")
+    return {"layers": form["layers"], "recipe": recipe, "design": design, "loop": form["loop"],
+            "variants": form["variants"] is not None, "warnings": warnings}
 
 
 def place_candidate(cue_dir: Path, card: dict, lay: dict, n: int, rel: str, rnd: int) -> dict:
     """One layer take checked (G-1: a changed take refuses the round, as for one-shots) and placed alone as recipe.json
     places the layer, through render's own `mix_layers` (gain, fades, the layer edge fade, offset or align with its
-    correction). A take render cannot place (its transient after the marker, a silent take) gets `_err`."""
+    correction), after the layer's own design pass as the recipe writes it. A take render cannot place (its transient
+    after the marker, a silent take) or design (a step refused on it) gets `_err`."""
     x, rate, take = render.check_take(cue_dir, {"take": rel})
     c = {"take": take["take"], "n": n, "round": rnd, "rate": rate, "channels": int(x.shape[1]),
          "take_sha256": take["take_sha256"], "clip": clip_reading(x, rate), "placement": None,
          "_x": x, "_p": None, "_info": None, "_err": None}
     try:
-        _, _, _, _, info = render.mix_layers(cue_dir, card, [{**lay, "take": rel, "design": []}],
+        _, _, _, _, info = render.mix_layers(cue_dir, card, [{**lay, "take": rel}],
                                              render.context(card, []))
     except SoundbenchError as err:
         c["_err"] = str(err)
@@ -886,38 +919,55 @@ def _with(others: tuple[int, int] | None, c: dict) -> tuple[int, int] | None:
     return max(own[0], others[0]), max(own[1], others[1])
 
 
-def mix_entry(cue_dir: Path, card: dict, plan_layers: list[dict], tops: dict) -> dict:
-    """The mix of each layer's chosen take, made by render's own `mix_layers` (no design pass, as rank judges every
-    take), judged as a one-shot take is (`judge`: the card's whole-cue rows, the three plans, the peak ceiling; no
-    rejection: a mix is not a take). Its layer rows must equal the ranked ones value for value (one function, one
-    audio), or rank refuses."""
-    chosen = [{**lay, "take": f"takes/{tops[lay['name']]['take']}", "design": []} for lay in plan_layers]
-    mix, rate, _, _, info = render.mix_layers(cue_dir, card, chosen, render.context(card, []))
+def mix_entry(cue_dir: Path, card: dict, lp: dict, tops: dict) -> dict:
+    """The mix of each layer's chosen take, made as render makes it: `mix_layers` (each layer's own design pass), then
+    the recipe's design pass on the mix, then its loop (render's order); judged as a one-shot take is (`judge`: the
+    card's whole-cue rows, the three plans, the peak ceiling; no rejection: a mix is not a take; a loop: no trim, cut
+    or fade). Its layer rows must equal the ranked ones value for value (one function, one audio), or rank refuses."""
+    plan_layers = lp["layers"]
+    chosen = [{**lay, "take": f"takes/{tops[lay['name']]['take']}"} for lay in plan_layers]
+    ctx = render.context(card, [])
+    mix, rate, _, _, info = render.mix_layers(cue_dir, card, chosen, ctx)
     placed = info.pop("placed")
     rows = score(render.layer_rows(card, chosen, placed, rate, info["layers"]))
     ranked = [r for lay in plan_layers for r in tops[lay["name"]]["after"]]
     if [(r["target"], r["value"], r["result"]) for r in rows] != [(r["target"], r["value"], r["result"]) for r in ranked]:
         raise SoundbenchError(f"rank: the chosen layer takes read differently in their mix than ranked ({rows} vs "
                               f"{ranked}): a soundbench bug, refused")
+    y, _ = render.apply_steps((("design", lp["design"]),), card, ctx, mix, rate)
+    if lp["loop"] is not None:
+        op, params = lp["loop"]
+        y, _ = assemble.LOOPS[op](y, rate, params)
     return {"takes": {lay["name"]: tops[lay["name"]]["take"] for lay in plan_layers}, "rate": rate,
             "channels": int(mix.shape[1]), "length_samples": int(len(mix)), "placement": info["layers"],
             "interference_db": info["interference_db"], "headroom": info["headroom"], "layer_rows": rows,
-            **judge(card, mix, rate, reject=False)}
+            "mix_design": [s["op"] for s in lp["design"]], "loop": None if lp["loop"] is None else lp["loop"][0],
+            **judge(card, y, rate, reject=False, loop=lp["loop"] is not None)}
 
 
-def prove_layers(card: dict, cue_dir: Path, raw_layers: list[dict], mix: dict) -> dict:
-    """Render the layers recipe of the chosen takes (recipe.json's placement, no design pass) with the mix's fix steps
-    for real on a temp copy, and compare every whole-cue row and every layer row."""
-    layers = [{**raw, "take": f"takes/{mix['takes'][raw['name']]}", "design": []} for raw in raw_layers]
-    recipe = {"cue": card["cue"], "layers": layers, "design": [], "edit": mix["fix"]["steps"]}
+def proof_recipe(recipe: dict, takes: dict, edit: list) -> dict:
+    """recipe.json as written, with only each layer's `take` and the `edit` pass replaced (review-rank-layers F1):
+    design steps, placement, loop and variants stay as the recipe has them."""
+    return {**recipe, "layers": [{**raw, "take": f"takes/{takes[raw['name']]}"} for raw in recipe["layers"]],
+            "edit": edit}
+
+
+def prove_layers(card: dict, cue_dir: Path, lp: dict, mix: dict) -> dict:
+    """Render recipe.json with the chosen takes and the mix's fix steps for real on a temp copy, and compare every
+    layer row and every whole-cue row. With variants, render writes one row set per variant file (pitch and level
+    drawn per file): those are render's alone and the verdict reads them from `must_failed`."""
+    recipe = proof_recipe(lp["recipe"], mix["takes"], mix["fix"]["steps"])
     doc = render_copy(card, cue_dir, list(mix["takes"].values()), recipe)
     rendered_layers = [r for r in doc["form_checks"] if r["target"].startswith("layer[")]
-    mismatches = row_mismatches(doc["targets"], mix["after"]) + row_mismatches(rendered_layers, mix["layer_rows"])
+    mismatches = row_mismatches(rendered_layers, mix["layer_rows"])
+    if not lp["variants"]:
+        mismatches += row_mismatches(doc["targets"], mix["after"])
     if mismatches:
         raise SoundbenchError(f"rank: the proof render of the layers {mix['takes']} disagrees with the simulation on "
                               f"{mismatches}: a soundbench bug, refused")
-    return {"takes": mix["takes"], "recipe_layers": layers, "recipe_edit": mix["fix"]["steps"],
-            "must_failed": doc["must_failed"], "rows_compared": len(doc["targets"]),
+    return {"takes": mix["takes"], "recipe_layers": recipe["layers"], "recipe_edit": mix["fix"]["steps"],
+            "recipe": recipe, "must_failed": doc["must_failed"],
+            "rows_compared": 0 if lp["variants"] else len(doc["targets"]),
             "layer_rows_compared": len(rendered_layers), "agrees": True,
             "audio_sha256_float32": doc["export"]["audio_sha256_float32"],
             "family": "not checked by the proof (a temp copy without the siblings' files): render checks D-03"}
@@ -927,7 +977,14 @@ def _row_text(r: dict) -> str:
     return f"{r['target']} {_fmt(r['value'])} (min {_fmt(r['min'])}, max {_fmt(r['max'])})"
 
 
+def proof_misses(proof: dict | None) -> list[str]:
+    """The must rows the proof render failed that rank does not leave to render's form checks (loop rows, the variant
+    count and spread: `form_note`); with variants, each variant file's rows (`<cue>-v<k>:<target>`)."""
+    return [t for t in (proof or {}).get("must_failed", []) if not t.split(":")[-1].startswith(("form.", "variants."))]
+
+
 def layer_verdict(k: int, names: list[str], entries: dict, mix: dict | None, proof: dict | None) -> tuple[dict, int]:
+    """`k`: the rounds the cue has used (`rounds_used`, generate's count)."""
     tops = {n: entries[n][0] for n in names}
     chosen = ", ".join(f"{n}: {tops[n]['take']}" for n in names)
     failing = [n for n in names if not tops[n]["passes_after_fix"]]
@@ -945,18 +1002,22 @@ def layer_verdict(k: int, names: list[str], entries: dict, mix: dict | None, pro
                 "prompt_must_change": {n: prompt_misses(entries[n]) for n in failing}, "passing_layers": keep,
                 "rejected": {n: {e["take"]: e["rejected"] for e in entries[n] if e["rejected"]} for n in names
                              if any(e["rejected"] for e in entries[n])}, "say": say}, 1
-    if mix["passes_after_fix"]:
-        return {"action": "use", "takes": mix["takes"], "recipe_layers": proof["recipe_layers"],
+    if mix["passes_after_fix"] and not proof_misses(proof):
+        return {"action": "use", "takes": mix["takes"], "recipe": proof["recipe"],
+                "recipe_layers": proof["recipe_layers"],
                 "recipe_edit": mix["fix"]["steps"],
                 "say": f"every layer has a passing take ({chosen}) and their mix passes every must-target after its "
-                       f"fixable steps: start recipe.json's layers from these takes (their placement as written; a "
-                       f"layer has no edit pass of its own) and its edit pass from {json.dumps(mix['fix']['steps'])}"
+                       f"fixable steps: put these takes in recipe.json's layers (everything else as written; a layer "
+                       f"has no edit pass of its own) and its edit pass {json.dumps(mix['fix']['steps'])} "
+                       "(`recipe` is the proven recipe.json)"
                        + form_note(proof)}, 0
     missed = [r for r in mix["after"] if r["must"] and r["result"] != "pass"]
+    texts = [_row_text(r) for r in missed] if missed else [f"{t} (in its render)" for t in proof_misses(proof)]
     runners = {n: [e["take"] for e in entries[n][1:] if e["passes_after_fix"]] for n in names}
-    return {"action": "mix_misses", "takes": mix["takes"], "mix_must_misses": [r["target"] for r in missed],
+    return {"action": "mix_misses", "takes": mix["takes"],
+            "mix_must_misses": [r["target"] for r in missed] if missed else proof_misses(proof),
             "runner_up_passing_takes": runners,
-            "say": f"do not use: the layers pass alone ({chosen}); the mix misses {', '.join(map(_row_text, missed))} "
+            "say": f"do not use: the layers pass alone ({chosen}); the mix misses {', '.join(texts)} "
                    "after its fixable steps. Change the layers' placement or gains in recipe.json (or add a design "
                    "step: render measures it), or try a runner-up passing take; rank judged one mix, each layer's "
                    "best take, and tried no other combination"}, 1
@@ -964,7 +1025,8 @@ def layer_verdict(k: int, names: list[str], entries: dict, mix: dict | None, pro
 
 def rank_layers(cue_dir: Path, card: dict, fam: dict | None, k: int, layered: dict, picture: bool) -> tuple[dict, int]:
     cue = card["cue"]
-    plan_layers, raw_layers, warnings = layer_plan(cue_dir, card)
+    lp = layer_plan(cue_dir, card)
+    plan_layers, warnings = lp["layers"], lp["warnings"]
     names = [lay["name"] for lay in plan_layers]
     stray = sorted(n for n, rounds in layered.items() if k in rounds and n not in names)
     if stray:
@@ -995,9 +1057,10 @@ def rank_layers(cue_dir: Path, card: dict, fam: dict | None, k: int, layered: di
     tops = {n: entries[n][0] for n in names}
     mix = proof = None
     if all(t["passes_after_fix"] for t in tops.values()):
-        mix = mix_entry(cue_dir, card, plan_layers, tops)
-        proof = prove_layers(card, cue_dir, raw_layers, mix) if needs_proof(mix) else None
-    verdict, code = layer_verdict(k, names, entries, mix, proof)
+        mix = mix_entry(cue_dir, card, lp, tops)
+        proof = prove_layers(card, cue_dir, lp, mix) if needs_proof(mix) else None
+    used = rounds_used(cue_dir, cue, k)
+    verdict, code = layer_verdict(used, names, entries, mix, proof)
     rep_dir = cue_dir / "report"
     pics = []
     for n in names:
@@ -1026,14 +1089,14 @@ def rank_layers(cue_dir: Path, card: dict, fam: dict | None, k: int, layered: di
     for es in entries.values():
         for e in es:
             del e["_audio"]
-    raw_by = {raw["name"]: raw for raw in raw_layers}
+    raw_by = {raw["name"]: raw for raw in lp["recipe"]["layers"]}
     doc = {"tool": "soundbench rank", "cue": cue, "kind": card["kind"], "category": card["category"],
-           "tier": card["tier"], "round": k, "rounds_left": MAX_ROUNDS - k, "form": "layers", "takes_expected": want,
+           "tier": card["tier"], "round": k, "rounds_left": MAX_ROUNDS - used, "form": "layers", "takes_expected": want,
            "warnings": warnings, "rank_key": RANK_KEY,
            "layers": [{"name": n, "round": sources[n][0], "takes_found": len(sources[n][1]),
                        "targets": raw_by[n].get("targets", {}),
                        "placement": {f: raw_by[n][f] for f in ("offset_ms", "align", "gain_db", "fade_in_ms",
-                                                               "fade_out_ms") if f in raw_by[n]},
+                                                               "fade_out_ms", "design") if f in raw_by[n]},
                        "order": [e["take"] for e in entries[n]], "takes": entries[n], "top": tops[n]["take"],
                        "has_passing_take": tops[n]["passes_after_fix"]} for n in names],
            "frame": None if frame is None else {"length_samples": frame[0], "channels": frame[1], "passes": passes,
