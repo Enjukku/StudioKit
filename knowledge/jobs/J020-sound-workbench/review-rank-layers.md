@@ -111,3 +111,41 @@ could_not_check:
 verdict: fix-first
 </spec>
 ```
+
+## Round 3 (489d6ed)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-24
+
+Frozen revision 489d6ed, found with `git log -1 --grep "^J020 soundbench layered rank repair round 2"`. The working tree under `tools/audio` matches it. Scope: R2-1, the variant_plan follow-up, and the builder's named weakness. Only the soundbench test modules were run (the full gate is broken by other sessions' work): 291 tests OK, 1 skipped, the real-take module not included. Runs: r2_variants, r2_loop, e2_variants re-run; r3_edge new (scratchpad `scripts/`).
+
+```text
+<spec>
+artifact: tools/audio/soundbench@489d6ed (rank.py, assemble.py)
+reviewer: reviewer
+looked_at_first: [git show 489d6ed (rank.py, assemble.py), then the coordinator's summary of the builder's report]
+earlier_findings:
+  - {id: R2-1, status: fixed, retrace: "r2_loop: rank mix_misses (exit 1) naming form.loop_crossfade_level, render of recipe.json exit 1 on the same row (2 of 2). r2_variants: with the new plan the sets render inside R-31 (spread 1.0, 1.0, 0.998), proof.must_failed [], rank use, render 0 (3 of 3). The layered verdict now reads every must row of the proof (proof_must_failed); needs_proof is true for every passing mix, so a `use` never lacks a proof. form_note is left only on the one-shot path"}
+  - {id: "variant_plan follow-up (pre-existing, round 2)", status: fixed, retrace: "centre_gains centres the draws on their mean and scales down until the rounded set is within max_db of its own mean; the loop terminates (scale shrinks to an all-zero set at worst). Seed 19 with 4 variants: planned 1.0975 -> 1.0, rendered 1.0 (pass)"}
+  - {id: "e2_variants", status: unchanged, retrace: "use, render of recipe.json exit 0 (2 of 2)"}
+findings: []
+named_weakness:
+  - "A plan at exactly max_db can read up to about max_db + 0.1 at render: loudness lands within 0.05 dB per file, and one file high with the others low also moves the mean. A peak cut on a non-extreme variant can move the mean as well. Not blocking: render catches it (exit 1), and rank's proof now turns it into mix_misses, never use. It is a nuisance exit 1 on a legal recipe, never a wrong file. Measured: 12 real seeds whose plan sits within 0.01 dB of max_db (4 and 10 variants, F-09 -24) all rendered inside R-31 and got use. Of 300 seeds, 12-36 per count sit at the edge"
+  - "The small fix, if wanted: budget max_db - 2 x ops.LOUDNESS_MAX_ERROR_DB (0.9 dB at max_db 1.0), not max_db - 0.05. One 0.05 covers only a file's own error, not the mean moving the other way. It still cannot cover peak cuts, so render stays the check. Optional"
+broke_check:
+  - "variant hashes change for every seeded set (centring moves every set, not only those over the limit): stated by the builder; any delivered variant file is different on its next render"
+  - "proof_must_failed: the layered proof never puts the family check in must_failed (family state is render's), so the temp copy's missing sibling files cannot block a use"
+keep:
+  - "proof_must_failed with no exemptions on the layered path"
+  - "centre_gains: measured against the set's own mean, the same reference as render.variant_rows"
+stated_limits:
+  - "a plan at max_db can read up to about +0.1 dB at render (exit 1 from render; rank says mix_misses)"
+  - "the LAYER_FRAME_PASSES refusal path is not exercised (no oscillating round built)"
+  - "no real layered loop cue (no real takes of 2 s or more)"
+  - "rank tries one mix, each layer's top take, never other combinations (stated in the verdict text)"
+weakest_part: "The 12 edge seeds all used one body take and the first air take; another take's peak cuts could push a set over the limit (render would catch it)"
+could_not_check:
+  - {step: "LAYER_FRAME_PASSES refusal", missing_input: "an oscillating round", closes_it: "a synthetic 2-cycle test", who: "feature-builder"}
+  - {step: "a real layered loop cue", missing_input: "real takes of 2 s or more", closes_it: "the first long layered cue", who: "feature-builder"}
+verdict: ready for the next review
+</spec>
+```
