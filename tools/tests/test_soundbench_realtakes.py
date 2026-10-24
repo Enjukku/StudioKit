@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from tools.audio.soundbench import ffmpeg as sbf  # noqa: E402
 from tools.audio.soundbench import fxops, intake, ops, rank, render  # noqa: E402
+from tools.audio.soundbench import fixtures as fx  # noqa: E402
 from tools.audio.soundbench import measures as m  # noqa: E402
 from tools.audio.soundbench.core import SoundbenchError, read_float32  # noqa: E402
 
@@ -180,6 +181,135 @@ class RealTakeTest(unittest.TestCase):
                 rank.prove(card, folder, {**e, "fix": {**e["fix"], "steps": []}})
             self.assertTrue(any(str(raised.exception) in r for r in reasons), (str(raised.exception), reasons))
         self.assertFalse((folder / "out").exists())
+
+    def test_layers_loops_and_variants_from_real_takes(self):
+        """J020 step 6 on real takes: every round as one variant file per take and as seeded variants of its first take
+        (G-1 in-process, R-31 and the count rows present, never a refusal); each hit or thump layered over the first
+        whoosh, each layer on its marker to the sample and the mix exported; beds of 2, 10 and 30 s spliced from the
+        real takes slowed x4 looped with loop_bed: every must loop row passes on the good loop, and a spike 3 samples
+        before the end of the delivered loop is caught by a wrap row."""
+        rounds: dict = {}
+        for mp3 in TAKES:
+            found = re.match(r"^(.+)\.t(\d+)$", mp3.stem)
+            if found:
+                rounds.setdefault(found[1], []).append((int(found[2]), mp3))
+        edit = [{"op": "trim"}, {"op": "fade", "out_ms": 10}, {"op": "loudness"}, {"op": "peak"}]
+        level = {"measure": "F-09", "target": -24.0, "tolerance": 1.0, "must": False}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            masters: dict = {}
+            for sound, takes in sorted(rounds.items()):
+                kind = "whoosh" if re.search(r"whoosh|swish", sound) else "hit"
+                for how in ("takes", "seeded"):
+                    with self.subTest(sound=sound, variants=how):
+                        cue = "REAL-V-" + how.upper() + "-" + re.sub(r"[^A-Za-z0-9-]", "-", sound)
+                        folder = root / cue
+                        (folder / "takes").mkdir(parents=True)
+                        rels = []
+                        for n, src in sorted(takes):
+                            rel = f"takes/{cue}.r1.t{n}.mp3"
+                            shutil.copyfile(src, folder / rel)
+                            intake.decode_take(folder / rel, requested_ms=requested_ms(src))
+                            rels.append(rel)
+                            masters.setdefault((sound, n), folder / rel)
+                        count = len(rels) if how == "takes" else 4
+                        c = {"cue": cue, "kind": kind, "category": "sfx", "tier": "frequent", "level": level,
+                             "targets": {"edge_clicks": {"max": 0, "must": True}}, "form": {"variants": count},
+                             "playback": PLAYBACK}
+                        rec = ({"cue": cue, "takes": rels, "design": [], "edit": edit} if how == "takes" else
+                               {"cue": cue, "take": rels[0], "design": [], "edit": edit,
+                                "variants": {"seed": 1, "max_cents": 60, "max_db": 0.5}})
+                        (folder / "card.json").write_text(json.dumps(c), encoding="utf-8")
+                        (folder / "recipe.json").write_text(json.dumps(rec), encoding="utf-8")
+                        doc, code = render.render(folder)
+                        self.assertIn(code, (0, 1))
+                        hashes = [o["export"]["audio_sha256_float32"] for o in doc["outputs"]]
+                        self.assertEqual(len(hashes), count)
+                        self.assertEqual(len(set(hashes)), count)
+                        rows = {r["target"]: r for r in doc["form_checks"]}
+                        self.assertEqual(rows["form.variants"]["result"], "pass")
+                        self.assertIn("variants.level_spread", rows)
+                        again, _ = render.render(folder)  # G-1: the same recipe gives the same audio
+                        self.assertEqual([o["export"]["audio_sha256_float32"] for o in again["outputs"]], hashes)
+            whoosh = next(p for (s, n), p in sorted(masters.items()) if re.search(r"whoosh", s) and n == 1)
+            for (sound, n), src in sorted(masters.items()):
+                if n != 1 or not re.search(r"hit|thump", sound):
+                    continue
+                with self.subTest(layers=sound):
+                    cue = "REAL-L-" + re.sub(r"[^A-Za-z0-9-]", "-", sound)
+                    folder = root / cue
+                    (folder / "takes").mkdir(parents=True)
+                    for stem, p in (("air", whoosh), ("hit", src)):  # a copy of each take, its sidecar and master
+                        dst = folder / "takes" / f"{stem}.r1.t1.mp3"
+                        shutil.copyfile(p, dst)
+                        shutil.copyfile(p.with_suffix(".json"), dst.with_suffix(".json"))
+                        shutil.copyfile(intake.master_path(p), intake.master_path(dst))
+                    c = {"cue": cue, "kind": "hit", "category": "sfx", "tier": "minor", "level": level,
+                         "targets": {"true_peak_dbtp": {"max": -1.0, "must": True}}, "playback": PLAYBACK}
+                    rec = {"cue": cue, "layers": [
+                        {"name": "air", "take": "takes/air.r1.t1.mp3", "design": [{"op": "highpass", "hz": 300}],
+                         "align": {"to_ms": 5.0, "on": "F-01"}, "gain_db": -6.0},
+                        {"name": "hit", "take": "takes/hit.r1.t1.mp3", "design": [],
+                         "align": {"to_ms": 300.0, "on": "main_transient"}}],
+                        "design": [], "edit": [{"op": "loudness"}, {"op": "peak"}]}
+                    (folder / "card.json").write_text(json.dumps(c), encoding="utf-8")
+                    (folder / "recipe.json").write_text(json.dumps(rec), encoding="utf-8")
+                    doc, code = render.render(folder)
+                    self.assertIn(code, (0, 1))
+                    self.assertNotIn("true_peak_dbtp", doc["must_failed"])
+                    ls = doc["layers"]["layers"]
+                    self.assertAlmostEqual(ls[0]["measured"]["F-01_onset_ms"], 5.0, delta=1000 / 44100 + 0.001)
+                    self.assertAlmostEqual(ls[1]["measured"]["main_transient_ms"], 300.0, delta=1000 / 44100 + 0.005)
+                    self.assertAlmostEqual(sum(e["share_of_mix"] for e in ls), 1.0, delta=2e-3)
+                    self.assertIn("exportable", doc["layers"]["headroom"])
+            groups = {"whoosh": [p for (s, n), p in masters.items() if re.search(r"whoosh|swish", s)],
+                      "note": [p for (s, n), p in masters.items() if re.search(r"note", s)],
+                      "all": list(masters.values())}
+            for name, paths in sorted(groups.items()):
+                parts = [fx.slow(read_float32(intake.master_path(p))[0].astype(np.float64)) for p in paths]
+                for sec in (2, 10, 30):
+                    with self.subTest(bed=name, seconds=sec):
+                        cue = f"REAL-LOOP-{name.upper()}-{sec}"
+                        folder = root / cue
+                        bed = fx.chain(parts, 44100, sec + 0.5, seed=sec)
+                        bed = bed / float(np.max(np.abs(bed))) * 10 ** (-12 / 20)  # chain works at unit RMS
+                        add_stand_in_take(folder, f"takes/{cue}.r1.t1.mp3", bed, 44100)
+                        c = {"cue": cue, "kind": "loop_bed", "category": "ambience", "tier": "minor", "level": level,
+                             "form": {"loop": True}, "playback": PLAYBACK}
+                        rec = {"cue": cue, "take": f"takes/{cue}.r1.t1.mp3", "design": [], "edit": [],
+                               "loop": {"op": "loop_bed", "crossfade_ms": 250}}
+                        (folder / "card.json").write_text(json.dumps(c), encoding="utf-8")
+                        (folder / "recipe.json").write_text(json.dumps(rec), encoding="utf-8")
+                        doc, code = render.render(folder)
+                        self.assertEqual(code, 0, doc["must_failed"])
+                        y = read_float32(folder / "out" / f"{cue}.flac")[0].astype(np.float64)
+                        y[-3] += 0.25 * float(np.max(np.abs(y)))
+                        bad, _ = render.loop_rows(c, measures_f08(y), y, 44100, doc["loop"])
+                        self.assertTrue({r["target"] for r in bad if r["result"] != "pass"} &
+                                        {"form.loop_wrap_clicks", "form.loop_wrap_hf"})
+
+
+PLAYBACK = {"space": "2D", "takes_room": False, "ducks": None}
+
+
+def measures_f08(y) -> dict:
+    return {"F-08_loop_seam": m.cue_numbers(y - y.mean(axis=0), 44100)["F-08_loop_seam"]}
+
+
+def add_stand_in_take(cue_dir: Path, rel: str, x, rate: int) -> None:
+    """A built bed as a take: a stand-in take file, its master WAV and a sidecar with the intake record."""
+    from tools.audio.soundbench.core import audio_sha256, file_sha256
+
+    take = cue_dir / rel
+    take.parent.mkdir(parents=True, exist_ok=True)
+    take.write_bytes(b"stand-in take bytes for " + rel.encode())
+    fx.write_wav(intake.master_path(take), x, rate)
+    y, _ = read_float32(intake.master_path(take))
+    side = {"prompt": "bed built from real takes", "intake": {"take_sha256": file_sha256(take),
+                                                              "master_audio_sha256": audio_sha256(y), "rate": rate,
+                                                              "decoder": "test (no decode)"}}
+    take.with_suffix(".json").write_text(json.dumps(side), encoding="utf-8")
+
 
 if __name__ == "__main__":
     unittest.main()

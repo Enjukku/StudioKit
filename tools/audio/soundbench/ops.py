@@ -95,15 +95,17 @@ OP_STAGES = {"dc": ("clean",), "highpass": ("clean", "eq"), "lowpass": ("clean",
 BAND_TYPES = ("bell", "low_shelf", "high_shelf", "notch")
 
 
-def check_params(op: str, step: dict) -> dict:
-    """Resolve a recipe step's parameters against SPEC (defaults filled); SoundbenchError on anything wrong."""
-    if op in FFMPEG_OPS:
+def check_params(op: str, step: dict, spec: dict | None = None) -> dict:
+    """Resolve a recipe step's parameters against SPEC (defaults filled); SoundbenchError on anything wrong. `spec`:
+    another table of the same rule types (the layer, loop and variant fields of `assemble.py`)."""
+    own = spec is None
+    if spec is None and op in FFMPEG_OPS:
         from . import fxops
 
         spec = fxops.SPEC[op]
-    elif op in SPEC:
+    elif spec is None and op in SPEC:
         spec = SPEC[op]
-    else:
+    elif spec is None:
         raise SoundbenchError(f"unknown operation {op!r}")
     given = {k: v for k, v in step.items() if k not in ("op", "why")}
     extra = set(given) - set(spec)
@@ -132,6 +134,8 @@ def check_params(op: str, step: dict) -> dict:
                 raise SoundbenchError(f"{where}: {v} is outside {rule['lo']}..{rule['hi']}")
             v = rule["type"](v)
         out[name] = v
+    if not own:
+        return out
     if op == "cut" and (out["end_ms"] is None) == (out["after_sound_ms"] is None):
         raise SoundbenchError("cut: give exactly one of end_ms or after_sound_ms")
     if op == "chorus":

@@ -113,18 +113,22 @@ def main(argv: list[str] | None = None) -> int:
             from . import render as rendermod
 
             doc, code = rendermod.render(a.cue, a.picture)
-            rep = {"cue": doc["cue"], "file": doc["export"]["file"], "exit_code": code, "must_failed": doc["must_failed"],
-                   "targets": doc["targets"], "family": doc["family"],
-                   "audio_sha256_float32": doc["export"]["audio_sha256_float32"]}
+            outs = doc.get("outputs") or [{"name": doc["cue"], "file": doc["export"]["file"], "export": doc["export"]}]
+            rep = {"cue": doc["cue"], "file": doc["export"]["file"], "files": [str(o["file"]) for o in outs],
+                   "exit_code": code, "must_failed": doc["must_failed"], "targets": doc["targets"],
+                   "form_checks": doc["form_checks"], "family": doc["family"],
+                   "audio_sha256_float32": doc["export"]["audio_sha256_float32"],
+                   "audio_sha256_float32_all": {o["name"]: o["export"]["audio_sha256_float32"] for o in outs}}
             if a.json:
                 print(json.dumps(rep, indent=2))
             else:
-                for t in rep["targets"]:
-                    print(f"{t['result']:<8} {t['target']:<18} {t['measure']:<28} {t['value']} "
+                for t in rep["targets"] + rep["form_checks"]:
+                    label = (t["output"] + ": " if "output" in t else "") + t["target"]
+                    print(f"{t['result']:<8} {label:<18} {t['measure']:<28} {t['value']} "
                           f"(min {t['min']}, max {t['max']}, {'must' if t['must'] else 'aim'})")
                 if rep["family"]:
                     print(f"family {rep['family']['id']}: {rep['family']['result']} {rep['family'].get('reason', '')}")
-                print(f"file: {rep['file']}  exit {code}")
+                print(f"file{'s' if len(rep['files']) > 1 else ''}: {', '.join(rep['files'])}  exit {code}")
             return code
         if a.cmd == "rank":
             from . import rank as rankmod

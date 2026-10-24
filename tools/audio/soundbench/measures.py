@@ -276,12 +276,18 @@ def main_transient_ms(x: np.ndarray, rate: int) -> float | None:
 
     Known false readings: a rising sound (a tell, a whoosh, a riser) has its main transient late by design, so a
     late value there is not a late start; two hits of nearly equal level read the first one."""
+    found = main_transient_index(x, rate)
+    return None if found is None else round(1000 * (found[0] + found[1]) / rate, 2)
+
+
+def main_transient_index(x: np.ndarray, rate: int) -> tuple[int, float] | None:
+    """`main_transient_ms` as (first envelope index within 10 dB of the maximum, the window-centre offset in samples):
+    the time is (index + offset) / rate. `layers`' align places a layer by this same reading (one way to measure)."""
     env, off = envelope_1ms(x.mean(axis=1), rate)
     top = float(env.max())
     if top <= 0:
         return None
-    i = int(np.argmax(env >= top * 10 ** (-MAIN_TRANSIENT_DB / 20)))
-    return round(1000 * (i + off) / rate, 2)
+    return int(np.argmax(env >= top * 10 ** (-MAIN_TRANSIENT_DB / 20))), off
 
 
 def attack_rise_ms(x: np.ndarray, rate: int) -> float | None:
@@ -373,15 +379,22 @@ def clicks(x: np.ndarray, rate: int, raw: np.ndarray | None = None) -> dict:
     `raw`: the samples as stored (before the mean is removed). The edges read them, because playback starts and stops
     from the file's own first and last samples (J020 step 5: a low thump that starts and ends at exactly 0 read two
     edge clicks from its removed -0.0135 mean; a DC take read none). Without `raw` the edges read `x`."""
-    steps = np.abs(np.diff(x, axis=0))
-    peak = float(np.max(np.abs(x)))
-    w = 2 * max(1, int(round(CLICK_LOCAL_S * rate))) + 1
     e = x if raw is None else np.asarray(raw, dtype=np.float64)
     e_peak = float(np.max(np.abs(e)))
     edges = [] if e_peak <= 0 else [name for name, s in (("start", e[0]), ("end", e[-1]))
                                     if float(np.max(np.abs(s))) >= CLICK_MIN_OF_PEAK * e_peak]
+    merged = click_steps(x, rate)
+    return {"count": len(merged), "first_ms": [round(1000 * (i + 1) / rate, 2) for i in merged[:10]], "edges": edges,
+            "edge_count": len(edges)}
+
+
+def click_steps(x: np.ndarray, rate: int) -> list[int]:
+    """Every click `clicks` counts, as the index i of its step (between samples i and i+1), nearby hits merged."""
+    steps = np.abs(np.diff(x, axis=0))
+    peak = float(np.max(np.abs(x)))
+    w = 2 * max(1, int(round(CLICK_LOCAL_S * rate))) + 1
     if peak <= 0 or len(steps) < w:
-        return {"count": 0, "first_ms": [], "edges": edges, "edge_count": len(edges)}
+        return []
     kernel = np.ones(w) / w
     local = np.sqrt(np.stack([np.convolve(steps[:, c] ** 2, kernel, "same") for c in range(x.shape[1])], axis=1))
     big = (steps > CLICK_FACTOR * local) & (steps >= CLICK_MIN_OF_PEAK * peak)
@@ -390,8 +403,81 @@ def clicks(x: np.ndarray, rate: int, raw: np.ndarray | None = None) -> dict:
     for i in idx:
         if not merged or i - merged[-1] > int(0.001 * rate):
             merged.append(int(i))
-    return {"count": len(merged), "first_ms": [round(1000 * (i + 1) / rate, 2) for i in merged[:10]], "edges": edges,
-            "edge_count": len(edges)}
+    return merged
+
+
+LOOP_WINDOW_S = 0.050  # PROPOSAL: loop_wrap's level windows (50 ms, hop 25 ms) ...
+LOOP_MIN_BODY_WINDOWS = 8  # ... and the fewest windows outside the seam that give the loop's own level range
+WRAP_CLICK_S = 0.001  # a click within 1 ms of the wrap is a click at the wrap
+
+
+def loop_wrap(x: np.ndarray, rate: int, seam_ms: float | None = None) -> dict:
+    """The loop's wrap, read as the player hears it (the file's end followed by its start). F-08 reads only the one
+    step across the wrap, so it passes a spike a few samples before the end and a fade to silence at both ends
+    (review.md F-08's own false reading). Three more readings, each relative to the loop's own material:
+
+      wrap_clicks: the clicks `clicks` finds within 1 ms of the wrap when the file is rotated so the wrap sits in its
+        middle (the same detector and file peak: the wrap has no blind spot the rest of the file lacks);
+      wrap_hf_db: the second-difference energy (a 12 dB/octave high-pass, every channel) of the 2 ms window centred
+        on the wrap against the 99th percentile of every other 2 ms window (dB; 29 good loops of 2-30 s read -27.7 to
+        -1.2; a spike 3 samples before the end of 0.1 x peak reads +3.1 to +4.5 in tonal beds, of 0.5 x peak +4.2
+        to +7.1 in low-passed noise); None under 100 other windows;
+      seam_gap_db: 50 ms RMS windows (hop 25 ms) of the rotated file; the quietest window touching the seam region
+        (the last `seam_ms` of the file, default 50 ms, plus the first 50 ms) against the 5th percentile of every other
+        window: 0 when it is not quieter, else how far under (fades to silence of 100 ms at both ends read -5.5 to
+        -17.8 on continuous beds; on beds that already hold near-silent lulls they read 0: not seen). None when
+        fewer than 8 windows lie outside the seam region.
+
+    Known false readings: a seam on a natural transient (a hit in the bed) reads a high wrap_hf_db (2 of 1,160 natural
+    positions over 3 dB in the step 6 calibration); a seam in a natural lull reads a gap; a slope break with no jump
+    (a waveform reflected at its crest) is not read; a click inside loud noise hides as in `clicks`; a bump at the
+    seam is not read here (the loop step measures its crossfade against its sources: a bed's loudest moment can sit
+    at the seam, 3 of 29 good loops built from real takes read 2-9 dB over the 95th percentile there)."""
+    a = np.asarray(x, dtype=np.float64)
+    a = a[:, None] if a.ndim == 1 else a
+    a = a - a.mean(axis=0)
+    n = len(a)
+    r = n // 2
+    rolled = np.roll(a, r, axis=0)  # out[i] = a[i - r]: the wrap pair (a[-1], a[0]) is now (rolled[r-1], rolled[r])
+    k = int(round(WRAP_CLICK_S * rate))
+    near = [i for i in click_steps(rolled, rate) if abs(i - (r - 1)) <= k]
+    # high-frequency energy at the wrap: the second difference (a 12 dB/octave high-pass) summed over 2 ms windows of
+    # every channel; the window centred on the wrap against the 99th percentile of every other window
+    d2 = np.sum(np.diff(rolled, n=2, axis=0) ** 2, axis=1)  # d2[j] is centred on sample j + 1
+    hw = max(2, 2 * k)
+    wrap_start = r - 1 - hw // 2  # the window d2[wrap_start : wrap_start + hw] holds the wrap step's terms
+    cs = np.concatenate([[0.0], np.cumsum(d2)])
+    starts = np.arange(wrap_start % hw, len(d2) - hw + 1, hw)
+    energy = cs[starts + hw] - cs[starts]
+    at = energy[starts == wrap_start]
+    others = energy[starts != wrap_start]
+    hf = None
+    if len(at) and len(others) >= 100 and float(np.percentile(others, 99)) > 0:
+        hf = round(10 * math.log10(max(float(at[0]), 1e-30) / float(np.percentile(others, 99))), 2)
+    w = max(2, int(round(LOOP_WINDOW_S * rate)))
+    hop = max(1, w // 2)
+    seam = w if seam_ms is None else max(w, int(round(seam_ms * rate / 1000)))
+    out = {"wrap_clicks": len(near), "wrap_click_ms": [round(1000 * (i + 1 - r) / rate, 3) for i in near],
+           "wrap_hf_db": hf,
+           "seam_ms": round(1000 * seam / rate, 2), "window_ms": round(1000 * w / rate, 2), "seam_gap_db": None,
+           "seam_db_re_median": None, "body_range_db": None, "body_windows": 0}
+    if n < 2 * w or seam >= r:
+        return out
+    mono = rolled.mean(axis=1)
+    c = np.concatenate([[0.0], np.cumsum(mono ** 2)])
+    starts = np.arange(0, n - w + 1, hop)
+    lv = 10 * np.log10(np.maximum((c[starts + w] - c[starts]) / w, 1e-24))
+    in_seam = (starts < r + w) & (starts + w > r - seam)
+    body, sm = lv[~in_seam], lv[in_seam]
+    out["body_windows"] = int(len(body))
+    if len(body) < LOOP_MIN_BODY_WINDOWS or not len(sm):
+        return out
+    med = float(np.median(body))
+    lo, hi = float(np.percentile(body, 5)), float(np.percentile(body, 95))
+    out.update({"seam_gap_db": round(min(0.0, float(sm.min()) - lo), 2), "seam_db_re_median": [round(float(sm.min()) - med, 2),
+                                                                          round(float(sm.max()) - med, 2)],
+                "body_range_db": [round(lo - med, 2), round(hi - med, 2)]})
+    return out
 
 
 def tonality(x: np.ndarray, rate: int) -> dict:

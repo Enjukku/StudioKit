@@ -27,6 +27,17 @@ recipe.json:
   The edit steps run in the fixed order trim, cut, fade, mono, loudness, peak, export whatever order they are
   listed in; export always runs.
 
+  One source, exactly (J020 step 6; numbers checked by render.plan_form, the work in assemble.py):
+    "take": "takes/<cue>.r1.t1.mp3"                                one take;
+    "layers": [{"name": "contact", "take": "...", "design": [...], "offset_ms": 0 | "align": {"to_ms": 12,
+                "on": "main_transient" | "F-01"}, "gain_db": -3, "fade_in_ms": 0, "fade_out_ms": 0,
+                "targets": {...}}, ...]                            several takes mixed; "design" then runs on the mix;
+    "takes": ["takes/<cue>.r1.t1.mp3", ...]                        one variant file per take (card.form.variants).
+  Optional: "loop": {"op": "loop_bed", "crossfade_ms": 500, "start_ms", "end_ms", "search_ms", "curve"} or
+  {"op": "loop_music", "bpm", "bars", "beats_per_bar": 4, "start_ms" (the downbeat), "crossfade_ms": 20, "curve"}
+  (card.form.loop must be true; no trim, cut or fade in the edit pass); "variants": {"seed", "count", "max_cents",
+  "max_db"} (n files from one sound; card.form.variants says n; refused for tell, warning, countdown: SC-12).
+
 Usage:
   from tools.audio.soundbench import card
   c = card.load_card(Path("content/audio/SFX-COMBAT-HIT/card.json"))
@@ -126,23 +137,7 @@ def check_card(doc: dict) -> dict:
     if _num(lv["tolerance"], "card.level.tolerance") < 0:
         raise SoundbenchError("card.level.tolerance: must be 0 or more")
     _bool(lv["must"], "card.level.must")
-    if not isinstance(doc.get("targets", {}), dict):
-        raise SoundbenchError("card.targets: needs an object of target name -> {min, max, must}")
-    for name, spec in doc.get("targets", {}).items():
-        where = f"card.targets.{name}"
-        if name not in TARGETS:
-            raise SoundbenchError(f"{where}: unknown target (known: {sorted(TARGETS)})")
-        _keys(spec, {"min", "max", "must", "binds_to"} if name == "onset_ms" else {"min", "max", "must"}, {"must"},
-              where)
-        _bool(spec["must"], where + ".must")
-        if "min" not in spec and "max" not in spec:
-            raise SoundbenchError(f"{where}: needs min, max or both")
-        lo = _num(spec["min"], where + ".min") if "min" in spec else None
-        hi = _num(spec["max"], where + ".max") if "max" in spec else None
-        if lo is not None and hi is not None and lo > hi:
-            raise SoundbenchError(f"{where}: min {lo} is above max {hi}")
-        if "binds_to" in spec:
-            _choice(spec["binds_to"], ONSET_KEYS, where + ".binds_to")
+    check_targets(doc.get("targets", {}), "card.targets")
     if "key" in doc:
         k = _keys(doc["key"], {"root", "scale", "must"}, {"root", "scale"}, "card.key")
         _choice(k["root"], NOTE_NAMES, "card.key.root")
@@ -179,6 +174,28 @@ def check_card(doc: dict) -> dict:
     return doc
 
 
+def check_targets(targets, where0: str) -> dict:
+    """Target name -> {min, max, must} (the card's targets, and a layer's own targets)."""
+    if not isinstance(targets, dict):
+        raise SoundbenchError(f"{where0}: needs an object of target name -> {{min, max, must}}")
+    for name, spec in targets.items():
+        where = f"{where0}.{name}"
+        if name not in TARGETS:
+            raise SoundbenchError(f"{where}: unknown target (known: {sorted(TARGETS)})")
+        _keys(spec, {"min", "max", "must", "binds_to"} if name == "onset_ms" else {"min", "max", "must"}, {"must"},
+              where)
+        _bool(spec["must"], where + ".must")
+        if "min" not in spec and "max" not in spec:
+            raise SoundbenchError(f"{where}: needs min, max or both")
+        lo = _num(spec["min"], where + ".min") if "min" in spec else None
+        hi = _num(spec["max"], where + ".max") if "max" in spec else None
+        if lo is not None and hi is not None and lo > hi:
+            raise SoundbenchError(f"{where}: min {lo} is above max {hi}")
+        if "binds_to" in spec:
+            _choice(spec["binds_to"], ONSET_KEYS, where + ".binds_to")
+    return targets
+
+
 def onset_binding(doc: dict) -> str:
     """Which onset the card's onset target and `trim` use: the target's binds_to, else the kind's."""
     spec = doc.get("targets", {}).get("onset_ms", {})
@@ -197,17 +214,66 @@ def _step(step, where: str) -> dict:
     return step
 
 
-def check_recipe(doc: dict) -> dict:
-    _keys(doc, {"cue", "take", "design", "edit", "_about"}, {"cue", "take", "design", "edit"}, "recipe")
-    _cue_id(doc["cue"], "recipe.cue")
-    take = doc["take"]
+def _take_path(take, where: str) -> str:
     if not isinstance(take, str) or not take.lower().endswith(".mp3") or Path(take).is_absolute() or ".." in Path(take).parts:
-        raise SoundbenchError("recipe.take: needs the take's .mp3 path inside the cue folder, e.g. takes/<cue>.r1.t1.mp3")
-    for part in ("design", "edit"):
-        if not isinstance(doc[part], list):
-            raise SoundbenchError(f"recipe.{part}: needs a list of steps")
-        for i, step in enumerate(doc[part]):
-            _step(step, f"recipe.{part}[{i}]")
+        raise SoundbenchError(f"{where}: needs the take's .mp3 path inside the cue folder, e.g. takes/<cue>.r1.t1.mp3")
+    return take
+
+
+def _design(steps, where: str) -> list:
+    if not isinstance(steps, list):
+        raise SoundbenchError(f"{where}: needs a list of steps")
+    for i, step in enumerate(steps):
+        _step(step, f"{where}[{i}]")
+        if step["op"] in EDIT_ORDER:
+            raise SoundbenchError(f"{where}: {step['op']!r} is an edit step; it belongs in recipe.edit")
+    return steps
+
+
+def check_recipe(doc: dict) -> dict:
+    """The recipe's shape. Exactly one source: `take` (one take), `layers` (several takes mixed into one sound) or
+    `takes` (one variant file per take). The numbers inside layers, `loop` and `variants` are checked by
+    `render.plan_form` before any audio is touched."""
+    _keys(doc, {"cue", "take", "layers", "takes", "design", "loop", "variants", "edit", "_about"},
+          {"cue", "design", "edit"}, "recipe")
+    _cue_id(doc["cue"], "recipe.cue")
+    sources = [k for k in ("take", "layers", "takes") if k in doc]
+    if len(sources) != 1:
+        raise SoundbenchError(f"recipe: needs exactly one of take, layers or takes (got {sources or 'none'})")
+    if "take" in doc:
+        _take_path(doc["take"], "recipe.take")
+    if "takes" in doc:
+        if not isinstance(doc["takes"], list) or not doc["takes"]:
+            raise SoundbenchError("recipe.takes: needs a list of take paths (one variant file per take)")
+        for i, t in enumerate(doc["takes"]):
+            _take_path(t, f"recipe.takes[{i}]")
+        if len(set(doc["takes"])) != len(doc["takes"]):
+            raise SoundbenchError("recipe.takes: a take is listed more than once")
+    if "layers" in doc:
+        if not isinstance(doc["layers"], list) or not doc["layers"]:
+            raise SoundbenchError("recipe.layers: needs a list of layers, each {take, design, offset_ms or align, ...}")
+        for i, layer in enumerate(doc["layers"]):
+            where = f"recipe.layers[{i}]"
+            _keys(layer, {"name", "take", "design", "offset_ms", "align", "gain_db", "fade_in_ms", "fade_out_ms",
+                          "targets"}, {"take", "design"}, where)
+            _take_path(layer["take"], where + ".take")
+            _design(layer["design"], where + ".design")
+            if ("offset_ms" in layer) == ("align" in layer):
+                raise SoundbenchError(f"{where}: give exactly one of offset_ms or align")
+            if "name" in layer and (not isinstance(layer["name"], str) or not layer["name"].strip()):
+                raise SoundbenchError(f"{where}.name: needs a non-empty name")
+            if "targets" in layer:
+                check_targets(layer["targets"], where + ".targets")
+    for part in ("loop", "variants"):
+        if part in doc and not isinstance(doc[part], dict):
+            raise SoundbenchError(f"recipe.{part}: needs an object")
+    if "loop" in doc and doc["loop"].get("op") not in ("loop_bed", "loop_music"):
+        raise SoundbenchError("recipe.loop.op: needs loop_bed or loop_music")
+    _design(doc["design"], "recipe.design")
+    if not isinstance(doc["edit"], list):
+        raise SoundbenchError("recipe.edit: needs a list of steps")
+    for i, step in enumerate(doc["edit"]):
+        _step(step, f"recipe.edit[{i}]")
     names = [s["op"] for s in doc["edit"]]
     for n in names:
         if n not in EDIT_ORDER:
@@ -215,9 +281,6 @@ def check_recipe(doc: dict) -> dict:
     dup = {n for n in names if names.count(n) > 1}
     if dup:
         raise SoundbenchError(f"recipe.edit: {sorted(dup)} listed more than once")
-    for s in doc["design"]:
-        if s["op"] in EDIT_ORDER:
-            raise SoundbenchError(f"recipe.design: {s['op']!r} is an edit step; it belongs in recipe.edit")
     return doc
 
 

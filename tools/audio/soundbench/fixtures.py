@@ -159,6 +159,81 @@ def make_real(name: str, rate: int, channels: int = 2, seed: int = 11) -> np.nda
     return np.stack([left, right], axis=1)
 
 
+# Long material for loops (J020 step 6): beds of 2-30 s, noise-like and tonal, at real-take levels (quiet, the right
+# channel 1.1 dB lower with its own floor). `real_bed` and `chain` build long sounds from short takes the way the rank
+# repair did: takes slowed x4 (two octaves down, four times longer) and spliced with equal-power crossfades.
+BED_KINDS = ("steady_noise", "noise_bed", "steady_tone", "tonal_pad", "real_bed")
+BED_PEAK_DBFS = {"steady_noise": -30.0, "noise_bed": -30.0, "steady_tone": -24.0, "tonal_pad": -24.0, "real_bed": -30.0}
+
+
+def slow(x: np.ndarray, factor: int = 4) -> np.ndarray:
+    """A take played `factor` times slower (length x factor, pitch down by log2(factor) octaves)."""
+    from scipy.signal import resample_poly
+
+    return resample_poly(np.asarray(x, dtype=np.float64), factor, 1, axis=0)
+
+
+def chain(parts: list, rate: int, seconds: float, cross_ms: float = 60.0, seed: int = 0) -> np.ndarray:
+    """Parts (each (n, ch)) spliced end to start with equal-power crossfades, in a seeded order that never repeats a
+    part twice in a row, until `seconds` long; every part normalised to the same RMS first."""
+    rs = np.random.RandomState(seed)
+    ch = max(p.shape[1] for p in parts)
+    norm = [np.repeat(p, ch, axis=1) if p.shape[1] < ch else p for p in parts]
+    norm = [p / max(float(np.sqrt(np.mean(p ** 2))), 1e-12) for p in norm]
+    n_total = int(round(seconds * rate))
+    k = int(round(cross_ms * rate / 1000))
+    out = norm[rs.randint(len(norm))].copy()
+    last = None
+    while len(out) < n_total + k:
+        i = rs.randint(len(norm))
+        if len(norm) > 1 and i == last:
+            continue
+        last = i
+        nxt = norm[i]
+        t = np.arange(1, k + 1) / (k + 1)
+        mixed = out[-k:] * np.cos(np.pi / 2 * t)[:, None] + nxt[:k] * np.sin(np.pi / 2 * t)[:, None]
+        out = np.vstack([out[:-k], mixed, nxt[k:]])
+    return out[:n_total]
+
+
+def make_bed(kind: str, rate: int, seconds: float, channels: int = 2, seed: int = 5) -> np.ndarray:
+    """A bed of `seconds` as float64 (n, channels), peaking at BED_PEAK_DBFS[kind].
+
+    steady_noise: noise low-passed at 3 kHz, steady level. noise_bed: the same with a slow +-3 dB swell (0.37 Hz) and
+    a little high hiss. steady_tone: 220 Hz with two harmonics, exactly periodic. tonal_pad: an A-minor-ish chord
+    (220, 261.6, 329.6 Hz) with a slow 6-cent vibrato, so no two periods are equal. real_bed: `chain` of the realistic
+    takes (`make_real`) slowed x4."""
+    from scipy.signal import butter, sosfilt
+
+    rs = np.random.RandomState(seed + BED_KINDS.index(kind))
+    n = int(round(seconds * rate))
+    t = np.arange(n) / rate
+    if kind in ("steady_noise", "noise_bed"):
+        y = sosfilt(butter(2, 3000, "lowpass", fs=rate, output="sos"), rs.standard_normal(n))
+        if kind == "noise_bed":
+            y = y * 10 ** (3 * np.sin(2 * np.pi * 0.37 * t) / 20)
+            y = y + 0.05 * sosfilt(butter(2, 6000, "highpass", fs=rate, output="sos"), rs.standard_normal(n))
+    elif kind == "steady_tone":
+        y = sum(a * np.sin(2 * np.pi * 220 * h * t) for h, a in ((1, 1.0), (2, 0.4), (3, 0.2)))
+    elif kind == "tonal_pad":
+        vib = 2 ** (6 / 1200 * np.sin(2 * np.pi * 0.3 * t))
+        phase = 2 * np.pi * np.cumsum(vib) / rate
+        y = sum(a * np.sin(f * phase + p) for f, a, p in ((220.0, 1.0, 0.0), (261.63, 0.7, 1.1), (329.63, 0.6, 2.3)))
+    elif kind == "real_bed":
+        parts = [slow(make_real(name, rate, 1, seed=seed)) for name in REAL_NAMES]
+        y = chain(parts, rate, seconds, seed=seed)[:, 0]
+    else:
+        raise KeyError(f"unknown bed {kind!r}")
+    floor = 10 ** (REAL_FLOOR_DB_RE_PEAK / 20) * float(np.max(np.abs(y)))
+    left = y + floor * rs.standard_normal(n)
+    left = left / np.max(np.abs(left)) * 10 ** (BED_PEAK_DBFS[kind] / 20)
+    if channels == 1:
+        return left[:, None]
+    right = 10 ** (REAL_RIGHT_DB / 20) * left + 10 ** ((BED_PEAK_DBFS[kind] + REAL_FLOOR_DB_RE_PEAK) / 20) * \
+        rs.standard_normal(n)
+    return np.stack([left, right], axis=1)
+
+
 def write_wav(path: Path, x: np.ndarray, rate: int) -> Path:
     """Float32 WAV (no quantisation beyond float32), the format every measure test reads."""
     import soundfile as sf
