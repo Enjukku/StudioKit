@@ -36,3 +36,10 @@ plan can turn a must-passing take into a regenerate (aim fixes + loudness/peak);
 Rank round 2 (2026-10-23): a "do nothing" plan added as a fix candidate must pass the export's own refusals (a
 master over full scale cannot be written at 24-bit); proof-render every take's kept plan, not just the top. A clip
 or level reading that is a total time (ms over a threshold) grows with take length: calibrate on long takes too.
+Step 6 loops/layers/variants (2026-10-23): (1) a card target with must:false must never set the limit of a must
+guardrail row: grep every `.get("max", CONST)` that reads a card target into a must row (loop_seam lifted R-26's F-08 2.0
+to the card's aim 50: exit 0 on a 0.1 x peak drift click). (2) Loop seam readings built on whole-file percentiles
+(F-08 p95, HF p99, click floor 1 % of peak) go blind when the seam sits in a quiet part of a bed with a loud section:
+build a circular (FFT-filtered) bed so the base loop is exact, then plant jumps re the LOCAL step RMS. (3) Alignment by
+a threshold crossing (main transient -10 dB) moves with DC removal context on slow-rising takes: compare the align
+reading with the as-placed reading on real swishes.

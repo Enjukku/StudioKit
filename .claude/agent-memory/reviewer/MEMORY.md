@@ -1,2 +1,2 @@
 - [Workflow script reviews](workflow-script-reviews.md) — prove job-*.js findings with harness scenarios (nullLabel, statusLabel, blockLabelOnce); where defects cluster
-- [Audio tool reviews](audio-tool-reviews.md) — real quiet/hot takes; MP3 overshoot vs clip checks; LUFS gate non-linearity; one-sided rules
+- [Audio tool reviews](audio-tool-reviews.md) — real quiet/hot takes; MP3 overshoot; LUFS gate; one-sided rules; aim targets setting must limits; loop seams in dynamic beds
