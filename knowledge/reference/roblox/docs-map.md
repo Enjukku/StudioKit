@@ -12,6 +12,8 @@ supersedes: []
 
 Paths are relative to `knowledge/external/roblox-creator-docs/` (the local mirror; `_api-reference/classes/<Class>.yaml` holds every class, property, method and event). Read your rows before you design or build. The routing rule is `AGENTS.md` §0: the context packet's Roblox docs section first, a scout when it finds nothing or the system is new to you, a Studio probe when the docs are silent.
 
+This table is the one source for three places (J026-D1): `tools/sync_harness.py` writes each role's row into its generated role file (`.claude/agents/`, `.codex/agents/`), the `SubagentStart` hook prints the row at every kit-role start, and `python tools/context_packet.py docs "<task>" --role <role>` ranks pages for a brief's `docs:` key. After you edit a row, run `python tools/sync_harness.py`; the gate reports drift until you do. The first cell holds exact role names, comma-separated.
+
 | Role | Read first (sections) | Key pages | API classes to check |
 | --- | --- | --- | --- |
 | architect, feature-builder, quick-builder, reviewer, qa-lead | `scripting/`, `luau/`, `physics/`, `workspace/`, `players/`, `input/`, `cloud-services/` | scripting/events/remote.md; scripting/security/; physics/sleep-system.md; physics/network-ownership.md; cloud-services/data-stores/index.md; projects/server-authority/index.md; luau/type-checking.md; luau/native-code-gen.md | the class of every Instance you touch; RemoteEvent, DataStoreService, MarketplaceService, Players, Workspace |

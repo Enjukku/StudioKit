@@ -1153,6 +1153,49 @@ def docs_map_rows(root: Path, role: str) -> list[dict]:
     return rows
 
 
+def role_docs(root: Path, role: str) -> dict | None:
+    """The role's docs-map cells (sections, key pages, API classes), rows merged; None when no row names it.
+
+    One source for the SubagentStart hook, the generated role files (tools/sync_harness.py) and `docs` (J026-D1).
+    """
+    rows = docs_map_rows(root, role)
+    if not rows:
+        return None
+    cells: dict[str, list[str]] = {"sections": [], "pages": [], "api": []}
+    for row in rows:
+        parts = [cell.strip() for cell in row["row"].strip().strip("|").split("|")]
+        for key, value in zip(("sections", "pages", "api"), parts[1:4]):
+            if value and value not in ("—", "-") and value not in cells[key]:
+                cells[key].append(value)
+    return {key: "; ".join(values) for key, values in cells.items()} | {"lines": [r["line"] for r in rows]}
+
+
+def docs_brief(root: Path, query: str, role: str | None = None, limit: int = DOCS_PAGES) -> dict:
+    """The brief's `docs:` key for one task (J026-D1): ranked mirror pages, API classes, the role's sections."""
+    if role is not None and role not in role_names(root) and role not in ROLE_ALIASES:
+        role_info(root, role)  # raises the unknown-role error
+    own = role_docs(root, role) if role else None
+    found = roblox_docs(root, query, limit * 4 if own else limit)
+    pages = found["pages"]
+    if own:  # pages inside the role's own docs-map sections first, each group in rank order
+        sections = [f"{DOCS_MIRROR}/{s}" for s in re.findall(r"`([^`]+)`", own["sections"]) if not s.startswith("knowledge/")]
+        pages = sorted(pages, key=lambda page: not any(page["path"].startswith(s) for s in sections))
+    return {"query": query, "role": role, "pages": pages[:limit], "api": found["api"], "role_docs": own}
+
+
+def render_docs_brief(found: dict) -> str:
+    """YAML lines to paste into a brief (rules/messages.md §2 `docs:`)."""
+    out = [f"docs:  # python tools/context_packet.py docs \"{found['query']}\"" + (f" --role {found['role']}" if found["role"] else "")]
+    out += [f"  - {page['path']}  # {page['title']}" for page in found["pages"]]
+    out += [f"  - {item['path']}  # API {item['class']}" for item in found["api"]]
+    if not found["pages"] and not found["api"]:
+        out.append("  []  # no mirror page matched: say why, or name pages by hand")
+    role_part = found.get("role_docs")
+    if role_part:
+        out.append(f"  # role sections ({DOCS_MAP} L{', L'.join(str(n) for n in role_part['lines'])}): {role_part['sections']}")
+    return "\n".join(out) + "\n"
+
+
 def precedent_rows(root: Path, role: str, limit: int = PRECEDENT_ROWS) -> list[dict]:
     """The newest `limit` rows of the precedents register whose Craft cell names the role, verbatim."""
     path = root / PRECEDENTS
@@ -1457,6 +1500,11 @@ def parser() -> argparse.ArgumentParser:
     packet.add_argument("--json", action="store_true", help="machine-readable output")
     packet.add_argument("--role", help="kit role (.agents/roles/<role>.md) or orchestrator: boost its book and tagged notes, add a 'For role' block")
     packet.add_argument("--job", help="job id or unique prefix (knowledge/jobs/<job-id>/): boost its notes, add a 'Job' block")
+    docs = sub.add_parser("docs", help="print a brief's `docs:` key: Roblox docs mirror pages for one task (J026-D1)")
+    docs.add_argument("task", help="plain-language task")
+    docs.add_argument("--role", help="kit role: add its docs-map sections as a comment line")
+    docs.add_argument("--max", type=int, default=6, help="mirror pages to list")
+    docs.add_argument("--json", action="store_true", help="machine-readable output")
     return result
 
 
@@ -1465,6 +1513,16 @@ def main(argv: list[str] | None = None) -> int:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
     args = parser().parse_args(argv)
+    if args.command == "docs":
+        try:
+            if args.max < 1:
+                raise ValueError("--max must be >= 1")
+            found = docs_brief(args.root.resolve(), args.task, args.role, args.max)
+        except (OSError, ValueError) as error:
+            print(f"context_packet: {error}", file=sys.stderr)
+            return 2
+        sys.stdout.write(json.dumps(found, indent=2, ensure_ascii=False) + "\n" if args.json else render_docs_brief(found))
+        return 0
     try:
         if args.budget < 200 or args.max < 1:
             raise ValueError("--budget must be >= 200 and --max >= 1")

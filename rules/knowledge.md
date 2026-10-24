@@ -28,7 +28,7 @@ Everything the studio knows is plain markdown or data files **in this repository
 | Skills | preloaded by the role file, or when the craft is needed | SKILL.md ≤ 500 lines; its steps and rules in the first 5,000 tokens (that is what survives compaction; checked by hand: about 20,000 characters, no gate check yet); detail in references; **description ≤ 400 characters, "Use when" first** (the skill list has a budget and drops the least-used descriptions) |
 | Path rules | none yet. Claude Code would load `.claude/rules/*.md` with `paths:` when matching files are touched; `tools/sync_harness.py` does not generate them | only area-specific rules |
 | Agent memory | when that role starts | first 200 lines / 25 KB |
-| Reference | on lookup | agent-ready cards for big docs; raw mirror for exact lookup. Roblox mirror: the packet's docs section, then grep; refresh with `python tools/sync_roblox_docs.py`, then update `knowledge/reference/roblox/whats-new.md` |
+| Reference | on lookup | agent-ready cards for big docs; raw mirror for exact lookup. Roblox mirror: the brief's `docs:` key (`context_packet.py docs`), the role file's generated docs lines, the packet's docs section, then grep; refresh with `python tools/sync_roblox_docs.py`, then update `knowledge/reference/roblox/whats-new.md` |
 
 ## 3. Routing: how every agent reaches its context
 **Load order** (the same for every agent and task):
@@ -39,7 +39,7 @@ Everything the studio knows is plain markdown or data files **in this repository
 5. Open only what the packet and the brief cite. Nothing fits, or a Roblox system is new to you → the kit's `explore` scout or the `researcher` (`AGENTS.md` §0).
 6. The role's own memory loads by itself.
 
-A `SubagentStart` hook (`tools/hooks/subagent_context.py`, enabled by the owner in settings) adds the active job pointer for kit roles at start and on resume; the job list is `knowledge/jobs/active.md`, kept current by the lead.
+A `SubagentStart` hook (`tools/hooks/subagent_context.py`, enabled by the owner in settings) adds the role's Roblox docs sections and key pages, and the active job pointer, for kit roles at start and on resume; the job list is `knowledge/jobs/active.md`, kept current by the lead.
 
 **Context withheld on purpose:**
 | Step | Not given | Why |
@@ -110,7 +110,7 @@ The lead gives a doc-keeper the list and checks the result (`orchestration` skil
 2. **Consolidate (weekly `/improve`):** group by cause; send each to its layer (the routing table in `.agents/workflows/improve.md` step 2); merge duplicates; supersede; prune. **Promote** a lesson into a skill step, rule, recipe, precedent or overlay only when it happened twice or the owner stated or confirmed it; every promotion links its evidence; the owner reviews the change summary.
 3. **Test:** retrieval cases (`knowledge/evals/retrieval.jsonl`) get a new case for every "context missed"; a defect the owner found after internal review becomes a seeded fault for reviewer evals (code: `.agents/skills/code-review/evals/briefs.md`; visual crafts: the evals of that craft's review skill, e.g. `.agents/skills/art-review/evals/`); skill evals and the monthly agent scorecard run before and after; a change that makes them worse is reverted and gets a `tried-and-failed` row.
 4. **Share:** universal lessons go to the kit with `/kit-sync`, owner-approved.
-5. **After every Claude Code update:** re-run the capability probes and update the capability record (`knowledge/reference/studio/claude-code-capabilities.md`); behaviour changed between 2.1.296 and 2.1.306. Probes: one subagent sends a message to a sibling by id while it works (C01, C03); a role with a `tools:` list without `SendMessage` tries to send (C22; an edited tool list takes effect only after Claude Code restarts); one one-stage saved workflow runs (C07); a finished agent is resumed by a message and recalls its last work (C11).
+5. **After every Claude Code update:** re-run the capability probes and update the capability record (`knowledge/reference/studio/claude-code-capabilities.md`); behaviour changed between 2.1.296 and 2.1.306. Probes: one subagent sends a message to a sibling by id while it works (C01, C03); a role with a `tools:` list without `SendMessage` tries to send (C22; an edited tool list takes effect only after Claude Code restarts); one one-stage saved workflow runs (C07); a finished agent is resumed by a message and recalls its last work (C11). **MCP tool probe** (J027): start each role whose `tools:` list names an `mcp__<server id>__*` on Haiku and ask it to list its tools; a missing server means the connector id changed (Figma: `c11dc8e7…` until 2026-10-21, `8aa4c860…` on 2026-10-24). Fix: map the kit id to the new one in this checkout's `kit.json` `tool_ids`, run `python tools/sync_harness.py`, probe again. Connector ids change without a Claude Code update, so `/improve` runs this probe every week.
 
 ## 9. Retrieval and context health
 - `python tools/kb_index.py` regenerates area indexes and runs the lint (frontmatter, dead links, superseded without replacement, notes over 300 lines, duplicate titles, unknown `roles:` names). Part of the gate.

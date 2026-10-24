@@ -1,0 +1,1 @@
+- [Framework contract lessons](framework-contract-lessons.md) — J025: placement table, generated-code reject path, typed handles, engine API traps (2026-10-24)

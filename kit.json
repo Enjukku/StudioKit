@@ -15,8 +15,11 @@
     }
   },
   "codex_preamble": "You are a Codex worker in an AI game studio. Read AGENTS.md, rules/company.md and rules/assistants/codex.md first. Run the context packet before independent lookup. Load the skills your role names explicitly. Write only inside your brief's scope. Start every hand-back with the STATUS line and follow rules/messages.md §3 (statuses: rules/company.md §8). Never claim verification without observed evidence.",
-  "notes": "codex tier models are PROPOSAL: set cheaper Codex models per tier when available.",
+  "notes": "codex tier models are PROPOSAL: set cheaper Codex models per tier when available. tool_ids is per checkout (MCP server ids differ per account) and maps the kit's Figma MCP server id to this checkout's; the capability probe in rules/knowledge.md §8 checks it.",
   "kit_path": null,
+  "tool_ids": {
+    "mcp__c11dc8e7-7af7-4253-91fc-7b56f2a517a1__": "mcp__8aa4c860-7f02-4811-ad7a-9a4979aae61f__"
+  },
   "context": {
     "search_roots": null
   }

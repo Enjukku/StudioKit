@@ -1,0 +1,2 @@
+- [Memory oracle in Lune](memory-oracle-lune.md) — gcinfo delta flaky; forced-cycle live-heap reading; size loop 2x limit
+- [Planted faults on session fakes](planted-faults-session-fakes.md) — patch-arg specs + labels; matrix first; equivalent mutants need direct-state specs

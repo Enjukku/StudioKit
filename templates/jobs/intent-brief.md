@@ -15,6 +15,8 @@ model: <tier model>
 effort: <low | medium | high>
 skills: [<craft skills to load first>]
 packet: python tools/context_packet.py packet "<task>" --role <to-role> --job <job-id>
+docs:                                # python tools/context_packet.py docs "<task>" --role <to-role>; [] with the reason when no engine system is touched
+  - knowledge/external/roblox-creator-docs/<page>.md   # <what it covers>
 owner_words: ["<the owner's sentences, verbatim, when the work touches taste>"]
 refs:
   - <path>   # take: <what>; avoid: <what>

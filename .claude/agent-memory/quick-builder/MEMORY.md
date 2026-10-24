@@ -1,0 +1,1 @@
+- [Kit python tests](kit-python-tests.md) — use unittest, pytest not installed; sync_harness errors go to stderr

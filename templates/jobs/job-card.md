@@ -7,7 +7,7 @@ source: <job-id>
 supersedes: []
 ---
 > Author: orchestrator · <model id> · <effort> · <date>
-<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: target-experience sentence, belief check, floor and bar); revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design: no proof stage and no G2, `performance` risk token) -->
+<!-- Template: kit-writer · claude-sonnet-5-5 · medium · 2026-10-20; revised by orchestrator · claude-opus-5-5 · high · 2026-10-21 (J016: recipe, direction leads, usage in tokens, gates bound to revisions, close-out metrics); revised by role-fixer W4 · claude-opus-5-5 · high · 2026-10-21, J016 G3 (frontmatter, Studio id, code file owners pointer); revised by orchestrator · claude-opus-5-5 · high · 2026-10-22, J019 (Risks row for the recipes' risk-gated slots); revised by J019 P6 maker · claude-opus-5-5 · medium · 2026-10-22 (G3-P6): four lines and goal word, stop criteria and budget per stage, doors closed per gate; revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021: target-experience sentence, belief check, floor and bar); revised by J024 writer · claude-opus-5-5 · default · 2026-10-24 (J024 design: no proof stage and no G2, `performance` risk token); revised by orchestrator (side session) · claude-opus-5-5 · default · 2026-10-24 (J027-D4: Serves row, the roadmap milestone) -->
 
 # Job card: <job-id> <title>
 
@@ -27,6 +27,7 @@ supersedes: []
 | Code file owners | the `owns` column of the contract header (`contract-<name>.md`), set by the architect in its direction limits table and merged into the plan (`rules/company.md` §4 step 2) |
 | Linked jobs | <job-id: which shared interface it owns (saved fields, ids, who grants, who checks)>; none = a single job |
 | Risks (review slots) | the risks this job carries, which switch on the recipe's *(risk: …)* rows (`orchestration/references/job-types.md`): tokens (the saved workflow's `risks` arg: `.agents/workflows/jobs/README.md`): `money`, `saves`, `remotes`, `trades`, `paid-random` (paid random items), `server-result` (the server confirms the result), `rewards`, `frequent-effect`, `danger-area`, `sold-variant`, `new-enemy` (with gameplay behaviour), `performance` (the performance-engineer gives limits and reviews), `shop-screen` (shop, odds or progress screen), `event` (from a live-ops update brief); none = "none" |
+| Serves (roadmap milestone) | <milestone> on `knowledge/design/roadmap.md` (J027); none = a kit job or a game without a roadmap yet: say which |
 | Status | proposed |
 
 ## Four lines (goal)

@@ -12,3 +12,14 @@
 - [Judge edits against own source parts](feedback_judge_against_own_source_parts.md) — whole-file percentiles false-alarm on real beds; planted faults must FAIL, not ERROR
 - [Windows write_text writes CRLF](feedback_windows_write_text_crlf.md) — scripted edits: write bytes or newline LF; kit is LF
 - [Simulate in the consumer's frame](feedback_simulate_in_the_consumers_frame.md) — score parts in the context the real run reads them; probe what context moves
+- [Roblox toolchain probes](feedback_roblox_toolchain_probes.md) — wally wipes Packages/, luau-lsp string requires on disk, pin selene std (J025 S2)
+- [IDL generator probing](idl-generator-probing.md) — read generated deserializers + Lune offline buffer harness; vendor docs were wrong (J025 P1)
+- [Luau new-solver table params](luau-new-solver-table-params.md) — indexer params reject typed/frozen data; use {} / annotate-then-freeze; Lune helper pattern (J025 B2)
+- [Lune bench + shared scratch](lune-bench-and-shared-scratch.md) — custom luau.load env deopts builtins ~3x; parallel builders share scratchpad (J025-B1)
+- [Admin panel lessons](admin-panel-lessons.md) — deprecated GetRankInGroupAsync, cloned-client transport gap, sampled-log alloc, nil-in-table spec bug (J025-B8)
+- [Blink transport lessons](blink-transport-lessons.md) — Blink function On returns nothing, reply-after-leave leak, import ignores options, Lune fakes, escapes via Edit (J025-B7, B7b, Net fix1-3: plants vs holes, lint value count)
+- [parallel-gate-and-planted-faults](feedback_parallel_gate_and_planted_faults.md) — Framework repo gate is shared by parallel block builders; planted faults on check rules find real gaps (J025-B3 Loader, 2026-10-24)
+- [Game template lessons](game-template-lessons.md) — Rojo RunContext, literal/freeze type friction, Fire(nil), sourcemap after codegen, no specs in Systems (J025-S7)
+- [luau-framework-lessons](luau-framework-lessons.md) — Craft lessons from J025 framework blocks (charm-sync filtering, new-solver freeze typing, Lune engine seams, gate type-check rules)
+- [lune-allocation-and-isolation](lune-allocation-and-isolation.md) — Lune spec craft - how to measure allocations reliably with gcinfo and keep leak-count specs from cascading
+- [ProfileStore and Session lessons](profilestore-session-lessons.md) — sync OnSessionEnd, newest-first signals, same-server rejoin nil, fake os.clock start, receipt confirm wake, same-server rejoin vs release back-off

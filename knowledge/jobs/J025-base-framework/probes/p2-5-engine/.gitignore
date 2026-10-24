@@ -1,1 +1,4 @@
 *.rbxl.lock
+DevPackages/
+tools/globalTypes.d.luau
+vendor/

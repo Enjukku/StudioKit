@@ -17,7 +17,7 @@ from pathlib import Path
 TOOLS = Path(__file__).resolve().parent.parent
 HOOKS = TOOLS / "hooks"
 FIXTURE = TOOLS / "tests" / "fixtures" / "context" / "repo"
-CAP = 2000
+CAP = 4000
 REASON = "Hand-back must start with 'STATUS: done | blocked | needs-decision | failed.' and include coverage (rules/messages.md §3)."
 GOOD_HANDBACK = "STATUS: done. Built the tools.\n\n<spec>\ncoverage:\n  - C1: done\n</spec>\n"
 
@@ -78,12 +78,38 @@ class SubagentContextTests(HookCase):
         del payload["agent_type"]
         self.assertEqual(self.assert_silent_success("subagent_context.py", payload), "")
 
-    def test_no_active_jobs_gives_nothing(self):
+    def test_no_active_jobs_still_gives_role_docs(self):
+        # J026-D1: the docs row reaches the role in a game with no open job (GreatWallSim main had no active.md).
         active = self.root / "knowledge/jobs/active.md"
         active.write_text(active.read_text(encoding="utf-8").replace("- J016-demo · Boss intro cutscene\n", ""), encoding="utf-8")
-        self.assert_silent_success("subagent_context.py", start("film-director"))
-        active.unlink()
-        self.assert_silent_success("subagent_context.py", start("film-director"))
+        for _ in range(2):
+            text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+            self.assertIn("Roblox docs for this role", text)
+            self.assertIn('Run: python tools/context_packet.py packet "<your task>" --role film-director', text)
+            self.assertNotIn("--job", text)
+            if active.exists():
+                active.unlink()
+
+    def test_docs_row_cells_not_a_line_number(self):
+        # J026-D1: the hook prints the role's sections and key pages, not only "docs-map.md L<n>".
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("sections `workspace/camera/`, `animation/`.", text)
+        self.assertIn("Key pages: workspace/camera/index.md.", text)
+        self.assertIn("list it in `docs_read`", text)
+
+    def test_role_without_docs_row_says_so(self):
+        shutil.copy(self.root / ".agents/roles/film-director.md", self.root / ".agents/roles/sound-designer.md")
+        text = self.context("subagent_context.py", start("sound-designer"), "SubagentStart")
+        self.assertIn("Roblox docs: no row names this role", text)
+
+    def test_docs_pages_dropped_before_run_lines(self):
+        # J026-D1: over the cap, job file lines go first, then the key pages; the Run line stays.
+        docs_map = self.root / "knowledge/reference/roblox/docs-map.md"
+        long_pages = "; ".join(f"workspace/camera/page-{i:03}.md" for i in range(300))
+        docs_map.write_text(docs_map.read_text(encoding="utf-8").replace("| workspace/camera/index.md |", f"| {long_pages} |"), encoding="utf-8")
+        text = self.context("subagent_context.py", start("film-director"), "SubagentStart")
+        self.assertIn("Key pages: your role file.", text)
+        self.assertIn('Run: python tools/context_packet.py packet "<your task>" --role film-director --job J016-demo', text)
 
     def test_context_capped_and_run_line_kept(self):
         for i in range(200):

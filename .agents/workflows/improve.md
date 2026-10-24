@@ -17,7 +17,7 @@ Run once a week (or `/improve 14` for a 14-day window). Lead model at medium eff
 4. `knowledge/inbox/` drafts (with their `cause` and `layer` fields; the lead writes them from the `lesson` field of hand-backs, `rules/messages.md` §3); `python tools/kb_index.py --lint`; `python tools/eval_context.py --compare <last week's knowledge/logs/improve/*-retrieval.json> --save knowledge/logs/improve/YYYY-MM-DD-retrieval.json` (score vs last week; exit 1 when recall@10 drops).
 5. Closed jobs' `evidence.md`: defects by cause and the metrics at close (first-pass acceptance, repair rounds by cause, defects the owner found after internal review, stale hand-offs, unsupported "done" claims, usage vs estimate). Compare with earlier jobs of the same type.
 6. Last week's improve log: did each change hold, or did the same mistake return?
-7. Claude Code version (`claude --version`): if it changed since the last run, re-run the capability probes listed in `rules/knowledge.md` §8.5 and update the capability record it names.
+7. Claude Code version (`claude --version`): if it changed since the last run, re-run the capability probes listed in `rules/knowledge.md` §8.5 and update the capability record it names. Every week, whatever the version: the MCP tool probe of §8.5 (one Haiku run per role with an `mcp__` server; J027).
 
 ## Step 2: Find the mistakes
 

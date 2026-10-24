@@ -1,2 +1,10 @@
 - [Workflow script reviews](workflow-script-reviews.md) — prove job-*.js findings with harness scenarios (nullLabel, statusLabel, blockLabelOnce); where defects cluster
+- [Contract reviews](contract-reviews.md) — pre-code contracts: check wrapped library source per failure row, signal self-fires, API read security
 - [Audio tool reviews](audio-tool-reviews.md) — real quiet/hot takes; MP3 overshoot; LUFS gate; one-sided rules; aim targets setting must limits; loop seams in dynamic beds
+- [Batched transport floods](feedback_batched-transport-flood.md) — per-packet guard + per-event rate do not bound work; probe one max packet of the smallest event
+- [Map every vendor caller of an end path](feedback_end-path-callers.md) — own-end flags must cover shutdown too (ProfileStore BindToClose fires OnSessionEnd)
+- [Per-field vs per-call bounds](feedback_per-field-vs-per-call-bounds.md) — nested/summed arrays pass per-array lints; departed-sender allow-true skips flood bound
+- [Permission thresholds](feedback_permission-thresholds.md) — rank>=min with min 0 admits non-members; exemption flags must clear on reset to default
+- [Release-mark discriminator](feedback_release-mark-discriminator.md) — OnAfterSave clears on early saves; data-compare strands after a steal; probe both
+- [table.remove with a nil find](feedback_remove-find-nil.md) — nil pos removes the last item; check close-before-insert in registries
+- [Trace same-server rejoin](feedback_same-server-rejoin.md) — lock keyed by JobId: rejoin mid-load or mid-release loses data or degrades
