@@ -122,3 +122,35 @@ The studio's universal principles, stated for system design: the standard, an ex
 | 18 | **Know when it is done:** the plan stops when every invariant, event, number and file has its owner and check; extra structure is a follow-up. | A 90-line plan for a pickup feature, not a 400-line framework document. | §3 step 11; AR-20. | §3 step 11 |
 | 19 | **Feedback follows the real outcome:** the attempt cue at once; the outcome layer only on confirmation, sized by tier (or a predicted row the spec allows, gone the frame a denial arrives); rejected requests show no success; frequent events merged and capped. | A shop "Buy" press sinks at once; the coin burst plays on `PurchaseResolved{done}`; `denied{not_enough_gold}` shows the message at the button. | AR-07, AR-12; RV-01, RV-09. | R-19, R-24 |
 | 20 | **Every player can read it:** two channels per fact; one local comfort service; reduced variants keep the information. | Reduced motion turns the fuse blink into a steady glow with a fill countdown; the ring stays. | AR-10, AR-13; RV-04. | R-22, R-23 |
+
+## 8. Framework games (J025): systems, owners, placement
+Every game built on `roblox-game-framework` (blocks, API, examples: `engineering-craft` → `references/framework.md`; contracts: `roblox-game-framework/contracts/*.md`) keeps these. They apply R-02, R-08, R-11 and R-12 to the framework's blocks.
+- **New systems are Loader systems.** One ModuleScript in `src/server/Systems/` or `src/client/Systems/`: `{ After = { ... } }`, `init` (no yield: build tables, register), `start` (connect, `Net.answer`). No hand-written boot list; the Loader orders by `After` and stops the boot on any failure (`contracts/Loader.md`). A system's own helpers sit inside its module or in `Rules/` (pure).
+- **One owner per kind of fact:**
+
+| Fact | Owner | Others |
+| --- | --- | --- |
+| Saved player data, receipts, award ids | **Session** (`Save.handle:update`, the game's `Save` system holds the handle) | read `get`/`selector`; never `DataStoreService` or `ProcessReceipt` |
+| What each client sees of server state | **State** (Charm atoms on the server, charm-sync copies on clients; the game's `Atoms` module names the writer of each atom) | clients read `State.mine`/atoms; never write them |
+| The remote surface | **Net** + the game's one schema `net/game.blink` (framework messages merged in) | handlers registered with `Net.on`/`Net.answer`; never a raw remote |
+| Boot order | **Loader** | each system declares `After` |
+| Screen stack, `blocking` | **Screens** | gameplay reads `view().blocking`, gates its own InputContexts |
+| Tween timings, clip table, config keys, analytics names, admin pages | the game's data tables | blocks read them; logic holds no literals |
+| Ownership, server-state range, game state, idempotency of a request | the handler's system (N-02 steps 4-7) | Net does not decide them |
+
+- **Placement** (`contracts/README.md` Placement; the template's `default.project.json`; the gate writes `test.project.json` from `tools/placement.json`):
+
+| Goes to | What | Why |
+| --- | --- | --- |
+| `ReplicatedStorage.Framework` | Types, Helpers, Loader, State, Screens, Motion, Anim | the client needs them; nothing secret |
+| `ReplicatedStorage.Packages` | Charm, charm-sync, Janitor, Signal (Wally) | shared |
+| `ReplicatedStorage.Shared` | `Atoms`, `Content/` data, client `Remotes` (generated) | shared data |
+| `ReplicatedStorage.Client` | `Main.client.luau`, client `Systems/` | client code |
+| `ServerScriptService.Framework` | Session, Net, Config, Analytics, Admin (all of Admin, its panel client too: cloned to admins only; CC-19), `vendor/ProfileStore` | server code never replicates |
+| `ServerScriptService.Server` | `Main.server.luau`, server `Systems/`, `Save/Schema`, `Rules/`, server `Remotes` (generated) | server rules |
+| `ServerStorage.AdminPages` | the game's admin pages and frames | cloned to admins only |
+| `<game>/Framework-tools/<Block>/` (outside the place) | Net's Lune patch and schema lint | dev only, lock-checked |
+| nowhere in a place | specs, `test/` folders, ContentTests | dev only |
+
+- A block's service is part of its require path (`@game/<Service>/Framework/<Block>`): moving a block means changing the framework's placement file and requires together, in the framework repo, never in a game.
+- The framework never holds an event bus, a dependency-injection layer, a UI theme system or an ECS (J025 proposal §3); a game that needs one makes the R-09 case first.

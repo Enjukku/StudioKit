@@ -1,0 +1,46 @@
+P1 zap redeem_ok accepted RedeemCode(ABC123)
+P1 zap redeem_empty rejected error: buffer access out of bounds
+P1 zap redeem_25_ascii accepted RedeemCode(AAAAAAAAAAAAAAAAAAAAAAAAA)
+P1 zap redeem_96_ascii accepted RedeemCode(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
+P1 zap redeem_bad_utf8 rejected error: value is not valid utf-8
+P1 zap redeem_truncated rejected error: buffer access out of bounds
+P1 zap delta_ok accepted EchoDelta(table)
+P1 zap delta_gym_nan rejected error: value is less than 0!
+P1 zap delta_gym_inf rejected error: value is more than 100!
+P1 zap delta_gym_ninf rejected error: value is less than 0!
+P1 zap delta_gym_over rejected error: value is more than 100!
+P1 zap delta_endsAt_nan_unranged accepted EchoDelta(table)
+P1 zap delta_endsAt_inf_unranged accepted EchoDelta(table)
+P1 zap delta_bad_enum accepted EchoDelta(table)
+P1 zap delta_labels_9 rejected error: value is more than 8!
+P1 zap delta_cells_5000_unbounded_map accepted EchoDelta(table)
+P1 zap blob_256 accepted Blob(buffer: 0x0000018411c1be10)
+P1 zap blob_257 rejected error: value is more than 256!
+P1 zap fire_ok rejected error: attempt to compare number <= nil
+P1 zap fire_origin_nan rejected error: attempt to compare number <= nil
+P1 zap fire_origin_inf rejected error: attempt to compare number <= nil
+P1 zap fire_origin_ninf rejected error: attempt to compare number <= nil
+P1 zap fire_dir_nan rejected error: attempt to compare number <= nil
+P1 zap fire_dist_nan rejected error: attempt to compare number <= nil
+P1 zap fire_gear_33 rejected error: attempt to compare number <= nil
+P1 zap fire_missing_instance rejected error: attempt to compare number <= nil
+P1 zap fire_wrong_class rejected error: attempt to compare number <= nil
+P1 zap pick_ok accepted Pick(Part,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 zap pick_cframe_nan accepted Pick(Part,NaN, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 zap pick_cframe_inf accepted Pick(Part,inf, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 zap pick_vector_nan_unranged accepted Pick(Part,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,nan, 0, 0)
+P1 zap pick_missing_instance rejected error: received instance is nil!
+P1 zap pick_wrong_class rejected error: received instance is not of the BasePart class!
+P1 zap wrongtype_string_not_buffer rejected error: invalid argument #1 to 'len' (buffer expected, got string)
+P1 zap wrongtype_number_not_buffer rejected error: invalid argument #1 to 'len' (buffer expected, got number)
+P1 zap wrongtype_instances_nil rejected error: attempt to index nil with number
+P1 zap wrongtype_instances_number rejected error: attempt to index number with number
+P1 zap unknown_event_id_200 rejected error: Unknown event id
+P1 zap batch_ok_bad_ok accepted RedeemCode(ONE) RedeemCode() | then error: received instance is nil!
+P1 zap batch_ok_nan_ok accepted RedeemCode(ONE) | then error: value is less than 0!
+P1 zap view_ok rejected error: attempt to compare number <= nil
+P1 zap view_pos_nan rejected error: attempt to compare number <= nil
+P1 zap view_pos_inf rejected error: attempt to compare number <= nil
+P1 zap view_look_ninf rejected error: attempt to compare number <= nil
+P1 zap spam_1000_redeem accepted 1000 listener calls in 0.90 ms (Lune decode cost; generated code has no rate limit)
+P1 zap warnings 0

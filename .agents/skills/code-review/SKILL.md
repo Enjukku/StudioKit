@@ -129,3 +129,36 @@ The studio's universal principles, written for code review. The master is `knowl
 | 18 | **Know when the review is done.** Depth sets the stop rule; done when every area is walked and every candidate proved or dropped; a round with nothing new ends the loop; round 3 escalates | A clean data change gets "no blocking findings" and a keep list (WE-3) | The hand-back states depth, areas walked, round number |
 | 19 | **Feedback follows the real outcome.** The attempt cue plays at once; the big layer, counters and reveals follow the confirmed result and never claim more than it | A denied hatch still cracks the egg (WE-1 F4); a tween's `Completed` that grants the coins | PT-01 to PT-04; PT-18 (presentation never decides the outcome); a denied-request run or test, else not verified |
 | 20 | **Every player can read it.** Meaning never on one channel; every intense channel has a reduced path that keeps the information; rates at most 3 Hz | A shake and FOV punch with no reduced branch; a low-health blink at 5 Hz | PT-09, PT-10, PT-15, PT-17 |
+
+## 8. Framework games: bypass greps (J025)
+In a game built on `roblox-game-framework` (blocks: `engineering-craft` → `references/framework.md`), run these greps from the game root on every review. They search `src/`, the game's own code; `Framework/`, `vendor/` and `Packages/` are copies checked by the lock. A hit is a V-18 finding (a second way to do a solved thing) unless `knowledge/design/game-profile.md` records the deviation; severity follows V-12 by what it bypasses (saves, money and remotes: High or Critical).
+
+```sh
+rg -n "DataStoreService|GetDataStore|ProcessReceipt|ProfileStore" src                                         # B1 saves outside Session
+rg -n "RemoteEvent|RemoteFunction|UnreliableRemoteEvent|OnServerEvent|OnServerInvoke|InvokeClient" src -g "!**/Remotes.luau"   # B2 raw remotes outside Net
+rg -n "Remotes\.[A-Za-z.]+\.On\(" src/server                                                                  # B3 every hit is the first argument of Net.on / Net.answer (or Admin.start's action)
+rg -n "LoadAnimation" src                                                                                     # B4 tracks outside Anim
+rg -n -i "zap|bytenet|warp|networker|rodux|reflex|fusion|vide|trove|maid|promise|goodsignal|lemonsignal|dataservice|profileservice|lapis" wally.toml   # B5 second library
+python Framework/check_lock.py .                                                                              # B6 edited framework copy: must name no file
+rg -n "require\(script|require\(game" src                                                                     # B7 in the framework repo only: Instance requires
+rg -n "Config\.(number|string|json)\(" src/server                                                             # B8 read each key: no receipt price, no store name
+rg -n "TweenInfo\.new|TweenService:Create" src                                                                # B9 tween literals outside Motion
+rg -n "AnalyticsService" src                                                                                  # B10 analytics outside the block
+```
+
+| Id | Check | Allowed only in |
+| --- | --- | --- |
+| B1 | saved data, receipts or ProfileStore outside Session | nowhere in `src/` (Session and `vendor/ProfileStore` own them) |
+| B2 | a raw remote outside Net | the generated `src/*/Remotes.luau` |
+| B3 | a handler connected outside Net | as the `listen` argument of `Net.on` / `Net.answer`, or Admin's `action` |
+| B4 | `LoadAnimation` outside Anim | nowhere (Anim loads once per Animator and clip) |
+| B5 | a second transport, state, save, cleanup, signal or Promise library | none (`rules/packages.md` one per concern); Janitor's own typed-promise dependency is allowed |
+| B6 | an edited, added or deleted file under `Framework/`, `vendor/`, `Framework-tools/` or the locked dev tools | none: fix in the framework repo, tag, install again |
+| B7 | `script.Parent...` or `game:GetService(...)` requires in framework code | nowhere (`REQUIRES.md`; the framework gate's `rules` check fails them too) |
+| B8 | a config key tied to money or saves | never (Config C5) |
+| B9 | tween timing literals | the game's motion table through `Motion.play` |
+| B10 | `AnalyticsService` direct | nowhere (Analytics block) |
+| B11 | a content table without its spec | every `src/**/Content/<Name>.luau` has a sibling `<Name>.spec.luau` (ContentTests pattern step 6) |
+
+- The greps find candidates; V-06 still applies: each hit needs its failure scenario (for example "this handler skips Net, so a NaN amount reaches the save") or it is dropped.
+- The blocks are not reviewed again in a game review; a suspected framework bug is a ticket to the framework repo with the failing sequence.

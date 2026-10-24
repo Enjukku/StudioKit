@@ -1,0 +1,46 @@
+{
+  "name": "probe-transport",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Net": {
+        "$className": "Folder",
+        "BlinkClient": { "$path": "../gen/blink/Client.luau" },
+        "BlinkTypes": { "$path": "../gen/blink/Types.luau" }
+      },
+      "P1Case": { "$className": "RemoteEvent" }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Net": {
+        "$className": "Folder",
+        "BlinkServer": { "$path": "../gen/blink/Server.luau" }
+      },
+      "P1Server": { "$path": "src/server/P1Server.server.luau" }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "P1Client": { "$path": "src/client/P1Client.client.luau" }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": { "Anchored": true, "Size": [128, 2, 128], "Position": [0, -1, 0] }
+      },
+      "SpawnLocation": {
+        "$className": "SpawnLocation",
+        "$properties": { "Anchored": true, "Size": [6, 1, 6], "Position": [0, 0.5, 0] }
+      },
+      "P1Target": {
+        "$className": "Part",
+        "$properties": { "Anchored": true, "Size": [2, 2, 2], "Position": [0, 5, 12] }
+      },
+      "P1WrongClass": { "$className": "Folder" }
+    }
+  }
+}

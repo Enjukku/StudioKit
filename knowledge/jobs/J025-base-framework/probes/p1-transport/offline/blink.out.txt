@@ -1,0 +1,46 @@
+P1 blink redeem_ok accepted RedeemCode(ABC123)
+P1 blink redeem_empty rejected error: Expected length of "Value" to be larger than or equal to 1, got 0 instead.
+P1 blink redeem_25_ascii rejected error: Expected length of "Value" to be smaller than or equal to  24, got 25 instead.
+P1 blink redeem_96_ascii rejected error: Expected length of "Value" to be smaller than or equal to  24, got 96 instead.
+P1 blink redeem_bad_utf8 accepted RedeemCode(���)
+P1 blink redeem_truncated rejected error: buffer access out of bounds
+P1 blink delta_ok accepted EchoDelta(table)
+P1 blink delta_gym_nan rejected error: Expected "Value.GymMultiplier" to be larger than or equal to 0, got nan instead.
+P1 blink delta_gym_inf rejected error: Expected "Value.GymMultiplier" to be smaller than or equal to 100, got inf instead.
+P1 blink delta_gym_ninf rejected error: Expected "Value.GymMultiplier" to be larger than or equal to 0, got -inf instead.
+P1 blink delta_gym_over rejected error: Expected "Value.GymMultiplier" to be smaller than or equal to 100, got 101 instead.
+P1 blink delta_endsAt_nan_unranged accepted EchoDelta(table)
+P1 blink delta_endsAt_inf_unranged accepted EchoDelta(table)
+P1 blink delta_bad_enum rejected error: Unexpected enum: 7
+P1 blink delta_labels_9 rejected error: Expected "Length" to be smaller than or equal to 8, got 9 instead.
+P1 blink delta_cells_5000_unbounded_map accepted EchoDelta(table)
+P1 blink blob_256 accepted Blob(buffer: 0x0000029bc64fb450)
+P1 blink blob_257 rejected error: Expected size of "Value" to be smaller than or equal to 256, got 257 instead.
+P1 blink fire_ok accepted RequestFire(table)
+P1 blink fire_origin_nan rejected error: Expected magnitude of "Value.Origin" to be larger than or equal to -9007199254740992, got nan instead.
+P1 blink fire_origin_inf rejected error: Expected magnitude of "Value.Origin" to be smaller than or equal to 10000, got inf instead.
+P1 blink fire_origin_ninf rejected error: Expected magnitude of "Value.Origin" to be smaller than or equal to 10000, got inf instead.
+P1 blink fire_dir_nan rejected error: Expected magnitude of "Value.Direction" to be larger than or equal to 0.99, got nan instead.
+P1 blink fire_dist_nan rejected error: Expected "Value.Distance" to be larger than or equal to 0, got nan instead.
+P1 blink fire_gear_33 rejected error: Expected length of "Value.GearId" to be smaller than or equal to  32, got 33 instead.
+P1 blink fire_missing_instance rejected error: Expected an Instance, got nil instead.
+P1 blink fire_wrong_class rejected error: Expected an Instance of type "BasePart", got "Folder" instead.
+P1 blink pick_ok accepted Pick(Part,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 blink pick_cframe_nan accepted Pick(Part,NaN, 0, 0, NaN, NaN, NaN, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 blink pick_cframe_inf accepted Pick(Part,inf, 0, 0, NaN, NaN, NaN, 0, 1, 0, 0, 0, 1,0, 0, 0)
+P1 blink pick_vector_nan_unranged accepted Pick(Part,0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,NaN, 0, 0)
+P1 blink pick_missing_instance rejected error: Expected an Instance, got nil instead.
+P1 blink pick_wrong_class rejected error: Expected an Instance of type "BasePart", got "Folder" instead.
+P1 blink wrongtype_string_not_buffer rejected error: invalid argument #1 to 'len' (buffer expected, got string)
+P1 blink wrongtype_number_not_buffer rejected error: invalid argument #1 to 'len' (buffer expected, got number)
+P1 blink wrongtype_instances_nil rejected error: attempt to index nil with number
+P1 blink wrongtype_instances_number rejected error: attempt to index number with number
+P1 blink unknown_event_id_200 rejected no listener call, no error (silent drop)
+P1 blink batch_ok_bad_ok accepted RedeemCode(ONE) | then error: Expected length of "Value" to be larger than or equal to 1, got 0 instead.
+P1 blink batch_ok_nan_ok accepted RedeemCode(ONE) | then error: Expected "Value.GymMultiplier" to be larger than or equal to 0, got nan instead.
+P1 blink view_ok accepted ReportView(5, 0, 0,1, 0, 0)
+P1 blink view_pos_nan rejected error: Expected magnitude of "Value1" to be larger than or equal to -9007199254740992, got nan instead.
+P1 blink view_pos_inf rejected error: Expected magnitude of "Value1" to be smaller than or equal to 10000, got inf instead.
+P1 blink view_look_ninf rejected error: Expected magnitude of "Value2" to be smaller than or equal to 1.01, got inf instead.
+P1 blink spam_1000_redeem accepted 1000 listener calls in 0.87 ms (Lune decode cost; generated code has no rate limit)
+P1 blink warnings 0

@@ -14,3 +14,6 @@ The lead keeps this list current: one line per open M or L job, `- <job-id> · <
 - J020-sound-workbench · the sound workflow and an in-house AI audio editor
 - J021-depth-and-bar · the blog's depth, range and finish-line ideas in the kit
 - J022-context-and-usage · context size and usage: session per stage, image hygiene, batched calls, helper models, usage report
+- J023-flow-speed · faster job flow at the same quality: map every step, then options
+- J025-base-framework · universal base game framework: reusable Luau packages for every game (research and proposal; owner picks before any build)
+- J024-flow-cuts-r2 · second cut of the job flow: no roughs, direction and needs in one step, fewer reviewers · linked: J023-flow-speed

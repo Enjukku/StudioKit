@@ -20,6 +20,7 @@ After `animation-design` produced the read, the technique per part, the set, the
 | Export profile and Studio import of the rig (rigger's side) | `rigging-craft` → `references/controls-export-import.md` |
 | The self-review lines per pass, failure diagnosis, light-check budget | `animation-design` → `references/review.md` |
 | Phone measurement method and floor devices | `performance` skill |
+| A framework game (`roblox-game-framework`): clips play through **Anim** from the game's clip table (one track per clip per Animator, markers declared in the table, presentation only), code-driven UI and object tweens through **Motion** rows with their reduced variant; never `LoadAnimation` in game code | `engineering-craft` → `references/framework.md` §4.7, §4.8 |
 
 ## 3. Steps (rigged asset: S6 → S7)
 1. **Versions and inputs.** Record the Blender build, the FBX add-on check (`roblox_fbx.check_exporter() == []`), the rig sheet and control manifest revisions, the timing-list revision, the picked key poses and beat sheets. Work on a copy of the released rig file; never edit the rigger's file. *Check: build manifest in `content/anim/<asset-id>/`.*

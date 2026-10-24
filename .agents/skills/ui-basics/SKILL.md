@@ -20,6 +20,7 @@ A screen, HUD element, popup or button is built or changed. The **design** (flow
 | Text players type that others see | `platform-policy` skill § D (filtering) |
 | Shops, Robux prices, paid random items | `platform-policy` § A-B (binding; wins over this book) |
 | UI cost questions beyond §4 | `performance` skill |
+| A framework game (`roblox-game-framework`): open, close, back and gamepad focus through **Screens**, every tween through **Motion** and the game's motion table, never own screen stacks or `TweenInfo` literals | `engineering-craft` → `references/framework.md` §4.6, §4.7 |
 
 ## 3. Steps (cheap stages first)
 1. **Read the spec and restate it.** Flow (where am I, what can I do, what just happened, what next), every state, data sources and remotes, motion-table rows, message table, tokens, cue ids. A missing piece is a question to the UI designer, with a PROPOSAL meanwhile. *Check:* restatement with zero open questions, or the questions sent.

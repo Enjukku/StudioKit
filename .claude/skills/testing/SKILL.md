@@ -122,3 +122,18 @@ The studio's universal principles (master: `knowledge/reference/craft/riot/unive
 | 20 | **Every player can read it.** No meaning on one channel; every intense channel has an off path that keeps the warning; flashes and pulses on the composite within the PF-07 caps | Reduced motion on: the fuse blink becomes a steady glow with a fill countdown, and the log shows it fired | PF-07; T-17 |
 
 Project overlay: if `knowledge/overlays/testing.md` exists, read it after this file; it wins for this game.
+
+## 8. Framework test lanes (J025)
+Games and blocks built on `roblox-game-framework` test in three lanes (`roblox-game-framework/contracts/README.md` Test-lane rule; probes `knowledge/jobs/J025-base-framework/probes/p2-5-engine/verdict.md`). T-09 picks the lane: the cheapest one that can fail for the real cause; a Lune row first whenever the logic can be separated; a Studio row is never replaced by a Lune row when the bug lives in the engine.
+
+| Lane | Runs | How | Proves |
+| --- | --- | --- | --- |
+| **Lune** (gate) | every change: `python tools/gate.py` (`specs` check) | `*.spec.luau` next to the code returns named tests (`expect(x).toBe/toEqual/toThrow`); engine parts through fakes passed in: Session on `FakeWorld` (virtual clock, scripted DataStore faults, crash, shutdown, two servers), Net and State on fake transports and the patched generated module, Admin on `test/World.luau` | pure logic and every engine interaction a fake can model deterministically |
+| **Studio engine** (Jest 3.20.1) | merge lane | `*.engine.spec.luau` (the gate lists them). Build the test place (the gate writes `test.project.json`; `rojo build test.project.json -o test.rbxl`), open it, paste `tools/engine/run_jest.luau` into MCP `execute_luau` in the **Edit** data model (0.42 s for 6 specs in P3). A play-test **Server** data model works only when the test project sets `ServerScriptService.LoadStringEnabled = true` (NotScriptable: Rojo `$properties` only; test place only, never the game place: `networking-security` N-12) | real engine behaviour one server shows: TweenService, Animator, ConfigService fallback, DataStore with a `test_` prefix |
+| **Studio multi-client** | before a tag | MCP starts `StudioTestService:ExecuteMultiplayerTestAsync` from the Edit data model (inside `task.spawn`); a server Script ends it with `EndTest`; read each side's Output through the child studio ids (`studio-mcp`) | replication, remotes end to end, join and leave, admin refusal, private state not sent to others |
+
+- **Planted faults through a patch argument.** The harness loads the real source and lets a spec rewrite it before load (Session `FakeWorld`: `world:server({ patch = function(file, source) ... end })`; Admin `World.patch`). Each planted fault (remove the ready check, record the id after the grant, drop the version fence, never reset the rate, remove the decode `pcall`) must turn its row red, and the spec fails when the fault's text is not found, so a refactor cannot turn a plant into a no-op. Rows: `Planted.spec.luau` per block.
+- **Protected tests** (T-06): the QA lead's hard tests live in `tests/acceptance/<Block>/` (framework) or the game's own acceptance folder; the gate runs them; block builders and makers never edit them.
+- **Memory limit:** one extra Studio client costs about 3.2 GB RAM; when a second client cannot run, run one real client plus the server-side check and mark the second-client row BLOCKED, never PASS.
+- **Not a lane yet:** Open Cloud Luau Execution (P2 BLOCKED: no API key).
+- **Leak rule (Q5):** every block with a lifetime runs 1,000 open/close or join/leave cycles and counts 0 connections and 0 per-player entries through its spec-only `_debugCounts()`; game systems with a lifetime copy the pattern.

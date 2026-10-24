@@ -1,0 +1,9 @@
+[package]
+name = "probe/engine"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dev-dependencies]
+Jest = "roblox/jest@3.20.1"
+JestGlobals = "roblox/jest-globals@3.20.1"

@@ -47,6 +47,8 @@ Any change that adds, renames, removes or reinterprets saved data, any new write
 ## 5. Adapters (wrappers)
 A persistence package is one adapter behind the game's own data module. Before adopting or keeping one, check it against D-02, D-04, D-07, D-08, D-09 and D-11, and record the answers in `knowledge/reference/`. Roblox's guidance: vet the module's maintenance and know how to read your data without it (BP:33-42). DataStore2 is legacy. Known traits of ProfileStore (community, rank 4): lock in the profile metadata via `UpdateAsync`, autosave 300 s, takes over a lock after about 40 s of waiting and treats a holder as dead after 630 s, replaces malformed records with the template (hook `OnOverwrite`).
 
+**Default adapter (J025):** in a game built on `roblox-game-framework`, the adapter is the framework's **Session** block over our pinned, patched ProfileStore 1.0.3. Its answers to every D-rule: §8.
+
 ## 6. Rules (final check)
 - No player data written before load, lock and migration finish, or from a degraded session.
 - No `SetAsync` on player keys; every write passes metadata and userIds through.
@@ -62,3 +64,26 @@ A persistence package is one adapter behind the game's own data module. Before a
 - [ ] The design note says what is saved, where, the cadence and the restore steps.
 
 Project overlay: if `knowledge/overlays/data-saving.md` exists, read it after this file; it wins for this game.
+
+## 8. Session: the default adapter (J025)
+§5 applies: in a game built on `roblox-game-framework`, the adapter is the **Session** block (`roblox-game-framework/contracts/Session.md`; card and example: `engineering-craft` → `references/framework.md` §4.3). A game uses another adapter only with the deviation and its §5 answers recorded in `knowledge/design/game-profile.md`. How Session keeps each D-rule:
+
+| Rule | What keeps it in Session | Test (contract id) |
+| --- | --- | --- |
+| D-01 | key `PLAYER_<UserId>`, store name from `def.store`, `AddUserId` on load (S13; existing games keep their key and store) | S-T15 |
+| D-02 | `schemaVersion = def.version`; `migrations[n]` (v(n-1) → v(n), pure) run in order on a deep copy, then reconcile against the template (fills missing keys, keeps unknown keys, S8), then `def.validate`; a newer save is fenced: `degraded`, never migrated down or written (S7) | S-T3, S-T4, S-T19 |
+| D-03 | every `update` result is walked: finite numbers, strings, booleans, string-key or dense-array tables, depth ≤ 16; else `invalid_data`, nothing changes (S5) | S-T10 |
+| D-04 | ProfileStore's session lock; status `loading` → `ready` → `degraded` / `closing` → `closed`, mirrored as Player attribute `SessionStatus`; writes only in `ready` (S2, S3, S9); 120 s load timeout is Session's `Cancel`; a session taken by another server stops writes and kicks (S12) | S-T1, S-T2, S-T7, H-S3 |
+| D-05 | one writer: `save:update(player, fn)`; `fn` gets frozen data, must not yield, checks inside it; error, yield, deny or bad data change nothing (S1, S4) | S-T5, S-T8..S-T11 |
+| D-06 | memory first; ProfileStore autosave 300 s (staggered), save on leave, on shutdown and after each receipt | S-T20, H-S5 |
+| D-07 | every store write is ProfileStore's `UpdateAsync` on the locked profile; Session has no `SetAsync` on player keys | S-T15, H-S2 |
+| D-08 | ProfileStore retries with backoff; load failure past 120 s → `degraded` (template copy, no write, purchase or award); critical state logged, sampled | S-T2, H-S1, H-S2 |
+| D-09 | ProfileStore's `BindToClose` saves and releases all profiles in parallel; `ProfileStore.IsClosing` refuses updates (`unavailable, closing`); shutdown never kicks | H-S5 |
+| D-10 | in Studio the store name is `STUDIO_` .. `def.store` (S14); Studio probes use a `test_` store prefix | S-T16, S-T17 |
+| D-11 | receipt: grant and `PurchaseId` in one update, `PurchaseGranted` only after a save holding the id landed (S10, cap 100); awards: `save:award(player, awardId, fn)` applies an id once while it is in the log (S11, cap 200); `Purchased` is never a grant or revenue source (CC-4) | S-T12, S-T20..S-T25 |
+| D-14 | a malformed record replaced by ProfileStore fires `OnOverwrite`: Session logs store and key so a restore can start (S-T26); restore steps stay the game's | S-T26 |
+| D-15 | the newer-version fence (D-02 row) keeps an old server from writing a newer save | S-T3 |
+| D-12, D-13 | not Session's: external tools throttle themselves; global data uses ordered stores or MemoryStore | — |
+
+- **ProfileStore pin:** our own copy of 1.0.3 in `vendor/ProfileStore/` (Apache-2.0), with patch **P-1** (`OnAfterSave` also passes `is_ending_session`, so a same-server rejoin waits for the real release, not a save already in flight); every patch is a row in `vendor/ProfileStore/PATCHES.md` with its test. Owner exception: `rules/packages.md` "ProfileStore exception". Package note: `knowledge/reference/libraries/profilestore.md`.
+- **Studio save edits** go through `save:studioReset` / `save:studioSet` (Studio only, refused live: `denied, studio_only`), never a direct DataStore edit.

@@ -24,6 +24,7 @@ Any task that writes or changes Luau, content tables that code reads, or place s
 | Measuring before and after (hard problems, performance) | `performance` → `references/measure-loop.md` |
 | Remotes, saves, money, policy (binding; they win over this book) | `networking-security`, `data-saving`, `platform-policy` |
 | Building a screen | `ui-basics` skill |
+| A new game, or any base code (saves, remotes, client state, screens, motion, animation tracks, config, analytics, rate limits, admin tools): the framework block, its API, rule, owners, test lanes and a usage example; start, install, lock, require rule | `references/framework.md` (FW-01: use the block before writing base code) |
 
 ## 3. Steps (cheap stages first; each ends with its check)
 1. **Write the behaviour contract** (EC-01), with the brief's target-experience line quoted, the budget (passes or time) and the stop criteria; for every player action, the **feedback stack sheet** (`references/presentation.md` §1). A design answer is missing → `needs-decision` with options and a default. *Check:* SR-01, SR-02.
@@ -69,6 +70,7 @@ Any task that writes or changes Luau, content tables that code reads, or place s
 
 ## 5. Rules (final check)
 - No custom replacement of an engine mechanism without the EC-03 answer in the hand-back.
+- No base code a framework block already does, and no edit to a copied block (`references/framework.md` FW-01, FW-02); a bypass needs its deviation recorded in `knowledge/design/game-profile.md`.
 - No engine assumption the design depends on without a docs line or a probe result.
 - No performance, physics or feel claim marked `done` without Studio evidence.
 - No edit to hidden or protected tests, expected results or acceptance fixtures; a wrong test is reported, not worked around.

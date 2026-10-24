@@ -63,3 +63,38 @@ Any new or changed client request, relay, physics interaction, reward path, trad
 - [ ] Spam test (fire the request far beyond the limit) and bad-value test (NaN, huge strings, wrong types, far targets) planned or run.
 
 Project overlay: if `knowledge/overlays/networking-security.md` exists, read it after this file; it wins for this game.
+
+## 7. The standard path in framework games (J025)
+In a game built on `roblox-game-framework`, N-01 is met by **one Blink schema file** (`net/game.blink`, framework messages merged in) and the **Net** block in front of every handler (`roblox-game-framework/contracts/Net.md`; card and example: `engineering-craft` → `references/framework.md` §4.4). Edit the schema, run `python tools/gate.py --transport` (regenerate, patch, lint, byte-compare), register the handler with `Net.on` / `Net.answer` in a system's `start`. A raw `RemoteEvent`, `RemoteFunction` or `UnreliableRemoteEvent` in game code is a finding (`code-review` §8).
+
+**Who does each N-02 step:**
+
+| N-02 step | Done by | Notes |
+| --- | --- | --- |
+| (1) player ready | Net: sender still in `Players`, `Session.status` `ready` or `degraded` (`loading` only with `beforeReady`) | "alive" (character present, not dead) stays in the handler |
+| (2) types and shape | Blink decode (types, declared ranges and bounds) + schema lint (ranges and bounds required) + Net walk (every number finite incl. vector and CFrame parts, valid UTF-8, depth ≤ 8, ≤ 512 values) | `Instance` args: Blink checks only `typeof` + `IsA`; the handler checks `IsDescendantOf` a known folder and ownership (G7) |
+| (3) rate | Net: per-handler `rate`/`burst` per player + per-player event allowance in the patched decode loop (PROPOSAL 600/s, burst 600) | a game cooldown is extra (Helpers `RateLimit.cooldown`) |
+| (4) ownership and permission | **handler** | Admin actions: Admin re-checks `isAdmin` |
+| (5) range and line of sight against server state | **handler** | |
+| (6) game state (equipped, cooldown, phase) | **handler**; checks that guard a save write go inside the `Save.handle:update` fn | |
+| (7) idempotency | **handler**, through Session: `save:award(player, awardId, fn)`, receipts by `PurchaseId` | |
+| after a yield | **handler** re-checks the player and its state; replies to a player who left are dropped by the patch (G10) | client: `handle.alive()` (Screens) |
+
+**What Blink 0.18.9 alone does not check** (probe J025-P1 gaps, `knowledge/jobs/J025-base-framework/probes/p1-transport/verdict.md` §3; G10 from the Net build, CC-8) **and what covers it now:**
+
+| Gap | Blink alone | Covered by |
+| --- | --- | --- |
+| G1 | unranged `f16`/`f32`/`f64`/`vector` pass NaN and inf | schema lint: every client number and vector carries a range; Net walk: finite check |
+| G2 | `CFrame` never checked | schema lint: no `CFrame` in client data; Net walk checks every component |
+| G3 | strings: byte length only, no UTF-8 check | Net walk: `utf8.len(s) ~= nil`; bounds in the schema are bytes |
+| G4 | maps: `u16` count, no cap | schema lint: no `map`; arrays bounded `[..n]`, n ≤ 511; ≤ 512 values per message |
+| G5 | no rate limit | Net per-handler rate + per-event allowance (CC-13) |
+| G6 | a bad packet raises inside `OnServerEvent`: 5 Output lines each, no cap; heartbeat 16.7 → 42.3 ms average at 1,000 bad packets/s | patch: `pcall` around each dispatcher, `guard.reject` counts it; 20 strikes in 1 s block the sender 10 s (PROPOSAL); ≤ 1 sample line per 10 s; no kick (N-10) |
+| G7 | `Instance` check is `typeof` + `IsA` only: another player's part passes | the handler (step 4) |
+| G8 | events with no listener queue without a cap | patch caps the queue at 256 (`no_listener`); every handler registers in `start` |
+| G9 | buffer allocated at the client's declared length (≤ 65,535 bytes) before the max check | accepted: bounded and freed at once |
+| G10 | a reply or `Fire` after the player left still makes a send entry | patch steps 5-6: reply writers return early; `StepReplication` drops departed players |
+| — | `Sync`/`Polling` client calls close a yielding handler when the next packet arrives | schema lint: client calls are `SingleAsync` or `ManyAsync` |
+
+- The patch (`Framework-tools/Net/patch-generated.luau`) fails loudly when a Blink anchor is missing; a new Blink version re-runs probe P1 before the pin moves (`knowledge/reference/libraries/blink.md`).
+- N-06 still applies to the schema: unreliable events small (≤ 1,000 bytes) and replaceable; no server-to-client invoke.

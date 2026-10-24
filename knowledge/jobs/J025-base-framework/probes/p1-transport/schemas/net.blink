@@ -1,0 +1,92 @@
+-- P1 probe schema (Blink 0.18.9). Payload sources: research/games.md 2.3.
+option Casing = Pascal
+option ServerOutput = "../gen/blink/Server.luau"
+option ClientOutput = "../gen/blink/Client.luau"
+option TypesOutput = "../gen/blink/Types.luau"
+
+enum DamPhase = { Building, Won, Flooded }
+
+struct Cell {
+	Owner: string(..20),
+	Hp: u8(0..100),
+}
+
+-- Blink 0.18.9 Parser.luau:1402-1431: maps take no size bound (the docs page says they do)
+map CellMap = { [u16]: Cell }
+
+-- (a) state delta, shape from GWS NetController.luau:39-52 (validDam) plus a nested cell map
+struct DamDelta {
+	Seq: u32,
+	Phase: DamPhase,
+	Quota: u16,
+	Placed: u16,
+	GymMultiplier: f32(0..100),
+	EndsAt: f64,
+	Cells: CellMap,
+	Labels: string(..32)[..8],
+}
+
+event DamState {
+	From: Server,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: DamDelta
+}
+
+-- the same struct client -> server, so the server-side deserializer of a nested delta can be tested
+event EchoDelta {
+	From: Client,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: DamDelta
+}
+
+-- (b) text from a client, GWS CodesService.redeemCode(player, text)
+event RedeemCode {
+	From: Client,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: string(1..24)
+}
+
+-- (c) Instance + vector + CFrame, DS WeaponService.requestFire (gearId, origin, direction, shotId, distance) plus a target part
+struct Fire {
+	GearId: string(1..32),
+	Origin: vector(..10000),
+	Direction: vector(0.99..1.01),
+	ShotId: u32,
+	Distance: f32(0..200),
+	Target: Instance(BasePart),
+	Aim: CFrame,
+}
+
+event RequestFire {
+	From: Client,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: Fire
+}
+
+-- oversize buffer case
+event Blob {
+	From: Client,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: buffer(..256)
+}
+
+-- (d) per-frame camera report, DS BrickWorldService.reportView
+event ReportView {
+	From: Client,
+	Type: Unreliable,
+	Call: SingleSync,
+	Data: (vector(..10000), vector(0.99..1.01))
+}
+
+-- Instance + CFrame + unbounded vector without a ranged vector in front (isolates the Instance and CFrame checks)
+event Pick {
+	From: Client,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: (Instance(BasePart), CFrame, vector)
+}

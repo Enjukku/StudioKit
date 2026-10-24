@@ -19,3 +19,10 @@ Each game's chosen packages (transport, data, UI state, cleanup, signals) are li
 - **Edits to a package** go in a pinned fork or a checked-in patch, never an undocumented edit the installer overwrites.
 - **No frameworks for their own sake:** a service framework, event bus, dependency-injection layer or persistence library each adds a contract every agent must learn. The game's own small modules are often enough.
 - A builder restricted to a feature's files reports a needed shared-package change to the lead; it does not edit the package itself.
+
+## ProfileStore exception (J025-G1 D-2)
+- **What:** ProfileStore (loleris, Apache-2.0) fails item 2 read literally: upstream's last commit is 2025-07-31 (about 15 months on 2026-10-24). The owner approved keeping it with our own pinned copy: "Okay, yeah, these are all fine, and acceptable for the framework." (J025-G1 D-2, 2026-10-24; `knowledge/jobs/J025-base-framework/decisions.md`).
+- **How:** the framework vendors ProfileStore **1.0.3** at `roblox-game-framework/vendor/ProfileStore/` (source sha256 and copy date in its `PATCHES.md`); games get it only through `tools/install.py` (lock-checked), never through Wally. Only the Session block requires it.
+- **Patches:** every change to the copy is a row in `vendor/ProfileStore/PATCHES.md` (date, change, why, upstream issue, covering test). Today: **P-1** (2026-10-24) `OnAfterSave` also passes `is_ending_session`, so Session holds a same-server rejoin until the real release lands; record format, keys, retries and timing unchanged.
+- **Re-check when:** a data-loss or duplication bug is found in ProfileStore that we cannot patch (then closed door CD-2, our own lock, may reopen); upstream ships a new release (diff it against our copy and P-1, re-run Session's specs and hard tests before moving the pin); Roblox ships an engine session lock or changes DataStore semantics ProfileStore relies on; or once a year from 2026-10-24.
+- **Package notes** for the framework's packages live in `knowledge/reference/libraries/` (one per package; item "Record each package" above).

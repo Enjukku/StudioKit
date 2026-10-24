@@ -1,0 +1,61 @@
+{
+  "name": "probe-engine",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "DevPackages": {
+        "$path": "DevPackages"
+      },
+      "ProbeShared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Vendor": {
+        "$path": "vendor"
+      },
+      "ProbeServer": {
+        "$path": "src/server"
+      },
+      "Specs": {
+        "$path": "src/specs"
+      },
+      "$properties": {
+        "LoadStringEnabled": true
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "ProbeClient": {
+          "$path": "src/client"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "FilteringEnabled": true
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Size": [
+            512,
+            4,
+            512
+          ],
+          "Position": [
+            0,
+            -2,
+            0
+          ]
+        }
+      }
+    }
+  }
+}
