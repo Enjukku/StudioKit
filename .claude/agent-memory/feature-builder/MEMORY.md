@@ -10,3 +10,5 @@
 - [Detectors on decoded data](feedback_detectors_on_decoded_data.md) — tune clip/click detectors on MP3-decoded real takes; state margin and unseparable cases
 - [Vendor facts: measure first](feedback_vendor_facts_measure_first.md) — probe a paid API's errors, formats, billing before the client; docs wrong 2 of 3
 - [Judge edits against own source parts](feedback_judge_against_own_source_parts.md) — whole-file percentiles false-alarm on real beds; planted faults must FAIL, not ERROR
+- [Windows write_text writes CRLF](feedback_windows_write_text_crlf.md) — scripted edits: write bytes or newline LF; kit is LF
+- [Simulate in the consumer's frame](feedback_simulate_in_the_consumers_frame.md) — score parts in the context the real run reads them; probe what context moves

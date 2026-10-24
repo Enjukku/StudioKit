@@ -182,6 +182,90 @@ class RealTakeTest(unittest.TestCase):
             self.assertTrue(any(str(raised.exception) in r for r in reasons), (str(raised.exception), reasons))
         self.assertFalse((folder / "out").exists())
 
+    def test_rank_layered_real_rounds(self):
+        """rank on layered rounds of real takes (J020: layer takes `<cue>.<layer>.r<k>.t<n>`): each hit or thump's
+        takes as the `body` layer (aligned on its main transient at 300 ms; a phone-loss must of 15 dB that
+        thumps miss) and the first whoosh's takes as the `air`
+        layer (its F-01 at 60 ms, -6 dB), under F-09 and LUFS-I. Every round exits 0 or 1; each layer's order is the
+        documented key; render of the chosen takes (the test's own render, in the cue folder) gives exactly the
+        ranked layer rows, exits 0 on `use`, and exits 1 with the same whole-cue misses on `mix_misses`; rank writes
+        no out/."""
+        rounds: dict = {}
+        for mp3 in TAKES:
+            found = re.match(r"^(.+)\.t(\d+)$", mp3.stem)
+            if found:
+                rounds.setdefault(found[1], []).append((int(found[2]), mp3))
+        air = next(sorted(t) for s, t in sorted(rounds.items()) if re.search(r"whoosh", s))
+        verdicts: dict = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            for sound, takes in sorted(rounds.items()):
+                if not re.search(r"hit|thump", sound):
+                    continue
+                for measure in ("F-09", "LUFS-I"):
+                    with self.subTest(sound=sound, measure=measure):
+                        cue = "REAL-LR-" + re.sub(r"[^A-Za-z0-9-]", "-", sound) + "-" + measure.replace("-", "")
+                        folder = Path(tmp) / cue
+                        (folder / "takes").mkdir(parents=True)
+                        for name, srcs in (("body", sorted(takes)), ("air", air)):
+                            for n, src in srcs:
+                                take = folder / "takes" / f"{cue}.{name}.r1.t{n}.mp3"
+                                shutil.copyfile(src, take)
+                                intake.decode_take(take, requested_ms=requested_ms(src))
+                        card = {**RANK_CARD, "cue": cue, "kind": "hit", "tier": "important",
+                                "level": {**RANK_CARD["level"], "measure": measure},
+                                "targets": {"true_peak_dbtp": {"max": -1.0, "must": True},
+                                            "sound_ms": {"min": 40, "max": 900, "must": False}}}
+                        layers = [{"name": "body", "take": f"takes/{cue}.body.r1.t1.mp3", "design": [],
+                                   "align": {"to_ms": 300.0, "on": "main_transient"},
+                                   "targets": {"sound_ms": {"min": 40, "max": 600, "must": True},
+                                               "phone_loss_db": {"max": 15, "must": True}}},
+                                  {"name": "air", "take": f"takes/{cue}.air.r1.t1.mp3", "design": [],
+                                   "align": {"to_ms": 60.0, "on": "F-01"}, "gain_db": -6.0,
+                                   "targets": {"sound_ms": {"min": 100, "max": 900, "must": True}}}]
+                        recipe = {"cue": cue, "layers": layers, "design": [], "edit": []}
+                        (folder / "card.json").write_text(json.dumps(card), encoding="utf-8")
+                        (folder / "recipe.json").write_text(json.dumps(recipe), encoding="utf-8")
+                        doc, code = rank.rank(folder)
+                        self.assertIn(code, (0, 1))
+                        self.assertFalse((folder / "out").exists())
+                        v = doc["verdict"]
+                        verdicts[v["action"]] = verdicts.get(v["action"], 0) + 1
+                        passes = f"frame passes {doc['frame']['passes']}"
+                        verdicts[passes] = verdicts.get(passes, 0) + 1
+                        for t in v.get("mix_must_misses", []) + v.get("layers_without_a_passing_take", []):
+                            verdicts[t] = verdicts.get(t, 0) + 1
+                        for lay in doc["layers"]:
+                            keys = [e["rank_key"] for e in lay["takes"]]
+                            self.assertEqual(keys, sorted(keys))
+                            for e in lay["takes"]:
+                                self.assertFalse(e["clip"]["clipped"], e["clip"])
+                        tops = {lay["name"]: lay["takes"][0] for lay in doc["layers"]}
+                        if any("cannot be placed" in " ".join(e["rejected"]) for e in tops.values()):
+                            continue  # render refuses a take it cannot place: nothing to compare
+                        edit = doc["mix"]["fix"]["steps"] if doc["mix"] else []
+                        chosen = [{**lay, "take": f"takes/{tops[lay['name']]['take']}"} for lay in layers]
+                        (folder / "recipe.json").write_text(json.dumps({**recipe, "layers": chosen, "edit": edit}),
+                                                            encoding="utf-8")
+                        out, rcode = render.render(folder)
+                        ranked = {r["target"]: r for e in tops.values() for r in e["after"]}
+                        rendered = [r for r in out["form_checks"] if r["target"].startswith("layer[")]
+                        self.assertEqual(len(rendered), len(ranked))
+                        for r in rendered:  # the ranked layer rows are render's, value for value
+                            self.assertEqual((r["value"], r["result"]),
+                                             (ranked[r["target"]]["value"], ranked[r["target"]]["result"]), r["target"])
+                        if v["action"] == "use":
+                            self.assertEqual((rcode, out["must_failed"]), (0, []))
+                            self.assertTrue(doc["proof"]["agrees"])
+                        elif v["action"] == "mix_misses":
+                            self.assertEqual(rcode, 1)
+                            self.assertEqual(v["mix_must_misses"],
+                                             [t for t in out["must_failed"] if not t.startswith("layer[")])
+                        else:
+                            self.assertTrue(v["layers_without_a_passing_take"])
+                            for name in v["layers_without_a_passing_take"]:
+                                self.assertTrue(tops[name]["must_after"] or tops[name]["rejected"])
+        print(f"\nlayered real rounds: {verdicts}", file=sys.stderr)
+
     def test_layers_loops_and_variants_from_real_takes(self):
         """J020 step 6 on real takes: every round as one variant file per take and as seeded variants of its first take
         (G-1 in-process, R-31 and the count rows present, never a refusal); each hit or thump layered over the first

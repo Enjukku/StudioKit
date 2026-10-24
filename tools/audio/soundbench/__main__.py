@@ -15,8 +15,9 @@ Usage:
   python -m tools.audio.soundbench rank <cue-folder> [--round K] [--picture] [--json]
   python tools/keys.py run --only ELEVENLABS_API_KEY -- python -m tools.audio.soundbench generate <cue-folder>
       [--budget CREDITS] [--dry-run] [--json]
-Exit codes for rank: 0 the top take passes every must-target after its fixable steps; 1 regenerate with a changed
-prompt (or, after round 3, the cue goes to the owner); 2 refused.
+Exit codes for rank: 0 the top take passes every must-target after its fixable steps (a layered round: every layer
+and their mix); 1 regenerate with a changed prompt (or, after round 3, the cue goes to the owner; or the layers pass
+alone and their mix misses); 2 refused.
 Exit codes for render: 0 every must-target and the family check passed; 1 one failed (file written, report says
 why); 2 refused; 3 a paid-reveal family is incomplete (re-render after the siblings).
 Exit codes for generate: 0 every planned take made and decoded; 1 stopped by the budget or a take rejected; 2 refused
@@ -182,6 +183,24 @@ def main(argv: list[str] | None = None) -> int:
             from . import rank as rankmod
 
             doc, code = rankmod.rank(a.cue, a.round, a.picture)
+            if doc.get("form") == "layers":  # a layered round: one order per layer, then the mix
+                if a.json:
+                    out = {k_: doc[k_] for k_ in ("cue", "round", "verdict", "proof", "warnings", "exit_code")}
+                    out["layers"] = {lay["name"]: lay["order"] for lay in doc["layers"]}
+                    print(json.dumps(out, indent=2, default=str))
+                else:
+                    for lay in doc["layers"]:
+                        print(f"layer {lay['name']} (round {lay['round']}):")
+                        for i, e in enumerate(lay["takes"], 1):
+                            state = ("rejected: " + "; ".join(e["rejected"]) if e["rejected"] else
+                                     "passes as placed" if e["passes_after_fix"] else f"must misses {e['must_after']}")
+                            print(f"  {i}. {e['take']:<40} {state}; aim misses {e['aim_after']}")
+                    if doc["mix"] is not None:
+                        print(f"mix {doc['mix']['takes']}: must misses after fix {doc['mix']['must_after']}")
+                    print(f"verdict: {doc['verdict']['say']}")
+                    print(f"report: {a.cue / 'report' / (doc['cue'] + '.r' + str(doc['round']) + '.rank.md')}  "
+                          f"exit {code}")
+                return code
             if a.json:
                 print(json.dumps({k_: doc[k_] for k_ in ("cue", "round", "order", "verdict", "proof", "warnings",
                                                          "exit_code")}, indent=2))
