@@ -13,6 +13,7 @@ Run once a week (or `/improve 14` for a 14-day window). Lead model at medium eff
 
 1. Window: since the newest `knowledge/logs/improve/*.md`, else 7 days.
 2. `python tools/improve_scan.py --since <date>`: owner messages (corrections flagged), interrupts, rejected or dismissed questions, tool errors, repeated commands, tokens by model and agent.
+   2b. `python tools/usage_report.py --since <date>` (kit) and `--root <game repo>` for each game worked on this week: context per session and subagent, worktrees included; its flags (big context, no compaction, many images, many calls, helper on Opus) go into step 2.
 3. `git log --since=<date> --stat --oneline`; new rows in `decisions.md`, `tried-and-failed.md`, `open-questions.md`; job ledgers closed this week.
 4. `knowledge/inbox/` drafts (with their `cause` and `layer` fields; the lead writes them from the `lesson` field of hand-backs, `rules/messages.md` §3); `python tools/kb_index.py --lint`; `python tools/eval_context.py --compare <last week's knowledge/logs/improve/*-retrieval.json> --save knowledge/logs/improve/YYYY-MM-DD-retrieval.json` (score vs last week; exit 1 when recall@10 drops).
 5. Closed jobs' `evidence.md`: defects by cause and the metrics at close (first-pass acceptance, repair rounds by cause, defects the owner found after internal review, stale hand-offs, unsupported "done" claims, usage vs estimate). Compare with earlier jobs of the same type.
@@ -39,6 +40,7 @@ One row per owner correction, redo, interrupt, rejection, gate "no", and each to
 | Same mistake a second time | promote: rule line, then a hook if it must always hold | the mistake does not return |
 | Brief, routing or gate problem | orchestration skill, a recipe, or `rules/company.md` | — |
 | Overcomplication (rounds of patches, size far over estimate) | a simplification review, not another patch | — |
+| Oversized context (usage report flags) | `rules/assistants/claude.md` rows Session size, Images, Tool calls, Helper models; or the book step that loads too much; a settings proposal for the owner (`knowledge/jobs/J022-context-and-usage/settings-proposal.md`) | next week's report: median context and calls per session fall, repair rounds do not rise |
 
 Check `tried-and-failed.md` first: repeating a recorded failure is the most important finding.
 

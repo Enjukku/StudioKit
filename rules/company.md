@@ -1,6 +1,6 @@
 # Company rulebook — how the AI studio works
 
-> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit file: universal. Rewritten in J016 from the owner's two orchestration papers, 14 Riot transcripts and a live capability check (owner approval J016-D4). Evidence with line references: `knowledge/jobs/J016-orchestration/design.md`, `design-jobtypes.md`, `design-context.md`, `capability-check.md`. Revised by orchestrator-fixer W1 · claude-opus-5-5 · high · 2026-10-21 (J016 G3: audit findings, lead decisions LD1-LD16).
+> Author: orchestrator · claude-opus-5-5 · high · 2026-10-21. Kit file: universal. Rewritten in J016 from the owner's two orchestration papers, 14 Riot transcripts and a live capability check (owner approval J016-D4). Evidence with line references: `knowledge/jobs/J016-orchestration/design.md`, `design-jobtypes.md`, `design-context.md`, `capability-check.md`. Revised by orchestrator-fixer W1 · claude-opus-5-5 · high · 2026-10-21 (J016 G3: audit findings, lead decisions LD1-LD16). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-24 (J022): images stay out of the lead's chat.
 
 Every agent reads this file. It lets agents work together closely **without** losing the owner's vision, burning usage or looping. When this file and a brief disagree, this file wins; when the owner and this file disagree, the owner wins.
 
@@ -102,7 +102,7 @@ Order on one frozen candidate: **scripts** (gate, audits, measurable checks) →
 - **Three classes:** blocking defect · recommendation · new request. A new request goes to scope review.
 - **Protected list:** what already passed and must stay passed is listed with the candidate; a fix may not break it.
 - **Independent look first:** a reviewer opens the artifact before reading the maker's hand-back.
-- **Light checks:** numbers for every case; images only for a failing number plus a few key cases; one full check per hand-off, by the receiver; the full image set once, at release (owner J005-D8).
+- **Light checks:** numbers for every case; images only for a failing number plus a few key cases; one full check per hand-off, by the receiver; the full image set once, at release (owner J005-D8). Images reach the lead's chat only for a gate packet or a failing number; makers and helpers view captures and hand back numbers and paths (J022).
 - **Visual notes are pictures:** a paint-over or a marked-up screenshot.
 - **Stop:** when required checks pass and the intent is visible; a clean review is valid. Two repair rounds per review gate (code review keeps three, `rules/anti-overengineering.md` rule 20). After the limit the stage returns `needs-decision` to the lead. The lead diagnoses the cause (brief, tool, standard or approach) and fixes what is its to fix; only a diagnosis that needs scope, taste or budget goes into the owner's digest.
 - **Selective recheck:** only the failed layer and what depends on it.
