@@ -108,3 +108,37 @@ remaining_stated_limits: ["R1: a seam jump under 1 % of peak in the quiet part o
 verdict: fix-first (F2)
 </spec>
 ```
+
+## Round 3: b260065 and 13b27b3 (final narrow re-review)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-23
+
+The revision is frozen at 13b27b3 (HEAD; no changes under `tools/audio` in the working tree). I read the code diff 2b69063..13b27b3 before the builder's message. The runs are in the session scratchpad: p4.py; r3_layers.py, which replaces r2_dc.py because `with_auto_dc` no longer exists and compares the edge fade against a mocked no-op baseline; r3_trim.py, which compares trim between a `git archive` of 2b69063 and HEAD; r3_shift.py; and r3_edge.py. The step-6 test module passes (35 tests).
+
+```text
+<spec>
+artifact: tools/audio/soundbench@13b27b3 (assemble.layer_index/transient_index, ops.fade_hot_edges and op_trim, render.fade_layer_edges/layer_edge_clicks/layer_rows/mix_layers)
+reviewer: reviewer
+looked_at_first: [git diff 2b69063 13b27b3 -- tools/audio/soundbench/*.py]
+earlier_findings:
+  - {id: F2, status: fixed. The automatic dc step is gone. DC is removed only from the copy that layer_index reads, and the placed audio is never shifted. r3_layers.py over the 9 real sets: 0 clicks in every delivered mix (set 35, which had 2 clicks in round 2, now has 0)}
+  - {id: F1, R1, R2, status: unchanged since round 2 (fixed, named limit, fixed)}
+checks:
+  - "1. p4.py: 27 of 27 layers within 0.13 samples of the marker. r3_layers.py: align_err 0 and align_unstable False on every layer of all 9 sets; the edge_clicks row reads 0 on every layer; all renders exit 0"
+  - "2. Audio unchanged apart from the fades: fade_layer_edges on 62 real takes changes 0 samples outside the first and last 22 (0.5 ms). In the two sets where the faded and unfaded offsets are equal, the delivered mixes differ only inside the edge fades (0 and 44 samples, 0 of them outside). In the other 7 sets the offsets differ (see R4), so a sample-by-sample comparison does not apply there"
+  - "3. trim is identical: 62 real takes x 2 bindings x 2 prerolls x 2 levels = 496 cases. Audio sha256 and the full info log are equal at 2b69063 and 13b27b3 on all 496 (364 of them with edge_faded true)"
+  - "4. The edge-click row: a spike of 0.5 or 1.0 x peak planted 0.6 ms into a thump layer reads edge_clicks 1. The same spike, or a decaying step of 0.3 x peak, planted 1.5 ms in reads edge_clicks 0, but the file's clicks reading counts it (1 at 101.5 ms). That is a click inside the take, not at the layer's edge. The edge fade touches only 0.5 ms, so it cannot create a step there, and a click inside a take has never been a must row (as with single takes). A hot end (a thump cut at -4.5 dB re peak) and the same end with +12 dB gain both read 0, with 0 file clicks: the fade runs after gain and is relative to the layer's own peak, so gain cannot reopen the edge. Not a finding"
+findings:
+  - {id: R4, class: recommendation, where: "render.py mix_layers: fade_layer_edges runs before assemble.transient_index / layer_index, so align reads the faded edge",
+     expected: "a fade of the first 0.5 ms changes only that 0.5 ms and does not move the body of the layer",
+     observed: "On 62 real takes (r3_shift.py) the fade moves the align reading for F-01 on 72 of 124 readings (up to 70 samples, 1.6 ms) and for main_transient on 36 of 124 (up to 35 samples, 0.8 ms). gainfly-hit-speed-1.t3's edge is at -58.65 dB re peak, just over the -60 dB fade threshold; fading it moves its F-01 reading from sample 16 to 71, so the whole layer is placed 55 samples (1.25 ms) earlier. Delivered sets 0, 7, 14, 28, 35, 42 and 49 place layers 2-55 samples apart from the unfaded alignment. The log and the placement still agree (one reading), so the claim 'within 1 sample' holds by that reading. The shift is below the size at which layers are heard as two hits, but which 0.5 ms fade happens now changes inter-layer timing by up to 1.6 ms",
+     evidence: "Low. Not blocking: no exit-0 fault, and the shift is under 2 ms. Label: not verified by listening",
+     smallest_fix: "Read the align index on the layer before fade_layer_edges (the fade cannot move the body), or name 'the edge fade can move an F-01 reading by up to 1.6 ms' in layer_index's false readings",
+     protect: "27/27 within 1 sample; the 0 edge clicks", retest: "r3_shift.py: shifts 0, or the limit named"}
+keep: ["layer_index: one reading, on a copy, with the layer's own mean", "ops.fade_hot_edges shared by trim and layers, with trim's audio and log byte-identical", "the layer[<name>].edge_clicks row (must for important cues)", "fades after gain, relative to the layer's own peak"]
+weakest_part: "R4's and the edge fades' audibility (1.6 ms of inter-layer shift; a 0.5 ms fade on an edge at -5 dB) is judged from numbers, not listened to"
+could_not_check: [{step: "the full gate on 13b27b3", missing_input: "I ran only the step-6 module and the scripts", closes_it: "the builder's gate log (stated: 26/26 planted faults)", who: "feature-builder"}]
+remaining_stated_limits: ["R1: a seam jump under 1 % of peak in the quiet part of a bed with a loud section", "a 0.25 x peak spike in low-passed noise", "gaps in beds with near-silent lulls", "slope breaks are not read", "Roblox's loop transcode is not measured", "no real take of 2 s or more", "R-26 itself: a 5 % drift step in a tonal pad passes; needs a listen", "a must loop_seam with any why can lift F-08 without bound (logged in limit_from)", "F-01 layers may move 1 sample under the shared reading (lead-accepted)", "edge_clicks is an aim below the important tier; clicks inside a take (over 1 ms from an edge) stay screening-only, as for single takes", "a hot edge gets a 0.5 ms fade, never a longer one (lead decision R2-2)", "R4 if it is named rather than changed"]
+verdict: ready for the next review
+</spec>
+```
