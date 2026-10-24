@@ -3,7 +3,7 @@ name: sound-design
 description: Design, specify, review or prompt sound for a Roblox game - SFX, music, ambience, UI audio, rewards, hits, scares, egg reveals; layering, repetition, mixing and loudness, AI sound prompts, editing files with soundbench, Roblox playback (2D or 3D, falloff, room, ducking). Use for "make the reveal feel exciting", "make the hallway scary", or any sound review. Game-agnostic.
 ---
 
-> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Rebuilt by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Evidence stays out of the body: `evidence/` (S-, E-, D- rule sources) and the craft library `knowledge/reference/craft/riot/` (§7 follows its `universal-principles.md`).
+> Author: skill-builder · claude-opus-5-5 · medium · 2026-10-10. Rebuilt by J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Evidence stays out of the body: `evidence/` (S-, E-, D- rule sources) and the craft library `knowledge/reference/craft/riot/` (§7 follows its `universal-principles.md`). Revised by J020 step 8 follow-up sound-designer · claude-opus-5-5 · high · 2026-10-24: steps 4 and 6-8, 11 for the built `generate`, `rank`, layers, loops and variants.
 
 # Sound design for Roblox games
 
@@ -21,7 +21,7 @@ claim you heard, measured or tested anything you did not. After a compaction, re
 
 **Done and feel (J020-D3, J020-LD3).** A cue is done when its delivered file is measured inside its must-targets
 (`soundbench render` exit 0) and it is proven to play on its event (debug cue log). Feel is the owner's call in their
-play-tests; you never ask him for a listening session (the old check-ins A, B and C are retired). Each flag he raises
+play-tests; you never ask them for a listening session (the old check-ins A, B and C are retired). Each flag they raise
 goes into your hand-back as a `lesson` (owner-correction, the owner's words) and into the fix. No reference sounds (CD-2): picks
 are against the card's targets. **Roblox only plays and places** (J020-D1, D8): every alteration is baked into the file
 with the kit editor `soundbench` (`references/craft-process.md` §5-§6); in Roblox only volume, 2D or 3D with its
@@ -62,24 +62,35 @@ the timing is locked (SC-17).
    S-60); size tiers and burst scaling (S-78, S-79). Recipes: `craft-satisfying.md`, `reward-and-juice.md`,
    `horror-and-tension.md`. Write the card's targets as numbers in `card.json` (timing with the onset it binds to,
    bands, phone loss, level with its measure named, true peak, form, playback), each `must` or `aim`, tagged (P)
-   (`references/cue-card.md` §D). *Check (D): R-13; the card loads in `soundbench`.*
+   (`references/cue-card.md` §D); an important cue's layers each get their own targets; a paid-reveal family's cards are all
+   written, in sibling folders, before any render. *Check (D): R-13; the card loads (every soundbench command checks it first: a bad field is exit 2).*
 5. **Temp pass on the markers.** Reuse the library first (SC-15); every stage gets a temp source marked TEMP; the
    integrator wires them on the event ids; the debug cue log proves each temp cue fires on its event, in order
    (`references/craft-process.md` §4). *Check (S): R-50.*
 6. **Generate and rank.** Prompts by texture (SC-14, `references/ai-generation-prompts.md`); takes per round by tier:
    minor 3, frequent 4 (kept as the variant set), important 6, with the layers of an important sound generated one
-   prompt each (J020-D9); `soundbench generate` (being built). Every take measured and ranked against the card's
-   targets, never against a reference sound (`soundbench rank`, being built; CD-2). No take passes after the fixable
-   steps → change the prompt and regenerate, never pile on edits; at most 3 rounds, then the cue goes to the owner
-   with its numbers (J020-D7). Good unpicked takes go to the game library. Pictures only when a number fails or is
+   prompt each (J020-D9). Write `prompts.json` with `duration_s` always set (cost ceil(11 × s) credits, 55 without);
+   `generate <cue> --dry-run` to price the round, then `python tools/keys.py run --only ELEVENLABS_API_KEY -- python -m
+   tools.audio.soundbench generate <cue> --budget <credits>` (exit 0 made, 1 budget stop or a take rejected, 2 refused;
+   round 4 refused). `soundbench rank <cue>` scores the round against the card's targets, never against a reference
+   sound (CD-2): exit 0 `use` (its fix steps start `recipe.json`), 1 `regenerate` or `owner`, 2 refused; layer takes are
+   ranked by hand from `measure --json` (`references/craft-process.md` §5). No take passes after the fixable steps →
+   change the prompt (the misses in its `note`) and regenerate, never pile on edits; at most 3 rounds, then the cue goes
+   to the owner with its numbers (J020-D7). A `use` on a loop or variant card is not a pass: the form rows are judged at
+   render. Good unpicked takes go to the game library. Pictures only when a number fails or is
    near its limit, and for important cues. *Check (F): F-01 to F-12 and the new measures per take; R-62.*
 7. **Design pass.** A `recipe.json` design pass in the SC-09 order, a little per step, rendered into the file
    (`soundbench render`); unprocessed tried first; movement inside sustained layers; never the room (J020-D10); parts
-   filed in the library (SC-08 to SC-10, `references/craft-process.md` §6). *Check (F): R-20 to R-36, R-51.*
+   filed in the library (SC-08 to SC-10, `references/craft-process.md` §6). One source per recipe: `take`, `layers`
+   (each its own design pass, `offset_ms` or `align` to a marker, `gain_db`, targets; edges faded at 0.5 ms
+   automatically) or `takes` (one variant file each); a `loop` block (`loop_bed`, `loop_music`) on a `form.loop` card.
+   *Check (F): R-20 to R-36, R-51; the `layer[<name>].*` rows.*
 8. **Edit pass.** Fit each stage to its event in context with the scene's other sounds; drop what does not serve; the
    recipe's fixed edit pass (trim to the onset the kind binds to → cut → fade → mono → loudness by the card's level
    measure → peak → export FLAC, G-8); plan repetition from the event rate: variants, shuffle-bag, jitter, cooldown,
-   voice cap (SC-13, `references/repetition.md`). *Check (F, D): R-20, R-22, R-31, R-36.*
+   voice cap (SC-13, `references/repetition.md`); variants as files (`takes`, or a seeded `variants` block; never for
+   tell, warning, countdown). `soundbench render <cue>`: exit 0 pass, 1 a must row failed, 2 refused, 3 family
+   incomplete. *Check (F, D): R-20, R-22, R-26 (`form.loop_*`), R-31 (`variants.level_spread`), R-36.*
 9. **Mix and place.** Tier, level slot, carry distance and far version; 2D or 3D by the rule (does where it comes from,
    or how far, tell the player something?), the actor rule, for 3D the falloff mode and bounds; takes the room or not;
    ducks only where the four questions say so (J020-D11); music and SFX agree who leads each key beat (SC-07, SC-08,
@@ -92,7 +103,9 @@ the timing is locked (SC-17).
 11. **Self-review and proof.** Run §5 and `references/review.md` §3; every delivered file passes its must-targets
     (`render` exit 0); every cue proven on its event in a play-test's debug cue log; sync on the device or "not
     verified"; stop by `references/review.md` §6. Feel is the owner's play-test: the owner's flags become lessons and fixes
-    (`references/review.md` §2). *Check: R-36, R-41, R-54, R-60 to R-67.*
+    (`references/review.md` §2). A green number inside a soundbench known limit (clipped short hits after MP3, full-scale
+    rumble, takes of 2 s or more, quiet-part loop seams, the Roblox loop transcode) is not trusted: `references/review.md`
+    §4. *Check: R-36, R-41, R-54, R-60 to R-67.*
 
 Genre defaults (tempo, budgets, failure cases): `references/genre-presets.md`. Worked examples:
 `references/worked-examples.md`.
@@ -183,7 +196,7 @@ Run `references/review.md` §3 for every cue type in the job; then confirm:
 | --- | --- |
 | Inputs, stage sheet, layer jobs, temp pass, sources, design and edit passes, library, identity sheet, partners | `references/craft-process.md` |
 | Self-review lines, the owner's play-test, measuring a file (`soundbench measure`), reviewing a sound set, when to stop | `references/review.md` |
-| The editor: cue folder, `card.json` targets, two-pass recipe, commands (measure, rank, render, generate, compare, parity) | `references/craft-process.md` §5-§7; `references/cue-card.md` §D; `tools/audio/soundbench/README.md` |
+| The editor: cue folder, `card.json` targets, `prompts.json`, the order of work, two-pass recipe, layers, loops, variants, reading `rank`, commands (measure, rank, render, generate, compare, parity), known limits | `references/craft-process.md` §5-§7; `references/review.md` §4; `references/cue-card.md` §D; `tools/audio/soundbench/README.md` |
 | Worked examples (ability, frequent pickup, footsteps and spaces, paid reveal) | `references/worked-examples.md` |
 | Target feeling → tempo, register, spectrum, envelope, level, space, silence | `references/emotion-recipes.md` |
 | Is this element or claim backed? Effect sizes, contested claims, culture | `references/elements.md` |

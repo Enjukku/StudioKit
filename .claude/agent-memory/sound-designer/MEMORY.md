@@ -1,1 +1,2 @@
 - [No listening sessions](feedback_no_listening_sessions.md) — feel = owner's play-test; done = render pass + debug cue log; no reference sounds (J020, 2026-10-23)
+- [Books vs tool code](feedback_books_vs_tool_code.md) — confirm README facts in code and in uncommitted diffs before writing books (2026-10-24)

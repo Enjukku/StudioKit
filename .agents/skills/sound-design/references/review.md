@@ -1,4 +1,4 @@
-> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D4, on 982592c): R-01.
+> Author: J018 maker sound-designer · claude-opus-5-5 · high · 2026-10-22: built also from the owner's Riot transcripts (J018). Revised by orchestrator · claude-opus-5-5 · high · 2026-10-23 (J021-D4, on 982592c): R-01. Revised by J020 step 8 follow-up sound-designer · claude-opus-5-5 · high · 2026-10-24: soundbench known limits (§4).
 
 # Review: inputs, the owner's play-test, self-review list, file measures
 
@@ -77,12 +77,12 @@ Run every line that fits the cue type; mark each passed, failed, MEASURED or not
 | R-23 | Essential cues keep at least about 10 % (P) of their energy in 500 Hz-5 kHz (F-06) and lose at most the card's phone-loss target (`phone_loss_db`, §4); below that, fix the file (saturation for harmonics, a mid layer) or regenerate; how it sounds on the owner's phone is the owner's play-test. |
 | R-24 | Bright layers keep at most 0.5 % (P) of their energy below their low cut (F-06); in each cue only one layer (the low-end owner) has more than about 10 % (P) of its energy below 120 Hz. |
 | R-25 | A stereo file loses at most 3 dB summed to mono (F-07). |
-| R-26 | Loops: seam ratio (F-08) ≤ 2 (P); a long-stay bed lasts 15-20 s or more per segment (F-12, S-100). |
+| R-26 | Loops: seam ratio (F-08) ≤ 2 (P); a long-stay bed lasts 15-20 s or more per segment (F-12, S-100). `render` judges every `form.loop` card with the must rows `form.loop_f08`, `form.loop_wrap_clicks`, `form.loop_wrap_hf`, `form.loop_seam_gap` (with a loop step also `form.loop_crossfade_level`, and `form.loop_length_samples` for music); a card's `loop_seam` only tightens the 2, loosening needs `must: true` and a `why` (`craft-process.md` §6); the blind spots are in §4. |
 | R-27 | Pitched and tonal parts sit within ±50 cents of a game-key note (F-10); check a surprising note for the harmonic trap. |
 | R-28 | Charges and build-ups rise in pitch first to last (F-10) and peak in the last 10 % of the file (F-05). |
 | R-29 | Sustained magic, travel and loop layers vary over time: centroid variation (F-11) ≥ 0.05 (P). Never applied to one-shot hits. |
 | R-30 | A pass-by's envelope peak sits in the middle third, not at the start (F-05). |
-| R-31 | Variants of one sound: F-09 within ±1 dB. Options and siblings with different spectra: F-13 a, never F-09. Paid random reveal results: F-13 b momentary maximum within 1 LU of each other and sample peaks (F-03) within 1 dB (D-03); never F-13 a, which a longer, quieter tail pulls down. |
+| R-31 | Variants of one sound: F-09 within ±1 dB. Options and siblings with different spectra: F-13 a, never F-09. Paid random reveal results: F-13 b momentary maximum within 1 LU of each other and sample peaks (F-03) within 1 dB (D-03); never F-13 a, which a longer, quieter tail pulls down. A variant set rendered as files is checked by `render`'s `variants.level_spread` row; every variant file of a paid-reveal member enters its D-03 check. |
 | R-32 | (D + F) Every tier of a paid random reveal uses the same windup asset (same asset id, or the same file hash), so length and sound are identical up to the result. |
 | R-33 | Size tiers of one family step down in pitch by the card's declared interval (S-82: 3-5 st per size class (P)), the same step in every family: F-10 on each tier's body or tonal part, and F-05 decay longer per tier. A step off the declared one by more than 1 st (P) is flagged; a step near 7 or 12 st off is the harmonic trap: compare the same partial. |
 | R-34 | In one scene, threat hits and attacks (impact and contact one-shots) rise faster than friendly one-shots: onset-to-peak (F-02 minus F-01) of each is shorter than that of every friendly one-shot (SC-11). Tells, warnings, charges and build-ups are not compared: they rise by design (S-76, R-09, R-28). |
@@ -161,6 +161,20 @@ case that matches a listed false reading is not trusted: check it the same way. 
 | lag (`compare`, and after every ffmpeg step) | cross-correlation with the input | periodic, silent or inverted input reads "not clear": proven on a probe signal instead |
 
 Pictures (`--picture`, or `render` on a miss): a waveform and spectrogram PNG, before and after. Light checks: numbers for every take; a picture only when a number fails or is near its limit, and for important cues.
+
+**soundbench known limits: do not trust a green result past these** (`tools/audio/soundbench/README.md` "Known limits", "Ranking takes", "Layers, loops and variants"; J020 `job-card.md` Progress rows 5-6, `review-rank.md`, `review-step6.md`). A pass on a case in this table is written "MEASURED, inside a known blind spot: <which>", checked on a picture where the row says so, and listed for the owner's play-test.
+
+| Case | What the tool misses | What to do |
+| --- | --- | --- |
+| A short hit that clipped before the MP3 encode | `rank`'s clip check: the clipped tips last under 1 ms and the MP3 smears them; not caught even at +12 dB. Clipping scaled down after it happened, or under full scale, is not caught either | picture of every important hit take (`rank --picture`); a hit that looks flat-topped is regenerated; a clipped hit that passes reads at most as a level miss (`peak` cannot repair distortion) |
+| Steady full-scale rumble or a steady low tone | reads as clipped (rejected) though clean | look at the take before trusting a "clipped" rejection of a sub or rumble layer; ask for it quieter in the next prompt rather than override |
+| Takes of 2 s or more | no real ElevenLabs take of 2 s or more has been measured yet: the clip limit (10 ms in 300 ms, 2.8 ms margin) and the loop calibration rest on 480-800 ms real takes and fixtures built from them | the first long cue's takes are measured against the calibration and reported to the lead; a long take rejected as clipped gets a picture before it is dropped |
+| A loop seam in the quiet part of a bed with a loud section | F-08 and `form.loop_wrap_hf` read the seam against the whole loop; only the click floor (1 % of peak) is left. Also not read: a spike inside low-passed noise, a gap in a bed with near-silent lulls, a slope break with no jump | `render --picture` and look at the wrap; list the bed for the owner's play-test |
+| Roblox's transcode at the loop point | the seam is sample-exact in the FLAC; what Roblox's transcode does at the wrap is not measured | proven only in the play-test (the debug cue log proves it plays, not that it is seamless) |
+| `rank` on a loop or variant card | judges each take as a one-shot; the form rows are judged only at `render` | never stop at rank's `use` for a loop or variant cue: `render` must pass the `form.*` and `variants.*` rows |
+| `rank` and design steps | computes edit-pass fixes only: a miss an `eq` or `limit` could close reads as a prompt miss | try the design step in `recipe.json` when it is small; `render` measures it |
+| Layer edge fades | the automatic 0.5 ms fade on a hot layer edge can cost attack (`edge_fade_attack_loss`) and moves the align reading up to 1.6 ms; clicks inside a take (over 1 ms from an edge) stay screening-only | read `edge_fade_attack_loss` per layer; a hit layer losing much attack is regenerated |
+| Any result at all | **nobody has listened to any soundbench result**: every number is a screen | feel and audible defects are the owner's play-test (§2), never your claim |
 
 ## 5. Reviewing a sound set (someone else's or a game's current one)
 
