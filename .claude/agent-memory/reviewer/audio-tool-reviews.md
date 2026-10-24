@@ -54,3 +54,8 @@ checks at plan time + mode 'x' at write time = a concurrent run loses a PAID tak
 (4) Count 5xx-without-cost-header like a timeout. (5) Preflight every local dependency (ffmpeg) before the first paid
 call. (6) A cap keyed on a name the input file chooses (layer names) is bypassed by renaming. (7) Default urllib opener
 forwards custom auth headers on cross-host redirects: prove with two loopback servers.
+Rank on layered rounds (2026-10-24): when a judge READS an existing recipe (placement, targets) but simulates and
+proves a stripped copy (design: [], no loop), "every use proven by a real render" proves the wrong recipe. Test: add one
+ordinary design step (highpass 60) to recipe.json, then render recipe.json with the judge's choice: 5 of 6 real cases
+flipped use -> exit 1. Also cross-check every round count against generate.cue_rounds (counts takes/rejected/ too).
+Hand-check level verdicts with crest = F-09 - TP vs target - (ceiling - margin): gain-only reachability in one line.
