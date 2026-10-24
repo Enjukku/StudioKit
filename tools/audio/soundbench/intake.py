@@ -55,8 +55,11 @@ def stream_info(take: Path, exe: Path) -> dict:
                         "stream=codec_name,sample_rate,channels,start_time,duration", "-of", "json", str(take)])
     try:
         st = json.loads(proc.stdout)["streams"][0]
+        # ffprobe 9.0.2 states no start_time for a PCM WAV (ElevenLabs wav_44100, 2026-10-24): PCM has no encoder
+        # delay, so its start is 0. An MP3 must still state one (the encoder-delay rule below).
+        start = 0.0 if "start_time" not in st and str(st.get("codec_name", "")).startswith("pcm_") else st["start_time"]
         return {"codec": st["codec_name"], "rate": int(st["sample_rate"]), "channels": int(st["channels"]),
-                "start_s": float(st["start_time"]), "duration_ms": 1000 * float(st["duration"])}
+                "start_s": float(start), "duration_ms": 1000 * float(st["duration"])}
     except (json.JSONDecodeError, KeyError, IndexError, TypeError, ValueError) as err:
         raise SoundbenchError(f"cannot read the take's audio stream with ffprobe: {proc.stderr.strip()[-200:]}") from err
 

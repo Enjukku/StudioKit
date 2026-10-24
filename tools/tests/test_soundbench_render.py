@@ -123,7 +123,9 @@ class CardTest(unittest.TestCase):
                             (lambda r: r["edit"].append({"op": "eq"}), "not an edit step"),
                             (lambda r: r["design"].append({"op": "trim"}), "belongs in recipe.edit"),
                             (lambda r: r.update(take="../other/x.mp3"), "inside the cue folder"),
-                            (lambda r: r.update(take="takes/x.wav"), ".mp3"),
+                            (lambda r: r.update(take="takes/x.flac"), ".mp3 or .wav"),
+                            # J020 step 7: generate saves WAV takes, so a recipe may name one, never its master
+                            (lambda r: r.update(take="takes/x.r1.t1.master.wav"), "never its master"),
                             (lambda r: r["design"].append({"op": "eq", "why": ""}), "non-empty reason"),
                             (lambda r: r.update(extra=1), "unknown field")):
             with self.subTest(why=why):

@@ -13,10 +13,14 @@ Usage:
   python -m tools.audio.soundbench parity <file> <file> [...] --mode integrated|momentary [--json]
   python -m tools.audio.soundbench render <cue-folder> [--picture] [--json]
   python -m tools.audio.soundbench rank <cue-folder> [--round K] [--picture] [--json]
+  python tools/keys.py run --only ELEVENLABS_API_KEY -- python -m tools.audio.soundbench generate <cue-folder>
+      [--budget CREDITS] [--dry-run] [--json]
 Exit codes for rank: 0 the top take passes every must-target after its fixable steps; 1 regenerate with a changed
 prompt (or, after round 3, the cue goes to the owner); 2 refused.
 Exit codes for render: 0 every must-target and the family check passed; 1 one failed (file written, report says
 why); 2 refused; 3 a paid-reveal family is incomplete (re-render after the siblings).
+Exit codes for generate: 0 every planned take made and decoded; 1 stopped by the budget or a take rejected; 2 refused
+before any call, or a call failed.
 """
 
 from __future__ import annotations
@@ -77,6 +81,42 @@ def _print(rec: dict) -> None:
         print(f"{k}: {v}")
 
 
+def _generate(a) -> int:
+    """Its own handler: every text it prints passes the key redaction (AGENTS.md section 3.4)."""
+    import os
+
+    from . import generate as gen
+
+    key = os.environ.get(gen.KEY_ENV, "").strip()
+    try:
+        doc, code = gen.generate(a.cue, gen.DEFAULT_BUDGET if a.budget is None else a.budget, dry_run=a.dry_run)
+    except SoundbenchError as err:
+        print(gen.redact(f"ERROR: {err}", key), file=sys.stderr)
+        return 2
+    except Exception as err:  # noqa: BLE001 - an unexpected failure is a refusal (2)
+        print(gen.redact(f"ERROR (unexpected, a soundbench bug or a malformed input): {type(err).__name__}: {err}",
+                         key), file=sys.stderr)
+        return 2
+    if a.json:
+        print(gen.redact(json.dumps(doc, indent=2), key))
+        return code
+    lines = [f"{doc['cue']} ({doc['tier']}): " + ", ".join(f"{s['name']} round {s['round']}" for s in doc["sounds"]),
+             f"predicted {doc['predicted_credits']} credits, budget {doc['budget']:g}"]
+    if doc.get("dry_run"):
+        lines += [f"  {c['stem']}: {c['predicted']} credits, {c['text'][:70]}" for c in doc["plan"]]
+    else:
+        lines += [f"  {t['stem']}: {t['format_used']}, {t['credits']} credits" for t in doc["takes"]]
+        lines += [f"  {t['stem']}: REJECTED {t['rejected']}" for t in doc["rejected"]]
+        lines.append(f"spent {doc['spent_credits']} credits (+ {doc['possibly_spent_credits']} possibly, network "
+                     f"failures); formats refused: {doc['formats_refused'] or 'none'}")
+        if doc["stopped"]:
+            lines.append(f"stopped: {doc['stopped']}")
+        lines.append(f"log: {doc['log']}  exit {code}")
+    lines += [f"warning: {w}" for w in doc["warnings"]]
+    print(gen.redact("\n".join(lines), key))
+    return code
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="python -m tools.audio.soundbench", description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -105,7 +145,15 @@ def main(argv: list[str] | None = None) -> int:
     k.add_argument("--round", type=int, help="the round to rank (default: the highest present; at most 3, J020-D7)")
     k.add_argument("--picture", action="store_true", help="pictures of every take (default: the top take when needed)")
     k.add_argument("--json", action="store_true")
+    g = sub.add_parser("generate", help="one round of ElevenLabs takes for a cue (prompts.json, card.json)")
+    g.add_argument("cue", type=Path, help="the cue folder (card.json, prompts.json)")
+    g.add_argument("--budget", type=float, default=None, help="credits this run may spend (default: "
+                   "generate.DEFAULT_BUDGET)")
+    g.add_argument("--dry-run", action="store_true", help="plan and predict the cost; no call, no key needed")
+    g.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
+    if a.cmd == "generate":
+        return _generate(a)
     try:
         if a.cmd == "doctor":
             return doctor.main(a.root, a.json)

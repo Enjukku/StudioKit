@@ -218,8 +218,11 @@ def _step(step, where: str) -> dict:
 
 
 def _take_path(take, where: str) -> str:
-    if not isinstance(take, str) or not take.lower().endswith(".mp3") or Path(take).is_absolute() or ".." in Path(take).parts:
-        raise SoundbenchError(f"{where}: needs the take's .mp3 path inside the cue folder, e.g. takes/<cue>.r1.t1.mp3")
+    ok = isinstance(take, str) and (take.lower().endswith(".mp3") or (take.lower().endswith(".wav") and not
+                                                                       take.lower().endswith(".master.wav")))
+    if not ok or Path(take).is_absolute() or ".." in Path(take).parts:
+        raise SoundbenchError(f"{where}: needs the take's .mp3 or .wav path inside the cue folder (never its master), "
+                              "e.g. takes/<cue>.r1.t1.mp3")
     return take
 
 

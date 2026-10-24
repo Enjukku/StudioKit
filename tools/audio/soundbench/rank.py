@@ -5,7 +5,8 @@ Kit tool (universal). Author: feature-builder · claude-opus-5-5 · high · 2026
 
 Order of work, each step refusing instead of guessing:
   1. read card.json (every field checked) and refuse an inconsistent family declaration, exactly as `render` does;
-     find the round's takes `takes/<cue>.r<k>.t<n>.mp3` (the highest round unless `--round`; round 4 or more is
+     find the round's takes `takes/<cue>.r<k>.t<n>.mp3` or `.wav` (as `generate` saves them; the highest round
+     unless `--round`; round 4 or more is
      refused, J020-D7); check every take's sha256 and master against its sidecar (G-1, `render.check_take`);
   2. measure every master (`measures.measure_audio`) and score every target with `render.evaluate`, the function
      `render` uses on the delivered file: inside, near (inside but within the `near` margin of `tables.json`) or
@@ -96,7 +97,7 @@ CUT_INSIDE_MS = 1.0  # a cut for sound_ms ends 1 ms inside the card's maximum
 LEVEL_AGREE_DB = 0.1  # the derived and the simulated level must agree within this
 PROOF_ABS, PROOF_REL = 0.02, 0.002  # the proof render's values vs the simulation's: 0.02 or 0.2 %, whichever is larger
 
-TAKE_RE = re.compile(r"^(?P<cue>.+)\.r(?P<round>\d+)\.t(?P<take>\d+)\.mp3$", re.IGNORECASE)
+TAKE_RE = re.compile(r"^(?P<cue>.+)\.r(?P<round>\d+)\.t(?P<take>\d+)\.(?:mp3|wav)$", re.IGNORECASE)
 STEP_FOR = {"onset_ms": "trim", "main_transient_ms": "trim", "sound_ms": "cut", "file_ms": "cut",
             "level": "loudness and peak", "true_peak_dbtp": "loudness and peak", "sample_peak_dbfs": "loudness and peak",
             "form.mono": "mono", "edge_clicks": "trim or fade"}
@@ -106,12 +107,12 @@ BANDS = ("below_120", "band_120_500", "band_500_5k", "above_5k")
 def find_takes(cue_dir: Path, cue: str, round_no: int | None) -> tuple[int, list[tuple[int, str]]]:
     """(round, [(take number, path relative to the cue folder)]) for the asked round, or the highest one present."""
     found: dict[int, list[tuple[int, str]]] = {}
-    for p in sorted((cue_dir / "takes").glob("*.mp3")):
+    for p in sorted(q for q in (cue_dir / "takes").glob("*") if q.suffix.lower() in (".mp3", ".wav")):
         m = TAKE_RE.match(p.name)
         if m and m["cue"] == cue:
             found.setdefault(int(m["round"]), []).append((int(m["take"]), f"takes/{p.name}"))
     if not found:
-        raise SoundbenchError(f"no takes named takes/{cue}.r<k>.t<n>.mp3 in {cue_dir}")
+        raise SoundbenchError(f"no takes named takes/{cue}.r<k>.t<n>.mp3 or .wav in {cue_dir}")
     k = max(found) if round_no is None else round_no
     if k < 1 or k > MAX_ROUNDS:
         raise SoundbenchError(f"round {k}: a cue has at most {MAX_ROUNDS} rounds (J020-D7); after round {MAX_ROUNDS} it "
@@ -555,7 +556,7 @@ def rank(cue_dir: Path, round_no: int | None = None, picture: bool = False) -> t
             from . import pictures
 
             rep_dir.mkdir(parents=True, exist_ok=True)
-            stem = Path(e["take"]).name[: -len(".mp3")]
+            stem = Path(e["take"]).stem
             x, rate = e["_audio"][0], e["rate"]
             pics.append(str(pictures.picture(x, rate, rep_dir / f"{stem}.rank-before.png", title=f"{stem} take")))
             if e["_audio"][1] is not None:

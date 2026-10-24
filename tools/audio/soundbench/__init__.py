@@ -5,7 +5,8 @@ Kit tool (universal). Author: feature-builder · claude-opus-5-5 · high · 2026
 Built so far (design section 10 steps 1-4): the ffmpeg adapter with its time checks (`ffmpeg`), every measure
 (`measures`, with F-01..F-13 moved from cue_check.py), pictures, the MP3 intake decode (`intake`), FLAC export
 (`export`), `doctor`; the card and recipe (`card`), the numpy operations (`ops`), the ffmpeg operations (`fxops`,
-with `standins`) and the two-pass `render`. Not built yet: rank, layers, loops, variants, generate. Commands:
+with `standins`), the two-pass `render`, `rank`, layers, loops and variants (`assemble`), and `generate`
+(ElevenLabs takes, step 7). Commands:
 README.md.
 
 Usage:

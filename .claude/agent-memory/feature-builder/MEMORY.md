@@ -8,4 +8,5 @@
 - [Fixtures like real inputs](feedback_fixtures_like_real_inputs.md) — measure real inputs first; relative thresholds; env-gated real-file test
 - [Simulate steps in sequence](feedback_simulate_steps_in_sequence.md) — plan later fix steps on the post-step state; playback measures read stored samples
 - [Detectors on decoded data](feedback_detectors_on_decoded_data.md) — tune clip/click detectors on MP3-decoded real takes; state margin and unseparable cases
+- [Vendor facts: measure first](feedback_vendor_facts_measure_first.md) — probe a paid API's errors, formats, billing before the client; docs wrong 2 of 3
 - [Judge edits against own source parts](feedback_judge_against_own_source_parts.md) — whole-file percentiles false-alarm on real beds; planted faults must FAIL, not ERROR
