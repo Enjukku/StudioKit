@@ -59,7 +59,7 @@ LOOP_GAP_DB = 6.0  # PROPOSAL: the seam's quietest 50 ms at most 6 dB under the 
                    # beds with near-silent lulls, where a fade gap reads 0 and is not caught)
 LOOP_CROSSFADE_DB = 2.0  # PROPOSAL: a loop's crossfade at most 2 dB outside the band of its own two parts' levels
                          # (29 good auto-curve loops read -1.67 to +0.63; wrong curves -1.7 to -3.1 and +2.6 to +3.0)
-ALIGN_CORRECTIONS = 1  # align: after placing, the offset is corrected once by the placed layer's own reading (R3)
+ALIGN_CORRECTIONS = 1  # align: after placing, the offset is corrected once by the layer read alone at its offset
 VARIANT_SPREAD_DB = 1.0  # R-31: variants of one sound, F-09 within +-1 dB (of the set's mean)
 
 
@@ -356,8 +356,8 @@ def plan_form(card: dict, recipe: dict, edit: list) -> dict:
             if card["tier"] == "important" and not lay.get("targets"):
                 raise SoundbenchError(f"{where}: an important cue's layer needs its own targets (craft-process "
                                       "section 6: per-layer targets for important sounds)")
-            design, auto = with_auto_dc(plan(card, {"design": lay["design"], "edit": []})[0], align)
-            layers.append({"name": name, "take": lay["take"], "design": design, "auto_dc": auto,
+            layers.append({"name": name, "take": lay["take"], "design": plan(card, {"design": lay["design"],
+                                                                                     "edit": []})[0],
                            "align": align, "targets": lay.get("targets", {}), **p})
         out["layers"] = layers
     if "loop" in recipe:
@@ -392,17 +392,6 @@ def plan_form(card: dict, recipe: dict, edit: list) -> dict:
                                   "file per take, the card says how many")
         out["takes"] = list(recipe["takes"])
     return out
-
-
-def with_auto_dc(design: list, align: dict | None) -> tuple[list, bool]:
-    """Lead decision (review step 6 R3): a layer aligned on its main transient gets `dc` first in its design pass,
-    unless it already has one, so DC cannot skew the reading align places it by (a whoosh with DC of 0.1 x peak read
-    1,225 samples apart alone and in the mix). `dc` is the first clean step of SC-09, so it never breaks the order.
-    Logged with its `why` in the layer's steps and as `auto_dc` in the layer log."""
-    if align is None or align["on"] != "main_transient" or any(st["op"] == "dc" for st in design):
-        return design, False
-    return [{"op": "dc", "params": ops.check_params("dc", {}), "stage": "clean",
-             "why": "added automatically: the layer aligns on its main transient, and DC skews that reading"}] + design, True
 
 
 def _step_log(passname: str, op: str, params: dict, info: dict, before: np.ndarray, after: np.ndarray, rate: int,
@@ -441,17 +430,19 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
         info["layers"].append({"name": lay["name"], "take": take["take"], "rate": take["rate"],
                                "offset_samples": off, "offset_ms": round(1000 * off / rate, 3),
                                "gain_db": lay["gain_db"], "fade_ms": [lay["fade_in_ms"], lay["fade_out_ms"]],
-                               "align": lay["align"], "auto_dc": lay.get("auto_dc", False),
-                               "standalone_index": standalone})
+                               "align": lay["align"], "standalone_index": standalone,
+                               "reading_dc": None if lay["align"] is None else
+                               [round(float(v), 6) for v in y.mean(axis=0)]})
     mix, placed = assemble.place(parts)
     for entry in info["layers"]:
         entry["align_correction_samples"], entry["align_unstable"] = 0, False
-    for _ in range(ALIGN_CORRECTIONS):  # read each aligned layer as placed (the file's view) and correct once
+    for _ in range(ALIGN_CORRECTIONS):  # read each aligned layer alone at its placed offset and correct once
         moved = False
         for k, (entry, p, lay) in enumerate(zip(info["layers"], placed, layers)):
             if lay["align"] is None:
                 continue
-            err = assemble.samples(lay["align"]["to_ms"], rate) - placed_index(p, rate, lay["align"]["on"])
+            err = assemble.samples(lay["align"]["to_ms"], rate) - assemble.layer_index(
+                parts[k][0], rate, lay["align"]["on"], entry["offset_samples"])
             if err and entry["offset_samples"] + err >= 0:
                 entry["offset_samples"] += err
                 entry["align_correction_samples"] += err
@@ -459,20 +450,19 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
                 moved = True
         if moved:
             mix, placed = assemble.place(parts)
-    for entry, p, lay in zip(info["layers"], placed, layers):
-        a = p - p.mean(axis=0)
-        entry["offset_ms"] = round(1000 * entry["offset_samples"] / rate, 3)
-        entry["measured"] = {"F-01_onset_ms": round(1000 * measures.onset_index(a.mean(axis=1)) / rate, 3),
-                             "main_transient_ms": measures.main_transient_ms(a, rate),
+    for (y, off), entry, p, lay in zip(parts, info["layers"], placed, layers):
+        entry["offset_ms"] = round(1000 * off / rate, 3)
+        ms = lambda on: None if not np.any(y) else round(1000 * assemble.layer_index(y, rate, on, off) / rate, 3)  # noqa: E731
+        entry["measured"] = {"F-01_onset_ms": ms("F-01"), "main_transient_ms": ms("main_transient"),
                              "F-09_dbfs": round(measures.level_db(p, rate, "F-09"), 2) if np.any(p) else None}
         if lay["align"] is not None:  # the log is read the way align was: a disagreement is flagged, never hidden
-            entry["placed_index"] = placed_index(p, rate, lay["align"]["on"])
+            entry["placed_index"] = assemble.layer_index(y, rate, lay["align"]["on"], off)
             off_by = assemble.samples(lay["align"]["to_ms"], rate) - entry["placed_index"]
             entry["align_unstable"] = abs(off_by) > 1
             if entry["align_unstable"]:
                 entry["align_note"] = (f"the placed layer still reads {off_by} samples from the marker after "
                                        f"{ALIGN_CORRECTIONS} correction: its {lay['align']['on']} reading depends on the "
-                                       "mix (a rising layer with DC); align it on F-01 or add `dc` to its design pass")
+                                       "position (a layer loud at its first sample, placed under 1 ms in)")
     sh = assemble.shares(placed, mix)
     for k, entry in enumerate(info["layers"]):
         entry["share_energy"], entry["share_of_mix"] = sh["energy"][k], sh["of_mix"][k]
@@ -490,15 +480,6 @@ def mix_layers(cue_dir: Path, card: dict, layers: list, ctx: dict) -> tuple[np.n
     info["headroom"] = head
     info["placed"] = placed
     return mix, rate, {"layers": takes, "rate": rate}, steps, info
-
-
-def placed_index(p: np.ndarray, rate: int, on: str) -> int:
-    """A placed layer's transient sample, read as the log reads it (the placed buffer, its own mean removed)."""
-    a = p - p.mean(axis=0)
-    if on == "F-01":
-        return measures.onset_index(a.mean(axis=1))
-    found = measures.main_transient_index(a, rate)
-    return 0 if found is None else found[0] + int(found[1])
 
 
 def layer_rows(card: dict, layers: list, placed: list, rate: int) -> list[dict]:

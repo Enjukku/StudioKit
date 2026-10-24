@@ -81,23 +81,28 @@ def resample(x: np.ndarray, rate: int, to_rate: int) -> tuple[np.ndarray, dict]:
                "samples": [len(x), len(y)]}
 
 
-def transient_index(x: np.ndarray, rate: int, on: str) -> int:
-    """The sample a layer is aligned by first: F-01's onset, or the main transient as `measures.main_transient_ms`
-    reads it (envelope index + the window-centre offset). `render.mix_layers` then reads each layer as placed and
-    corrects the offset once by that reading, so the log and the placement agree (review step 6 R3). DC skews the
-    main-transient reading (a whoosh with DC of 0.1 x peak read 1,225 samples apart alone and in a long mix), so a
-    layer aligned on its main transient gets `dc` first in its design pass automatically (`render.with_auto_dc`,
-    logged); with it the correction is 0 samples at DC of 0 to 0.5 x peak. A layer still more than one sample off
-    after the correction is flagged `align_unstable`."""
-    pad = 2 * max(1, int(round(measures.ENV_S * rate)))  # read the layer as it will sit in the file, after silence:
-    a = np.vstack([np.zeros((pad, x.shape[1])), x])     # a take loud at its first sample read 0.84 ms later alone
-    a = a - a.mean(axis=0)
+def layer_index(x: np.ndarray, rate: int, on: str, at: int) -> int:
+    """The one reading align uses (review step 6 round 2, lead decision): the layer's own audio with its own mean
+    removed (a copy: DC is removed for the reading only, never from the delivered audio), laid alone after `at`
+    samples of silence, read as `measures` reads F-01 or the main transient (envelope index + the window-centre
+    offset). Returns the sample index in that buffer. No other layer and no mix mean can move it."""
+    a = np.vstack([np.zeros((at, x.shape[1])), x - x.mean(axis=0)])
     if on == "F-01":
-        return measures.onset_index(a.mean(axis=1)) - pad
+        return measures.onset_index(a.mean(axis=1))
     found = measures.main_transient_index(a, rate)
     if found is None:
         raise SoundbenchError("align: the layer is silent, it has no transient")
-    return found[0] + int(found[1]) - pad
+    return found[0] + int(found[1])
+
+
+def transient_index(x: np.ndarray, rate: int, on: str) -> int:
+    """The first reading of a layer's transient: `layer_index` after 2 ms of silence (a take loud at its first sample
+    read 0.84 ms later without it). `render.mix_layers` then reads the layer alone at its placed offset with the same
+    function and corrects once. DC skewed the reading when the mean of a padded or mix-length buffer was removed (a
+    whoosh with DC of 0.1 x peak: 1,225 samples); the layer's own mean removes that skew without touching its audio.
+    A layer still more than one sample off after the correction is flagged `align_unstable`."""
+    pad = 2 * max(1, int(round(measures.ENV_S * rate)))
+    return layer_index(x, rate, on, pad) - pad
 
 
 def shape_layer(x: np.ndarray, rate: int, gain_db: float, fade_in_ms: float, fade_out_ms: float) -> np.ndarray:

@@ -182,17 +182,35 @@ class LayerTest(unittest.TestCase):
                 lay = doc["layers"]["layers"][0]
                 self.assertFalse(lay["align_unstable"], lay)
                 self.assertAlmostEqual(lay["measured"]["main_transient_ms"], 400.0, delta=1000 / R + 0.005)
-                # lead decision (R3): DC removed before the reading, so the standalone and as-placed readings agree
-                self.assertTrue(lay["auto_dc"])
-                auto = [st for st in doc["steps"] if st.get("layer") == "swish" and st["op"] == "dc"]
-                self.assertEqual(len(auto), 1)
-                self.assertIn("added automatically", auto[0]["why"])
+                # lead decision (round 2, F2): DC is removed for the reading only, never from the audio
+                self.assertEqual([st for st in doc["steps"] if st["op"] == "dc"], [])
+                self.assertAlmostEqual(lay["reading_dc"][0], float(np.mean(sw[:, 0])), places=5)
                 self.assertLessEqual(abs(lay["align_correction_samples"]), 1)
                 self.assertLessEqual(abs(lay["standalone_index"] + lay["offset_samples"] - lay["placed_index"]), 1)
 
+    def test_a_dc_layer_that_ends_at_zero_is_placed_untouched_and_gains_no_edge_click(self):
+        """Review step 6 round 2 F2: the automatic `dc` step shifted a layer that fades to 0 by its mean, so it started
+        and ended at -mean: two new clicks at the layer's edges, at exit 0. The delivered audio is the take itself."""
+        cue = "SFX-L-EDGE"
+        n = int(0.48 * R)
+        t = np.arange(n) / R
+        env = np.sin(np.pi * t / t[-1]) ** 3  # rises and falls to exactly 0 at both ends
+        tone = (0.6 + np.sin(2 * np.pi * 180 * t)) * env * 0.05  # carries DC: its mean is about 0.6 x 0.05 x 0.42
+        x = np.stack([tone, 0.9 * tone], axis=1)
+        self.assertGreater(abs(float(np.mean(x[:, 0]))), 0.005)
+        rec = {"layers": [{"name": "swell", "take": take(cue), "design": [], "align": {"to_ms": 300.0}}],
+               "design": [], "edit": []}
+        d = make_cue(self.d, card(cue, "whoosh"), rec, {take(cue): (x, R)})
+        doc, _ = render.render(d)
+        y = delivered(d)
+        off = doc["layers"]["layers"][0]["offset_samples"]
+        np.testing.assert_allclose(y[off:off + n], x, atol=STEP)  # the take itself, sample for sample
+        self.assertEqual(float(np.max(np.abs(y[:off]))), 0.0)
+        self.assertEqual(m.clicks(y - y.mean(axis=0), R)["count"], 0)
+
     def test_the_correction_after_placing_still_lands_a_skewed_reading(self):
-        """The safety net kept by the lead: with the automatic DC step taken away, the DC-skewed whoosh needs a large
-        correction, and the one correction after placing still lands it on the marker by the placed reading."""
+        """The safety net kept by the lead: when the first reading is off (here forced 600 samples off), the one
+        correction after placing lands the layer on the marker by the as-placed reading of the layer alone."""
         cue = "SFX-L-NET"
         sw = fx.make_real("quiet_whoosh", R)
         sw = sw + 0.1 * float(np.max(np.abs(sw)))
@@ -201,10 +219,11 @@ class LayerTest(unittest.TestCase):
                "design": [], "edit": [{"op": "peak"}]}
         d = make_cue(self.d, card(cue, "whoosh"), rec,
                      {take(cue, 1): (sw, R), take(cue, 2): (fx.make_bed("steady_noise", R, 5.0) * 0.1, R)})
-        with mock.patch.object(render, "with_auto_dc", lambda design, align: (design, False)):
-            doc, _ = render.render(d)
+        orig = assemble.transient_index
+        with mock.patch.object(assemble, "transient_index", lambda x, rate, on: orig(x, rate, on) - 600):
+            doc, _ = render.render(d)  # a first reading 600 samples off
         lay = doc["layers"]["layers"][0]
-        self.assertGreater(abs(lay["align_correction_samples"]), 100)  # the skew the DC step now prevents
+        self.assertEqual(lay["align_correction_samples"], -600)
         self.assertFalse(lay["align_unstable"])
         self.assertAlmostEqual(lay["measured"]["main_transient_ms"], 400.0, delta=1000 / R + 0.005)
 
@@ -838,6 +857,36 @@ def _wrap_into_the_start(x, s, n, cross, curve):
     return y
 
 
+def _dc_shaped(orig):
+    def shape_layer(x, rate, *a):
+        return orig(x - x.mean(axis=0), rate, *a)
+    return shape_layer
+
+
+class _read_the_mix:
+    """Planted fault: after placing, every reading is taken on the de-meaned mix, not on the layer alone."""
+
+    def __enter__(self):
+        held, place, index = {}, assemble.place, assemble.layer_index
+
+        def placed(parts):
+            mix, ps = place(parts)
+            held["mix"] = mix
+            return mix, ps
+
+        def reading(x, rate, on, at):
+            return index(held["mix"], rate, on, 0) if "mix" in held else index(x, rate, on, at)
+
+        self._p = [mock.patch.object(assemble, "place", placed), mock.patch.object(assemble, "layer_index", reading)]
+        for p in self._p:
+            p.start()
+        return self
+
+    def __exit__(self, *exc):
+        for p in self._p:
+            p.stop()
+
+
 def _floored_bars(bars, beats_per_bar, bpm, rate):
     exact = bars * beats_per_bar * 60.0 / bpm * rate
     return int(exact), exact
@@ -896,8 +945,11 @@ FAULTS = {
     "R2: rank's use text without the form rows":
         (lambda: mock.patch.object(rank_mod, "form_note", lambda proof: ""),
          [(VariantTest, "test_rank_use_names_the_form_rows_its_proof_leaves_to_render")]),
-    "R3: the automatic DC step dropped (lead decision)":
-        (lambda: mock.patch.object(render, "with_auto_dc", lambda design, align: (design, False)),
+    "F2: DC removed from the layer's audio (the old automatic dc step)":
+        (lambda: mock.patch.object(assemble, "shape_layer", _dc_shaped(assemble.shape_layer)),
+         [(LayerTest, "test_a_dc_layer_that_ends_at_zero_is_placed_untouched_and_gains_no_edge_click")]),
+    "F2: the as-placed reading uses the mix instead of the layer alone":
+        (lambda: _read_the_mix(),
          [(LayerTest, "test_the_logged_transient_is_read_after_placing_and_matches_the_marker")]),
     "R3: no correction after placing (align read on the layer alone)":
         (lambda: mock.patch.object(render, "ALIGN_CORRECTIONS", 0),
