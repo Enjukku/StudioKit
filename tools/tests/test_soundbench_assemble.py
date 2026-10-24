@@ -708,6 +708,25 @@ class VariantTest(unittest.TestCase):
         self.assertEqual(assemble.variant_plan(3, 1, 0.0, 0.0), [{"k": k, "cents": 0.0, "gain_db": 0.0}
                                                                  for k in (1, 2, 3)])
 
+    def test_a_planned_set_passes_r31_as_render_reads_it_over_many_seeds(self):
+        """review-rank-layers round 2 (lead decision): R-31 reads each file's level against the set's mean
+        (render.variant_rows), so the plan must keep every gain within max_db of the set's mean, not of 0. Seed 19 with
+        4 variants at max_db 1.0 used to plan 1.0975 dB. Checked with render's own row over 2..16 variants x 300 seeds x
+        max_db 0.5 and 1.0, levels on a -24 target; the plan stays seeded and keeps its spread (the outer slots)."""
+        for max_db in (0.5, 1.0):
+            for count in range(2, 17):
+                for seed in range(300):
+                    draws = assemble.variant_plan(count, seed, 30.0, max_db)
+                    gains = [d["gain_db"] for d in draws]
+                    mean = sum(gains) / count
+                    self.assertLessEqual(max(abs(g - mean) for g in gains), max_db + 1e-9, (count, seed, gains))
+                    rows = render.variant_rows(count, {f"v{d['k']}": -24.0 + d["gain_db"] for d in draws})
+                    spread = next(r for r in rows if r["target"] == "variants.level_spread")
+                    self.assertEqual(spread["result"], "pass", (count, seed, max_db, spread["value"]))
+                    if count >= 4:  # stratified, centred and scaled: the set still uses most of its range
+                        self.assertGreaterEqual(max(gains) - min(gains), max_db, (count, seed, gains))
+        self.assertEqual(assemble.variant_plan(4, 19, 30.0, 1.0), assemble.variant_plan(4, 19, 30.0, 1.0))
+
     def test_variant_files_carry_their_pitch_and_level(self):
         d = variant_cue(self.d, "SFX-V-HIT", 4, {"seed": 3, "max_cents": 80, "max_db": 0.5})
         (d / "out").mkdir()
@@ -748,12 +767,12 @@ class VariantTest(unittest.TestCase):
         self.assertEqual(len(set(runs[0].values())), 3)  # three different files
 
     def test_a_variant_that_misses_a_must_is_named(self):
-        d = variant_cue(self.d, "SFX-V-MISS", 4, {"seed": 3, "max_cents": 30, "max_db": 1.0})
+        d = variant_cue(self.d, "SFX-V-MISS", 4, {"seed": 22, "max_cents": 30, "max_db": 1.0})
         c = json.loads((d / "card.json").read_text(encoding="utf-8"))
         c["level"]["tolerance"] = 0.2
         (d / "card.json").write_text(json.dumps(c), encoding="utf-8")
         doc, code = render.render(d)
-        draws = assemble.variant_plan(4, 3, 30.0, 1.0)  # |gain| 0.72, 0.03, 0.40, 0.94: none within 0.1 of 0.2
+        draws = assemble.variant_plan(4, 22, 30.0, 1.0)  # gains -0.5, 0.78, 0.06, -0.33: none within 0.1 of 0.2
         self.assertTrue(all(abs(abs(v["gain_db"]) - 0.2) > 0.1 for v in draws))
         want = sorted(f"SFX-V-MISS-v{v['k']}:level" for v in draws if abs(v["gain_db"]) > 0.2)  # the card's tolerance
         self.assertTrue(want)
@@ -1022,6 +1041,9 @@ FAULTS = {
     "variants drawn without the seed":
         (lambda: mock.patch.object(assemble.np.random, "RandomState", lambda seed=None: RS(None)),
          [(VariantTest, "test_the_plan_is_seeded_and_spreads_over_the_range")]),
+    "variant gains drawn around 0, not kept within max_db of the set's mean":
+        (lambda: mock.patch.object(assemble, "centre_gains", lambda gains, max_db: gains),
+         [(VariantTest, "test_a_planned_set_passes_r31_as_render_reads_it_over_many_seeds")]),
     "the variant level change not applied":
         (lambda: mock.patch.object(assemble, "variant_plan", _no_gain(assemble.variant_plan)),
          [(VariantTest, "test_variant_files_carry_their_pitch_and_level")]),

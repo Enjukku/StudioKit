@@ -301,5 +301,22 @@ def variant_plan(count: int, seed: int, max_cents: float, max_db: float) -> list
         vals = edges[:-1] + rs.uniform(0, 1, count) * (edges[1:] - edges[:-1])
         return [float(v) for v in vals[rs.permutation(count)]]
 
-    cents, gains = strata(max_cents), strata(max_db)
-    return [{"k": i + 1, "cents": round(c, 1), "gain_db": round(g, 2)} for i, (c, g) in enumerate(zip(cents, gains))]
+    cents, gains = strata(max_cents), centre_gains(strata(max_db), max_db)
+    return [{"k": i + 1, "cents": round(c, 1), "gain_db": g} for i, (c, g) in enumerate(zip(cents, gains))]
+
+
+def centre_gains(gains: list[float], max_db: float) -> list[float]:
+    """The level offsets, rounded to 0.01 dB, with every one within `max_db` of the set's own mean: R-31 reads each
+    variant file against the set's mean (render.variant_rows), not against 0, so stratified draws around 0 could plan a
+    set render fails (seed 19, 4 variants, max_db 1.0: 1.0975 dB; review-rank-layers round 2). The draws are moved to
+    their mean, then scaled down (never up) until the rounded set is inside; their order and shape stay."""
+    mean = sum(gains) / len(gains)
+    g = [v - mean for v in gains]
+    worst = max((abs(v) for v in g), default=0.0)
+    scale = 1.0 if worst <= max_db else max_db / worst
+    while True:
+        out = [round(v * scale, 2) + 0.0 for v in g]
+        m = sum(out) / len(out)
+        if max((abs(v - m) for v in out), default=0.0) <= max_db + 1e-9:
+            return out
+        scale *= 0.995

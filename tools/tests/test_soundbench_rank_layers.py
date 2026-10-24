@@ -406,6 +406,45 @@ class LayerRankTest(unittest.TestCase):
         self.assertEqual((doc["round"], doc["rounds_left"], code, doc["verdict"]["action"]), (1, 0, 1, "owner"))
 
 
+    def test_a_variant_set_render_fails_is_never_use(self):
+        """review-rank-layers R2-1. recipe.json asks 4 variants; the plan here (fixed by the test, the set render is
+        given) spreads the levels 1.5 dB from their mean, over R-31's 1 dB, while every file's own level row passes
+        (tolerance 2). render of recipe.json exits 1 on variants.level_spread, so rank must not say `use`."""
+        plan = [{"k": 1, "cents": 10.0, "gain_db": 1.0}, {"k": 2, "cents": -10.0, "gain_db": -1.0},
+                {"k": 3, "cents": 20.0, "gain_db": -1.0}, {"k": 4, "cents": -20.0, "gain_db": -1.0}]
+        card = card_for("SFX-LR-VAR", form={"variants": 4},
+                        level={"measure": "F-09", "target": -24.0, "tolerance": 2.0, "must": True})
+        cue = cue_folder(self.d, card, variants={"seed": 1, "max_cents": 30, "max_db": 1.0})
+        layer_round(cue, {"sub": [bass()], "air": [whoosh()]})
+        with mock.patch.object(render.assemble, "variant_plan", lambda *a: plan):
+            doc, code = self.rank(cue)
+            out, rcode = render_as_written(cue, doc["mix"]["takes"], doc["mix"]["fix"]["steps"])
+        self.assertEqual((rcode, out["must_failed"]), (1, ["variants.level_spread"]))
+        v = doc["verdict"]
+        self.assertEqual((code, v["action"]), (1, "mix_misses"), v["say"])
+        self.assertEqual(v["mix_must_misses"], ["variants.level_spread"])
+        self.assertIn("variants.level_spread", v["say"])
+
+    def test_a_loop_whose_form_row_fails_at_render_is_never_use(self):
+        """review-rank-layers R2-1. The loop card of the F3 test without its onset target: the mix passes every card
+        row, and render of recipe.json (its loop_bed, 50 ms crossfade) fails a loop row; rank must follow render."""
+        card = card_for("SFX-LR-LOOPROW", kind="loop_bed", category="ambience", form={"loop": True}, targets={})
+        lays = [{"name": "sub", "take": "takes/SFX-LR-LOOPROW.sub.r1.t1.mp3", "design": [], "offset_ms": 60,
+                 "targets": SUB},
+                {"name": "air", "take": "takes/SFX-LR-LOOPROW.air.r1.t1.mp3", "design": [], "offset_ms": 60,
+                 "targets": {"below_120": {"max": 0.2, "must": True}}}]
+        cue = cue_folder(self.d, card, lays, loop={"op": "loop_bed", "crossfade_ms": 50})
+        layer_round(cue, {"sub": [bass()], "air": [whoosh()]})
+        doc, code = self.rank(cue)
+        self.assertEqual(doc["mix"]["must_after"], [])  # every card row passes on the mix
+        out, rcode = render_as_written(cue, doc["mix"]["takes"], doc["mix"]["fix"]["steps"])
+        failed = [t for t in out["must_failed"] if t.startswith("form.loop")]
+        self.assertTrue(failed, out["must_failed"])  # the construction: a 50 ms crossfade of a 60 ms-late bed
+        v = doc["verdict"]
+        self.assertEqual((code, rcode, v["action"]), (1, 1, "mix_misses"), v["say"])
+        self.assertEqual(v["mix_must_misses"], out["must_failed"])
+
+
 # ------------------------------------------------------------------------------------------------- planted faults
 
 def _swap_targets(orig):
@@ -481,6 +520,10 @@ FAULTS = {
     "rejected rounds not counted (the round limit from takes/ only)":
         (lambda: mock.patch.object(rank, "rounds_used", lambda cue_dir, cue, k: k),
          ["test_the_round_limit_counts_rejected_rounds_as_generate_does"]),
+    "form rows exempted (loop and variant rows the proof failed read as passes)":
+        (lambda: mock.patch.object(rank, "proof_must_failed", lambda proof: [
+            t for t in (proof or {}).get("must_failed", []) if not t.split(":")[-1].startswith(("form.", "variants."))]),
+         ["test_a_variant_set_render_fails_is_never_use", "test_a_loop_whose_form_row_fails_at_render_is_never_use"]),
     "a layer that fails is not named (every layer listed)":
         (lambda: mock.patch.object(rank, "prompt_misses", lambda entries: []),
          ["test_a_layer_without_a_passing_take_is_named_with_its_prompt_misses"]),

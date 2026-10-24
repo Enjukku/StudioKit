@@ -69,7 +69,8 @@ that had no passing take). rank judges recipe.json as written: only the layer ta
   4. verdict: `use` (every layer passes and the mix passes every must after its fixable steps: the chosen takes,
      `recipe` = recipe.json with those takes and the mix's edit steps, design, loop and variants as written),
      proven by a real render of that recipe on a temp copy (every layer row compared, and every whole-cue row when
-     there are no variants; a must row of a variant file that render fails turns `use` into `mix_misses`); `mix_misses` (every layer passes alone, the mix misses a must
+     there are no variants); `use` only when that render fails no must row at all (loop and variant rows included,
+     review-rank-layers R2-1), otherwise `mix_misses` naming render's rows; `mix_misses` (every layer passes alone, the mix misses a must
      after its fixable steps: said plainly, exit 1, as render exits on that recipe; runner-up passing takes listed;
      no other combination is tried); `regenerate` or `owner` (round 3): the layers without a passing take, each
      with the misses its prompt must change. Report: one section per layer, then the mix and its proof.
@@ -977,10 +978,12 @@ def _row_text(r: dict) -> str:
     return f"{r['target']} {_fmt(r['value'])} (min {_fmt(r['min'])}, max {_fmt(r['max'])})"
 
 
-def proof_misses(proof: dict | None) -> list[str]:
-    """The must rows the proof render failed that rank does not leave to render's form checks (loop rows, the variant
-    count and spread: `form_note`); with variants, each variant file's rows (`<cue>-v<k>:<target>`)."""
-    return [t for t in (proof or {}).get("must_failed", []) if not t.split(":")[-1].startswith(("form.", "variants."))]
+def proof_must_failed(proof: dict | None) -> list[str]:
+    """Every must row the proof render failed. The layered proof renders recipe.json as written (loop and variants
+    included), so none is exempt: a loop row or a variant spread render fails is a failure of the recipe rank would
+    hand over (review-rank-layers R2-1). Only the one-shot proof, which has no loop or variants step, notes form rows
+    instead (`form_note`)."""
+    return list((proof or {}).get("must_failed", []))
 
 
 def layer_verdict(k: int, names: list[str], entries: dict, mix: dict | None, proof: dict | None) -> tuple[dict, int]:
@@ -1002,20 +1005,20 @@ def layer_verdict(k: int, names: list[str], entries: dict, mix: dict | None, pro
                 "prompt_must_change": {n: prompt_misses(entries[n]) for n in failing}, "passing_layers": keep,
                 "rejected": {n: {e["take"]: e["rejected"] for e in entries[n] if e["rejected"]} for n in names
                              if any(e["rejected"] for e in entries[n])}, "say": say}, 1
-    if mix["passes_after_fix"] and not proof_misses(proof):
+    if mix["passes_after_fix"] and not proof_must_failed(proof):
         return {"action": "use", "takes": mix["takes"], "recipe": proof["recipe"],
                 "recipe_layers": proof["recipe_layers"],
                 "recipe_edit": mix["fix"]["steps"],
                 "say": f"every layer has a passing take ({chosen}) and their mix passes every must-target after its "
                        f"fixable steps: put these takes in recipe.json's layers (everything else as written; a layer "
                        f"has no edit pass of its own) and its edit pass {json.dumps(mix['fix']['steps'])} "
-                       "(`recipe` is the proven recipe.json)"
-                       + form_note(proof)}, 0
+                       "(`recipe` is the proven recipe.json; its render fails no must row)"}, 0
     missed = [r for r in mix["after"] if r["must"] and r["result"] != "pass"]
-    texts = [_row_text(r) for r in missed] if missed else [f"{t} (in its render)" for t in proof_misses(proof)]
+    texts = [_row_text(r) for r in missed] if missed else [f"{t} (in the render of recipe.json)"
+                                                           for t in proof_must_failed(proof)]
     runners = {n: [e["take"] for e in entries[n][1:] if e["passes_after_fix"]] for n in names}
     return {"action": "mix_misses", "takes": mix["takes"],
-            "mix_must_misses": [r["target"] for r in missed] if missed else proof_misses(proof),
+            "mix_must_misses": [r["target"] for r in missed] if missed else proof_must_failed(proof),
             "runner_up_passing_takes": runners,
             "say": f"do not use: the layers pass alone ({chosen}); the mix misses {', '.join(texts)} "
                    "after its fixable steps. Change the layers' placement or gains in recipe.json (or add a design "
