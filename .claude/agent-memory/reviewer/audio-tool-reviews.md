@@ -47,3 +47,10 @@ Step 6 round 2: a repair that adds an automatic `dc` (whole-take mean subtractio
 layer's edges inside the mix (a take ending at ~0 now ends at -mean): 0 -> 2 clicks on a real swish at exit 0. When a
 fix is "remove X so the reading is stable", check it changes only the reading, never the placed audio: diff the click
 count and edge steps against a mocked no-fix baseline.
+Step 7 `generate` (paid API client, 2026-10-24): (1) urllib raises http.client.IncompleteRead (HTTPException, not
+OSError) when a 200 body is cut: a "catch network errors as possibly spent" handler misses it; patch urlopen to prove.
+(2) Run logs written only on the happy path lose every attempt on any late exception: ask for a finally. (3) Existence
+checks at plan time + mode 'x' at write time = a concurrent run loses a PAID take (FileExistsError after the charge).
+(4) Count 5xx-without-cost-header like a timeout. (5) Preflight every local dependency (ffmpeg) before the first paid
+call. (6) A cap keyed on a name the input file chooses (layer names) is bypassed by renaming. (7) Default urllib opener
+forwards custom auth headers on cross-host redirects: prove with two loopback servers.
