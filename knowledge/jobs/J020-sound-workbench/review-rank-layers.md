@@ -68,3 +68,46 @@ could_not_check:
 verdict: fix-first
 </spec>
 ```
+
+## Round 2 (6922e83)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-24
+
+Frozen revision 6922e83, found with `git log -1 --grep "^J020 soundbench layered rank repair round 1"`. The working tree under `tools/audio` matches it. Scope: F1-F3, the variants path the builder named as untested, the round count's effect on one-shots, and new ways around each fix. The layered tests pass (15, including the planted-fault test). Runs: copies of the real takes in the session scratchpad (`scripts/`: e1_design, e1b, e2_loop, e2_variants, e3_d7 re-run; r2_variants, r2_loop, r2_rounds, e5_identity new).
+
+```text
+<spec>
+artifact: tools/audio/soundbench/rank.py@6922e83
+reviewer: reviewer
+looked_at_first: [git show 6922e83 (rank.py), then the coordinator's summary of the builder's report]
+earlier_findings:
+  - {id: F1, status: fixed, retrace: "e1_design: rank's verdict now equals render's exit on recipe.json in 6 of 6 (5 mix_misses on level with render exit 1; hit-strength-4 + mix transient: use, render 0). e1b: rank's mix level -20.071 = render's -20.071 (was -18.643). The proof renders recipe.json with only the layer takes and edit replaced (proof_recipe)"}
+  - {id: F2, status: fixed, retrace: "e3_d7: rank round 2, rounds_left 0, exit 1 owner, 'round 3 of 3'; generate refuses round 4: they agree. The round ranked is unchanged (rounds_used only sets last, rounds_left and the text)"}
+  - {id: F3, status: fixed for what it claims, retrace: "e2_loop: the mix plan has no trim (edit [loudness, peak]); rank mix_misses on onset_ms; render of recipe.json exits 1 on onset_ms and form.loop_crossfade_level. No exit 0 that render refuses with exit 2. But see R2-1: the loop's own form rows are still exempted"}
+findings:
+  - {id: R2-1, class: blocking, where: "tools/audio/soundbench/rank.py:980-983 (proof_misses drops every must row starting form. or variants.) used by layer_verdict :1005",
+     expected: "F1's own rule: `use` means recipe.json as written, with rank's takes and edit, renders with exit 0. The form.*/variants.* exemption (review-step6 R2) existed because the old proof recipe had no loop or variants step; the proof recipe is now recipe.json itself, so a failing form or variants row is a failure of the recipe rank tells the driver to use",
+     observed: "(a) Variants, the builder's named untested path: a layered hit, card form.variants 4, level F-09 -24 +-1, recipe variants {seed 19, max_cents 50, max_db 1.0}. rank exits 0 `use`, proof.must_failed ['variants.level_spread'], with the note 'form rows (loop, variants) are judged at render'. Render of recipe.json exits 1: variants.level_spread 1.098 > 1.0 (levels -24.0, -24.44, -24.98, -23.01; every per-file level row passes, so nothing else catches it). Same on hit-strength-4 (seed 19) and hit-speed-2 with 5 variants (seed 238: spread 1.062). (b) Loop: the e2_loop card without its onset target: rank exits 0 `use` with proof.must_failed ['form.loop_crossfade_level']; render of recipe.json exits 1 on that row (hit-speed-2 and hit-strength-4)",
+     evidence: "High (exit 0 `use` while the proof render of the exact recipe exits 1, on 5 of 5 cases built; rank already holds the failing row). Runs: scratchpad scripts/r2_variants.py (level -24), scripts/r2_loop.py. Label: not verified in Studio (a tool run, reproducible)",
+     smallest_fix: "In the layered path, `use` only when the proof's must_failed is empty (drop the form./variants. filter there; keep form_note for the one-shot path, whose proof recipe still has no loop or variants step)",
+     protect: "per-variant rows (`<cue>-v<k>:level`) already turning use into mix_misses; e2_variants (use, render 0); the one-shot form_note",
+     retest: "r2_variants.py and r2_loop.py: rank gives mix_misses (exit 1) naming variants.level_spread / form.loop_crossfade_level; add a layered variants test whose spread fails at render, and a planted fault 'form rows exempted'"}
+broke_check:
+  - "one-shot output: e5_identity on 4 real rounds (3 use, 1 regenerate): .json and .md identical to 2859a06~1 apart from the folder path"
+  - "one-shot rounds (r2_rounds, swish-3 at rounds 1, 2, 3, old vs new): the round ranked and the default-round texts are identical ('round 2 of 3', 'round 3 of 3', owner after round 3). Only `--round 1` on an older round changed: rounds_left and the text now count the rounds used (left 0, owner after round 3), which matches generate; before it said 'regenerate (round 2 of 3)', which generate would refuse"
+  - "the mix's design pass runs with context(card, []); the only op reading the context's fade_out_ms is cut (ops.py:640), an edit step, so the design pass is the same as render's"
+  - "recipe.json's own `edit` is not read (warned); rank's `recipe` carries its own edit: consistent with the use text"
+keep:
+  - "proof_recipe: recipe.json as written with only takes and edit replaced; the `use` carries it"
+  - "the mix built in render's order (layer design, mix design, loop) before judge"
+  - "rounds_used from generate.cue_rounds, the ranked round unchanged"
+  - "LOOP_REFUSES in plan_for, with its own reason in _why_kept"
+pre_existing_follow_up:
+  - "render/assemble (step 6, not this change): variant_plan draws gains in +-max_db around 0, but R-31's row measures each file against the set's mean, so a legal recipe (max_db 1.0, the allowed maximum) can plan a set that render's own must row fails (seed 19, 4 variants: 1.0975 dB by the plan alone). Render catches it (exit 1), so no wrong file ships; the planner should keep the drawn set within +-max_db of its own mean. Owner: render's builder"
+weakest_part: "The variants case needed a level target with headroom (-24): at -18 the peak cap compressed the spread to 0.26-0.46 dB, so how often real cards hit R2-1 through variants depends on the card"
+could_not_check:
+  - {step: "LAYER_FRAME_PASSES refusal path (from round 1)", missing_input: "a round whose tops oscillate", closes_it: "a synthetic 2-cycle test", who: "feature-builder"}
+  - {step: "a real layered loop cue", missing_input: "real takes of 2 s or more", closes_it: "the first long layered cue ranked and rendered", who: "feature-builder"}
+verdict: fix-first
+</spec>
+```

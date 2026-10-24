@@ -59,3 +59,6 @@ proves a stripped copy (design: [], no loop), "every use proven by a real render
 ordinary design step (highpass 60) to recipe.json, then render recipe.json with the judge's choice: 5 of 6 real cases
 flipped use -> exit 1. Also cross-check every round count against generate.cue_rounds (counts takes/rejected/ too).
 Hand-check level verdicts with crest = F-09 - TP vs target - (ceiling - margin): gain-only reachability in one line.
+Layered rank round 2 (2026-10-24): when a fix makes the proof recipe the real recipe, every old exemption that existed
+because the proof was partial (form./variants. rows filtered from must_failed) becomes a false `use`: grep the filters.
+Variant spread failures need a level target with headroom (-24): at -18 the peak cap hides the spread.
