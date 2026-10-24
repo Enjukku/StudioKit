@@ -43,3 +43,7 @@ to the card's aim 50: exit 0 on a 0.1 x peak drift click). (2) Loop seam reading
 build a circular (FFT-filtered) bed so the base loop is exact, then plant jumps re the LOCAL step RMS. (3) Alignment by
 a threshold crossing (main transient -10 dB) moves with DC removal context on slow-rising takes: compare the align
 reading with the as-placed reading on real swishes.
+Step 6 round 2: a repair that adds an automatic `dc` (whole-take mean subtraction) to a layer leaves a step at the
+layer's edges inside the mix (a take ending at ~0 now ends at -mean): 0 -> 2 clicks on a real swish at exit 0. When a
+fix is "remove X so the reading is stable", check it changes only the reading, never the placed audio: diff the click
+count and edge steps against a mocked no-fix baseline.

@@ -76,3 +76,35 @@ verdict: fix-first (F1)
 2. *`form_checks` vs `targets`.* Every must row in `form_checks` goes into `must_failed` and the exit code, and the family check reads files, not rows. The one bypass is F1, where an aim target sets a must row's limit. Rank's one-shot view (R2) only gives wrong guidance; it never delivers a file, so it is not blocking.
 3. *Refactors.* No behaviour change: I compared the old and new code line by line, and the render and rank test modules pass on 1cdae69.
 4. *Loop calibration.* Both directions are guarded where it matters: the crossfade level ±2 dB, plus a gap and a click/HF reading. The readings hold from 0.5 to 30 s on steady beds. They are relative to the whole loop, not to the seam's own neighbourhood (R1), and the calibration beds are all steady.
+
+## Round 2: repair 2b69063 (narrow re-review)
+
+> Author: reviewer · claude-opus-5-5 · medium · 2026-10-23
+
+The revision is frozen at 2b69063 (HEAD; no changes under `tools/audio` in the working tree). I read the diff before the builder's message. I re-ran the round-1 scripts (fa_render.py, p2.py, p4.py, p6.py, e1_render.py) and two new ones in the same scratchpad: r2_f1.py (bypass probes) and r2_dc.py (with and without the automatic `dc`; the baseline uses a mock of `with_auto_dc` inside the scratch script, so no tree was edited).
+
+```text
+<spec>
+artifact: tools/audio/soundbench@2b69063 (render.py f08_limit, with_auto_dc, mix_layers correction, placed_index; card.py check_targets why; rank.py form_note; measures.py loop_wrap docstring)
+reviewer: reviewer
+looked_at_first: [git show 2b69063 (render.py, assemble.py, card.py, rank.py, measures.py), ops.py op_dc]
+earlier_findings:
+  - {id: F1, status: fixed. fa_render.py: aim max 3 and aim max 50 now exit 1 (form.loop_f08 3.236 against 2.0, limit_from 'R-26 (the card's looser limit needs must: true and a why)'). p2.py: the aim-50 column now fails exactly where the default does on every bed and length. Bypass probes (r2_f1.py): why '' / '   ' / '\t\n' / 0 are refused by card.check_targets; why on an aim target gives 2.0; must with no why and max 2.0001 gives 2.0; a stricter aim of 1.0 is used as 1.0 (it tightens); min only gives 2.0; why on any other target is refused. The only way to loosen the limit is must: true plus a non-empty why. That is the stated rule, and it has no upper bound: max 1e9 with why 'x' is accepted and logged in limit_from}
+  - {id: R1, status: named limit (lead decision). measures.loop_wrap false readings plus test_known_miss_a_seam_in_the_quiet_part_of_a_bed_with_a_loud_section. e1_render.py reads the same as round 1 (+0 dB jump: exit 0; +2 dB: exit 1 on clicks)}
+  - {id: R2, status: fixed. p6.py: 'use ... ; form rows (loop, variants) are judged at render: form.variants'; the verdict and exit code are unchanged}
+  - {id: R3, status: fixed for the log, but the fix adds F2 below. p4.py: 27 of 27 layers within 0.13 samples of their marker (was 2 of 27 off by 100 and 553 samples). F-01 layers: auto_dc False and their offsets unchanged}
+findings:
+  - {id: F2, class: blocking, where: "tools/audio/soundbench/render.py with_auto_dc (plan_form puts `dc` first in the layer's design pass); ops.py:247-249 op_dc subtracts the whole-take mean from every sample",
+     expected: "R3 asked that the log and the placement read the same way. DC does not move what is heard (round 1), so the fix must not change the layer's sound. G-4/G-5: an automatic step must not add a fault the recipe did not ask for",
+     observed: "op_dc shifts the whole layer by its mean. A take that decays to about 0 now ends at -mean, so where the layer starts and ends inside the mix there is a step from or to silence. Real take, set 35 of p4 (gainfly-swish-2.t1 aligned on main_transient, DC removed [-0.022046, -0.026457]): without the auto dc (mock) the delivered mix has 0 clicks; with it, 2 clicks at 337.12 ms and 817.12 ms. These are exactly the layer's first and last sample (offset 337.12 ms, length 480 ms), with steps of 3.05 % and 2.48 % of the mix peak (they were 0.66 % and 0.02 %). Set 42 (gainfly-swish-4.t3): clicks 1 -> 2, end edge 0.06 % -> 0.91 %. Both renders exit 0: clicks are not a must row for a one-shot, so the new clicks reach delivery. Other effects are small: shares move by at most 0.003, and the F-01 onset readings of main_transient layers change in the log only. Layers aligned on F-01 or placed by offset_ms get no dc and are unchanged",
+     evidence: "Medium-High (a repair adds an audible edit fault to real takes at exit 0). Runs: r2_dc.py over 9 three-take real sets plus the location probe (the clicks fall on the layer's edge samples). Label: not verified by listening",
+     smallest_fix: "Remove DC only for the reading: transient_index and placed_index read a mean-removed copy, and the placed audio stays untouched. (Alternatively keep dc but fade the layer's edges; the read-only change is smaller and keeps the sound identical)",
+     protect: "the 27/27 alignment within 1 sample (p4.py); unchanged audio for layers that are not aligned on main_transient; a recipe's own `dc` step still runs as written",
+     retest: "r2_dc.py: with and without the fix, the delivered mix has the same click count and edge steps as the no-dc baseline on all 9 sets, and p4.py stays 27/27 within 1 sample. Also add a planted-fault test: a DC-carrying layer that ends at 0 must not gain an edge click"}
+keep: ["f08_limit: tighten-only unless must + a non-empty why; limit_from logged", "the why check in card.check_targets (empty, whitespace, non-string refused; why allowed on loop_seam only)", "the one correction after placing, plus align_unstable", "rank form_note (text only)"]
+weakest_part: "F2's audibility: a 2.5-3 % step at a swish layer's edges inside a hit is my estimate from the click detector and the step size, not a listen"
+could_not_check: [{step: "the full gate on 2b69063 (1098 tests)", missing_input: "I ran the scripts above, not tools/verify.py", closes_it: "the builder's gate log", who: "feature-builder"}]
+remaining_stated_limits: ["R1: a seam jump under 1 % of peak in the quiet part of a bed with a loud section", "a 0.25 x peak spike in low-passed noise", "a gap in beds that already hold near-silent lulls", "slope breaks are not read", "Roblox's transcode at the loop point is not measured", "no real take of 2 s or more", "R-26 itself: a 5 % drift step in a tonal pad passes (F-08 1.1-1.7); needs a listen", "a must loop_seam target with any why can lift F-08 without bound (the stated rule; limit_from shows it)"]
+verdict: fix-first (F2)
+</spec>
+```
