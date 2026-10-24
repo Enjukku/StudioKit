@@ -1,0 +1,6 @@
+{
+  "name": "studio",
+  "version": "0.1.0",
+  "description": "Studio Kit live view: the studio floor (who runs, what waits on the owner) and the flow map of one job, in a pane beside the lead chat.",
+  "types": "./types/index.d.ts"
+}

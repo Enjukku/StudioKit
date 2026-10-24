@@ -71,6 +71,17 @@ Owner, in chat: "I think it would be cool if the orchestrator loaded up a live l
 - Start: the `orchestration` skill gets one line, "open the Studio pane" (slash command from the mod), at the start of every owner request.
 - Limit (inference): a mod sees the agents of its own session live; production chats appear through their transcripts with up to a timer's delay.
 
+### Built (J028, 2026-10-24)
+Job: [[jobs/J028-studio-pane/job-card]]. Source: `tools/mods/studio/` (marketplace `tools/mods/.claude-plugin/marketplace.json`).
+| Part | What was built | Checked |
+| --- | --- | --- |
+| Pane | "Studio", tabs Floor and Flow; `/studio [floor\|flow] [job]` and the tool `mcp__studio__open_pane` (the lead cannot type a slash command, so it calls the tool) | `claude plugin validate` pass; `tsc -p` pass; `claude plugin test` 7/7; loaded in the J028 session, the tool opened the pane; the drawn pane not yet seen (owner G3) |
+| Floor | One SVG figure per pending, running or waiting agent, in 8 craft rooms; role name, role-colour body, hat per role (feasibility table), model badge from the run or from the role's `tier:` through `kit.json`, effort pips; waiting = dimmed "zz"; a button per agent opens its transcript. Owner's desk: per active job, its Status row, gates with no date, every needs-decision line, an Open button per file | tests (desktop and terminal); real roles rendered |
+| Flow | One job: lead sessions + a lane per role, a bar per run (width = wall time, shade = tokens read, red edge past 500k, dashed = running now), gates dashed, gaps over 90 min drawn as breaks; flags: one role 3+ runs in a stage, 3+ reviewer runs within 30 min, idle gaps over 30 min (with a gate in it = wait on the owner), runs past 500k | tests; real J025 data rendered (42 runs, 7 flags) |
+| Kit side | `usage_report.py --json` adds per run `id`, `description`, `effort` (from the subagent meta file), `last`, and `job` (the brief's `--job` first, else the first job id; sessions: title first) | `test_usage_report.py` 7/7; gate PASS |
+
+Left (not built): figure art (mascot, a reference-images job); hand-off arrows (job `ledger.md`, exchange notes); bar detail panel (brief, STATUS, `docs_read`); account meters; agents of other sessions show only through the 60 s usage report, not live. Inference: gates are placed in the longest idle gap on their date, because the cards record a date and no time; 66 of 641 runs in the last 7 days name no job id in their brief, so those runs are on no flow map.
+
 ## Part 1: verdict per item
 
 | # | Item | Verdict | One line |

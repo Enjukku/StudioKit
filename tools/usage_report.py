@@ -30,6 +30,7 @@ import argparse
 import collections
 import datetime as dt
 import json
+import re
 import statistics
 import sys
 from pathlib import Path
@@ -38,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from improve_scan import REPO, parse_since, parse_ts, project_dir, read_meta, records  # noqa: E402
 
 HELPERS = {"general-purpose", "Explore", "Plan"}
+JOB_FLAG, JOB_ID = re.compile(r"--job\s+(J\d{3})"), re.compile(r"\b(J\d{3})\b")  # J028 flow map
 
 
 def project_dirs(repo: Path, projects_root: Path | None = None) -> list[Path]:
@@ -63,14 +65,14 @@ def stats(path: Path, since: dt.datetime) -> dict | None:
     """One transcript: calls, context per call, output, images, compactions. None when idle in the window."""
     seen, ctx, models = set(), [], collections.Counter()
     out = images = auto = manual = 0
-    title, first = path.stem[:8], None
+    title, first, last, prompt = path.stem[:8], None, None, ""
     for o in records(path):
         if o.get("type") == "custom-title":
             title = o.get("customTitle") or o.get("title") or title
         ts = parse_ts(o.get("timestamp"))
         if not ts or ts < since:
             continue
-        first = first or ts
+        first, last = first or ts, ts
         msg = o.get("message") or {}
         if o.get("type") == "system" and o.get("subtype") == "compact_boundary":
             if (o.get("compactMetadata") or {}).get("trigger") == "manual":
@@ -87,11 +89,26 @@ def stats(path: Path, since: dt.datetime) -> dict | None:
                 models[msg.get("model", "?")] += 1
         elif o.get("type") == "user" and not o.get("isCompactSummary"):
             images += images_in(msg.get("content"))
+            prompt = prompt or text_of(msg.get("content"))
     if first is None or not ctx:
         return None
     return {"title": title, "calls": len(ctx), "start": ctx[0], "median": int(statistics.median(ctx)),
             "peak": max(ctx), "read": sum(ctx), "out": out, "images": images, "auto_compact": auto,
-            "manual_compact": manual, "model": models.most_common(1)[0][0], "first": first.isoformat()}
+            "manual_compact": manual, "model": models.most_common(1)[0][0], "first": first.isoformat(),
+            "last": last.isoformat(), "job": job_of(title) or job_of(prompt)}
+
+
+def text_of(content) -> str:
+    """The text of a user message (a string, or its text blocks); tool results are not prompts."""
+    if isinstance(content, str):
+        return content
+    return " ".join(b.get("text", "") for b in content or [] if isinstance(b, dict) and b.get("type") == "text")
+
+
+def job_of(text: str) -> str:
+    """The job id a title or first prompt names (`--job J0xx` first), or ""."""
+    m = JOB_FLAG.search(text or "") or JOB_ID.search(text or "")
+    return m.group(1) if m else ""
 
 
 def flags(row: dict, limits: dict, main: bool, agent_type: str = "") -> list[str]:
@@ -120,8 +137,11 @@ def scan(dirs: list[Path], since: dt.datetime, limits: dict) -> dict:
                 s = stats(sub, since)
                 if not s:
                     continue
-                kind = read_meta(sub).get("agentType", "?")
+                meta = read_meta(sub)
+                kind = meta.get("agentType", "?")
                 s.update(type=kind, workflow="workflows" in sub.parts, session=path.stem[:8], place=place,
+                         id=sub.stem.removeprefix("agent-"), description=meta.get("description", ""),
+                         effort=meta.get("effort", ""),
                          flags=flags(s, limits, main=False, agent_type=kind))
                 subs.append(s)
             if row:

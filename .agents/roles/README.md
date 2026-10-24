@@ -33,7 +33,7 @@ Canonical format: see tools/sync_harness.py header. Models per tier come from `k
 | doc-keeper | mechanical → Haiku | medium | in kit |
 | explore | mechanical → Haiku | medium (owner 2026-10-23, was low) | in kit |
 
-**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). A role's `tools:` line is its permission list and the owner's decision: a role whose list has no SendMessage does its sideways work through exchange notes, and a role without the built-in browser writes image prompts and returns `images: pending`.
+**Place in the job flow** (J016, owner approval J016-D4): each role file's "Your place in the job flow" section says where the role is job lead, direction lead, contract owner, integrator or reviewer; the seven recipes are in the `orchestration` skill (`references/job-types.md`) and run as saved workflows (`.agents/workflows/jobs/`). A role's `tools:` line is its permission list and the owner's decision: a role whose list has no SendMessage does its sideways work through exchange notes, and a role without Claude in Chrome writes image prompts and returns `images: pending`.
 
 xhigh and max: nobody by default; only after a measured gain. Owner decisions 2026-10-20 ("Opus for animating ... on high. For UI ... Opus on medium. For sound, Opus on medium"; modeler "for simple things, medium is fine ... models that we want to look really good ... high").
 

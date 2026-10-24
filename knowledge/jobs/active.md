@@ -19,3 +19,4 @@ The lead keeps this list current: one line per open M or L job, `- <job-id> · <
 - J024-flow-cuts-r2 · second cut of the job flow: no roughs, direction and needs in one step, fewer reviewers · linked: J023-flow-speed
 - J026-context-structure · context structure and Roblox docs use against Anthropic's advice; Obsidian question (proposal; owner picks before any edit)
 - J027-agent-routing · the lead routes each task to its specialist: craft owners at every size, build board, role sessions, Figma tool-id map
+- J028-studio-pane · the Studio pane mod: live studio floor and flow map beside the lead chat

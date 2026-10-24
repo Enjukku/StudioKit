@@ -66,8 +66,11 @@ class UsageReportTests(unittest.TestCase):
         ])
         # A subagent inside a workflow folder: a built-in helper on Opus.
         sub = base / "s1" / "subagents" / "workflows" / "wf_1" / "agent-a1.jsonl"
-        write(sub, [call(5, "a1", 80_000), call(6, "a2", 120_000)])
-        sub.with_suffix(".meta.json").write_text(json.dumps({"agentType": "general-purpose"}), encoding="utf-8")
+        brief = {"type": "user", "timestamp": ts(5), "message": {"role": "user", "content": [
+            {"type": "text", "text": "Fix J019 notes. Packet: context_packet.py packet x --role reviewer --job J027-agent-routing"}]}}
+        write(sub, [brief, call(5, "a1", 80_000), call(9, "a2", 120_000)])
+        sub.with_suffix(".meta.json").write_text(json.dumps(
+            {"agentType": "general-purpose", "description": "Review routing", "effort": "high"}), encoding="utf-8")
         # A worktree folder of the same repository, with an automatic compaction.
         wt = base.parent / (base.name + "--claude-worktrees-j1-ui-abc123")
         write(wt / "s2.jsonl", [call(0, "w1", 450_000), compact(1, "auto"), call(2, "w2", 460_000)])
@@ -108,6 +111,15 @@ class UsageReportTests(unittest.TestCase):
         self.assertEqual(agent["flags"], ["helper on Opus"])
         s1 = next(r for r in out["sessions"] if r["session"] == "s1")
         self.assertEqual((s1["subagents"], s1["sub_read"]), (1, 200_000))
+
+    def test_run_span_job_and_meta_for_the_flow_map(self) -> None:
+        out = self.report()
+        (agent,) = out["agents"]
+        self.assertEqual((agent["first"], agent["last"]), (ts(5).replace("Z", "+00:00"), ts(9).replace("Z", "+00:00")))
+        self.assertEqual(agent["job"], "J027", "the packet line's --job wins over an earlier job id")
+        self.assertEqual((agent["id"], agent["description"], agent["effort"]), ("a1", "Review routing", "high"))
+        s1 = next(r for r in out["sessions"] if r["session"] == "s1")
+        self.assertEqual(s1["job"], "", "no job id in the title or first prompt")
 
     def test_old_activity_is_outside_the_window(self) -> None:
         self.assertNotIn("old", {r["session"] for r in self.report()["sessions"]})
