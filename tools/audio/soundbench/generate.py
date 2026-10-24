@@ -15,13 +15,14 @@ designer for this round):
    "note": "what changed this round"}    optional, copied into every sidecar
   An important cue's layers are generated separately, one prompt set each (J020-D9): "layers" replaces "prompts":
    "layers": [{"name": "body", "prompts": ["..."], <any optional field above>}, ...]
-  and each layer's takes are named `<cue>.<layer>.r<k>.t<n>`, with its own rounds.
+  and each layer's takes are named `<cue>.<layer>.r<k>.t<n>`; rounds are counted per cue, never per layer.
 
 What it does, refusing before any call when something is wrong:
   1. reads the card and prompts.json (every field checked; an unknown field is an error) and the key from the
      environment variable ELEVENLABS_API_KEY only (run through `python tools/keys.py run --only ELEVENLABS_API_KEY
      -- ...`); it never reads a key file;
-  2. finds each sound's next round from the takes present (rejected ones count); round 4 is refused (J020-D7);
+  2. finds the cue round: the highest round of any file of the cue or its layers, under any name, kept or
+     rejected (lead decision on J020-D7, review F5); every sound of the run gets that + 1; round 4 is refused;
   3. plans the round (takes per tier: minor 3, frequent 4, important 6, J020-D9) and predicts each call's cost:
      ceil(11 x duration_s) credits with a duration, 55 without (measured 2026-10-24); a round predicted over the
      budget is refused; before every call (and every retry) it stops when spent + possibly spent + the call's
@@ -31,12 +32,15 @@ What it does, refusing before any call when something is wrong:
      rest of the run. The received bytes decide the file type (RIFF WAV or MP3); a mismatch is a warning;
   5. retries 429, 5xx and network failures at most MAX_ATTEMPTS times per take and format, waiting Retry-After
      (at most 30 s) or 2 s, 4 s. Every attempt is logged with its status and charge: the `character-cost` header
-     when present (an error that carries one is counted as spent), "unknown" for a network failure (counted at the
-     prediction as possibly spent), so a retry never spends twice without a record;
+     when present (an error that carries one is counted as spent), "unknown" for a network failure, a body cut short
+     or a 5xx without the header (counted at the header cost, else the prediction, as possibly spent), so a retry
+     never spends twice without a record. Redirects are never followed (a 3xx stops the run);
   6. writes the take `takes/<sound>.r<k>.t<n>.wav|mp3` and its sidecar `.json` (never over an existing file), then
      decodes it once with `intake.decode_take(take, requested_ms=)`; bytes that are not audio, or a take intake
      refuses, move to `takes/rejected/` with their sidecar (the credits stay counted);
-  7. writes the run log `report/<cue>.generate.<UTC time>.json`: the plan, every attempt, the credits predicted,
+  Before the first call it finds ffmpeg and ffprobe and takes the per-cue lock `<cue-folder>/.generate.lock`
+  (held: refused); a take path taken during a call keeps the paid bytes in `takes/rejected/` under a fresh name;
+  7. on every exit path after the lock, writes the run log `report/<cue>.generate.<UTC time>.json`: the plan, every attempt, the credits predicted,
      spent and possibly spent, the formats refused, warnings, and why it stopped.
 The key appears only in the request header: every text written or printed is passed through `redact` (the key and
 anything shaped like an ElevenLabs key become `<redacted>`), and the sidecar keeps only named response headers.
@@ -52,6 +56,7 @@ Usage:
 from __future__ import annotations
 
 import datetime as dt
+import http.client
 import json
 import math
 import os
@@ -65,7 +70,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import card as cardmod
-from . import intake
+from . import ffmpeg, intake
 from .core import SoundbenchError, file_sha256
 from .rank import MAX_ROUNDS, TAKES_PER_ROUND  # J020-D7, J020-D9: one source with rank
 
@@ -99,7 +104,12 @@ class Response:
 
 
 class NetworkError(Exception):
-    """No HTTP answer (connection reset, timeout): the service may or may not have charged the call."""
+    """No whole HTTP answer (connection reset, timeout, a body cut short): the service may or may not have charged
+    the call. `headers` holds the response headers when they arrived before the failure (their cost is counted)."""
+
+    def __init__(self, message: str = "", headers: dict | None = None):
+        super().__init__(message)
+        self.headers = dict(headers or {})
 
 
 class _Stop(Exception):
@@ -124,6 +134,12 @@ def redact(text: str, key: str) -> str:
     return KEY_LIKE_RE.sub("<redacted>", text)
 
 
+def error_text(body: bytes, key: str, limit: int = 600) -> str:
+    """An error body for the log: the whole body redacted first, then cut (review F7: a cut first can leave a key's
+    prefix too short for the key-shape pattern)."""
+    return redact(body.decode("utf-8", "replace"), key)[:limit]
+
+
 def trace_headers(headers: dict) -> dict:
     """The response headers a take keeps for tracing and billing; never the rest."""
     low = {str(k).lower(): str(v) for k, v in headers.items()}
@@ -137,18 +153,41 @@ def _dump(path: Path, doc: dict, key: str, mode: str = "x") -> None:
 
 
 # ------------------------------------------------------------------------------------------------ HTTP
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Review F6: a redirect would re-send the xi-api-key header to wherever Location points. Never follow one: the
+    3xx comes back as a Response and stops the run."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def _opener() -> urllib.request.OpenerDirector:
+    return urllib.request.build_opener(_NoRedirect)
+
+
+# Review F1: http.client.HTTPException (IncompleteRead, RemoteDisconnected, ...) is not an OSError; it is a network
+# failure too (the answer did not arrive whole), so it is counted as possibly spent.
+NETWORK_ERRORS = (urllib.error.URLError, TimeoutError, ConnectionError, OSError, http.client.HTTPException)
+
+
 def urllib_send(url: str, data: bytes, headers: dict, timeout: float) -> Response:
     req = urllib.request.Request(url, data=data, method="POST")
     for k, v in headers.items():
         req.add_header(k, v)
+    got_headers: dict = {}
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return Response(resp.status, dict(resp.headers), resp.read())
+        with _opener().open(req, timeout=timeout) as resp:
+            got_headers = dict(resp.headers)
+            return Response(resp.status, got_headers, resp.read())
     except urllib.error.HTTPError as err:
-        return Response(err.code, dict(err.headers or {}), err.read() or b"")
-    except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as err:
-        reason = getattr(err, "reason", err)
-        raise NetworkError(f"{type(err).__name__}: {reason}") from None
+        try:
+            body = err.read() or b""
+        except NETWORK_ERRORS:
+            body = b""
+        return Response(err.code, dict(err.headers or {}), body)
+    except NETWORK_ERRORS as err:
+        reason = getattr(err, "reason", None) or type(err).__name__
+        raise NetworkError(f"{type(err).__name__}: {reason}", got_headers) from None
 
 
 # ------------------------------------------------------------------------------------------------ rules
@@ -173,13 +212,16 @@ def format_refused(resp: Response, fmt: str) -> bool:
 def attempt_record(status: int | None, headers: dict, predicted: int, error: str | None = None) -> dict:
     """One call's record. charged: yes (character-cost > 0), no (none or 0), unknown (no answer: counted at the
     prediction as possibly spent)."""
-    if status is None:
-        return {"status": None, "error": error, "charged": "unknown", "credits": None, "counted_credits": predicted}
     raw = {str(k).lower(): v for k, v in headers.items()}.get("character-cost")
     credits = int(raw) if raw is not None and str(raw).strip().isdigit() else None
+    if status is None:  # no whole answer: the header's cost when the headers came, else the prediction
+        return {"status": None, "error": error, "charged": "unknown", "credits": credits,
+                "counted_credits": predicted if credits is None else credits}
     rec = {"status": status, "charged": "yes" if credits else "no", "credits": credits,
            "counted_credits": credits or 0}
-    if status == 200 and credits is None:  # a success with no cost header: count the prediction, say so
+    if credits is None and (status == 200 or 500 <= status <= 599):
+        # a success, or a server or gateway error (review F3: a 504 may have been billed upstream), with no cost
+        # header: possibly spent, counted at the prediction. A 429 stays uncharged (refused before any work).
         rec.update(charged="unknown", counted_credits=predicted, note="no character-cost header: prediction counted")
     if error:
         rec["error"] = error
@@ -287,9 +329,11 @@ def load_prompts(path: Path, cue: str, tier: str) -> list[dict]:
     return out
 
 
-def rounds_present(takes_dir: Path, name: str) -> set[int]:
-    """Rounds that have a take of this sound, kept or rejected (a rejected take used its round)."""
-    pat = re.compile(r"^" + re.escape(name) + r"\.r(\d+)\.t\d+\.(?:mp3|wav|bin)$", re.IGNORECASE)
+def cue_rounds(takes_dir: Path, cue: str) -> set[int]:
+    """Rounds used by the cue: any file of the cue itself or of any of its layers, under any name, kept or rejected
+    (a rejected or kept-aside take used its round). Lead decision on J020-D7 (review F5): the 3-round limit is per
+    cue, so switching to layers or renaming a layer never starts a new count."""
+    pat = re.compile(r"^" + re.escape(cue) + r"(?:\.[^.]+)?\.r(\d+)\.t\d+\.", re.IGNORECASE)
     found = set()
     for folder in (takes_dir, takes_dir / "rejected"):
         if folder.is_dir():
@@ -317,12 +361,14 @@ def plan(cue_dir: Path) -> tuple[dict, list[dict], list[dict], list[str]]:
     want = TAKES_PER_ROUND[card["tier"]]
     takes_dir = cue_dir / "takes"
     calls, warnings = [], []
+    present = cue_rounds(takes_dir, card["cue"])
+    cue_round = max(present, default=0) + 1
+    if cue_round > MAX_ROUNDS:
+        raise SoundbenchError(f"{card['cue']}: rounds {sorted(present)} are done (counted over the cue and all its "
+                              f"layers); a cue has at most {MAX_ROUNDS} rounds (J020-D7): it goes to the owner with "
+                              f"its numbers, round {cue_round} refused")
     for s in sounds:
-        present = rounds_present(takes_dir, s["name"])
-        s["round"] = max(present, default=0) + 1
-        if s["round"] > MAX_ROUNDS:
-            raise SoundbenchError(f"{s['name']}: rounds {sorted(present)} are done; a cue has at most {MAX_ROUNDS} "
-                                  f"rounds (J020-D7): it goes to the owner with its numbers, round {s['round']} refused")
+        s["round"] = cue_round
         n = s["takes"] or want
         if n != want:
             warnings.append(f"{s['name']}: {n} takes this round; a {card['tier']} cue gets {want} per round (J020-D9)")
@@ -363,13 +409,14 @@ def _call_take(call: dict, run: Run, send, sleep) -> tuple[Response, str, list[s
             try:
                 resp = send(f"{API}?output_format={fmt}", data, headers, TIMEOUT_S)
             except NetworkError as err:
-                rec = attempt_record(None, {}, call["predicted"], redact(str(err), run.key))
-                rec.update(n=len(attempts) + 1, format=fmt)
+                hdrs = getattr(err, "headers", {}) or {}
+                rec = attempt_record(None, hdrs, call["predicted"], redact(str(err), run.key))
+                rec.update(n=len(attempts) + 1, format=fmt, headers=trace_headers(hdrs))
                 attempts.append(rec)
                 run.possibly += rec["counted_credits"]
                 last = None
                 continue
-            body_text = redact(resp.body[:600].decode("utf-8", "replace"), run.key) if resp.status != 200 else None
+            body_text = error_text(resp.body, run.key) if resp.status != 200 else None
             rec = attempt_record(resp.status, resp.headers, call["predicted"], body_text)
             rec.update(n=len(attempts) + 1, format=fmt, headers=trace_headers(resp.headers))
             attempts.append(rec)
@@ -407,11 +454,12 @@ def _save_take(cue_dir: Path, call: dict, resp: Response, fmt: str, refused_here
     charged = sum(a["counted_credits"] for a in attempts if a["charged"] == "yes")
     success = attempts[-1]
     side = {"tool": "soundbench generate", "provider": "ElevenLabs", "endpoint": ENDPOINT, "cue": call["cue"],
-            "sound": call["sound"], "layer": call["layer"],
-            "round": call["round"], "take": call["take"], "request": call["body"], "query": {"output_format": fmt},
-            "format_asked": attempts[0]["format"], "formats_refused": refused_here, "format_used": fmt, "format_received": got,
-            "requested_ms": call["requested_ms"], "credits": success["credits"], "credits_predicted": call["predicted"],
-            "credits_all_attempts": charged, "response": {"status": resp.status, "headers": trace_headers(resp.headers)},
+            "sound": call["sound"], "layer": call["layer"], "round": call["round"], "cue_round": call["round"],
+            "take": call["take"], "request": call["body"], "query": {"output_format": fmt},
+            "format_asked": attempts[0]["format"], "formats_refused": refused_here, "format_used": fmt,
+            "format_received": got, "requested_ms": call["requested_ms"], "credits": success["credits"],
+            "credits_predicted": call["predicted"], "credits_all_attempts": charged,
+            "response": {"status": resp.status, "headers": trace_headers(resp.headers)},
             "attempts": attempts, "bytes": len(resp.body), "sha256": None,
             "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "note": call["note"],
             "status": "not auditioned (an agent cannot listen; the owner judges in play-tests, J020-D3)"}
@@ -420,39 +468,108 @@ def _save_take(cue_dir: Path, call: dict, resp: Response, fmt: str, refused_here
     if got["container"] != asked:
         run.warnings.append(f"{call['stem']}: asked {fmt}, received {got['container']} bytes (saved as received)")
     take = takes_dir / f"{call['stem']}.{got['container']}"
-    with open(take, "xb") as f:
-        f.write(resp.body)
+    taken_why = ("exists (written by another run during this call): the paid take is kept here under a fresh name, "
+                 "never dropped")
+    taken = [q.name for q in (take, take.with_suffix(".json"), intake.master_path(take)) if q.exists()]
+    if taken:  # review F2: another writer took the path while this paid call was in flight
+        return _reject(takes_dir, call["stem"], "." + got["container"], resp.body, side,
+                       f"{', '.join(taken)} {taken_why}", run)
+    try:
+        with open(take, "xb") as f:
+            f.write(resp.body)
+    except FileExistsError:
+        return _reject(takes_dir, call["stem"], "." + got["container"], resp.body, side, f"{take.name} {taken_why}",
+                       run)
     side["sha256"] = file_sha256(take)
     _dump(take.with_suffix(".json"), side, run.key)
     try:
         decode(take, requested_ms=call["requested_ms"])
     except SoundbenchError as err:
-        rej = takes_dir / "rejected"
-        rej.mkdir(exist_ok=True)
         side["rejected"] = f"intake refused: {redact(str(err), run.key)}"
         take.with_suffix(".json").unlink()
-        shutil.move(str(take), str(rej / take.name))
         intake.master_path(take).unlink(missing_ok=True)
-        _dump(rej / (call["stem"] + ".json"), side, run.key)
-        return {"stem": call["stem"], "rejected": side["rejected"], "file": str(rej / take.name)}
+        rej, base = _free_base(takes_dir, call["stem"], take.suffix)
+        shutil.move(str(take), str(rej / (base + take.suffix)))
+        _dump(rej / (base + ".json"), side, run.key)
+        return {"stem": call["stem"], "rejected": side["rejected"], "file": str(rej / (base + take.suffix))}
     return {"stem": call["stem"], "file": str(take), "format_used": fmt, "credits": side["credits"]}
 
 
-def _reject(takes_dir: Path, stem: str, suffix: str, body: bytes, side: dict, why: str, run: Run) -> dict:
+def _free_base(takes_dir: Path, stem: str, suffix: str) -> tuple[Path, str]:
+    """takes/rejected/ and a file base under which neither the audio nor its sidecar exists yet: the stem, else
+    <stem>.kept<n>."""
     rej = takes_dir / "rejected"
     rej.mkdir(parents=True, exist_ok=True)
-    path = rej / (stem + suffix)
-    with open(path, "xb") as f:
-        f.write(body)
+    n = 0
+    while True:
+        base = stem if n == 0 else f"{stem}.kept{n}"
+        if not (rej / (base + suffix)).exists() and not (rej / (base + ".json")).exists():
+            return rej, base
+        n += 1
+
+
+def _reject(takes_dir: Path, stem: str, suffix: str, body: bytes, side: dict, why: str, run: Run) -> dict:
+    """Paid bytes that cannot be a take of the round go to takes/rejected/ with their sidecar; never dropped."""
+    while True:
+        rej, base = _free_base(takes_dir, stem, suffix)
+        path = rej / (base + suffix)
+        try:
+            with open(path, "xb") as f:
+                f.write(body)
+            break
+        except FileExistsError:
+            continue
     side.update(sha256=file_sha256(path), rejected=why)
-    _dump(rej / (stem + ".json"), side, run.key)
+    _dump(rej / (base + ".json"), side, run.key)
     return {"stem": stem, "rejected": why, "file": str(path)}
+
+
+LOCK_NAME = ".generate.lock"
+
+
+def require_decoder() -> None:
+    """Review F4: ffmpeg and ffprobe found the way doctor and intake find them, before any paid call."""
+    located = ffmpeg.require_ffmpeg()
+    intake.ffprobe_path(located.path)
+
+
+def acquire_lock(cue_dir: Path) -> Path:
+    """Review F2: one generate run per cue at a time. The lock file is created exclusively; a held lock refuses."""
+    lock = cue_dir / LOCK_NAME
+    try:
+        with open(lock, "x", encoding="utf-8") as f:
+            f.write(f"pid {os.getpid()} since {dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')}\n")
+    except FileExistsError:
+        raise SoundbenchError(f"{lock} exists: another generate run of this cue is going (or one crashed: delete "
+                              "the lock file once no run is going); refused before any call") from None
+    return lock
+
+
+def _describe(card: dict, sounds: list, calls: list, warnings: list, budget: float) -> dict:
+    return {"tool": "soundbench generate", "cue": card["cue"], "tier": card["tier"], "budget": budget,
+            "predicted_credits": sum(c["predicted"] for c in calls),
+            "cost_model": {"credits_per_second": CREDITS_PER_SECOND, "credits_no_duration": CREDITS_NO_DURATION},
+            "cue_round": sounds[0]["round"],
+            "sounds": [{"name": s["name"], "round": s["round"], "rounds_left_after": MAX_ROUNDS - s["round"]}
+                       for s in sounds],
+            "plan": [{k: c[k] for k in ("stem", "predicted", "requested_ms")} | {"text": c["body"]["text"]}
+                     for c in calls],
+            "warnings": warnings, "formats_order": list(FORMATS)}
+
+
+def check_budget(predicted: int, budget: float, n_calls: int, dry_run: bool) -> None:
+    """A round predicted over the budget is refused before any call; a dry run gets the same refusal (books-agent
+    finding: a dry run used to exit 0 for a round the real run refuses)."""
+    if not budget_allows(0, predicted, budget):
+        raise SoundbenchError(f"the round predicts {predicted} credits ({n_calls} calls) and the budget is {budget:g}: "
+                              "refused before any call (raise --budget or plan fewer or shorter takes)"
+                              + (" [dry run: the real run would be refused the same way]" if dry_run else ""))
 
 
 def generate(cue_dir: Path, budget: float = DEFAULT_BUDGET, *, send=None, sleep=None, env=None, decode=None,
              dry_run: bool = False) -> tuple[dict, int]:
     """One round for the cue (every sound in prompts.json). Returns (run log, exit code); raises SoundbenchError when
-    refused before any call."""
+    refused before any call. Once the lock is taken, every exit path writes the run log and releases the lock."""
     cue_dir = Path(cue_dir)
     send = urllib_send if send is None else send
     sleep = time.sleep if sleep is None else sleep
@@ -461,15 +578,8 @@ def generate(cue_dir: Path, budget: float = DEFAULT_BUDGET, *, send=None, sleep=
     if isinstance(budget, bool) or not isinstance(budget, (int, float)) or not math.isfinite(budget) or budget <= 0:
         raise SoundbenchError(f"budget: needs a positive number of credits, got {budget!r}")
     card, sounds, calls, warnings = plan(cue_dir)
-    predicted = sum(c["predicted"] for c in calls)
-    doc = {"tool": "soundbench generate", "cue": card["cue"], "tier": card["tier"], "budget": budget,
-           "predicted_credits": predicted, "cost_model": {"credits_per_second": CREDITS_PER_SECOND,
-                                                          "credits_no_duration": CREDITS_NO_DURATION},
-           "sounds": [{"name": s["name"], "round": s["round"], "rounds_left_after": MAX_ROUNDS - s["round"]}
-                      for s in sounds],
-           "plan": [{k: c[k] for k in ("stem", "predicted", "requested_ms")} | {"text": c["body"]["text"]}
-                    for c in calls],
-           "warnings": warnings, "formats_order": list(FORMATS)}
+    doc = _describe(card, sounds, calls, warnings, budget)
+    check_budget(doc["predicted_credits"], budget, len(calls), dry_run)
     if dry_run:
         doc.update(dry_run=True, spent_credits=0, possibly_spent_credits=0)
         return doc, 0
@@ -477,33 +587,48 @@ def generate(cue_dir: Path, budget: float = DEFAULT_BUDGET, *, send=None, sleep=
     if not key:
         raise SoundbenchError(f"{KEY_ENV} is not set: run `python tools/keys.py run --only ELEVENLABS_API_KEY -- "
                               "python -m tools.audio.soundbench generate ...` (the tool never reads a key file)")
-    if not budget_allows(0, predicted, budget):
-        raise SoundbenchError(f"the round predicts {predicted} credits ({len(calls)} calls) and the budget is "
-                              f"{budget:g}: refused before any call (raise --budget or plan fewer or shorter takes)")
-    run = Run(budget=budget, key=key, warnings=warnings)
+    if decode is intake.decode_take:
+        require_decoder()
+    lock = acquire_lock(cue_dir)
+    run = Run(budget=budget, key=key)
     made, rejected, failed, stopped, code = [], [], [], None, 0
     started = dt.datetime.now(dt.timezone.utc)
-    for call in calls:
+    try:
+        card, sounds, calls, warnings = plan(cue_dir)  # again under the lock: another run may have finished
+        doc = _describe(card, sounds, calls, warnings, budget)
+        if not budget_allows(0, doc["predicted_credits"], budget):
+            raise SoundbenchError(f"the round predicts {doc['predicted_credits']} credits and the budget is "
+                                  f"{budget:g}: refused before any call")
+        run.warnings = warnings
+        for call in calls:
+            try:
+                resp, fmt, refused_here, attempts = _call_take(call, run, send, sleep)
+            except _Stop as stop:
+                msg, attempts, why = stop.args
+                stopped = redact(msg, key)
+                if attempts:
+                    failed.append({"stem": call["stem"], "attempts": attempts})
+                code = 1 if why == "budget" else 2
+                break
+            res = _save_take(cue_dir, call, resp, fmt, refused_here, attempts, run, decode)
+            (rejected if "rejected" in res else made).append(res)
+        if rejected and code == 0:
+            code = 1
+    except BaseException as err:
+        stopped = redact(f"unexpected {type(err).__name__}: {err}", key)
+        code = 2
+        raise
+    finally:
+        doc.update(spent_credits=run.spent, possibly_spent_credits=run.possibly, formats_refused=run.refused,
+                   takes=made, rejected=rejected, failed=failed, stopped=stopped, exit_code=code,
+                   started=started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                   finished=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
         try:
-            resp, fmt, refused_here, attempts = _call_take(call, run, send, sleep)
-        except _Stop as stop:
-            msg, attempts, why = stop.args
-            stopped = redact(msg, key)
-            if attempts:
-                failed.append({"stem": call["stem"], "attempts": attempts})
-            code = 1 if why == "budget" else 2
-            break
-        res = _save_take(cue_dir, call, resp, fmt, refused_here, attempts, run, decode)
-        (rejected if "rejected" in res else made).append(res)
-    if rejected and code == 0:
-        code = 1
-    doc.update(spent_credits=run.spent, possibly_spent_credits=run.possibly, formats_refused=run.refused,
-               takes=made, rejected=rejected, failed=failed, stopped=stopped, exit_code=code,
-               started=started.strftime("%Y-%m-%dT%H:%M:%SZ"),
-               finished=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
-    rep = cue_dir / "report"
-    rep.mkdir(parents=True, exist_ok=True)
-    base = f"{card['cue']}.generate.{started.strftime('%Y%m%dT%H%M%S%fZ')}"
-    doc["log"] = str(rep / f"{base}.json")
-    _dump(rep / f"{base}.json", doc, key)
+            rep = cue_dir / "report"
+            rep.mkdir(parents=True, exist_ok=True)
+            base = f"{card['cue']}.generate.{started.strftime('%Y%m%dT%H%M%S%fZ')}"
+            doc["log"] = str(rep / f"{base}.json")
+            _dump(rep / f"{base}.json", doc, key)
+        finally:
+            lock.unlink(missing_ok=True)
     return json.loads(redact(json.dumps(doc), key)), code
